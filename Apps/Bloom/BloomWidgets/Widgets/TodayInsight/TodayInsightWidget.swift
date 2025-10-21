@@ -64,7 +64,7 @@ struct TodayInsightWidget: Widget {
 } timeline: {
   TodayInsightEntry(
     date: .now,
-    relevance: TimelineEntryRelevance(score: 0.3, duration: 3600),
+    relevance: nil,
     title: "Today's Insight",
     content: "Open the app to load your personalized insights.",
     symbol: .sparkles,

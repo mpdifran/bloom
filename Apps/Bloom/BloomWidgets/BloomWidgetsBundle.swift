@@ -11,7 +11,6 @@ internal import BloomFoundation
 
 @main
 struct BloomWidgetsBundle: WidgetBundle {
-
   var body: some Widget {
     ActionControl()
     BudSummaryWidget()

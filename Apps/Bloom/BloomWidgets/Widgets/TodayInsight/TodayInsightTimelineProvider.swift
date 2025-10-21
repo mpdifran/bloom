@@ -52,10 +52,10 @@ struct TodayInsightTimelineProvider: AppIntentTimelineProvider {
     // Try to load today's content from UserDefaults
     guard let data = UserDefaults.group.data(forKey: "TodayInsightsManager.lastTodayContentResponse"),
           let content = try? JSONDecoder().decode(TodayContentDTO.self, from: data) else {
-      // No content available - show loading state
+      // No content available - show loading state (no relevance needed)
       return TodayInsightEntry(
         date: Date(),
-        relevance: calculateRelevance(for: .advice, settings: settings),
+        relevance: nil,
         title: "Today's Insight",
         content: "Open the app to load your personalized insights.",
         symbol: .sparkles,
@@ -68,10 +68,10 @@ struct TodayInsightTimelineProvider: AppIntentTimelineProvider {
 
     // Check if content is from today
     guard Calendar.current.isDate(content.day, inSameDayAs: Date()) else {
-      // Content is stale
+      // Content is stale (no relevance needed)
       return TodayInsightEntry(
         date: Date(),
-        relevance: calculateRelevance(for: .advice, settings: settings),
+        relevance: nil,
         title: "Today's Insight",
         content: "Open the app to refresh your insights for today.",
         symbol: .sparkles,

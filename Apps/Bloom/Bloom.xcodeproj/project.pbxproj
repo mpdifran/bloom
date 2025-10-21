@@ -46,7 +46,6 @@
 		FF83DB1E2D2ECFC80018FAAC /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF83DB1D2D2ECFC80018FAAC /* StoreKit.framework */; };
 		FF89AA532EA2A74B00C76B6C /* CoreNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF97D6922EA16EE300FE7A82 /* CoreNetwork.framework */; };
 		FF89AA662EA2C6F000C76B6C /* BloomModel in Frameworks */ = {isa = PBXBuildFile; productRef = FF89AA652EA2C6F000C76B6C /* BloomModel */; };
-		FF89B3F22EA2CFF900C76B6C /* CoreHealth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFECC1CE2DC2C326002F6AAA /* CoreHealth.framework */; };
 		FF89B3F52EA2E6AC00C76B6C /* AppFoundations in Frameworks */ = {isa = PBXBuildFile; productRef = FF89B3F42EA2E6AC00C76B6C /* AppFoundations */; };
 		FF89B3F72EA2E6E500C76B6C /* BloomModel in Frameworks */ = {isa = PBXBuildFile; productRef = FF89B3F62EA2E6E500C76B6C /* BloomModel */; };
 		FF89B40A2EA321F900C76B6C /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = FF89B4092EA321F900C76B6C /* TelemetryDeck */; };
@@ -56,10 +55,17 @@
 		FF89BDC42EA5566100C76B6C /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = FF89BDC32EA5566100C76B6C /* AppUI */; };
 		FF89BDC62EA5566700C76B6C /* AppFoundations in Frameworks */ = {isa = PBXBuildFile; productRef = FF89BDC52EA5566700C76B6C /* AppFoundations */; };
 		FF89BDC82EA556B800C76B6C /* SFSafeSymbols in Frameworks */ = {isa = PBXBuildFile; productRef = FF89BDC72EA556B800C76B6C /* SFSafeSymbols */; };
-		FF89BDD42EA55ABB00C76B6C /* BloomUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF89BDB12EA5564300C76B6C /* BloomUI.framework */; };
-		FF89BDD72EA55AC200C76B6C /* BloomFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96842C0C1F38004DAD2D /* BloomFoundation.framework */; };
 		FF89BDE92EA5658500C76B6C /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = FF89BDE82EA5658500C76B6C /* AppUI */; };
 		FF89BDFC2EA578A300C76B6C /* BloomFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96842C0C1F38004DAD2D /* BloomFoundation.framework */; };
+		FF89BE072EA72FFA00C76B6C /* BloomFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96842C0C1F38004DAD2D /* BloomFoundation.framework */; };
+		FF89BE082EA72FFA00C76B6C /* BloomFoundation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96842C0C1F38004DAD2D /* BloomFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FF89BE0A2EA72FFE00C76B6C /* BloomUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF89BDB12EA5564300C76B6C /* BloomUI.framework */; };
+		FF89BE0B2EA72FFE00C76B6C /* BloomUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF89BDB12EA5564300C76B6C /* BloomUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FF89BE0C2EA7300000C76B6C /* CoreHealth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFECC1CE2DC2C326002F6AAA /* CoreHealth.framework */; };
+		FF89BE0D2EA7300000C76B6C /* CoreHealth.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FFECC1CE2DC2C326002F6AAA /* CoreHealth.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FF89BE0E2EA7300100C76B6C /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF97C3F62E9C407300FE7A82 /* SwiftUI.framework */; };
+		FF89BE102EA7300300C76B6C /* Umbrella.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; };
+		FF89BE112EA7300300C76B6C /* Umbrella.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FF9782DD2C9A22C900A8ED7E /* Umbrella.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; };
 		FF9782DE2C9A22C900A8ED7E /* Umbrella.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FF9782E62C9A22EE00A8ED7E /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = FF9782E52C9A22EE00A8ED7E /* AppUI */; };
@@ -71,9 +77,7 @@
 		FF97832B2C9B546700A8ED7E /* AppFoundations in Frameworks */ = {isa = PBXBuildFile; productRef = FFF61AEA2BED52A900926042 /* AppFoundations */; };
 		FF97832C2C9B546700A8ED7E /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FF8B8B202BFD1EF500BA2128 /* Algorithms */; };
 		FF97C3F52E9C407300FE7A82 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF97C3F42E9C407300FE7A82 /* WidgetKit.framework */; };
-		FF97C3F72E9C407300FE7A82 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF97C3F62E9C407300FE7A82 /* SwiftUI.framework */; };
 		FF97C4062E9C407400FE7A82 /* BloomWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FF97C3F32E9C407300FE7A82 /* BloomWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		FF97CD772E9D9E1300FE7A82 /* Umbrella.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; };
 		FF97CD7B2E9D9EDA00FE7A82 /* SFSafeSymbols in Frameworks */ = {isa = PBXBuildFile; productRef = FF97CD7A2E9D9EDA00FE7A82 /* SFSafeSymbols */; };
 		FF97CDA72EA148C400FE7A82 /* BloomModel in Frameworks */ = {isa = PBXBuildFile; productRef = FF8741782CE14F8E002581FA /* BloomModel */; };
 		FF97D6982EA16EE300FE7A82 /* CoreNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF97D6922EA16EE300FE7A82 /* CoreNetwork.framework */; };
@@ -382,6 +386,20 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FF89BE092EA72FFA00C76B6C /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				FF89BE0B2EA72FFE00C76B6C /* BloomUI.framework in Embed Frameworks */,
+				FF89BE0D2EA7300000C76B6C /* CoreHealth.framework in Embed Frameworks */,
+				FF89BE112EA7300300C76B6C /* Umbrella.framework in Embed Frameworks */,
+				FF89BE082EA72FFA00C76B6C /* BloomFoundation.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -669,13 +687,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				FF89BDE92EA5658500C76B6C /* AppUI in Frameworks */,
-				FF89BDD72EA55AC200C76B6C /* BloomFoundation.framework in Frameworks */,
-				FF89BDD42EA55ABB00C76B6C /* BloomUI.framework in Frameworks */,
-				FF89B3F22EA2CFF900C76B6C /* CoreHealth.framework in Frameworks */,
-				FF97CD772E9D9E1300FE7A82 /* Umbrella.framework in Frameworks */,
-				FF97C3F72E9C407300FE7A82 /* SwiftUI.framework in Frameworks */,
+				FF89BE072EA72FFA00C76B6C /* BloomFoundation.framework in Frameworks */,
+				FF89BE0A2EA72FFE00C76B6C /* BloomUI.framework in Frameworks */,
+				FF89BE102EA7300300C76B6C /* Umbrella.framework in Frameworks */,
 				FF89B3F72EA2E6E500C76B6C /* BloomModel in Frameworks */,
 				FF97CD7B2E9D9EDA00FE7A82 /* SFSafeSymbols in Frameworks */,
+				FF89BE0E2EA7300100C76B6C /* SwiftUI.framework in Frameworks */,
+				FF89BE0C2EA7300000C76B6C /* CoreHealth.framework in Frameworks */,
 				FF97C3F52E9C407300FE7A82 /* WidgetKit.framework in Frameworks */,
 				FF89B3F52EA2E6AC00C76B6C /* AppFoundations in Frameworks */,
 				FF89B40A2EA321F900C76B6C /* TelemetryDeck in Frameworks */,
@@ -1108,6 +1126,7 @@
 				FF97C3EF2E9C407300FE7A82 /* Sources */,
 				FF97C3F02E9C407300FE7A82 /* Frameworks */,
 				FF97C3F12E9C407300FE7A82 /* Resources */,
+				FF89BE092EA72FFA00C76B6C /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -3618,9 +3637,10 @@
 				CODE_SIGN_ENTITLEMENTS = BloomWidgetsExtensionDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = GUJ47GUV2Q;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = GUJ47GUV2Q;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BloomWidgets/Info.plist;
@@ -3633,6 +3653,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).BloomWidgets";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.lotus-labs.bloom.BloomWidgets";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -3651,9 +3673,10 @@
 				CODE_SIGN_ENTITLEMENTS = "BloomWidgetsExtensionDebug [Dev].entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = GUJ47GUV2Q;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = GUJ47GUV2Q;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BloomWidgets/Info.plist;
@@ -3666,6 +3689,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).BloomWidgets";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.lotus-labs.bloom.dev.BloomWidgets";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -3684,9 +3709,10 @@
 				CODE_SIGN_ENTITLEMENTS = BloomWidgetsExtensionRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = GUJ47GUV2Q;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = GUJ47GUV2Q;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BloomWidgets/Info.plist;
@@ -3699,6 +3725,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).BloomWidgets";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.lotus-labs.bloom.BloomWidgets";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -3717,9 +3745,10 @@
 				CODE_SIGN_ENTITLEMENTS = BloomWidgetsExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = GUJ47GUV2Q;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = GUJ47GUV2Q;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BloomWidgets/Info.plist;
@@ -3732,6 +3761,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).BloomWidgets";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.lotus-labs.bloom.dev.BloomWidgets";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;

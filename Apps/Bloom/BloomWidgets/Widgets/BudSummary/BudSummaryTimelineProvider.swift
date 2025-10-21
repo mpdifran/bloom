@@ -53,14 +53,13 @@ struct BudSummaryTimelineProvider: TimelineProvider {
     let currentTimeMode = TimeMode.current(for: Date(), settings: settings)
     let userName = getUserName()
     let isSubscribed = checkSubscriptionStatus()
-    let relevance = calculateRelevance(settings: settings)
 
     // Check subscription status first
     guard isSubscribed else {
-      // Not subscribed - show paywall state
+      // Not subscribed - show paywall state (no relevance needed)
       return BudSummaryEntry(
         date: Date(),
-        relevance: relevance,
+        relevance: nil,
         budState: nil,
         summary: nil,
         timeMode: currentTimeMode,
@@ -74,10 +73,10 @@ struct BudSummaryTimelineProvider: TimelineProvider {
     // Try to load today's content from UserDefaults
     guard let data = UserDefaults.group.data(forKey: "TodayInsightsManager.lastTodayContentResponse"),
           let content = try? JSONDecoder().decode(TodayContentDTO.self, from: data) else {
-      // No content available - show loading state
+      // No content available - show loading state (no relevance needed)
       return BudSummaryEntry(
         date: Date(),
-        relevance: relevance,
+        relevance: nil,
         budState: nil,
         summary: nil,
         timeMode: currentTimeMode,
@@ -90,10 +89,10 @@ struct BudSummaryTimelineProvider: TimelineProvider {
 
     // Check if content is from today
     guard Calendar.current.isDate(content.day, inSameDayAs: Date()) else {
-      // Content is stale - show loading state
+      // Content is stale - show loading state (no relevance needed)
       return BudSummaryEntry(
         date: Date(),
-        relevance: relevance,
+        relevance: nil,
         budState: nil,
         summary: nil,
         timeMode: currentTimeMode,
@@ -104,10 +103,10 @@ struct BudSummaryTimelineProvider: TimelineProvider {
       )
     }
 
-    // Return entry with content
+    // Return entry with content - calculate relevance for actual content
     return BudSummaryEntry(
       date: Date(),
-      relevance: relevance,
+      relevance: calculateRelevance(settings: settings),
       budState: content.budState,
       summary: content.summary,
       timeMode: currentTimeMode,

@@ -6,6 +6,8 @@
 	<string>$(BLOOM_APP_GROUP_ID)</string>
 	<key>BLOOM_BASE_URL</key>
 	<string>$(BLOOM_BASE_URL)</string>
+	<key>BLOOM_BASE_WS_URL</key>
+	<string>$(BLOOM_BASE_WS_URL)</string>
 	<key>NSExtension</key>
 	<dict>
 		<key>NSExtensionPointIdentifier</key>

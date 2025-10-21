@@ -10,6 +10,7 @@ import WidgetKit
 import BloomUI
 import SFSafeSymbols
 import AppUI
+internal import BloomFoundation
 
 struct TodayInsightWidgetView: View {
   let entry: TodayInsightEntry
@@ -51,7 +52,6 @@ struct TodayInsightWidgetView: View {
       Text(entry.content)
         .font(.body)
         .fontDesign(.rounded)
-//        .fixedSize(horizontal: false, vertical: true)
 
       Spacer(minLength: 0)
     }
@@ -62,7 +62,7 @@ struct TodayInsightWidgetView: View {
 
   @ViewBuilder
   private var loadingView: some View {
-    VStack(alignment: .leading, spacing: 12) {
+    VStack(alignment: .leading) {
       HStack {
         Image(systemSymbol: entry.symbol)
           .font(.title3)
@@ -82,19 +82,23 @@ struct TodayInsightWidgetView: View {
         Spacer()
       }
 
+      Spacer(minLength: 0)
+
       Text(entry.content)
         .font(.body)
         .fontDesign(.rounded)
+        .fixedSize(horizontal: false, vertical: true)
+
+      Spacer(minLength: 0)
     }
     .foregroundStyle(.white)
-    .padding()
-    .widgetURL(URL(string: "bloom://today"))
+    .widgetURL(URL(string: "https://api.trybloom.app/today"))
     .containerBackground(entry.color.gradient, for: .widget)
   }
 
   @ViewBuilder
   private var errorView: some View {
-    VStack(alignment: .leading, spacing: 12) {
+    VStack(alignment: .leading) {
       HStack {
         Image(systemSymbol: .exclamationmarkTriangleFill)
           .font(.title3)
@@ -114,13 +118,16 @@ struct TodayInsightWidgetView: View {
         Spacer()
       }
 
+      Spacer(minLength: 0)
+
       Text("Unable to load insights. Please open the app.")
         .font(.body)
         .fontDesign(.rounded)
+
+      Spacer(minLength: 0)
     }
     .foregroundStyle(.white)
-    .padding()
-    .widgetURL(URL(string: "bloom://today"))
-    .containerBackground(Color.red.gradient, for: .widget)
+    .widgetURL(URL(string: "https://api.trybloom.app/today"))
+    .containerBackground(Color.mutedRed.gradient, for: .widget)
   }
 }

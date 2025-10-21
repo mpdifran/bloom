@@ -63,7 +63,7 @@ struct BudSummaryWidget: Widget {
 } timeline: {
   BudSummaryEntry(
     date: .now,
-    relevance: TimelineEntryRelevance(score: 1.0, duration: 3600),
+    relevance: nil,
     budState: nil,
     summary: nil,
     timeMode: .morning,
@@ -79,7 +79,7 @@ struct BudSummaryWidget: Widget {
 } timeline: {
   BudSummaryEntry(
     date: .now,
-    relevance: TimelineEntryRelevance(score: 0.3, duration: 3600),
+    relevance: nil,
     budState: nil,
     summary: nil,
     timeMode: .afternoon,
@@ -95,7 +95,7 @@ struct BudSummaryWidget: Widget {
 } timeline: {
   BudSummaryEntry(
     date: .now,
-    relevance: TimelineEntryRelevance(score: 0.3, duration: 3600),
+    relevance: nil,
     budState: nil,
     summary: nil,
     timeMode: .afternoon,
@@ -111,7 +111,7 @@ struct BudSummaryWidget: Widget {
 } timeline: {
   BudSummaryEntry(
     date: .now,
-    relevance: TimelineEntryRelevance(score: 0.3, duration: 3600),
+    relevance: nil,
     budState: nil,
     summary: nil,
     timeMode: .morning,
@@ -127,7 +127,7 @@ struct BudSummaryWidget: Widget {
 } timeline: {
   BudSummaryEntry(
     date: .now,
-    relevance: TimelineEntryRelevance(score: 0.3, duration: 3600),
+    relevance: nil,
     budState: nil,
     summary: nil,
     timeMode: .afternoon,
