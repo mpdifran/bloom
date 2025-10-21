@@ -108,7 +108,7 @@ struct BudSummaryTimelineProvider: TimelineProvider {
     return BudSummaryEntry(
       date: Date(),
       relevance: calculateRelevance(settings: settings),
-      budState: content.budState,
+      budState: cleanBudState(content.budState),
       summary: content.summary,
       timeMode: currentTimeMode,
       userName: userName,
@@ -125,6 +125,15 @@ struct BudSummaryTimelineProvider: TimelineProvider {
 
   private func getUserName() -> String {
     UserDefaults.group.string(forKey: String.HealthDefaults.name.key) ?? ""
+  }
+
+  private func cleanBudState(_ budState: String) -> String {
+    // Strip JSON encoding artifacts (leading/trailing quote characters)
+    var cleaned = budState
+    if cleaned.hasPrefix("\"") && cleaned.hasSuffix("\"") {
+      cleaned = String(cleaned.dropFirst().dropLast())
+    }
+    return cleaned
   }
 
   private func calculateRelevance(settings: TodaySettings) -> TimelineEntryRelevance? {
