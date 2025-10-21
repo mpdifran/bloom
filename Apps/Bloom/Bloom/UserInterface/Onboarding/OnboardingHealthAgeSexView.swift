@@ -155,7 +155,7 @@ private extension OnboardingHealthAgeSexView {
     Text("Looks Great!")
       .appear(with: 1, currentIndex: index, secondaryIfNotCurrentIndex: false)
 
-    Text("According to your Health data, you're a \(age) year old \(sex). Does that look right?")
+    Text("According to your data, you're a \(age) year old \(sex). Does that look right?")
       .contentTransition(.numericText())
       .appear(with: 2, currentIndex: index, secondaryIfNotCurrentIndex: false)
 

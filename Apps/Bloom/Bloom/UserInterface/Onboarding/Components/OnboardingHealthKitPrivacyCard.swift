@@ -18,13 +18,13 @@ struct OnboardingHealthKitPrivacyCard: View {
 
   var body: some View {
     CardView {
-      LargeTitleActionCard("Health Data Privacy") {
+      LargeTitleActionCard("Personal Data Privacy") {
         VStack {
           Image(systemSymbol: .handRaisedCircleFill)
             .font(.system(size: 100))
             .foregroundStyle(.invertedText, .tint)
 
-          Text("We'll only use your health data anonymously to provide you insights and goals.")
+          Text("We'll only use your personal data anonymously to provide you insights and goals.")
             .font(.title3)
             .bold()
             .multilineTextAlignment(.center)

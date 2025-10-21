@@ -77,7 +77,7 @@ private extension OnboardingHealthActivityLevelView {
         .appear(with: 1, currentIndex: index)
 
       if vitalsViewModel.activityLevelSummary?.details.activityLevel != nil {
-        Text("We've selected where we think your activity level is based on your Health data, but feel free to change it!")
+        Text("We've selected where we think your activity level is based on your personal data, but feel free to change it!")
           .font(.title3)
           .transition(.opacity)
           .appear(with: 2, currentIndex: index)

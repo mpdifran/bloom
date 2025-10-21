@@ -136,11 +136,11 @@ private extension ExternalHealthPrivacyView {
             .foregroundStyle(.white, .mutedBlue)
             .font(.system(size: 40))
 
-          Text("External Health Sharing")
+          Text("External Data Sharing")
             .font(.title3)
         }
 
-        Text("Please select which health data you want to share. Your health data is not tied to any personally identifiable information, and is not stored on our servers.")
+        Text("Please select which personal data you want to share. Your personal data is not tied to any personally identifiable information, and is not stored on our servers.")
           .foregroundStyle(.secondary)
           .multilineTextAlignment(.leading)
 

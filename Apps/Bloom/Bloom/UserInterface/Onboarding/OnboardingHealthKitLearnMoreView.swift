@@ -43,10 +43,10 @@ private extension OnboardingHealthKitLearnMoreView {
   @ViewBuilder
   var titleSection: some View {
     VStack(alignment: .leading, spacing: 16) {
-      Text("Why I need your Health data 💙")
+      Text("Why I need your personal data 💙")
         .font(.title2)
 
-      Text("With your permission, I can use your Health data to give you better, more personal insights.")
+      Text("With your permission, I can use your personal data to give you better, more personal insights.")
         .foregroundStyle(.secondary)
     }
     .multilineTextAlignment(.leading)
@@ -54,7 +54,7 @@ private extension OnboardingHealthKitLearnMoreView {
 
   var healthDataUsageSection: some View {
     VStack(alignment: .leading) {
-      Text("Your health data is used for:")
+      Text("Your personal data is used for:")
         .font(.body)
         .fontWeight(.heavy)
         .fontDesign(.rounded)
@@ -126,7 +126,7 @@ private extension OnboardingHealthKitLearnMoreView {
         .fontDesign(.rounded)
 
       Group {
-        Text("Bloom uses Apple Health data together with AI to create general wellness insights. These insights are for educational purposes only and are not medical advice.\n\nAlways consult a qualified healthcare professional before making medical decisions.")
+        Text("Bloom uses your personal data from Apple Health together with AI to create general wellness insights. These insights are for educational purposes only and are not medical advice.\n\nAlways consult a qualified healthcare professional before making medical decisions.")
       }
       .foregroundStyle(.secondary)
       .multilineTextAlignment(.leading)
@@ -144,7 +144,7 @@ private extension OnboardingHealthKitLearnMoreView {
       }
       .frame(height: 35)
 
-      Link(destination: .emailBloom(subject: "Health Data Questions")) {
+      Link(destination: .emailBloom(subject: "Personal Data Questions")) {
         HStack {
           Text("Still have questions? Email us")
           Image(systemSymbol: .envelopeFill)

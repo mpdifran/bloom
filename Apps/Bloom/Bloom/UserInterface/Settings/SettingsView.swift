@@ -435,7 +435,7 @@ private extension SettingsView {
             try await withCheckedThrowingContinuation { continuation in
               confirmationDialogDetails = ConfirmationDialogDetails(
                 title: "Are You Sure?",
-                message: "This can't be undone. Your health data and existing food logs will not be deleted, and will remain on your device.",
+                message: "This can't be undone. Your personal data and existing food logs will not be deleted, and will remain on your device.",
                 buttons: [
                   ConfirmationDialogDetails.Button(title: "Delete", role: .destructive) {
                     Task {

@@ -58,7 +58,7 @@ private extension OnboardingAIGoalsView {
   var mainScrollContent: some View {
     ScrollView {
       VStack(alignment: .leading, spacing: 20) {
-        Text("Great! Let's create some personalized goals for you based on your health data.")
+        Text("Great! Let's create some personalized goals for you based on your data.")
           .onboardingTextStyle()
 
         switch mode {

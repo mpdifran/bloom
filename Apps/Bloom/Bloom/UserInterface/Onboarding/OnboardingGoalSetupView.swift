@@ -121,7 +121,7 @@ private extension OnboardingGoalSetupView {
         ProgressView()
           .controlSize(.large)
         
-        Text("Analyzing your health data...")
+        Text("Analyzing your personal data...")
           .font(.subheadline)
           .foregroundStyle(.secondary)
       }

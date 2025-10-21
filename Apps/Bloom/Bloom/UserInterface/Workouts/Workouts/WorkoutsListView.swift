@@ -113,7 +113,7 @@ private extension WorkoutsListView {
         .fontWeight(.semibold)
         .multilineTextAlignment(.center)
 
-      Text("To show your workout history, we need access to your Health data. You can manage this permission at any time.")
+      Text("To show your workout history, we need access to your personal data. You can manage this permission at any time.")
         .font(.title3)
         .fontWeight(.semibold)
         .multilineTextAlignment(.center)

@@ -36,7 +36,7 @@ struct OnboardingHealthKitView: View {
 
           Group {
             Text("Help me help you 💙")
-            Text("Share your Health data so I can personalize your insights. Your info always stays private, I promise.")
+            Text("Share your personal data so I can personalize your insights. Your info always stays private, I promise.")
               .font(.title3)
               .foregroundStyle(.secondary)
           }
@@ -46,8 +46,8 @@ struct OnboardingHealthKitView: View {
           BudImage(.budDoctor)
 
           Group {
-            Text("I need access to your Health Data")
-            Text("The more health data you share with me, the more personalized your advice will be!")
+            Text("I need access to your Personal Data")
+            Text("The more personal data you share with me, the more personalized your advice will be!")
               .font(.title3)
               .foregroundStyle(.secondary)
           }
@@ -74,7 +74,7 @@ struct OnboardingHealthKitView: View {
     .sheet($presentedSheet)
     .shelf {
       VStack {
-        Text("Your Health data always remains anonymous. Always consult with a doctor before making any changes to your health.")
+        Text("Your personal data always remains anonymous. Always consult with a doctor before making any changes to your health.")
           .font(.subheadline)
           .fontDesign(.rounded)
           .bold()

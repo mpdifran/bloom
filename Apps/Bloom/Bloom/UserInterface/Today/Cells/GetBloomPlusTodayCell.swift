@@ -19,7 +19,7 @@ struct GetBloomPlusTodayCell: View {
       TodayCardCell(
         symbol: .moonZzz,
         title: "Tonight's Sleep",
-        content: "This is where you would receive daily insights into your health data.",
+        content: "This is where you would receive daily insights into your personal data.",
         color: .mutedPurple
       )
       .premiumLocked("Bud’s Got the Scoop—Wanna See It?")

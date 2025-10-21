@@ -37,7 +37,7 @@ struct OnboardingAppExplanationViewTreatment: View {
           }
 
           if index >= 2 {
-            Text("You can ask me anything, and I'll answer using your health data.")
+            Text("You can ask me anything, and I'll answer using your personal data.")
               .font(.title3)
               .fixedSize(horizontal: false, vertical: true)
               .transition(.blurReplace)
@@ -73,7 +73,7 @@ struct OnboardingAppExplanationViewTreatment: View {
               .transition(.blurReplace)
           } else if index >= 6 {
             ChatBubbleCell(
-              message: "You’ve been getting about 7 hours of sleep per night this week. A bit less deep sleep than usual, so you might feel a touch more tired in the afternoons. Try winding down 30 minutes earlier tonight to help!",
+              message: "You’ve been getting about 7 hours of sleep per night this week. A bit less deep sleep than usual, so you might feel a touch more tired in the afternoon. Try winding down 30 minutes earlier tonight to help!",
               isDirect: false,
               isCurrentUser: false,
               showTail: true

@@ -23,7 +23,7 @@ struct ActionControl: ControlWidget {
         Label(configuration.actionType.label, systemSymbol: configuration.actionType.sfSymbol)
       }
     }
-    .displayName("Log Health Data")
-    .description("Quickly log health data.")
+    .displayName("Log Data")
+    .description("Quickly log personal data.")
   }
 }

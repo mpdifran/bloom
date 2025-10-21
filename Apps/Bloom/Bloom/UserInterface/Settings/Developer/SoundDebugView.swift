@@ -17,7 +17,7 @@ struct SoundDebugView: View {
     ("Activity Goal Behind", { SoundPlayer.alertActivityGoalBehind() }),
 
     // Health data
-    ("Log Health Data", { SoundPlayer.playLogHealthData() }),
+    ("Log Personal Data", { SoundPlayer.playLogHealthData() }),
     ("Health Reading Fail", { SoundPlayer.healthReadingFail() }),
 
     // Head gestures

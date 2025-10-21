@@ -328,7 +328,7 @@ extension DeveloperSettingsView {
           await MainActor.run {
             alertDetails = AlertDetails(
               title: "Today Insights Regenerated",
-              message: "Your today insights have been regenerated with yesterday's health data."
+              message: "Your today insights have been regenerated with yesterday's personal data."
             )
           }
         } label: {
@@ -564,7 +564,7 @@ extension DeveloperSettingsView {
           if let age = calculatedAge {
             message = "Biological age calculated: \(String(format: "%.1f", age)) years"
           } else {
-            message = "Biological age calculation completed. No result available - check that you have enough health data logged."
+            message = "Biological age calculation completed. No result available - check that you have enough personal data logged."
           }
 
           alertDetails = AlertDetails(
