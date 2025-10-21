@@ -58,14 +58,10 @@
 		FF89BDE92EA5658500C76B6C /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = FF89BDE82EA5658500C76B6C /* AppUI */; };
 		FF89BDFC2EA578A300C76B6C /* BloomFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96842C0C1F38004DAD2D /* BloomFoundation.framework */; };
 		FF89BE072EA72FFA00C76B6C /* BloomFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96842C0C1F38004DAD2D /* BloomFoundation.framework */; };
-		FF89BE082EA72FFA00C76B6C /* BloomFoundation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96842C0C1F38004DAD2D /* BloomFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FF89BE0A2EA72FFE00C76B6C /* BloomUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF89BDB12EA5564300C76B6C /* BloomUI.framework */; };
-		FF89BE0B2EA72FFE00C76B6C /* BloomUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF89BDB12EA5564300C76B6C /* BloomUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FF89BE0C2EA7300000C76B6C /* CoreHealth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFECC1CE2DC2C326002F6AAA /* CoreHealth.framework */; };
-		FF89BE0D2EA7300000C76B6C /* CoreHealth.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FFECC1CE2DC2C326002F6AAA /* CoreHealth.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FF89BE0E2EA7300100C76B6C /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF97C3F62E9C407300FE7A82 /* SwiftUI.framework */; };
 		FF89BE102EA7300300C76B6C /* Umbrella.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; };
-		FF89BE112EA7300300C76B6C /* Umbrella.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FF9782DD2C9A22C900A8ED7E /* Umbrella.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; };
 		FF9782DE2C9A22C900A8ED7E /* Umbrella.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FF9782E62C9A22EE00A8ED7E /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = FF9782E52C9A22EE00A8ED7E /* AppUI */; };
@@ -382,20 +378,6 @@
 				FF75775E2DC9626000E31C86 /* DataContainer.framework in Embed Frameworks */,
 				FF7577602DC9626200E31C86 /* Umbrella.framework in Embed Frameworks */,
 				FF75775C2DC9625F00E31C86 /* CoreHealth.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FF89BE092EA72FFA00C76B6C /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				FF89BE0B2EA72FFE00C76B6C /* BloomUI.framework in Embed Frameworks */,
-				FF89BE0D2EA7300000C76B6C /* CoreHealth.framework in Embed Frameworks */,
-				FF89BE112EA7300300C76B6C /* Umbrella.framework in Embed Frameworks */,
-				FF89BE082EA72FFA00C76B6C /* BloomFoundation.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1126,7 +1108,6 @@
 				FF97C3EF2E9C407300FE7A82 /* Sources */,
 				FF97C3F02E9C407300FE7A82 /* Frameworks */,
 				FF97C3F12E9C407300FE7A82 /* Resources */,
-				FF89BE092EA72FFA00C76B6C /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
