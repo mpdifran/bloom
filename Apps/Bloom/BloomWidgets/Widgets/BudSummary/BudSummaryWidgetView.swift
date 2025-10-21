@@ -54,7 +54,7 @@ private extension BudSummaryWidgetView {
       .padding()
       .background {
         RoundedRectangle(cornerRadius: 20)
-          .fill(.ultraThinMaterial)
+          .fill(.thinMaterial)
       }
       .padding(-8)
       .padding(.trailing, 8)
@@ -73,6 +73,8 @@ private extension BudSummaryWidgetView {
       Spacer(minLength: 0)
 
       budImageView(dimension: 200)
+        .scaleEffect(x: 1.25, y: 1.25)
+        .offset(y: 45)
         .horizontallyCentered()
 
       VStack(alignment: .leading) {
@@ -84,7 +86,7 @@ private extension BudSummaryWidgetView {
       .padding()
       .background {
         RoundedRectangle(cornerRadius: 20)
-          .fill(.ultraThinMaterial)
+          .fill(.thinMaterial)
       }
       .padding(-8)
     }
@@ -118,7 +120,7 @@ private extension BudSummaryWidgetView {
       .padding()
       .background {
         RoundedRectangle(cornerRadius: 20)
-          .fill(.ultraThinMaterial)
+          .fill(.thinMaterial)
       }
       .padding(-8)
       .padding(.trailing, 8)
@@ -144,7 +146,7 @@ private extension BudSummaryWidgetView {
       .padding()
       .background {
         RoundedRectangle(cornerRadius: 20)
-          .fill(.ultraThinMaterial)
+          .fill(.thinMaterial)
       }
       .padding(-8)
     }

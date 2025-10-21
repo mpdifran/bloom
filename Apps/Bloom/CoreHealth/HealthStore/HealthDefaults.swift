@@ -23,7 +23,7 @@ public extension String {
     case isBreastFeeding = "HealthManager.isBreastfeeding"
     case selectedWorkoutEquipment = "HealthManager.selectedWorkoutEquipment"
 
-    var key: String { rawValue }
+    public var key: String { rawValue }
   }
 }
 

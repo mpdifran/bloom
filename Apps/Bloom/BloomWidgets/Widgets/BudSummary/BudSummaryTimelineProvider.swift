@@ -12,6 +12,7 @@ import SwiftUI
 internal import BloomFoundation
 import DataContainer
 import BloomUI
+import CoreHealth
 
 struct BudSummaryTimelineProvider: TimelineProvider {
   typealias Entry = BudSummaryEntry
@@ -123,7 +124,7 @@ struct BudSummaryTimelineProvider: TimelineProvider {
   }
 
   private func getUserName() -> String {
-    UserDefaults.group.string(forKey: "HealthDefaults.name") ?? ""
+    UserDefaults.group.string(forKey: String.HealthDefaults.name.key) ?? ""
   }
 
   private func calculateRelevance(settings: TodaySettings) -> TimelineEntryRelevance? {
