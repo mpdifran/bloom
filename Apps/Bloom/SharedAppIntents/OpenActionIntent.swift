@@ -25,7 +25,7 @@ struct OpenActionIntent: AppIntent {
   }
 
   func perform() async throws -> some IntentResult & OpensIntent {
-    let urlString = "https://api.trybloom.app\(actionType.urlPath)"
+    let urlString = "https://api.trybloom.app/\(actionType.urlPath)"
     let url = URL(string: urlString)!
     return .result(opensIntent: OpenURLIntent(url))
   }

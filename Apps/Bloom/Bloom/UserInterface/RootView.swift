@@ -95,10 +95,14 @@ struct RootView: View {
 private extension RootView {
 
   func handleURL(_ url: URL) {
-    // Support universal links only (https://api.trybloom.app)
-    guard url.host == "api.trybloom.app" || url.host == "trybloom.app" else { return }
+    // Support both custom URL scheme (bloom://) and universal links (https://api.trybloom.app)
+    guard url.scheme == "bloom" || url.host == "api.trybloom.app" || url.host == "trybloom.app" else { return }
 
-    switch url.path {
+    // For bloom:// URLs, reconstruct the full path from host and path
+    // bloom://action/food-scanner -> host="action", path="/food-scanner" -> "/action/food-scanner"
+    let path = url.scheme == "bloom" ? "/\(url.host ?? "")\(url.path)" : url.path
+
+    switch path {
     case "/today":
       tabController.activeTab = .today
     case "/paywall":

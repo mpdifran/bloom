@@ -54,19 +54,19 @@ enum ActionType: String, AppEnum {
   var urlPath: String {
     switch self {
     case .scanFood:
-      return "/action/food-scanner"
+      return "action/food-scanner"
     case .logFood:
-      return "/action/log-food"
+      return "action/log-food"
     case .logWater:
-      return "/action/log-water"
+      return "action/log-water"
     case .logBowelMovement:
-      return "/action/log-bowel-movement"
+      return "action/log-bowel-movement"
     case .logPeriod:
-      return "/action/log-period"
+      return "action/log-period"
     case .logWeight:
-      return "/action/log-weight"
+      return "action/log-weight"
     case .logBloodPressure:
-      return "/action/log-blood-pressure"
+      return "action/log-blood-pressure"
     }
   }
 
