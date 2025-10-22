@@ -38,6 +38,7 @@ final class TodayInsightsManager {
           UserDefaults.group.set(data, forKey: .lastTodayContentResponse)
           // Reload widget timeline when data updates
           WidgetRefreshManager.shared.reloadTodayWidgets()
+          WidgetRefreshManager.shared.reloadHealthInsightWidgets()
           WidgetRefreshManager.shared.reloadBudSummaryWidgets()
         }
       } else {

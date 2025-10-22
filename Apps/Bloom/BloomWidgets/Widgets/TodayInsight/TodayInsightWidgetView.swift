@@ -16,13 +16,50 @@ struct TodayInsightWidgetView: View {
   let entry: TodayInsightEntry
 
   var body: some View {
-    if entry.isLoading {
+    if !entry.isSubscribed {
+      nonSubscriberView
+    } else if entry.isLoading {
       loadingView
     } else if entry.hasError {
       errorView
     } else {
       contentView
     }
+  }
+
+  @ViewBuilder
+  private var nonSubscriberView: some View {
+    VStack(alignment: .leading) {
+      HStack {
+        Image(systemSymbol: entry.symbol)
+          .font(.title3)
+          .foregroundStyle(entry.color)
+          .frame(square: 30)
+          .padding(6)
+          .background {
+            RoundedRectangle(cornerRadius: 13)
+              .fill(.white)
+          }
+
+        Text(entry.title)
+          .font(.title3)
+          .fontDesign(.rounded)
+          .bold()
+
+        Spacer()
+      }
+
+      Spacer(minLength: 0)
+
+      Text(entry.content)
+        .font(.body)
+        .fontDesign(.rounded)
+
+      Spacer(minLength: 0)
+    }
+    .foregroundStyle(.white)
+    .widgetURL(URL(string: "https://api.trybloom.app/paywall"))
+    .containerBackground(entry.color.gradient, for: .widget)
   }
 
   @ViewBuilder

@@ -39,7 +39,8 @@ struct TodayInsightWidget: Widget {
     color: .mutedOrange,
     contentType: .advice,
     isLoading: false,
-    hasError: false
+    hasError: false,
+    isSubscribed: true
   )
 }
 
@@ -55,7 +56,25 @@ struct TodayInsightWidget: Widget {
     color: .mutedIndigo,
     contentType: .sleep,
     isLoading: false,
-    hasError: false
+    hasError: false,
+    isSubscribed: true
+  )
+}
+
+#Preview("Not Subscribed", as: .systemMedium) {
+  TodayInsightWidget()
+} timeline: {
+  TodayInsightEntry(
+    date: .now,
+    relevance: nil,
+    title: "Daily Health Guidance",
+    content: "Get simple, personalized advice each morning and sleep recommendations each evening to help you thrive.",
+    symbol: .sparkles,
+    color: .mutedOrange,
+    contentType: .advice,
+    isLoading: false,
+    hasError: false,
+    isSubscribed: false
   )
 }
 
@@ -71,6 +90,7 @@ struct TodayInsightWidget: Widget {
     color: .mutedOrange,
     contentType: .advice,
     isLoading: true,
-    hasError: false
+    hasError: false,
+    isSubscribed: true
   )
 }

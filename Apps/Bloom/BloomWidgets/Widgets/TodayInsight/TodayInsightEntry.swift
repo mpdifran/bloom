@@ -29,4 +29,5 @@ struct TodayInsightEntry: TimelineEntry {
   // State flags
   let isLoading: Bool
   let hasError: Bool
+  let isSubscribed: Bool
 }
