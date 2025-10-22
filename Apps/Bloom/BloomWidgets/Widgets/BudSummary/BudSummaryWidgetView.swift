@@ -46,7 +46,6 @@ private extension BudSummaryWidgetView {
   var mediumWidgetView: some View {
     HStack(alignment: .bottom) {
       VStack(alignment: .leading) {
-        dateView
         greetingView
         summaryView
         Spacer(minLength: 0)
@@ -78,7 +77,6 @@ private extension BudSummaryWidgetView {
         .horizontallyCentered()
 
       VStack(alignment: .leading) {
-        dateView
         greetingView
         summaryView
       }
@@ -112,7 +110,6 @@ private extension BudSummaryWidgetView {
   var nonSubscriberMediumView: some View {
     HStack(alignment: .bottom) {
       VStack(alignment: .leading) {
-        dateView
         getBloomPlusTitleView
         unsubscribedSummaryView
         Spacer(minLength: 0)
@@ -138,7 +135,6 @@ private extension BudSummaryWidgetView {
         .horizontallyCentered()
 
       VStack(alignment: .leading) {
-        dateView
         getBloomPlusTitleView
         unsubscribedSummaryView
       }

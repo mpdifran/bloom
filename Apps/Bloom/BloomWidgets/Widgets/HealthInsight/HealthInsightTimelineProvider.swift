@@ -114,6 +114,9 @@ struct HealthInsightTimelineProvider: TimelineProvider {
     // Sort insights by priority (highest first)
     let sortedInsights = content.insights.sorted { $0.priority > $1.priority }
 
+    // Generate random offset so multiple widget instances show different insights
+    let randomOffset = Int.random(in: 0..<sortedInsights.count)
+
     // Generate entries for all remaining hours today
     var entries: [HealthInsightEntry] = []
     let endOfDay = calendar.startOfDay(for: calendar.date(byAdding: .day, value: 1, to: now)!)
@@ -123,7 +126,7 @@ struct HealthInsightTimelineProvider: TimelineProvider {
     var hourIndex = calendar.component(.hour, from: now)
 
     while currentHour < endOfDay {
-      let insight = sortedInsights[hourIndex % sortedInsights.count]
+      let insight = sortedInsights[(hourIndex + randomOffset) % sortedInsights.count]
       let entry = makeEntry(for: insight, at: currentHour)
       entries.append(entry)
 
