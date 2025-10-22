@@ -42,7 +42,6 @@ struct AIFoodScannerView: View {
   @Namespace private var aiFoodScannerNamespace
 
   @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
-  @State private var locationViewModel = LocationManagerViewModel.shared
 
   var body: some View {
     NavigationStack {
@@ -95,11 +94,6 @@ struct AIFoodScannerView: View {
 
       errorToggle.toggle()
     }
-    .onChange(of: locationViewModel.country) { _, newValue in
-      guard let country = newValue else { return }
-
-      viewModel.country = country
-    }
   }
 }
 
@@ -119,7 +113,7 @@ private extension AIFoodScannerView {
 
       switch viewModel.mode {
       case .base:
-        if viewModel.suggestedServings.isNotEmpty || viewModel.servings.isNotEmpty || viewModel.unknownBarcodes.isNotEmpty {
+        if viewModel.suggestedServings.isNotEmpty || viewModel.servings.isNotEmpty {
           ScrollView {
             VStack {
               servingSections
@@ -255,19 +249,6 @@ private extension AIFoodScannerView {
           }
         }
       }
-
-      if viewModel.unknownBarcodes.isNotEmpty {
-        SectionTitleView("Barcodes")
-          .padding(.horizontal)
-        ForEach(viewModel.unknownBarcodes) { barcode in
-          AIScanUnknownBarcodeCell(barcode: barcode) {
-            presentedSheet = FoodUploadScannerView(barcode: barcode) { foodItem in
-              viewModel.added(foodItem: foodItem, for: barcode)
-            }.asAny
-          }
-          .transition(.blurReplace)
-        }
-      }
     }
   }
 
@@ -324,26 +305,18 @@ private extension AIFoodScannerView {
       Spacer(minLength: 0)
 
       HStack {
-        Spacer()
+        Spacer(minLength: 0)
+
         Image(.soup)
           .overlay {
             CameraReticuleShapeView(lineWidth: 6, cornerRadius: 15)
-          }
-        Spacer()
-        Image(.barcodePackaging)
-          .overlay {
-            CameraReticuleShapeView(lineWidth: 6, cornerRadius: 5)
-              .frame(width: 45, height: 40)
-              .padding(.bottom, 12)
-              .padding(.trailing, 12)
-              .zStackAlignment(.bottomTrailing)
           }
 
         Spacer(minLength: 0)
       }
       .padding(.vertical)
 
-      Text("Hold up a barcode to scan, or take a photo to estimate your whole plate.")
+      Text("Take a photo to estimate your whole plate with AI.")
         .font(.title3)
         .fontDesign(.rounded)
         .bold()

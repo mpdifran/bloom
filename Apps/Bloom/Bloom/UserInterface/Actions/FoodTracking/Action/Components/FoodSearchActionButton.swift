@@ -27,37 +27,46 @@ struct FoodSearchActionButton: View {
     Button {
       action()
     } label: {
-      HStack {
+      VStack {
         Image(systemSymbol: symbol)
+          .font(.title2)
           .foregroundStyle(.tint)
+          .frame(height: 25)
         Text(title)
           .foregroundStyle(.primary)
+          .bold()
+          .fontDesign(.rounded)
       }
       .lineLimit(1)
-      .minimumScaleFactor(0.5)
-      .font(.headline)
+      .font(.caption)
       .horizontallyCentered()
-      .cardContainer()
+      .padding(6)
+      .cardContainer(
+        stroke: .fill,
+        lineWidth: 0.5,
+        includePadding: false
+      )
     }
     .buttonStyle(.plain)
-    .bold()
   }
 }
 
 #Preview {
-  HStack {
-    FoodSearchActionButton(symbol: .barcodeViewfinder, title: "Scan") {
+  PreviewEnvironment {
+    BloomScrollView {
+      HStack {
+        FoodSearchActionButton(symbol: .barcodeViewfinder, title: "Scan") {
 
-    }
+        }
 
-    FoodSearchActionButton(symbol: .plus, title: "Quick Add") {
+        FoodSearchActionButton(symbol: .plus, title: "Quick Add") {
 
-    }
+        }
 
-    FoodSearchActionButton(symbol: .textBubble, title: "Text") {
+        FoodSearchActionButton(symbol: .textBubble, title: "Text") {
 
+        }
+      }
     }
   }
-  .padding()
-  .groupedBackground()
 }

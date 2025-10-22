@@ -21,32 +21,15 @@ extension AIFoodScannerView {
     var scannedFoodName: String?
     var servings = [FoodItemServingAmount]()
     var suggestedServings = [FoodItemServingAmount]()
-    var unknownBarcodes = [String]()
     var scanResultsToggle = false
     var scanResultsErrorToggle = false
-    var country: String = "usa"
     var error: Error?
 
-    init() {
-      setupObservers()
-    }
-
     let cameraManager = CameraManager()
-
-    private var detectedBarcodes = Set<String>()
-    private var tasks = [Task<Void, Never>]()
   }
 }
 
 extension AIFoodScannerView.ViewModel {
-
-  private func setupObservers() {
-    cameraManager.onNewBarcode = { [weak self] barcode in
-      Task {
-        await self?.handleNewBarcode(barcode)
-      }
-    }
-  }
 
   func reset() {
     image = nil
@@ -65,13 +48,6 @@ extension AIFoodScannerView.ViewModel {
 
       await self.performTakePhoto()
     }
-  }
-
-  func added(foodItem: FoodItem, for barcode: String) {
-    unknownBarcodes.removeAll(where: { $0 == barcode })
-
-    let serving = FoodItemServingAmount(serving: 1, foodItem: foodItem)
-    servings.append(serving)
   }
 }
 
@@ -125,39 +101,5 @@ private extension AIFoodScannerView.ViewModel {
         self.mode = .base
       }
     }
-  }
-
-  func handleNewBarcode(_ barcode: String) async {
-    guard mode == .base else { return }
-    guard !detectedBarcodes.contains(barcode) else { return }
-
-    detectedBarcodes.insert(barcode)
-
-    let foodItems = await search(barcode: barcode)
-    let barcodeServings = foodItems.map { FoodItemServingAmount(serving: 1, foodItem: $0) }
-
-    if barcodeServings.isEmpty {
-      scanResultsErrorToggle.toggle()
-      unknownBarcodes.append(barcode)
-      TelemetryDeck.signal("Food Item Barcode Scan", parameters: ["barcodeScanResult": "Fail"])
-    } else {
-      scanResultsToggle.toggle()
-      servings = barcodeServings + servings
-      TelemetryDeck.signal("Food Item Barcode Scan", parameters: ["barcodeScanResult": "Match"])
-    }
-  }
-
-  nonisolated func search(barcode: String) async -> [FoodItem] {
-    do {
-      let sections = try await NetworkRequester.shared.foodSearch(
-        upcCode: barcode,
-        country: country
-      )
-
-      return sections.flatMap({ $0.foods })
-    } catch {
-      print(error)
-    }
-    return []
   }
 }

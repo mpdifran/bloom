@@ -104,6 +104,7 @@ private extension ChatLayoutSwiftUIView {
           .multilineTextAlignment(.leading)
           .lineLimit(2)
           .contentTransition(.numericText())
+          .shimmer()
 
         Spacer(minLength: 60)
       }

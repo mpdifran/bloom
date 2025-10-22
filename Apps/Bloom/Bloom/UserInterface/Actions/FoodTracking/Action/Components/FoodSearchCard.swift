@@ -79,9 +79,9 @@ private extension FoodSearchCard {
         switch toolbarMode {
         case .logTools:
           HStack {
+            barcodeScanButton
             magicScanButton
             textFoodButton
-            addFoodButton
           }
         case .pickerTools:
           HStack {
@@ -101,21 +101,21 @@ private extension FoodSearchCard {
     .animation(.easeInOut, value: searchQuery.isEmpty)
   }
 
+  var barcodeScanButton: some View {
+    FoodSearchActionButton(symbol: .barcodeViewfinder, title: "Barcode Scan") {
+      showBarcodeScanner()
+    }
+  }
+
   var magicScanButton: some View {
-    FoodSearchActionButton(symbol: .barcodeViewfinder, title: "Scan") {
+    FoodSearchActionButton(symbol: .cameraViewfinder, title: "Magic Scan") {
       showMagicScan()
     }
   }
 
   var textFoodButton: some View {
-    FoodSearchActionButton(symbol: .quoteBubble, title: "Text") {
+    FoodSearchActionButton(symbol: .quoteBubble, title: "Magic Text") {
       showTextFoodGenerationView()
-    }
-  }
-
-  var addFoodButton: some View {
-    FoodSearchActionButton(symbol: .plusViewfinder, title: "Upload") {
-      showFoodUploadView()
     }
   }
 
@@ -178,7 +178,10 @@ private extension FoodSearchCard {
       performSearch()
     }
     .selectAllTextOnBeginEditing()
-    .cardContainer()
+    .cardContainer(
+      stroke: .fill,
+      lineWidth: 0.5
+    )
 //    .onChange(of: searchQuery) { oldValue, newValue in
 //      guard shouldAutocomplete else { return }
 //
@@ -223,6 +226,10 @@ private extension FoodSearchCard {
     presentedSheet = BarcodeScannerPickerView(selectFoodItem: { foodItem in
       onFoodItemPicked?(foodItem)
     }).asAny
+  }
+
+  func showBarcodeScanner() {
+    presentedSheet = BarcodeScannerView().asAny
   }
 
   func showTextFoodGenerationView() {
