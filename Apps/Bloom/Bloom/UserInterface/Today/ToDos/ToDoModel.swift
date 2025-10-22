@@ -114,8 +114,7 @@ extension ToDoModel {
 
     var requiresBloomPlusEntitlement: Bool {
       switch self {
-      case .logWeight, .logBloodPressure: false
-      case .logFood, .logProtein: true
+      case .logWeight, .logBloodPressure, .logFood, .logProtein: false
       }
     }
   }

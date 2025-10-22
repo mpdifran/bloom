@@ -21,11 +21,9 @@ struct ActionsView: View {
           ActionInstanceCell(image: .logFoodIcon, title: "Food")
             .tint(.mutedGreen)
             .onTapGesture {
-              EntitledPresent(presentedSheet: $presentedCardSheet) {
-                FoodLoggingActionCardView {
-                  dismiss()
-                }
-              }
+              presentedCardSheet = FoodLoggingActionCardView {
+                dismiss()
+              }.asAny
             }
 
           ActionInstanceCell(image: .logWaterIcon, title: "Water")

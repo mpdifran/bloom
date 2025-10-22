@@ -33,8 +33,8 @@ struct BloomPlusFeaturesListView: View {
         )
 
         FeatureCard(
-          image: Image(systemSymbol: .barcodeViewfinder),
-          message: "Scan food barcodes"
+          image: Image(systemSymbol: .textViewfinder),
+          message: "Describe your food to log it"
         )
       }
 

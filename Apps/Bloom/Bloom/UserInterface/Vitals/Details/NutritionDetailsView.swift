@@ -128,9 +128,7 @@ private extension NutritionDetailsView {
       Text("Track your food to get more insights into your Nutrition.")
     } actions: {
       Button("Log Food"){
-        EntitledPresent(presentedSheet: $presentedSheet) {
-          FoodLoggingActionCardView()
-        }
+        presentedSheet = FoodLoggingActionCardView().asAny
       }
       .buttonStyle(.primary)
     }

@@ -108,7 +108,9 @@ private extension RootView {
     case "/paywall":
       tabController.showPaywall = true
     case "/action/food-scanner":
-      presentedSheet = AIFoodScannerView().asAny
+      EntitledAction(presentedSheet: $presentedSheet) {
+        presentedSheet = AIFoodScannerView().asAny
+      }
     case "/action/log-food":
       presentedSheet = FoodLoggingActionCardView(performDismiss: nil).asAny
     case "/action/log-water":

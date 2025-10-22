@@ -196,18 +196,20 @@ private extension FoodSearchCard {
   }
 
   func showMagicScan() {
-    if hasShownExplanation {
-      presentedSheet = AIFoodScannerView().asAny
-    } else {
-      presentedSheet = AIFoodScannerExplanationView {
-        Task {
-          await Delay(300)
-          await MainActor.run {
-            hasShownExplanation = true
-            presentedSheet = AIFoodScannerView().asAny
+    EntitledAction(presentedSheet: $presentedSheet) {
+      if hasShownExplanation {
+        presentedSheet = AIFoodScannerView().asAny
+      } else {
+        presentedSheet = AIFoodScannerExplanationView {
+          Task {
+            await Delay(300)
+            await MainActor.run {
+              hasShownExplanation = true
+              presentedSheet = AIFoodScannerView().asAny
+            }
           }
-        }
-      }.asAny
+        }.asAny
+      }
     }
   }
 
@@ -224,7 +226,9 @@ private extension FoodSearchCard {
   }
 
   func showTextFoodGenerationView() {
-    presentedSheet = AIFoodTextGenerationView().asAny
+    EntitledAction(presentedSheet: $presentedSheet) {
+      presentedSheet = AIFoodTextGenerationView().asAny
+    }
   }
 }
 
