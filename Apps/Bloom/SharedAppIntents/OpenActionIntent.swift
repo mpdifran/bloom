@@ -21,7 +21,7 @@ struct OpenActionIntent: AppIntent {
   }
 
   init() {
-    self.actionType = .scanFood
+    self.actionType = .logFood
   }
 
   func perform() async throws -> some IntentResult & OpensIntent {

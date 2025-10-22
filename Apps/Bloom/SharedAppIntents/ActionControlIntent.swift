@@ -12,6 +12,6 @@ struct ActionControlIntent: ControlConfigurationIntent {
   static let title: LocalizedStringResource = "Health Action Configuration"
   static let description = IntentDescription("Choose which health action to perform.")
 
-  @Parameter(title: "Action", default: .scanFood)
+  @Parameter(title: "Action", default: .logFood)
   var actionType: ActionType
 }

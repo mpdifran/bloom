@@ -10,7 +10,8 @@ import Foundation
 import SFSafeSymbols
 
 enum ActionType: String, AppEnum {
-  case scanFood
+  case magicScan
+  case barcodeScan
   case logFood
   case logWater
   case logBowelMovement
@@ -21,40 +22,46 @@ enum ActionType: String, AppEnum {
   nonisolated(unsafe) static var typeDisplayRepresentation = TypeDisplayRepresentation(name: "Action Type")
 
   nonisolated(unsafe) static var caseDisplayRepresentations: [Self: DisplayRepresentation] = [
-    .scanFood: DisplayRepresentation(
-      title: "Scan Food",
-      image: DisplayRepresentation.Image(systemName: Self.scanFood.sfSymbol.rawValue)
+    .magicScan: DisplayRepresentation(
+      title: "Open Magic Scanner",
+      image: DisplayRepresentation.Image(systemName: "camera.viewfinder")
+    ),
+    .barcodeScan: DisplayRepresentation(
+      title: "Open Barcode Scanner",
+      image: DisplayRepresentation.Image(systemName: "barcode.viewfinder")
     ),
     .logFood: DisplayRepresentation(
-      title: "Log Food",
-      image: DisplayRepresentation.Image(systemName: Self.logFood.sfSymbol.rawValue)
+      title: "Open Food Logger",
+      image: DisplayRepresentation.Image(systemName: "fork.knife")
     ),
     .logWater: DisplayRepresentation(
-      title: "Log Water",
-      image: DisplayRepresentation.Image(systemName: Self.logWater.sfSymbol.rawValue)
+      title: "Open Water Logger",
+      image: DisplayRepresentation.Image(systemName: "waterbottle")
     ),
     .logBowelMovement: DisplayRepresentation(
-      title: "Log Bowel Movement",
-      image: DisplayRepresentation.Image(systemName: Self.logBowelMovement.sfSymbol.rawValue)
+      title: "Open Bowel Movement Logger",
+      image: DisplayRepresentation.Image(systemName: "toilet")
     ),
     .logPeriod: DisplayRepresentation(
-      title: "Log Period",
-      image: DisplayRepresentation.Image(systemName: Self.logPeriod.sfSymbol.rawValue)
+      title: "Open Period Logger",
+      image: DisplayRepresentation.Image(systemName: "drop")
     ),
     .logWeight: DisplayRepresentation(
-      title: "Log Weight",
-      image: DisplayRepresentation.Image(systemName: Self.logWeight.sfSymbol.rawValue)
+      title: "Open Weight Logger",
+      image: DisplayRepresentation.Image(systemName: "scalemass")
     ),
     .logBloodPressure: DisplayRepresentation(
-      title: "Log Blood Pressure",
-      image: DisplayRepresentation.Image(systemName: Self.logBloodPressure.sfSymbol.rawValue)
+      title: "Open Blood Pressure Logger",
+      image: DisplayRepresentation.Image(systemName: "heart")
     )
   ]
 
   var urlPath: String {
     switch self {
-    case .scanFood:
-      return "action/food-scanner"
+    case .magicScan:
+      return "action/magic-scan"
+    case .barcodeScan:
+      return "action/barcode-scan"
     case .logFood:
       return "action/log-food"
     case .logWater:
@@ -72,26 +79,30 @@ enum ActionType: String, AppEnum {
 
   var label: String {
     switch self {
-    case .scanFood:
-      return "Scan Food"
+    case .magicScan:
+      return "Open Magic Scanner"
+    case .barcodeScan:
+      return "Open Barcode Scanner"
     case .logFood:
-      return "Log Food"
+      return "Open Food Logger"
     case .logWater:
-      return "Log Water"
+      return "Open Water Logger"
     case .logBowelMovement:
-      return "Log Bowel Movement"
+      return "Open Bowel Movement Logger"
     case .logPeriod:
-      return "Log Period"
+      return "Open Period Logger"
     case .logWeight:
-      return "Log Weight"
+      return "Open Weight Logger"
     case .logBloodPressure:
-      return "Log Blood Pressure"
+      return "Open Blood Pressure Logger"
     }
   }
 
   var sfSymbol: SFSymbol {
     switch self {
-    case .scanFood:
+    case .magicScan:
+      return .cameraViewfinder
+    case .barcodeScan:
       return .barcodeViewfinder
     case .logFood:
       return .forkKnife

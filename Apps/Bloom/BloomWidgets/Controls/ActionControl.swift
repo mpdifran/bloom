@@ -23,7 +23,7 @@ struct ActionControl: ControlWidget {
         Label(configuration.actionType.label, systemSymbol: configuration.actionType.sfSymbol)
       }
     }
-    .displayName("Log Data")
+    .displayName("Open Data Loggers")
     .description("Quickly log personal data.")
   }
 }
