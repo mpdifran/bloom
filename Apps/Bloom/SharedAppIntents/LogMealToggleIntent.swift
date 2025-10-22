@@ -14,6 +14,7 @@ import CoreHealth
 struct LogMealToggleIntent: SetValueIntent {
   nonisolated(unsafe) static var title: LocalizedStringResource = "Log Meal"
   nonisolated(unsafe) static var description = IntentDescription("Logs a meal with one or more food items.")
+  nonisolated(unsafe) static var isDiscoverable = false
 
   @Parameter(title: "Widget Type")
   var kind: LogMealWidgetType

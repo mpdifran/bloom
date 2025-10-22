@@ -15,7 +15,10 @@ struct LogMealIntent: AppIntent {
   nonisolated(unsafe) static var title: LocalizedStringResource = "Log Meal"
   nonisolated(unsafe) static var description = IntentDescription("Logs a meal with one or more food items.")
 
-  @Parameter(title: "Food Items")
+  @Parameter(
+    title: "Food Items",
+    requestDisambiguationDialog: IntentDialog("Which food item?")
+  )
   var foodItems: [FoodItemEntity]
 
   @Parameter(title: "Meal", default: .automatic)
@@ -38,6 +41,13 @@ struct LogMealIntent: AppIntent {
 
   @MainActor
   func perform() async throws -> some IntentResult {
+    // Validate that at least one food item was selected
+    if foodItems.isEmpty {
+      throw $foodItems.needsValueError(
+        IntentDialog("Please select at least one food item to log")
+      )
+    }
+
     // Convert meal option to actual meal based on current time
     let meal = mealOption.toMeal()
 
