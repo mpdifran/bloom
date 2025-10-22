@@ -17,6 +17,7 @@ struct LogMealIntent: AppIntent {
 
   @Parameter(
     title: "Food Items",
+    requestValueDialog: IntentDialog(full: "Which food item?", supporting: "Food?", systemImageName: "fork.knife"),
     requestDisambiguationDialog: IntentDialog("Which food item?")
   )
   var foodItems: [FoodItemEntity]

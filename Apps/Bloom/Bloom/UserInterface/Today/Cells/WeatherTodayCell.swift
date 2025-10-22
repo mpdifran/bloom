@@ -11,6 +11,8 @@ import CoreLocation
 @preconcurrency import WeatherKit
 import Charts
 import BloomUI
+import SFSafeSymbols
+import BloomFoundation
 
 enum WeatherDay: CaseIterable {
   case today
@@ -42,7 +44,7 @@ struct WeatherTodayCell: View {
       if isLoadingWeather {
         loadingView
       } else if let weather {
-        TimelineView(.everyMinute) { _ in
+        TimelineView(.periodic(from: Date(), by: 3600)) { _ in
           contentView(for: weather)
         }
       } else {
@@ -164,10 +166,30 @@ private extension WeatherTodayCell {
 
     VStack {
       if day == .today {
-        WeatherCurrentConditionsCell(
-          currentWeather: weather.currentWeather,
-          locality: locationLocality ?? ""
-        )
+        // Find the hour closest to current time for display
+        let currentHour = weather.hourlyForecast
+          .filter({ Calendar.current.isDateInToday($0.date) })
+          .min(by: { abs($0.date.timeIntervalSinceNow) < abs($1.date.timeIntervalSinceNow) })
+
+        if let currentHour {
+          WeatherCurrentConditionsCell(
+            symbol: SFSymbol(rawValue: currentHour.symbolName),
+            temperature: currentHour.temperature.formatted(
+              .measurement(
+                width: .narrow,
+                numberFormatStyle: .number.precision(.fractionLength(0))
+              )
+            ),
+            conditions: currentHour.condition.description,
+            locality: locationLocality ?? ""
+          )
+        } else {
+          // Fallback to current weather if no hourly data
+          WeatherCurrentConditionsCell(
+            currentWeather: weather.currentWeather,
+            locality: locationLocality ?? ""
+          )
+        }
       } else {
         // For tomorrow, show temperature range
         temperatureRangeView(for: weather)
@@ -177,90 +199,10 @@ private extension WeatherTodayCell {
         let minTemp = minTemp(from: weather),
         let maxTemp = maxTemp(from: weather)
       {
-        // For tomorrow, all temps are future temps
-        // For today, use overall temps as fallback if no past temps exist
-        let minPastTemp = day == .tomorrow ? minTemp : (minPastTemp(from: weather) ?? minTemp)
-        let maxPastTemp = day == .tomorrow ? maxTemp : (maxPastTemp(from: weather) ?? maxTemp)
-        let minFutureTemp = minFutureTemp(from: weather) ?? minTemp
-        let maxFutureTemp = maxFutureTemp(from: weather) ?? maxTemp
-        
-        let closestHour = weather.hourlyForecast.filter({ isDateInSelectedDay($0.date) && $0.date > .now }).min(by: {
-          abs($0.date.timeIntervalSinceNow) < abs($1.date.timeIntervalSinceNow)
-        })
-        
-        // For tomorrow, use the first hour as the "closest"
-        // For today, use closestHour if available, otherwise use the last hour of the day
-        let chartClosestHour = day == .tomorrow 
-          ? weather.hourlyForecast.filter({ isDateInSelectedDay($0.date) }).first
-          : (closestHour ?? weather.hourlyForecast.filter({ isDateInSelectedDay($0.date) }).last)
-        
-        Chart {
-            ForEach(weather.hourlyForecast, id: \.date) { hourWeather in
-              if isDateInSelectedDay(hourWeather.date) {
-                // For tomorrow, all hours are "future" so skip the past rendering
-                if day == .today && (hourWeather.date < .now || hourWeather == chartClosestHour) {
-                  LineMark(
-                    x: .value("Date", hourWeather.date),
-                    y: .value("Temperature", hourWeather.temperature.localizedValue)
-                  )
-                  .lineStyle(StrokeStyle(lineWidth: 4, lineCap: .round, dash: [10, 10]))
-                  .interpolationMethod(.catmullRom)
-                  .foregroundStyle(by: .value("DataSet", "Past Line"))
-
-                  AreaMark(
-                    x: .value("Date", hourWeather.date),
-                    yStart: .value("", minTemp.localizedValue - 5),
-                    yEnd: .value("Temperature", hourWeather.temperature.localizedValue)
-                  )
-                  .interpolationMethod(.catmullRom)
-                  .foregroundStyle(by: .value("DataSet", "Past Area"))
-                }
-                // For tomorrow, render all hours as future; for today, render future hours
-                if day == .tomorrow || hourWeather.date >= .now {
-                  LineMark(
-                    x: .value("Date", hourWeather.date),
-                    y: .value("Temperature", hourWeather.temperature.localizedValue)
-                  )
-                  .lineStyle(StrokeStyle(lineWidth: 4))
-                  .interpolationMethod(.catmullRom)
-                  .foregroundStyle(by: .value("DataSet", "Future Line"))
-
-                  AreaMark(
-                    x: .value("Date", hourWeather.date),
-                    yStart: .value("", minTemp.localizedValue - 5),
-                    yEnd: .value("Temperature", hourWeather.temperature.localizedValue)
-                  )
-                  .interpolationMethod(.catmullRom)
-                  .foregroundStyle(by: .value("DataSet", "Future Area"))
-                }
-            }
-          }
-
-          // Only show current time indicators for today
-          if day == .today, let chartClosestHour {
-            PointMark(
-              x: .value("Date", chartClosestHour.date),
-              y: .value("Temperature", chartClosestHour.temperature.localizedValue)
-            )
-            .foregroundStyle(.text)
-
-            RuleMark(
-              x: .value("Date", chartClosestHour.date)
-            )
-            .lineStyle(StrokeStyle(lineWidth: 0.5))
-            .foregroundStyle(.text)
-          }
-        }
-        .chartForegroundStyleScale([
-            "Past Line": gradientFor(minTemp: minPastTemp, maxTemp: maxPastTemp, opacity: 0.5),
-            "Future Line": gradientFor(minTemp: minFutureTemp, maxTemp: maxFutureTemp),
-            "Past Area": gradientFor(minTemp: minPastTemp, minTempShift: 5, maxTemp: maxPastTemp, opacity: 0.2),
-            "Future Area": gradientFor(minTemp: minFutureTemp, minTempShift: 5, maxTemp: maxFutureTemp, opacity: 0.5)
-        ])
-        .chartLegend(.hidden)
-        .chartYScale(domain: (minTemp.localizedValue - 5)...(maxTemp.localizedValue + 5), range: .plotDimension)
-        .frame(height: 180)
+        temperatureChartView(for: weather, minTemp: minTemp, maxTemp: maxTemp)
       }
+
+      precipitationChartView(for: weather)
 
       Link("Powered by  Weather", destination: .appleWeatherAttribution)
         .font(.caption)
@@ -396,6 +338,212 @@ private extension WeatherTodayCell {
     }
 
     return LinearGradient(colors: colors, startPoint: .bottom, endPoint: .top)
+  }
+
+  func hasPrecipitation(from weather: Weather) -> Bool {
+    weather.hourlyForecast
+      .filter({ isDateInSelectedDay($0.date) })
+      .contains(where: { $0.precipitationAmount.converted(to: .millimeters).value > 0 })
+  }
+
+  func precipitationColor(for condition: WeatherCondition) -> Color {
+    switch condition {
+    case .snow, .heavySnow, .sleet, .freezingRain:
+      return .cyan.opacity(0.7)
+    default:
+      return .blue
+    }
+  }
+
+  func formatPrecipitationValue(_ value: Double) -> String {
+    let formatter: NumberFormatter = value < 1.0 ? .oneDecimalPlace : .noDecimalPlaces
+    return formatter.string(from: NSNumber(value: value)) ?? "0"
+  }
+
+  @ViewBuilder
+  func precipitationChartView(for weather: Weather) -> some View {
+    if hasPrecipitation(from: weather) {
+      let precipitationData = weather.hourlyForecast.filter({ isDateInSelectedDay($0.date) })
+      let maxPrecipitation = precipitationData.map({ $0.precipitationAmount.converted(to: .millimeters).value }).max() ?? 1.0
+
+      // Determine predominant precipitation type for color
+      let hasSnow = precipitationData.contains { hourWeather in
+        switch hourWeather.condition {
+        case .snow, .heavySnow, .sleet, .freezingRain:
+          return hourWeather.precipitationAmount.converted(to: .millimeters).value > 0
+        default:
+          return false
+        }
+      }
+
+      // Calculate closest hour for current time indicator
+      let closestHour = weather.hourlyForecast.filter({ isDateInSelectedDay($0.date) && $0.date > .now }).min(by: {
+        abs($0.date.timeIntervalSinceNow) < abs($1.date.timeIntervalSinceNow)
+      })
+      let chartClosestHour = day == .tomorrow
+        ? weather.hourlyForecast.filter({ isDateInSelectedDay($0.date) }).first
+        : (closestHour ?? weather.hourlyForecast.filter({ isDateInSelectedDay($0.date) }).last)
+
+      Text(hasSnow ? "Snow" : "Rain")
+        .font(.subheadline)
+        .bold()
+        .fontDesign(.rounded)
+        .horizontalAlignment(.leading)
+        .padding(.top, 8)
+
+      Chart {
+        ForEach(weather.hourlyForecast, id: \.date) { hourWeather in
+          if isDateInSelectedDay(hourWeather.date) {
+            // For tomorrow, all hours are "future"; for today, check if past or future
+            let isPast = day == .today && hourWeather.date < .now
+
+            BarMark(
+              x: .value("Date", hourWeather.date),
+              y: .value("Precipitation", hourWeather.precipitationAmount.converted(to: .millimeters).value)
+            )
+            .cornerRadius(5)
+            .foregroundStyle(by: .value("DataSet", isPast ? "Past Precipitation" : "Future Precipitation"))
+          }
+        }
+
+        // Only show current time indicator for today
+        if day == .today, let chartClosestHour {
+          RuleMark(
+            x: .value("Date", chartClosestHour.date)
+          )
+          .lineStyle(StrokeStyle(lineWidth: 0.5))
+          .foregroundStyle(.text)
+        }
+      }
+      .chartForegroundStyleScale([
+        "Past Precipitation": (hasSnow ? Color.cyan.opacity(0.7) : Color.blue).opacity(0.5),
+        "Future Precipitation": hasSnow ? Color.cyan.opacity(0.7) : Color.blue
+      ])
+      .chartLegend(.hidden)
+      .chartYScale(domain: 0...(maxPrecipitation + maxPrecipitation * 0.1), range: .plotDimension)
+      .chartYAxis {
+        AxisMarks(position: .trailing, values: .automatic(desiredCount: 3)) { value in
+          AxisValueLabel {
+            if let doubleValue = value.as(Double.self) {
+              Text("\(formatPrecipitationValue(doubleValue)) mm")
+                .font(.caption2)
+                .frame(width: 40, alignment: .trailing)
+            }
+          }
+        }
+      }
+      .frame(height: 100)
+    }
+  }
+
+  @ViewBuilder
+  func temperatureChartView(
+    for weather: Weather,
+    minTemp: Measurement<UnitTemperature>,
+    maxTemp: Measurement<UnitTemperature>
+  ) -> some View {
+    // For tomorrow, all temps are future temps
+    // For today, use overall temps as fallback if no past temps exist
+    let minPastTemp = day == .tomorrow ? minTemp : (minPastTemp(from: weather) ?? minTemp)
+    let maxPastTemp = day == .tomorrow ? maxTemp : (maxPastTemp(from: weather) ?? maxTemp)
+    let minFutureTemp = minFutureTemp(from: weather) ?? minTemp
+    let maxFutureTemp = maxFutureTemp(from: weather) ?? maxTemp
+
+    let closestHour = weather.hourlyForecast.filter({ isDateInSelectedDay($0.date) && $0.date > .now }).min(by: {
+      abs($0.date.timeIntervalSinceNow) < abs($1.date.timeIntervalSinceNow)
+    })
+
+    // For tomorrow, use the first hour as the "closest"
+    // For today, use closestHour if available, otherwise use the last hour of the day
+    let chartClosestHour = day == .tomorrow
+      ? weather.hourlyForecast.filter({ isDateInSelectedDay($0.date) }).first
+      : (closestHour ?? weather.hourlyForecast.filter({ isDateInSelectedDay($0.date) }).last)
+
+    Chart {
+      ForEach(weather.hourlyForecast, id: \.date) { hourWeather in
+        if isDateInSelectedDay(hourWeather.date) {
+          // For tomorrow, all hours are "future" so skip the past rendering
+          if day == .today && (hourWeather.date < .now || hourWeather == chartClosestHour) {
+            LineMark(
+              x: .value("Date", hourWeather.date),
+              y: .value("Temperature", hourWeather.temperature.localizedValue)
+            )
+            .lineStyle(StrokeStyle(lineWidth: 4, lineCap: .round, dash: [10, 10]))
+            .interpolationMethod(.catmullRom)
+            .foregroundStyle(by: .value("DataSet", "Past Line"))
+
+            AreaMark(
+              x: .value("Date", hourWeather.date),
+              yStart: .value("", minTemp.localizedValue - 5),
+              yEnd: .value("Temperature", hourWeather.temperature.localizedValue)
+            )
+            .interpolationMethod(.catmullRom)
+            .foregroundStyle(by: .value("DataSet", "Past Area"))
+          }
+          // For tomorrow, render all hours as future; for today, render future hours
+          if day == .tomorrow || hourWeather.date >= .now {
+            LineMark(
+              x: .value("Date", hourWeather.date),
+              y: .value("Temperature", hourWeather.temperature.localizedValue)
+            )
+            .lineStyle(StrokeStyle(lineWidth: 4))
+            .interpolationMethod(.catmullRom)
+            .foregroundStyle(by: .value("DataSet", "Future Line"))
+
+            AreaMark(
+              x: .value("Date", hourWeather.date),
+              yStart: .value("", minTemp.localizedValue - 5),
+              yEnd: .value("Temperature", hourWeather.temperature.localizedValue)
+            )
+            .interpolationMethod(.catmullRom)
+            .foregroundStyle(by: .value("DataSet", "Future Area"))
+          }
+        }
+      }
+
+      // Only show current time indicators for today
+      if day == .today, let chartClosestHour {
+        PointMark(
+          x: .value("Date", chartClosestHour.date),
+          y: .value("Temperature", chartClosestHour.temperature.localizedValue)
+        )
+        .foregroundStyle(.text)
+
+        RuleMark(
+          x: .value("Date", chartClosestHour.date)
+        )
+        .lineStyle(StrokeStyle(lineWidth: 0.5))
+        .foregroundStyle(.text)
+      }
+    }
+    .chartForegroundStyleScale([
+      "Past Line": gradientFor(minTemp: minPastTemp, maxTemp: maxPastTemp, opacity: 0.5),
+      "Future Line": gradientFor(minTemp: minFutureTemp, maxTemp: maxFutureTemp),
+      "Past Area": gradientFor(minTemp: minPastTemp, minTempShift: 5, maxTemp: maxPastTemp, opacity: 0.2),
+      "Future Area": gradientFor(minTemp: minFutureTemp, minTempShift: 5, maxTemp: maxFutureTemp, opacity: 0.5)
+    ])
+    .chartLegend(.hidden)
+    .chartYScale(domain: (minTemp.localizedValue - 5)...(maxTemp.localizedValue + 5), range: .plotDimension)
+    .chartYAxis {
+      AxisMarks(position: .trailing) { value in
+        AxisValueLabel {
+          if let doubleValue = value.as(Double.self) {
+            // Determine the temperature unit based on locale
+            let temperatureUnit: UnitTemperature = Locale.current.measurementSystem == .us ? .fahrenheit : .celsius
+            let measurement = Measurement(value: doubleValue, unit: temperatureUnit)
+            Text(measurement.formatted(
+              .measurement(
+                width: .narrow,
+                numberFormatStyle: .number.precision(.fractionLength(0))
+              )
+            ))
+            .font(.caption2)
+            .frame(width: 40, alignment: .trailing)
+          }
+        }
+      }
+    }
+    .frame(height: 180)
   }
 }
 
