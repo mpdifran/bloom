@@ -24,7 +24,11 @@ struct LogMealIntent: AppIntent {
   )
   var foodItems: [FoodItemEntity]
 
-  @Parameter(title: "Meal", default: .automatic)
+  @Parameter(
+    title: "Meal",
+    default: .automatic,
+    requestValueDialog: IntentDialog("Which meal?")
+  )
   var mealOption: MealOption
 
   @Parameter(title: "Servings", default: 1.0)
