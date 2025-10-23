@@ -12,11 +12,12 @@ struct BloomAppShortcuts: AppShortcutsProvider {
     AppShortcut(
       intent: LogMealIntent(),
       phrases: [
-        "Log a meal in \(.applicationName)",
         "Log food in \(.applicationName)",
-        "Track food in \(.applicationName)"
+        "Log food with \(.applicationName)",
+        "Track food in \(.applicationName)",
+        "Track food with \(.applicationName)"
       ],
-      shortTitle: "Log Meal",
+      shortTitle: "Log Food",
       systemImageName: "fork.knife"
     )
     AppShortcut(
