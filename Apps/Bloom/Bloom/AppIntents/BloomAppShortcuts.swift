@@ -41,5 +41,15 @@ struct BloomAppShortcuts: AppShortcutsProvider {
       shortTitle: "Scan Food",
       systemImageName: "camera.viewfinder"
     )
+    AppShortcut(
+      intent: OpenVitalIntent(),
+      phrases: [
+        "View \(\.$vitalType) in \(.applicationName)",
+        "Show \(\.$vitalType) in \(.applicationName)",
+        "Open \(\.$vitalType) in \(.applicationName)"
+      ],
+      shortTitle: "View Vital",
+      systemImageName: "figure"
+    )
   }
 }

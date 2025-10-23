@@ -10,6 +10,7 @@ import SwiftUI
 import RevenueCat
 import TelemetryDeck
 import SFSafeSymbols
+import DataContainer
 
 enum Tab: CaseIterable, Identifiable {
   var id: Self { self }
@@ -65,6 +66,7 @@ final class TabController {
 
   var showPaywall = false
   var toggleToDismiss = false
+  var pendingVitalNavigation: VitalModel.Kind?
 
   private var notificationCenterDelegate: NotificationCenterDelegate!
 

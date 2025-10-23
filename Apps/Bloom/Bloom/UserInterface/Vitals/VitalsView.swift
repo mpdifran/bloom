@@ -77,6 +77,12 @@ struct VitalsView: View {
       .toolbar {
         SettingsProfileViewToolbarButton()
       }
+      .onChange(of: tabController.pendingVitalNavigation) { oldValue, newValue in
+        if let vitalKind = newValue {
+          path.append(vitalKind)
+          tabController.pendingVitalNavigation = nil
+        }
+      }
     }
     .tabItem {
       Label("You", systemSymbol: .figure)

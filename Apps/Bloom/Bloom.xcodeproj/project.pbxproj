@@ -518,7 +518,9 @@
 				MealEntity.swift,
 				MealOption.swift,
 				OpenActionIntent.swift,
+				OpenVitalIntent.swift,
 				TodayInsightConfigurationIntent.swift,
+				VitalType.swift,
 			);
 			target = FFACBAD82BAC7788006AAD0B /* Bloom */;
 		};
@@ -536,7 +538,9 @@
 				MealEntity.swift,
 				MealOption.swift,
 				OpenActionIntent.swift,
+				OpenVitalIntent.swift,
 				TodayInsightConfigurationIntent.swift,
+				VitalType.swift,
 			);
 			target = FF97C3F22E9C407300FE7A82 /* BloomWidgetsExtension */;
 		};

@@ -123,6 +123,36 @@ private extension RootView {
       presentedSheet = BodyWeightActionCardView(performDismiss: nil).asAny
     case "/action/log-blood-pressure":
       presentedSheet = BloodPressureActionCardView(performDismiss: nil).asAny
+    case "/vital/sleep-quality":
+      tabController.activeTab = .vitals
+      tabController.pendingVitalNavigation = .sleepQuality
+    case "/vital/activity-level":
+      tabController.activeTab = .vitals
+      tabController.pendingVitalNavigation = .activityLevel
+    case "/vital/heart-health":
+      tabController.activeTab = .vitals
+      tabController.pendingVitalNavigation = .heartHealth
+    case "/vital/body-composition":
+      tabController.activeTab = .vitals
+      tabController.pendingVitalNavigation = .bodyComposition
+    case "/vital/stress-levels":
+      tabController.activeTab = .vitals
+      tabController.pendingVitalNavigation = .stressLevels
+    case "/vital/nutrition":
+      tabController.activeTab = .vitals
+      tabController.pendingVitalNavigation = .nutrition
+    case "/vital/exercise-effectiveness":
+      tabController.activeTab = .vitals
+      tabController.pendingVitalNavigation = .exerciseEffectiveness
+    case "/vital/cycle-tracking":
+      tabController.activeTab = .vitals
+      tabController.pendingVitalNavigation = .cycleTracking
+    case "/vital/bowel-movements":
+      tabController.activeTab = .vitals
+      tabController.pendingVitalNavigation = .bowelMovements
+    case "/vital/cardio-fitness":
+      tabController.activeTab = .vitals
+      tabController.pendingVitalNavigation = .cardioFitness
     default:
       break
     }
