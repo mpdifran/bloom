@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppUI
+import TelemetryDeck
 
 @MainActor
 struct RootView: View {
@@ -102,6 +103,10 @@ private extension RootView {
     // bloom://action/food-scanner -> host="action", path="/food-scanner" -> "/action/food-scanner"
     let path = url.scheme == "bloom" ? "/\(url.host ?? "")\(url.path)" : url.path
 
+    // Track which URLs are being opened
+    let urlScheme = url.scheme ?? "unknown"
+    var wasHandled = true
+
     switch path {
     case "/today":
       tabController.activeTab = .today
@@ -154,8 +159,19 @@ private extension RootView {
       tabController.activeTab = .vitals
       tabController.pendingVitalNavigation = .cardioFitness
     default:
-      break
+      wasHandled = false
     }
+
+    // Send analytics after handling the URL
+    TelemetryDeck.signal(
+      "Universal Link Opened",
+      parameters: [
+        "path": path,
+        "scheme": urlScheme,
+        "url": url.absoluteString,
+        "handled": String(wasHandled)
+      ]
+    )
   }
 
   @available(iOS 26.0, *)
