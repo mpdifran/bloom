@@ -10,6 +10,8 @@ import Foundation
 import SwiftData
 import DataContainer
 import CoreHealth
+import CoreNetwork
+import AppFoundations
 
 struct LogMealIntent: AppIntent {
   nonisolated(unsafe) static var title: LocalizedStringResource = "Log Meal"
@@ -83,7 +85,7 @@ struct LogMealIntent: AppIntent {
 
     // Check if we have any items to log
     if foodItemServings.isEmpty {
-      throw IntentError.message("Unable to fetch food data. Please try again.")
+      throw NSError(description: "Unable to fetch food data. Please try again.")
     }
 
     // Log the food items

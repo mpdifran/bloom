@@ -185,10 +185,11 @@ public extension NetworkRequester {
 
   func getFoodItem(id: String) async throws -> FoodItem {
     let request = await URLRequest.Food.getById(foodId: id)
-    return try await URLSession.shared.authenticatedBloomRequestWithResponse(
+    let response = try await URLSession.shared.authenticatedBloomRequestWithResponse(
       request: request,
-      responseType: FoodItem.self
+      responseType: GetFoodItemResponse.self
     )
+    return response.foodItem
   }
 }
 

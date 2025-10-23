@@ -44,3 +44,4 @@ extension TodayReportRequest: @retroactive Content { }
 extension TodayReportResponse: @retroactive Content { }
 extension BiologicalAgeRequest: @retroactive Content { }
 extension BiologicalAgeResponse: @retroactive Content { }
+extension GetFoodItemResponse: @retroactive Content { }

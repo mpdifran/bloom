@@ -189,7 +189,7 @@ extension FoodController {
   }
 
   @Sendable
-  func getFoodItemById(_ request: Request) async throws -> FoodItem {
+  func getFoodItemById(_ request: Request) async throws -> GetFoodItemResponse {
     guard let foodId = request.parameters.get("id") else {
       throw Abort(.badRequest)
     }
@@ -202,7 +202,7 @@ extension FoodController {
       throw Abort(.internalServerError, reason: "Failed to convert food item")
     }
 
-    return foodItem
+    return GetFoodItemResponse(foodItem: foodItem)
   }
 }
 
