@@ -16,6 +16,7 @@ import CoreNetwork
 private extension String {
   static let lastTodayContentRequestDate = "TodayInsightsManager.lastTodayContentRequestDate"
   static let lastTodayContentResponse = "TodayInsightsManager.lastTodayContentResponse"
+  static let budStateOverride = "TodayInsightsManager.budStateOverride"
 }
 
 @MainActor @Observable
@@ -24,6 +25,16 @@ final class TodayInsightsManager {
 
   var isLoadingContent = false
   var hasLoadError = false
+
+  var budStateOverride: String? {
+    didSet {
+      if let budStateOverride {
+        UserDefaults.standard.set(budStateOverride, forKey: .budStateOverride)
+      } else {
+        UserDefaults.standard.removeObject(forKey: .budStateOverride)
+      }
+    }
+  }
 
   private var lastRequestDate: Date? {
     didSet {
@@ -64,6 +75,12 @@ final class TodayInsightsManager {
   }
 
   var budState: TodayReportResponse.BudState? {
+    // Check for developer override first
+    if let overrideRawValue = budStateOverride,
+       let overrideState = TodayReportResponse.BudState(rawValue: overrideRawValue) {
+      return overrideState
+    }
+
     guard let content = todayContent,
           let data = content.budState.data(using: .utf8),
           let budState = try? JSONDecoder().decode(TodayReportResponse.BudState.self, from: data) else {
@@ -176,6 +193,9 @@ final class TodayInsightsManager {
        let response = try? JSONDecoder().decode(TodayContentDTO.self, from: data) {
       lastResponse = response
     }
+
+    // Load bud state override
+    budStateOverride = UserDefaults.standard.string(forKey: .budStateOverride)
   }
 
   private func performOneTimeDataCleanup() async {

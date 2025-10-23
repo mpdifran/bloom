@@ -12,6 +12,7 @@ import HealthKit
 import DataContainer
 import CoreHealth
 import CoreNetwork
+import BloomModel
 
 struct DeveloperSettingsView: View {
 
@@ -23,6 +24,7 @@ struct DeveloperSettingsView: View {
   @State private var authStatus: HKAuthorizationRequestStatus = .unknown
   @State private var shouldPromptForNotificationPermissions = false
   @State private var showRCDebugOverlay = false
+  @State private var todayInsightsManager = TodayInsightsManager.shared
   @State private var presentedFullScreenView: AnyView?
   @State private var presentedSheet: AnyView?
   @State private var alertDetails: AlertDetails?
@@ -639,6 +641,27 @@ extension DeveloperSettingsView {
         .padding(.horizontal)
 
       SettingsSectionContainer {
+        Menu {
+          Button("No Override") {
+            todayInsightsManager.budStateOverride = nil
+          }
+
+          Divider()
+
+          ForEach(TodayReportResponse.BudState.allCases, id: \.self) { state in
+            Button(budStateLabel(for: state)) {
+              todayInsightsManager.budStateOverride = state.rawValue
+            }
+          }
+        } label: {
+          SettingsCell("Bud State Override") {
+            Text(currentBudStateLabel)
+              .foregroundStyle(.secondary)
+          }
+        }
+
+        Divider()
+
         SettingsCell("Color Palette", iconType: .disclosure) { }
           .onTapGesture {
             presentedSheet = ColorPaletteView().asAny
@@ -711,6 +734,7 @@ extension DeveloperSettingsView {
           showDeveloperMode = false
           bypassPaywall = false
           enableOpenAIModelOverride = false
+          todayInsightsManager.budStateOverride = nil
           clearAllExperimentOverrides()
           dismiss()
         } label: {
@@ -729,6 +753,47 @@ extension DeveloperSettingsView {
     // Clear all experiment overrides
     let overrideKey = String.ExperimentOverrideKey.key(for: ExperimentIdentifier.softerHealthKitView.value)
     UserDefaults.standard.removeObject(forKey: overrideKey)
+  }
+
+  private var currentBudStateLabel: String {
+    guard let rawValue = todayInsightsManager.budStateOverride,
+          let state = TodayReportResponse.BudState(rawValue: rawValue) else {
+      return "No Override"
+    }
+    return budStateLabel(for: state)
+  }
+
+  private func budStateLabel(for state: TodayReportResponse.BudState) -> String {
+    switch state {
+    case .groggy:
+      return "Groggy"
+    case .sleepy:
+      return "Sleepy"
+    case .eatingSalad:
+      return "Eating Salad"
+    case .holdingSmoothie:
+      return "Holding Smoothie"
+    case .holdingTrophy:
+      return "Holding Trophy"
+    case .workingOut:
+      return "Working Out"
+    case .stressed:
+      return "Stressed"
+    case .proudCoach:
+      return "Proud Coach"
+    case .superhero:
+      return "Superhero"
+    case .running:
+      return "Running"
+    case .strengthTraining:
+      return "Strength Training"
+    case .yoga:
+      return "Yoga"
+    case .bicycleRiding:
+      return "Bicycle Riding"
+    @unknown default:
+      return state.rawValue.capitalized
+    }
   }
 }
 
