@@ -227,16 +227,33 @@ AASA files are served at `https://api.trybloom.app/.well-known/apple-app-site-as
 - `https://api.trybloom.app/today` - Navigate to Today tab
   - Used by: Today Insight widget
 - `https://api.trybloom.app/paywall` - Show subscription paywall
-  - Used by: Bud Summary widget (non-subscribers)
+  - Query parameters:
+    - `?focus=standard` (default) - Standard paywall content
+    - `?focus=todayInsights` - Paywall focused on Today Insights feature
+    - `?focus=biologicalAge` - Paywall focused on Biological Age feature
+  - Used by: Bud Summary widget, Today Insight widget (non-subscribers)
 
 #### Action Shortcuts
-- `https://api.trybloom.app/action/food-scanner` - Open AI food scanner
+- `https://api.trybloom.app/action/magic-scan` - Open AI food scanner (magic scan)
+- `https://api.trybloom.app/action/barcode-scan` - Open barcode scanner
 - `https://api.trybloom.app/action/log-food` - Log food
 - `https://api.trybloom.app/action/log-water` - Log water
 - `https://api.trybloom.app/action/log-bowel-movement` - Log bowel movement
 - `https://api.trybloom.app/action/log-period` - Log period
 - `https://api.trybloom.app/action/log-weight` - Log weight
 - `https://api.trybloom.app/action/log-blood-pressure` - Log blood pressure
+
+#### Vital Shortcuts
+- `https://api.trybloom.app/vital/sleep-quality` - View Sleep Quality vital
+- `https://api.trybloom.app/vital/activity-level` - View Activity Level vital
+- `https://api.trybloom.app/vital/heart-health` - View Heart Health vital
+- `https://api.trybloom.app/vital/body-composition` - View Body Composition vital
+- `https://api.trybloom.app/vital/stress-levels` - View Stress Levels vital
+- `https://api.trybloom.app/vital/nutrition` - View Nutrition vital
+- `https://api.trybloom.app/vital/exercise-effectiveness` - View Exercise Effectiveness vital
+- `https://api.trybloom.app/vital/cycle-tracking` - View Cycle Tracking vital
+- `https://api.trybloom.app/vital/bowel-movements` - View Bowel Movements vital
+- `https://api.trybloom.app/vital/cardio-fitness` - View Cardio Fitness vital
 
 ### URL Handling Pattern
 All deep links are handled in `RootView.handleURL()`:
@@ -255,8 +272,22 @@ private func handleURL(_ url: URL) {
     case "/today":
         tabController.activeTab = .today
     case "/paywall":
-        tabController.showPaywall = true
-    case "/action/food-scanner":
+        // Parse focus parameter from query string
+        let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        let focusParam = components?.queryItems?.first(where: { $0.name == "focus" })?.value
+        let focus: BloomPlusPaywall.Focus
+
+        switch focusParam {
+        case "todayInsights":
+            focus = .todayInsights
+        case "biologicalAge":
+            focus = .biologicalAge
+        default:
+            focus = .standard
+        }
+
+        presentedPaywall = BloomPlusPaywall(focus: focus).asAny
+    case "/action/magic-scan":
         presentedSheet = AIFoodScannerView().asAny
     // ... other cases
     }

@@ -58,7 +58,7 @@ struct TodayInsightWidgetView: View {
       Spacer(minLength: 0)
     }
     .foregroundStyle(.white)
-    .widgetURL(URL(string: "https://api.trybloom.app/paywall"))
+    .widgetURL(URL(string: "https://api.trybloom.app/paywall?focus=todayInsights"))
     .containerBackground(entry.color.gradient, for: .widget)
   }
 

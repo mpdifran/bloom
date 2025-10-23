@@ -134,9 +134,6 @@ struct TodayView: View {
       .sheet($presentedSheet)
       .navigationDestination($presentedNavPush)
       .fullScreenCover($presentedFullScreen)
-      .fullScreenCover(isPresented: $tabController.showPaywall) {
-        BloomPlusPaywall()
-      }
       .confirmationDialog($confirmationDialogDetails)
     }
     .animation(.default, value: todayViewModel.todayContent)

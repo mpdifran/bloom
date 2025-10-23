@@ -36,7 +36,7 @@ struct BudSummaryWidgetView: View {
       sceneryImageView
         .zStackAlignment(.top)
     }
-    .widgetURL(!entry.isSubscribed ? URL(string: "https://api.trybloom.app/paywall") : nil)
+    .widgetURL(!entry.isSubscribed ? URL(string: "https://api.trybloom.app/paywall?focus=todayInsights") : nil)
   }
 }
 

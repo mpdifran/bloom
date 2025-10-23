@@ -35,7 +35,7 @@ private extension HealthInsightWidgetView {
       title: entry.title,
       body: entry.body,
       background: gradientForPriority(entry.priority),
-      url: URL(string: "https://api.trybloom.app/paywall")
+      url: URL(string: "https://api.trybloom.app/paywall?focus=todayInsights")
     )
   }
 

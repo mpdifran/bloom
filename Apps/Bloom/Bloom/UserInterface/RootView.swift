@@ -20,6 +20,7 @@ struct RootView: View {
 
   @ObservedObject private var entitlementController = EntitlementController.shared
   @State private var presentedSheet: AnyView?
+  @State private var presentedPaywall: AnyView?
 
   @State private var selectionToggle = false
   @State private var shouldShowLogPeriodSheet = false
@@ -76,6 +77,7 @@ struct RootView: View {
         shouldShowLogPeriodSheet = false
       }
     }
+    .fullScreenCover($presentedPaywall)
     .animation(.easeInOut(duration: 1), value: userController.isAuthenticated)
     .animation(.easeInOut(duration: 1), value: hasShownOnboarding)
     .onChange(of: tabController.toggleToDismiss) { oldValue, newValue in
@@ -111,7 +113,21 @@ private extension RootView {
     case "/today":
       tabController.activeTab = .today
     case "/paywall":
-      tabController.showPaywall = true
+      // Parse focus parameter from query string
+      let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+      let focusParam = components?.queryItems?.first(where: { $0.name == "focus" })?.value
+      let focus: BloomPlusPaywall.Focus
+
+      switch focusParam {
+      case "todayInsights":
+        focus = .todayInsights
+      case "biologicalAge":
+        focus = .biologicalAge
+      default:
+        focus = .standard
+      }
+
+      presentedPaywall = BloomPlusPaywall(focus: focus).asAny
     case "/action/magic-scan":
       EntitledAction(presentedSheet: $presentedSheet) {
         presentedSheet = AIFoodScannerView().asAny

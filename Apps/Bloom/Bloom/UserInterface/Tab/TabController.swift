@@ -64,7 +64,6 @@ final class TabController {
   var chatContexts = [ChatContext]()
   var chatLauncherSafeAreaInset: CGFloat = 0
 
-  var showPaywall = false
   var toggleToDismiss = false
   var pendingVitalNavigation: VitalModel.Kind?
 
