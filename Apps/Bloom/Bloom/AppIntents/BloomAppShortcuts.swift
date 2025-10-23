@@ -20,26 +20,13 @@ struct BloomAppShortcuts: AppShortcutsProvider {
       systemImageName: "fork.knife"
     )
     AppShortcut(
-      intent: OpenActionIntent(actionType: .barcodeScan),
+      intent: OpenActionIntent(),
       phrases: [
-        "Scan barcodes in \(.applicationName)",
-        "Scan barcodes with \(.applicationName)",
-        "Open barcode scanner with \(.applicationName)",
-        "Open barcode scanner in \(.applicationName)"
+        "\(\.$actionType) in \(.applicationName)",
+        "\(\.$actionType) with \(.applicationName)"
       ],
-      shortTitle: "Scan Barcodes",
-      systemImageName: "barcode.viewfinder"
-    )
-    AppShortcut(
-      intent: OpenActionIntent(actionType: .magicScan),
-      phrases: [
-        "Open magic scanner in \(.applicationName)",
-        "Magic scan food in \(.applicationName)",
-        "Scan food with \(.applicationName)",
-        "Open food scanner with \(.applicationName)"
-      ],
-      shortTitle: "Scan Food",
-      systemImageName: "camera.viewfinder"
+      shortTitle: "Open Logger",
+      systemImageName: "plus.circle.fill"
     )
     AppShortcut(
       intent: OpenVitalIntent(),
