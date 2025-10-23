@@ -28,6 +28,7 @@ extension FoodController: RouteCollection {
           $0.post("mark-as-inaccurate", use: markAsInaccurate)
           $0.post("submit-food-item-issue", use: submitFoodItemIssue)
           $0.post("track-log", use: trackLog)
+          $0.get(":id", use: getFoodItemById)
         }
       }
       $0.group("v2") {
@@ -185,6 +186,23 @@ extension FoodController {
     try await request.foodDatabaseService.incrementLogCount(foodIDs: requestBody.foodIds)
 
     return Response(status: .ok)
+  }
+
+  @Sendable
+  func getFoodItemById(_ request: Request) async throws -> FoodItem {
+    guard let foodId = request.parameters.get("id") else {
+      throw Abort(.badRequest)
+    }
+
+    guard let foodItemRecord = try await FoodItemRecord.find(foodId, on: request.db) else {
+      throw Abort(.notFound, reason: "Food item not found")
+    }
+
+    guard let foodItem = foodItemRecord.asFoodItem() else {
+      throw Abort(.internalServerError, reason: "Failed to convert food item")
+    }
+
+    return foodItem
   }
 }
 

@@ -182,6 +182,14 @@ public extension NetworkRequester {
     let request = try await URLRequest.Food.trackLog(body: body)
     try await URLSession.shared.authenticatedBloomRequest(request: request)
   }
+
+  func getFoodItem(id: String) async throws -> FoodItem {
+    let request = await URLRequest.Food.getById(foodId: id)
+    return try await URLSession.shared.authenticatedBloomRequestWithResponse(
+      request: request,
+      responseType: FoodItem.self
+    )
+  }
 }
 
 // MARK: - Today Content

@@ -33,7 +33,27 @@ struct FoodItemEntity: AppEntity, Identifiable, Codable {
       title += " - \(brandName)"
     }
 
-    return DisplayRepresentation(title: "\(title)")
+    // Create subtitle with nutrition info
+    var subtitle: String?
+    if let calories = calories {
+      var nutritionParts: [String] = ["\(Int(calories)) cal"]
+      if let protein = protein {
+        nutritionParts.append("\(Int(protein))g protein")
+      }
+      if let carbs = carbs {
+        nutritionParts.append("\(Int(carbs))g carbs")
+      }
+      if let fat = fat {
+        nutritionParts.append("\(Int(fat))g fat")
+      }
+      subtitle = nutritionParts.joined(separator: " • ")
+    }
+
+    return DisplayRepresentation(
+      title: LocalizedStringResource(stringLiteral: title),
+      subtitle: subtitle.map { LocalizedStringResource(stringLiteral: $0) },
+      image: DisplayRepresentation.Image(systemName: "fork.knife")
+    )
   }
 
   nonisolated(unsafe) static var defaultQuery = FoodItemQuery()

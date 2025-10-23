@@ -55,20 +55,35 @@ struct LogMealIntent: AppIntent {
     // Create model context
     let modelContext = ContainerHolder.shared.createContext()
 
-    // Convert food entities back to FoodItem for logging
+    // Fetch full food item data using hybrid approach
     var foodItemServings = [FoodItemServingAmount]()
 
     for foodEntity in foodItems {
-      // Fetch the full FoodItem from the database
-      guard let foodItemRecord = try modelContext.fetchFirstFoodItem(for: foodEntity.id) else {
-        continue
+      // Try to fetch from database first (gets complete nutrition data)
+      if let foodItemRecord = try modelContext.fetchFirstFoodItem(for: foodEntity.id) {
+        let foodItem = foodItemRecord.asNetworkFoodItem()
+        foodItemServings.append(FoodItemServingAmount(
+          serving: servings,
+          foodItem: foodItem
+        ))
+      } else {
+        // Fallback: Fetch from backend API
+        do {
+          let foodItem = try await NetworkRequester.shared.getFoodItem(id: foodEntity.id)
+          foodItemServings.append(FoodItemServingAmount(
+            serving: servings,
+            foodItem: foodItem
+          ))
+        } catch {
+          // Skip items that can't be fetched
+          continue
+        }
       }
+    }
 
-      let foodItem = foodItemRecord.asNetworkFoodItem()
-      foodItemServings.append(FoodItemServingAmount(
-        serving: servings,
-        foodItem: foodItem
-      ))
+    // Check if we have any items to log
+    if foodItemServings.isEmpty {
+      throw IntentError.message("Unable to fetch food data. Please try again.")
     }
 
     // Log the food items

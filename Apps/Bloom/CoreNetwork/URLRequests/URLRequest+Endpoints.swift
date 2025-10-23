@@ -74,6 +74,9 @@ extension URLRequest {
     static func trackLog(body: TrackFoodLogRequest) async throws -> URLRequest {
       try await URLRequest.post("v1/food/track-log", body: body)
     }
+    static func getById(foodId: String) async -> URLRequest {
+      await URLRequest.get("v1/food/\(foodId)")
+    }
   }
 }
 

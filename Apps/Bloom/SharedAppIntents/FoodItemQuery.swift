@@ -32,7 +32,8 @@ struct FoodItemQuery: EntityQuery, EntityStringQuery {
     // Fetch frequently logged foods (last 2 months, all meals)
     let frequentFoods = try await modelActor.fetchFrequentLogs(for: nil)
 
-    return frequentFoods.map { FoodItemEntity(from: $0) }
+    // Limit to 30 items for better picker performance
+    return frequentFoods.prefix(30).map { FoodItemEntity(from: $0) }
   }
 
   func entities(matching string: String) async throws -> [FoodItemEntity] {
@@ -43,7 +44,7 @@ struct FoodItemQuery: EntityQuery, EntityStringQuery {
       preferredCountry: "usa"
     )
 
-    // Flatten all sections and convert to FoodItemEntity
-    return sections.flatMap { $0.foods }.map { FoodItemEntity(from: $0) }
+    // Flatten all sections and convert to FoodItemEntity, limited to 30 items
+    return sections.flatMap { $0.foods }.prefix(30).map { FoodItemEntity(from: $0) }
   }
 }
