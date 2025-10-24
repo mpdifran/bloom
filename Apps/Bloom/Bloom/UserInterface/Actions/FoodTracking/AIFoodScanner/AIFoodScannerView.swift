@@ -390,6 +390,13 @@ private extension AIFoodScannerView {
       meal: nutritionViewModel.suggestedMeal
     )
 
+    // Donate intent for Siri suggestions
+    await IntentDonator.donateMealLog(
+      foodItemServings: viewModel.servings,
+      meal: nutritionViewModel.suggestedMeal,
+      numberOfServings: 1
+    )
+
     if saveAsMeal {
       try await nutritionViewModel.createMeal(
         modelContext: modelContext,

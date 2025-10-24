@@ -111,6 +111,14 @@ private extension FoodItemCell {
       meal: nutritionViewModel.suggestedMeal,
       numberOfServings: 1
     )
+
+    // Donate intent for Siri suggestions
+    await IntentDonator.donateMealLog(
+      foodItemServings: [FoodItemServingAmount(serving: 1, foodItem: foodItem)],
+      meal: nutritionViewModel.suggestedMeal,
+      numberOfServings: 1
+    )
+
     hasLoggedThisFoodItem = true
     saveComplete.toggle()
     SoundPlayer.playLogHealthData()

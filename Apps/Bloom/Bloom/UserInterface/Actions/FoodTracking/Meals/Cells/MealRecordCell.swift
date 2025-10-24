@@ -119,6 +119,23 @@ private extension MealRecordCell {
       meal: nutritionViewModel.suggestedMeal
     )
 
+    // Donate intent for Siri suggestions
+    if let items = mealRecord.items {
+      let foodItemServings = items.compactMap { item -> FoodItemServingAmount? in
+        guard let foodItem = item.foodItem else { return nil }
+        return FoodItemServingAmount(
+          serving: item.numberOfServings,
+          foodItem: foodItem.asNetworkFoodItem()
+        )
+      }
+
+      await IntentDonator.donateMealLog(
+        foodItemServings: foodItemServings,
+        meal: nutritionViewModel.suggestedMeal,
+        numberOfServings: 1
+      )
+    }
+
     hasLoggedThisMeal = true
     saveComplete.toggle()
     SoundPlayer.playLogHealthData()

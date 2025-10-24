@@ -162,6 +162,13 @@ private extension ChatDetectedFoodCell {
       meal: meal
     )
 
+    // Donate intent for Siri suggestions
+    await IntentDonator.donateMealLog(
+      foodItemServings: servings,
+      meal: meal,
+      numberOfServings: 1
+    )
+
     hasAddedFood = true
     try modelContext.markChatMessageActionTaken(id: chatMessageID, hasPerformedAction: hasAddedFood)
     try modelContext.storeDBID(id: chatMessageID, dbID: foodLogID)

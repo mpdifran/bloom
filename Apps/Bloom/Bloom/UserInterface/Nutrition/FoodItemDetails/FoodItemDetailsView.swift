@@ -399,6 +399,13 @@ private extension FoodItemDetailsView {
         meal: meal,
         numberOfServings: numberOfServings
       )
+
+      // Donate intent for Siri suggestions
+      await IntentDonator.donateMealLog(
+        foodItemServings: [FoodItemServingAmount(serving: numberOfServings, foodItem: foodItem)],
+        meal: meal,
+        numberOfServings: numberOfServings
+      )
     }
 
     saveComplete.toggle()
