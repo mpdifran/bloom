@@ -16,11 +16,11 @@ public extension SleepVitalsMonthlySummary {
     case great
 
     public init(sleepScore: Double) {
-      if sleepScore < 4 {
+      if sleepScore < 40 {
         self = .poor
-      } else if sleepScore < 7 {
+      } else if sleepScore < 70 {
         self = .low
-      } else if sleepScore < 9 {
+      } else if sleepScore < 90 {
         self = .good
       } else {
         self = .great
@@ -71,22 +71,22 @@ public extension SleepVitalsMonthlySummary {
     case .poor:
       return VitalModel.BarLevel(
         level: .low,
-        proportion: averageSleepScore.scaledPercent(lower: 0, upper: 4)
+        proportion: averageSleepScore.scaledPercent(lower: 0, upper: 40)
       )
     case .low:
       return VitalModel.BarLevel(
         level: .medium,
-        proportion: averageSleepScore.scaledPercent(lower: 4, upper: 7)
+        proportion: averageSleepScore.scaledPercent(lower: 40, upper: 70)
       )
     case .good:
       return VitalModel.BarLevel(
         level: .high,
-        proportion: averageSleepScore.scaledPercent(lower: 7, upper: 9)
+        proportion: averageSleepScore.scaledPercent(lower: 70, upper: 90)
       )
     case .great:
       return VitalModel.BarLevel(
         level: .optimal,
-        proportion: averageSleepScore.scaledPercent(lower: 9, upper: 10)
+        proportion: averageSleepScore.scaledPercent(lower: 90, upper: 100)
       )
     }
   }
@@ -146,7 +146,7 @@ public extension SleepVitalsMonthlySummary {
 public extension SleepVitalsMonthlySummary.Details {
 
   var score: Double? {
-    averageSleepScore?.scaledPercent(lower: 4, upper: 8)
+    averageSleepScore?.scaledPercent(lower: 40, upper: 80)
   }
 
   var hasNoData: Bool {

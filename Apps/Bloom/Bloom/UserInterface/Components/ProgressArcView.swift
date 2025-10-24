@@ -52,6 +52,7 @@ struct ProgressArcView: View {
         )
 
       Image(systemSymbol: symbol)
+        .rotationEffect(.degrees(90))
         .foregroundStyle(.black)
         .font(.system(size: thickness * 0.6))
         .rotationEffect(

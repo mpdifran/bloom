@@ -33,7 +33,7 @@ extension Double {
   static let maxRestingHeartRatePercent: Double = 0.9
   static let minHeartRate: Double = 60
   static let maxHeartRate: Double = 68
-  static let maxScore: Double = 10
+  static let maxScore: Double = 100
 }
 
 public struct SleepAnalysis: Codable, Hashable, Identifiable, Sendable {
@@ -484,11 +484,11 @@ public extension SleepAnalysis {
       ),
       SleepAnalysis(
         startDate: Date().addingTimeInterval(-(280800)),
-        endDate: Date.now.addingTimeInterval(-259200),
+        endDate: Date.now.addingTimeInterval(-253200),
         hasDetailedSleepCategories: true,
-        deepSleepMinutes: 46,
+        deepSleepMinutes: 70,
         coreSleepMinutes: 260,
-        remSleepMinutes: 48,
+        remSleepMinutes: 150,
         awakeSleepMinutes: 12,
         averageRestingHeartRate: 65,
         environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData,

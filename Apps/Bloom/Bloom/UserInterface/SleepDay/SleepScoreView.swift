@@ -30,21 +30,21 @@ struct SleepScoreView: View {
         VStack(spacing: spacing) {
           ZStack(alignment: .bottom) {
             ProgressArcView(
-              progress: CGFloat(sleepAnalysis.sleepLengthScore) / 10.0,
+              progress: CGFloat(sleepAnalysis.sleepLengthScore) / 100.0,
               dimension: proxy.size.width,
               thickness: .lineWidth / divisor,
               symbol: .clock,
               color: .mutedGreen
             )
             ProgressArcView(
-              progress: sleepAnalysis.awakeSleepScore.map { $0.asCGFloat / 10 },
+              progress: sleepAnalysis.awakeSleepScore.map { $0.asCGFloat / 100 },
               dimension: proxy.size.width - (2.0 * scaledLineWidth) - scaledRingSpacing,
               thickness: .lineWidth / divisor,
               symbol: .boltHorizontal,
               color: .awakeSleep
             )
             ProgressArcView(
-              progress: sleepAnalysis.heartRateScore.map { $0.asCGFloat / 10 },
+              progress: sleepAnalysis.heartRateScore.map { $0.asCGFloat / 100 },
               dimension: proxy.size.width - (4.0 * scaledLineWidth) - (2.0 * scaledRingSpacing),
               thickness: .lineWidth / divisor,
               symbol: .heart,
@@ -53,7 +53,7 @@ struct SleepScoreView: View {
           }
           ZStack(alignment: .top) {
             ProgressArcView(
-              progress: sleepAnalysis.deepSleepScore.map { $0.asCGFloat / 10 },
+              progress: sleepAnalysis.deepSleepScore.map { $0.asCGFloat / 100 },
               dimension: proxy.size.width - (4.0 * scaledLineWidth) - (2.0 * scaledRingSpacing),
               thickness: .lineWidth / divisor,
               symbol: .arrowDownToLine,
@@ -61,7 +61,7 @@ struct SleepScoreView: View {
               color: .deepSleep
             )
             ProgressArcView(
-              progress: sleepAnalysis.coreSleepScore.map { $0.asCGFloat / 10 },
+              progress: sleepAnalysis.coreSleepScore.map { $0.asCGFloat / 100 },
               dimension: proxy.size.width - (2.0 * scaledLineWidth) - scaledRingSpacing,
               thickness: .lineWidth / divisor,
               symbol: .circleDottedCircle,
@@ -69,7 +69,7 @@ struct SleepScoreView: View {
               color: .coreSleep
             )
             ProgressArcView(
-              progress: sleepAnalysis.remSleepScore.map { $0.asCGFloat / 10 },
+              progress: sleepAnalysis.remSleepScore.map { $0.asCGFloat / 100 },
               dimension: proxy.size.width,
               thickness: .lineWidth / divisor,
               symbol: .eyesInverse,
@@ -78,14 +78,14 @@ struct SleepScoreView: View {
             )
           }
         }
+        .rotationEffect(.degrees(-90))
 
-        //                if !isMini {
         Text("\(sleepAnalysis.overallScore)")
           .contentTransition(.numericText(value: Double(sleepAnalysis.overallScore)))
-          .font(.system(size: (proxy.size.width / 3)))
+          .font(.system(size: (proxy.size.width / 4.3)))
           .bold()
           .fontDesign(.rounded)
-        //                }
+          .frame(width: proxy.size.width / 2.3)
       }
     }
     .padding(isMini ? 6 : 16)
@@ -112,25 +112,28 @@ struct SleepScoreView: View {
 }
 
 #Preview {
-  List {
-    SleepScoreView(sleepAnalysis: SleepAnalysis.previewData[0])
-    SleepScoreView(
-      sleepAnalysis: SleepAnalysis(
-        startDate: .now.addingTimeInterval(-20000),
-        endDate: .now,
-        hasDetailedSleepCategories: false,
-        deepSleepMinutes: 0,
-        coreSleepMinutes: 0,
-        remSleepMinutes: 0,
-        awakeSleepMinutes: 0,
-        averageRestingHeartRate: nil,
-        environmentalSoundLevels: [],
-        heartRate: [],
-        respiratoryRate: [],
-        wristTemperature: nil
+  PreviewEnvironment {
+    List {
+      SleepScoreView(sleepAnalysis: SleepAnalysis.previewData[0])
+      SleepScoreView(sleepAnalysis: SleepAnalysis.previewData[3])
+      SleepScoreView(
+        sleepAnalysis: SleepAnalysis(
+          startDate: .now.addingTimeInterval(-20000),
+          endDate: .now,
+          hasDetailedSleepCategories: false,
+          deepSleepMinutes: 0,
+          coreSleepMinutes: 0,
+          remSleepMinutes: 0,
+          awakeSleepMinutes: 0,
+          averageRestingHeartRate: nil,
+          environmentalSoundLevels: [],
+          heartRate: [],
+          respiratoryRate: [],
+          wristTemperature: nil
+        )
       )
-    )
-    SleepScoreView(sleepAnalysis: SleepAnalysis.previewData[0], isMini: true)
+      SleepScoreView(sleepAnalysis: SleepAnalysis.previewData[0], isMini: true)
+    }
+    .listStyle(.plain)
   }
-  .listStyle(.plain)
 }

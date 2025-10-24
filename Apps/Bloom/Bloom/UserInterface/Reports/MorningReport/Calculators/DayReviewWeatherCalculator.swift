@@ -84,7 +84,7 @@ extension DayReviewWeatherCalculator {
 
     // Get today's forecast for high/low temperatures
     let todaysForecast = weather.hourlyForecast.filter { hourWeather in
-      Calendar.current.isDate(hourWeather.date, inSameDayAs: date)
+      Calendar.current.isDateInToday(hourWeather.date)
     }
 
     let todaysHigh = todaysForecast.max { first, second in
