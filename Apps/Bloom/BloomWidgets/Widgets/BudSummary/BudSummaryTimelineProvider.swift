@@ -20,18 +20,53 @@ struct BudSummaryTimelineProvider: TimelineProvider {
   func placeholder(in context: Context) -> BudSummaryEntry {
     let settings = TodaySettings()
     let currentTimeMode = TimeMode.current(for: Date(), settings: settings)
+    let userName = TodayContentLoader.getUserName()
 
-    return BudSummaryEntry(
-      date: Date(),
-      relevance: nil,
-      budState: "proudCoach",
-      summary: "You're doing great! Keep up the excellent work on your health journey.",
-      timeMode: currentTimeMode,
-      userName: getUserName(),
-      isLoading: false,
-      hasError: false,
-      isSubscribed: true
-    )
+    // Try to load real cached data for better preview experience
+    let contentState = TodayContentLoader.loadTodayContent()
+
+    switch contentState {
+    case .subscriptionRequired:
+      return BudSummaryEntry(
+        date: Date(),
+        relevance: nil,
+        budState: nil,
+        summary: nil,
+        timeMode: currentTimeMode,
+        userName: userName,
+        isLoading: false,
+        hasError: false,
+        isSubscribed: false
+      )
+
+    case .loading:
+      // No content available - show sample data with loading state
+      return BudSummaryEntry(
+        date: Date(),
+        relevance: nil,
+        budState: "proudCoach",
+        summary: "You're doing great! Keep up the excellent work on your health journey.",
+        timeMode: currentTimeMode,
+        userName: userName,
+        isLoading: true,
+        hasError: false,
+        isSubscribed: true
+      )
+
+    case .loaded(let content):
+      // Show real cached content
+      return BudSummaryEntry(
+        date: Date(),
+        relevance: nil,
+        budState: cleanBudState(content.budState),
+        summary: content.summary,
+        timeMode: currentTimeMode,
+        userName: userName,
+        isLoading: false,
+        hasError: false,
+        isSubscribed: true
+      )
+    }
   }
 
   func getSnapshot(in context: Context, completion: @escaping (BudSummaryEntry) -> Void) {
@@ -52,11 +87,11 @@ struct BudSummaryTimelineProvider: TimelineProvider {
   private func makeEntry() -> BudSummaryEntry {
     let settings = TodaySettings()
     let currentTimeMode = TimeMode.current(for: Date(), settings: settings)
-    let userName = getUserName()
-    let isSubscribed = checkSubscriptionStatus()
+    let userName = TodayContentLoader.getUserName()
+    let contentState = TodayContentLoader.loadTodayContent()
 
-    // Check subscription status first
-    guard isSubscribed else {
+    switch contentState {
+    case .subscriptionRequired:
       // Not subscribed - show paywall state (no relevance needed)
       return BudSummaryEntry(
         date: Date(),
@@ -69,11 +104,8 @@ struct BudSummaryTimelineProvider: TimelineProvider {
         hasError: false,
         isSubscribed: false
       )
-    }
 
-    // Try to load today's content from UserDefaults
-    guard let data = UserDefaults.group.data(forKey: "TodayInsightsManager.lastTodayContentResponse"),
-          let content = try? JSONDecoder().decode(TodayContentDTO.self, from: data) else {
+    case .loading:
       // No content available - show loading state (no relevance needed)
       return BudSummaryEntry(
         date: Date(),
@@ -86,45 +118,21 @@ struct BudSummaryTimelineProvider: TimelineProvider {
         hasError: false,
         isSubscribed: true
       )
-    }
 
-    // Check if content is from today
-    guard Calendar.current.isDate(content.day, inSameDayAs: Date()) else {
-      // Content is stale - show loading state (no relevance needed)
+    case .loaded(let content):
+      // Return entry with content - calculate relevance for actual content
       return BudSummaryEntry(
         date: Date(),
-        relevance: nil,
-        budState: nil,
-        summary: nil,
+        relevance: calculateRelevance(settings: settings),
+        budState: cleanBudState(content.budState),
+        summary: content.summary,
         timeMode: currentTimeMode,
         userName: userName,
-        isLoading: true,
+        isLoading: false,
         hasError: false,
         isSubscribed: true
       )
     }
-
-    // Return entry with content - calculate relevance for actual content
-    return BudSummaryEntry(
-      date: Date(),
-      relevance: calculateRelevance(settings: settings),
-      budState: cleanBudState(content.budState),
-      summary: content.summary,
-      timeMode: currentTimeMode,
-      userName: userName,
-      isLoading: false,
-      hasError: false,
-      isSubscribed: true
-    )
-  }
-
-  private func checkSubscriptionStatus() -> Bool {
-    // Read simple boolean from UserDefaults (saved by EntitlementController)
-    return UserDefaults.group.bool(forKey: "RevenueCat.IsSubscribed")
-  }
-
-  private func getUserName() -> String {
-    UserDefaults.group.string(forKey: String.HealthDefaults.name.key) ?? ""
   }
 
   private func cleanBudState(_ budState: String) -> String {

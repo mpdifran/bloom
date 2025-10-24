@@ -19,18 +19,72 @@ struct TodayInsightTimelineProvider: AppIntentTimelineProvider {
   typealias Intent = TodayInsightConfigurationIntent
 
   func placeholder(in context: Context) -> TodayInsightEntry {
-    TodayInsightEntry(
-      date: Date(),
-      relevance: nil,
-      title: "Today's Advice",
-      content: "Focus on getting at least 20 minutes of moderate cardio today to support your VO2 max goals.",
-      symbol: .sunHorizonFill,
-      color: .mutedOrange,
-      contentType: .advice,
-      isLoading: false,
-      hasError: false,
-      isSubscribed: true
-    )
+    let settings = TodaySettings()
+    let currentTimeMode = TimeMode.current(for: Date(), settings: settings)
+    let contentState = TodayContentLoader.loadTodayContent()
+
+    switch contentState {
+    case .subscriptionRequired:
+      return TodayInsightEntry(
+        date: Date(),
+        relevance: nil,
+        title: "Today's Advice",
+        content: "Get simple, personalized advice each morning and sleep recommendations each evening to help you thrive with Bloom Plus.",
+        symbol: .sparkles,
+        color: .mutedOrange,
+        contentType: .advice,
+        isLoading: false,
+        hasError: false,
+        isSubscribed: false
+      )
+
+    case .loading:
+      // No content available - show sample data with loading state
+      return TodayInsightEntry(
+        date: Date(),
+        relevance: nil,
+        title: "Today's Advice",
+        content: "Focus on getting at least 20 minutes of moderate cardio today to support your VO2 max goals.",
+        symbol: .sunHorizonFill,
+        color: .mutedOrange,
+        contentType: .advice,
+        isLoading: true,
+        hasError: false,
+        isSubscribed: true
+      )
+
+    case .loaded(let content):
+      // Show real cached content based on time of day
+      let shouldShowSleep = currentTimeMode == .evening || currentTimeMode == .night
+
+      if shouldShowSleep {
+        return TodayInsightEntry(
+          date: Date(),
+          relevance: nil,
+          title: "Tonight's Sleep",
+          content: content.tonightsSleepRecommendations,
+          symbol: .moonZzzFill,
+          color: .mutedIndigo,
+          contentType: .sleep,
+          isLoading: false,
+          hasError: false,
+          isSubscribed: true
+        )
+      } else {
+        return TodayInsightEntry(
+          date: Date(),
+          relevance: nil,
+          title: "Today's Advice",
+          content: content.todaysAdvice,
+          symbol: .sunHorizonFill,
+          color: .mutedOrange,
+          contentType: .advice,
+          isLoading: false,
+          hasError: false,
+          isSubscribed: true
+        )
+      }
+    }
   }
 
   func snapshot(for configuration: TodayInsightConfigurationIntent, in context: Context) async -> TodayInsightEntry {
@@ -42,11 +96,11 @@ struct TodayInsightTimelineProvider: AppIntentTimelineProvider {
     let now = Date()
     let displayMode = configuration.displayMode ?? .automatic
     let settings = TodaySettings()
+    let contentState = TodayContentLoader.loadTodayContent(for: now)
 
-    // Check subscription status first
-    let isSubscribed = checkSubscriptionStatus()
-    guard isSubscribed else {
-      // Not subscribed - show upsell view
+    // Handle non-loaded states with single entry timeline
+    switch contentState {
+    case .subscriptionRequired:
       let entry = TodayInsightEntry(
         date: now,
         relevance: nil,
@@ -60,12 +114,8 @@ struct TodayInsightTimelineProvider: AppIntentTimelineProvider {
         isSubscribed: false
       )
       return Timeline(entries: [entry], policy: .atEnd)
-    }
 
-    // Try to load today's content from UserDefaults
-    guard let data = UserDefaults.group.data(forKey: "TodayInsightsManager.lastTodayContentResponse"),
-          let content = try? JSONDecoder().decode(TodayContentDTO.self, from: data) else {
-      // No content available - show loading state
+    case .loading:
       let entry = TodayInsightEntry(
         date: now,
         relevance: nil,
@@ -79,24 +129,14 @@ struct TodayInsightTimelineProvider: AppIntentTimelineProvider {
         isSubscribed: true
       )
       return Timeline(entries: [entry], policy: .atEnd)
+
+    case .loaded(let content):
+      break // Continue to generate hourly entries
     }
 
-    // Check if content is from today
-    guard calendar.isDate(content.day, inSameDayAs: now) else {
-      // Content is stale
-      let entry = TodayInsightEntry(
-        date: now,
-        relevance: nil,
-        title: "Today's Advice",
-        content: "Open the app to refresh your advice for today.",
-        symbol: .sparkles,
-        color: .mutedOrange,
-        contentType: .advice,
-        isLoading: true,
-        hasError: false,
-        isSubscribed: true
-      )
-      return Timeline(entries: [entry], policy: .atEnd)
+    // Extract content from loaded state
+    guard case .loaded(let content) = contentState else {
+      fatalError("Unexpected state after switch")
     }
 
     // Generate entries for all remaining hours today
@@ -139,10 +179,10 @@ struct TodayInsightTimelineProvider: AppIntentTimelineProvider {
   private func makeCurrentEntry(from configuration: TodayInsightConfigurationIntent) -> TodayInsightEntry {
     let displayMode = configuration.displayMode ?? .automatic
     let settings = TodaySettings()
+    let contentState = TodayContentLoader.loadTodayContent()
 
-    // Check subscription status first
-    let isSubscribed = checkSubscriptionStatus()
-    guard isSubscribed else {
+    switch contentState {
+    case .subscriptionRequired:
       // Not subscribed - show upsell view
       return TodayInsightEntry(
         date: Date(),
@@ -156,12 +196,9 @@ struct TodayInsightTimelineProvider: AppIntentTimelineProvider {
         hasError: false,
         isSubscribed: false
       )
-    }
 
-    // Try to load today's content from UserDefaults
-    guard let data = UserDefaults.group.data(forKey: "TodayInsightsManager.lastTodayContentResponse"),
-          let content = try? JSONDecoder().decode(TodayContentDTO.self, from: data) else {
-      // No content available - show loading state (no relevance needed)
+    case .loading:
+      // No content available - show loading state
       return TodayInsightEntry(
         date: Date(),
         relevance: nil,
@@ -174,68 +211,52 @@ struct TodayInsightTimelineProvider: AppIntentTimelineProvider {
         hasError: false,
         isSubscribed: true
       )
-    }
 
-    // Check if content is from today
-    guard Calendar.current.isDate(content.day, inSameDayAs: Date()) else {
-      // Content is stale (no relevance needed)
-      return TodayInsightEntry(
-        date: Date(),
-        relevance: nil,
-        title: "Today's Advice",
-        content: "Open the app to refresh your advice for today.",
-        symbol: .sparkles,
-        color: .mutedOrange,
-        contentType: .advice,
-        isLoading: true,
-        hasError: false,
-        isSubscribed: true
-      )
-    }
+    case .loaded(let content):
+      // Determine which content to show based on display mode
+      let shouldShowSleep: Bool
+      switch displayMode {
+      case .automatic:
+        // Use default TodaySettings for time mode detection
+        let currentTimeMode = TimeMode.current(for: Date(), settings: settings)
+        shouldShowSleep = currentTimeMode == .evening || currentTimeMode == .night
 
-    // Determine which content to show based on display mode
-    let shouldShowSleep: Bool
-    switch displayMode {
-    case .automatic:
-      // Use default TodaySettings for time mode detection
-      let currentTimeMode = TimeMode.current(for: Date(), settings: settings)
-      shouldShowSleep = currentTimeMode == .evening || currentTimeMode == .night
+      case .todaysAdvice:
+        shouldShowSleep = false
 
-    case .todaysAdvice:
-      shouldShowSleep = false
+      case .tonightsSleep:
+        shouldShowSleep = true
+      }
 
-    case .tonightsSleep:
-      shouldShowSleep = true
-    }
-
-    if shouldShowSleep {
-      // Show tonight's sleep recommendations
-      return TodayInsightEntry(
-        date: Date(),
-        relevance: calculateRelevance(for: .sleep, settings: settings),
-        title: "Tonight's Sleep",
-        content: content.tonightsSleepRecommendations,
-        symbol: .moonZzzFill,
-        color: .mutedIndigo,
-        contentType: .sleep,
-        isLoading: false,
-        hasError: false,
-        isSubscribed: true
-      )
-    } else {
-      // Show today's advice
-      return TodayInsightEntry(
-        date: Date(),
-        relevance: calculateRelevance(for: .advice, settings: settings),
-        title: "Today's Advice",
-        content: content.todaysAdvice,
-        symbol: .sunHorizonFill,
-        color: .mutedOrange,
-        contentType: .advice,
-        isLoading: false,
-        hasError: false,
-        isSubscribed: true
-      )
+      if shouldShowSleep {
+        // Show tonight's sleep recommendations
+        return TodayInsightEntry(
+          date: Date(),
+          relevance: calculateRelevance(for: .sleep, settings: settings),
+          title: "Tonight's Sleep",
+          content: content.tonightsSleepRecommendations,
+          symbol: .moonZzzFill,
+          color: .mutedIndigo,
+          contentType: .sleep,
+          isLoading: false,
+          hasError: false,
+          isSubscribed: true
+        )
+      } else {
+        // Show today's advice
+        return TodayInsightEntry(
+          date: Date(),
+          relevance: calculateRelevance(for: .advice, settings: settings),
+          title: "Today's Advice",
+          content: content.todaysAdvice,
+          symbol: .sunHorizonFill,
+          color: .mutedOrange,
+          contentType: .advice,
+          isLoading: false,
+          hasError: false,
+          isSubscribed: true
+        )
+      }
     }
   }
 
@@ -321,10 +342,5 @@ struct TodayInsightTimelineProvider: AppIntentTimelineProvider {
   private func calculateRelevance(for contentType: TodayInsightEntry.ContentType, settings: TodaySettings) -> TimelineEntryRelevance? {
     // Legacy version for makeCurrentEntry - uses current time
     calculateRelevance(for: contentType, at: Date(), settings: settings)
-  }
-
-  private func checkSubscriptionStatus() -> Bool {
-    // Read simple boolean from UserDefaults (saved by EntitlementController)
-    return UserDefaults.group.bool(forKey: "RevenueCat.IsSubscribed")
   }
 }
