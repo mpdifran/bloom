@@ -12,6 +12,7 @@ public extension String {
     public static let todayInsight = "com.lotus-labs.bloom.TodayInsightWidget"
     public static let healthInsight = "com.lotus-labs.bloom.HealthInsightWidget"
     public static let logMeal = "com.lotus-labs.bloom.LogMealWidget"
+    public static let logActions = "com.lotus-labs.bloom.LogActionsWidget"
     public static let actionControl = "com.lotus-labs.bloom.ActionControl"
     public static let budSummary = "com.lotus-labs.bloom.BudSummaryWidget"
   }

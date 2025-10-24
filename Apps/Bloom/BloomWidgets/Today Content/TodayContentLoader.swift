@@ -6,7 +6,7 @@
 //
 
 import Foundation
-internal import BloomFoundation
+import BloomFoundation
 import DataContainer
 import CoreHealth
 

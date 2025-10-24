@@ -9,7 +9,7 @@ import AppIntents
 import SwiftUI
 import WidgetKit
 import SFSafeSymbols
-internal import BloomFoundation
+import BloomFoundation
 
 struct ActionControl: ControlWidget {
   static let kind: String = .WidgetKind.actionControl

@@ -7,7 +7,7 @@
 
 import SwiftUI
 import WidgetKit
-internal import BloomFoundation
+import BloomFoundation
 import BloomUI
 
 struct BudSummaryWidget: Widget {

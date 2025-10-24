@@ -9,7 +9,7 @@ import Foundation
 import WidgetKit
 import AppIntents
 import SwiftUI
-internal import BloomFoundation
+import BloomFoundation
 import DataContainer
 import BloomUI
 import CoreHealth

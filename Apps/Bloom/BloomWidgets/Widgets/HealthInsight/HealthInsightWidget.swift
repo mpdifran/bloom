@@ -7,7 +7,7 @@
 
 import SwiftUI
 import WidgetKit
-internal import BloomFoundation
+import BloomFoundation
 
 struct HealthInsightWidget: Widget {
   let kind: String = .WidgetKind.healthInsight

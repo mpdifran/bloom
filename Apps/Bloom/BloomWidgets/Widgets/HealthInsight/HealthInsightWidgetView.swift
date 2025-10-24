@@ -8,7 +8,7 @@
 import SwiftUI
 import WidgetKit
 import BloomUI
-internal import BloomFoundation
+import BloomFoundation
 
 struct HealthInsightWidgetView: View {
   let entry: HealthInsightEntry

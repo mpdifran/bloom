@@ -14,7 +14,6 @@ struct ActionInstanceCell: View {
   var body: some View {
     HStack(spacing: 16) {
       Image(image)
-        .foregroundStyle(.tint)
 
       Text(title)
         .font(.title3)
@@ -25,7 +24,8 @@ struct ActionInstanceCell: View {
 
       DisclosureIndicator()
     }
-    .cardContainer(fill: .tint.tertiary)
+    .foregroundStyle(.white)
+    .cardContainer(fill: .tint)
   }
 }
 

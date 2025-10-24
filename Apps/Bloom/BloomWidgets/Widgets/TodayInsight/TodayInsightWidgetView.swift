@@ -10,7 +10,7 @@ import WidgetKit
 import BloomUI
 import SFSafeSymbols
 import AppUI
-internal import BloomFoundation
+import BloomFoundation
 
 struct TodayInsightWidgetView: View {
   let entry: TodayInsightEntry

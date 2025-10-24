@@ -8,6 +8,9 @@
 import AppIntents
 import Foundation
 import SFSafeSymbols
+import SwiftUI
+import CoreHealth
+import BloomFoundation
 
 enum ActionType: String, AppEnum {
   case magicScan
@@ -116,6 +119,46 @@ enum ActionType: String, AppEnum {
       return .scalemass
     case .logBloodPressure:
       return .heart
+    }
+  }
+
+  var color: Color {
+    switch self {
+    case .logFood:
+      return .mutedGreen
+    case .logWater:
+      return .mutedBlue
+    case .logPeriod:
+      return .mutedPink
+    case .logBowelMovement:
+      return .brown
+    case .logWeight:
+      return .mutedIndigo
+    case .logBloodPressure:
+      return .mutedRed
+    case .barcodeScan, .magicScan:
+      return .gray
+    }
+  }
+
+  var icon: ImageResource {
+    switch self {
+    case .logFood:
+      return .logFoodIcon
+    case .logWater:
+      return .logWaterIcon
+    case .logPeriod:
+      return .logPeriodIcon
+    case .logBowelMovement:
+      return .logBowelIcon
+    case .logWeight:
+      return .logWeightIcon
+    case .logBloodPressure:
+      return .logBloodPressureIcon
+    case .barcodeScan:
+      return .logFoodIcon // Using food icon as placeholder for barcode
+    case .magicScan:
+      return .logFoodIcon // Using food icon as placeholder for magic scan
     }
   }
 }

@@ -8,7 +8,7 @@
 import Foundation
 import WidgetKit
 import AppIntents
-internal import BloomFoundation
+import BloomFoundation
 import DataContainer
 
 struct LogMealTimelineProvider: AppIntentTimelineProvider {

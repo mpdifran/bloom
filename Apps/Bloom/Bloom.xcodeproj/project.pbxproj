@@ -508,9 +508,11 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				ActionControlIntent.swift,
+				ActionEntity.swift,
 				ActionType.swift,
 				FoodItemEntity.swift,
 				FoodItemQuery.swift,
+				LogActionsConfigurationIntent.swift,
 				LogMealConfigurationIntent.swift,
 				LogMealIntent.swift,
 				LogMealToggleIntent.swift,
@@ -528,9 +530,11 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				ActionControlIntent.swift,
+				ActionEntity.swift,
 				ActionType.swift,
 				FoodItemEntity.swift,
 				FoodItemQuery.swift,
+				LogActionsConfigurationIntent.swift,
 				LogMealConfigurationIntent.swift,
 				LogMealIntent.swift,
 				LogMealToggleIntent.swift,

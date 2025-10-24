@@ -11,7 +11,7 @@ import SFSafeSymbols
 import AppFoundations
 import AppIntents
 import CoreHealth
-internal import BloomFoundation
+import BloomFoundation
 
 struct LogMealToggleStyle: ToggleStyle {
   func makeBody(configuration: Configuration) -> some View {

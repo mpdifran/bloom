@@ -7,7 +7,7 @@
 
 import WidgetKit
 import SwiftUI
-internal import BloomFoundation
+import BloomFoundation
 
 @main
 struct BloomWidgetsBundle: WidgetBundle {
@@ -17,5 +17,6 @@ struct BloomWidgetsBundle: WidgetBundle {
     TodayInsightWidget()
     HealthInsightWidget()
     LogMealWidget()
+    LogActionsWidget()
   }
 }

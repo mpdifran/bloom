@@ -8,7 +8,7 @@
 import Foundation
 import WidgetKit
 import SwiftUI
-internal import BloomFoundation
+import BloomFoundation
 import DataContainer
 import BloomUI
 

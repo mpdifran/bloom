@@ -10,7 +10,7 @@ import WidgetKit
 import AppIntents
 import SwiftUI
 import SFSafeSymbols
-internal import BloomFoundation
+import BloomFoundation
 import DataContainer
 import BloomUI
 
