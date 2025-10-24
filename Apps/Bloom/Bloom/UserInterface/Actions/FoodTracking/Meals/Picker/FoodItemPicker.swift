@@ -39,7 +39,6 @@ struct FoodItemPicker: View {
   @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
 
   @State private var searchQuery = ""
-  @State private var selectedTab = FoodItemCategoryTab.branded
   @State private var selectedHistoryTab = FoodItemHistoryTab.frequent
   @State private var presentedSheet: AnyView?
 
@@ -59,16 +58,24 @@ struct FoodItemPicker: View {
       .safeAreaInset(edge: .bottom) {
         FoodSearchCard(
           searchQuery: $searchQuery,
-          toolbarMode: .pickerTools
-        ) { searchQuery in
-          Task {
-            await viewModel.performSearch(for: searchQuery)
+          toolbarMode: .pickerTools,
+          onSearch: { searchQuery in
+            Task {
+              await viewModel.performSearch(for: searchQuery)
+            }
+          },
+          onTextChange: { searchQuery in
+            Task {
+              await viewModel.debounceSearch(for: searchQuery)
+            }
+          },
+          onUploadNewFood: { foodItem in
+            // Do nothing since tools are disabled.
+          },
+          onFoodItemPicked: { foodItem in
+            select(foodItem: foodItem)
           }
-        } onUploadNewFood: { foodItem in
-          // Do nothing since tools are disabled.
-        } onFoodItemPicked: { foodItem in
-          select(foodItem: foodItem)
-        }
+        )
       }
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
@@ -85,6 +92,7 @@ struct FoodItemPicker: View {
     .animation(.default, value: nutritionViewModel.suggestedMeal)
     .animation(.default, value: viewModel.frequentFoodItemSections)
     .animation(.default, value: viewModel.recentFoodItemSections)
+    .animation(.default, value: viewModel.results)
     .sheet($presentedSheet)
     .alert(error: $viewModel.error)
     .presentationCompactAdaptation(.fullScreenCover)
@@ -112,47 +120,38 @@ struct FoodItemPicker: View {
 
 private extension FoodItemPicker {
 
+  var filteredFrequentItems: [BloomModel.FoodItem] {
+    viewModel.frequentFoodItemSections
+      .flatMap { $0.foodItems }
+      .filter { searchQuery.isEmpty || $0.contains(searchQuery: searchQuery) }
+  }
+
+  var filteredRecentItems: [BloomModel.FoodItem] {
+    viewModel.recentFoodItemSections
+      .flatMap { $0.foodItems }
+      .filter { searchQuery.isEmpty || $0.contains(searchQuery: searchQuery) }
+  }
+
+  var filteredBackendResults: [BloomModel.FoodItem] {
+    guard let results = viewModel.results else { return [] }
+
+    // Get IDs of items already shown in current tab
+    let localItemIDs: Set<String> = {
+      let localItems = selectedHistoryTab == .frequent ? filteredFrequentItems : filteredRecentItems
+      return Set(localItems.map { $0.id.value })
+    }()
+
+    // Filter out items that are already shown locally
+    return results
+      .flatMap { $0.foodItems }
+      .filter { !localItemIDs.contains($0.id.value) }
+  }
+
   @ViewBuilder
   var contentView: some View {
-    if viewModel.isSearching {
-      searchingView
-    } else if let results = viewModel.results {
-      if results.isNotEmpty {
-        resultsView(results: results)
-      } else {
-        noContentView
-      }
-    } else {
-      frequentLogsView
-    }
-  }
-
-  var searchingView: some View {
+    // Always show tab content with tabs visible
     VStack {
-      Spacer()
-      ProgressView()
-        .tint(.secondary)
-      Text("Looking up foods...")
-        .font(.title2)
-        .bold()
-        .foregroundStyle(.secondary)
-      Spacer()
-    }
-  }
-
-  var noContentView: some View {
-    ContentUnavailableView("No Results", systemImage: "exclamationmark.magnifyingglass")
-      .foregroundStyle(.secondary)
-  }
-
-  var frequentLogsView: some View {
-    VStack {
-      switch selectedHistoryTab {
-      case .frequent:
-        frequentFoodItemsView
-      case .recent:
-        recentFoodItemsView
-      }
+      contentWithBackendResults
     }
     .safeAreaInset(edge: .top) {
       foodItemHistoryHeader
@@ -161,112 +160,100 @@ private extension FoodItemPicker {
     .animation(.easeInOut, value: selectedHistoryTab)
   }
 
+  @ViewBuilder
+  var contentWithBackendResults: some View {
+    ScrollView {
+      LazyVStack {
+        // Show tab-specific content (filtered by searchQuery)
+        switch selectedHistoryTab {
+        case .frequent:
+          frequentTabContent
+        case .recent:
+          recentTabContent
+        }
+
+        // Show backend results below
+        if filteredBackendResults.isNotEmpty {
+          backendResultsSection
+        }
+      }
+      .padding(.horizontal)
+      .padding(.bottom)
+    }
+  }
+
+  @ViewBuilder
+  var frequentTabContent: some View {
+    ForEach(viewModel.frequentFoodItemSections) { section in
+      SectionTitleView(section.title)
+
+      ForEach(section.foodItems) { foodItem in
+        if searchQuery.isEmpty || foodItem.contains(searchQuery: searchQuery) {
+          FoodItemPickerCell(foodItem: foodItem) {
+            select(foodItem: foodItem)
+          }
+          .id(foodItem.id)
+          .transition(.blurReplace)
+          .onTapGesture {
+            presentedSheet = FoodItemDetailsView(
+              foodItem: foodItem,
+              existingFoodItemLog: nil,
+              mode: .viewOnly
+            ).asAny
+          }
+        }
+      }
+    }
+  }
+
+  @ViewBuilder
+  var recentTabContent: some View {
+    ForEach(viewModel.recentFoodItemSections) { section in
+      SectionTitleView(section.title)
+
+      ForEach(section.foodItems) { foodItem in
+        if searchQuery.isEmpty || foodItem.contains(searchQuery: searchQuery) {
+          FoodItemPickerCell(foodItem: foodItem) {
+            select(foodItem: foodItem)
+          }
+          .id(foodItem.id)
+          .transition(.blurReplace)
+          .onTapGesture {
+            presentedSheet = FoodItemDetailsView(
+              foodItem: foodItem,
+              existingFoodItemLog: nil,
+              mode: .viewOnly
+            ).asAny
+          }
+        }
+      }
+    }
+  }
+
+  @ViewBuilder
+  var backendResultsSection: some View {
+    SectionTitleView("All Results")
+
+    ForEach(filteredBackendResults) { foodItem in
+      FoodItemPickerCell(foodItem: foodItem) {
+        select(foodItem: foodItem)
+      }
+      .id(foodItem.id)
+      .transition(.opacity)
+      .onTapGesture {
+        presentedSheet = FoodItemDetailsView(
+          foodItem: foodItem,
+          existingFoodItemLog: nil,
+          mode: .viewOnly
+        ).asAny
+      }
+    }
+  }
+
   var foodItemHistoryHeader: some View {
     SegmentedPicker(selectedValue: $selectedHistoryTab)
       .padding(.horizontal)
       .padding(.vertical, 8)
-  }
-
-  var frequentFoodItemsView: some View {
-    ScrollView {
-      LazyVStack {
-        ForEach(viewModel.frequentFoodItemSections) { section in
-          SectionTitleView(section.title)
-            .padding(.horizontal)
-
-          ForEach(section.foodItems) { foodItem in
-            if searchQuery.isEmpty || foodItem.contains(searchQuery: searchQuery) {
-              FoodItemPickerCell(foodItem: foodItem) {
-                select(foodItem: foodItem)
-              }
-              .id(foodItem.id)
-              .transition(.blurReplace)
-              .onTapGesture {
-                presentedSheet = FoodItemDetailsView(
-                  foodItem: foodItem,
-                  existingFoodItemLog: nil,
-                  mode: .viewOnly
-                ).asAny
-              }
-            }
-          }
-        }
-      }
-      .padding(.horizontal)
-      .padding(.bottom)
-    }
-  }
-
-  var recentFoodItemsView: some View {
-    ScrollView {
-      LazyVStack {
-        ForEach(viewModel.recentFoodItemSections) { section in
-          SectionTitleView(section.title)
-            .padding(.horizontal)
-
-          ForEach(section.foodItems) { foodItem in
-            if searchQuery.isEmpty || foodItem.contains(searchQuery: searchQuery) {
-              FoodItemPickerCell(foodItem: foodItem) {
-                select(foodItem: foodItem)
-              }
-              .id(foodItem.id)
-              .transition(.blurReplace)
-              .onTapGesture {
-                presentedSheet = FoodItemDetailsView(
-                  foodItem: foodItem,
-                  existingFoodItemLog: nil,
-                  mode: .viewOnly
-                ).asAny
-              }
-            }
-          }
-        }
-      }
-      .padding(.horizontal)
-      .padding(.bottom)
-    }
-  }
-
-  func resultsView(results: [FoodItemSection]) -> some View {
-    Group {
-      if let section = results.first(where: { $0.category == selectedTab.category }) {
-        ScrollView {
-          LazyVStack {
-            TabFilter(selectedTab: $selectedTab)
-
-            ForEach(section.foodItems) { food in
-              FoodItemPickerCell(foodItem: food) {
-                select(foodItem: food)
-              }
-              .id(food.id)
-              .transition(.opacity)
-              .onTapGesture {
-                presentedSheet = FoodItemDetailsView(
-                  foodItem: food,
-                  existingFoodItemLog: nil,
-                  mode: .viewOnly
-                ).asAny
-              }
-            }
-          }
-          .padding()
-        }
-      } else {
-        VStack {
-          TabFilter(selectedTab: $selectedTab)
-
-          ContentUnavailableView {
-            Label {
-              Text("No Results")
-            } icon: {
-              selectedTab.image
-            }
-          }
-        }
-        .padding()
-      }
-    }
-    .animation(.bouncy, value: viewModel.results)
   }
 }
 

@@ -102,7 +102,7 @@ private extension BarcodeScannerView {
                   presentedSheet = FoodItemDetailsView(
                     foodItem: foodItem,
                     existingFoodItemLog: nil,
-                    mode: .viewOnly
+                    mode: .editAndView
                   ).asAny
                 }
             }

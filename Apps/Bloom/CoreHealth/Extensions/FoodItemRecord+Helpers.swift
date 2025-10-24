@@ -9,9 +9,9 @@ import HealthKit
 import DataContainer
 import BloomModel
 
-extension FoodItemRecord {
+public extension FoodItemRecord {
 
-  public convenience init(foodItem: FoodItem) {
+  convenience init(foodItem: FoodItem) {
     self.init(
       id: foodItem.id.value,
       name: foodItem.name,

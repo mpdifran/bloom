@@ -10,6 +10,9 @@ import BloomModel
 import DataContainer
 import TelemetryDeck
 import CoreNetwork
+import Combine
+import BloomFoundation
+import SwiftData
 
 extension FoodItemPicker {
   @Observable @MainActor
@@ -20,6 +23,10 @@ extension FoodItemPicker {
     var recentFoodItemSections = [FoodItemSection]()
     var country: String = "usa"
     var error: Error?
+
+    private var debounceTask: Task<Void, Never>?
+    private var searchTask: Task<Void, Never>?
+    private var lastSearchedQuery: String = ""
 
     private let foodItemModelActor = FoodItemLogModelActor.standard()
   }
@@ -61,31 +68,72 @@ extension FoodItemPicker.ViewModel {
     }
   }
 
+  func debounceSearch(for query: String) {
+    // Cancel previous debounce task
+    debounceTask?.cancel()
+    // Cancel previous search task
+    searchTask?.cancel()
+
+    guard query.isNotEmpty else {
+      results = nil
+      return
+    }
+
+    debounceTask = Task {
+      await Delay(500) // 0.5 seconds
+      await performSearch(for: query)
+    }
+  }
+
   func performSearch(for query: String) async {
+    // Skip if already searched this exact query
+    guard query != lastSearchedQuery else { return }
+
+    // Cancel any existing search
+    searchTask?.cancel()
+
     results = nil
 
-    guard query.isNotEmpty else { return }
+    guard query.isNotEmpty else {
+      lastSearchedQuery = ""
+      return
+    }
 
-    defer { isSearching = false }
-    isSearching = true
+    searchTask = Task {
+      do {
+        // Fetch backend results
+        let sections = try await NetworkRequester.shared.foodSearch(
+          name: query,
+          brand: nil,
+          preferredCountry: country
+        )
 
-    do {
-      let sections = try await NetworkRequester.shared.foodSearch(
-        name: query,
-        brand: nil,
-        preferredCountry: country
-      )
+        // Check if task was cancelled
+        guard !Task.isCancelled else { return }
 
-      self.results = sections.map(
-        {
+        // Store backend results directly - deduplication handled at View level
+        self.results = sections.map {
           FoodItemSection(
-            title: $0.title,
-            category: $0.category,
+            title: "All Results",
+            category: .branded,
             foodItems: $0.foods
           )
-      })
-    } catch {
-      self.error = error
+        }
+
+        // Update last searched query after successful search
+        self.lastSearchedQuery = query
+
+        // Upsert food items in the background
+        let foodItems = sections.flatMap { $0.foods }
+        Task.detached {
+          await FoodItemUpsertProcessor.shared.upsertFoodItems(foodItems)
+        }
+      } catch {
+        guard !Task.isCancelled else { return }
+        self.error = error
+      }
     }
+
+    await searchTask?.value
   }
 }

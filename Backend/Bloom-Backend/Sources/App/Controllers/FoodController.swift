@@ -314,84 +314,24 @@ private extension FoodController {
     country: String
   ) async -> [FoodSearchResponse.Section] {
     do {
-      var sections = [FoodSearchResponse.Section]()
-
       let foodDatabaseService = request.foodDatabaseService
 
-      try await withThrowingTaskGroup(of: FoodSearchResponse.Section?.self) { group in
-        group.addTask {
-          let foodItems = try await foodDatabaseService.searchFoods(
-            query: name,
-            category: .branded,
-            preferredCountry: country,
-            limit: 20
-          )
-          guard foodItems.isNotEmpty else { return nil }
+      let foodItems = try await foodDatabaseService.searchFoods(
+        query: name,
+        preferredCountry: country,
+        limit: 20
+      )
 
-          return FoodSearchResponse.Section(
-            title: "Branded",
-            index: 0,
-            category: .branded,
-            foods: foodItems
-          )
-        }
-        group.addTask {
-          let foodItems = try await foodDatabaseService.searchFoods(
-            query: name,
-            category: .restaurant,
-            preferredCountry: country,
-            limit: 20
-          )
-          guard foodItems.isNotEmpty else { return nil }
+      guard foodItems.isNotEmpty else { return [] }
 
-          return FoodSearchResponse.Section(
-            title: "Restaurant",
-            index: 1,
-            category: .restaurant,
-            foods: foodItems
-          )
-        }
-        group.addTask {
-          let foodItems = try await foodDatabaseService.searchFoods(
-            query: name,
-            category: .fastfood,
-            preferredCountry: country,
-            limit: 20
-          )
-          guard foodItems.isNotEmpty else { return nil }
+      let section = FoodSearchResponse.Section(
+        title: "Branded",
+        index: 0,
+        category: .branded,
+        foods: foodItems
+      )
 
-          return FoodSearchResponse.Section(
-            title: "Fast Food",
-            index: 2,
-            category: .fastfood,
-            foods: foodItems
-          )
-        }
-        group.addTask {
-          let foodItems = try await foodDatabaseService.searchFoods(
-            query: name,
-            category: .generic,
-            preferredCountry: country,
-            limit: 20
-          )
-          guard foodItems.isNotEmpty else { return nil }
-
-          return FoodSearchResponse.Section(
-            title: "Generic",
-            index: 3,
-            category: .generic,
-            foods: foodItems
-          )
-        }
-
-        for try await section in group {
-          guard let section else { continue }
-
-          sections.append(section)
-        }
-      }
-
-      return sections.sorted(by: { $0.index < $1.index })
+      return [section]
     } catch {
       request.logger.error(error)
     }

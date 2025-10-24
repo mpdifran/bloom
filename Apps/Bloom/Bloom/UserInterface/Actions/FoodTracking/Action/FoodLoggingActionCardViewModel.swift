@@ -11,6 +11,7 @@ import DataContainer
 import TelemetryDeck
 import CoreNetwork
 import BloomFoundation
+import SwiftData
 
 private extension Int {
   static let debounceTime: Int = 300
@@ -28,7 +29,6 @@ extension FoodLoggingActionCardView {
 
   @Observable @MainActor
   final class ViewModel {
-    var autocomplete = [String]()
     var isSearching = false
     var results: [FoodItemSection]?
     var failedBarcodeSearch: String?
@@ -38,6 +38,8 @@ extension FoodLoggingActionCardView {
     var country: String = "usa"
 
     private var debounceTask: Task<Void, Never>?
+    private var searchTask: Task<Void, Never>?
+    private var lastSearchedQuery: String = ""
 
     private let foodItemModelActor = FoodItemLogModelActor.standard()
   }
@@ -79,49 +81,73 @@ extension FoodLoggingActionCardView.ViewModel {
     }
   }
 
-  func debounceAutocomplete(for query: String) {
+  func debounceSearch(for query: String) {
+    // Cancel previous debounce task
     debounceTask?.cancel()
+    // Cancel previous search task
+    searchTask?.cancel()
 
     guard query.isNotEmpty else {
-      autocomplete.removeAll()
+      results = nil
       return
     }
 
     debounceTask = Task {
-      await Delay(.debounceTime)
-      await performAutocomplete(query: query)
+      await Delay(500) // 0.5 seconds
+      await performSearch(for: query)
     }
   }
 
   func performSearch(for query: String) async {
+    // Skip if already searched this exact query
+    guard query != lastSearchedQuery else { return }
+
+    // Cancel any existing search
+    searchTask?.cancel()
+
     results = nil
 
-    guard query.isNotEmpty else { return }
+    guard query.isNotEmpty else {
+      lastSearchedQuery = ""
+      return
+    }
 
-    defer { isSearching = false }
-    isSearching = true
+    searchTask = Task {
+      do {
+        // Fetch backend results
+        let sections = try await NetworkRequester.shared.foodSearch(
+          name: query,
+          brand: nil,
+          preferredCountry: country
+        )
 
-    autocomplete.removeAll()
+        // Check if task was cancelled
+        guard !Task.isCancelled else { return }
 
-    do {
-      let sections = try await NetworkRequester.shared.foodSearch(
-        name: query,
-        brand: nil,
-        preferredCountry: country
-      )
-
-      self.results = sections.map(
-        {
+        // Store backend results directly - deduplication handled at View level
+        self.results = sections.map {
           FoodItemSection(
-            title: $0.title,
-            category: $0.category,
+            title: "All Results",
+            category: .branded,
             foodItems: $0.foods
           )
-      })
-      self.autocomplete.removeAll()
-    } catch {
-      self.error = error
+        }
+
+        // Update last searched query after successful search
+        self.lastSearchedQuery = query
+
+        // Upsert food items in the background
+        let foodItems = sections.flatMap { $0.foods }
+        Task.detached {
+          await FoodItemUpsertProcessor.shared.upsertFoodItems(foodItems)
+        }
+      } catch {
+        guard !Task.isCancelled else { return }
+        self.error = error
+      }
     }
+
+    await searchTask?.value
   }
 
   func performBarcodeSearch(for barcode: String) async {
@@ -129,8 +155,6 @@ extension FoodLoggingActionCardView.ViewModel {
 
     defer { isSearching = false }
     isSearching = true
-
-    autocomplete.removeAll()
 
     do {
       let sections = try await NetworkRequester.shared.foodSearch(
@@ -167,21 +191,6 @@ extension FoodLoggingActionCardView.ViewModel {
 
     failedBarcodeSearch = nil
     isSearching = false
-    autocomplete.removeAll()
     results = [section]
-  }
-}
-
-private extension FoodLoggingActionCardView.ViewModel {
-
-  func performAutocomplete(query: String) async {
-    guard query.isNotEmpty else { return }
-
-    failedBarcodeSearch = nil
-    results = nil
-
-    do {
-      self.autocomplete = try await NetworkRequester.shared.foodAutocomplete(query: query)
-    } catch { }
   }
 }

@@ -56,6 +56,41 @@ extension FoodDatabaseService {
     return results.compactMap { $0.asFoodItem() }
   }
 
+  func searchFoods(
+    query: String,
+    preferredCountry: String,
+    limit: Int
+  ) async throws -> [FoodItem] {
+    guard !query.isEmpty else { return [] }
+
+    guard let sqlDatabase = db as? SQLDatabase else {
+      throw Abort(.internalServerError, reason: "Database is not SQLDatabase compatible.")
+    }
+
+    let results = try await sqlDatabase.raw("""
+            SELECT *,
+                   GREATEST(
+                       similarity(name, \(bind: query)) * 1.5,
+                       similarity(brand_name, \(bind: query)),
+                       similarity(flavour, \(bind: query)) * 0.5,
+                       similarity(brand_name || ' ' || name || ' ' || flavour, \(bind: query)) * 2.0
+                   ) *
+                   CASE WHEN state = 'verified' THEN 1.05 ELSE 1.0 END *
+                   (1.0 + similarity(country, \(bind: preferredCountry)) * 0.1) AS rank
+            FROM food_item_records
+            WHERE (similarity(name, \(bind: query)) > 0.1
+               OR similarity(brand_name, \(bind: query)) > 0.1
+               OR similarity(flavour, \(bind: query)) > 0.1
+               OR similarity(brand_name || ' ' || name || ' ' || flavour, \(bind: query)) > 0.1)
+              AND state != 'needsAIProcessing'
+            ORDER BY
+                rank DESC
+            LIMIT \(bind: limit)
+        """).all(decodingFluent: FoodItemRecord.self)
+
+    return results.compactMap { $0.asFoodItem() }
+  }
+
   func searchFoods(barcode: String) async throws -> [FoodItem] {
     guard !barcode.isEmpty else { return [] }
 

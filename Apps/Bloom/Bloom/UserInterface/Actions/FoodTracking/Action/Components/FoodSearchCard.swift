@@ -23,6 +23,7 @@ struct FoodSearchCard: View {
   @Binding var searchQuery: String
   let toolbarMode: ToolbarMode
   let onSearch: (String) -> Void
+  let onTextChange: ((String) -> Void)?
   let onUploadNewFood: (FoodItem) -> Void
   let onFoodItemPicked: ((FoodItem) -> Void)?
 
@@ -30,12 +31,14 @@ struct FoodSearchCard: View {
     searchQuery: Binding<String>,
     toolbarMode: ToolbarMode,
     onSearch: @escaping (String) -> Void,
+    onTextChange: ((String) -> Void)? = nil,
     onUploadNewFood: @escaping (FoodItem) -> Void,
     onFoodItemPicked: ((FoodItem) -> Void)? = nil
   ) {
     self._searchQuery = searchQuery
     self.toolbarMode = toolbarMode
     self.onSearch = onSearch
+    self.onTextChange = onTextChange
     self.onUploadNewFood = onUploadNewFood
     self.onFoodItemPicked = onFoodItemPicked
   }
@@ -99,6 +102,9 @@ private extension FoodSearchCard {
     .sensoryFeedback(.selection, trigger: isFocused)
     .animation(.easeInOut, value: isFocused)
     .animation(.easeInOut, value: searchQuery.isEmpty)
+    .onChange(of: searchQuery) { _, newValue in
+      onTextChange?(newValue)
+    }
   }
 
   var barcodeScanButton: some View {
@@ -140,7 +146,7 @@ private extension FoodSearchCard {
       TextField(
         "",
         text: $searchQuery,
-        prompt: Text("Search for foods")
+        prompt: Text("Search or Describe Food")
       )
       .focused($isFocused)
       .scrollDismissesKeyboard(.interactively)
