@@ -485,6 +485,66 @@ private extension OpenAIService {
 
 extension OpenAIService {
 
+  func estimateCaloriesMagicScan(
+    image: Data,
+    contextText: String?
+  ) async throws -> [MagicScanStatusResponse.Serving] {
+    let model = ModelID.GPT4.gpt_4o_mini
+
+    // Determine image type
+    let imageProcessor = ImageProcessor()
+    guard let imageType = imageProcessor.determineImageType(image) else {
+      throw Abort(.badRequest, reason: "Unsupported image type")
+    }
+
+    var messages: [Chat.Message] = [
+      Chat.Message(
+        role: .system,
+        content: [
+          .text("Identify the food in this image and provide your best estimate of nutrients. Only include edible items. Be concise.")
+        ]
+      ),
+      Chat.Message(
+        role: .user,
+        content: [
+          .imageData(image, "image/\(imageType)")
+        ]
+      )
+    ]
+
+    if let contextText = contextText, !contextText.isEmpty {
+      messages.append(
+        Chat.Message(
+          role: .user,
+          content: [
+            .text(contextText)
+          ]
+        )
+      )
+    }
+
+    let response = try await openAI.chats.create(
+      model: model,
+      messages: messages,
+      responseFormat: ResponseFormat(type: .jsonSchema(.magicScanEstimate))
+    )
+
+    guard let parsedResponse = try response.parse(OpenAIEstimateCaloriesResponse.self) else {
+      throw Abort(.internalServerError, reason: "Failed to parse OpenAI response")
+    }
+
+    // Convert to MagicScanStatusResponse.Serving
+    return parsedResponse.foodItems.map { item in
+      MagicScanStatusResponse.Serving(
+        servings: item.servingCount,
+        item: item.asFoodItem()
+      )
+    }
+  }
+}
+
+extension OpenAIService {
+
   func suggestGoals(
     healthData: String,
     currentGoals: String

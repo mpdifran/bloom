@@ -15,6 +15,7 @@ enum StoragePath: String {
   case nutritionLabel = "nutrition-label"
   case foodPackaging = "food-packaging"
   case chatImages = "chat-images"
+  case magicScanner = "magic-scanner"
 }
 
 protocol ImageStorage: Sendable {

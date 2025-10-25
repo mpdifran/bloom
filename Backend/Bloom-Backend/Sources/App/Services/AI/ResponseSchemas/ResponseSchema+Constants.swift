@@ -116,6 +116,25 @@ extension ResponseSchema {
       ]
     )
   )
+
+  static let magicScanEstimate = ResponseSchema(
+    name: "magicScanEstimate",
+    schema: Schema.Object(
+      properties: [
+        "name": Schema.Parameter(
+          type: .string,
+          description: "A short, concise name to describe the food in the image."
+        ),
+        "foodItems": Schema.Parameter(
+          description: "The individual food items detected in the image.",
+          arrayOf: .object(.AIEstimate.item)
+        )
+      ],
+      references: [
+        "quantity": Schema.Object.quantity
+      ]
+    )
+  )
 }
 
 extension Schema.Object {

@@ -28,6 +28,8 @@ extension FoodController: RouteCollection {
           $0.post("mark-as-inaccurate", use: markAsInaccurate)
           $0.post("submit-food-item-issue", use: submitFoodItemIssue)
           $0.post("track-log", use: trackLog)
+          $0.post("magic-scan-upload", use: uploadMagicScan)
+          $0.post("magic-scan-status", use: checkMagicScanStatus)
           $0.get(":id", use: getFoodItemById)
         }
       }
@@ -203,6 +205,86 @@ extension FoodController {
     }
 
     return GetFoodItemResponse(foodItem: foodItem)
+  }
+
+  @Sendable
+  func uploadMagicScan(_ request: Request) async throws -> MagicScanUploadResponse {
+    let user = try request.auth.require(User.self)
+    let requestBody = try request.content.decode(MagicScanUploadRequest.self)
+
+    guard let userId = user.id else {
+      throw Abort(.unauthorized, reason: "User ID not found")
+    }
+
+    // Store image to S3
+    let imageMetadata = try await request.imageStorage.store(
+      image: requestBody.foodImage,
+      path: .magicScanner
+    )
+
+    // Create job in Redis
+    try await request.magicScanJobManager.createJob(
+      processingIdentifier: requestBody.processingIdentifier,
+      userId: userId,
+      imageFileName: imageMetadata.filename,
+      contextText: requestBody.contextText
+    )
+
+    // Trigger background processing
+    Task {
+      await request.magicScanJobManager.processJob(
+        processingIdentifier: requestBody.processingIdentifier,
+        imageStorage: request.imageStorage,
+        openAIService: request.openAIService,
+        db: request.db,
+        application: request.application
+      )
+    }
+
+    return MagicScanUploadResponse(
+      processingIdentifier: requestBody.processingIdentifier,
+      status: .pending
+    )
+  }
+
+  @Sendable
+  func checkMagicScanStatus(_ request: Request) async throws -> MagicScanStatusResponse {
+    let requestBody = try request.content.decode(MagicScanStatusRequest.self)
+
+    var results: [MagicScanStatusResponse.Result] = []
+
+    for processingIdentifier in requestBody.processingIdentifiers {
+      guard let job = try await request.magicScanJobManager.getJob(
+        processingIdentifier: processingIdentifier
+      ) else {
+        // Job not found - skip it
+        continue
+      }
+
+      var servings: [MagicScanStatusResponse.Serving]?
+      if let servingsJson = job.servingsJson,
+         let servingsData = servingsJson.data(using: .utf8) {
+        servings = try? JSONDecoder.bloomModel.decode(
+          [MagicScanStatusResponse.Serving].self,
+          from: servingsData
+        )
+      }
+
+      // Convert string status to enum, skip if invalid
+      guard let status = MagicScanStatus(rawValue: job.status) else {
+        continue
+      }
+
+      let result = MagicScanStatusResponse.Result(
+        processingIdentifier: processingIdentifier,
+        status: status,
+        servings: servings,
+        errorMessage: job.errorMessage
+      )
+      results.append(result)
+    }
+
+    return MagicScanStatusResponse(results: results)
   }
 }
 

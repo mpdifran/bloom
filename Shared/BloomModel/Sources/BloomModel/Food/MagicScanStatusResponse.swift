@@ -18,13 +18,13 @@ public struct MagicScanStatusResponse: Codable, Sendable {
 extension MagicScanStatusResponse {
   public struct Result: Codable, Sendable {
     public let processingIdentifier: AIFoodProcessingIdentifier
-    public let status: String
+    public let status: MagicScanStatus
     public let servings: [Serving]?
     public let errorMessage: String?
 
     public init(
       processingIdentifier: AIFoodProcessingIdentifier,
-      status: String,
+      status: MagicScanStatus,
       servings: [Serving]?,
       errorMessage: String?
     ) {

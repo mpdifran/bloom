@@ -45,3 +45,7 @@ extension TodayReportResponse: @retroactive Content { }
 extension BiologicalAgeRequest: @retroactive Content { }
 extension BiologicalAgeResponse: @retroactive Content { }
 extension GetFoodItemResponse: @retroactive Content { }
+extension MagicScanUploadRequest: @retroactive Content { }
+extension MagicScanUploadResponse: @retroactive Content { }
+extension MagicScanStatusRequest: @retroactive Content { }
+extension MagicScanStatusResponse: @retroactive Content { }

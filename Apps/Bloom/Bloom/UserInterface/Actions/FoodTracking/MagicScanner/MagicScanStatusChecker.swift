@@ -80,7 +80,7 @@ final class MagicScanStatusChecker {
     }
 
     switch result.status {
-    case "completed":
+    case .completed:
       // Convert servings to FoodItemServingAmount
       let servings = result.servings?.map { $0.asServing() } ?? []
 
@@ -94,7 +94,7 @@ final class MagicScanStatusChecker {
         print("Error completing magic scan:", error)
       }
 
-    case "failed":
+    case .failed:
       let errorMessage = result.errorMessage ?? "Processing failed"
 
       do {
@@ -107,7 +107,7 @@ final class MagicScanStatusChecker {
         print("Error failing magic scan:", error)
       }
 
-    case "pending", "processing":
+    case .pending, .processing:
       // Update state to processing if it was pending
       let identifierValue = result.processingIdentifier.value
       let descriptor = FetchDescriptor<FoodItemLog>(
@@ -123,9 +123,6 @@ final class MagicScanStatusChecker {
           foodItemLog.processingState = .processing
         }
       }
-
-    default:
-      break
     }
   }
 }

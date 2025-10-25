@@ -9,11 +9,11 @@ import Foundation
 
 public struct MagicScanUploadResponse: Codable, Sendable {
   public let processingIdentifier: AIFoodProcessingIdentifier
-  public let status: String
+  public let status: MagicScanStatus
 
   public init(
     processingIdentifier: AIFoodProcessingIdentifier,
-    status: String
+    status: MagicScanStatus
   ) {
     self.processingIdentifier = processingIdentifier
     self.status = status
