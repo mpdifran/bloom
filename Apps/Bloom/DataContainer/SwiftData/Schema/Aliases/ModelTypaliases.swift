@@ -7,11 +7,11 @@
 
 public typealias BowelMovement = SchemaV17.BowelMovement
 public typealias Habit = SchemaV11.Habit
-public typealias FoodItemRecord = SchemaV9.FoodItemRecord
-public typealias FoodItemLog = SchemaV9.FoodItemLog
-public typealias FoodItemServing = SchemaV9.FoodItemServing
-public typealias MealItemRecord = SchemaV9.MealItemRecord
-public typealias MealRecord = SchemaV9.MealRecord
+public typealias FoodItemRecord = SchemaV29.FoodItemRecord
+public typealias FoodItemLog = SchemaV29.FoodItemLog
+public typealias FoodItemServing = SchemaV29.FoodItemServing
+public typealias MealItemRecord = SchemaV29.MealItemRecord
+public typealias MealRecord = SchemaV29.MealRecord
 public typealias ChatMessage = SchemaV28.ChatMessage
 public typealias ChatConversation = SchemaV28.ChatConversation
 public typealias WorkoutPlan = SchemaV14.WorkoutPlan

@@ -1,8 +1,8 @@
 //
-//  FoodItemLogV8.swift
+//  FoodItemLogV29.swift
 //  Bloom
 //
-//  Created by Mark DiFranco on 2025-02-12.
+//  Created by Claude on 2025-10-25.
 //
 
 import SwiftData
@@ -10,7 +10,7 @@ import SwiftData
 // https://www.hackingwithswift.com/books/ios-swiftui/syncing-swiftdata-with-cloudkit
 // For CloudKit sync to work, all properties must be optional or have default values, and all relationship must be optional.
 
-extension SchemaV9 {
+extension SchemaV29 {
   @Model
   public final class FoodItemLog: Identifiable, Hashable {
     public var id: String = ""
@@ -20,6 +20,12 @@ extension SchemaV9 {
     public var numberOfServings: Double = 0
 
     @Attribute(.externalStorage) public var imageData: Data? = nil
+
+    // Magic Scanner fields
+    public var processingIdentifier: String? = nil
+    public var processingStateRawValue: String? = nil
+    public var contextText: String? = nil
+    public var errorMessage: String? = nil
 
     @Relationship public var mealItem: MealRecord? = nil
 
@@ -96,7 +102,7 @@ extension SchemaV9 {
   }
 }
 
-public extension SchemaV9.FoodItemLog {
+public extension SchemaV29.FoodItemLog {
 
   var meal: Meal {
     get {
@@ -107,13 +113,14 @@ public extension SchemaV9.FoodItemLog {
     }
   }
 
-  // Helper properties used during migrations
-  var hasSingleServing: Bool {
-    foodItemServings?.count == 1
-  }
-
-  var firstFoodItemServing: SchemaV9.FoodItemServing? {
-    foodItemServings?.first
+  var processingState: ProcessingState? {
+    get {
+      guard let rawValue = processingStateRawValue else { return nil }
+      return ProcessingState(rawValue: rawValue)
+    }
+    set {
+      processingStateRawValue = newValue?.rawValue
+    }
   }
 
   enum Meal: String, Hashable, Sendable, Codable, CaseIterable, Identifiable {
@@ -123,5 +130,12 @@ public extension SchemaV9.FoodItemLog {
     case lunch
     case dinner
     case snack
+  }
+
+  enum ProcessingState: String, Hashable, Sendable, Codable {
+    case pending
+    case processing
+    case completed
+    case failed
   }
 }
