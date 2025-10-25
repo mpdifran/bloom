@@ -12,6 +12,7 @@ import PhotosUI
 import SwiftUI
 import DataContainer
 import CoreHealth
+import BloomModel
 
 // MARK: - MagicScannerCameraView
 
@@ -27,7 +28,6 @@ struct MagicScannerCameraView: View {
   @State private var alertDetails: AlertDetails?
 
   @StateObject var permissionManager = CameraPermissionManager.shared
-  @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
 
   @Environment(\.dismiss) private var dismiss
 
@@ -83,29 +83,13 @@ struct MagicScannerCameraView: View {
         MagicScannerReviewCardView(
           image: capturedImage,
           contextText: $contextText,
-          onSave: {
-            handleSave()
-          },
-          onRetake: {
-            handleRetake()
+          onDismissAll: {
+            showReviewSheet = false
+            dismiss()
           }
         )
       }
     }
-  }
-
-  private func handleSave() {
-    // TODO: Phase 2 - Save to SwiftData with processing state
-    // Use nutritionViewModel.date and nutritionViewModel.suggestedMeal for the log
-    // For now, just dismiss everything
-    showReviewSheet = false
-    dismiss()
-  }
-
-  private func handleRetake() {
-    capturedImage = nil
-    contextText = ""
-    showReviewSheet = false
   }
 }
 

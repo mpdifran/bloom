@@ -257,6 +257,48 @@ public extension NutritionTrackingViewModel {
     return foodLogID
   }
 
+  /// Saves a Magic Scanner capture with processing state
+  /// - Returns: The processing identifier for tracking
+  @discardableResult
+  func logMagicScan(
+    modelContext: ModelContext,
+    imageData: Data,
+    contextText: String?,
+    date: Date,
+    meal: FoodItemLog.Meal
+  ) -> String {
+    let processingIdentifier = AIFoodProcessingIdentifier()
+
+    try? modelContext.savingTransaction {
+      let logDate = calculateDate(for: meal, from: date)
+
+      let foodItemLog = FoodItemLog(
+        id: UUID().uuidString,
+        name: nil,  // Will be set when processing completes
+        date: logDate,
+        meal: meal,
+        numberOfServings: 1,
+        imageData: imageData,
+        foodItemServings: []  // Empty, populated after processing
+      )
+
+      // Set Magic Scanner fields
+      foodItemLog.processingIdentifier = processingIdentifier.value
+      foodItemLog.processingState = .pending
+      foodItemLog.contextText = contextText?.isEmpty == false ? contextText : nil
+
+      modelContext.insert(foodItemLog)
+    }
+
+    // Don't update HealthKit yet - wait until processing completes
+
+    if !Bundle.main.isAppExtension {
+      TelemetryDeck.signal("magic_scanner_item_saved")
+    }
+
+    return processingIdentifier.value
+  }
+
   /// Logs each serving as an individual `FoodItemLog`.
   func logIndividual(
     modelContext: ModelContext,

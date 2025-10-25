@@ -8,17 +8,22 @@
 import SwiftUI
 import BloomUI
 import DataContainer
+import CoreHealth
+import BloomModel
 
 struct MagicScannerReviewCardView: View {
   let image: UIImage
   @Binding var contextText: String
-  let onSave: () -> Void
-  let onRetake: () -> Void
+  let onDismissAll: () -> Void
 
   @State private var imageWidth: CGFloat = 300
+  @State private var saveComplete = false
 
   @Environment(\.dismiss) private var dismiss
+  @Environment(\.modelContext) private var modelContext
   @FocusState private var isContextFieldFocused: Bool
+
+  @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
 
   var body: some View {
     CardView {
@@ -47,8 +52,8 @@ struct MagicScannerReviewCardView: View {
         .multilineTextAlignment(.leading)
         .cardContainer(fill: .background.secondary)
 
-        Button {
-
+        AsyncButton {
+          try await handleSave()
         } label: {
           Text("Save")
             .horizontallyCentered()
@@ -60,6 +65,34 @@ struct MagicScannerReviewCardView: View {
       }
       .padding()
     }
+    .sensoryFeedback(.success, trigger: saveComplete)
+  }
+
+  private func handleSave() async throws {
+    // Crop and resize image
+    guard let squareImage = image.croppedToSquare(),
+          let imageData = BackendImageResizer.resize(squareImage) else {
+      // TODO: Show error to user
+      return
+    }
+
+    // Save via NutritionTrackingViewModel
+    let processingIdentifier = nutritionViewModel.logMagicScan(
+      modelContext: modelContext,
+      imageData: imageData,
+      contextText: contextText,
+      date: nutritionViewModel.date,
+      meal: nutritionViewModel.suggestedMeal
+    )
+
+    // TODO: Phase 2 - Upload to backend with processingIdentifier
+
+    // Trigger feedback and sound
+    saveComplete.toggle()
+    SoundPlayer.playLogHealthData()
+
+    // Dismiss both sheet and camera
+    onDismissAll()
   }
 }
 
@@ -79,8 +112,7 @@ struct MagicScannerReviewCardView: View {
       MagicScannerReviewCardView(
         image: sampleImage,
         contextText: $contextText,
-        onSave: { print("Save tapped") },
-        onRetake: { print("Retake tapped") }
+        onDismissAll: { print("Dismiss all") }
       )
     }
   }
