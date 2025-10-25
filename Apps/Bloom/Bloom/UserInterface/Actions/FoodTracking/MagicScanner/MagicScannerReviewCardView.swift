@@ -11,6 +11,7 @@ import DataContainer
 import CoreHealth
 import BloomModel
 import CoreNetwork
+import AppUI
 
 struct MagicScannerReviewCardView: View {
   let image: UIImage
