@@ -304,16 +304,116 @@ public extension NutritionTrackingViewModel {
     modelContext: ModelContext,
     foodItemLog: FoodItemLog
   ) async throws {
+    guard let imageData = foodItemLog.imageData,
+          let processingIdentifier = foodItemLog.processingIdentifier else {
+      throw NSError(description: "Missing image data or processing identifier")
+    }
+
     try modelContext.savingTransaction {
       // Reset to pending state
       foodItemLog.processingState = .pending
       foodItemLog.errorMessage = nil
     }
 
-    // TODO: Phase 2 - Re-upload image to backend with processingIdentifier
+    // Re-upload image to backend
+    do {
+      _ = try await NetworkRequester.shared.uploadMagicScan(
+        imageData: imageData,
+        contextText: foodItemLog.contextText,
+        processingIdentifier: AIFoodProcessingIdentifier(processingIdentifier)
+      )
+    } catch {
+      try await failMagicScan(
+        modelContext: modelContext,
+        processingIdentifier: AIFoodProcessingIdentifier(processingIdentifier),
+        errorMessage: "Failed to upload image"
+      )
+      throw error
+    }
 
     if !Bundle.main.isAppExtension {
       TelemetryDeck.signal("magic_scanner_retry")
+    }
+  }
+
+  /// Marks a Magic Scanner upload as failed
+  func failMagicScan(
+    modelContext: ModelContext,
+    processingIdentifier: AIFoodProcessingIdentifier,
+    errorMessage: String
+  ) async throws {
+    // Find the food item log by processing identifier
+    let identifierValue = processingIdentifier.value
+    let descriptor = FetchDescriptor<FoodItemLog>(
+      predicate: #Predicate { $0.processingIdentifier == identifierValue }
+    )
+
+    guard let foodItemLog = try modelContext.fetch(descriptor).first else {
+      return
+    }
+
+    try modelContext.savingTransaction {
+      foodItemLog.processingState = .failed
+      foodItemLog.errorMessage = errorMessage
+    }
+
+    if !Bundle.main.isAppExtension {
+      TelemetryDeck.signal("magic_scanner_failed")
+    }
+  }
+
+  /// Completes a Magic Scanner upload with results from backend
+  func completeMagicScan(
+    modelContext: ModelContext,
+    processingIdentifier: AIFoodProcessingIdentifier,
+    servings: [FoodItemServingAmount]
+  ) async throws {
+    // Find the food item log by processing identifier
+    let identifierValue = processingIdentifier.value
+    let descriptor = FetchDescriptor<FoodItemLog>(
+      predicate: #Predicate { $0.processingIdentifier == identifierValue }
+    )
+
+    guard let foodItemLog = try modelContext.fetch(descriptor).first else {
+      return
+    }
+
+    var dates = [Date]()
+
+    try modelContext.savingTransaction {
+      // Convert FoodItemServingAmount to FoodItemServing
+      var foodItemServings = [FoodItemServing]()
+
+      for serving in servings {
+        let (modifiedDates, foodItem) = try upsertAndMerge(modelContext: modelContext, foodItem: serving.foodItem)
+        dates.append(contentsOf: modifiedDates)
+
+        let foodItemServing = FoodItemServing(
+          numberOfServings: serving.serving,
+          foodItem: foodItem
+        )
+        modelContext.insert(foodItemServing)
+        foodItemServings.append(foodItemServing)
+      }
+
+      // Update the food item log with servings
+      foodItemLog.foodItemServings = foodItemServings
+      foodItemLog.processingState = .completed
+      foodItemLog.errorMessage = nil
+
+      // Set name to first food item name
+      if let firstServing = servings.first {
+        foodItemLog.name = firstServing.foodItem.name
+      }
+
+      dates.append(foodItemLog.date)
+    }
+
+    // Update HealthKit
+    try await updateNutrition(for: dates.asSet())
+
+    if !Bundle.main.isAppExtension {
+      TelemetryDeck.signal("magic_scanner_completed")
     }
   }
 

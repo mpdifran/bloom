@@ -8,6 +8,8 @@
 import SwiftUI
 import AppUI
 import TelemetryDeck
+import DataContainer
+import SwiftData
 
 @MainActor
 struct RootView: View {
@@ -28,6 +30,7 @@ struct RootView: View {
   @ObservedObject private var userController = UserController.shared
 
   @Environment(\.dismiss) private var dismiss
+  @Environment(\.modelContext) private var modelContext
 
   init() {
     let largeTitleFont = UIFont.systemFont(ofSize: 35, weight: .bold)
@@ -85,6 +88,11 @@ struct RootView: View {
     }
     .onReceive(NotificationCenter.default.publisher(for: .showLogPeriodSheet)) { _ in
       shouldShowLogPeriodSheet = true
+    }
+    .onForeground {
+      Task {
+        await MagicScanStatusChecker.shared.checkPendingItems(modelContext: modelContext)
+      }
     }
     .onOpenURL { url in
       handleURL(url)

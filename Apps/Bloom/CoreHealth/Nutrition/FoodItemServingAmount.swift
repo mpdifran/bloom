@@ -26,3 +26,10 @@ public extension EstimateFoodCaloriesResponse.Serving {
         FoodItemServingAmount(serving: servings, foodItem: item)
     }
 }
+
+public extension MagicScanStatusResponse.Serving {
+
+    func asServing() -> FoodItemServingAmount {
+        FoodItemServingAmount(serving: servings, foodItem: item)
+    }
+}

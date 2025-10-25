@@ -63,6 +63,12 @@ class BloomAppDelegate: NSObject, UIApplicationDelegate {
     didReceiveRemoteNotification userInfo: [AnyHashable: Any]
   ) async -> UIBackgroundFetchResult {
     do {
+      // Check if this is a magic scanner completion notification
+      if let type = userInfo["type"] as? String, type == "magic_scan_complete" {
+        await handleMagicScanComplete(userInfo: userInfo)
+        return .newData
+      }
+
       // Otherwise handle as chat notification
       let data = try JSONSerialization.data(withJSONObject: userInfo, options: [])
       await ChatController.shared.handlePushData(data)
@@ -77,5 +83,15 @@ class BloomAppDelegate: NSObject, UIApplicationDelegate {
       print("Error decoding push payload:", error)
       return .failed
     }
+  }
+
+  private func handleMagicScanComplete(userInfo: [AnyHashable: Any]) async {
+    guard let processingIdentifier = userInfo["processingIdentifier"] as? String else {
+      return
+    }
+
+    await MagicScanStatusChecker.shared.checkStatus(
+      processingIdentifiers: [AIFoodProcessingIdentifier(processingIdentifier)]
+    )
   }
 }

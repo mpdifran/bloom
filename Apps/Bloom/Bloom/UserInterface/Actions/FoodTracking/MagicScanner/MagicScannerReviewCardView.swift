@@ -10,6 +10,7 @@ import BloomUI
 import DataContainer
 import CoreHealth
 import BloomModel
+import CoreNetwork
 
 struct MagicScannerReviewCardView: View {
   let image: UIImage
@@ -85,7 +86,21 @@ struct MagicScannerReviewCardView: View {
       meal: nutritionViewModel.suggestedMeal
     )
 
-    // TODO: Phase 2 - Upload to backend with processingIdentifier
+    // Upload to backend
+    do {
+      _ = try await NetworkRequester.shared.uploadMagicScan(
+        imageData: imageData,
+        contextText: contextText.isEmpty ? nil : contextText,
+        processingIdentifier: AIFoodProcessingIdentifier(processingIdentifier)
+      )
+    } catch {
+      // If upload fails, mark the item as failed
+      try await nutritionViewModel.failMagicScan(
+        modelContext: modelContext,
+        processingIdentifier: AIFoodProcessingIdentifier(processingIdentifier),
+        errorMessage: "Failed to upload image"
+      )
+    }
 
     // Trigger feedback and sound
     saveComplete.toggle()

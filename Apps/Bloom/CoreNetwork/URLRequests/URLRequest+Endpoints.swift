@@ -77,6 +77,12 @@ extension URLRequest {
     static func getById(foodId: String) async -> URLRequest {
       await URLRequest.get("v1/food/\(foodId)")
     }
+    static func uploadMagicScan(body: MagicScanUploadRequest) async throws -> URLRequest {
+      try await URLRequest.post("v1/food/magic-scan-upload", body: body)
+    }
+    static func checkMagicScanStatus(body: MagicScanStatusRequest) async throws -> URLRequest {
+      try await URLRequest.post("v1/food/magic-scan-status", body: body)
+    }
   }
 }
 

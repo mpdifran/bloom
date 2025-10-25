@@ -159,6 +159,39 @@ public extension NetworkRequester {
     )
   }
 
+  func uploadMagicScan(
+    imageData: Data,
+    contextText: String?,
+    processingIdentifier: AIFoodProcessingIdentifier
+  ) async throws -> MagicScanUploadResponse {
+    let body = MagicScanUploadRequest(
+      foodImage: ImageFile(
+        data: imageData,
+        fileExtension: "jpg"
+      ),
+      contextText: contextText,
+      processingIdentifier: processingIdentifier
+    )
+
+    let request = try await URLRequest.Food.uploadMagicScan(body: body)
+    return try await URLSession.shared.authenticatedBloomRequestWithResponse(
+      request: request,
+      responseType: MagicScanUploadResponse.self
+    )
+  }
+
+  func checkMagicScanStatus(
+    processingIdentifiers: [AIFoodProcessingIdentifier]
+  ) async throws -> MagicScanStatusResponse {
+    let body = MagicScanStatusRequest(processingIdentifiers: processingIdentifiers)
+
+    let request = try await URLRequest.Food.checkMagicScanStatus(body: body)
+    return try await URLSession.shared.authenticatedBloomRequestWithResponse(
+      request: request,
+      responseType: MagicScanStatusResponse.self
+    )
+  }
+
   func submitFoodIssueReport(issue: FoodItemIssue) async throws {
     let body = SubmitFoodItemIssueRequest(foodItemIssue: issue)
     let request = try await URLRequest.Food.submitFoodItemIssue(body: body)
