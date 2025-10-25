@@ -67,6 +67,13 @@ private extension NutritionMealView {
       self.error = error
     }
   }
+
+  func retry(_ foodItemLog: FoodItemLog) async throws {
+    try await nutritionViewModel.retryMagicScan(
+      modelContext: modelContext,
+      foodItemLog: foodItemLog
+    )
+  }
 }
 
 private extension NutritionMealView {
@@ -83,28 +90,47 @@ private extension NutritionMealView {
 
   var contentView: some View {
     ForEach(foodItemLogs) { foodItemLog in
-      FoodItemLogCell(foodItemLog: foodItemLog) { foodItem in
-        onCellTapped(foodItemLog, foodItem)
-      } showMealDetails: { foodItemLog in
-        showMealDetails(foodItemLog)
-      }
-      .id(foodItemLog.id)
-      .contextMenu {
-        Button("Duplicate", systemSymbol: .docOnDoc) {
-          presentedSheet = DuplicateFoodLogView(
-            foodItemLog: foodItemLog,
-            performDismiss: nil
-          ).asAny
+      // Check if this is a Magic Scanner item with processing/error state
+      if let processingState = foodItemLog.processingState,
+         processingState != .completed {
+        MagicScannerProcessingCell(foodItemLog: foodItemLog) {
+          try await retry(foodItemLog)
         }
-
-        Divider()
-
-        Button("Delete", systemSymbol: .trash, role: .destructive) {
-          Task {
-            await delete(foodItemLog)
+        .id(foodItemLog.id)
+        .contextMenu {
+          // Only show delete for processing items
+          Button("Delete", systemSymbol: .trash, role: .destructive) {
+            Task {
+              await delete(foodItemLog)
+            }
           }
+          .tint(.red)
         }
-        .tint(.red)
+      } else {
+        // Normal food item log cell
+        FoodItemLogCell(foodItemLog: foodItemLog) { foodItem in
+          onCellTapped(foodItemLog, foodItem)
+        } showMealDetails: { foodItemLog in
+          showMealDetails(foodItemLog)
+        }
+        .id(foodItemLog.id)
+        .contextMenu {
+          Button("Duplicate", systemSymbol: .docOnDoc) {
+            presentedSheet = DuplicateFoodLogView(
+              foodItemLog: foodItemLog,
+              performDismiss: nil
+            ).asAny
+          }
+
+          Divider()
+
+          Button("Delete", systemSymbol: .trash, role: .destructive) {
+            Task {
+              await delete(foodItemLog)
+            }
+          }
+          .tint(.red)
+        }
       }
     }
   }

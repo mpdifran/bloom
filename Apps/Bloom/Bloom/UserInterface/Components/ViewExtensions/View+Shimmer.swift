@@ -11,6 +11,7 @@ struct ShimmerModifier: ViewModifier {
   let duration: Double
 
   @State private var phase: CGFloat = 0
+  @Environment(\.colorScheme) private var colorScheme
 
   func body(content: Content) -> some View {
     content
@@ -21,7 +22,7 @@ struct ShimmerModifier: ViewModifier {
               LinearGradient(
                 colors: [
                   .clear,
-                  .white,
+                  colorScheme == .light ? .white : .black,
                   .clear
                 ],
                 startPoint: .leading,

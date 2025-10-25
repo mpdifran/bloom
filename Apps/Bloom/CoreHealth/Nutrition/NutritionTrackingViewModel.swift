@@ -299,6 +299,24 @@ public extension NutritionTrackingViewModel {
     return processingIdentifier.value
   }
 
+  /// Retries a failed Magic Scanner upload
+  func retryMagicScan(
+    modelContext: ModelContext,
+    foodItemLog: FoodItemLog
+  ) async throws {
+    try modelContext.savingTransaction {
+      // Reset to pending state
+      foodItemLog.processingState = .pending
+      foodItemLog.errorMessage = nil
+    }
+
+    // TODO: Phase 2 - Re-upload image to backend with processingIdentifier
+
+    if !Bundle.main.isAppExtension {
+      TelemetryDeck.signal("magic_scanner_retry")
+    }
+  }
+
   /// Logs each serving as an individual `FoodItemLog`.
   func logIndividual(
     modelContext: ModelContext,
