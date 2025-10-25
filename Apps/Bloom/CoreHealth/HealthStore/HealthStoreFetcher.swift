@@ -11,7 +11,7 @@ import BloomFoundation
 import CoreLocation
 
 private extension TimeInterval {
-  static let maxSleepGroupTimeDistance: TimeInterval = 7200 // 2 hours
+  static let maxSleepGroupTimeDistance: TimeInterval = 14400 // 4 hours
   static let maxMenstruationTimeGap: TimeInterval = TimeInterval(60 * 60 * 24 * 2) // 2 days
 }
 
