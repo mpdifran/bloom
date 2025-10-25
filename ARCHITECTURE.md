@@ -1046,3 +1046,113 @@ This architecture emphasizes:
 - **Performance**: Optimize for smooth user experience
 - **Privacy**: Respect user data
 - **Maintainability**: Clear organization and naming
+
+## Magic Scanner (AI Food Scanning)
+
+Magic Scanner is an async AI-powered food image analysis feature that uses OpenAI's Vision API to detect and log food items from photos.
+
+### Overview
+Unlike the traditional food scanner that provides suggestions, Magic Scanner gives its best guess of what's in the photo and processes it asynchronously in the background. The entire flow is designed for resilience with Redis + in-memory fallback, automatic cleanup, and silent push notifications.
+
+### Client Flow
+1. **Camera** - User takes a photo of their meal
+2. **Review** - User can add optional context text describing the meal
+3. **Upload** - Image is uploaded to backend S3 storage, job created in Redis
+4. **Background Tracking** - Client tracks processing state (pending → processing → completed/failed)
+5. **Status Checks** - Two mechanisms:
+   - Silent push notification when processing completes
+   - Bulk status check when app enters foreground (checks all pending items)
+6. **Completion** - Results automatically populate SwiftData and sync to HealthKit
+
+### Backend Flow
+```
+Upload → S3 Storage → Redis Job Queue → OpenAI Vision API → Results in Redis → Silent Push Notification
+```
+
+1. **Upload Endpoint** (`POST /v1/food/magic-scan-upload`)
+   - Stores image to S3 (`magic-scanner/` path)
+   - Creates job in Redis with 48-hour TTL
+   - Triggers background processing task
+   - Returns immediate response with `pending` status
+
+2. **Background Processing** (`MagicScanJobManager.processJob`)
+   - Updates status to `processing`
+   - Retrieves image from S3
+   - Calls OpenAI Vision API with simplified prompt (no suggestions, just best guess)
+   - Stores results as JSON in Redis
+   - Updates status to `completed` or `failed`
+   - Sends silent push notification to user's device
+
+3. **Status Check Endpoint** (`POST /v1/food/magic-scan-status`)
+   - Accepts array of processing identifiers
+   - Queries Redis for each job
+   - Returns current status, servings (if completed), or error message
+
+### Type Safety Pattern
+```swift
+// Shared enum in BloomModel
+public enum MagicScanStatus: String, Codable, Sendable {
+  case pending
+  case processing
+  case completed
+  case failed
+}
+```
+
+- **Client side**: Uses strongly-typed enum with exhaustive switch statements
+- **Backend side**: Stores raw strings in Redis for flexibility, converts to enum at API boundaries
+- **Benefits**: Compile-time checking, autocomplete, refactor-friendly
+
+### Resilience Pattern (Redis + In-Memory Fallback)
+`MagicScanJobManager` follows the same pattern as `ChatHistory`:
+
+```swift
+final actor MagicScanJobManager {
+  private let redis: RedisClient
+  private var fallbackJobs: [String: MagicScanJob] = [:]
+  private var redisIsHealthy = true
+
+  // Always write to both Redis and in-memory
+  // Read from Redis if healthy, fallback to in-memory if not
+  // Auto-sync when Redis recovers
+}
+```
+
+### Data Retention & Cleanup
+- **Redis Jobs**: 48-hour TTL set automatically on creation
+- **S3 Images**: Daily cron job (runs at 2 AM) deletes images older than 48 hours
+- **Cron Schedule**: `"0 2 * * *"` in `configure+Cron.swift`
+- **Cleanup Method**: `ImageStorage.deleteOldImages(olderThan:path:)`
+
+### Error Handling
+- **Upload Failures**: Shows user-facing alert using `AlertDetails` pattern
+- **Processing Failures**: Marks job as `failed` in Redis, sends push notification
+- **Network Errors**: Handled gracefully with fallback to in-memory storage
+- **S3 Retrieval Failures**: Logs error and marks job as failed
+
+### Models & Files
+
+**iOS:**
+- `FoodItemLog.swift` - SwiftData model with processing state
+- `MagicScannerReviewCardView.swift` - Review screen with upload logic
+- `MagicScanStatusChecker.swift` - Handles push notifications and foreground checks
+- `NutritionTrackingViewModel.swift` - Business logic (logMagicScan, completeMagicScan, failMagicScan)
+
+**Shared (BloomModel):**
+- `MagicScanStatus.swift` - Type-safe status enum
+- `MagicScanUploadRequest.swift` / `MagicScanUploadResponse.swift`
+- `MagicScanStatusRequest.swift` / `MagicScanStatusResponse.swift`
+
+**Backend:**
+- `MagicScanJobManager.swift` - Actor managing Redis jobs and processing
+- `FoodController.swift` - API endpoints
+- `OpenAIService.swift` - `estimateCaloriesMagicScan` method
+- `ImageStorage.swift` - S3 operations including cleanup
+- `configure+Cron.swift` - Daily cleanup job
+
+### Key Differences from Traditional Scanner
+- **No Suggestions**: Only returns best guess (uses `magicScanEstimate` schema vs `aiEstimate`)
+- **Async Processing**: Processing happens in background, not blocking user
+- **Push Notifications**: Silent notifications alert user when processing completes
+- **Automatic Cleanup**: Images and jobs expire after 48 hours
+- **Simplified UX**: Less user interaction required, more automated

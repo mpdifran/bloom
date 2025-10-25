@@ -19,6 +19,7 @@ struct MagicScannerReviewCardView: View {
 
   @State private var imageWidth: CGFloat = 300
   @State private var saveComplete = false
+  @State private var alertDetails: AlertDetails?
 
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
@@ -67,13 +68,14 @@ struct MagicScannerReviewCardView: View {
       .padding()
     }
     .sensoryFeedback(.success, trigger: saveComplete)
+    .alert(alertDetails: $alertDetails)
   }
 
   private func handleSave() async throws {
     // Crop and resize image
     guard let squareImage = image.croppedToSquare(),
           let imageData = BackendImageResizer.resize(squareImage) else {
-      // TODO: Show error to user
+      alertDetails = AlertDetails(title: "Error", message: "Unable to process image")
       return
     }
 

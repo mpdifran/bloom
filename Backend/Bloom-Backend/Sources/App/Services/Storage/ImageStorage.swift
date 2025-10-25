@@ -31,12 +31,25 @@ protocol ImageStorage: Sendable {
     path: StoragePath,
     expiration: TimeAmount
   ) async throws -> URL?
-  
+
   /// Retrieve image data from storage
   /// - Parameters:
   ///   - fileName: The name of the file to retrieve
   ///   - path: The storage path where the file is located
   func retrieveImage(fileName: String, path: StoragePath) async throws -> ImageFile?
+
+  /// Delete a single image from storage
+  /// - Parameters:
+  ///   - fileName: The name of the file to delete
+  ///   - path: The storage path where the file is located
+  func deleteImage(fileName: String, path: StoragePath) async throws
+
+  /// Delete old images from storage
+  /// - Parameters:
+  ///   - date: Delete images older than this date
+  ///   - path: The storage path to clean up
+  /// - Returns: Number of images deleted
+  func deleteOldImages(olderThan date: Date, path: StoragePath) async throws -> Int
 }
 
 struct S3Storage: ImageStorage {
@@ -129,6 +142,61 @@ struct S3Storage: ImageStorage {
     } catch {
       logger.error("Failed to retrieve image from S3: \(error)")
       return nil
+    }
+  }
+
+  func deleteImage(fileName: String, path: StoragePath) async throws {
+    let objectKey = "\(path.rawValue)/\(fileName)"
+
+    let deleteRequest = S3.DeleteObjectRequest(
+      bucket: bucketName,
+      key: objectKey
+    )
+
+    do {
+      _ = try await s3.deleteObject(deleteRequest)
+      logger.info("Deleted image from S3: \(objectKey)")
+    } catch {
+      logger.error("Failed to delete image from S3: \(error)")
+      throw error
+    }
+  }
+
+  func deleteOldImages(olderThan date: Date, path: StoragePath) async throws -> Int {
+    let prefix = "\(path.rawValue)/"
+
+    let listRequest = S3.ListObjectsV2Request(
+      bucket: bucketName,
+      prefix: prefix
+    )
+
+    do {
+      let response = try await s3.listObjectsV2(listRequest)
+
+      let oldObjects = response.contents?.filter { object in
+        guard let lastModified = object.lastModified else { return false }
+        return lastModified < date
+      } ?? []
+
+      guard !oldObjects.isEmpty else {
+        logger.info("No old images to delete from S3 path: \(prefix)")
+        return 0
+      }
+
+      let objectsToDelete = oldObjects.compactMap { $0.key }.map { S3.ObjectIdentifier(key: $0) }
+
+      let deleteRequest = S3.DeleteObjectsRequest(
+        bucket: bucketName,
+        delete: S3.Delete(objects: objectsToDelete)
+      )
+
+      _ = try await s3.deleteObjects(deleteRequest)
+
+      logger.info("Deleted \(objectsToDelete.count) old images from S3 path: \(prefix)")
+      return objectsToDelete.count
+    } catch {
+      logger.error("Failed to delete old images from S3: \(error)")
+      throw error
     }
   }
 }

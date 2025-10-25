@@ -31,6 +31,26 @@ extension Application {
       }
     }
     
-    self.logger.info("Configured cron jobs: duplicate-detection (every 4 hours)")
+    // Magic Scanner S3 cleanup - runs daily at 2 AM
+    try cron.schedule("0 2 * * *") { [weak self] in
+      guard let self else { return }
+
+      self.logger.info("Starting Magic Scanner S3 cleanup job")
+
+      Task {
+        do {
+          let cutoffDate = Date().addingTimeInterval(-48 * 3600) // 48 hours ago
+          let deletedCount = try await self.imageStorage.deleteOldImages(
+            olderThan: cutoffDate,
+            path: .magicScanner
+          )
+          self.logger.info("Magic Scanner S3 cleanup completed: deleted \(deletedCount) images")
+        } catch {
+          self.logger.error("Magic Scanner S3 cleanup failed: \(error)")
+        }
+      }
+    }
+
+    self.logger.info("Configured cron jobs: duplicate-detection (every 4 hours), magic-scanner-cleanup (daily at 2 AM)")
   }
 }
