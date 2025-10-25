@@ -116,9 +116,10 @@ struct FoodLoggingActionCardView: View {
               Label("Upload a Food", systemSymbol: .plusViewfinder)
             }
           } label: {
-            Label("Add", systemSymbol: .plus)
+            Image(systemSymbol: .plus)
               .bold()
           }
+          .buttonStyle(.plain)
         }
       }
     }
@@ -251,6 +252,7 @@ private extension FoodLoggingActionCardView {
   var frequentTabContent: some View {
     ForEach(viewModel.frequentFoodItemSections) { section in
       SectionTitleView(section.title)
+        .padding(.horizontal)
 
       ForEach(section.foodItems) { foodItem in
         if searchQuery.isEmpty || foodItem.contains(searchQuery: searchQuery) {
@@ -272,6 +274,7 @@ private extension FoodLoggingActionCardView {
   var recentTabContent: some View {
     ForEach(viewModel.recentFoodItemSections) { section in
       SectionTitleView(section.title)
+        .padding(.horizontal)
 
       ForEach(section.foodItems) { foodItem in
         if searchQuery.isEmpty || foodItem.contains(searchQuery: searchQuery) {
@@ -320,6 +323,7 @@ private extension FoodLoggingActionCardView {
   @ViewBuilder
   var backendResultsSection: some View {
     SectionTitleView("All Results")
+      .padding(.horizontal)
 
     ForEach(filteredBackendResults) { foodItem in
       FoodItemCell(foodItem: foodItem)

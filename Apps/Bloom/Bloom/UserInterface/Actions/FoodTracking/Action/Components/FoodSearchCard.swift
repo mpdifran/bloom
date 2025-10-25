@@ -9,6 +9,7 @@ import SFSafeSymbols
 import SwiftUI
 import BloomModel
 import BloomFoundation
+import DataContainer
 
 extension FoodSearchCard {
   enum ToolbarMode {
@@ -49,6 +50,7 @@ struct FoodSearchCard: View {
   @State private var presentedSheet: AnyView?
 
   @AppStorage("FoodLoggingActionCardView.hasShownExplanation", store: .group) private var hasShownExplanation = false
+  @AppStorage(.FeatureFlag.useNewMagicScanner) private var useNewMagicScanner = false
 
   var body: some View {
     if #available(iOS 26.0, *) {
@@ -206,18 +208,24 @@ private extension FoodSearchCard {
 
   func showMagicScan() {
     EntitledAction(presentedSheet: $presentedSheet) {
-      if hasShownExplanation {
-        presentedSheet = AIFoodScannerView().asAny
+      if useNewMagicScanner {
+        // New Magic Scanner flow
+        presentedSheet = MagicScannerCameraView().asAny
       } else {
-        presentedSheet = AIFoodScannerExplanationView {
-          Task {
-            await Delay(300)
-            await MainActor.run {
-              hasShownExplanation = true
-              presentedSheet = AIFoodScannerView().asAny
+        // Original Magic Scanner flow
+        if hasShownExplanation {
+          presentedSheet = AIFoodScannerView().asAny
+        } else {
+          presentedSheet = AIFoodScannerExplanationView {
+            Task {
+              await Delay(300)
+              await MainActor.run {
+                hasShownExplanation = true
+                presentedSheet = AIFoodScannerView().asAny
+              }
             }
-          }
-        }.asAny
+          }.asAny
+        }
       }
     }
   }
