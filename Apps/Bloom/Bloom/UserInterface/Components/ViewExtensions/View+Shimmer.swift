@@ -29,7 +29,7 @@ struct ShimmerModifier: ViewModifier {
                 endPoint: .trailing
               )
             )
-            .offset(x: -geometry.size.width + (phase * geometry.size.width * 2))
+            .offset(x: -geometry.size.width * 2 + (phase * geometry.size.width * 3))
             .mask(content)
         }
       }
