@@ -25,6 +25,7 @@ struct MagicScannerCameraView: View {
 
   private let cameraManager = CameraManager()
 
+  @State private var cameraCaptureToggle = false
   @State private var alertDetails: AlertDetails?
 
   @StateObject var permissionManager = CameraPermissionManager.shared
@@ -136,7 +137,9 @@ private extension MagicScannerCameraView {
   var captureButton: some View {
     Button {
       Task {
+        cameraCaptureToggle.toggle()
         let image = await cameraManager.capture()
+        cameraCaptureToggle.toggle()
         await MainActor.run {
           capturedImage = image
           showReviewSheet = true
@@ -164,6 +167,7 @@ private extension MagicScannerCameraView {
       }
     }
     .buttonStyle(.plain)
+    .sensoryFeedback(.impact, trigger: cameraCaptureToggle)
   }
 
   var galleryButton: some View {
