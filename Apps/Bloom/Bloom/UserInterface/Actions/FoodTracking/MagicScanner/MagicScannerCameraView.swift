@@ -43,8 +43,11 @@ struct MagicScannerCameraView: View {
               alertDetails = permissionManager.permissionAlert
             }
         case .pending:
-          // Just a black screen.
           Color.black.edgesIgnoringSafeArea(.all)
+            .overlay {
+              viewfinderView
+            }
+            .ignoresSafeArea()
         }
       }
       .toolbar {
@@ -100,7 +103,6 @@ private extension MagicScannerCameraView {
   var cameraView: some View {
     ZStack {
       Color.black
-        .ignoresSafeArea()
 
       CameraPreview(
         cameraManager: cameraManager,
@@ -110,12 +112,25 @@ private extension MagicScannerCameraView {
           await cameraManager.setFocus(for: focusPoint)
         }
       }
-      .ignoresSafeArea()
+
+      viewfinderView
 
       captureButton
         .padding(.bottom, 24)
         .zStackAlignment(.bottom)
     }
+    .ignoresSafeArea()
+  }
+
+  var viewfinderView: some View {
+    ViewfinderCornerBracketsShape(
+      bracketLengthRatio: 0.3,
+      cornerRadius: 20
+    )
+    .stroke(.thickMaterial, style: StrokeStyle(lineWidth: 10, lineCap: .round))
+    .aspectRatio(1, contentMode: .fit)
+    .padding(30)
+    .preferredColorScheme(.light)
   }
 
   var captureButton: some View {
@@ -130,21 +145,21 @@ private extension MagicScannerCameraView {
     } label: {
       if #available(iOS 26, *) {
         Circle()
-          .frame(width: 70, height: 70, alignment: .center)
-          .glassEffect(in: Circle())
+          .frame(width: 80, height: 80, alignment: .center)
+          .glassEffect(.clear, in: Circle())
           .overlay(
             Circle()
               .stroke(Color.white.opacity(0.8), lineWidth: 2)
-              .frame(width: 59, height: 59, alignment: .center)
+              .frame(width: 69, height: 69, alignment: .center)
           )
       } else {
         Circle()
           .foregroundColor(.white)
-          .frame(width: 70, height: 70, alignment: .center)
+          .frame(width: 80, height: 80, alignment: .center)
           .overlay(
             Circle()
               .stroke(Color.black.opacity(0.8), lineWidth: 2)
-              .frame(width: 59, height: 59, alignment: .center)
+              .frame(width: 69, height: 69, alignment: .center)
           )
       }
     }

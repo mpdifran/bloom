@@ -37,8 +37,8 @@ struct MagicScannerReviewCardView: View {
           Image(uiImage: squareImage)
             .resizable()
             .aspectRatio(1.0, contentMode: .fit)
+            .frame(square: imageWidth)
             .clipShape(RoundedRectangle(cornerRadius: 20))
-            .frame(width: imageWidth)
         }
 
         TextField(
