@@ -84,14 +84,27 @@ final class MagicScanStatusChecker {
       // Convert servings to FoodItemServingAmount
       let servings = result.servings?.map { $0.asServing() } ?? []
 
-      do {
-        try await NutritionTrackingViewModel.shared.completeMagicScan(
-          modelContext: modelContext,
-          processingIdentifier: result.processingIdentifier,
-          servings: servings
-        )
-      } catch {
-        print("Error completing magic scan:", error)
+      // If no food was detected, treat as an error
+      if servings.isEmpty {
+        do {
+          try await NutritionTrackingViewModel.shared.failMagicScan(
+            modelContext: modelContext,
+            processingIdentifier: result.processingIdentifier,
+            errorMessage: "Couldn't detect any food in this image"
+          )
+        } catch {
+          print("Error failing magic scan:", error)
+        }
+      } else {
+        do {
+          try await NutritionTrackingViewModel.shared.completeMagicScan(
+            modelContext: modelContext,
+            processingIdentifier: result.processingIdentifier,
+            servings: servings
+          )
+        } catch {
+          print("Error completing magic scan:", error)
+        }
       }
 
     case .failed:

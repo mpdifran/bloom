@@ -13,6 +13,7 @@ import AppUI
 struct MagicScannerProcessingCell: View {
   let foodItemLog: FoodItemLog
   let onRetry: () async throws -> Void
+  let onDelete: () async -> Void
 
   var body: some View {
     HStack(spacing: 0) {
@@ -56,7 +57,7 @@ struct MagicScannerProcessingCell: View {
           case .pending, .processing:
             EmptyView()
           case .failed:
-            errorIcon
+            errorActions
           case .completed:
             EmptyView()
           }
@@ -99,20 +100,38 @@ struct MagicScannerProcessingCell: View {
     }
   }
 
-  private var errorIcon: some View {
-    AsyncButton {
-      try await onRetry()
-    } label: {
-      Circle()
-        .fill(Color.mutedRed.tertiary)
-        .frame(square: 40)
-        .overlay {
-          Image(systemSymbol: .arrowCounterclockwise)
-            .font(.title3)
-            .foregroundStyle(.mutedRed)
-        }
+  private var errorActions: some View {
+    HStack(spacing: 12) {
+      // Retry button
+      AsyncButton {
+        try await onRetry()
+      } label: {
+        Circle()
+          .fill(Color.mutedRed.tertiary)
+          .frame(square: 40)
+          .overlay {
+            Image(systemSymbol: .arrowCounterclockwise)
+              .font(.title3)
+              .foregroundStyle(.mutedRed)
+          }
+      }
+      .buttonStyle(.plain)
+
+      // Delete button
+      AsyncButton {
+        await onDelete()
+      } label: {
+        Circle()
+          .fill(Color.mutedRed.tertiary)
+          .frame(square: 40)
+          .overlay {
+            Image(systemSymbol: .trash)
+              .font(.title3)
+              .foregroundStyle(.mutedRed)
+          }
+      }
+      .buttonStyle(.plain)
     }
-    .buttonStyle(.plain)
   }
 }
 
@@ -138,6 +157,9 @@ struct MagicScannerProcessingCell: View {
         }(),
         onRetry: {
           print("Retry tapped")
+        },
+        onDelete: {
+          print("Delete tapped")
         }
       )
 
@@ -159,6 +181,9 @@ struct MagicScannerProcessingCell: View {
         }(),
         onRetry: {
           print("Retry tapped")
+        },
+        onDelete: {
+          print("Delete tapped")
         }
       )
     }

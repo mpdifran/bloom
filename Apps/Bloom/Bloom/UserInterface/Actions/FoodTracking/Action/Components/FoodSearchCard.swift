@@ -49,9 +49,6 @@ struct FoodSearchCard: View {
   @State private var didSearchToggle = false
   @State private var presentedSheet: AnyView?
 
-  @AppStorage("FoodLoggingActionCardView.hasShownExplanation", store: .group) private var hasShownExplanation = false
-  @AppStorage(.FeatureFlag.useNewMagicScanner) private var useNewMagicScanner = false
-
   var body: some View {
     if #available(iOS 26.0, *) {
       GlassEffectContainer {
@@ -208,25 +205,7 @@ private extension FoodSearchCard {
 
   func showMagicScan() {
     EntitledAction(presentedSheet: $presentedSheet) {
-      if useNewMagicScanner {
-        // New Magic Scanner flow
-        presentedSheet = MagicScannerCameraView().asAny
-      } else {
-        // Original Magic Scanner flow
-        if hasShownExplanation {
-          presentedSheet = AIFoodScannerView().asAny
-        } else {
-          presentedSheet = AIFoodScannerExplanationView {
-            Task {
-              await Delay(300)
-              await MainActor.run {
-                hasShownExplanation = true
-                presentedSheet = AIFoodScannerView().asAny
-              }
-            }
-          }.asAny
-        }
-      }
+      presentedSheet = MagicScannerCameraView().asAny
     }
   }
 

@@ -95,6 +95,8 @@ private extension NutritionMealView {
          processingState != .completed {
         MagicScannerProcessingCell(foodItemLog: foodItemLog) {
           try await retry(foodItemLog)
+        } onDelete: {
+          await delete(foodItemLog)
         }
         .id(foodItemLog.id)
         .contextMenu {

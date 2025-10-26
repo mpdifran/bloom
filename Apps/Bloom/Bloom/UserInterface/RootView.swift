@@ -138,7 +138,7 @@ private extension RootView {
       presentedPaywall = BloomPlusPaywall(focus: focus).asAny
     case "/action/magic-scan":
       EntitledAction(presentedSheet: $presentedSheet) {
-        presentedSheet = AIFoodScannerView().asAny
+        presentedSheet = MagicScannerCameraView().asAny
       }
     case "/action/barcode-scan":
       EntitledAction(presentedSheet: $presentedSheet) {

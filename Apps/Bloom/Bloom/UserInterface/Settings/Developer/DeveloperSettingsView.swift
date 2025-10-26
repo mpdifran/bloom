@@ -20,7 +20,6 @@ struct DeveloperSettingsView: View {
   @AppStorage(.FeatureFlag.developerMode) private var showDeveloperMode: Bool = false
   @AppStorage(.FeatureFlag.enableOpenAIModelOverride) private var enableOpenAIModelOverride = false
   @AppStorage(.FeatureFlag.bypassPaywall) private var bypassPaywall = false
-  @AppStorage(.FeatureFlag.useNewMagicScanner) private var useNewMagicScanner = false
 
   @State private var authStatus: HKAuthorizationRequestStatus = .unknown
   @State private var shouldPromptForNotificationPermissions = false
@@ -221,12 +220,6 @@ extension DeveloperSettingsView {
 
         SettingsCell("OpenAI Model o3") {
           Toggle("", isOn: $enableOpenAIModelOverride)
-        }
-
-        Divider()
-
-        SettingsCell("Use New Magic Scanner") {
-          Toggle("", isOn: $useNewMagicScanner)
         }
       }
     }

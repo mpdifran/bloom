@@ -12,7 +12,6 @@ extension String {
     static let developerMode = "FeatureFlag.developerMode"
     static let bypassPaywall = "FeatureFlag.bypassPaywall"
     static let enableOpenAIModelOverride = "FeatureFlag.enableOpenAIModelOverride"
-    static let useNewMagicScanner = "FeatureFlag.useNewMagicScanner"
   }
   
   enum ExperimentOverrideKey {
