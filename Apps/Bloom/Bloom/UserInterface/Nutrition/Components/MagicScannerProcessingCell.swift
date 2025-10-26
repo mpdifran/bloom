@@ -98,6 +98,7 @@ struct MagicScannerProcessingCell: View {
           .foregroundStyle(.mutedRed)
       }
     }
+    .fixedSize(horizontal: false, vertical: true)
   }
 
   private var errorActions: some View {
@@ -176,7 +177,7 @@ struct MagicScannerProcessingCell: View {
             foodItemServings: []
           )
           log.processingState = .failed
-          log.errorMessage = "Failed to process image"
+          log.errorMessage = "Failed to find any food in this image."
           return log
         }(),
         onRetry: {
