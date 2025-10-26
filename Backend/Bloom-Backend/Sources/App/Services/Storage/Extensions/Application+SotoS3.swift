@@ -23,7 +23,23 @@ extension Application {
       return client
     }
 
-    let client = AWSClient(httpClientProvider: .createNew)
+    let client: AWSClient
+
+    // Read from custom environment variable names (S3_ACCESS_KEY, S3_SECRET_KEY)
+    if let accessKey = Environment.get("S3_ACCESS_KEY"),
+       let secretKey = Environment.get("S3_SECRET_KEY") {
+      client = AWSClient(
+        credentialProvider: .static(
+          accessKeyId: accessKey,
+          secretAccessKey: secretKey
+        ),
+        httpClientProvider: .createNew
+      )
+    } else {
+      // Fallback to default credential providers (AWS_ACCESS_KEY_ID, etc.)
+      client = AWSClient(httpClientProvider: .createNew)
+    }
+
     storage[AWSClientKey.self] = client
 
     return client

@@ -77,20 +77,17 @@ struct S3Storage: ImageStorage {
     guard let imageType = imageProcessing.determineImageType(image.data) else {
       throw Abort(.badRequest, reason: "Unsupported image type")
     }
-    
+
     let filename = "\(UUID().uuidString).\(imageType)"
 
     let putObjectRequest = S3.PutObjectRequest(
         body: .data(image.data, byteBufferAllocator: allocator),
         bucket: bucketName,
-        key: "\(path)/\(filename)"
+        key: "\(path.rawValue)/\(filename)"
     )
-    do {
-        _ = try await s3.putObject(putObjectRequest)
-        logger.info("Saved image to S3: \(bucketName) - \(putObjectRequest.key)")
-    } catch {
-        logger.error("Failed to save content to S3: \(error)")
-    }
+
+    _ = try await s3.putObject(putObjectRequest)
+    logger.info("Saved image to S3: \(bucketName) - \(putObjectRequest.key)")
 
     return ImageFileMetadata(filename: filename, data: image.data)
   }
@@ -119,30 +116,26 @@ struct S3Storage: ImageStorage {
   }
 
   func retrieveImage(fileName: String, path: StoragePath) async throws -> ImageFile? {
-    let objectKey = "\(path)/\(fileName)"
-    
+    let objectKey = "\(path.rawValue)/\(fileName)"
+
     let getObjectRequest = S3.GetObjectRequest(
       bucket: bucketName,
       key: objectKey
     )
-    
-    do {
-      let response = try await s3.getObject(getObjectRequest)
-      guard let data = response.body?.asData() else {
-        logger.warning("No data in S3 response for: \(objectKey)")
-        return nil
-      }
-      
-      guard let fileExtension = fileName.split(separator: ".").last.map(String.init) else {
-        logger.warning("Could not determine file extension for: \(fileName)")
-        return nil
-      }
-      
-      return ImageFile(data: data, fileExtension: fileExtension)
-    } catch {
-      logger.error("Failed to retrieve image from S3: \(error)")
+
+    let response = try await s3.getObject(getObjectRequest)
+
+    guard let data = response.body?.asData() else {
+      logger.warning("No data in S3 response for: \(objectKey)")
       return nil
     }
+
+    guard let fileExtension = fileName.split(separator: ".").last.map(String.init) else {
+      logger.warning("Could not determine file extension for: \(fileName)")
+      return nil
+    }
+
+    return ImageFile(data: data, fileExtension: fileExtension)
   }
 
   func deleteImage(fileName: String, path: StoragePath) async throws {

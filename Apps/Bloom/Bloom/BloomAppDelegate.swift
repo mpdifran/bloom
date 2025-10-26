@@ -64,7 +64,8 @@ class BloomAppDelegate: NSObject, UIApplicationDelegate {
   ) async -> UIBackgroundFetchResult {
     do {
       // Check if this is a magic scanner completion notification
-      if let type = userInfo["type"] as? String, type == "magic_scan_complete" {
+      if let type = userInfo["type"] as? String,
+         type == MagicScanCompleteTrigger.notificationType {
         await handleMagicScanComplete(userInfo: userInfo)
         return .newData
       }

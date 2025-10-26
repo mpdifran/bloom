@@ -331,13 +331,7 @@ extension MagicScanJobManager {
       let topic = application.bloomAppBundleID
 
       // Create payload for magic scan completion
-      struct MagicScanCompleteTrigger: Codable {
-        let type: String
-        let processingIdentifier: String
-      }
-
       let payload = MagicScanCompleteTrigger(
-        type: "magic_scan_complete",
         processingIdentifier: processingIdentifier.value
       )
 
