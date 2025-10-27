@@ -16,7 +16,7 @@ import AppUI
 struct MagicScannerReviewCardView: View {
   let image: UIImage
   @Binding var contextText: String
-  let onDismissAll: () -> Void
+  let performDismiss: () -> Void
 
   @State private var imageWidth: CGFloat = 300
   @State private var saveComplete = false
@@ -124,7 +124,7 @@ struct MagicScannerReviewCardView: View {
     SoundPlayer.playLogHealthData()
 
     // Dismiss both sheet and camera
-    onDismissAll()
+    performDismiss()
   }
 }
 
@@ -144,7 +144,7 @@ struct MagicScannerReviewCardView: View {
       MagicScannerReviewCardView(
         image: sampleImage,
         contextText: $contextText,
-        onDismissAll: { print("Dismiss all") }
+        performDismiss: { print("Dismiss all") }
       )
     }
   }

@@ -18,6 +18,12 @@ import BloomModel
 
 struct MagicScannerCameraView: View {
 
+  let performDismiss: (() -> Void)?
+
+  init(performDismiss: (() -> Void)? = nil) {
+    self.performDismiss = performDismiss
+  }
+
   @State private var capturedImage: UIImage?
   @State private var contextText: String = ""
   @State private var showReviewSheet = false
@@ -87,9 +93,12 @@ struct MagicScannerCameraView: View {
         MagicScannerReviewCardView(
           image: capturedImage,
           contextText: $contextText,
-          onDismissAll: {
-            showReviewSheet = false
-            dismiss()
+          performDismiss: {
+            if let performDismiss {
+              performDismiss()
+            } else {
+              dismiss()
+            }
           }
         )
       }

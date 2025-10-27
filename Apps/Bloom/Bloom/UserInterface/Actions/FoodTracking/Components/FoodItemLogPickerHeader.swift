@@ -15,6 +15,7 @@ struct FoodItemLogPickerHeader: View {
         FoodItemLogDatePicker()
         MealPicker()
       }
+      .menuStyle(.button)
       .buttonStyle(.plain)
     } else {
       HStack(spacing: 8) {

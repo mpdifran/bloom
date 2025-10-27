@@ -27,6 +27,7 @@ struct FoodSearchCard: View {
   let onTextChange: ((String) -> Void)?
   let onUploadNewFood: (FoodItem) -> Void
   let onFoodItemPicked: ((FoodItem) -> Void)?
+  let performDismiss: (() -> Void)?
 
   init(
     searchQuery: Binding<String>,
@@ -34,7 +35,8 @@ struct FoodSearchCard: View {
     onSearch: @escaping (String) -> Void,
     onTextChange: ((String) -> Void)? = nil,
     onUploadNewFood: @escaping (FoodItem) -> Void,
-    onFoodItemPicked: ((FoodItem) -> Void)? = nil
+    onFoodItemPicked: ((FoodItem) -> Void)? = nil,
+    performDismiss: (() -> Void)? = nil
   ) {
     self._searchQuery = searchQuery
     self.toolbarMode = toolbarMode
@@ -42,6 +44,7 @@ struct FoodSearchCard: View {
     self.onTextChange = onTextChange
     self.onUploadNewFood = onUploadNewFood
     self.onFoodItemPicked = onFoodItemPicked
+    self.performDismiss = performDismiss
   }
 
   @FocusState private var isFocused: Bool
@@ -205,7 +208,7 @@ private extension FoodSearchCard {
 
   func showMagicScan() {
     EntitledAction(presentedSheet: $presentedSheet) {
-      presentedSheet = MagicScannerCameraView().asAny
+      presentedSheet = MagicScannerCameraView(performDismiss: performDismiss).asAny
     }
   }
 

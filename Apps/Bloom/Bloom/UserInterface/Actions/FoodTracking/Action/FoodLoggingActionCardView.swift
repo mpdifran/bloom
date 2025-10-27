@@ -83,7 +83,8 @@ struct FoodLoggingActionCardView: View {
           },
           onUploadNewFood: { foodItem in
             viewModel.didUploadNewFood(foodItem: foodItem)
-          }
+          },
+          performDismiss: performDismiss
         )
       }
       .navigationBarTitleDisplayMode(.inline)
@@ -102,8 +103,6 @@ struct FoodLoggingActionCardView: View {
               Label("Create Meal", systemSymbol: .forkKnife)
             }
 
-            Divider()
-
             Button {
               presentedSheet = FoodUploadScannerView { foodItem in
                 viewModel.results = [FoodItemSection(
@@ -119,6 +118,7 @@ struct FoodLoggingActionCardView: View {
             Image(systemSymbol: .plus)
               .bold()
           }
+          .menuStyle(.button)
           .buttonStyle(.plain)
         }
       }
