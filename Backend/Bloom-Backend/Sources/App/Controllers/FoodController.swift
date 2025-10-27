@@ -30,6 +30,7 @@ extension FoodController: RouteCollection {
           $0.post("track-log", use: trackLog)
           $0.post("magic-scan-upload", use: uploadMagicScan)
           $0.post("magic-scan-status", use: checkMagicScanStatus)
+          $0.post("magic-scan-cancel", use: cancelMagicScan)
           $0.get(":id", use: getFoodItemById)
         }
       }
@@ -285,6 +286,17 @@ extension FoodController {
     }
 
     return MagicScanStatusResponse(results: results)
+  }
+
+  @Sendable
+  func cancelMagicScan(_ request: Request) async throws -> Response {
+    let requestBody = try request.content.decode(MagicScanCancelRequest.self)
+
+    try await request.magicScanJobManager.cancelJob(
+      processingIdentifier: requestBody.processingIdentifier
+    )
+
+    return Response(status: .ok)
   }
 }
 

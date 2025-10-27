@@ -508,6 +508,20 @@ public extension NutritionTrackingViewModel {
   ) async throws {
     var dates = Set<Date>()
 
+    // Cancel any magic scan jobs that are in progress
+    for foodItemLog in foodItemLogs {
+      if let processingIdentifier = foodItemLog.processingIdentifier,
+         let processingState = foodItemLog.processingState,
+         (processingState == .pending || processingState == .processing) {
+        // Fire and forget - don't block deletion if this fails
+        Task {
+          try? await NetworkRequester.shared.cancelMagicScan(
+            processingIdentifier: AIFoodProcessingIdentifier(processingIdentifier)
+          )
+        }
+      }
+    }
+
     try modelContext.savingTransaction {
       for foodItemLog in foodItemLogs {
         dates.insert(foodItemLog.date)

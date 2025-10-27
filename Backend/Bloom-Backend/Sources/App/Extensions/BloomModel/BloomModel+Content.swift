@@ -49,4 +49,5 @@ extension MagicScanUploadRequest: @retroactive Content { }
 extension MagicScanUploadResponse: @retroactive Content { }
 extension MagicScanStatusRequest: @retroactive Content { }
 extension MagicScanStatusResponse: @retroactive Content { }
+extension MagicScanCancelRequest: @retroactive Content { }
 extension MagicScanCompleteTrigger: @retroactive Content { }

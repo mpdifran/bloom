@@ -192,6 +192,15 @@ public extension NetworkRequester {
     )
   }
 
+  func cancelMagicScan(
+    processingIdentifier: AIFoodProcessingIdentifier
+  ) async throws {
+    let body = MagicScanCancelRequest(processingIdentifier: processingIdentifier)
+
+    let request = try await URLRequest.Food.cancelMagicScan(body: body)
+    try await URLSession.shared.authenticatedBloomRequest(request: request)
+  }
+
   func submitFoodIssueReport(issue: FoodItemIssue) async throws {
     let body = SubmitFoodItemIssueRequest(foodItemIssue: issue)
     let request = try await URLRequest.Food.submitFoodItemIssue(body: body)

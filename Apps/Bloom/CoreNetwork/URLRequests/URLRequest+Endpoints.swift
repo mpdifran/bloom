@@ -83,6 +83,9 @@ extension URLRequest {
     static func checkMagicScanStatus(body: MagicScanStatusRequest) async throws -> URLRequest {
       try await URLRequest.post("v1/food/magic-scan-status", body: body)
     }
+    static func cancelMagicScan(body: MagicScanCancelRequest) async throws -> URLRequest {
+      try await URLRequest.post("v1/food/magic-scan-cancel", body: body)
+    }
   }
 }
 

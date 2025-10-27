@@ -179,6 +179,16 @@ extension MagicScanJobManager {
     return fallbackJobs[identifierValue]
   }
 
+  /// Cancels a magic scan job
+  func cancelJob(
+    processingIdentifier: AIFoodProcessingIdentifier
+  ) async throws {
+    try await updateJobStatus(
+      processingIdentifier: processingIdentifier,
+      status: MagicScanStatus.cancelled.rawValue
+    )
+  }
+
   /// Updates the status of a magic scan job
   func updateJobStatus(
     processingIdentifier: AIFoodProcessingIdentifier,
@@ -235,6 +245,12 @@ extension MagicScanJobManager {
         return
       }
 
+      // Check if job was cancelled before we start processing
+      if job.status == MagicScanStatus.cancelled.rawValue {
+        logger.info("Job was cancelled, skipping processing: \(processingIdentifier.value)")
+        return
+      }
+
       // Update status to processing
       try await updateJobStatus(
         processingIdentifier: processingIdentifier,
@@ -258,6 +274,13 @@ extension MagicScanJobManager {
           db: db,
           application: application
         )
+        return
+      }
+
+      // Check again if job was cancelled before expensive OpenAI call
+      if let currentJob = try await getJob(processingIdentifier: processingIdentifier),
+         currentJob.status == MagicScanStatus.cancelled.rawValue {
+        logger.info("Job was cancelled, skipping OpenAI processing: \(processingIdentifier.value)")
         return
       }
 

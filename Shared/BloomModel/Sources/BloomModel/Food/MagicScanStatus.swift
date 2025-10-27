@@ -12,4 +12,5 @@ public enum MagicScanStatus: String, Codable, Sendable {
   case processing
   case completed
   case failed
+  case cancelled
 }
