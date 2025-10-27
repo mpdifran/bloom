@@ -73,11 +73,7 @@ final class MagicScanStatusChecker {
 
   private func handleStatusResult(_ result: MagicScanStatusResponse.Result) async {
     // Get model context from main app
-    guard let modelContext = try? ModelContext(
-      ContainerHolder.shared.container
-    ) else {
-      return
-    }
+    let modelContext = ModelContext(ContainerHolder.shared.container)
 
     switch result.status {
     case .completed:
@@ -115,6 +111,17 @@ final class MagicScanStatusChecker {
           modelContext: modelContext,
           processingIdentifier: result.processingIdentifier,
           errorMessage: errorMessage
+        )
+      } catch {
+        print("Error failing magic scan:", error)
+      }
+
+    case .cancelled:
+      do {
+        try await NutritionTrackingViewModel.shared.failMagicScan(
+          modelContext: modelContext,
+          processingIdentifier: result.processingIdentifier,
+          errorMessage: "Scan cancelled"
         )
       } catch {
         print("Error failing magic scan:", error)

@@ -10,6 +10,7 @@ import AppUI
 import TelemetryDeck
 import DataContainer
 import SwiftData
+import BloomFoundation
 
 @MainActor
 struct RootView: View {
@@ -158,34 +159,54 @@ private extension RootView {
       presentedSheet = BloodPressureActionCardView(performDismiss: nil).asAny
     case "/vital/sleep-quality":
       tabController.activeTab = .vitals
-      tabController.pendingVitalNavigation = .sleepQuality
+      Delay(600) {
+        tabController.pendingVitalNavigation = .sleepQuality
+      }
     case "/vital/activity-level":
       tabController.activeTab = .vitals
-      tabController.pendingVitalNavigation = .activityLevel
+      Delay(600) {
+        tabController.pendingVitalNavigation = .activityLevel
+      }
     case "/vital/heart-health":
       tabController.activeTab = .vitals
-      tabController.pendingVitalNavigation = .heartHealth
+      Delay(600) {
+        tabController.pendingVitalNavigation = .heartHealth
+      }
     case "/vital/body-composition":
       tabController.activeTab = .vitals
-      tabController.pendingVitalNavigation = .bodyComposition
+      Delay(600) {
+        tabController.pendingVitalNavigation = .bodyComposition
+      }
     case "/vital/stress-levels":
       tabController.activeTab = .vitals
-      tabController.pendingVitalNavigation = .stressLevels
+      Delay(600) {
+        tabController.pendingVitalNavigation = .stressLevels
+      }
     case "/vital/nutrition":
       tabController.activeTab = .vitals
-      tabController.pendingVitalNavigation = .nutrition
+      Delay(600) {
+        tabController.pendingVitalNavigation = .nutrition
+      }
     case "/vital/exercise-effectiveness":
       tabController.activeTab = .vitals
-      tabController.pendingVitalNavigation = .exerciseEffectiveness
+      Delay(600) {
+        tabController.pendingVitalNavigation = .exerciseEffectiveness
+      }
     case "/vital/cycle-tracking":
       tabController.activeTab = .vitals
-      tabController.pendingVitalNavigation = .cycleTracking
+      Delay(600) {
+        tabController.pendingVitalNavigation = .cycleTracking
+      }
     case "/vital/bowel-movements":
       tabController.activeTab = .vitals
-      tabController.pendingVitalNavigation = .bowelMovements
+      Delay(600) {
+        tabController.pendingVitalNavigation = .bowelMovements
+      }
     case "/vital/cardio-fitness":
       tabController.activeTab = .vitals
-      tabController.pendingVitalNavigation = .cardioFitness
+      Delay(600) {
+        tabController.pendingVitalNavigation = .cardioFitness
+      }
     default:
       wasHandled = false
     }
