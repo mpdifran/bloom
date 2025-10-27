@@ -29,7 +29,7 @@ struct MagicScannerReviewCardView: View {
   @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
 
   var body: some View {
-    CardView {
+    ScrollView {
       VStack {
         FoodItemLogPickerHeader()
 
@@ -52,20 +52,18 @@ struct MagicScannerReviewCardView: View {
         .onSubmit {
           isContextFieldFocused = false
         }
+        .onChange(of: contextText) { oldValue, newValue in
+          if let newLineIndex = newValue.lastIndex(of: "\n") {
+            contextText.remove(at: newLineIndex)
+            isContextFieldFocused = false
+          }
+        }
         .font(.title2)
         .fontDesign(.rounded)
         .lineLimit(3...6)
         .bold()
         .multilineTextAlignment(.leading)
-        .cardContainer(fill: .background.secondary)
-
-        AsyncButton {
-          try await handleSave()
-        } label: {
-          Text("Save")
-            .horizontallyCentered()
-        }
-        .buttonStyle(.primary)
+        .cardContainer()
       }
       .readViewSize { proxy in
         imageWidth = proxy.size.width
@@ -74,6 +72,18 @@ struct MagicScannerReviewCardView: View {
     }
     .sensoryFeedback(.success, trigger: saveComplete)
     .alert(alertDetails: $alertDetails)
+    .presentationCornerRadius(30)
+    .presentationDetents([.fraction(0.85), .large])
+    .presentationDragIndicator(.visible)
+    .shelf {
+      AsyncButton {
+        try await handleSave()
+      } label: {
+        Text("Save")
+          .horizontallyCentered()
+      }
+      .buttonStyle(.primary)
+    }
   }
 
   private func handleSave() async throws {
