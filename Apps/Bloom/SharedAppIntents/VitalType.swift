@@ -18,7 +18,6 @@ enum VitalType: String, AppEnum {
   case exerciseEffectiveness
   case cycleTracking
   case bowelMovements
-  case cardioFitness
 
   nonisolated(unsafe) static var typeDisplayRepresentation = TypeDisplayRepresentation(name: "Vital")
 
@@ -58,10 +57,6 @@ enum VitalType: String, AppEnum {
     .bowelMovements: DisplayRepresentation(
       title: "Bowel Movements",
       image: DisplayRepresentation.Image(systemName: "toilet.fill")
-    ),
-    .cardioFitness: DisplayRepresentation(
-      title: "Cardio Fitness",
-      image: DisplayRepresentation.Image(systemName: "heart.fill")
     )
   ]
 
@@ -85,8 +80,6 @@ enum VitalType: String, AppEnum {
       return "vital/cycle-tracking"
     case .bowelMovements:
       return "vital/bowel-movements"
-    case .cardioFitness:
-      return "vital/cardio-fitness"
     }
   }
 }
