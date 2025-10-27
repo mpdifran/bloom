@@ -48,6 +48,10 @@ struct MagicScannerReviewCardView: View {
           axis: .vertical
         )
         .focused($isContextFieldFocused)
+        .submitLabel(.done)
+        .onSubmit {
+          isContextFieldFocused = false
+        }
         .font(.title2)
         .fontDesign(.rounded)
         .lineLimit(3...6)
