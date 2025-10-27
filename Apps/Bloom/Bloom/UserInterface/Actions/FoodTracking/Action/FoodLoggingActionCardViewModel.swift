@@ -177,6 +177,12 @@ extension FoodLoggingActionCardView.ViewModel {
           foodItems: $0.foods
         )
       })
+
+      // Upsert food items in the background
+      let foodItems = sections.flatMap { $0.foods }
+      Task.detached {
+        await FoodItemUpsertProcessor.shared.upsertFoodItems(foodItems)
+      }
     } catch {
       self.error = error
     }

@@ -74,7 +74,14 @@ private extension BarcodeScannerPickerView.ViewModel {
         country: country
       )
 
-      return sections.flatMap({ $0.foods })
+      let foodItems = sections.flatMap({ $0.foods })
+
+      // Upsert food items in the background
+      Task.detached {
+        await FoodItemUpsertProcessor.shared.upsertFoodItems(foodItems)
+      }
+
+      return foodItems
     } catch {
       print(error)
     }
