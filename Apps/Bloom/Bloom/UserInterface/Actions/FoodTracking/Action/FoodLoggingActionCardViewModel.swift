@@ -12,6 +12,7 @@ import TelemetryDeck
 import CoreNetwork
 import BloomFoundation
 import SwiftData
+import CoreHealth
 
 private extension Int {
   static let debounceTime: Int = 300
@@ -198,5 +199,28 @@ extension FoodLoggingActionCardView.ViewModel {
     failedBarcodeSearch = nil
     isSearching = false
     results = [section]
+  }
+
+  func generateWithAI(query: String, modelContext: ModelContext) async throws {
+    // Generate identifier upfront
+    let processingIdentifier = AIFoodProcessingIdentifier()
+
+    // Upload to backend first
+    _ = try await NetworkRequester.shared.uploadMagicScan(
+      imageData: nil,
+      contextText: query,
+      processingIdentifier: processingIdentifier
+    )
+
+    // Only save locally if upload succeeded
+    NutritionTrackingViewModel.shared.logTextOnlyMagicScan(
+      modelContext: modelContext,
+      processingIdentifier: processingIdentifier,
+      contextText: query,
+      date: NutritionTrackingViewModel.shared.date,
+      meal: NutritionTrackingViewModel.shared.suggestedMeal
+    )
+
+    TelemetryDeck.signal("ai_text_generation_initiated")
   }
 }

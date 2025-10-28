@@ -258,17 +258,14 @@ public extension NutritionTrackingViewModel {
   }
 
   /// Saves a Magic Scanner capture with processing state
-  /// - Returns: The processing identifier for tracking
-  @discardableResult
   func logMagicScan(
     modelContext: ModelContext,
+    processingIdentifier: AIFoodProcessingIdentifier,
     imageData: Data,
     contextText: String?,
     date: Date,
     meal: FoodItemLog.Meal
-  ) -> String {
-    let processingIdentifier = AIFoodProcessingIdentifier()
-
+  ) {
     try? modelContext.savingTransaction {
       let logDate = calculateDate(for: meal, from: date)
 
@@ -295,8 +292,42 @@ public extension NutritionTrackingViewModel {
     if !Bundle.main.isAppExtension {
       TelemetryDeck.signal("magic_scanner_item_saved")
     }
+  }
 
-    return processingIdentifier.value
+  /// Saves a text-only AI food generation request with processing state
+  func logTextOnlyMagicScan(
+    modelContext: ModelContext,
+    processingIdentifier: AIFoodProcessingIdentifier,
+    contextText: String,
+    date: Date,
+    meal: FoodItemLog.Meal
+  ) {
+    try? modelContext.savingTransaction {
+      let logDate = calculateDate(for: meal, from: date)
+
+      let foodItemLog = FoodItemLog(
+        id: UUID().uuidString,
+        name: nil,  // Will be set when processing completes
+        date: logDate,
+        meal: meal,
+        numberOfServings: 1,
+        imageData: nil,  // No image for text-only generation
+        foodItemServings: []  // Empty, populated after processing
+      )
+
+      // Set Magic Scanner fields
+      foodItemLog.processingIdentifier = processingIdentifier.value
+      foodItemLog.processingState = .pending
+      foodItemLog.contextText = contextText
+
+      modelContext.insert(foodItemLog)
+    }
+
+    // Don't update HealthKit yet - wait until processing completes
+
+    if !Bundle.main.isAppExtension {
+      TelemetryDeck.signal("ai_text_generation_item_saved")
+    }
   }
 
   /// Retries a failed Magic Scanner upload

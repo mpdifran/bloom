@@ -486,41 +486,63 @@ private extension OpenAIService {
 extension OpenAIService {
 
   func estimateCaloriesMagicScan(
-    image: Data,
+    image: Data?,
     contextText: String?
   ) async throws -> [MagicScanStatusResponse.Serving] {
     let model = ModelID.GPT4.gpt_4o_mini
 
-    // Determine image type
-    let imageProcessor = ImageProcessor()
-    guard let imageType = imageProcessor.determineImageType(image) else {
-      throw Abort(.badRequest, reason: "Unsupported image type")
-    }
+    var messages: [Chat.Message] = []
 
-    var messages: [Chat.Message] = [
-      Chat.Message(
-        role: .system,
-        content: [
-          .text("Identify the food in this image and provide your best estimate of nutrients. Only include edible items. Be concise.")
-        ]
-      ),
-      Chat.Message(
-        role: .user,
-        content: [
-          .imageData(image, "image/\(imageType)")
-        ]
-      )
-    ]
+    if let image = image {
+      // Image-based scan
+      let imageProcessor = ImageProcessor()
+      guard let imageType = imageProcessor.determineImageType(image) else {
+        throw Abort(.badRequest, reason: "Unsupported image type")
+      }
 
-    if let contextText = contextText, !contextText.isEmpty {
-      messages.append(
+      messages = [
+        Chat.Message(
+          role: .system,
+          content: [
+            .text("Identify the food in this image and provide your best estimate of nutrients. Only include edible items. Be concise.")
+          ]
+        ),
+        Chat.Message(
+          role: .user,
+          content: [
+            .imageData(image, "image/\(imageType)")
+          ]
+        )
+      ]
+
+      if let contextText = contextText, !contextText.isEmpty {
+        messages.append(
+          Chat.Message(
+            role: .user,
+            content: [
+              .text(contextText)
+            ]
+          )
+        )
+      }
+    } else if let contextText = contextText, !contextText.isEmpty {
+      // Text-only scan
+      messages = [
+        Chat.Message(
+          role: .system,
+          content: [
+            .text("Identify the food described and provide your best estimate of nutrients. Only include edible items. Be concise.")
+          ]
+        ),
         Chat.Message(
           role: .user,
           content: [
             .text(contextText)
           ]
         )
-      )
+      ]
+    } else {
+      throw Abort(.badRequest, reason: "Either image or contextText must be provided")
     }
 
     let response = try await openAI.chats.create(

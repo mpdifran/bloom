@@ -94,30 +94,25 @@ struct MagicScannerReviewCardView: View {
       return
     }
 
-    // Save via NutritionTrackingViewModel
-    let processingIdentifier = nutritionViewModel.logMagicScan(
+    // Generate identifier upfront
+    let processingIdentifier = AIFoodProcessingIdentifier()
+
+    // Upload to backend first - throw error if it fails
+    _ = try await NetworkRequester.shared.uploadMagicScan(
+      imageData: imageData,
+      contextText: contextText.isEmpty ? nil : contextText,
+      processingIdentifier: processingIdentifier
+    )
+
+    // Only save locally if upload succeeded
+    nutritionViewModel.logMagicScan(
       modelContext: modelContext,
+      processingIdentifier: processingIdentifier,
       imageData: imageData,
       contextText: contextText,
       date: nutritionViewModel.date,
       meal: nutritionViewModel.suggestedMeal
     )
-
-    // Upload to backend
-    do {
-      _ = try await NetworkRequester.shared.uploadMagicScan(
-        imageData: imageData,
-        contextText: contextText.isEmpty ? nil : contextText,
-        processingIdentifier: AIFoodProcessingIdentifier(processingIdentifier)
-      )
-    } catch {
-      // If upload fails, mark the item as failed
-      try await nutritionViewModel.failMagicScan(
-        modelContext: modelContext,
-        processingIdentifier: AIFoodProcessingIdentifier(processingIdentifier),
-        errorMessage: "Failed to upload image"
-      )
-    }
 
     // Trigger feedback and sound
     saveComplete.toggle()

@@ -8,12 +8,12 @@
 import Foundation
 
 public struct MagicScanUploadRequest: Codable, Sendable {
-  public let foodImage: ImageFile
+  public let foodImage: ImageFile?
   public let contextText: String?
   public let processingIdentifier: AIFoodProcessingIdentifier
 
   public init(
-    foodImage: ImageFile,
+    foodImage: ImageFile?,
     contextText: String?,
     processingIdentifier: AIFoodProcessingIdentifier
   ) {

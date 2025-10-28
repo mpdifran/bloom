@@ -17,19 +17,13 @@ struct MagicScannerProcessingCell: View {
 
   var body: some View {
     HStack(spacing: 0) {
-      // Image (always shown if available)
+      // Image (only shown if available)
       if let image = foodItemLog.image {
         Image(uiImage: image)
           .resizable()
           .scaledToFill()
           .frame(square: 80)
           .clipShape(RoundedRectangle(cornerRadius: 18))
-          .padding(.vertical, 8)
-          .padding(.leading, 8)
-      } else {
-        RoundedRectangle(cornerRadius: 18)
-          .fill(.background.secondary)
-          .frame(square: 80)
           .padding(.vertical, 8)
           .padding(.leading, 8)
       }

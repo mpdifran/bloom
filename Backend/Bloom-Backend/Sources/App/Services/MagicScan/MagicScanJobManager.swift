@@ -16,7 +16,7 @@ import APNSCore
 
 struct MagicScanJob: Codable, Sendable {
   let userId: UserIdentifier
-  let imageFileName: String
+  let imageFileName: String?
   let contextText: String?
   var status: String // "pending", "processing", "completed", "failed"
   var servingsJson: String?
@@ -122,7 +122,7 @@ extension MagicScanJobManager {
   func createJob(
     processingIdentifier: AIFoodProcessingIdentifier,
     userId: UserIdentifier,
-    imageFileName: String,
+    imageFileName: String?,
     contextText: String?
   ) async throws {
     let job = MagicScanJob(
@@ -257,24 +257,30 @@ extension MagicScanJobManager {
         status: MagicScanStatus.processing.rawValue
       )
 
-      // Retrieve image from S3
-      guard let imageFile = try await imageStorage.retrieveImage(
-        fileName: job.imageFileName,
-        path: .magicScanner
-      ) else {
-        logger.error("Failed to retrieve image from S3: \(job.imageFileName)")
-        try await updateJobStatus(
-          processingIdentifier: processingIdentifier,
-          status: MagicScanStatus.failed.rawValue,
-          errorMessage: "Failed to retrieve image"
-        )
-        await sendPushNotification(
-          processingIdentifier: processingIdentifier,
-          userId: job.userId,
-          db: db,
-          application: application
-        )
-        return
+      // Retrieve image from S3 if available
+      let imageData: Data?
+      if let imageFileName = job.imageFileName {
+        guard let imageFile = try await imageStorage.retrieveImage(
+          fileName: imageFileName,
+          path: .magicScanner
+        ) else {
+          logger.error("Failed to retrieve image from S3: \(imageFileName)")
+          try await updateJobStatus(
+            processingIdentifier: processingIdentifier,
+            status: MagicScanStatus.failed.rawValue,
+            errorMessage: "Failed to retrieve image"
+          )
+          await sendPushNotification(
+            processingIdentifier: processingIdentifier,
+            userId: job.userId,
+            db: db,
+            application: application
+          )
+          return
+        }
+        imageData = imageFile.data
+      } else {
+        imageData = nil
       }
 
       // Check again if job was cancelled before expensive OpenAI call
@@ -286,7 +292,7 @@ extension MagicScanJobManager {
 
       // Process with OpenAI
       let servings = try await openAIService.estimateCaloriesMagicScan(
-        image: imageFile.data,
+        image: imageData,
         contextText: job.contextText
       )
 

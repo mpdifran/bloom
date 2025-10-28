@@ -217,17 +217,23 @@ extension FoodController {
       throw Abort(.unauthorized, reason: "User ID not found")
     }
 
-    // Store image to S3
-    let imageMetadata = try await request.imageStorage.store(
-      image: requestBody.foodImage,
-      path: .magicScanner
-    )
+    // Store image to S3 if provided
+    let imageFileName: String?
+    if let foodImage = requestBody.foodImage {
+      let imageMetadata = try await request.imageStorage.store(
+        image: foodImage,
+        path: .magicScanner
+      )
+      imageFileName = imageMetadata.filename
+    } else {
+      imageFileName = nil
+    }
 
     // Create job in Redis
     try await request.magicScanJobManager.createJob(
       processingIdentifier: requestBody.processingIdentifier,
       userId: userId,
-      imageFileName: imageMetadata.filename,
+      imageFileName: imageFileName,
       contextText: requestBody.contextText
     )
 

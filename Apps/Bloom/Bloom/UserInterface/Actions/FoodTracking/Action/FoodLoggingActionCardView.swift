@@ -55,6 +55,7 @@ struct FoodLoggingActionCardView: View {
   @State private var selectedHistoryTab = FoodItemHistoryTab.frequent
 
   @Environment(\.dismiss) private var dismiss
+  @Environment(\.modelContext) private var modelContext
 
   @FocusState private var isFocused: Bool
 
@@ -228,6 +229,11 @@ private extension FoodLoggingActionCardView {
   var contentWithBackendResults: some View {
     ScrollView {
       LazyVStack {
+        // Show AI Generate button when search query is not empty
+        if searchQuery.isNotEmpty {
+          aiGenerateButton
+        }
+
         // Show tab-specific content (filtered by searchQuery)
         switch selectedHistoryTab {
         case .frequent:
@@ -251,11 +257,15 @@ private extension FoodLoggingActionCardView {
   @ViewBuilder
   var frequentTabContent: some View {
     ForEach(viewModel.frequentFoodItemSections) { section in
-      SectionTitleView(section.title)
-        .padding(.horizontal)
+      let filteredItems = section.foodItems.filter {
+        searchQuery.isEmpty || $0.contains(searchQuery: searchQuery)
+      }
 
-      ForEach(section.foodItems) { foodItem in
-        if searchQuery.isEmpty || foodItem.contains(searchQuery: searchQuery) {
+      if filteredItems.isNotEmpty {
+        SectionTitleView(section.title)
+          .padding(.horizontal)
+
+        ForEach(filteredItems) { foodItem in
           FoodItemCell(foodItem: foodItem)
             .id(foodItem.id)
             .transition(.blurReplace)
@@ -273,11 +283,15 @@ private extension FoodLoggingActionCardView {
   @ViewBuilder
   var recentTabContent: some View {
     ForEach(viewModel.recentFoodItemSections) { section in
-      SectionTitleView(section.title)
-        .padding(.horizontal)
+      let filteredItems = section.foodItems.filter {
+        searchQuery.isEmpty || $0.contains(searchQuery: searchQuery)
+      }
 
-      ForEach(section.foodItems) { foodItem in
-        if searchQuery.isEmpty || foodItem.contains(searchQuery: searchQuery) {
+      if filteredItems.isNotEmpty {
+        SectionTitleView(section.title)
+          .padding(.horizontal)
+
+        ForEach(filteredItems) { foodItem in
           FoodItemCell(foodItem: foodItem)
             .id(foodItem.id)
             .transition(.blurReplace)
@@ -336,6 +350,21 @@ private extension FoodLoggingActionCardView {
           ).asAny
         }
     }
+  }
+
+  var aiGenerateButton: some View {
+    AsyncButton {
+      do {
+        try await viewModel.generateWithAI(query: searchQuery, modelContext: modelContext)
+        performDismiss?()
+      } catch {
+        viewModel.error = error
+      }
+    } label: {
+      Label("Generate with AI", systemSymbol: .sparkles)
+        .frame(maxWidth: .infinity)
+    }
+    .buttonStyle(.primary)
   }
 
   var foodItemHistoryHeader: some View {
