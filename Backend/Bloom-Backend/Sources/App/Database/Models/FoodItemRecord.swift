@@ -206,7 +206,7 @@ final class FoodItemRecord: Model, @unchecked Sendable {
     self.downvoteCount = nil
     self.source = source
     self.notes = nil
-    self.logCount = nil
+    self.logCount = 0
   }
 
   init(
