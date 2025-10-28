@@ -267,6 +267,16 @@ public extension DateRange {
     return DateRange(startDate, endDate)
   }
 
+  static func trailingMonthsFromEndOfToday(_ numberOfMonths: Int) -> DateRange {
+    let endDate = Calendar.current.endOfDay(for: .now)
+
+    guard let startDate = Calendar.current.date(byAdding: .month, value: -numberOfMonths, to: endDate) else {
+      return DateRange(endDate, endDate)
+    }
+
+    return DateRange(startDate, endDate)
+  }
+
   static func trailingMonthsFromStartOfWeek(_ numberOfMonths: Int) -> DateRange {
     guard
       let endDate = Calendar.current.startOfWeek(for: .now),

@@ -44,7 +44,15 @@ public final class NutritionTrackingViewModel: ObservableObject {
 
   @Storage(key: .lastMealAutoUpdateDateKey, defaultValue: nil) var lastMealAutoUpdateDate: Date?
 
+  private let foodLoggedContinuation: AsyncStream<Void>.Continuation
+  public let foodLoggedStream: AsyncStream<Void>
+
   private init() {
+    // Create AsyncStream for food logging events
+    let (stream, continuation) = AsyncStream<Void>.makeStream()
+    self.foodLoggedStream = stream
+    self.foodLoggedContinuation = continuation
+
     updateMealForCurrentTime()
     Task {
       await refreshDateStates()
@@ -254,6 +262,9 @@ public extension NutritionTrackingViewModel {
       try? await NetworkRequester.shared.trackFoodLog(foodIDs: foodIDs)
     }
 
+    // Notify listeners that food was logged
+    foodLoggedContinuation.yield()
+
     return foodLogID
   }
 
@@ -292,6 +303,9 @@ public extension NutritionTrackingViewModel {
     if !Bundle.main.isAppExtension {
       TelemetryDeck.signal("magic_scanner_item_saved")
     }
+
+    // Notify listeners that food was logged (pending state)
+    foodLoggedContinuation.yield()
   }
 
   /// Saves a text-only AI food generation request with processing state
@@ -328,6 +342,9 @@ public extension NutritionTrackingViewModel {
     if !Bundle.main.isAppExtension {
       TelemetryDeck.signal("ai_text_generation_item_saved")
     }
+
+    // Notify listeners that food was logged (pending state)
+    foodLoggedContinuation.yield()
   }
 
   /// Retries a failed Magic Scanner upload
@@ -446,6 +463,9 @@ public extension NutritionTrackingViewModel {
     if !Bundle.main.isAppExtension {
       TelemetryDeck.signal("magic_scanner_completed")
     }
+
+    // Notify listeners that food was logged
+    foodLoggedContinuation.yield()
   }
 
   /// Logs each serving as an individual `FoodItemLog`.
@@ -508,6 +528,9 @@ public extension NutritionTrackingViewModel {
       let foodIDs = foodItemServings.map { $0.foodItem.id }
       try? await NetworkRequester.shared.trackFoodLog(foodIDs: foodIDs)
     }
+
+    // Notify listeners that food was logged
+    foodLoggedContinuation.yield()
 
     return firstLogID
   }
@@ -876,6 +899,9 @@ public extension NutritionTrackingViewModel {
         floatValue: Double(items.count)
       )
     }
+
+    // Notify listeners that food was logged
+    foodLoggedContinuation.yield()
   }
 }
 
@@ -938,6 +964,9 @@ public extension NutritionTrackingViewModel {
         parameters: ["Meal": meal.rawValue]
       )
     }
+
+    // Notify listeners that food was logged
+    foodLoggedContinuation.yield()
   }
 }
 

@@ -36,6 +36,7 @@ extension FoodLoggingActionCardView {
     var error: Error?
     var frequentFoodItemSections = [FoodItemSection]()
     var recentFoodItemSections = [FoodItemSection]()
+    var otherMealsFoodItemSections = [FoodItemSection]()
     var country: String = "usa"
 
     private var debounceTask: Task<Void, Never>?
@@ -76,6 +77,20 @@ extension FoodLoggingActionCardView.ViewModel {
         ]
       } else {
         recentFoodItemSections = []
+      }
+
+      let otherMealsFoodItems = try await foodItemModelActor.fetchRecentLogsExcludingMeal(excluding: meal)
+
+      if otherMealsFoodItems.isNotEmpty {
+        otherMealsFoodItemSections = [
+          FoodItemSection(
+            title: "From Other Meals",
+            category: .branded,
+            foodItems: otherMealsFoodItems.makingUnique().map({ $0.asNetworkFoodItem() })
+          )
+        ]
+      } else {
+        otherMealsFoodItemSections = []
       }
     } catch {
       print(error)

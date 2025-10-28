@@ -81,7 +81,7 @@ public extension FoodItemLogModelActor {
 
   func fetchRecentLogs(
     for meal: FoodItemLog.Meal?,
-    dateRange: DateRange = DateRange.trailingMonthsFromNow(1)
+    dateRange: DateRange = DateRange.trailingMonthsFromEndOfToday(1)
   ) throws -> [FoodItemDTO] {
     let startDate = dateRange.start
     let endDate = dateRange.end
@@ -116,7 +116,7 @@ public extension FoodItemLogModelActor {
 
   func fetchFrequentLogs(
     for meal: FoodItemLog.Meal?,
-    dateRange: DateRange = DateRange.trailingMonthsFromNow(2)
+    dateRange: DateRange = DateRange.trailingMonthsFromEndOfToday(2)
   ) throws -> [FoodItemDTO] {
     let startDate = dateRange.start
     let endDate = dateRange.end
@@ -151,6 +151,31 @@ public extension FoodItemLogModelActor {
     return frequencyMap.compactMap { (foodItemID, value) in
       value.0?.asDTO()
     }
+  }
+
+  func fetchRecentLogsExcludingMeal(
+    excluding meal: FoodItemLog.Meal,
+    dateRange: DateRange = DateRange.trailingMonthsFromEndOfToday(1)
+  ) throws -> [FoodItemDTO] {
+    let startDate = dateRange.start
+    let endDate = dateRange.end
+    let excludedMealRawValue = meal.rawValue
+
+    let descriptor = FetchDescriptor<FoodItemLog>(
+      predicate: #Predicate<FoodItemLog> { model in
+        model.date >= startDate &&
+        model.date <= endDate &&
+        model.mealRawValue != excludedMealRawValue
+      },
+      sortBy: [SortDescriptor(\FoodItemLog.date, order: .reverse)]
+    )
+
+    let results = try context.fetch(descriptor)
+
+    return results
+      .compactMap { $0.foodItemServings }
+      .flatMap { $0 }
+      .compactMap { $0.foodItem?.asDTO() }
   }
 
   func fetchFoodItem(for id: String) throws -> FoodItemDTO? {

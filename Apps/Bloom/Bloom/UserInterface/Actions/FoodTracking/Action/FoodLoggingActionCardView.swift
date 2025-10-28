@@ -171,6 +171,12 @@ struct FoodLoggingActionCardView: View {
 
       await viewModel.performBarcodeSearch(for: initialBarcodeToSearch)
     }
+    .task {
+      // Listen for food logging events and refresh lists
+      for await _ in nutritionViewModel.foodLoggedStream {
+        await viewModel.fetchRecentFoodItemLogs(for: nutritionViewModel.suggestedMeal)
+      }
+    }
   }
 }
 
@@ -188,13 +194,35 @@ private extension FoodLoggingActionCardView {
       .filter { searchQuery.isEmpty || $0.contains(searchQuery: searchQuery) }
   }
 
+  var filteredOtherMealsItems: [BloomModel.FoodItem] {
+    // Only show when search query is not empty
+    guard searchQuery.isNotEmpty else { return [] }
+
+    // Get current meal items to exclude
+    let currentMealItemIDs: Set<String> = {
+      let localItems = selectedHistoryTab == .frequent ? filteredFrequentItems : filteredRecentItems
+      return Set(localItems.map { $0.id.value })
+    }()
+
+    // Get other meals items from ViewModel and filter
+    return viewModel.otherMealsFoodItemSections
+      .flatMap { $0.foodItems }
+      .filter { foodItem in
+        let matchesSearch = foodItem.contains(searchQuery: searchQuery)
+        let notInCurrentMeal = !currentMealItemIDs.contains(foodItem.id.value)
+        return matchesSearch && notInCurrentMeal
+      }
+  }
+
   var filteredBackendResults: [BloomModel.FoodItem] {
     guard let results = viewModel.results else { return [] }
 
-    // Get IDs of items already shown in current tab
+    // Get IDs of items already shown in current tab and other meals
     let localItemIDs: Set<String> = {
-      let localItems = selectedHistoryTab == .frequent ? filteredFrequentItems : filteredRecentItems
-      return Set(localItems.map { $0.id.value })
+      let currentMealItems = selectedHistoryTab == .frequent ? filteredFrequentItems : filteredRecentItems
+      let otherMealsItems = filteredOtherMealsItems
+      let allLocalItems = currentMealItems + otherMealsItems
+      return Set(allLocalItems.map { $0.id.value })
     }()
 
     // Filter out items that are already shown locally
@@ -242,6 +270,11 @@ private extension FoodLoggingActionCardView {
           recentTabContent
         case .meals:
           mealsTabContent
+        }
+
+        // Show other meals section (only for frequent/recent tabs with search query)
+        if selectedHistoryTab != .meals && filteredOtherMealsItems.isNotEmpty {
+          otherMealsSection
         }
 
         // Show backend results below (only for frequent/recent tabs)
@@ -331,6 +364,24 @@ private extension FoodLoggingActionCardView {
             }
         }
       }
+    }
+  }
+
+  @ViewBuilder
+  var otherMealsSection: some View {
+    SectionTitleView("From Other Meals")
+      .padding(.horizontal)
+
+    ForEach(filteredOtherMealsItems) { foodItem in
+      FoodItemCell(foodItem: foodItem)
+        .id(foodItem.id)
+        .transition(.opacity)
+        .onTapGesture {
+          presentedSheet = FoodItemDetailsView(
+            foodItem: foodItem,
+            existingFoodItemLog: nil
+          ).asAny
+        }
     }
   }
 
