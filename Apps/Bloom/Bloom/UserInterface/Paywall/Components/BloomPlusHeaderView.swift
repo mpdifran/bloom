@@ -11,9 +11,11 @@ import SwiftUI
 struct BloomPlusHeaderView: View {
 
   private let showDismiss: Bool
+  private let onDismiss: () -> Void
 
-  init(showDismiss: Bool = true) {
+  init(showDismiss: Bool = true, onDismiss: @escaping () -> Void = { }) {
     self.showDismiss = showDismiss
+    self.onDismiss = onDismiss
   }
 
   @Environment(\.dismiss) private var dismiss
@@ -25,6 +27,7 @@ struct BloomPlusHeaderView: View {
       if showDismiss {
         Button {
           dismiss()
+          onDismiss()
         } label: {
           Image(systemSymbol: .xmarkCircleFill)
             .foregroundStyle(.text, .regularMaterial)

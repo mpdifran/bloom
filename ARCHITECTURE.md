@@ -1047,6 +1047,217 @@ This architecture emphasizes:
 - **Privacy**: Respect user data
 - **Maintainability**: Clear organization and naming
 
+## TelemetryDeck A/B Testing & Experiments
+
+Bloom uses TelemetryDeck for A/B testing and experiments. The experiment system provides a consistent pattern for testing feature variations with users.
+
+### Experiment Architecture
+
+The experiment system consists of:
+- **ExperimentManager**: Determines which variant a user sees (control/treatment)
+- **ExperimentIdentifier**: Type-safe experiment identifiers
+- **Experiment**: Enum defining all experiments with display names
+- **ExperimentVariant**: Control or treatment
+- **ExperimentOverride**: Developer override system for testing
+
+### Creating a New Experiment
+
+#### 1. Define the Experiment
+Add your experiment to `Experiments/Experiment.swift`:
+
+```swift
+enum Experiment: String, CaseIterable {
+  case softerHealthKitView = "softer_healthkit_view"
+  case onboardingPaywall = "onboarding_paywall"  // New experiment
+
+  var name: String {
+    switch self {
+    case .softerHealthKitView:
+      return "Softer HealthKit View"
+    case .onboardingPaywall:
+      return "Onboarding Paywall"  // Display name for developer settings
+    }
+  }
+
+  var id: ExperimentIdentifier {
+    ExperimentIdentifier(self.rawValue)
+  }
+}
+
+extension ExperimentIdentifier {
+  static let softerHealthKitView = Experiment.softerHealthKitView.id
+  static let onboardingPaywall = Experiment.onboardingPaywall.id  // Convenience accessor
+}
+```
+
+#### 2. Use ExperimentManager in Your View
+```swift
+struct OnboardingFinishView: View {
+  @Environment(ExperimentManager.self) private var experimentManager
+
+  var body: some View {
+    // Your view code
+  }
+}
+```
+
+#### 3. Send Telemetry Signals
+Send AB test signals when the experiment decision point is reached (typically when view appears):
+
+```swift
+.task {
+  // Send AB test signals when view appears
+  let variant = experimentManager.variant(for: .onboardingPaywall)
+  switch variant {
+  case .control:
+    TelemetryDeck.signal("AB: Onboarding Paywall Control")
+  case .treatment:
+    TelemetryDeck.signal("AB: Onboarding Paywall Treatment")
+  }
+}
+```
+
+#### 4. Implement Variant Logic
+Check the variant and execute different code paths:
+
+```swift
+Button("Continue") {
+  let variant = experimentManager.variant(for: .onboardingPaywall)
+  switch variant {
+  case .treatment:
+    // Show new feature for treatment group
+    presentedPaywall = BloomPlusPaywall(focus: .standard).asAny
+  case .control:
+    // Keep existing behavior for control group
+    onContinue()
+  }
+}
+```
+
+#### 5. Add to Developer Settings
+Allow developers to override the experiment variant for testing:
+
+**a) Add to experimentsSection** in `DeveloperSettingsView.swift`:
+```swift
+var experimentsSection: some View {
+  VStack {
+    SectionTitleView("Experiments")
+      .padding(.horizontal)
+
+    SettingsSectionContainer {
+      // Existing experiments...
+
+      Divider()
+
+      ExperimentOverrideView(
+        experimentId: ExperimentIdentifier.onboardingPaywall.value,
+        experimentName: "Onboarding Paywall"
+      )
+    }
+  }
+}
+```
+
+**b) Update clearAllExperimentOverrides()** in `DeveloperSettingsView.swift`:
+```swift
+private func clearAllExperimentOverrides() {
+  // Add cleanup for your new experiment
+  let onboardingPaywallKey = String.ExperimentOverrideKey.key(for: ExperimentIdentifier.onboardingPaywall.value)
+  UserDefaults.standard.removeObject(forKey: onboardingPaywallKey)
+
+  // ... other experiments
+}
+```
+
+This allows testing both variants via Settings > Developer > Experiments.
+
+### Best Practices
+
+**Signal Timing:**
+- Send AB test signals when the view/feature appears (not when action is taken)
+- This ensures accurate tracking even if users don't complete the action
+- Signals should be sent once per session for each experiment decision
+
+**Naming Convention:**
+- Signal names: `"AB: [Feature] Control"` and `"AB: [Feature] Treatment"`
+- Experiment IDs: Use snake_case (e.g., `onboarding_paywall`)
+- Display names: Use Title Case (e.g., "Onboarding Paywall")
+
+**Testing:**
+- Use developer overrides in Settings > Developer > Experiments to test both variants in the app
+  - Select "Control" or "Treatment" to force a specific variant
+  - Select "Original" to use the default 50/50 split
+- Create previews with both variants for quick visual testing:
+  ```swift
+  #Preview("Control") {
+    PreviewEnvironment(variant: .control) {
+      OnboardingFinishView { }
+    }
+  }
+
+  #Preview("Treatment") {
+    PreviewEnvironment(variant: .treatment) {
+      OnboardingFinishView { }
+    }
+  }
+  ```
+
+### Example: Onboarding Paywall Experiment
+
+This experiment tests showing a paywall at the end of onboarding (Apps/Bloom/Bloom/UserInterface/Onboarding/OnboardingFinishView.swift):
+
+**Setup:**
+1. Experiment defined in `Experiment.swift` as `onboardingPaywall`
+2. `ExperimentManager` injected via environment
+3. AB signals sent when finish view appears
+4. Variant checked when "Let's Go!" button is tapped
+
+**Behavior:**
+- **Control group**: User taps "Let's Go!" → onboarding completes normally
+- **Treatment group**: User taps "Let's Go!" → paywall appears → on dismiss (purchase or X) → onboarding completes
+
+**Implementation highlights:**
+```swift
+struct OnboardingFinishView: View {
+  @Environment(ExperimentManager.self) private var experimentManager
+  @State private var presentedPaywall: AnyView?
+
+  var body: some View {
+    // View content
+    Button("Let's Go!") {
+      let variant = experimentManager.variant(for: .onboardingPaywall)
+      switch variant {
+      case .treatment:
+        presentedPaywall = BloomPlusPaywall(
+          focus: .standard,
+          onPurchase: { onContinue() }
+        ).asAny
+      case .control:
+        onContinue()
+      }
+    }
+    .fullScreenCover($presentedPaywall)
+    .onChange(of: presentedPaywall) { oldValue, newValue in
+      // Handle dismissal without purchase
+      if oldValue != nil && newValue == nil {
+        onContinue()
+      }
+    }
+    .task {
+      // Send AB signals when view appears
+      let variant = experimentManager.variant(for: .onboardingPaywall)
+      TelemetryDeck.signal(
+        variant == .control
+          ? "AB: Onboarding Paywall Control"
+          : "AB: Onboarding Paywall Treatment"
+      )
+    }
+  }
+}
+```
+
+This pattern ensures both groups complete onboarding successfully while allowing measurement of paywall impact.
+
 ## Magic Scanner (AI Food Scanning)
 
 Magic Scanner is an async AI-powered food image analysis feature that uses OpenAI's Vision API to detect and log food items from photos.

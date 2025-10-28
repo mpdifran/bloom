@@ -716,11 +716,18 @@ extension DeveloperSettingsView {
     VStack {
       SectionTitleView("Experiments")
         .padding(.horizontal)
-      
+
       SettingsSectionContainer {
         ExperimentOverrideView(
           experimentId: ExperimentIdentifier.softerHealthKitView.value,
           experimentName: "Softer HealthKit View"
+        )
+
+        Divider()
+
+        ExperimentOverrideView(
+          experimentId: ExperimentIdentifier.onboardingPaywall.value,
+          experimentName: "Onboarding Paywall"
         )
       }
     }
@@ -751,8 +758,11 @@ extension DeveloperSettingsView {
   
   private func clearAllExperimentOverrides() {
     // Clear all experiment overrides
-    let overrideKey = String.ExperimentOverrideKey.key(for: ExperimentIdentifier.softerHealthKitView.value)
-    UserDefaults.standard.removeObject(forKey: overrideKey)
+    let softerHealthKitKey = String.ExperimentOverrideKey.key(for: ExperimentIdentifier.softerHealthKitView.value)
+    UserDefaults.standard.removeObject(forKey: softerHealthKitKey)
+
+    let onboardingPaywallKey = String.ExperimentOverrideKey.key(for: ExperimentIdentifier.onboardingPaywall.value)
+    UserDefaults.standard.removeObject(forKey: onboardingPaywallKey)
   }
 
   private var currentBudStateLabel: String {

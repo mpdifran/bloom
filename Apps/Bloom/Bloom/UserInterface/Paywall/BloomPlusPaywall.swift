@@ -24,15 +24,28 @@ struct BloomPlusPaywall: View {
   private let focus: Focus
   private let showDismiss: Bool
   private let onPurchase: () -> Void
+  private let onDismiss: () -> Void
 
+  /// Creates a Bloom Plus paywall view.
+  ///
+  /// - Parameters:
+  ///   - focus: The feature to emphasize in the paywall. Defaults to `.standard`.
+  ///   - showDismiss: Whether to show the X dismiss button. Defaults to `true`.
+  ///   - onPurchase: Called after a successful purchase completes, after the view dismisses.
+  ///                 Use for purchase-specific tracking or actions. Defaults to empty closure.
+  ///   - onDismiss: Called when the paywall dismisses for ANY reason (purchase, X button, swipe).
+  ///                Dismissal order: `dismiss()` → `onPurchase()` (if purchase) → `onDismiss()`.
+  ///                Use this to continue your flow after the paywall closes. Defaults to empty closure.
   init(
     focus: Focus = .standard,
     showDismiss: Bool = true,
-    onPurchase: @escaping () -> Void = { }
+    onPurchase: @escaping () -> Void = { },
+    onDismiss: @escaping () -> Void = { }
   ) {
     self.focus = focus
     self.showDismiss = showDismiss
     self.onPurchase = onPurchase
+    self.onDismiss = onDismiss
   }
 
   @State private var viewModel = ViewModel()
@@ -69,7 +82,7 @@ struct BloomPlusPaywall: View {
       }
       .ignoresSafeArea(edges: .top)
 
-      BloomPlusHeaderView(showDismiss: showDismiss)
+      BloomPlusHeaderView(showDismiss: showDismiss, onDismiss: onDismiss)
         .padding(.horizontal)
         .zStackAlignment(.top)
     }
@@ -93,6 +106,7 @@ struct BloomPlusPaywall: View {
       TelemetryDeck.signal("Paywall Purchase Complete")
       dismiss()
       onPurchase()
+      onDismiss()
     }
     .onChange(of: viewModel.packages) { _, _ in
       if let package = viewModel.packages.first(where: { $0.hasFreeIntroductoryOffer }) {
