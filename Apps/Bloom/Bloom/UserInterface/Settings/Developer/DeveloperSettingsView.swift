@@ -282,6 +282,34 @@ extension DeveloperSettingsView {
             Image(systemSymbol: .bellBadgeFill)
           }
         }
+
+        Divider()
+
+        AsyncButton {
+          do {
+            try await NetworkRequester.shared.testPushNotification()
+
+            await MainActor.run {
+              alertDetails = AlertDetails(
+                title: "Test Sent",
+                message: "Test push notification has been sent. You should receive it shortly."
+              )
+            }
+          } catch {
+            await MainActor.run {
+              self.error = error
+            }
+          }
+        } label: {
+          LabeledContent("Test Push Notifications") {
+            Image(systemSymbol: .bellAndWavesLeftAndRight)
+          }
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
+          .selectable()
+          .frame(height: 60)
+        }
       }
     }
   }

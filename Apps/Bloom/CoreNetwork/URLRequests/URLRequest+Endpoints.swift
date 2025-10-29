@@ -20,13 +20,20 @@ public extension URLRequest {
     return try URLRequest(url: base.appendingPathComponent(path)).encoding(body: body)
   }
 
+  public static func post(_ path: String) async -> URLRequest {
+    let base = await APIHost.shared.resolvedHost
+    var request = URLRequest(url: base.appendingPathComponent(path))
+    request.httpMethod = "POST"
+    return request
+  }
+
   static func websocket(_ path: String) async -> URLRequest {
     let base = await APIHost.shared.resolvedWebSocketHost
     return URLRequest(url: base.appendingPathComponent(path))
   }
 }
 
-extension URLRequest {
+public extension URLRequest {
   enum Auth {
     static func signIn(body: AuthenticationRequest) async throws -> URLRequest {
       try await URLRequest.post("v1/auth/sign-in", body: body)
@@ -34,24 +41,27 @@ extension URLRequest {
   }
 }
 
-extension URLRequest {
-  enum User {
-    static func identify(body: AuthIdentifyRequest) async throws -> URLRequest {
+public extension URLRequest {
+  public enum User {
+    public static func identify(body: AuthIdentifyRequest) async throws -> URLRequest {
       try await URLRequest.post("v1/user/identify", body: body)
     }
-    static func registerDeviceToken(body: RegisterUserPushNotificationTokenRequest) async throws -> URLRequest {
+    public static func registerDeviceToken(body: RegisterUserPushNotificationTokenRequest) async throws -> URLRequest {
       try await URLRequest.post("v1/user/register-device-token", body: body)
     }
-    static func logout() async -> URLRequest {
+    public static func testPushNotification() async -> URLRequest {
+      await URLRequest.post("v1/user/test-push-notification")
+    }
+    public static func logout() async -> URLRequest {
       await URLRequest.get("v1/user/logout")
     }
-    static func deleteAccount() async -> URLRequest {
+    public static func deleteAccount() async -> URLRequest {
       await URLRequest.get("v1/user/delete-account")
     }
   }
 }
 
-extension URLRequest {
+public extension URLRequest {
   enum Food {
     static func autocomplete(body: FoodAutocompleteRequest) async throws -> URLRequest {
       try await URLRequest.post("v1/food/autocomplete", body: body)
@@ -89,7 +99,7 @@ extension URLRequest {
   }
 }
 
-extension URLRequest {
+public extension URLRequest {
   enum Chat {
     static func reportHealthData(body: ChatReportHealthDataRequest) async throws -> URLRequest {
       try await URLRequest.post("v1/chat/report-health-data", body: body)
@@ -115,7 +125,7 @@ extension URLRequest {
   }
 }
 
-extension URLRequest {
+public extension URLRequest {
   enum Goals {
     static func suggestGoals(body: SuggestGoalsRequest) async throws -> URLRequest {
       try await URLRequest.post("v1/goals/suggest", body: body)
@@ -123,7 +133,7 @@ extension URLRequest {
   }
 }
 
-extension URLRequest {
+public extension URLRequest {
   enum Reports {
     static func getMorningHealthReport(body: MorningHealthReportRequest) async throws -> URLRequest {
       try await URLRequest.post("v1/morning-report/generate", body: body)
@@ -131,7 +141,7 @@ extension URLRequest {
   }
 }
 
-extension URLRequest {
+public extension URLRequest {
   enum AI {
     static func getTodayView(body: TodayReportRequest) async throws -> URLRequest {
       try await URLRequest.post("v1/today/insights", body: body)
@@ -139,7 +149,7 @@ extension URLRequest {
   }
 }
 
-extension URLRequest {
+public extension URLRequest {
   enum BiologicalAge {
     static func calculate(body: BiologicalAgeRequest) async throws -> URLRequest {
       try await URLRequest.post("v1/biological-age/calculate", body: body)

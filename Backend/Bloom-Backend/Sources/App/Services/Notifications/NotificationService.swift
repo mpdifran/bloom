@@ -65,20 +65,20 @@ struct NotificationService {
     let expiration = APNSNotificationExpiration.timeIntervalSince1970InSeconds(expirationTime)
     let priority = APNSPriority.immediately
     let topic = application.bloomAppBundleID
-    
+
     // Create payload for morning report trigger
     struct MorningReportTrigger: Codable {
       let type: String
     }
-    
+
     let payload = MorningReportTrigger(type: "morning_report")
-    
+
     let silentNotification = APNSBackgroundNotification(
       expiration: expiration,
       topic: topic,
       payload: payload
     )
-    
+
     let result = try await application.apns.client.send(
       APNSRequest(
         message: silentNotification,
@@ -91,9 +91,51 @@ struct NotificationService {
         collapseID: nil
       )
     )
-    
+
     if let apnsUniqueID = result.apnsUniqueID {
       logger.debug("Sent morning report notification to user \(user.id?.value ?? ""): \(apnsUniqueID)")
+    }
+  }
+
+  func sendTestNotification(to user: User, deviceToken: String) async throws {
+    let expirationTime = Int(Date().addingTimeInterval(3600).timeIntervalSince1970)
+    let expiration = APNSNotificationExpiration.timeIntervalSince1970InSeconds(expirationTime)
+    let priority = APNSPriority.immediately
+    let topic = application.bloomAppBundleID
+
+    // Create payload for test notification with timestamp
+    struct TestNotificationPayload: Codable {
+      let type: String
+      let timestamp: String
+    }
+
+    let iso8601Formatter = ISO8601DateFormatter()
+    let payload = TestNotificationPayload(
+      type: "test_notification",
+      timestamp: iso8601Formatter.string(from: Date())
+    )
+
+    let silentNotification = APNSBackgroundNotification(
+      expiration: expiration,
+      topic: topic,
+      payload: payload
+    )
+
+    let result = try await application.apns.client.send(
+      APNSRequest(
+        message: silentNotification,
+        deviceToken: deviceToken,
+        pushType: .background,
+        expiration: expiration,
+        priority: priority,
+        apnsID: nil,
+        topic: topic,
+        collapseID: nil
+      )
+    )
+
+    if let apnsUniqueID = result.apnsUniqueID {
+      logger.info("Sent test notification to user \(user.id?.value ?? "") with APNS ID: \(apnsUniqueID)")
     }
   }
 }

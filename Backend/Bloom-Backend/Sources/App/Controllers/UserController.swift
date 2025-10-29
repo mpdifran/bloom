@@ -25,6 +25,7 @@ extension UserController: RouteCollection {
           $0.post("identify", use: identify)
           $0.post("register-device-token", use: registerDeviceToken)
           $0.post("morning-notification-time", use: updateMorningNotificationTime)
+          $0.post("test-push-notification", use: testPushNotification)
           $0.get("logout", use: logout)
           $0.get("delete-account", use: deleteAccount)
         }
@@ -136,27 +137,44 @@ private extension UserController {
     // Convert user's local time to UTC
     var userCalendar = Calendar.current
     userCalendar.timeZone = userTimeZone
-    
+
     // Create date components for today at the specified time
     let now = Date()
     var components = userCalendar.dateComponents([.year, .month, .day], from: now)
     components.hour = body.hour
     components.minute = roundedMinute
-    
+
     // Get the date in user's timezone
     guard let userDate = userCalendar.date(from: components) else {
       throw Abort(.internalServerError, reason: "Failed to create date from components")
     }
-    
+
     // Convert to UTC components
     var utcCalendar = Calendar.current
     utcCalendar.timeZone = TimeZone(identifier: "UTC")!
     let utcComponents = utcCalendar.dateComponents([.hour, .minute], from: userDate)
-    
+
     // Update user preferences with UTC time
     user.morningNotificationHour = utcComponents.hour
     user.morningNotificationMinute = utcComponents.minute
     try await user.save(on: request.db)
+
+    return Response(status: .ok)
+  }
+
+  @Sendable
+  func testPushNotification(_ request: Request) async throws -> Response {
+    let user = try request.auth.require(User.self)
+
+    // Ensure user has a registered device token
+    guard let deviceToken = user.apnsDeviceToken else {
+      throw Abort(.badRequest, reason: "No device token registered. Please ensure push notifications are enabled.")
+    }
+
+    // Send test notification
+    try await request.notificationService.sendTestNotification(to: user, deviceToken: deviceToken)
+
+    request.logger.info("Test push notification sent to user \(user.id?.value ?? "")")
 
     return Response(status: .ok)
   }

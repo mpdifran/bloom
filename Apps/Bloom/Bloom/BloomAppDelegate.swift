@@ -63,6 +63,13 @@ class BloomAppDelegate: NSObject, UIApplicationDelegate {
     didReceiveRemoteNotification userInfo: [AnyHashable: Any]
   ) async -> UIBackgroundFetchResult {
     do {
+      // Check if this is a test notification
+      if let type = userInfo["type"] as? String,
+         type == "test_notification" {
+        await handleTestNotification(userInfo: userInfo)
+        return .newData
+      }
+
       // Check if this is a magic scanner completion notification
       if let type = userInfo["type"] as? String,
          type == MagicScanCompleteTrigger.notificationType {
@@ -94,5 +101,35 @@ class BloomAppDelegate: NSObject, UIApplicationDelegate {
     await MagicScanStatusChecker.shared.checkStatus(
       processingIdentifiers: [AIFoodProcessingIdentifier(processingIdentifier)]
     )
+  }
+
+  @MainActor
+  private func handleTestNotification(userInfo: [AnyHashable: Any]) async {
+    let timestamp = userInfo["timestamp"] as? String ?? "Unknown"
+
+    // Find the root view controller to present the alert
+    guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+          let rootViewController = windowScene.windows.first?.rootViewController else {
+      print("Test notification received at \(timestamp), but could not present alert")
+      return
+    }
+
+    // Find the topmost view controller
+    var topController = rootViewController
+    while let presented = topController.presentedViewController {
+      topController = presented
+    }
+
+    let alert = UIAlertController(
+      title: "Test Push Notification Received",
+      message: "Silent push notification received successfully!\n\nTimestamp: \(timestamp)",
+      preferredStyle: .alert
+    )
+
+    alert.addAction(UIAlertAction(title: "OK", style: .default))
+
+    topController.present(alert, animated: true)
+
+    TelemetryDeck.signal("test_push_notification_received", parameters: ["timestamp": timestamp])
   }
 }

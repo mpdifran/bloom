@@ -49,6 +49,11 @@ public extension NetworkRequester {
     let request = await URLRequest.User.deleteAccount()
     try await URLSession.shared.authenticatedBloomRequest(request: request)
   }
+
+  func testPushNotification() async throws {
+    let request = await URLRequest.User.testPushNotification()
+    try await URLSession.shared.authenticatedBloomRequest(request: request)
+  }
 }
 
 // MARK: - Food
