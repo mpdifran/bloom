@@ -74,6 +74,18 @@ private extension NutritionMealView {
       foodItemLog: foodItemLog
     )
   }
+
+  func changeMeal(_ foodItemLog: FoodItemLog, to newMeal: FoodItemLog.Meal) async {
+    do {
+      try await nutritionViewModel.changeMeal(
+        modelContext: modelContext,
+        foodItemLog: foodItemLog,
+        to: newMeal
+      )
+    } catch {
+      self.error = error
+    }
+  }
 }
 
 private extension NutritionMealView {
@@ -117,11 +129,23 @@ private extension NutritionMealView {
         }
         .id(foodItemLog.id)
         .contextMenu {
-          Button("Duplicate", systemSymbol: .docOnDoc) {
+          Button("Copy Log", systemSymbol: .documentOnDocument) {
             presentedSheet = DuplicateFoodLogView(
               foodItemLog: foodItemLog,
               performDismiss: nil
             ).asAny
+          }
+
+          Menu {
+            ForEach(FoodItemLog.Meal.allCases.filter { $0 != meal }, id: \.self) { mealOption in
+              Button(mealOption.name) {
+                Task {
+                  await changeMeal(foodItemLog, to: mealOption)
+                }
+              }
+            }
+          } label: {
+            Label("Change Meal", systemSymbol: .arrowUpArrowDown)
           }
 
           Divider()

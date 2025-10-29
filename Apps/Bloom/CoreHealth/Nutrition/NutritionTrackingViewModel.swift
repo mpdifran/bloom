@@ -706,6 +706,31 @@ public extension NutritionTrackingViewModel {
 
     try await updateNutrition(for: [oldDate, date])
   }
+
+  func changeMeal(
+    modelContext: ModelContext,
+    foodItemLog: FoodItemLog,
+    to newMeal: FoodItemLog.Meal
+  ) async throws {
+    guard let localLog: FoodItemLog = try modelContext.existingModel(for: foodItemLog.persistentModelID) else {
+      throw NSError(description: "There was a problem changing the meal.")
+    }
+
+    let oldDate = localLog.date
+    let newDate = Calendar.current.startOfDay(for: oldDate)
+
+    try modelContext.savingTransaction {
+      localLog.meal = newMeal
+      localLog.date = calculateDate(for: newMeal, from: newDate)
+    }
+
+    try await updateNutrition(for: [oldDate, newDate])
+
+    TelemetryDeck.signal("food_log_meal_changed", parameters: [
+      "from_meal": foodItemLog.meal.rawValue,
+      "to_meal": newMeal.rawValue
+    ])
+  }
 }
 
 // MARK: - FoodItemRecord Methods

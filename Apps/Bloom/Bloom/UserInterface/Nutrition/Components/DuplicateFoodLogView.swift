@@ -26,7 +26,7 @@ struct DuplicateFoodLogView: View {
   
   var body: some View {
     CardView {
-      LargeTitleActionCard("Duplicate Food Log") {
+      LargeTitleActionCard("Copy Food Log") {
         VStack(spacing: 16) {
           HStack {
             if let image = foodItemLog.image {
@@ -80,7 +80,7 @@ struct DuplicateFoodLogView: View {
               if hasCompleted {
                 Image(systemSymbol: .checkmark)
               } else {
-                Text("Duplicate")
+                Text("Copy")
               }
             }
             .bold()
