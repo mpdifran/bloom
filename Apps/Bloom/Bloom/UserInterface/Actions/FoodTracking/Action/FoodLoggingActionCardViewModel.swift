@@ -109,7 +109,7 @@ extension FoodLoggingActionCardView.ViewModel {
     }
 
     debounceTask = Task {
-      await Delay(500) // 0.5 seconds
+      await Delay(300) // 0.3 seconds
       await performSearch(for: query)
     }
   }
