@@ -118,6 +118,12 @@ private extension RootView {
     let urlScheme = url.scheme ?? "unknown"
     var wasHandled = true
 
+    // Dismiss any presented views before handling navigation
+    presentedSheet = nil
+    presentedPaywall = nil
+    shouldShowLogPeriodSheet = false
+    tabController.isShowingChat = false
+
     switch path {
     case "/today":
       tabController.activeTab = .today
