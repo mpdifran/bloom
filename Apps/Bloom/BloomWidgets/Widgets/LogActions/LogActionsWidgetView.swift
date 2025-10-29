@@ -99,6 +99,8 @@ private extension LogActionsWidgetView {
       "Magic Scanner"
     case .barcodeScan:
       "Barcode Scanner"
+    case .logVoice:
+      "Voice Logger"
     case .logFood:
       "Log Food"
     case .logWater:

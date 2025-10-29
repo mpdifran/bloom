@@ -157,6 +157,8 @@ private extension RootView {
       presentedSheet = BodyWeightActionCardView(performDismiss: nil).asAny
     case "/action/log-blood-pressure":
       presentedSheet = BloodPressureActionCardView(performDismiss: nil).asAny
+    case "/action/voice-logger":
+      presentedSheet = VoiceLoggerView(performDismiss: nil).asAny
     case "/vital/sleep-quality":
       tabController.activeTab = .vitals
       Delay(600) {

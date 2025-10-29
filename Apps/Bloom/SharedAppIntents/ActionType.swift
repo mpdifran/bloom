@@ -21,6 +21,7 @@ enum ActionType: String, AppEnum {
   case logPeriod
   case logWeight
   case logBloodPressure
+  case logVoice
 
   nonisolated(unsafe) static var typeDisplayRepresentation = TypeDisplayRepresentation(name: "Action Type")
 
@@ -56,6 +57,10 @@ enum ActionType: String, AppEnum {
     .logBloodPressure: DisplayRepresentation(
       title: "Open Blood Pressure Logger",
       image: DisplayRepresentation.Image(systemName: "heart")
+    ),
+    .logVoice: DisplayRepresentation(
+      title: "Open Voice Logger",
+      image: DisplayRepresentation.Image(systemName: "microphone.fill")
     )
   ]
 
@@ -77,6 +82,8 @@ enum ActionType: String, AppEnum {
       return "action/log-weight"
     case .logBloodPressure:
       return "action/log-blood-pressure"
+    case .logVoice:
+      return "action/voice-logger"
     }
   }
 
@@ -98,6 +105,8 @@ enum ActionType: String, AppEnum {
       return "Open Weight Logger"
     case .logBloodPressure:
       return "Open Blood Pressure Logger"
+    case .logVoice:
+      return "Open Voice Logger"
     }
   }
 
@@ -119,6 +128,8 @@ enum ActionType: String, AppEnum {
       return .scalemass
     case .logBloodPressure:
       return .heart
+    case .logVoice:
+      return .microphoneFill
     }
   }
 
@@ -136,8 +147,12 @@ enum ActionType: String, AppEnum {
       return .mutedIndigo
     case .logBloodPressure:
       return .mutedRed
-    case .barcodeScan, .magicScan:
+    case .barcodeScan:
       return .gray
+    case .magicScan:
+      return .mutedPurple
+    case .logVoice:
+      return .orange
     }
   }
 
@@ -159,6 +174,8 @@ enum ActionType: String, AppEnum {
       return .logFoodIcon // Using food icon as placeholder for barcode
     case .magicScan:
       return .logFoodIcon // Using food icon as placeholder for magic scan
+    case .logVoice:
+      return .logFoodIcon // Using food icon as placeholder for voice logger
     }
   }
 }
