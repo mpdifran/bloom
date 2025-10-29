@@ -122,8 +122,8 @@ private extension FoodSearchCard {
   }
 
   var textFoodButton: some View {
-    FoodSearchActionButton(symbol: .quoteBubble, title: "Magic Text") {
-      showTextFoodGenerationView()
+    FoodSearchActionButton(symbol: .micFill, title: "Voice Logger") {
+      showVoiceLogger()
     }
   }
 
@@ -228,9 +228,9 @@ private extension FoodSearchCard {
     presentedSheet = BarcodeScannerView().asAny
   }
 
-  func showTextFoodGenerationView() {
+  func showVoiceLogger() {
     EntitledAction(presentedSheet: $presentedSheet) {
-      presentedSheet = AIFoodTextGenerationView().asAny
+      presentedSheet = VoiceLoggerView(performDismiss: performDismiss).asAny
     }
   }
 }

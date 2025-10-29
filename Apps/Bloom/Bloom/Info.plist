@@ -28,6 +28,10 @@
 	</array>
 	<key>NSCalendarsFullAccessUsageDescription</key>
 	<string>Show you your upcoming events every morning.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Bloom needs access to your microphone to record voice food logs.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Bloom uses speech recognition to help you log your meals by voice.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
