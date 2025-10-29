@@ -303,9 +303,10 @@ private extension FoodLoggingActionCardView {
             .id(foodItem.id)
             .transition(.blurReplace)
             .onTapGesture {
+              let existingLog = fetchExistingLog(for: foodItem)
               presentedSheet = FoodItemDetailsView(
                 foodItem: foodItem,
-                existingFoodItemLog: nil
+                existingFoodItemLog: existingLog
               ).asAny
             }
         }
@@ -329,9 +330,10 @@ private extension FoodLoggingActionCardView {
             .id(foodItem.id)
             .transition(.blurReplace)
             .onTapGesture {
+              let existingLog = fetchExistingLog(for: foodItem)
               presentedSheet = FoodItemDetailsView(
                 foodItem: foodItem,
-                existingFoodItemLog: nil
+                existingFoodItemLog: existingLog
               ).asAny
             }
         }
@@ -377,9 +379,10 @@ private extension FoodLoggingActionCardView {
         .id(foodItem.id)
         .transition(.opacity)
         .onTapGesture {
+          let existingLog = fetchExistingLog(for: foodItem)
           presentedSheet = FoodItemDetailsView(
             foodItem: foodItem,
-            existingFoodItemLog: nil
+            existingFoodItemLog: existingLog
           ).asAny
         }
     }
@@ -395,9 +398,10 @@ private extension FoodLoggingActionCardView {
         .id(foodItem.id)
         .transition(.opacity)
         .onTapGesture {
+          let existingLog = fetchExistingLog(for: foodItem)
           presentedSheet = FoodItemDetailsView(
             foodItem: foodItem,
-            existingFoodItemLog: nil
+            existingFoodItemLog: existingLog
           ).asAny
         }
     }
@@ -416,6 +420,8 @@ private extension FoodLoggingActionCardView {
         .frame(maxWidth: .infinity)
     }
     .buttonStyle(.primary)
+    .padding(.top, 8)
+    .transition(.blurReplace)
   }
 
   var foodItemHistoryHeader: some View {
@@ -482,6 +488,28 @@ private extension FoodLoggingActionCardView {
     } catch {
       print(error)
     }
+  }
+
+  func fetchExistingLog(for foodItem: BloomModel.FoodItem) -> FoodItemLog? {
+    let startOfDay = Calendar.current.startOfDay(for: nutritionViewModel.date)
+    let endOfDay = Calendar.current.endOfDay(for: nutritionViewModel.date)
+    let mealRawValue = nutritionViewModel.suggestedMeal.rawValue
+    let foodItemID = foodItem.id.value
+
+    let descriptor = FetchDescriptor<FoodItemLog>(
+      predicate: #Predicate<FoodItemLog> { model in
+        model.date >= startOfDay &&
+        model.date <= endOfDay &&
+        model.mealRawValue == mealRawValue
+      }
+    )
+
+    let logs = try? modelContext.fetch(descriptor)
+
+    // Find the log that contains this specific food item
+    return logs?.first(where: { log in
+      log.foodItemServings?.contains(where: { $0.foodItem?.id == foodItemID }) == true
+    })
   }
 }
 

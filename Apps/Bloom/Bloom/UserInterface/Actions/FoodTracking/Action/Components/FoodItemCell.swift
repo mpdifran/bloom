@@ -77,6 +77,19 @@ struct FoodItemCell: View {
     .onChange(of: nutritionViewModel.suggestedMeal) { _, _ in
       Task { await checkForExistingFoodLog() }
     }
+    .onChange(of: nutritionViewModel.date) { _, _ in
+      Task { await checkForExistingFoodLog() }
+    }
+    .task {
+      // Initial check when cell loads
+      await checkForExistingFoodLog()
+    }
+    .task {
+      // Listen for food logging events and re-check logged status
+      for await _ in nutritionViewModel.foodLoggedStream {
+        await checkForExistingFoodLog()
+      }
+    }
   }
 }
 
@@ -127,7 +140,7 @@ private extension FoodItemCell {
   func checkForExistingFoodLog() async {
     do {
       let existingFoodLog = try await foodItemLogModelActor.fetchLog(
-        for: .now,
+        for: nutritionViewModel.date,
         meal: nutritionViewModel.suggestedMeal,
         foodItemID: foodItem.id.value
       )
