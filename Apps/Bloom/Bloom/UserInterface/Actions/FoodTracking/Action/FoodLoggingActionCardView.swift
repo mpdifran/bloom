@@ -408,12 +408,16 @@ private extension FoodLoggingActionCardView {
   }
 
   var aiGenerateButton: some View {
-    AsyncButton {
-      do {
-        try await viewModel.generateWithAI(query: searchQuery, modelContext: modelContext)
-        performDismiss?()
-      } catch {
-        viewModel.error = error
+    Button {
+      EntitledAction(presentedSheet: $presentedSheet) {
+        Task {
+          do {
+            try await viewModel.generateWithAI(query: searchQuery, modelContext: modelContext)
+            performDismiss?()
+          } catch {
+            viewModel.error = error
+          }
+        }
       }
     } label: {
       Label("Generate with AI", systemSymbol: .sparkles)
