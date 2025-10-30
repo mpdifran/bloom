@@ -11,6 +11,7 @@ import TelemetryDeck
 import DataContainer
 import SwiftData
 import BloomFoundation
+import CoreHealth
 
 @MainActor
 struct RootView: View {
@@ -27,6 +28,7 @@ struct RootView: View {
 
   @State private var selectionToggle = false
   @State private var shouldShowLogPeriodSheet = false
+  @State private var alertDetails: AlertDetails?
 
   @ObservedObject private var userController = UserController.shared
 
@@ -82,13 +84,21 @@ struct RootView: View {
       }
     }
     .fullScreenCover($presentedPaywall)
+    .alert(alertDetails: $alertDetails)
     .animation(.easeInOut(duration: 1), value: userController.isAuthenticated)
     .animation(.easeInOut(duration: 1), value: hasShownOnboarding)
     .onChange(of: tabController.toggleToDismiss) { oldValue, newValue in
       dismiss()
     }
     .onReceive(NotificationCenter.default.publisher(for: .showLogPeriodSheet)) { _ in
-      shouldShowLogPeriodSheet = true
+      if HealthManager.shared.sex() == .female {
+        shouldShowLogPeriodSheet = true
+      } else {
+        alertDetails = AlertDetails(
+          title: "Not Supported",
+          message: "Period tracking is not supported for male users."
+        )
+      }
     }
     .onForeground {
       Task {
@@ -158,13 +168,22 @@ private extension RootView {
     case "/action/log-bowel-movement":
       presentedSheet = BowelMovementActionCardView(performDismiss: nil).asAny
     case "/action/log-period":
-      presentedSheet = CycleTrackingActionCardView(performDismiss: nil).asAny
+      if HealthManager.shared.sex() == .female {
+        presentedSheet = CycleTrackingActionCardView(performDismiss: nil).asAny
+      } else {
+        alertDetails = AlertDetails(
+          title: "Not Supported",
+          message: "Period tracking is not supported for male users."
+        )
+      }
     case "/action/log-weight":
       presentedSheet = BodyWeightActionCardView(performDismiss: nil).asAny
     case "/action/log-blood-pressure":
       presentedSheet = BloodPressureActionCardView(performDismiss: nil).asAny
     case "/action/voice-logger":
-      presentedSheet = VoiceLoggerView(performDismiss: nil).asAny
+      EntitledAction(presentedSheet: $presentedSheet) {
+        presentedSheet = VoiceLoggerView(performDismiss: nil).asAny
+      }
     case "/vital/sleep-quality":
       tabController.activeTab = .vitals
       Delay(600) {
