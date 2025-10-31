@@ -28,17 +28,20 @@ public extension GoalGridWeekModel {
     public let id: Int
     public let isComplete: Bool?
     public let isCurrentWeek: Bool
+    public let referenceDate: Date
     public let monthLabel: String?
 
     public init(
       id: Int,
       isComplete: Bool?,
       isCurrentWeek: Bool = false,
+      referenceDate: Date = .now,
       monthLabel: String? = nil
     ) {
       self.id = id
       self.isComplete = isComplete
       self.isCurrentWeek = isCurrentWeek
+      self.referenceDate = referenceDate
       self.monthLabel = monthLabel
     }
   }

@@ -32,19 +32,19 @@ struct HabitDetailsView: View {
         titleSection
 
         if viewModel.habit.timePeriod == .weekly {
-          HabitGridWeek(model: viewModel.habitGridWeekModel)
+          GoalGridWeek(model: viewModel.habitGridWeekModel)
             .padding(.bottom)
             .padding(.horizontal, 4)
         } else if viewModel.habit.timePeriod == .monthly {
-          HabitGridMonth(model: viewModel.habitGridMonthModel)
+          GoalGridMonth(model: viewModel.habitGridMonthModel)
             .padding(.bottom)
             .padding(.horizontal, 4)
         } else if viewModel.habit.timePeriod == .yearly {
-          HabitGridYear(model: viewModel.habitGridYearModel)
+          GoalGridYear(model: viewModel.habitGridYearModel)
             .padding(.bottom)
             .padding(.horizontal, 4)
         } else {
-          HabitGrid(model: viewModel.habitGridModel)
+          GoalGrid(model: viewModel.habitGridModel)
             .padding(.bottom)
         }
       }

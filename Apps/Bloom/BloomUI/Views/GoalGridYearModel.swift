@@ -28,17 +28,20 @@ public extension GoalGridYearModel {
     public let id: Int
     public let isComplete: Bool?
     public let isCurrentYear: Bool
+    public let referenceDate: Date
     public let yearLabel: String
 
     public init(
       id: Int,
       isComplete: Bool?,
       isCurrentYear: Bool = false,
+      referenceDate: Date = .now,
       yearLabel: String = ""
     ) {
       self.id = id
       self.isComplete = isComplete
       self.isCurrentYear = isCurrentYear
+      self.referenceDate = referenceDate
       self.yearLabel = yearLabel
     }
   }

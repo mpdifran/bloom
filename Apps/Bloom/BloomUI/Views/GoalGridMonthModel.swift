@@ -28,17 +28,20 @@ public extension GoalGridMonthModel {
     public let id: Int
     public let isComplete: Bool?
     public let isCurrentMonth: Bool
+    public let referenceDate: Date
     public let monthLabel: String
 
     public init(
       id: Int,
       isComplete: Bool?,
       isCurrentMonth: Bool = false,
+      referenceDate: Date = .now,
       monthLabel: String = ""
     ) {
       self.id = id
       self.isComplete = isComplete
       self.isCurrentMonth = isCurrentMonth
+      self.referenceDate = referenceDate
       self.monthLabel = monthLabel
     }
   }

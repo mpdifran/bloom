@@ -10,6 +10,7 @@ import HealthKit
 import DataContainer
 import CoreHealth
 import BloomFoundation
+import BloomUI
 
 struct GoalRange: Identifiable, Sendable, Hashable {
   var id: Int { hashValue }
@@ -31,10 +32,10 @@ extension HabitDetailsView {
     var dailySamples = [DateQuantitySample]()
     var averageValue: HKQuantity?
     var dayStats = [Calendar.Weekday: Double]()
-    var habitGridModel = HabitGridModel()
-    var habitGridWeekModel = HabitGridWeekModel()
-    var habitGridMonthModel = HabitGridMonthModel()
-    var habitGridYearModel = HabitGridYearModel()
+    var habitGridModel = GoalGridModel()
+    var habitGridWeekModel = GoalGridWeekModel()
+    var habitGridMonthModel = GoalGridMonthModel()
+    var habitGridYearModel = GoalGridYearModel()
     var allSamplesTwelveWeeks = [DateQuantitySample]()
     var weekQuantitySamples = [WeekQuantitySamples]() {
       didSet { 
@@ -250,7 +251,7 @@ extension HabitDetailsView.ViewModel {
         return referenceHabit.quantityMeetsGoal(sample.quantity)
       }
 
-      return HabitGridModel.Week(
+      return GoalGridModel.Week(
         id: weekSamples.id,
         isComplete: isCompleteArray,
         todayIndex: todayIndex
@@ -264,12 +265,12 @@ extension HabitDetailsView.ViewModel {
 
       for _ in 0 ..< remainingAdditions {
         earliestId -= 1
-        let week = HabitGridModel.Week(id: earliestId, isComplete: Array(repeating: false, count: 7))
+        let week = GoalGridModel.Week(id: earliestId, isComplete: Array(repeating: false, count: 7))
         weeks.insert(week, at: 0)
       }
     }
 
-    let model = HabitGridModel(weeks: weeks)
+    let model = GoalGridModel(weeks: weeks)
 
     await MainActor.run {
       self.habitGridModel = model
@@ -329,7 +330,7 @@ extension HabitDetailsView.ViewModel {
         }
       }
       
-      return HabitGridWeekModel.Week(
+      return GoalGridWeekModel.Week(
         id: weekSamples.id,
         isComplete: isComplete,
         isCurrentWeek: isCurrentWeek,
@@ -344,7 +345,7 @@ extension HabitDetailsView.ViewModel {
       
       for _ in 0 ..< remainingAdditions {
         earliestId -= 1
-        let week = HabitGridWeekModel.Week(
+        let week = GoalGridWeekModel.Week(
           id: earliestId,
           isComplete: nil,
           referenceDate: .distantPast
@@ -352,8 +353,8 @@ extension HabitDetailsView.ViewModel {
         weeks.insert(week, at: 0)
       }
     }
-    
-    let model = HabitGridWeekModel(weeks: weeks)
+
+    let model = GoalGridWeekModel(weeks: weeks)
     
     await MainActor.run {
       self.habitGridWeekModel = model
@@ -419,7 +420,7 @@ extension HabitDetailsView.ViewModel {
       formatter.dateFormat = "MMM"
       let monthLabel = formatter.string(from: monthSample.referenceDate)
       
-      return HabitGridMonthModel.Month(
+      return GoalGridMonthModel.Month(
         id: monthSample.id,
         isComplete: isComplete,
         isCurrentMonth: isCurrentMonth,
@@ -438,7 +439,7 @@ extension HabitDetailsView.ViewModel {
       
       for _ in 0 ..< remainingAdditions {
         earliestId -= 1
-        let month = HabitGridMonthModel.Month(
+        let month = GoalGridMonthModel.Month(
           id: earliestId,
           isComplete: nil,
           referenceDate: .distantPast,
@@ -447,8 +448,8 @@ extension HabitDetailsView.ViewModel {
         months.insert(month, at: 0)
       }
     }
-    
-    let model = HabitGridMonthModel(months: months)
+
+    let model = GoalGridMonthModel(months: months)
     
     await MainActor.run {
       self.habitGridMonthModel = model
@@ -511,7 +512,7 @@ extension HabitDetailsView.ViewModel {
       // Calculate ID based on years from current year (newer years have lower IDs)
       let id = currentYear - yearSample.year
       
-      return HabitGridYearModel.Year(
+      return GoalGridYearModel.Year(
         id: id,
         isComplete: isComplete,
         isCurrentYear: isCurrentYear,
@@ -530,7 +531,7 @@ extension HabitDetailsView.ViewModel {
       
       for _ in 0 ..< remainingAdditions {
         earliestId -= 1
-        let year = HabitGridYearModel.Year(
+        let year = GoalGridYearModel.Year(
           id: earliestId,
           isComplete: nil,
           referenceDate: .distantPast,
@@ -539,8 +540,8 @@ extension HabitDetailsView.ViewModel {
         years.insert(year, at: 0)
       }
     }
-    
-    let model = HabitGridYearModel(years: years)
+
+    let model = GoalGridYearModel(years: years)
     
     await MainActor.run {
       self.habitGridYearModel = model
