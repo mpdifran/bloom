@@ -13,6 +13,7 @@ import BloomModel
 import AppUI
 import BloomFoundation
 import SFSafeSymbols
+import TelemetryDeck
 
 struct VoiceLoggerView: View {
   let performDismiss: (() -> Void)?
@@ -54,12 +55,14 @@ struct VoiceLoggerView: View {
       }
     }
     .task {
+      TelemetryDeck.signal("voice_logger_opened")
       await viewModel.requestAuthorization()
 
       // Auto-start recording if authorized
       if viewModel.authorizationStatus == .authorized {
         viewModel.startRecording()
       } else if viewModel.authorizationStatus == .denied || viewModel.authorizationStatus == .restricted {
+        TelemetryDeck.signal("voice_logger_permission_denied")
         viewModel.alertDetails = AlertDetails(
           title: "Permission Required",
           message: "Please enable Speech Recognition and Microphone access in Settings to use Voice Logger."
@@ -171,29 +174,39 @@ private extension VoiceLoggerView {
     // Generate identifier upfront
     let processingIdentifier = AIFoodProcessingIdentifier()
 
-    // Upload to backend first
-    _ = try await NetworkRequester.shared.uploadMagicScan(
-      imageData: nil,
-      contextText: viewModel.transcript,
-      processingIdentifier: processingIdentifier
-    )
+    do {
+      // Upload to backend first
+      _ = try await NetworkRequester.shared.uploadMagicScan(
+        imageData: nil,
+        contextText: viewModel.transcript,
+        processingIdentifier: processingIdentifier
+      )
 
-    // Save locally if upload succeeded
-    nutritionViewModel.logTextOnlyMagicScan(
-      modelContext: modelContext,
-      processingIdentifier: processingIdentifier,
-      contextText: viewModel.transcript,
-      date: nutritionViewModel.date,
-      meal: nutritionViewModel.suggestedMeal
-    )
+      // Save locally if upload succeeded
+      nutritionViewModel.logTextOnlyMagicScan(
+        modelContext: modelContext,
+        processingIdentifier: processingIdentifier,
+        contextText: viewModel.transcript,
+        date: nutritionViewModel.date,
+        meal: nutritionViewModel.suggestedMeal
+      )
 
-    // Trigger feedback
-    viewModel.saveComplete.toggle()
-    SoundPlayer.playLogHealthData()
+      // Trigger feedback
+      viewModel.saveComplete.toggle()
+      SoundPlayer.playLogHealthData()
 
-    // Dismiss to NutritionView
-    performDismiss?()
-    dismiss()
+      TelemetryDeck.signal("voice_logger_saved", parameters: [
+        "result": "success",
+        "transcript_length": String(viewModel.transcript.count)
+      ])
+
+      // Dismiss to NutritionView
+      performDismiss?()
+      dismiss()
+    } catch {
+      TelemetryDeck.signal("voice_logger_saved", parameters: ["result": "failure"])
+      throw error
+    }
   }
 }
 

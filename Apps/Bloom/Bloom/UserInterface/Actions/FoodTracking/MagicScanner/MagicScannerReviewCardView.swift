@@ -12,6 +12,7 @@ import CoreHealth
 import BloomModel
 import CoreNetwork
 import AppUI
+import TelemetryDeck
 
 struct MagicScannerReviewCardView: View {
   let image: UIImage
@@ -91,35 +92,43 @@ struct MagicScannerReviewCardView: View {
     guard let squareImage = image.croppedToSquare(),
           let imageData = BackendImageResizer.resize(squareImage) else {
       alertDetails = AlertDetails(title: "Error", message: "Unable to process image")
+      TelemetryDeck.signal("magic_scan_submitted", parameters: ["result": "failure", "error": "image_processing_failed"])
       return
     }
 
     // Generate identifier upfront
     let processingIdentifier = AIFoodProcessingIdentifier()
 
-    // Upload to backend first - throw error if it fails
-    _ = try await NetworkRequester.shared.uploadMagicScan(
-      imageData: imageData,
-      contextText: contextText.isEmpty ? nil : contextText,
-      processingIdentifier: processingIdentifier
-    )
+    do {
+      // Upload to backend first - throw error if it fails
+      _ = try await NetworkRequester.shared.uploadMagicScan(
+        imageData: imageData,
+        contextText: contextText.isEmpty ? nil : contextText,
+        processingIdentifier: processingIdentifier
+      )
 
-    // Only save locally if upload succeeded
-    nutritionViewModel.logMagicScan(
-      modelContext: modelContext,
-      processingIdentifier: processingIdentifier,
-      imageData: imageData,
-      contextText: contextText,
-      date: nutritionViewModel.date,
-      meal: nutritionViewModel.suggestedMeal
-    )
+      // Only save locally if upload succeeded
+      nutritionViewModel.logMagicScan(
+        modelContext: modelContext,
+        processingIdentifier: processingIdentifier,
+        imageData: imageData,
+        contextText: contextText,
+        date: nutritionViewModel.date,
+        meal: nutritionViewModel.suggestedMeal
+      )
 
-    // Trigger feedback and sound
-    saveComplete.toggle()
-    SoundPlayer.playLogHealthData()
+      // Trigger feedback and sound
+      saveComplete.toggle()
+      SoundPlayer.playLogHealthData()
 
-    // Dismiss both sheet and camera
-    performDismiss()
+      TelemetryDeck.signal("magic_scan_submitted", parameters: ["result": "success"])
+
+      // Dismiss both sheet and camera
+      performDismiss()
+    } catch {
+      TelemetryDeck.signal("magic_scan_submitted", parameters: ["result": "failure", "error": error.localizedDescription])
+      throw error
+    }
   }
 }
 

@@ -13,6 +13,7 @@ import SwiftUI
 import DataContainer
 import CoreHealth
 import BloomModel
+import TelemetryDeck
 
 // MARK: - MagicScannerCameraView
 
@@ -77,6 +78,7 @@ struct MagicScannerCameraView: View {
     }
     .presentationCompactAdaptation(.fullScreenCover)
     .onAppear {
+      TelemetryDeck.signal("magic_scan_camera_opened")
       Task {
         await permissionManager.checkPermission()
         if permissionManager.permissionState == .granted {
@@ -152,6 +154,7 @@ private extension MagicScannerCameraView {
         await MainActor.run {
           capturedImage = image
           showReviewSheet = true
+          TelemetryDeck.signal("magic_scan_photo_captured", parameters: ["source": "camera"])
         }
       }
     } label: {
@@ -197,6 +200,7 @@ private extension MagicScannerCameraView {
       }
       capturedImage = uiImage
       showReviewSheet = true
+      TelemetryDeck.signal("magic_scan_photo_captured", parameters: ["source": "gallery"])
     }
   }
 }
