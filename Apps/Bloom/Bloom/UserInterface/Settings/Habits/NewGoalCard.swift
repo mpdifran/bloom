@@ -180,6 +180,11 @@ private extension NewGoalCard {
         requestReview()
       }
 
+      // Update widget cache
+      Task {
+        await GoalWidgetCacheManager.shared.updateCache(modelContext: modelContext)
+      }
+
       dismiss()
     } catch {
       self.didError.toggle()

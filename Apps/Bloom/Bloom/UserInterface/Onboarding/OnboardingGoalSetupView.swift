@@ -232,10 +232,15 @@ private extension OnboardingGoalSetupView {
     )
     
     modelContext.insert(habit)
-    
+
     do {
       try modelContext.save()
       addGoalToggle.toggle()
+
+      // Update widget cache
+      Task {
+        await GoalWidgetCacheManager.shared.updateCache(modelContext: modelContext)
+      }
     } catch {
       self.error = error
     }
@@ -243,10 +248,15 @@ private extension OnboardingGoalSetupView {
   
   func removeGoal(_ habit: Habit) {
     habit.endDate = .now
-    
+
     do {
       try modelContext.save()
       removeGoalToggle.toggle()
+
+      // Update widget cache
+      Task {
+        await GoalWidgetCacheManager.shared.updateCache(modelContext: modelContext)
+      }
     } catch {
       self.error = error
     }

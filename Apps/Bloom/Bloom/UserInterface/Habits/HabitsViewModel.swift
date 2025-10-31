@@ -128,6 +128,11 @@ extension HabitsViewModel {
     lastHabitRefreshDate = .now
 
     TelemetryDeck.signal("User Goal Count", floatValue: Double(addedTargetMetrics.count))
+
+    // Update widget cache
+    Task {
+      await GoalWidgetCacheManager.shared.updateCache(modelContext: modelContext)
+    }
   }
 
   func createHabit(from proposedGoal: ProposedGoal, isSuggested: Bool) -> Habit {
@@ -155,6 +160,11 @@ extension HabitsViewModel {
         let habit = createHabit(from: proposedGoal, isSuggested: true)
         modelContext.insert(habit)
       }
+    }
+
+    // Update widget cache
+    Task {
+      await GoalWidgetCacheManager.shared.updateCache(modelContext: modelContext)
     }
   }
 
@@ -202,6 +212,11 @@ extension HabitsViewModel {
 
     try modelContext.save()
 
+    // Update widget cache
+    Task {
+      await GoalWidgetCacheManager.shared.updateCache(modelContext: modelContext)
+    }
+
     return updatedHabit
   }
 
@@ -215,5 +230,10 @@ extension HabitsViewModel {
     }
 
     try modelContext.save()
+
+    // Update widget cache
+    Task {
+      await GoalWidgetCacheManager.shared.updateCache(modelContext: modelContext)
+    }
   }
 }

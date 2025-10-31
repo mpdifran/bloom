@@ -235,7 +235,16 @@ private extension RootView {
         tabController.pendingVitalNavigation = .cardioFitness
       }
     default:
-      wasHandled = false
+      // Handle goal deep links: /goals/{goalId}
+      if path.hasPrefix("/goals/") {
+        let goalId = String(path.dropFirst("/goals/".count))
+        tabController.activeTab = .today
+        Delay(600) {
+          tabController.pendingGoalNavigation = goalId
+        }
+      } else {
+        wasHandled = false
+      }
     }
 
     // Send analytics after handling the URL

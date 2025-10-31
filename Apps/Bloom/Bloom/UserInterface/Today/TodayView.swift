@@ -49,6 +49,7 @@ struct TodayView: View {
   @State private var presentedSheet: AnyView?
   @State private var presentedNavPush: AnyView?
   @State private var confirmationDialogDetails: ConfirmationDialogDetails?
+  @State private var alertDetails: AlertDetails?
   @TodaySettingsStorage("TodayView.settings") private var todaySettings = TodaySettings()
   @State private var currentTimeMode: TimeMode = .morning
   @State private var hideScrollEdge = true
@@ -135,6 +136,7 @@ struct TodayView: View {
       .navigationDestination($presentedNavPush)
       .fullScreenCover($presentedFullScreen)
       .confirmationDialog($confirmationDialogDetails)
+      .alert(alertDetails: $alertDetails)
     }
     .animation(.default, value: todayViewModel.todayContent)
     .animation(.default, value: todayViewModel.isLoadingContent)
@@ -155,6 +157,20 @@ struct TodayView: View {
       Task {
         todayViewModel.checkEntitlement()
         await todayViewModel.requestContentIfNeeded()
+      }
+    }
+    .onChange(of: tabController.pendingGoalNavigation) { oldValue, newValue in
+      if let goalId = newValue {
+        // Try to find the matching habit by targetMetric rawValue
+        if let matchingHabit = habits.first(where: { $0.targetMetric.rawValue == goalId }) {
+          presentedNavPush = HabitDetailsView(habit: matchingHabit).asAny
+        } else {
+          alertDetails = AlertDetails(
+            title: "Goal Not Found",
+            message: "This goal is no longer active."
+          )
+        }
+        tabController.pendingGoalNavigation = nil
       }
     }
   }

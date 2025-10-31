@@ -13,6 +13,7 @@ import DataContainer
 import RevenueCat
 import CoreHealth
 import BloomFoundation
+import SwiftData
 
 @main
 struct BloomApp: App {
@@ -98,6 +99,11 @@ struct BloomApp: App {
           // Run chat conversation migration on app launch
           ChatConversationMigration.shared.runMigrationIfNeeded()
         }
+        .task {
+          // Update goal widget cache on app launch
+          let modelContext = ModelContext(ContainerHolder.shared.container)
+          await GoalWidgetCacheManager.shared.updateCache(modelContext: modelContext)
+        }
     }
     .modelContainer(ContainerHolder.shared.container)
   }
@@ -150,6 +156,12 @@ private extension BloomApp {
     Task { @MainActor in
       // Run chat conversation migration in background
       ChatConversationMigration.shared.runMigrationIfNeeded()
+    }
+
+    Task { @MainActor in
+      // Update goal widget cache
+      let modelContext = ModelContext(ContainerHolder.shared.container)
+      await GoalWidgetCacheManager.shared.updateCache(modelContext: modelContext)
     }
 
     TelemetryDeck.signal(

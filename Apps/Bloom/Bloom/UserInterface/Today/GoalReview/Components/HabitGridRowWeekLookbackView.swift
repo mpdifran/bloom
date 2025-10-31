@@ -7,6 +7,7 @@
 
 import SwiftUI
 import BloomFoundation
+import BloomUI
 
 private extension CGFloat {
   static let spacing: CGFloat = 4
@@ -37,10 +38,11 @@ struct HabitGridRowWeekLookbackView: View {
     HStack(spacing: .spacing) {
       ForEach(0 ..< 7) { index in
         VStack(spacing: .spacing) {
-          HabitGridCell(
+          GoalGridCell(
             id: "\(index)",
             isComplete: completionHistory.safeAccess(at: UInt(index))?.goalMet,
-            isToday: false
+            isToday: false,
+            cornerRadius: 6
           )
           .frame(height: .minCellWidth)
 

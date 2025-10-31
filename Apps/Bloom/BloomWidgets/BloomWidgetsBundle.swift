@@ -18,5 +18,6 @@ struct BloomWidgetsBundle: WidgetBundle {
     HealthInsightWidget()
     LogMealWidget()
     LogActionsWidget()
+    GoalWidget()
   }
 }
