@@ -162,6 +162,16 @@ public final class GoalWidgetCacheManager {
     let calendar = Calendar.current
     let today = Date()
 
+    // Fetch all habits with the same target metric to handle goal changes over time
+    let habitHistory: [Habit]
+    do {
+      habitHistory = try modelContext.fetchHabits(for: goal.targetMetric)
+    } catch {
+      print("Failed to fetch habit history: \(error)")
+      return GoalWidgetData.WeeklyGridData(weeks: [])
+    }
+
+    let oldestHabit = habitHistory.first
     var weeks: [GoalWidgetData.WeeklyGridData.Week] = []
 
     for weekOffset in 0..<20 {
@@ -173,36 +183,38 @@ public final class GoalWidgetCacheManager {
 
       let isCurrentWeek = weekOffset == 0
 
-      // Check if week is within goal's active period
-      guard goal.isDateWithinHabit(date: startOfWeek) else {
-        weeks.append(
-          GoalWidgetData.WeeklyGridData.Week(
-            id: weekOffset,
-            isComplete: nil,
-            isCurrentWeek: isCurrentWeek,
-            monthLabel: nil
-          )
-        )
-        continue
+      // Find which habit was active during this week
+      let referenceHabit: Habit?
+      if let habit = habitHistory.first(where: { $0.isDateWithinHabit(date: startOfWeek) }) {
+        referenceHabit = habit
+      } else if let oldestHabit, startOfWeek < oldestHabit.startDate {
+        // Week is before oldest habit - use oldest habit's goal for comparison
+        referenceHabit = oldestHabit
+      } else {
+        // No habit active during this week (after all habits ended)
+        referenceHabit = nil
       }
 
       // Fetch total quantity for the week
       let dateRange = DateRange(startOfWeek, endOfWeek)
       let quantity = await goal.targetMetric.fetchTotalQuantity(for: dateRange)
-      let goalMet = goal.quantityMeetsGoal(quantity)
+
+      // Check if quantity meets the goal (false if no habit reference)
+      let isComplete = referenceHabit?.quantityMeetsGoal(quantity) ?? false
 
       // Add month label if this is the first week of a month
       let monthLabel = calendar.component(.weekOfMonth, from: startOfWeek) == 1
         ? startOfWeek.formatted(.dateTime.month(.abbreviated))
         : nil
 
-      weeks.append(
+      weeks.insert(
         GoalWidgetData.WeeklyGridData.Week(
           id: weekOffset,
-          isComplete: goalMet,
+          isComplete: isComplete,
           isCurrentWeek: isCurrentWeek,
           monthLabel: monthLabel
-        )
+        ),
+        at: 0
       )
     }
 
@@ -214,6 +226,16 @@ public final class GoalWidgetCacheManager {
     let calendar = Calendar.current
     let today = Date()
 
+    // Fetch all habits with the same target metric to handle goal changes over time
+    let habitHistory: [Habit]
+    do {
+      habitHistory = try modelContext.fetchHabits(for: goal.targetMetric)
+    } catch {
+      print("Failed to fetch habit history: \(error)")
+      return GoalWidgetData.MonthlyGridData(months: [])
+    }
+
+    let oldestHabit = habitHistory.first
     var months: [GoalWidgetData.MonthlyGridData.Month] = []
 
     for monthOffset in 0..<12 {
@@ -226,31 +248,33 @@ public final class GoalWidgetCacheManager {
       let isCurrentMonth = monthOffset == 0
       let monthLabel = startOfMonth.formatted(.dateTime.month(.abbreviated))
 
-      // Check if month is within goal's active period
-      guard goal.isDateWithinHabit(date: startOfMonth) else {
-        months.append(
-          GoalWidgetData.MonthlyGridData.Month(
-            id: monthOffset,
-            isComplete: nil,
-            isCurrentMonth: isCurrentMonth,
-            monthLabel: monthLabel
-          )
-        )
-        continue
+      // Find which habit was active during this month
+      let referenceHabit: Habit?
+      if let habit = habitHistory.first(where: { $0.isDateWithinHabit(date: startOfMonth) }) {
+        referenceHabit = habit
+      } else if let oldestHabit, startOfMonth < oldestHabit.startDate {
+        // Month is before oldest habit - use oldest habit's goal for comparison
+        referenceHabit = oldestHabit
+      } else {
+        // No habit active during this month (after all habits ended)
+        referenceHabit = nil
       }
 
       // Fetch total quantity for the month
       let dateRange = DateRange(startOfMonth, endOfMonth)
       let quantity = await goal.targetMetric.fetchTotalQuantity(for: dateRange)
-      let goalMet = goal.quantityMeetsGoal(quantity)
 
-      months.append(
+      // Check if quantity meets the goal (false if no habit reference)
+      let isComplete = referenceHabit?.quantityMeetsGoal(quantity) ?? false
+
+      months.insert(
         GoalWidgetData.MonthlyGridData.Month(
           id: monthOffset,
-          isComplete: goalMet,
+          isComplete: isComplete,
           isCurrentMonth: isCurrentMonth,
           monthLabel: monthLabel
-        )
+        ),
+        at: 0
       )
     }
 
@@ -262,6 +286,16 @@ public final class GoalWidgetCacheManager {
     let calendar = Calendar.current
     let today = Date()
 
+    // Fetch all habits with the same target metric to handle goal changes over time
+    let habitHistory: [Habit]
+    do {
+      habitHistory = try modelContext.fetchHabits(for: goal.targetMetric)
+    } catch {
+      print("Failed to fetch habit history: \(error)")
+      return GoalWidgetData.YearlyGridData(years: [])
+    }
+
+    let oldestHabit = habitHistory.first
     var years: [GoalWidgetData.YearlyGridData.Year] = []
 
     for yearOffset in 0..<5 {
@@ -274,31 +308,33 @@ public final class GoalWidgetCacheManager {
       let isCurrentYear = yearOffset == 0
       let yearLabel = startOfYear.formatted(.dateTime.year())
 
-      // Check if year is within goal's active period
-      guard goal.isDateWithinHabit(date: startOfYear) else {
-        years.append(
-          GoalWidgetData.YearlyGridData.Year(
-            id: yearOffset,
-            isComplete: nil,
-            isCurrentYear: isCurrentYear,
-            yearLabel: yearLabel
-          )
-        )
-        continue
+      // Find which habit was active during this year
+      let referenceHabit: Habit?
+      if let habit = habitHistory.first(where: { $0.isDateWithinHabit(date: startOfYear) }) {
+        referenceHabit = habit
+      } else if let oldestHabit, startOfYear < oldestHabit.startDate {
+        // Year is before oldest habit - use oldest habit's goal for comparison
+        referenceHabit = oldestHabit
+      } else {
+        // No habit active during this year (after all habits ended)
+        referenceHabit = nil
       }
 
       // Fetch total quantity for the year
       let dateRange = DateRange(startOfYear, endOfYear)
       let quantity = await goal.targetMetric.fetchTotalQuantity(for: dateRange)
-      let goalMet = goal.quantityMeetsGoal(quantity)
 
-      years.append(
+      // Check if quantity meets the goal (false if no habit reference)
+      let isComplete = referenceHabit?.quantityMeetsGoal(quantity) ?? false
+
+      years.insert(
         GoalWidgetData.YearlyGridData.Year(
           id: yearOffset,
-          isComplete: goalMet,
+          isComplete: isComplete,
           isCurrentYear: isCurrentYear,
           yearLabel: yearLabel
-        )
+        ),
+        at: 0
       )
     }
 
