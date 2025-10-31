@@ -32,6 +32,7 @@ struct LogMealWidget: Widget {
 } timeline: {
   LogMealEntry(
     date: .now,
+    relevance: TimelineEntryRelevance(score: 1.0),
     displayName: "Vector",
     mealName: "Breakfast",
     caloriesText: "300 cal",
@@ -64,6 +65,7 @@ struct LogMealWidget: Widget {
 } timeline: {
   LogMealEntry(
     date: .now,
+    relevance: TimelineEntryRelevance(score: 1.0),
     displayName: "Breakfast Bowl",
     mealName: "Breakfast",
     caloriesText: "390 cal",

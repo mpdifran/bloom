@@ -10,6 +10,7 @@ import WidgetKit
 
 struct LogMealEntry: TimelineEntry {
   let date: Date
+  let relevance: TimelineEntryRelevance?
 
   // Display fields
   let displayName: String

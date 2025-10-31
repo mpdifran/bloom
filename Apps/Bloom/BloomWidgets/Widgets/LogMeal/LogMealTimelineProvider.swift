@@ -18,6 +18,7 @@ struct LogMealTimelineProvider: AppIntentTimelineProvider {
   func placeholder(in context: Context) -> LogMealEntry {
     LogMealEntry(
       date: Date(),
+      relevance: TimelineEntryRelevance(score: 0.5),
       displayName: "Protein Shake",
       mealName: "Breakfast",
       caloriesText: "300 cal",
@@ -43,6 +44,35 @@ struct LogMealTimelineProvider: AppIntentTimelineProvider {
   func timeline(for configuration: LogMealConfigurationIntent, in context: Context) async -> Timeline<LogMealEntry> {
     let entry = await makeEntry(from: configuration)
     return Timeline(entries: [entry], policy: .never)
+  }
+
+  private func calculateRelevance(for meal: MealOption, at date: Date) -> TimelineEntryRelevance? {
+    let hour = Calendar.current.component(.hour, from: date)
+
+    switch meal {
+    case .automatic:
+      // Automatic mode adapts to current time, medium priority
+      return TimelineEntryRelevance(score: 0.5)
+
+    case .snack:
+      // Snacks have no specific time window, medium priority
+      return TimelineEntryRelevance(score: 0.5)
+
+    case .breakfast:
+      // Breakfast window: 6:00 AM - 10:59 AM
+      let isInWindow = (6..<11).contains(hour)
+      return TimelineEntryRelevance(score: isInWindow ? 1.0 : 0.0)
+
+    case .lunch:
+      // Lunch window: 11:00 AM - 3:59 PM
+      let isInWindow = (11..<16).contains(hour)
+      return TimelineEntryRelevance(score: isInWindow ? 1.0 : 0.0)
+
+    case .dinner:
+      // Dinner window: 4:00 PM - 11:59 PM
+      let isInWindow = (16..<24).contains(hour)
+      return TimelineEntryRelevance(score: isInWindow ? 1.0 : 0.0)
+    }
   }
 
   private func makeEntry(from configuration: LogMealConfigurationIntent) async -> LogMealEntry {
@@ -125,8 +155,12 @@ struct LogMealTimelineProvider: AppIntentTimelineProvider {
       servings: servings
     )
 
+    // Calculate relevance based on meal selection and current time
+    let relevance = calculateRelevance(for: meal, at: Date())
+
     return LogMealEntry(
       date: Date(),
+      relevance: relevance,
       displayName: configuration.displayName,
       mealName: mealName,
       caloriesText: caloriesText,
