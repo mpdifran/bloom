@@ -63,9 +63,7 @@ struct AddWaterGlassSizeView: View {
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
-          Button("Cancel") {
-            dismiss()
-          }
+          DismissButton()
         }
       }
       .presentationDetentSelfSizing()

@@ -55,9 +55,7 @@ struct FoodItemIssueReportView: View {
       }
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
-          Button("Cancel") {
-            dismiss()
-          }
+          DismissButton()
         }
       }
       .shelf {

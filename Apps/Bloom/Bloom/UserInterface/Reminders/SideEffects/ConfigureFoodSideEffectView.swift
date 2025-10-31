@@ -50,9 +50,7 @@ struct ConfigureFoodSideEffectView: View {
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
-          Button("Cancel") {
-            dismiss()
-          }
+          DismissButton()
         }
       }
       .shelf {

@@ -53,9 +53,7 @@ struct CreateEditReminderView: View {
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
-          Button("Cancel") {
-            dismiss()
-          }
+          DismissButton()
         }
 
         if existingReminder != nil {

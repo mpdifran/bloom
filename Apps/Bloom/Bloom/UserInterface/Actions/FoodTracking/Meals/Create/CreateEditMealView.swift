@@ -79,9 +79,7 @@ struct CreateEditMealView: View {
       .navigationTitle(isEditing ? "Edit Meal" : "New Meal")
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
-          Button("Cancel") {
-            dismiss()
-          }
+          DismissButton()
         }
       }
       .shelf {

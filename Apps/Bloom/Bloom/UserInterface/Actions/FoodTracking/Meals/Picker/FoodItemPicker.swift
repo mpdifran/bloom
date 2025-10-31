@@ -79,9 +79,7 @@ struct FoodItemPicker: View {
       }
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
-          Button("Cancel") {
-            dismiss()
-          }
+          DismissButton()
         }
         ToolbarItem(placement: .principal) {
           MealPicker()

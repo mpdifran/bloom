@@ -11,50 +11,48 @@ import AppUI
 import BloomUI
 
 struct VitalPickerView: View {
-    let excluding: [VitalModel.Kind]
-    let onSelect: (VitalModel) -> Void
+  let excluding: [VitalModel.Kind]
+  let onSelect: (VitalModel) -> Void
 
-    private let vitalsViewModel = VitalsViewModel.shared
+  private let vitalsViewModel = VitalsViewModel.shared
 
-    @Environment(\.dismiss) private var dismiss
+  @Environment(\.dismiss) private var dismiss
 
-    var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading) {
-                    ForEachEnumerated(vitalsViewModel.allVitals) { (index, vital) in
-                        if !excluding.contains(vital.id) {
-                            MiniVitalCell(vital: vital)
-                                .onTapGesture {
-                                    onSelect(vital)
-                                    dismiss()
-                                }
-                                .transition(.scale)
-                                .animation(
-                                    .bouncy
-                                        .delay(Double(100 * index)),
-                                    value: index
-                                )
-                        }
-                    }
+  var body: some View {
+    NavigationStack {
+      ScrollView {
+        VStack(alignment: .leading) {
+          ForEachEnumerated(vitalsViewModel.allVitals) { (index, vital) in
+            if !excluding.contains(vital.id) {
+              MiniVitalCell(vital: vital)
+                .onTapGesture {
+                  onSelect(vital)
+                  dismiss()
                 }
-                .horizontalAlignment(.leading)
-                .padding()
+                .transition(.scale)
+                .animation(
+                  .bouncy
+                    .delay(Double(100 * index)),
+                  value: index
+                )
             }
-            .navigationTitle("Pick a Vital")
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        dismiss()
-                    }
-                }
-            }
+          }
         }
+        .horizontalAlignment(.leading)
+        .padding()
+      }
+      .navigationTitle("Pick a Vital")
+      .toolbar {
+        ToolbarItem(placement: .cancellationAction) {
+          DismissButton()
+        }
+      }
     }
+  }
 }
 
 #Preview {
-    VitalPickerView(excluding: [.bodyComposition]) { (_) in
-        
-    }
+  VitalPickerView(excluding: [.bodyComposition]) { (_) in
+
+  }
 }
