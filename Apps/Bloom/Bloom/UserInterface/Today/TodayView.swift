@@ -39,6 +39,7 @@ struct TodayView: View {
 
   @ObservedObject private var habitsViewModel = HabitsViewModel.shared
   @ObservedObject private var remindersManager = RemindersManager.shared
+  @ObservedObject private var entitlementController = EntitlementController.shared
   @State private var todayViewModel = ViewModel.shared
   @State private var vitalsViewModel = VitalsViewModel.shared
 
@@ -139,6 +140,7 @@ struct TodayView: View {
       .alert(alertDetails: $alertDetails)
     }
     .animation(.default, value: todayViewModel.todayContent)
+    .animation(.default, value: habits)
     .animation(.default, value: todayViewModel.isLoadingContent)
     .animation(.default, value: todayViewModel.hasLoadError)
     .animation(.default, value: getBloomPlusHasDismissed)
@@ -503,6 +505,28 @@ private extension TodayView {
         .tint(.red)
       }
     }
+
+    if remainingMetrics.isNotEmpty {
+      SettingsAddHabitCell()
+        .onTapGesture {
+          // Check if user has reached their goal limit
+          if let maxGoals = entitlementController.maxGoals, habits.count >= maxGoals {
+            EntitledPresent(presentedSheet: $presentedSheet) {
+              NewGoalCard()
+            }
+          } else {
+            presentedSheet = NewGoalCard().asAny
+          }
+        }
+    }
+  }
+
+  var remainingMetrics: [TargetMetric] {
+    TargetMetric.allCases.filter({ targetMetric in
+      !habits.contains(where: { habit in
+        habit.targetMetric == targetMetric
+      })
+    })
   }
 }
 
