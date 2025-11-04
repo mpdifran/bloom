@@ -161,16 +161,14 @@ public extension HealthStoreFetcher {
     for sampleType: HKSampleType,
     dateRange: DateRange,
     writtenByApp: Bool = false
-  ) async -> [HKSample] {
+  ) async throws -> [HKSample] {
     // Source is the current app.
     let predicateFromApp = HKQuery.predicateForObjects(from: HKSource.default())
-    return (
-      try? await healthStore.fetchSamples(
-        for: sampleType,
-        dateRange: dateRange,
-        additionalPredicates: writtenByApp ? [predicateFromApp] : []
-      )
-    ) ?? []
+    return try await healthStore.fetchSamples(
+      for: sampleType,
+      dateRange: dateRange,
+      additionalPredicates: writtenByApp ? [predicateFromApp] : []
+    )
   }
 
   func fetchNetEnergy(dateRange: DateRange) async -> [DateQuantitySample] {
@@ -988,16 +986,18 @@ public extension HealthStoreFetcher {
       let duration = workout.duration / 60 // Convert to minutes
       
       // Fetch effort scores for this workout
-      let userEffortScore = (await fetchSamples(
+      let userEffortSamples = try? await fetchSamples(
         for: HKQuantityType(.workoutEffortScore),
         dateRange: DateRange(workout.startDate, workout.endDate)
-      ) as? [HKQuantitySample])?.first?.quantity.doubleValue(for: .appleEffortScore())
-      
-      let estimatedEffortScore = (await fetchSamples(
+      ) as? [HKQuantitySample]
+      let userEffortScore = userEffortSamples?.first?.quantity.doubleValue(for: .appleEffortScore())
+
+      let estimatedEffortSamples = try? await fetchSamples(
         for: HKQuantityType(.estimatedWorkoutEffortScore),
         dateRange: DateRange(workout.startDate, workout.endDate)
-      ) as? [HKQuantitySample])?.first?.quantity.doubleValue(for: .appleEffortScore())
-      
+      ) as? [HKQuantitySample]
+      let estimatedEffortScore = estimatedEffortSamples?.first?.quantity.doubleValue(for: .appleEffortScore())
+
       // Use user score if available, otherwise estimated score
       if let effortScore = userEffortScore ?? estimatedEffortScore {
         let workoutLoad = effortScore * duration

@@ -22,6 +22,9 @@ public final actor HealthStoreModifier {
   private let healthStore = HKHealthStore()
   private let foodItemLogModel = FoodItemLogModelActor(modelContainer: ContainerHolder.shared.container)
 
+  // Queue of pending updates to prevent race conditions
+  private var updateQueue: [Date: [CheckedContinuation<Void, Error>]] = [:]
+
   private init() { }
 }
 
@@ -56,11 +59,46 @@ public extension HealthStoreModifier {
 public extension HealthStoreModifier {
 
   func updateNutrition(for date: Date) async throws {
-    // Fetch logs from local database.
-    let foodLogs = try await foodItemLogModel.fetchLogs(for: date)
-    
-    // Perform bulk deletion and insertion in a more efficient manner
-    try await performBulkNutritionUpdate(for: date, with: foodLogs)
+    // Normalize date to start of day to ensure consistency
+    let normalizedDate = Calendar.current.startOfDay(for: date)
+
+    // Add ourselves to the queue and wait for our turn
+    let wasEmpty = updateQueue[normalizedDate]?.isEmpty ?? true
+
+    try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+      updateQueue[normalizedDate, default: []].append(continuation)
+
+      // If queue was empty before we added ourselves, we're first - start processing
+      if wasEmpty {
+        Task {
+          await processUpdateQueue(for: normalizedDate)
+        }
+      }
+    }
+  }
+
+  private func processUpdateQueue(for date: Date) async {
+    // Process queue entries one at a time until empty
+    while let continuation = updateQueue[date]?.first {
+      do {
+        // Fetch latest data from database
+        let foodLogs = try await foodItemLogModel.fetchLogs(for: date)
+
+        // Perform bulk deletion and insertion
+        try await performBulkNutritionUpdate(for: date, with: foodLogs)
+
+        // Success - remove from queue and resume the waiting call
+        updateQueue[date]?.removeFirst()
+        continuation.resume()
+      } catch {
+        // Error - remove from queue and propagate error
+        updateQueue[date]?.removeFirst()
+        continuation.resume(throwing: error)
+      }
+    }
+
+    // Queue is empty, clean up
+    updateQueue[date] = nil
   }
 }
 
@@ -134,7 +172,7 @@ public extension HealthStoreModifier {
 
     let normalizedDate = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: date) ?? date
 
-    let existingSamples = await HealthStoreFetcher.shared.fetchSamples(
+    let existingSamples = try await HealthStoreFetcher.shared.fetchSamples(
       for: HKCategoryType(.menstrualFlow),
       dateRange: .duringDay(date)
     )
@@ -188,11 +226,11 @@ private extension HealthStoreModifier {
     var samplesToDelete: [HKSample] = []
     
     // Fetch all existing samples for the day in parallel
-    await withTaskGroup(of: [HKSample].self) { group in
+    try await withThrowingTaskGroup(of: [HKSample].self) { group in
       for nutrientType in FoodItemNutrient.allCases {
         group.addTask {
           let type = HKQuantityType(nutrientType.identifier)
-          let samples = await HealthStoreFetcher.shared.fetchSamples(
+          let samples = try await HealthStoreFetcher.shared.fetchSamples(
             for: type,
             dateRange: .duringDay(date),
             writtenByApp: true
@@ -200,8 +238,8 @@ private extension HealthStoreModifier {
           return samples
         }
       }
-      
-      for await samples in group {
+
+      for try await samples in group {
         samplesToDelete.append(contentsOf: samples)
       }
     }

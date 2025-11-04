@@ -79,10 +79,10 @@ actor BiologicalAgeHealthContextCalculator {
   }
   
   private func fetchRestingHeartRate(dateRange: DateRange) async -> BiologicalAgeHealthData.CardiovascularHealth.HeartRateMetric? {
-    let samples = await healthStoreFetcher.fetchSamples(
+    let samples = ((try? await healthStoreFetcher.fetchSamples(
       for: HKQuantityType(.restingHeartRate),
       dateRange: dateRange
-    ).compactMap { $0 as? HKQuantitySample }
+    )) ?? []).compactMap { $0 as? HKQuantitySample }
 
     guard !samples.isEmpty else { return nil }
 
@@ -99,10 +99,10 @@ actor BiologicalAgeHealthContextCalculator {
   }
   
   private func fetchHeartRateVariability(dateRange: DateRange) async -> BiologicalAgeHealthData.CardiovascularHealth.HRVMetric? {
-    let samples = await healthStoreFetcher.fetchSamples(
+    let samples = ((try? await healthStoreFetcher.fetchSamples(
       for: HKQuantityType(.heartRateVariabilitySDNN),
       dateRange: dateRange
-    ).compactMap { $0 as? HKQuantitySample }
+    )) ?? []).compactMap { $0 as? HKQuantitySample }
 
     guard !samples.isEmpty else { return nil }
 
@@ -133,10 +133,10 @@ actor BiologicalAgeHealthContextCalculator {
   }
   
   private func fetchHeartRateRecovery(dateRange: DateRange) async -> BiologicalAgeHealthData.MetricValue? {
-    let samples = await healthStoreFetcher.fetchSamples(
+    let samples = ((try? await healthStoreFetcher.fetchSamples(
       for: HKQuantityType(.heartRateRecoveryOneMinute),
       dateRange: dateRange
-    ).compactMap { $0 as? HKQuantitySample }
+    )) ?? []).compactMap { $0 as? HKQuantitySample }
 
     guard !samples.isEmpty else { return nil }
 
@@ -247,10 +247,10 @@ actor BiologicalAgeHealthContextCalculator {
   }
 
   private func fetchWalkingSteadiness(dateRange: DateRange) async -> BiologicalAgeHealthData.MetricValue? {
-    let samples = await healthStoreFetcher.fetchSamples(
+    let samples = ((try? await healthStoreFetcher.fetchSamples(
       for: HKQuantityType(.appleWalkingSteadiness),
       dateRange: dateRange
-    ).compactMap { $0 as? HKQuantitySample }
+    )) ?? []).compactMap { $0 as? HKQuantitySample }
 
     guard !samples.isEmpty else { return nil }
 
@@ -263,10 +263,10 @@ actor BiologicalAgeHealthContextCalculator {
   }
 
   private func fetchWalkingSpeed(dateRange: DateRange) async -> BiologicalAgeHealthData.MetricValue? {
-    let samples = await healthStoreFetcher.fetchSamples(
+    let samples = ((try? await healthStoreFetcher.fetchSamples(
       for: HKQuantityType(.walkingSpeed),
       dateRange: dateRange
-    ).compactMap { $0 as? HKQuantitySample }
+    )) ?? []).compactMap { $0 as? HKQuantitySample }
 
     guard !samples.isEmpty else { return nil }
 
@@ -281,10 +281,10 @@ actor BiologicalAgeHealthContextCalculator {
   }
 
   private func fetchDoubleSupportPercentage(dateRange: DateRange) async -> BiologicalAgeHealthData.MetricValue? {
-    let samples = await healthStoreFetcher.fetchSamples(
+    let samples = ((try? await healthStoreFetcher.fetchSamples(
       for: HKQuantityType(.walkingDoubleSupportPercentage),
       dateRange: dateRange
-    ).compactMap { $0 as? HKQuantitySample }
+    )) ?? []).compactMap { $0 as? HKQuantitySample }
 
     guard !samples.isEmpty else { return nil }
 
@@ -297,10 +297,10 @@ actor BiologicalAgeHealthContextCalculator {
   }
 
   private func fetchWalkingAsymmetryPercentage(dateRange: DateRange) async -> BiologicalAgeHealthData.MetricValue? {
-    let samples = await healthStoreFetcher.fetchSamples(
+    let samples = ((try? await healthStoreFetcher.fetchSamples(
       for: HKQuantityType(.walkingAsymmetryPercentage),
       dateRange: dateRange
-    ).compactMap { $0 as? HKQuantitySample }
+    )) ?? []).compactMap { $0 as? HKQuantitySample }
 
     guard !samples.isEmpty else { return nil }
 
@@ -313,10 +313,10 @@ actor BiologicalAgeHealthContextCalculator {
   }
 
   private func fetchSixMinuteWalkDistance(dateRange: DateRange) async -> BiologicalAgeHealthData.MetricValue? {
-    let samples = await healthStoreFetcher.fetchSamples(
+    let samples = ((try? await healthStoreFetcher.fetchSamples(
       for: HKQuantityType(.sixMinuteWalkTestDistance),
       dateRange: dateRange
-    ).compactMap { $0 as? HKQuantitySample }
+    )) ?? []).compactMap { $0 as? HKQuantitySample }
 
     guard !samples.isEmpty else { return nil }
 
@@ -329,10 +329,10 @@ actor BiologicalAgeHealthContextCalculator {
   }
 
   private func fetchStairAscentSpeed(dateRange: DateRange) async -> BiologicalAgeHealthData.MetricValue? {
-    let samples = await healthStoreFetcher.fetchSamples(
+    let samples = ((try? await healthStoreFetcher.fetchSamples(
       for: HKQuantityType(.stairAscentSpeed),
       dateRange: dateRange
-    ).compactMap { $0 as? HKQuantitySample }
+    )) ?? []).compactMap { $0 as? HKQuantitySample }
 
     guard !samples.isEmpty else { return nil }
 
@@ -347,10 +347,10 @@ actor BiologicalAgeHealthContextCalculator {
   }
 
   private func fetchStairDescentSpeed(dateRange: DateRange) async -> BiologicalAgeHealthData.MetricValue? {
-    let samples = await healthStoreFetcher.fetchSamples(
+    let samples = ((try? await healthStoreFetcher.fetchSamples(
       for: HKQuantityType(.stairDescentSpeed),
       dateRange: dateRange
-    ).compactMap { $0 as? HKQuantitySample }
+    )) ?? []).compactMap { $0 as? HKQuantitySample }
 
     guard !samples.isEmpty else { return nil }
 
@@ -613,10 +613,10 @@ actor BiologicalAgeHealthContextCalculator {
   private func fetchLatestWeight() async -> BiologicalAgeHealthData.MetricValue? {
     let dateRange = DateRange.trailingDaysFromNow(30)
 
-    let samples = await healthStoreFetcher.fetchSamples(
+    let samples = ((try? await healthStoreFetcher.fetchSamples(
       for: HKQuantityType(.bodyMass),
       dateRange: dateRange
-    ).compactMap { $0 as? HKQuantitySample }
+    )) ?? []).compactMap { $0 as? HKQuantitySample }
 
     guard !samples.isEmpty else { return nil }
 
@@ -631,10 +631,10 @@ actor BiologicalAgeHealthContextCalculator {
   private func fetchLatestBMI() async -> BiologicalAgeHealthData.MetricValue? {
     let dateRange = DateRange.trailingDaysFromNow(30)
 
-    let samples = await healthStoreFetcher.fetchSamples(
+    let samples = ((try? await healthStoreFetcher.fetchSamples(
       for: HKQuantityType(.bodyMassIndex),
       dateRange: dateRange
-    ).compactMap { $0 as? HKQuantitySample }
+    )) ?? []).compactMap { $0 as? HKQuantitySample }
 
     guard !samples.isEmpty else { return nil }
 
@@ -649,10 +649,10 @@ actor BiologicalAgeHealthContextCalculator {
   private func fetchLatestBodyFat() async -> BiologicalAgeHealthData.MetricValue? {
     let dateRange = DateRange.trailingDaysFromNow(30)
 
-    let samples = await healthStoreFetcher.fetchSamples(
+    let samples = ((try? await healthStoreFetcher.fetchSamples(
       for: HKQuantityType(.bodyFatPercentage),
       dateRange: dateRange
-    ).compactMap { $0 as? HKQuantitySample }
+    )) ?? []).compactMap { $0 as? HKQuantitySample }
 
     guard !samples.isEmpty else { return nil }
 

@@ -128,10 +128,10 @@ private extension CycleTrackingActionCardView {
 private extension CycleTrackingActionCardView {
 
   func loadExistingSampleAndSetState() async {
-    let existingSamples = await HealthStoreFetcher.shared.fetchSamples(
+    let existingSamples = (try? await HealthStoreFetcher.shared.fetchSamples(
       for: HKCategoryType(.menstrualFlow),
       dateRange: .duringDay(date)
-    )
+    )) ?? []
 
     guard
       let firstSample = existingSamples.first as? HKCategorySample,

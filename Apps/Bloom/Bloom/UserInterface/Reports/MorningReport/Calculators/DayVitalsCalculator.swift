@@ -479,16 +479,16 @@ private extension DayVitalsCalculator {
       let duration = workout.duration / 60 // Convert to minutes
       
       // Fetch user-provided effort score for this workout
-      let userEffortScore = (await HealthStoreFetcher.shared.fetchSamples(
+      let userEffortScore = ((try? await HealthStoreFetcher.shared.fetchSamples(
         for: HKQuantityType(.workoutEffortScore),
         dateRange: DateRange(workout.startDate, workout.endDate)
-      ) as? [HKQuantitySample])?.first?.quantity.doubleValue(for: .appleEffortScore())
-      
+      )) as? [HKQuantitySample])?.first?.quantity.doubleValue(for: .appleEffortScore())
+
       // Fetch estimated effort score for this workout
-      let estimatedEffortScore = (await HealthStoreFetcher.shared.fetchSamples(
+      let estimatedEffortScore = ((try? await HealthStoreFetcher.shared.fetchSamples(
         for: HKQuantityType(.estimatedWorkoutEffortScore),
         dateRange: DateRange(workout.startDate, workout.endDate)
-      ) as? [HKQuantitySample])?.first?.quantity.doubleValue(for: .appleEffortScore())
+      )) as? [HKQuantitySample])?.first?.quantity.doubleValue(for: .appleEffortScore())
       
       // Use user score if available, otherwise estimated score
       let effortScore = userEffortScore ?? estimatedEffortScore
@@ -535,10 +535,10 @@ private extension DayVitalsCalculator {
     let previousWeekRange = DateRange.trailingDays(from: date, numberOfDays: 7)
 
     // Fetch mindful sessions for the day
-    let mindfulSessions = await HealthStoreFetcher.shared.fetchSamples(
+    let mindfulSessions = ((try? await HealthStoreFetcher.shared.fetchSamples(
       for: HKCategoryType(.mindfulSession),
       dateRange: dateRange
-    ).compactMap { $0 as? HKCategorySample }
+    )) ?? []).compactMap { $0 as? HKCategorySample }
 
     guard !mindfulSessions.isEmpty else { return nil }
 
@@ -548,10 +548,10 @@ private extension DayVitalsCalculator {
     }
 
     // Fetch previous week data for trend
-    let previousSessions = await HealthStoreFetcher.shared.fetchSamples(
+    let previousSessions = ((try? await HealthStoreFetcher.shared.fetchSamples(
       for: HKCategoryType(.mindfulSession),
       dateRange: previousWeekRange
-    ).compactMap { $0 as? HKCategorySample }
+    )) ?? []).compactMap { $0 as? HKCategorySample }
 
     // Calculate daily averages for previous week
     var dailyMinutes: [Double] = []

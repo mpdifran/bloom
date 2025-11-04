@@ -43,10 +43,10 @@ private extension SleepStageChartView {
 
     func loadSamples() async {
         self.samples = await Task {
-            await HealthStoreFetcher.shared.fetchSamples(
+            (try? await HealthStoreFetcher.shared.fetchSamples(
                 for: HKCategoryType(.sleepAnalysis),
                 dateRange: DateRange(sleepAnalysis.startDate, sleepAnalysis.endDate)
-            )
+            )) ?? []
         }.value
     }
 }
