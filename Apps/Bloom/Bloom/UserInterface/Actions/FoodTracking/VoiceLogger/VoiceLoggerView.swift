@@ -120,7 +120,7 @@ private extension VoiceLoggerView {
     } label: {
       ZStack {
         Circle()
-          .fill(.background)
+          .fill(.mutedOrange)
 //          .fill(Color.orange.opacity(0.3 + (viewModel.audioLevel * 0.5)))
           .frame(width: 160, height: 160)
           .scaleEffect(1.0 + (viewModel.audioLevel * 0.5))
@@ -128,7 +128,7 @@ private extension VoiceLoggerView {
 
         Image(systemSymbol: viewModel.isRecording ? .microphoneFill : .microphoneSlashFill)
           .font(.system(size: 60))
-          .foregroundStyle(Color.orange.opacity(0.3 + (viewModel.audioLevel * 0.5)))
+          .foregroundStyle(Color.invertedText)
       }
     }
     .buttonStyle(.plain)

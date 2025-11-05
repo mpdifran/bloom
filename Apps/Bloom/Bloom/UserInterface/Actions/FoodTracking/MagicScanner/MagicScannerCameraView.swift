@@ -29,6 +29,8 @@ struct MagicScannerCameraView: View {
   @State private var contextText: String = ""
   @State private var showReviewSheet = false
   @State private var selectedPhotoItem: PhotosPickerItem?
+  @State private var mockImage: UIImage?
+  @State private var mockPhotoItem: PhotosPickerItem?
 
   private let cameraManager = CameraManager()
 
@@ -37,25 +39,31 @@ struct MagicScannerCameraView: View {
 
   @StateObject var permissionManager = CameraPermissionManager.shared
 
+  @AppStorage(.FeatureFlag.mockMagicScanner) private var mockMagicScanner = false
+
   @Environment(\.dismiss) private var dismiss
 
   var body: some View {
     NavigationStack {
       Group {
-        switch permissionManager.permissionState {
-        case .granted:
-          cameraView
-        case .denied:
-          CameraPermissionDeniedView()
-            .onAppear {
-              alertDetails = permissionManager.permissionAlert
-            }
-        case .pending:
-          Color.black.edgesIgnoringSafeArea(.all)
-            .overlay {
-              viewfinderView
-            }
-            .ignoresSafeArea()
+        if mockMagicScanner {
+          mockCameraView
+        } else {
+          switch permissionManager.permissionState {
+          case .granted:
+            cameraView
+          case .denied:
+            CameraPermissionDeniedView()
+              .onAppear {
+                alertDetails = permissionManager.permissionAlert
+              }
+          case .pending:
+            Color.black.edgesIgnoringSafeArea(.all)
+              .overlay {
+                viewfinderView
+              }
+              .ignoresSafeArea()
+          }
         }
       }
       .toolbar {
@@ -80,14 +88,31 @@ struct MagicScannerCameraView: View {
     .onAppear {
       TelemetryDeck.signal("magic_scan_camera_opened")
       Task {
-        await permissionManager.checkPermission()
-        if permissionManager.permissionState == .granted {
-          cameraManager.start()
+        if !mockMagicScanner {
+          await permissionManager.checkPermission()
+          if permissionManager.permissionState == .granted {
+            cameraManager.start()
+          }
         }
       }
     }
     .onDisappear {
-      cameraManager.stop()
+      if !mockMagicScanner {
+        cameraManager.stop()
+      }
+    }
+    .task(id: mockPhotoItem) {
+      guard
+        let mockPhotoItem,
+        let image = try? await mockPhotoItem.loadTransferable(type: Data.self),
+        let uiImage = UIImage(data: image)
+      else {
+        return
+      }
+      mockImage = uiImage
+      capturedImage = uiImage
+      showReviewSheet = true
+      TelemetryDeck.signal("magic_scan_photo_captured", parameters: ["source": "mock"])
     }
     .alert(alertDetails: $alertDetails)
     .sheet(isPresented: $showReviewSheet) {
@@ -111,6 +136,47 @@ struct MagicScannerCameraView: View {
 // MARK: Private Methods
 
 private extension MagicScannerCameraView {
+
+  var mockCameraView: some View {
+    ZStack {
+      Color.black
+        .ignoresSafeArea()
+        .overlay {
+          if let mockImage {
+            PhotosPicker(
+              selection: $mockPhotoItem,
+              matching: .images
+            ) {
+              Image(uiImage: mockImage)
+                .resizable()
+                .scaledToFill()
+            }
+            .buttonStyle(.plain)
+          }
+        }
+
+      viewfinderView
+        .ignoresSafeArea()
+
+      if mockImage == nil {
+        PhotosPicker(
+          selection: $mockPhotoItem,
+          matching: .images
+        ) {
+          Label("Select Photo", systemSymbol: .photoOnRectangleAngled)
+            .font(.title2)
+            .bold()
+            .foregroundStyle(.white)
+            .padding()
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
+        }
+        .buttonStyle(.plain)
+        .padding(.bottom, 24)
+        .zStackAlignment(.bottom)
+      }
+    }
+    .ignoresSafeArea()
+  }
 
   var cameraView: some View {
     ZStack {
