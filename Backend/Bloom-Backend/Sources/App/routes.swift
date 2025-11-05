@@ -12,4 +12,8 @@ func routes(_ app: Application) throws {
   try app.register(collection: AdminOpenAIController())
   try app.register(collection: AdminChatController())
   try app.register(collection: HealthReportController())
+
+  // IMPORTANT: Fallback controller must be registered LAST
+  // to avoid catching API endpoints
+  try app.register(collection: FallbackController(app: app))
 }

@@ -25,6 +25,7 @@ public func configure(_ app: Application) async throws {
   try app.setupRedis()
 
   // Middleware
+  app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
 
   // Routes
   app.routes.defaultMaxBodySize = "10mb"
