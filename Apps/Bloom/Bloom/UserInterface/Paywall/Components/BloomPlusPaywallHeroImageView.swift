@@ -9,10 +9,10 @@ import SwiftUI
 
 struct BloomPlusPaywallHeroImageView: View {
   var body: some View {
-    Image(.breakfast)
+    Image(.budLounging)
       .resizable()
       .aspectRatio(contentMode: .fill)
-      .frame(height: 250)
+      .frame(height: 300)
   }
 }
 

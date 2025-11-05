@@ -71,12 +71,12 @@ struct FoodItemReportImageCell: View {
         FoodItemReportImageCell(
           symbol: .vialViewfinder,
           title: "Packaging",
-          image: .constant(.breakfast)
+          image: .constant(.budLounging)
         )
         FoodItemReportImageCell(
           symbol: .textViewfinder,
           title: "Nutrition Label",
-          image: .constant(.breakfast)
+          image: .constant(.budLounging)
         )
       }
     }

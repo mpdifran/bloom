@@ -23,5 +23,5 @@ struct AICameraRoundedImageView: View {
 }
 
 #Preview {
-  AICameraRoundedImageView(image: .breakfast)
+  AICameraRoundedImageView(image: .budLounging)
 }
