@@ -36,8 +36,8 @@ extension Application {
 
   var appleAppSiteAssociationFilepath: String {
       switch environment {
-      case .production: return "Backend/Bloom-Backend/Resources/association-prod.json"
-      case .development: return "Backend/Bloom-Backend/Resources/association-dev.json"
+      case .production: return "Resources/association-prod.json"
+      case .development: return "Resources/association-dev.json"
       default: fatalError("No domain for unknown environment.")
       }
   }
