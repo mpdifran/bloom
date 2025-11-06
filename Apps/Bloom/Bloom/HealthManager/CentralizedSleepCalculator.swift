@@ -18,80 +18,77 @@ actor CentralizedSleepCalculator {
 
   private init() { }
 
-  func calculateSleepSessionsForTodayInsights(for date: Date) async -> [SleepSession] {
-    guard let sleepEndDate = Calendar.current.date(byAdding: .hour, value: 24, to: date) else {
-      return []
-    }
+  func calculateSleepSessionForTodayInsights(for date: Date) async -> SleepSession? {
+    // Search backwards from now to capture the complete sleep session (including any that's ongoing or just ended)
+    let now = Date()
+    let lookbackRange = DateRange.trailingDays(from: now, numberOfDays: 3)
+    let allSleepAnalyses = await healthStoreFetcher.fetchSleepAnalysis(dateRange: lookbackRange)
 
-    let sleepStartDate = date
-    let sleepDateRange = DateRange(sleepStartDate, sleepEndDate)
-    let sleepAnalyses = await healthStoreFetcher.fetchSleepAnalysis(dateRange: sleepDateRange)
+    // For "today's insights", we want last night's sleep which ended TODAY (date + 1 day)
+    // The date parameter represents "yesterday" when called from TodayInsightsManager
+    guard let nextDay = Calendar.current.date(byAdding: .day, value: 1, to: date) else { return nil }
+    let filteredSleepAnalyses = allSleepAnalyses.filter { Calendar.current.isDate($0.endDate, inSameDayAs: nextDay) }
 
-    guard sleepAnalyses.isNotEmpty else { return [] }
+    // Should only get one sleep session for "last night"
+    guard let sleepAnalysis = filteredSleepAnalyses.first else { return nil }
 
+    // Calculate trends based on previous week's sleep
     let previousWeekRange = DateRange.trailingDays(from: date, numberOfDays: 7)
     let previousSleepAnalyses = await healthStoreFetcher.fetchSleepAnalysis(dateRange: previousWeekRange)
 
-    let bedtimeTrends = calculateBedtimeTrends(current: sleepAnalyses, previous: previousSleepAnalyses)
-    let wakeupTrends = calculateWakeupTrends(current: sleepAnalyses, previous: previousSleepAnalyses)
-    let efficiencyTrends = calculateEfficiencyTrends(current: sleepAnalyses, previous: previousSleepAnalyses)
+    let bedtimeTrends = calculateBedtimeTrends(current: [sleepAnalysis], previous: previousSleepAnalyses)
+    let wakeupTrends = calculateWakeupTrends(current: [sleepAnalysis], previous: previousSleepAnalyses)
+    let efficiencyTrends = calculateEfficiencyTrends(current: [sleepAnalysis], previous: previousSleepAnalyses)
 
-    var sleepSessions: [SleepSession] = []
+    // Build the sleep session
+    let totalSleepQuantity = HKQuantity(unit: .minute(), doubleValue: sleepAnalysis.overallMinutes)
+    let totalSleepTime = await totalSleepQuantity.displayString(for: .hour(), formatter: .oneDecimalPlace)
 
-    for (index, sleepAnalysis) in sleepAnalyses.enumerated() {
-      let totalSleepQuantity = HKQuantity(unit: .minute(), doubleValue: sleepAnalysis.overallMinutes)
-      let totalSleepTime = await totalSleepQuantity.displayString(for: .hour(), formatter: .oneDecimalPlace)
+    let deepSleepString = sleepAnalysis.hasDetailedSleepCategories ? await HKQuantity(unit: .minute(), doubleValue: sleepAnalysis.deepSleepMinutes).displayString(for: .minute(), formatter: .noDecimalPlaces) : nil
+    let coreSleepString = sleepAnalysis.hasDetailedSleepCategories ? await HKQuantity(unit: .minute(), doubleValue: sleepAnalysis.coreSleepMinutes).displayString(for: .minute(), formatter: .noDecimalPlaces) : nil
+    let remSleepString = sleepAnalysis.hasDetailedSleepCategories ? await HKQuantity(unit: .minute(), doubleValue: sleepAnalysis.remSleepMinutes).displayString(for: .minute(), formatter: .noDecimalPlaces) : nil
+    let awakeTimeString = sleepAnalysis.hasDetailedSleepCategories ? await HKQuantity(unit: .minute(), doubleValue: sleepAnalysis.awakeSleepMinutes).displayString(for: .minute(), formatter: .noDecimalPlaces) : nil
 
-      let deepSleepString = sleepAnalysis.hasDetailedSleepCategories ? await HKQuantity(unit: .minute(), doubleValue: sleepAnalysis.deepSleepMinutes).displayString(for: .minute(), formatter: .noDecimalPlaces) : nil
-      let coreSleepString = sleepAnalysis.hasDetailedSleepCategories ? await HKQuantity(unit: .minute(), doubleValue: sleepAnalysis.coreSleepMinutes).displayString(for: .minute(), formatter: .noDecimalPlaces) : nil
-      let remSleepString = sleepAnalysis.hasDetailedSleepCategories ? await HKQuantity(unit: .minute(), doubleValue: sleepAnalysis.remSleepMinutes).displayString(for: .minute(), formatter: .noDecimalPlaces) : nil
-      let awakeTimeString = sleepAnalysis.hasDetailedSleepCategories ? await HKQuantity(unit: .minute(), doubleValue: sleepAnalysis.awakeSleepMinutes).displayString(for: .minute(), formatter: .noDecimalPlaces) : nil
+    let heartRateString = sleepAnalysis.averageHeartRate.map { "\(Int($0)) bpm" }
+    let respiratoryRateString = sleepAnalysis.respiratoryRate.average(keyPath: \.averageRespiratoryRate) > 0 ? "\(Int(sleepAnalysis.respiratoryRate.average(keyPath: \.averageRespiratoryRate))) breaths/min" : nil
+    let soundLevelString = sleepAnalysis.averageSoundLevel > 0 ? "\(Int(sleepAnalysis.averageSoundLevel)) dB" : nil
 
-      let heartRateString = sleepAnalysis.averageHeartRate.map { "\(Int($0)) bpm" }
-      let respiratoryRateString = sleepAnalysis.respiratoryRate.average(keyPath: \.averageRespiratoryRate) > 0 ? "\(Int(sleepAnalysis.respiratoryRate.average(keyPath: \.averageRespiratoryRate))) breaths/min" : nil
-      let soundLevelString = sleepAnalysis.averageSoundLevel > 0 ? "\(Int(sleepAnalysis.averageSoundLevel)) dB" : nil
-
-      let wristTemperatureString: String?
-      if let wristTemp = sleepAnalysis.wristTemperature?.averageWristTemperature {
-        let tempQuantity = HKQuantity(unit: .degreeFahrenheit(), doubleValue: wristTemp)
-        wristTemperatureString = await tempQuantity.displayString(for: .degreeFahrenheit(), formatter: .oneDecimalPlace)
-      } else {
-        wristTemperatureString = nil
-      }
-
-      let bedtimeLocalString = formatTimeLocal(sleepAnalysis.startDate)
-      let wakeupTimeLocalString = formatTimeLocal(sleepAnalysis.endDate)
-
-      let sleepEfficiency = calculateSleepEfficiency(sleepAnalysis)
-      let sleepEfficiencyString = sleepEfficiency.map { String(format: "%.1f%%", $0) }
-
-      let bedtimeTrend = index < bedtimeTrends.count ? bedtimeTrends[index] : nil
-      let wakeupTrend = index < wakeupTrends.count ? wakeupTrends[index] : nil
-      let efficiencyTrend = index < efficiencyTrends.count ? efficiencyTrends[index] : nil
-
-      let sleepSession = SleepSession(
-        bedtimeLocal: bedtimeLocalString,
-        wakeupTimeLocal: wakeupTimeLocalString,
-        totalSleepTime: totalSleepTime,
-        sleepScore: sleepAnalysis.overallScore,
-        deepSleep: deepSleepString,
-        coreSleep: coreSleepString,
-        remSleep: remSleepString,
-        awakeTime: awakeTimeString,
-        averageHeartRate: heartRateString,
-        averageRespiratoryRate: respiratoryRateString,
-        averageSoundLevel: soundLevelString,
-        wristTemperature: wristTemperatureString,
-        bedtimeTrend: bedtimeTrend,
-        wakeupTimeTrend: wakeupTrend,
-        sleepEfficiency: sleepEfficiencyString,
-        sleepEfficiencyTrend: efficiencyTrend
-      )
-
-      sleepSessions.append(sleepSession)
+    let wristTemperatureString: String?
+    if let wristTemp = sleepAnalysis.wristTemperature?.averageWristTemperature {
+      let tempQuantity = HKQuantity(unit: .degreeFahrenheit(), doubleValue: wristTemp)
+      wristTemperatureString = await tempQuantity.displayString(for: .degreeFahrenheit(), formatter: .oneDecimalPlace)
+    } else {
+      wristTemperatureString = nil
     }
 
-    return sleepSessions
+    let bedtimeLocalString = formatTimeLocal(sleepAnalysis.startDate)
+    let wakeupTimeLocalString = formatTimeLocal(sleepAnalysis.endDate)
+
+    let sleepEfficiency = calculateSleepEfficiency(sleepAnalysis)
+    let sleepEfficiencyString = sleepEfficiency.map { String(format: "%.1f%%", $0) }
+
+    let bedtimeTrend = bedtimeTrends.first
+    let wakeupTrend = wakeupTrends.first
+    let efficiencyTrend = efficiencyTrends.first
+
+    return SleepSession(
+      bedtimeLocal: bedtimeLocalString,
+      wakeupTimeLocal: wakeupTimeLocalString,
+      totalSleepTime: totalSleepTime,
+      sleepScore: sleepAnalysis.overallScore,
+      deepSleep: deepSleepString,
+      coreSleep: coreSleepString,
+      remSleep: remSleepString,
+      awakeTime: awakeTimeString,
+      averageHeartRate: heartRateString,
+      averageRespiratoryRate: respiratoryRateString,
+      averageSoundLevel: soundLevelString,
+      wristTemperature: wristTemperatureString,
+      bedtimeTrend: bedtimeTrend,
+      wakeupTimeTrend: wakeupTrend,
+      sleepEfficiency: sleepEfficiencyString,
+      sleepEfficiencyTrend: efficiencyTrend
+    )
   }
 
   func calculateSleepMetricsForBiologicalAge(dateRange: DateRange) async -> BiologicalAgeHealthData.SleepMetrics? {

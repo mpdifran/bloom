@@ -9,7 +9,7 @@ import Foundation
 import CoreNetwork
 
 struct SleepData: SendableNetworkModel {
-  let sleepSessions: [SleepSession]
+  let sleepSession: SleepSession
 }
 
 struct SleepSession: SendableNetworkModel {

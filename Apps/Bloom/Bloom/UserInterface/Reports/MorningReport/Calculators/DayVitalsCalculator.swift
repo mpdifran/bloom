@@ -359,11 +359,11 @@ private extension DayVitalsCalculator {
 private extension DayVitalsCalculator {
   
   func generateSleepData(for date: Date) async -> SleepData? {
-    let sleepSessions = await CentralizedSleepCalculator.shared.calculateSleepSessionsForTodayInsights(for: date)
+    guard let sleepSession = await CentralizedSleepCalculator.shared.calculateSleepSessionForTodayInsights(for: date) else {
+      return nil
+    }
 
-    guard sleepSessions.isNotEmpty else { return nil }
-
-    return SleepData(sleepSessions: sleepSessions)
+    return SleepData(sleepSession: sleepSession)
   }
 }
 
