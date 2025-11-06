@@ -36,6 +36,12 @@ struct FoodItemQuery: EntityQuery, EntityStringQuery {
     return frequentFoods.prefix(30).map { FoodItemEntity(from: $0) }
   }
 
+  func defaultResult() async -> FoodItemEntity? {
+    // Return the most frequently logged food item as the default
+    let frequentFoods = try? await suggestedEntities()
+    return frequentFoods?.first
+  }
+
   func entities(matching string: String) async throws -> [FoodItemEntity] {
     // Search backend for food items matching the query string
     let sections = try await NetworkRequester.shared.foodSearch(

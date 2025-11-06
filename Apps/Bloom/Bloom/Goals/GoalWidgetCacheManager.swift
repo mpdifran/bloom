@@ -96,6 +96,16 @@ public final class GoalWidgetCacheManager {
     let calendar = Calendar.current
     let today = Date()
 
+    // Fetch all habits with the same target metric to handle goal changes over time
+    let habitHistory: [Habit]
+    do {
+      habitHistory = try modelContext.fetchHabits(for: goal.targetMetric)
+    } catch {
+      print("Failed to fetch habit history: \(error)")
+      return GoalWidgetData.DailyGridData(weeks: [])
+    }
+
+    let oldestHabit = habitHistory.first
     var weeks: [GoalWidgetData.DailyGridData.Week] = []
 
     for weekOffset in 0..<40 {
@@ -123,8 +133,35 @@ public final class GoalWidgetCacheManager {
           todayIndex = dayOffset
         }
 
+        // Find which habit was active during this day
+        let referenceHabit: Habit?
+        if let habit = habitHistory.first(where: { $0.isDateWithinHabit(date: day) }) {
+          referenceHabit = habit
+        } else if let oldestHabit, day < oldestHabit.startDate {
+          // Day is before oldest habit - use oldest habit's goal for comparison
+          referenceHabit = oldestHabit
+        } else {
+          // No habit active during this day (after all habits ended)
+          referenceHabit = nil
+        }
+
         // Check if goal was met on this day
-        let goalMet = await checkGoalMet(for: goal, on: day, modelContext: modelContext)
+        let goalMet: Bool
+        if let referenceHabit = referenceHabit {
+          // Create date range for the specific day
+          let startOfDay = calendar.startOfDay(for: day)
+          let endOfDay = calendar.endOfDay(for: day)
+          let dateRange = DateRange(startOfDay, endOfDay)
+
+          // Fetch the total quantity for this day from HealthKit
+          let quantity = await goal.targetMetric.fetchTotalQuantity(for: dateRange)
+
+          // Check if the quantity meets the goal
+          goalMet = referenceHabit.quantityMeetsGoal(quantity)
+        } else {
+          goalMet = false
+        }
+
         dayCompletions.append(goalMet)
       }
 
@@ -339,27 +376,6 @@ public final class GoalWidgetCacheManager {
     }
 
     return GoalWidgetData.YearlyGridData(years: years)
-  }
-
-  /// Check if a goal was met on a specific day
-  private func checkGoalMet(for goal: Habit, on date: Date, modelContext: ModelContext) async -> Bool {
-    // Check if the date is within the goal's active period
-    guard goal.isDateWithinHabit(date: date) else {
-      return false
-    }
-
-    // Create date range for the specific day
-    let calendar = Calendar.current
-    let startOfDay = calendar.startOfDay(for: date)
-    let endOfDay = calendar.endOfDay(for: date)
-
-    let dateRange = DateRange(startOfDay, endOfDay)
-
-    // Fetch the total quantity for this day from HealthKit
-    let quantity = await goal.targetMetric.fetchTotalQuantity(for: dateRange)
-
-    // Check if the quantity meets the goal
-    return goal.quantityMeetsGoal(quantity)
   }
 }
 

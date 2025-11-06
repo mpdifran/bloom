@@ -33,6 +33,11 @@ struct GoalEntityQuery: EntityQuery {
     return loadCachedGoals()
   }
 
+  func defaultResult() async -> GoalEntity? {
+    // Return the first available goal as the default selection
+    return loadCachedGoals().first
+  }
+
   private func loadCachedGoals() -> [GoalEntity] {
     guard let data = UserDefaults.group.data(forKey: "GoalWidgetCache.AllGoals"),
           let goalIds = try? JSONDecoder().decode([String].self, from: data) else {

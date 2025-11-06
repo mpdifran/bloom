@@ -44,4 +44,10 @@ struct MealQuery: EntityQuery {
     let allMeals = try await modelActor.fetchAllMealRecords()
     return allMeals.map { MealEntity(from: $0) }
   }
+
+  func defaultResult() async -> MealEntity? {
+    // Return the first saved meal as the default
+    let meals = try? await suggestedEntities()
+    return meals?.first
+  }
 }
