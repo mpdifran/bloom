@@ -422,9 +422,9 @@ public extension SleepAnalysis {
       }
     }
 
-    if overallScoreDouble < 4 {
+    if overallScoreDouble < 40 {
       results.append("Your sleep score indicates you should take it slow and make time for recovery.")
-    } else if overallScoreDouble < 6 {
+    } else if overallScoreDouble < 60 {
       results.append("Your sleep score indicates you should take it easy today.")
     } else {
       results.append("Your sleep score indicates you're ready to tackle the day!")

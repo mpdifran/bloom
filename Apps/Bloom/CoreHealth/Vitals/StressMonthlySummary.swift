@@ -326,7 +326,7 @@ public extension StressMonthlySummary.Details {
       let sleepAnalysis = sleepAnalyses.first(where: { Calendar.current.isDate($0.endDate, inSameDayAs: date) })
     else { return nil }
 
-    let score = sleepAnalysis.overallScoreDouble.scaledSymmetricalScore(lower: 5, upper: 10)
+    let score = sleepAnalysis.overallScoreDouble.scaledSymmetricalScore(lower: 50, upper: 100)
 
     //        print("SLEEP STRESS DEBUG \(sleepAnalysis.endDate) Sleep score: \(sleepAnalysis.overallScoreDouble.format(using: .oneDecimalPlace)) Score: \(score.format(using: .twoDecimalPlaces))")
 

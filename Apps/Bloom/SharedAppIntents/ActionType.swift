@@ -152,7 +152,7 @@ enum ActionType: String, AppEnum, CaseIterable {
     case .magicScan:
       return .mutedPurple
     case .logVoice:
-      return .orange
+      return .mutedOrange
     }
   }
 

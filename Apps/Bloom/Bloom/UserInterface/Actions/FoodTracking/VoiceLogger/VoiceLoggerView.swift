@@ -152,6 +152,7 @@ private extension VoiceLoggerView {
     }
     .buttonStyle(.primary)
     .disabled(viewModel.transcript.isEmpty)
+    .tint(.mutedOrange)
   }
 }
 
