@@ -22,6 +22,11 @@ struct LogMealEntry: TimelineEntry {
   let foodItemNames: String?
   let servingsDescription: String
 
+  // State tracking
+  let isLogged: Bool
+  let loggedFoodItemLogId: String?
+  let mealOption: MealOption
+
   // Intent data for the toggle
   let intent: LogMealToggleIntent
 }

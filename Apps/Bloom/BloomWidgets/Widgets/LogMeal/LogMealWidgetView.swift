@@ -70,6 +70,29 @@ struct LogMealWidgetView: View {
     }
     .unredacted()
     .tint(.mutedGreen)
+    .widgetURL(widgetURL)
+  }
+
+  private var widgetURL: URL? {
+    if entry.isLogged, let logId = entry.loggedFoodItemLogId {
+      // Food is logged - open the existing log details
+      return URL(string: "https://api.trybloom.app/nutrition/food-item-log/\(logId)")
+    } else {
+      // Food is not logged - open food item or meal details to create a new log
+      switch entry.intent.kind {
+      case .singleFoodItem:
+        if let foodItemId = entry.intent.foodItem?.id {
+          return URL(string: "https://api.trybloom.app/nutrition/food-item/\(foodItemId)")
+        }
+      case .savedMeal:
+        if let mealId = entry.intent.savedMeal?.id {
+          return URL(string: "https://api.trybloom.app/nutrition/saved-meal/\(mealId)")
+        }
+      }
+
+      // Fallback to just opening nutrition tab
+      return URL(string: "https://api.trybloom.app/nutrition")
+    }
   }
 }
 
@@ -127,7 +150,7 @@ private extension LogMealWidgetView {
   }
 
   var addButton: some View {
-    Toggle(isOn: false, intent: entry.intent) {
+    Toggle(isOn: entry.isLogged, intent: entry.intent) {
       EmptyView()
     }
     .toggleStyle(LogMealToggleStyle())

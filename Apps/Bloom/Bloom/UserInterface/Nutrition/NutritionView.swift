@@ -47,9 +47,7 @@ struct NutritionView: View {
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
           Button {
-            presentedSheet = FoodLoggingActionCardView(performDismiss: {
-              presentedSheet = nil
-            }).asAny
+            presentedSheet = FoodLoggingActionCardView().asAny
           } label: {
             Image(systemSymbol: .plus)
               .bold()
@@ -62,6 +60,54 @@ struct NutritionView: View {
     }
     .animation(.easeInOut, value: nutritionViewModel.date)
     .sheet($presentedSheet)
+    .onChange(of: tabController.pendingFoodItemLogNavigation) { oldValue, newValue in
+      if let logId = newValue {
+        // Fetch the food item log
+        if let foodItemLog = try? modelContext.fetchFoodItemLog(id: logId) {
+          // Show different views based on whether it's a single item or multi-item meal
+          if foodItemLog.hasSingleServing, let serving = foodItemLog.firstFoodItemServing, let foodItem = serving.foodItem {
+            // Single food item - show food item details
+            presentedSheet = FoodItemDetailsView(
+              foodItem: foodItem.asNetworkFoodItem(),
+              existingFoodItemLog: foodItemLog
+            ).asAny
+          } else {
+            // Multi-item meal - show meal details
+            presentedSheet = FoodItemLogDetailsView(foodItemLog: foodItemLog).asAny
+          }
+        }
+        tabController.pendingFoodItemLogNavigation = nil
+      }
+    }
+    .onChange(of: tabController.pendingFoodItemNavigation) { oldValue, newValue in
+      if let foodItemId = newValue {
+        // Fetch the food item from the database
+        if let foodItemRecord = try? modelContext.fetchFirstFoodItem(for: foodItemId) {
+          // Show food item details without an existing log
+          presentedSheet = FoodItemDetailsView(
+            foodItem: foodItemRecord.asNetworkFoodItem(),
+            existingFoodItemLog: nil
+          ).asAny
+        }
+        tabController.pendingFoodItemNavigation = nil
+      }
+    }
+    .onChange(of: tabController.pendingSavedMealNavigation) { oldValue, newValue in
+      if let mealId = newValue {
+        // Fetch the saved meal and show details
+        Task {
+          let mealActor = MealRecordModelActor.standard()
+          if let mealDTO = try? await mealActor.fetchMealRecord(for: mealId) {
+            // For saved meals, we need to show the meal in a way the user can log it
+            // Since there's no single food item, we'll need to show the food logging action
+            // with the meal pre-selected, or create a temporary meal log view
+            // For now, let's just open the food logging action card
+            presentedSheet = FoodLoggingActionCardView().asAny
+          }
+          tabController.pendingSavedMealNavigation = nil
+        }
+      }
+    }
     .tabItem {
       Label("Nutrition", image: .nutritionTab)
     }
@@ -123,9 +169,7 @@ private extension NutritionView {
             presentedSheet = FoodItemLogDetailsView(foodItemLog: foodItemLog).asAny
           } onLogTapped: {
             nutritionViewModel.suggestedMeal = meal
-            presentedSheet = FoodLoggingActionCardView(performDismiss: {
-              presentedSheet = nil
-            }).asAny
+            presentedSheet = FoodLoggingActionCardView().asAny
           }
           .padding(.vertical)
         }

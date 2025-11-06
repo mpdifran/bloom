@@ -67,6 +67,9 @@ final class TabController {
   var toggleToDismiss = false
   var pendingVitalNavigation: VitalModel.Kind?
   var pendingGoalNavigation: String?
+  var pendingFoodItemLogNavigation: String?
+  var pendingFoodItemNavigation: String?
+  var pendingSavedMealNavigation: String?
 
   private var notificationCenterDelegate: NotificationCenterDelegate!
 

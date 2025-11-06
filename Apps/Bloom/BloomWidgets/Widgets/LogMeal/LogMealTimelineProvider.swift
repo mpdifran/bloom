@@ -27,6 +27,9 @@ struct LogMealTimelineProvider: AppIntentTimelineProvider {
       fatGrams: 3,
       foodItemNames: nil,
       servingsDescription: "1 serving",
+      isLogged: false,
+      loggedFoodItemLogId: nil,
+      mealOption: .automatic,
       intent: LogMealToggleIntent(
         kind: .singleFoodItem,
         foodItem: nil,
@@ -43,36 +46,49 @@ struct LogMealTimelineProvider: AppIntentTimelineProvider {
 
   func timeline(for configuration: LogMealConfigurationIntent, in context: Context) async -> Timeline<LogMealEntry> {
     let entry = await makeEntry(from: configuration)
-    return Timeline(entries: [entry], policy: .never)
+
+    // Calculate next midnight to reset the logged state
+    let nextMidnight = Calendar.current.startOfDay(for: Date().addingTimeInterval(86400)) // Tomorrow at midnight
+
+    return Timeline(entries: [entry], policy: .after(nextMidnight))
   }
 
-  private func calculateRelevance(for meal: MealOption, at date: Date) -> TimelineEntryRelevance? {
+  private func calculateRelevance(for meal: MealOption, at date: Date, isLogged: Bool) -> TimelineEntryRelevance? {
     let hour = Calendar.current.component(.hour, from: date)
+
+    var baseScore: Float
 
     switch meal {
     case .automatic:
       // Automatic mode adapts to current time, medium priority
-      return TimelineEntryRelevance(score: 0.5)
+      baseScore = 0.5
 
     case .snack:
       // Snacks have no specific time window, medium priority
-      return TimelineEntryRelevance(score: 0.5)
+      baseScore = 0.5
 
     case .breakfast:
       // Breakfast window: 6:00 AM - 10:59 AM
       let isInWindow = (6..<11).contains(hour)
-      return TimelineEntryRelevance(score: isInWindow ? 1.0 : 0.0)
+      baseScore = isInWindow ? 1.0 : 0.0
 
     case .lunch:
       // Lunch window: 11:00 AM - 3:59 PM
       let isInWindow = (11..<16).contains(hour)
-      return TimelineEntryRelevance(score: isInWindow ? 1.0 : 0.0)
+      baseScore = isInWindow ? 1.0 : 0.0
 
     case .dinner:
       // Dinner window: 4:00 PM - 11:59 PM
       let isInWindow = (16..<24).contains(hour)
-      return TimelineEntryRelevance(score: isInWindow ? 1.0 : 0.0)
+      baseScore = isInWindow ? 1.0 : 0.0
     }
+
+    // Reduce priority if already logged
+    if isLogged {
+      baseScore *= 0.3
+    }
+
+    return TimelineEntryRelevance(score: baseScore)
   }
 
   private func makeEntry(from configuration: LogMealConfigurationIntent) async -> LogMealEntry {
@@ -87,6 +103,14 @@ struct LogMealTimelineProvider: AppIntentTimelineProvider {
     var totalFat: Double = 0
     var foodItemNames: String? = nil
 
+    // Check if food has been logged today
+    var isLogged = false
+    var loggedFoodItemLogId: String? = nil
+    let modelContext = ContainerHolder.shared.createContext()
+
+    // Convert meal option to actual meal for filtering
+    let targetMeal = meal.toMeal()
+
     switch kind {
     case .singleFoodItem:
       if let foodItem = configuration.foodItem {
@@ -94,6 +118,17 @@ struct LogMealTimelineProvider: AppIntentTimelineProvider {
         totalProtein = (foodItem.protein ?? 0) * servings
         totalCarbs = (foodItem.carbs ?? 0) * servings
         totalFat = (foodItem.fat ?? 0) * servings
+
+        // Check if this food item has been logged today
+        if let logs = try? modelContext.fetchFoodItemLogsToday(foodItemId: foodItem.id), !logs.isEmpty {
+          // Filter by meal type if not automatic
+          let filteredLogs = meal == .automatic ? logs : logs.filter { $0.meal == targetMeal }
+
+          if !filteredLogs.isEmpty {
+            isLogged = true
+            loggedFoodItemLogId = filteredLogs.first?.id
+          }
+        }
       }
 
     case .savedMeal:
@@ -117,6 +152,20 @@ struct LogMealTimelineProvider: AppIntentTimelineProvider {
             let names = mealDTO.items.compactMap { $0.foodItem?.name }
             let formatter = ListFormatter()
             foodItemNames = formatter.string(from: names)
+          }
+
+          // Check if all food items in this meal have been logged today
+          let foodItemIds = mealDTO.items.compactMap { $0.foodItem?.id }
+          if !foodItemIds.isEmpty,
+             let logs = try? modelContext.fetchFoodItemLogsToday(foodItemIds: foodItemIds),
+             !logs.isEmpty {
+            // Filter by meal type if not automatic
+            let filteredLogs = meal == .automatic ? logs : logs.filter { $0.meal == targetMeal }
+
+            if !filteredLogs.isEmpty {
+              isLogged = true
+              loggedFoodItemLogId = filteredLogs.first?.id
+            }
           }
         }
       }
@@ -155,8 +204,8 @@ struct LogMealTimelineProvider: AppIntentTimelineProvider {
       servings: servings
     )
 
-    // Calculate relevance based on meal selection and current time
-    let relevance = calculateRelevance(for: meal, at: Date())
+    // Calculate relevance based on meal selection, current time, and logged state
+    let relevance = calculateRelevance(for: meal, at: Date(), isLogged: isLogged)
 
     return LogMealEntry(
       date: Date(),
@@ -169,6 +218,9 @@ struct LogMealTimelineProvider: AppIntentTimelineProvider {
       fatGrams: totalFat,
       foodItemNames: foodItemNames,
       servingsDescription: servingsDescription,
+      isLogged: isLogged,
+      loggedFoodItemLogId: loggedFoodItemLogId,
+      mealOption: meal,
       intent: intent
     )
   }

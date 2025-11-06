@@ -41,6 +41,9 @@ struct LogMealWidget: Widget {
     fatGrams: 2,
     foodItemNames: nil,
     servingsDescription: "1 serving",
+    isLogged: false,
+    loggedFoodItemLogId: nil,
+    mealOption: .breakfast,
     intent: LogMealToggleIntent(
       kind: .singleFoodItem,
       foodItem: FoodItemEntity(
@@ -74,6 +77,9 @@ struct LogMealWidget: Widget {
     fatGrams: 17,
     foodItemNames: "Oatmeal, Blueberries, and Almonds",
     servingsDescription: "1 serving",
+    isLogged: false,
+    loggedFoodItemLogId: nil,
+    mealOption: .breakfast,
     intent: LogMealToggleIntent(
       kind: .savedMeal,
       foodItem: nil,

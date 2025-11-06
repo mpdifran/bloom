@@ -234,6 +234,8 @@ private extension RootView {
       Delay(600) {
         tabController.pendingVitalNavigation = .cardioFitness
       }
+    case "/nutrition":
+      tabController.activeTab = .nutrition
     default:
       // Handle goal deep links: /goals/{goalId}
       if path.hasPrefix("/goals/") {
@@ -241,6 +243,24 @@ private extension RootView {
         tabController.activeTab = .today
         Delay(600) {
           tabController.pendingGoalNavigation = goalId
+        }
+      } else if path.hasPrefix("/nutrition/food-item-log/") {
+        let logId = String(path.dropFirst("/nutrition/food-item-log/".count))
+        tabController.activeTab = .nutrition
+        Delay(600) {
+          tabController.pendingFoodItemLogNavigation = logId
+        }
+      } else if path.hasPrefix("/nutrition/food-item/") {
+        let foodItemId = String(path.dropFirst("/nutrition/food-item/".count))
+        tabController.activeTab = .nutrition
+        Delay(600) {
+          tabController.pendingFoodItemNavigation = foodItemId
+        }
+      } else if path.hasPrefix("/nutrition/saved-meal/") {
+        let mealId = String(path.dropFirst("/nutrition/saved-meal/".count))
+        tabController.activeTab = .nutrition
+        Delay(600) {
+          tabController.pendingSavedMealNavigation = mealId
         }
       } else {
         wasHandled = false
