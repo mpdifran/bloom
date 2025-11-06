@@ -46,7 +46,8 @@ struct LogActionsConfigurationIntent: WidgetConfigurationIntent {
       ActionEntity(actionType: .logBowelMovement),
       ActionEntity(actionType: .logPeriod),
       ActionEntity(actionType: .barcodeScan),
-      ActionEntity(actionType: .magicScan)
+      ActionEntity(actionType: .magicScan),
+      ActionEntity(actionType: .logVoice)
     ]
   }
 

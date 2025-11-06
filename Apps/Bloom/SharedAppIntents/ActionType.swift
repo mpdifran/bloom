@@ -12,7 +12,7 @@ import SwiftUI
 import CoreHealth
 import BloomFoundation
 
-enum ActionType: String, AppEnum {
+enum ActionType: String, AppEnum, CaseIterable {
   case magicScan
   case barcodeScan
   case logFood

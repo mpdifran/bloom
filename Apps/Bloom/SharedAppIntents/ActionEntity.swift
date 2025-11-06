@@ -42,9 +42,3 @@ struct ActionEntityQuery: EntityQuery {
     ActionType.allCases.map { ActionEntity(actionType: $0) }
   }
 }
-
-extension ActionType: CaseIterable {
-  static var allCases: [ActionType] {
-    [.logFood, .logWater, .logPeriod, .logBowelMovement, .logWeight, .logBloodPressure, .barcodeScan, .magicScan]
-  }
-}
