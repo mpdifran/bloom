@@ -34,9 +34,10 @@ struct GoalWidget: Widget {
     date: .now,
     relevance: TimelineEntryRelevance(score: 0.8),
     goalId: "steps",
-    goalName: "Daily Steps",
+    goalName: "Steps",
     systemImage: "figure.walk",
     colorHex: "#6BDA6B",
+    currentValue: 7543,
     targetValue: 10000,
     targetUnit: "steps",
     timePeriod: "daily",
@@ -66,6 +67,7 @@ struct GoalWidget: Widget {
     goalName: "Heart Rate Zone 5",
     systemImage: "heart.fill",
     colorHex: "#FF4444",
+    currentValue: 12,
     targetValue: 20,
     targetUnit: "min",
     timePeriod: "daily",
@@ -102,6 +104,48 @@ struct GoalWidget: Widget {
   )
 }
 
+#Preview("Weekly Workouts - Small", as: .systemSmall) {
+  GoalWidget()
+} timeline: {
+  GoalEntry(
+    date: .now,
+    relevance: TimelineEntryRelevance(score: 0.8),
+    goalId: "workouts",
+    goalName: "Workouts",
+    systemImage: "figure.run",
+    colorHex: "#FF9500",
+    currentValue: 3,
+    targetValue: 5,
+    targetUnit: "workouts",
+    timePeriod: "weekly",
+    gridData: .weekly(GoalGridWeekModel(
+      weeks: [
+        GoalGridWeekModel.Week(id: 0, isComplete: false),
+        GoalGridWeekModel.Week(id: 1, isComplete: true),
+        GoalGridWeekModel.Week(id: 2, isComplete: false),
+        GoalGridWeekModel.Week(id: 3, isComplete: true, monthLabel: "Apr"),
+        GoalGridWeekModel.Week(id: 4, isComplete: false),
+        GoalGridWeekModel.Week(id: 5, isComplete: true),
+        GoalGridWeekModel.Week(id: 6, isComplete: false),
+        GoalGridWeekModel.Week(id: 7, isComplete: true),
+        GoalGridWeekModel.Week(id: 8, isComplete: true, monthLabel: "May"),
+        GoalGridWeekModel.Week(id: 9, isComplete: false),
+        GoalGridWeekModel.Week(id: 10, isComplete: true),
+        GoalGridWeekModel.Week(id: 11, isComplete: false),
+        GoalGridWeekModel.Week(id: 12, isComplete: true),
+        GoalGridWeekModel.Week(id: 13, isComplete: true),
+        GoalGridWeekModel.Week(id: 14, isComplete: false, monthLabel: "Jun"),
+        GoalGridWeekModel.Week(id: 15, isComplete: true),
+        GoalGridWeekModel.Week(id: 16, isComplete: false),
+        GoalGridWeekModel.Week(id: 17, isComplete: true),
+        GoalGridWeekModel.Week(id: 18, isComplete: true),
+        GoalGridWeekModel.Week(id: 19, isComplete: false, isCurrentWeek: true, monthLabel: "Jul"),
+      ]
+    )),
+    isLoading: false
+  )
+}
+
 #Preview("Weekly Workouts - Medium", as: .systemMedium) {
   GoalWidget()
 } timeline: {
@@ -109,9 +153,10 @@ struct GoalWidget: Widget {
     date: .now,
     relevance: TimelineEntryRelevance(score: 0.8),
     goalId: "workouts",
-    goalName: "Weekly Workouts",
+    goalName: "Workouts",
     systemImage: "figure.run",
     colorHex: "#FF9500",
+    currentValue: 3,
     targetValue: 5,
     targetUnit: "workouts",
     timePeriod: "weekly",
@@ -150,9 +195,10 @@ struct GoalWidget: Widget {
     date: .now,
     relevance: TimelineEntryRelevance(score: 0.8),
     goalId: "sleep",
-    goalName: "Monthly Sleep",
+    goalName: "Sleep",
     systemImage: "bed.double.fill",
     colorHex: "#5E5CE6",
+    currentValue: 178,
     targetValue: 200,
     targetUnit: "hours",
     timePeriod: "monthly",
@@ -183,9 +229,10 @@ struct GoalWidget: Widget {
     date: .now,
     relevance: TimelineEntryRelevance(score: 0.8),
     goalId: "sleep",
-    goalName: "Monthly Sleep",
+    goalName: "Sleep",
     systemImage: "bed.double.fill",
     colorHex: "#5E5CE6",
+    currentValue: 178,
     targetValue: 200,
     targetUnit: "hours",
     timePeriod: "monthly",
@@ -216,9 +263,10 @@ struct GoalWidget: Widget {
     date: .now,
     relevance: TimelineEntryRelevance(score: 0.8),
     goalId: "yearly-steps",
-    goalName: "Yearly Steps",
+    goalName: "Steps",
     systemImage: "figure.walk",
     colorHex: "#32D74B",
+    currentValue: 2800000,
     targetValue: 3650000,
     targetUnit: "steps",
     timePeriod: "yearly",
@@ -245,6 +293,7 @@ struct GoalWidget: Widget {
     goalName: "Steps",
     systemImage: "figure.walk",
     colorHex: "#FF6B6B",
+    currentValue: 0,
     targetValue: 0,
     targetUnit: "",
     timePeriod: "daily",
@@ -263,6 +312,7 @@ struct GoalWidget: Widget {
     goalName: "Steps",
     systemImage: "figure.walk",
     colorHex: "#FF6B6B",
+    currentValue: 0,
     targetValue: 0,
     targetUnit: "",
     timePeriod: "daily",

@@ -19,6 +19,7 @@ struct GoalEntry: TimelineEntry {
   let goalName: String
   let systemImage: String
   let colorHex: String
+  let currentValue: Double
   let targetValue: Double
   let targetUnit: String
   let timePeriod: String

@@ -31,7 +31,10 @@ public struct GoalGridWeek: View {
     GeometryReader { proxy in
       HStack(alignment: .bottom, spacing: spacing) {
         ForEach(Array(model.weeks.enumerated()), id: \.element.id) { columnIndex, week in
-          if recommendedMaxColumnCount(for: proxy.size.width) > (model.weeks.count - columnIndex - 1) {
+          let maxColumns = min(recommendedMaxColumnCount(for: proxy.size.width), model.weeks.count)
+          let visibleColumnIndex = columnIndex - (model.weeks.count - maxColumns)
+
+          if visibleColumnIndex >= 0 {
             VStack(spacing: 0) {
               Spacer(minLength: labelHeight)
 
@@ -46,10 +49,13 @@ public struct GoalGridWeek: View {
           }
         }
       }
-      .overlay {
+      .overlay(alignment: .leading) {
         ZStack {
           ForEach(Array(model.weeks.enumerated()), id: \.element.id) { columnIndex, week in
-            if recommendedMaxColumnCount(for: proxy.size.width) > (model.weeks.count - columnIndex - 1) {
+            let maxColumns = min(recommendedMaxColumnCount(for: proxy.size.width), model.weeks.count)
+            let visibleColumnIndex = columnIndex - (model.weeks.count - maxColumns)
+
+            if visibleColumnIndex >= 0 {
               if let monthLabel = week.monthLabel {
                 Text(monthLabel)
                   .font(.caption)
@@ -57,7 +63,7 @@ public struct GoalGridWeek: View {
                   .foregroundStyle(.secondary)
                   .fixedSize(horizontal: true, vertical: false)
                   .frame(height: labelHeight, alignment: .bottom)
-                  .padding(.leading, CGFloat(columnIndex) * minCellWidth + CGFloat(columnIndex) * spacing)
+                  .padding(.leading, CGFloat(visibleColumnIndex) * (minCellWidth + spacing))
                   .zStackAlignment(.topLeading)
               }
             }
@@ -76,7 +82,6 @@ public extension GoalGridWeek {
   }
 
   func recommendedMaxColumnCount(for width: CGFloat) -> Int {
-    let remainingWidth = width - minCellWidth
-    return Int((remainingWidth / (minCellWidth + spacing)).rounded(.towardZero))
+    return Int(((width + spacing) / (minCellWidth + spacing)).rounded(.down))
   }
 }

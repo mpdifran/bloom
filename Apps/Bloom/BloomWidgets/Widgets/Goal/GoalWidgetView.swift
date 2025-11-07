@@ -18,24 +18,36 @@ struct GoalWidgetView: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 6) {
       // Header with goal info
-      HStack(spacing: 8) {
+      HStack {
         Image(systemSymbol: SFSymbol(rawValue: entry.systemImage))
-          .font(.title2)
+          .font(.subheadline)
+          .layoutPriority(10)
           .foregroundStyle(.tint)
 
-        Text(entry.goalName)
-          .font(.headline)
-          .bold()
-          .lineLimit(2)
+        VStack(alignment: .leading) {
+          Text(entry.goalName)
+            .font(.subheadline)
+            .bold()
+            .lineLimit(1)
+          Text("\(entry.targetValue.format(using: .oneDecimalPlace)) \(entry.targetUnit)")
+            .font(.caption2)
+            .foregroundStyle(.secondary)
+            .lineLimit(1)
+        }
+        .layoutPriority(1)
 
         Spacer(minLength: 0)
 
-        if widgetFamily != .systemSmall, !entry.isLoading {
-          Text("\(formattedTargetValue) \(entry.targetUnit)")
-            .font(.caption)
+        if !entry.isLoading {
+          Text("\(entry.currentValue.format(using: .oneDecimalPlace))")
+            .font(.system(size: 24))
+            .minimumScaleFactor(0.8)
+            .layoutPriority(10)
+            .fontWeight(.heavy)
+            .fontDesign(.rounded)
             .bold()
             .foregroundStyle(.tint)
-            .lineLimit(2)
+            .lineLimit(1)
         }
       }
 
@@ -87,14 +99,6 @@ private extension GoalWidgetView {
   }
 
   // MARK: - Helpers
-
-  var formattedTargetValue: String {
-    if entry.targetValue.truncatingRemainder(dividingBy: 1) == 0 {
-      return String(format: "%.0f", entry.targetValue)
-    } else {
-      return String(format: "%.1f", entry.targetValue)
-    }
-  }
 
   var loadingGridData: GoalEntry.GridData {
     // Create placeholder grid based on time period

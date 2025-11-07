@@ -63,6 +63,9 @@ public final class GoalWidgetCacheManager {
     // Use targetMetric as ID since only one active goal per type
     let goalId = goal.targetMetric.rawValue
 
+    // Calculate current value based on time period
+    let currentValue = await calculateCurrentValue(for: goal)
+
     // Calculate grid data based on time period
     let gridData: GoalWidgetData.GridData
     switch goal.timePeriod {
@@ -84,11 +87,49 @@ public final class GoalWidgetCacheManager {
       name: goal.targetMetric.name,
       systemImage: goal.targetMetric.systemImage,
       colorHex: colorHex,
+      currentValue: currentValue,
       targetValue: goal.value,
       targetUnit: goal.unit.sensibleUnitString,
       timePeriod: goal.timePeriod.rawValue,
       gridData: gridData
     )
+  }
+
+  /// Calculate current value for the goal based on its time period
+  private func calculateCurrentValue(for goal: Habit) async -> Double {
+    let calendar = Calendar.current
+    let now = Date()
+
+    // Determine the date range based on time period
+    let dateRange: DateRange
+    switch goal.timePeriod {
+    case .daily:
+      let startOfDay = calendar.startOfDay(for: now)
+      let endOfDay = calendar.endOfDay(for: now)
+      dateRange = DateRange(startOfDay, endOfDay)
+    case .weekly:
+      guard let weekInterval = calendar.dateInterval(of: .weekOfYear, for: now) else {
+        return 0
+      }
+      dateRange = DateRange(weekInterval.start, weekInterval.end)
+    case .monthly:
+      guard let monthInterval = calendar.dateInterval(of: .month, for: now) else {
+        return 0
+      }
+      dateRange = DateRange(monthInterval.start, monthInterval.end)
+    case .yearly:
+      guard let yearInterval = calendar.dateInterval(of: .year, for: now) else {
+        return 0
+      }
+      dateRange = DateRange(yearInterval.start, yearInterval.end)
+    }
+
+    // Fetch the total quantity for the period
+    let quantity = await goal.targetMetric.fetchTotalQuantity(for: dateRange)
+
+    // Convert to the goal's unit
+    let value = quantity.doubleValue(for: goal.unit)
+    return value
   }
 
   /// Calculate daily grid completion data (40 weeks with 7 days each)

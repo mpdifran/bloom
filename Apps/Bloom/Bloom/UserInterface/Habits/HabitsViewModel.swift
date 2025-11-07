@@ -129,9 +129,10 @@ extension HabitsViewModel {
 
     TelemetryDeck.signal("User Goal Count", floatValue: Double(addedTargetMetrics.count))
 
-    // Update widget cache
+    // Update widget cache and observer
     Task {
       await GoalWidgetCacheManager.shared.updateCache(modelContext: modelContext)
+      await GoalWidgetHealthObserver.shared.startObserving(modelContext: modelContext)
     }
   }
 
@@ -162,9 +163,10 @@ extension HabitsViewModel {
       }
     }
 
-    // Update widget cache
+    // Update widget cache and observer
     Task {
       await GoalWidgetCacheManager.shared.updateCache(modelContext: modelContext)
+      await GoalWidgetHealthObserver.shared.startObserving(modelContext: modelContext)
     }
   }
 
@@ -212,9 +214,10 @@ extension HabitsViewModel {
 
     try modelContext.save()
 
-    // Update widget cache
+    // Update widget cache and observer
     Task {
       await GoalWidgetCacheManager.shared.updateCache(modelContext: modelContext)
+      await GoalWidgetHealthObserver.shared.startObserving(modelContext: modelContext)
     }
 
     return updatedHabit
@@ -231,9 +234,10 @@ extension HabitsViewModel {
 
     try modelContext.save()
 
-    // Update widget cache
+    // Update widget cache and observer
     Task {
       await GoalWidgetCacheManager.shared.updateCache(modelContext: modelContext)
+      await GoalWidgetHealthObserver.shared.startObserving(modelContext: modelContext)
     }
   }
 }

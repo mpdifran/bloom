@@ -21,6 +21,9 @@ public struct GoalWidgetData: Codable, Sendable {
   /// Color as hex string for serialization
   public let colorHex: String
 
+  /// Current progress value for the goal
+  public let currentValue: Double
+
   /// Target value for the goal
   public let targetValue: Double
 
@@ -38,6 +41,7 @@ public struct GoalWidgetData: Codable, Sendable {
     name: String,
     systemImage: String,
     colorHex: String,
+    currentValue: Double,
     targetValue: Double,
     targetUnit: String,
     timePeriod: String,
@@ -47,6 +51,7 @@ public struct GoalWidgetData: Codable, Sendable {
     self.name = name
     self.systemImage = systemImage
     self.colorHex = colorHex
+    self.currentValue = currentValue
     self.targetValue = targetValue
     self.targetUnit = targetUnit
     self.timePeriod = timePeriod
