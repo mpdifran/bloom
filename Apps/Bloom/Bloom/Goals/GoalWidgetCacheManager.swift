@@ -79,14 +79,9 @@ public final class GoalWidgetCacheManager {
       gridData = .yearly(await calculateYearlyGridData(for: goal, modelContext: modelContext))
     }
 
-    // Get color hex string (add # prefix since toHex returns without it)
-    let colorHex = goal.targetMetric.color.toHex().map { "#\($0)" } ?? "#FF6B6B"
-
     return GoalWidgetData(
       id: goalId,
-      name: goal.targetMetric.name,
-      systemImage: goal.targetMetric.systemImage,
-      colorHex: colorHex,
+      targetMetricRawValue: goal.targetMetric.rawValue,
       currentValue: currentValue,
       targetValue: goal.value,
       targetUnit: goal.unit.sensibleUnitString,

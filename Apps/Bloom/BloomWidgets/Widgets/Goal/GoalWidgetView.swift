@@ -10,6 +10,8 @@ import WidgetKit
 import BloomUI
 import SFSafeSymbols
 import BloomFoundation
+import DataContainer
+import CoreHealth
 
 struct GoalWidgetView: View {
   let entry: GoalEntry
@@ -19,13 +21,13 @@ struct GoalWidgetView: View {
     VStack(alignment: .leading, spacing: 6) {
       // Header with goal info
       HStack {
-        Image(systemSymbol: SFSymbol(rawValue: entry.systemImage))
+        Image(systemSymbol: SFSymbol(rawValue: entry.targetMetric.systemImage))
           .font(.subheadline)
           .layoutPriority(10)
           .foregroundStyle(.tint)
 
         VStack(alignment: .leading) {
-          Text(entry.goalName)
+          Text(entry.targetMetric.name)
             .font(.subheadline)
             .bold()
             .lineLimit(1)
@@ -41,7 +43,6 @@ struct GoalWidgetView: View {
         if !entry.isLoading {
           Text("\(entry.currentValue.format(using: .oneDecimalPlace))")
             .font(.system(size: 24))
-            .minimumScaleFactor(0.8)
             .layoutPriority(10)
             .fontWeight(.heavy)
             .fontDesign(.rounded)
@@ -50,6 +51,7 @@ struct GoalWidgetView: View {
             .lineLimit(1)
         }
       }
+      .minimumScaleFactor(0.8)
 
       Spacer(minLength: 0)
 
@@ -74,7 +76,7 @@ struct GoalWidgetView: View {
     .fontDesign(.rounded)
     .widgetURL(URL(string: "https://api.trybloom.app/goals/\(entry.goalId)"))
     .containerBackground(.background, for: .widget)
-    .tint(entry.isLoading ? .secondary : colorFromHex(entry.colorHex))
+    .tint(entry.isLoading ? .secondary : entry.targetMetric.color)
   }
 }
 
@@ -146,29 +148,5 @@ private extension GoalWidgetView {
       }
       return .daily(GoalGridModel(weeks: weeks))
     }
-  }
-
-  func colorFromHex(_ hex: String) -> Color {
-    let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
-    var int: UInt64 = 0
-    Scanner(string: hex).scanHexInt64(&int)
-    let r, g, b: UInt64
-    switch hex.count {
-    case 3: // RGB (12-bit)
-      (r, g, b) = ((int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
-    case 6: // RGB (24-bit)
-      (r, g, b) = (int >> 16, int >> 8 & 0xFF, int & 0xFF)
-    case 8: // ARGB (32-bit)
-      (r, g, b) = (int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
-    default:
-      (r, g, b) = (255, 107, 107) // Default to mutedPink
-    }
-    return Color(
-      .sRGB,
-      red: Double(r) / 255,
-      green: Double(g) / 255,
-      blue: Double(b) / 255,
-      opacity: 1
-    )
   }
 }

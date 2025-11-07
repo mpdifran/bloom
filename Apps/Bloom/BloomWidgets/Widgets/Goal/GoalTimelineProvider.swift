@@ -11,6 +11,8 @@ import AppIntents
 import SwiftUI
 import BloomFoundation
 import BloomUI
+import DataContainer
+import CoreHealth
 
 struct GoalTimelineProvider: AppIntentTimelineProvider {
   typealias Entry = GoalEntry
@@ -21,9 +23,7 @@ struct GoalTimelineProvider: AppIntentTimelineProvider {
       date: Date(),
       relevance: nil,
       goalId: "placeholder",
-      goalName: "Daily Steps",
-      systemImage: "figure.walk",
-      colorHex: "#FF6B6B",
+      targetMetric: .stepCount,
       currentValue: 7543,
       targetValue: 10000,
       targetUnit: "steps",
@@ -49,21 +49,25 @@ struct GoalTimelineProvider: AppIntentTimelineProvider {
   }
 
   private func makeEntry(from configuration: GoalConfigurationIntent) async -> GoalEntry {
-    // Get selected goal ID from configuration
-    guard let goalId = configuration.goal?.id else {
+    // Get selected goal ID from configuration, or use first available goal
+    let goalId: String
+    if let configuredGoalId = configuration.goal?.id {
+      goalId = configuredGoalId
+    } else if let firstGoalId = loadFirstGoalId() {
+      goalId = firstGoalId
+    } else {
+      // No goals available at all - show placeholder data
       return GoalEntry(
         date: Date(),
         relevance: nil,
         goalId: "",
-        goalName: "No Goal Selected",
-        systemImage: "chart.line.uptrend.xyaxis",
-        colorHex: "#FF6B6B",
+        targetMetric: .stepCount,
         currentValue: 0,
         targetValue: 0,
         targetUnit: "",
         timePeriod: "daily",
-        gridData: .daily(GoalGridModel()),
-        isLoading: true
+        gridData: .daily(placeholderGridModel()),
+        isLoading: false
       )
     }
 
@@ -74,9 +78,7 @@ struct GoalTimelineProvider: AppIntentTimelineProvider {
         date: Date(),
         relevance: nil,
         goalId: goalId,
-        goalName: "Loading...",
-        systemImage: "chart.line.uptrend.xyaxis",
-        colorHex: "#FF6B6B",
+        targetMetric: .stepCount,
         currentValue: 0,
         targetValue: 0,
         targetUnit: "",
@@ -141,13 +143,14 @@ struct GoalTimelineProvider: AppIntentTimelineProvider {
       gridData = .yearly(gridModel)
     }
 
+    // Convert raw value back to TargetMetric enum
+    let targetMetric = TargetMetric(rawValue: goalData.targetMetricRawValue) ?? .stepCount
+
     return GoalEntry(
       date: Date(),
       relevance: TimelineEntryRelevance(score: 0.8),
       goalId: goalData.id,
-      goalName: goalData.name,
-      systemImage: goalData.systemImage,
-      colorHex: goalData.colorHex,
+      targetMetric: targetMetric,
       currentValue: goalData.currentValue,
       targetValue: goalData.targetValue,
       targetUnit: goalData.targetUnit,
@@ -160,11 +163,42 @@ struct GoalTimelineProvider: AppIntentTimelineProvider {
   private func placeholderGridModel() -> GoalGridModel {
     GoalGridModel(
       weeks: [
-        GoalGridModel.Week(id: 3, isComplete: [true, true, false, true, false, true, true]),
-        GoalGridModel.Week(id: 2, isComplete: [false, true, true, false, true, true, false]),
-        GoalGridModel.Week(id: 1, isComplete: [true, false, true, true, false, true, true]),
+        GoalGridModel.Week(id: 24, isComplete: [true, false, true, true, false, true, true]),
+        GoalGridModel.Week(id: 23, isComplete: [false, true, true, false, true, true, false]),
+        GoalGridModel.Week(id: 22, isComplete: [true, true, false, true, true, false, true]),
+        GoalGridModel.Week(id: 21, isComplete: [true, true, true, false, true, true, false]),
+        GoalGridModel.Week(id: 20, isComplete: [false, true, false, true, true, true, true]),
+        GoalGridModel.Week(id: 19, isComplete: [true, false, true, false, true, true, true]),
+        GoalGridModel.Week(id: 18, isComplete: [true, true, true, true, false, true, false]),
+        GoalGridModel.Week(id: 17, isComplete: [false, true, true, true, true, false, true]),
+        GoalGridModel.Week(id: 16, isComplete: [true, true, false, true, false, true, true]),
+        GoalGridModel.Week(id: 15, isComplete: [true, false, true, true, true, true, false]),
+        GoalGridModel.Week(id: 14, isComplete: [false, true, true, false, true, true, true]),
+        GoalGridModel.Week(id: 13, isComplete: [true, true, true, true, false, true, true]),
+        GoalGridModel.Week(id: 12, isComplete: [true, false, true, false, true, false, true]),
+        GoalGridModel.Week(id: 11, isComplete: [false, true, false, true, true, true, false]),
+        GoalGridModel.Week(id: 10, isComplete: [true, true, true, false, true, true, true]),
+        GoalGridModel.Week(id: 9, isComplete: [true, false, true, true, false, true, false]),
+        GoalGridModel.Week(id: 8, isComplete: [false, true, true, true, true, false, true]),
+        GoalGridModel.Week(id: 7, isComplete: [true, true, false, true, false, true, true]),
+        GoalGridModel.Week(id: 6, isComplete: [false, true, true, false, true, true, false]),
+        GoalGridModel.Week(id: 5, isComplete: [true, false, true, true, false, true, true]),
+        GoalGridModel.Week(id: 4, isComplete: [true, true, true, false, true, false, true]),
+        GoalGridModel.Week(id: 3, isComplete: [false, true, false, true, true, true, false]),
+        GoalGridModel.Week(id: 2, isComplete: [true, false, true, false, true, true, true]),
+        GoalGridModel.Week(id: 1, isComplete: [true, true, false, true, false, true, false]),
         GoalGridModel.Week(id: 0, isComplete: [true, true, false, true], todayIndex: 3),
       ]
     )
+  }
+
+  /// Loads the first available goal ID from the cache
+  private func loadFirstGoalId() -> String? {
+    guard let data = UserDefaults.group.data(forKey: "GoalWidgetCache.AllGoals"),
+          let goalIds = try? JSONDecoder().decode([String].self, from: data),
+          let firstGoalId = goalIds.first else {
+      return nil
+    }
+    return firstGoalId
   }
 }

@@ -8,6 +8,8 @@
 import AppIntents
 import Foundation
 import BloomFoundation
+import DataContainer
+import CoreHealth
 
 struct GoalEntity: AppEntity {
   var id: String
@@ -50,12 +52,14 @@ struct GoalEntityQuery: EntityQuery {
             let decoded = try? JSONDecoder().decode(GoalWidgetDataCacheEntry.self, from: goalData) else {
         return nil
       }
-      return GoalEntity(id: goalId, name: decoded.name)
+      // Convert raw value to TargetMetric and get its name
+      let targetMetric = TargetMetric(rawValue: decoded.targetMetricRawValue) ?? .none
+      return GoalEntity(id: goalId, name: targetMetric.name)
     }
   }
 }
 
-// Helper struct for decoding just the name
+// Helper struct for decoding just the targetMetricRawValue
 private struct GoalWidgetDataCacheEntry: Codable {
-  let name: String
+  let targetMetricRawValue: String
 }

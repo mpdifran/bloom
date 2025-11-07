@@ -12,14 +12,8 @@ public struct GoalWidgetData: Codable, Sendable {
   /// Unique identifier for the goal
   public let id: String
 
-  /// Display name of the goal (from targetMetric)
-  public let name: String
-
-  /// SF Symbol name for the icon
-  public let systemImage: String
-
-  /// Color as hex string for serialization
-  public let colorHex: String
+  /// Target metric raw value (convert to TargetMetric enum in consuming code)
+  public let targetMetricRawValue: String
 
   /// Current progress value for the goal
   public let currentValue: Double
@@ -38,9 +32,7 @@ public struct GoalWidgetData: Codable, Sendable {
 
   public init(
     id: String,
-    name: String,
-    systemImage: String,
-    colorHex: String,
+    targetMetricRawValue: String,
     currentValue: Double,
     targetValue: Double,
     targetUnit: String,
@@ -48,9 +40,7 @@ public struct GoalWidgetData: Codable, Sendable {
     gridData: GridData
   ) {
     self.id = id
-    self.name = name
-    self.systemImage = systemImage
-    self.colorHex = colorHex
+    self.targetMetricRawValue = targetMetricRawValue
     self.currentValue = currentValue
     self.targetValue = targetValue
     self.targetUnit = targetUnit

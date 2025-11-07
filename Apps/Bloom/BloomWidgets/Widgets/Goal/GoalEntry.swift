@@ -9,6 +9,7 @@ import Foundation
 import WidgetKit
 import BloomFoundation
 import BloomUI
+import DataContainer
 
 struct GoalEntry: TimelineEntry {
   let date: Date
@@ -16,9 +17,7 @@ struct GoalEntry: TimelineEntry {
 
   // Goal metadata
   let goalId: String
-  let goalName: String
-  let systemImage: String
-  let colorHex: String
+  let targetMetric: TargetMetric
   let currentValue: Double
   let targetValue: Double
   let targetUnit: String
