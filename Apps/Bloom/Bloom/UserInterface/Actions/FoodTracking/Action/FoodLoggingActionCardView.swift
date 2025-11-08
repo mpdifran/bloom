@@ -11,6 +11,7 @@ import SwiftData
 import DataContainer
 import CoreHealth
 import BloomModel
+import BloomFoundation
 
 extension FoodLoggingActionCardView {
   enum FoodItemHistoryTab: NamedCaseIterable {
@@ -408,17 +409,25 @@ private extension FoodLoggingActionCardView {
   }
 
   var aiGenerateButton: some View {
-    Button {
-      EntitledAction(presentedSheet: $presentedSheet) {
-        Task {
-          do {
-            try await viewModel.generateWithAI(query: searchQuery, modelContext: modelContext)
-            performDismiss?()
-          } catch {
-            viewModel.error = error
+    AsyncButton {
+      guard EntitlementController.shared.hasBloomPro == true else {
+        presentedSheet = BloomPlusPaywall {
+          guard EntitlementController.shared.hasBloomPro == true else { return }
+          Task {
+            await Delay(300)
+            do {
+              try await viewModel.generateWithAI(query: searchQuery, modelContext: modelContext)
+              performDismiss?()
+            } catch {
+              viewModel.error = error
+            }
           }
-        }
+        }.asAny
+        return
       }
+
+      try await viewModel.generateWithAI(query: searchQuery, modelContext: modelContext)
+      performDismiss?()
     } label: {
       Label("Generate with AI", systemSymbol: .sparkles)
         .frame(maxWidth: .infinity)
