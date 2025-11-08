@@ -41,7 +41,7 @@ public extension HealthStoreFetcher {
   ) -> HKBackgroundDeliveryHandle {
 
     for objectType in objectTypes {
-      print("Health Background Delivery Ref Counts: Enabling delivery for \(objectType).")
+//      print("Health Background Delivery Ref Counts: Enabling delivery for \(objectType).")
       // TODO: We should check the existing frequency and make sure we update it only if it's more often.
       healthStore.enableBackgroundDelivery(objectType: objectType, frequency: frequency)
       backgroundDeliveryReferenceCounts[objectType, default: 0] += 1
@@ -61,7 +61,7 @@ public extension HealthStoreFetcher {
       refCount -= 1
 
       if refCount <= 0 {
-        print("Health Background Delivery Ref Counts: Disabling delivery for \(objectType).")
+//        print("Health Background Delivery Ref Counts: Disabling delivery for \(objectType).")
         healthStore.disableBackgroundDelivery(for: objectType) { success, error in
           if let error {
             print(error)

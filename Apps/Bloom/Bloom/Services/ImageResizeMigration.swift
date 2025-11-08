@@ -77,7 +77,7 @@ final class ImageResizeMigration {
     await performMigration()
   }
 
-  private func performMigration() async {
+  nonisolated private func performMigration() async {
     print("ImageResizeMigration: Starting migration")
     let modelContext = ModelContext(ContainerHolder.shared.container)
 
@@ -177,7 +177,7 @@ final class ImageResizeMigration {
         
         // Resize the image (heavy work)
         if let resizedImage = image.resized(toWidth: targetWidth),
-           let resizedData = resizedImage.pngData() {
+           let resizedData = resizedImage.jpegData(compressionQuality: 0.75) {
           let originalSize = imageData.count
           let newSize = resizedData.count
           print("ImageResizeMigration: FoodLog - resized from \(originalSize) bytes to \(newSize) bytes")
@@ -240,7 +240,7 @@ final class ImageResizeMigration {
       if image.size.width > targetWidth {
         // Resize the image (heavy work)
         if let resizedImage = image.resized(toWidth: targetWidth),
-           let resizedData = resizedImage.pngData() {
+           let resizedData = resizedImage.jpegData(compressionQuality: 0.75) {
           meal.imageData = resizedData
           imagesResized += 1
           

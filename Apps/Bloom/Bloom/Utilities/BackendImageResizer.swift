@@ -8,8 +8,8 @@
 import UIKit
 
 enum BackendImageResizer {
-  /// Resizes an image to 300pt width and converts to PNG data for backend storage
+  /// Resizes an image to 300pt width and converts to JPEG data for backend storage
   static func resize(_ image: UIImage?) -> Data? {
-    image?.resized(toWidth: 300)?.pngData()
+    image?.resized(toWidth: 300)?.jpegData(compressionQuality: 0.75)
   }
 }

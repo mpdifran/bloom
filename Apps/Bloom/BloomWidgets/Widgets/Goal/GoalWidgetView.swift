@@ -22,36 +22,34 @@ struct GoalWidgetView: View {
       // Header with goal info
       HStack {
         Image(systemSymbol: SFSymbol(rawValue: entry.targetMetric.systemImage))
-          .font(.subheadline)
-          .layoutPriority(10)
+          .font(.system(size: 24))
           .foregroundStyle(.tint)
 
-        VStack(alignment: .leading) {
-          Text(entry.targetMetric.name)
-            .font(.subheadline)
-            .bold()
-            .lineLimit(1)
-          Text("\(entry.targetValue.format(using: .oneDecimalPlace)) \(entry.targetUnit)")
-            .font(.caption2)
-            .foregroundStyle(.secondary)
-            .lineLimit(1)
+        if widgetFamily != .systemSmall {
+          VStack(alignment: .leading) {
+            Text(entry.targetMetric.name)
+              .font(.system(size: 18))
+              .bold()
+              .lineLimit(1)
+            Text("\(entry.targetValue.format(using: .oneDecimalPlace)) \(entry.targetUnit)")
+              .font(.system(size: 12))
+              .foregroundStyle(.secondary)
+              .lineLimit(1)
+          }
         }
-        .layoutPriority(1)
 
         Spacer(minLength: 0)
 
-        if !entry.isLoading {
-          Text("\(entry.currentValue.format(using: .oneDecimalPlace))")
-            .font(.system(size: 24))
-            .layoutPriority(10)
-            .fontWeight(.heavy)
-            .fontDesign(.rounded)
-            .bold()
-            .foregroundStyle(.tint)
-            .lineLimit(1)
-        }
+        Text(entry.isLoading ? "--" : "\(entry.currentValue.format(using: .oneDecimalPlace))")
+          .font(.system(size: 30))
+          .fontWeight(.heavy)
+          .fontDesign(.rounded)
+          .bold()
+          .foregroundStyle(.tint)
+          .lineLimit(1)
+          .layoutPriority(10)
       }
-      .minimumScaleFactor(0.8)
+      .minimumScaleFactor(0.7)
 
       Spacer(minLength: 0)
 

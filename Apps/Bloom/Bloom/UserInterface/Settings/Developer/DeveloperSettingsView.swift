@@ -498,6 +498,44 @@ extension DeveloperSettingsView {
         Divider()
 
         Button {
+          PngToJpegMigration.shared.resetMigration()
+          alertDetails = AlertDetails(
+            title: "Migration Reset",
+            message: "PNG to JPEG migration flag has been reset. Migration will run on next app foreground."
+          )
+        } label: {
+          LabeledContent("Reset PNG to JPEG Migration") {
+            Image(systemSymbol: .arrowClockwise)
+          }
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
+          .selectable()
+          .frame(height: 60)
+        }
+
+        Divider()
+
+        AsyncButton {
+          await PngToJpegMigration.shared.forceMigration()
+          alertDetails = AlertDetails(
+            title: "Migration Complete",
+            message: "PNG to JPEG migration has been forced to run. Check console for logs."
+          )
+        } label: {
+          LabeledContent("Force PNG to JPEG Migration") {
+            Image(systemSymbol: .photoBadgeArrowDown)
+          }
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
+          .selectable()
+          .frame(height: 60)
+        }
+
+        Divider()
+
+        Button {
           ChatConversationMigration.shared.resetMigration()
           alertDetails = AlertDetails(
             title: "Migration Reset",

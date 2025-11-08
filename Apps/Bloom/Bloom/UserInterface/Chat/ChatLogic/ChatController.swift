@@ -172,7 +172,7 @@ extension ChatController {
     // Fetch the conversation for message relationship
     let conversationModel = try getConversationModel(id: resolvedConversationID)
 
-    let imageData = image?.resized(toWidth: 800)?.pngData()
+    let imageData = image?.resized(toWidth: 800)?.jpegData(compressionQuality: 0.75)
     let trimmedMessage = message.trimmingCharacters(in: .whitespacesAndNewlines)
 
     if let imageData {

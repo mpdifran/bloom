@@ -100,6 +100,10 @@ struct BloomApp: App {
           ChatConversationMigration.shared.runMigrationIfNeeded()
         }
         .task {
+          // Run PNG to JPEG migration on app launch
+          PngToJpegMigration.shared.runMigrationIfNeeded()
+        }
+        .task {
           // Update goal widget cache on app launch
           let modelContext = ModelContext(ContainerHolder.shared.container)
           await GoalWidgetCacheManager.shared.updateCache(modelContext: modelContext)
@@ -156,6 +160,11 @@ private extension BloomApp {
     Task { @MainActor in
       // Run image resize migration in background
       ImageResizeMigration.shared.runMigrationIfNeeded()
+    }
+
+    Task { @MainActor in
+      // Run PNG to JPEG migration in background
+      PngToJpegMigration.shared.runMigrationIfNeeded()
     }
 
     Task { @MainActor in
