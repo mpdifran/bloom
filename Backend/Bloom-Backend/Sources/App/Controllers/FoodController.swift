@@ -264,7 +264,14 @@ extension FoodController {
       guard let job = try await request.magicScanJobManager.getJob(
         processingIdentifier: processingIdentifier
       ) else {
-        // Job not found - skip it
+        // Job not found - return notFound status so client can re-upload
+        let result = MagicScanStatusResponse.Result(
+          processingIdentifier: processingIdentifier,
+          status: .notFound,
+          servings: nil,
+          errorMessage: "Processing record not found - please retry upload"
+        )
+        results.append(result)
         continue
       }
 

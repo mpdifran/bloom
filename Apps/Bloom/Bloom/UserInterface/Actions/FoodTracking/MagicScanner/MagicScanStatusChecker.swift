@@ -127,6 +127,33 @@ final class MagicScanStatusChecker {
         print("Error failing magic scan:", error)
       }
 
+    case .notFound:
+      // Backend doesn't have this job - need to re-upload
+      let identifierValue = result.processingIdentifier.value
+      let descriptor = FetchDescriptor<FoodItemLog>(
+        predicate: #Predicate { $0.processingIdentifier == identifierValue }
+      )
+
+      guard let foodItemLog = try? modelContext.fetch(descriptor).first else {
+        return
+      }
+
+      // Re-upload using the retry mechanism
+      do {
+        try await NutritionTrackingViewModel.shared.retryMagicScan(
+          modelContext: modelContext,
+          foodItemLog: foodItemLog
+        )
+      } catch {
+        print("Error retrying magic scan after notFound status:", error)
+        // If retry fails, mark as failed
+        try? await NutritionTrackingViewModel.shared.failMagicScan(
+          modelContext: modelContext,
+          processingIdentifier: result.processingIdentifier,
+          errorMessage: "Failed to re-upload: \(error.localizedDescription)"
+        )
+      }
+
     case .pending, .processing:
       // Update state to processing if it was pending
       let identifierValue = result.processingIdentifier.value
