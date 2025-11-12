@@ -37,12 +37,12 @@ extension FoodDatabaseService {
                        similarity(name, \(bind: query)) * 1.5,
                        similarity(brand_name, \(bind: query)),
                        similarity(flavour, \(bind: query)) * 0.5,
-                       similarity(search_text, \(bind: query)) * 2.0
+                       word_similarity(\(bind: query), search_text) * 2.0
                    ) *
                    CASE WHEN state = 'verified' THEN 1.05 ELSE 1.0 END *
                    (1.0 + CASE WHEN country = \(bind: preferredCountry) THEN 0.1 ELSE 0.0 END) AS rank
             FROM food_item_records
-            WHERE similarity(search_text, \(bind: query)) > 0.1
+            WHERE search_text %> \(bind: query)
               AND category = \(bind: category.rawValue)::category
               AND state != 'needsAIProcessing'
             ORDER BY
@@ -70,12 +70,12 @@ extension FoodDatabaseService {
                        similarity(name, \(bind: query)) * 1.5,
                        similarity(brand_name, \(bind: query)),
                        similarity(flavour, \(bind: query)) * 0.5,
-                       similarity(search_text, \(bind: query)) * 2.0
+                       word_similarity(\(bind: query), search_text) * 2.0
                    ) *
                    CASE WHEN state = 'verified' THEN 1.05 ELSE 1.0 END *
                    (1.0 + CASE WHEN country = \(bind: preferredCountry) THEN 0.1 ELSE 0.0 END) AS rank
             FROM food_item_records
-            WHERE similarity(search_text, \(bind: query)) > 0.1
+            WHERE search_text %> \(bind: query)
               AND state != 'needsAIProcessing'
             ORDER BY
                 rank DESC
