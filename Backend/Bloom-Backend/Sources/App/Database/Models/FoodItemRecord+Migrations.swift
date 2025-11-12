@@ -426,4 +426,28 @@ extension FoodItemRecord {
         .update()
     }
   }
+
+  struct AddStateIndex: AsyncMigration {
+    func prepare(on database: Database) async throws {
+      guard let sqlDatabase = database as? SQLDatabase else {
+        fatalError("This migration requires an SQL database.")
+      }
+
+      // Add B-tree index on state column for faster WHERE filtering
+      try await sqlDatabase.raw("""
+        CREATE INDEX CONCURRENTLY IF NOT EXISTS state_index
+        ON food_item_records (state)
+      """).run()
+    }
+
+    func revert(on database: Database) async throws {
+      guard let sqlDatabase = database as? SQLDatabase else {
+        fatalError("This migration requires an SQL database.")
+      }
+
+      try await sqlDatabase.raw("""
+        DROP INDEX IF EXISTS state_index
+      """).run()
+    }
+  }
 }

@@ -80,7 +80,8 @@ extension FoodItemPicker.ViewModel {
     }
 
     debounceTask = Task {
-      await Delay(500) // 0.5 seconds
+      await Delay(700) // 0.7 seconds
+      guard !Task.isCancelled else { return }
       await performSearch(for: query)
     }
   }

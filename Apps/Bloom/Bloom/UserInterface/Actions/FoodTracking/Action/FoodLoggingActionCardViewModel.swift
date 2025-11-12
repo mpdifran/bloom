@@ -15,7 +15,7 @@ import SwiftData
 import CoreHealth
 
 private extension Int {
-  static let debounceTime: Int = 300
+  static let debounceTime: Int = 700
 }
 
 struct FoodItemSection: Equatable, Identifiable {
@@ -109,7 +109,11 @@ extension FoodLoggingActionCardView.ViewModel {
     }
 
     debounceTask = Task {
-      await Delay(300) // 0.3 seconds
+      await Delay(.debounceTime)
+      guard !Task.isCancelled else {
+        print("Task cancelled, returning")
+        return
+      }
       await performSearch(for: query)
     }
   }
@@ -131,6 +135,7 @@ extension FoodLoggingActionCardView.ViewModel {
     searchTask = Task {
       do {
         // Fetch backend results
+        print("Fetching from network")
         let sections = try await NetworkRequester.shared.foodSearch(
           name: query,
           brand: nil,
@@ -138,7 +143,10 @@ extension FoodLoggingActionCardView.ViewModel {
         )
 
         // Check if task was cancelled
-        guard !Task.isCancelled else { return }
+        guard !Task.isCancelled else {
+          print("Network task cancelled, returning")
+          return
+        }
 
         // Store backend results directly - deduplication handled at View level
         self.results = sections.map {

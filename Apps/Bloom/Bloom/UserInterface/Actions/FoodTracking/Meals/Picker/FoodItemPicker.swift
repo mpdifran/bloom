@@ -65,9 +65,7 @@ struct FoodItemPicker: View {
             }
           },
           onTextChange: { searchQuery in
-            Task {
-              await viewModel.debounceSearch(for: searchQuery)
-            }
+            viewModel.debounceSearch(for: searchQuery)
           },
           onUploadNewFood: { foodItem in
             // Do nothing since tools are disabled.

@@ -103,7 +103,7 @@ extension FoodItemRecord {
       vitaminE: vitaminE.map({ .init(value: $0, unit: "mg") }),
       servingName: servingName,
       servingQuantity: servingQuantity,
-      ingredients: ingredients,
+      ingredients: "", // Hardcoded to avoid fetching large text field in search queries; client doesn't use this
       category: category.asCategory(),
       isVerified: state == .verified
     )
