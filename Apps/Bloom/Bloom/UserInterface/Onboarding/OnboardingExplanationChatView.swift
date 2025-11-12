@@ -27,7 +27,7 @@ struct OnboardingExplanationChatView: View {
 
 
         VStack {
-          BudImage(.budRunning, dimension: 180)
+          BudImage(.budBicycle, dimension: 180)
           helloSection
           chatSection
         }

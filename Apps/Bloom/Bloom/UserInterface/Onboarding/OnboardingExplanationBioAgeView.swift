@@ -30,7 +30,7 @@ struct OnboardingExplanationBioAgeView: View {
           .zStackAlignment(.top)
 
         VStack {
-          BudImage(.budRunning, dimension: 180)
+          BudImage(.budCoach, dimension: 180)
           helloSection
           biologicalAgeSection
         }

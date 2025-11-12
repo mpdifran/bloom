@@ -8,11 +8,16 @@
 import SwiftUI
 import AppUI
 import BloomUI
+import CoreHealth
 
 struct HealthDataConsentView: View {
   var onContinue: () -> Void
 
   @State private var healthDataCloudOptIn = false
+  @State private var healthPermissionTrigger = false
+  @State private var isWaitingForPermissionSheet = false
+  @State private var isAuthorized = false
+  @State private var error: Error?
 
   var body: some View {
     NavigationStack {
@@ -47,14 +52,52 @@ struct HealthDataConsentView: View {
           .padding(.horizontal)
 
         AsyncButton {
-          onContinue()
+          await recordOptIn()
+          await showHealthKitPermissionView()
         } label: {
-          Text("Accept and Continue")
-            .horizontallyCentered()
+          Group {
+            if isWaitingForPermissionSheet {
+              CircularSpinnerView()
+                .foregroundStyle(.invertedText)
+            } else {
+              Text("Accept and Continue")
+            }
+          }
+          .horizontallyCentered()
         }
         .buttonStyle(.primary)
 
         privacyEmailView
+      }
+      .alert(error: $error)
+      .healthDataAccessRequest(
+        store: HealthPermissionChecker.shared.healthStore,
+        shareTypes: HealthPermissionChecker.shared.writeTypes(),
+        readTypes: HealthPermissionChecker.shared.readTypes(),
+        trigger: healthPermissionTrigger
+      ) { result in
+
+        MainTask {
+          isWaitingForPermissionSheet = false
+        }
+
+        switch result {
+        case .success:
+          Task {
+            await fetchHeight()
+            await checkAuth()
+
+            await MainActor.run {
+              if isAuthorized {
+                onContinue()
+              }
+            }
+          }
+        case .failure(let error):
+          MainTask {
+            self.error = error
+          }
+        }
       }
     }
   }
@@ -133,6 +176,44 @@ private extension HealthDataConsentView {
       .padding(.horizontal)
     }
     .fixedSize(horizontal: false, vertical: true)
+  }
+}
+
+private extension HealthDataConsentView {
+
+  func recordOptIn() async {
+    // TODO: Send request to backend to make acceptance
+  }
+
+  func showHealthKitPermissionView() async {
+    await checkAuth()
+
+    if isAuthorized {
+      await fetchHeight()
+      onContinue()
+    } else {
+      isWaitingForPermissionSheet = true
+      healthPermissionTrigger.toggle()
+    }
+  }
+
+  func fetchHeight() async {
+    let quantity = await HealthStoreFetcher.shared.fetchLatestSample(for: .height)?.quantity
+    if let height = quantity?.doubleValue(for: .meterUnit(with: .centi)) {
+      HealthManager.shared.heightCM = height
+    }
+  }
+
+  func checkAuth() async {
+    do {
+      let authStatus = try await HealthPermissionChecker.shared.checkAccessForAllTypes()
+
+      isAuthorized = authStatus == .unnecessary
+
+      if isAuthorized {
+        await VitalsCalculator.shared.forceFetchVitals()
+      }
+    } catch { }
   }
 }
 
