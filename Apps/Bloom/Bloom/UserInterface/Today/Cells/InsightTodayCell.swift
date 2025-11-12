@@ -12,14 +12,27 @@ import BloomUI
 
 struct InsightTodayCell: View {
   let insights: [TodayReportResponse.HealthInsight]
-  
+  let allowContextMenu: Bool
+
+  init(
+    insights: [TodayReportResponse.HealthInsight],
+    allowContextMenu: Bool = true
+  ) {
+    self.insights = insights
+    self.allowContextMenu = allowContextMenu
+  }
+
   @State private var presentedSheet: AnyView?
   
   var body: some View {
     ScrollView(.horizontal) {
       HStack {
         ForEach(insights, id: \.self) { insight in
-          InsightCard(insight: insight, presentedSheet: $presentedSheet)
+          InsightCard(
+            insight: insight,
+            allowContextMenu: allowContextMenu,
+            presentedSheet: $presentedSheet
+          )
         }
       }
       .scrollTargetLayout()
@@ -33,6 +46,7 @@ struct InsightTodayCell: View {
 
 struct InsightCard: View {
   let insight: TodayReportResponse.HealthInsight
+  let allowContextMenu: Bool
   @Binding var presentedSheet: AnyView?
   
   @Environment(TabController.self) private var tabController: TabController
@@ -58,9 +72,11 @@ struct InsightCard: View {
     .horizontalAlignment(.leading)
     .frame(width: 220)
     .cardContainer(fill: cardFill)
-    .contextMenu {
-      Button("Ask Bud", systemSymbol: .ellipsisMessage) {
-        handleAskBudAction()
+    .if(allowContextMenu) {
+      $0.contextMenu {
+        Button("Ask Bud", systemSymbol: .ellipsisMessage) {
+          handleAskBudAction()
+        }
       }
     }
   }

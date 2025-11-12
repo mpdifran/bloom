@@ -44,7 +44,7 @@ struct ExperimentOverrideView: View {
   PreviewEnvironment {
     BloomScrollView {
       SettingsSectionContainer {
-        ExperimentOverrideView(experimentId: ExperimentIdentifier.softerHealthKitView.value, experimentName: "Softer HealthKit View")
+        ExperimentOverrideView(experimentId: ExperimentIdentifier.onboardingPaywall.value, experimentName: "Onboarding Paywall")
       }
     }
   }

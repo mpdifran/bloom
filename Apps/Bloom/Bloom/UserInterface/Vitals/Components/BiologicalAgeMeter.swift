@@ -70,7 +70,7 @@ struct BiologicalAgeMeter: View {
             .font(.system(size: size * 0.22, weight: .heavy, design: .rounded))
             .contentTransition(.numericText(value: biologicalAge ?? 0))
 
-          Text(String(format: "%+.1f years", ageDifference))
+          Text(ageDifference.format(using: .oneDecimalPlace))
             .font(.system(size: size * 0.07, weight: .heavy, design: .rounded))
             .foregroundColor(progressColor)
         }
@@ -86,7 +86,7 @@ private extension BiologicalAgeMeter {
 
   var bioAgeDescription: String {
     if let biologicalAge {
-      return String(format: "%.1f", biologicalAge)
+      return biologicalAge.format(using: .oneDecimalPlace)
     }
     return "--"
   }

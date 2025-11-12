@@ -792,13 +792,6 @@ extension DeveloperSettingsView {
 
       SettingsSectionContainer {
         ExperimentOverrideView(
-          experimentId: ExperimentIdentifier.softerHealthKitView.value,
-          experimentName: "Softer HealthKit View"
-        )
-
-        Divider()
-
-        ExperimentOverrideView(
           experimentId: ExperimentIdentifier.onboardingPaywall.value,
           experimentName: "Onboarding Paywall"
         )
@@ -832,9 +825,6 @@ extension DeveloperSettingsView {
   
   private func clearAllExperimentOverrides() {
     // Clear all experiment overrides
-    let softerHealthKitKey = String.ExperimentOverrideKey.key(for: ExperimentIdentifier.softerHealthKitView.value)
-    UserDefaults.standard.removeObject(forKey: softerHealthKitKey)
-
     let onboardingPaywallKey = String.ExperimentOverrideKey.key(for: ExperimentIdentifier.onboardingPaywall.value)
     UserDefaults.standard.removeObject(forKey: onboardingPaywallKey)
   }

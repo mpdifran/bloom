@@ -111,6 +111,7 @@ struct RootView: View {
     .tint(themeController.theme.color)
     .environment(themeController)
     .environment(experimentManager)
+    .environment(tabController)
   }
 }
 
@@ -304,7 +305,6 @@ private extension RootView {
       )
       .ignoresSafeArea()
     }
-    .environment(tabController)
   }
 
   var legacyContentView: some View {
@@ -321,7 +321,6 @@ private extension RootView {
       }
     }
     .chatLauncher()
-    .environment(tabController)
     .transition(.blurReplace)
   }
 

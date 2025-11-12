@@ -16,8 +16,6 @@ import BloomUI
 
 struct OnboardingHealthKitView: View {
   let onContinue: () -> Void
-
-  @Environment(ExperimentManager.self) private var experimentManager
   
   @State private var showMockHealthApp = false
   @State private var isWaitingForPermissionSheet = false
@@ -30,30 +28,16 @@ struct OnboardingHealthKitView: View {
   var body: some View {
     ScrollView {
       VStack(alignment: .leading) {
-        switch experimentManager.variant(for: .softerHealthKitView) {
-        case .treatment:
-          BudImage(.budCoach)
+        BudImage(.budCoach)
 
-          Group {
-            Text("Help me help you 💙")
-            Text("Share your personal data so I can personalize your insights. Your info always stays private, I promise.")
-              .font(.title3)
-              .foregroundStyle(.secondary)
-          }
-          .fixedSize(horizontal: false, vertical: true)
-          .onboardingTextStyle()
-        case .control:
-          BudImage(.budDoctor)
-
-          Group {
-            Text("I need access to your Personal Data")
-            Text("The more personal data you share with me, the more personalized your advice will be!")
-              .font(.title3)
-              .foregroundStyle(.secondary)
-          }
-          .fixedSize(horizontal: false, vertical: true)
-          .onboardingTextStyle()
+        Group {
+          Text("Help me help you 💙")
+          Text("Share your personal data so I can personalize your insights. Your info always stays private, I promise.")
+            .font(.title3)
+            .foregroundStyle(.secondary)
         }
+        .fixedSize(horizontal: false, vertical: true)
+        .onboardingTextStyle()
 
         if showMockHealthApp {
           MockHealthAppPermissionView()
@@ -111,18 +95,16 @@ struct OnboardingHealthKitView: View {
               .frame(minHeight: 50)
           }
 
-          if experimentManager.variant(for: .softerHealthKitView) == .treatment {
-            Text("•")
-              .bold()
-              .foregroundStyle(.tint)
+          Text("•")
+            .bold()
+            .foregroundStyle(.tint)
 
-            Button {
-              presentedSheet = OnboardingHealthKitLearnMoreView().asAny
-            } label: {
-              Text("Learn More")
-                .bold()
-                .frame(minHeight: 50)
-            }
+          Button {
+            presentedSheet = OnboardingHealthKitLearnMoreView().asAny
+          } label: {
+            Text("Learn More")
+              .bold()
+              .frame(minHeight: 50)
           }
         }
       }
@@ -156,12 +138,6 @@ struct OnboardingHealthKitView: View {
     }
     .onAppear {
       TelemetryDeck.signal("OB HealthKit")
-      switch experimentManager.variant(for: .softerHealthKitView) {
-      case .control:
-        TelemetryDeck.signal("AB: Softer HealthKit Control")
-      case .treatment:
-        TelemetryDeck.signal("AB: Softer HealthKit Treatment")
-      }
     }
   }
 }
