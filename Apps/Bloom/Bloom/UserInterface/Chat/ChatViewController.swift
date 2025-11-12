@@ -206,15 +206,26 @@ class ChatViewController: UICollectionViewController {
   }
 
   private func setupNavigationBar() {
-    // Bud image (center)
-    let budImageView = UIImageView(image: .budCoach)
-    budImageView.contentMode = .scaleAspectFit
-    budImageView.translatesAutoresizingMaskIntoConstraints = false
+    // Create ChatTitleView with conversationID - @Query will handle reactive updates
+    let titleView = ChatTitleView(conversationID: conversationID)
+      .modelContainer(ContainerHolder.shared.container)
+
+    let hostingController = UIHostingController(rootView: titleView)
+    hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+    hostingController.view.backgroundColor = .clear
+    hostingController.sizingOptions = [.intrinsicContentSize]
+
+    navigationItem.titleView = hostingController.view
+
+    // Set layout priorities to prevent unnecessary compression
+    hostingController.view.setContentCompressionResistancePriority(.required, for: .horizontal)
+    hostingController.view.setContentHuggingPriority(.defaultLow, for: .horizontal)
+
     NSLayoutConstraint.activate([
-      budImageView.widthAnchor.constraint(equalToConstant: 60),
-      budImageView.heightAnchor.constraint(equalToConstant: 60)
+      hostingController.view.widthAnchor.constraint(equalToConstant: 250),
+//      hostingController.view.widthAnchor.constraint(lessThanOrEqualToConstant: 300),
+      hostingController.view.heightAnchor.constraint(equalToConstant: 50)
     ])
-    navigationItem.titleView = budImageView
   }
 
   private func setupCollectionView() {

@@ -1,0 +1,91 @@
+//
+//  ChatTitleView.swift
+//  Bloom
+//
+//  Created by Mark DiFranco on 2025-11-12.
+//
+
+import SwiftUI
+import SwiftData
+import AppUI
+import BloomUI
+import DataContainer
+
+struct ChatTitleView: View {
+  let conversationID: String
+
+  @Query private var conversations: [ChatConversation]
+
+  @State private var presentedSheet: AnyView?
+
+  init(conversationID: String) {
+    self.conversationID = conversationID
+
+    let predicate = #Predicate<ChatConversation> { conversation in
+      conversation.id == conversationID
+    }
+
+    _conversations = Query(
+      filter: predicate,
+      animation: .default
+    )
+  }
+
+  var body: some View {
+    if #available(iOS 26.0, *) {
+      contentView
+        .padding(.vertical, 6)
+        .padding(.leading, 10)
+        .padding(.trailing, 20)
+        .glassEffect(.regular.interactive())
+    } else {
+      contentView
+    }
+  }
+}
+
+private extension ChatTitleView {
+
+  var conversation: ChatConversation? {
+    conversations.first
+  }
+
+  var title: String {
+    conversation?.name ?? "New Chat Where the title goes onto multiple lines"
+  }
+
+  var contentView: some View {
+    HStack(spacing: 6) {
+      BudImage(.budCoach, dimension: 40)
+
+      Text(title)
+        .fontDesign(.rounded)
+        .bold()
+        .contentTransition(.numericText())
+        .lineLimit(2)
+        .multilineTextAlignment(.leading)
+        .layoutPriority(10)
+        .minimumScaleFactor(0.8)
+    }
+    .onTapGesture {
+      if let conversation {
+        presentedSheet = RenameConversationView(conversation: conversation).asAny
+      }
+    }
+    .animation(.bouncy, value: title)
+    .sheet($presentedSheet)
+  }
+}
+
+#Preview {
+  PreviewEnvironment {
+    NavigationStack {
+      Text("Chat Content")
+        .toolbar {
+          ToolbarItem(placement: .principal) {
+            ChatTitleView(conversationID: String.legacyConversationID)
+          }
+        }
+    }
+  }
+}
