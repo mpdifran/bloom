@@ -52,7 +52,7 @@ struct HealthDataConsentView: View {
           .padding(.horizontal)
 
         AsyncButton {
-          await recordOptIn()
+          try await recordOptIn()
           await showHealthKitPermissionView()
         } label: {
           Group {
@@ -181,8 +181,11 @@ private extension HealthDataConsentView {
 
 private extension HealthDataConsentView {
 
-  func recordOptIn() async {
-    // TODO: Send request to backend to make acceptance
+  func recordOptIn() async throws {
+    try await ConsentManager.shared.recordConsent(
+      healthData: true,
+      externalProcessing: healthDataCloudOptIn
+    )
   }
 
   func showHealthKitPermissionView() async {

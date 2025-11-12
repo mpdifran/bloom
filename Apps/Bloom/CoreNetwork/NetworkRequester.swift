@@ -54,6 +54,15 @@ public extension NetworkRequester {
     let request = await URLRequest.User.testPushNotification()
     try await URLSession.shared.authenticatedBloomRequest(request: request)
   }
+
+  func updateConsent(request: UpdateConsentRequest) async throws -> ConsentResponse {
+    let request = try await URLRequest.User.updateConsent(body: request)
+
+    return try await URLSession.shared.authenticatedBloomRequestWithResponse(
+      request: request,
+      responseType: ConsentResponse.self
+    )
+  }
 }
 
 // MARK: - Food

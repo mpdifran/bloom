@@ -52,6 +52,9 @@ public extension URLRequest {
     public static func testPushNotification() async -> URLRequest {
       await URLRequest.post("v1/user/test-push-notification")
     }
+    public static func updateConsent(body: UpdateConsentRequest) async throws -> URLRequest {
+      try await URLRequest.post("v1/user/consent", body: body)
+    }
     public static func logout() async -> URLRequest {
       await URLRequest.get("v1/user/logout")
     }
