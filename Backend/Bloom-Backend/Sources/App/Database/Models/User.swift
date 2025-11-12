@@ -49,6 +49,12 @@ final class User: Model, Content, @unchecked Sendable {
   @Field(key: "morning_notification_minute")
   var morningNotificationMinute: Int?
 
+  @Field(key: "health_data_consent_granted_at")
+  var healthDataConsentGrantedAt: Date?
+
+  @Field(key: "external_processing_consent_granted_at")
+  var externalProcessingConsentGrantedAt: Date?
+
   @Field(key: "access_token")
   var accessToken: String?
 

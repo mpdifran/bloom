@@ -157,11 +157,27 @@ extension User {
         .field("morning_notification_minute", .int)
         .update()
     }
-    
+
     func revert(on database: any Database) async throws {
       try await database.schema(User.schema)
         .deleteField("morning_notification_hour")
         .deleteField("morning_notification_minute")
+        .update()
+    }
+  }
+
+  struct AddConsentTracking: AsyncMigration {
+    func prepare(on database: any Database) async throws {
+      try await database.schema(User.schema)
+        .field("health_data_consent_granted_at", .datetime)
+        .field("external_processing_consent_granted_at", .datetime)
+        .update()
+    }
+
+    func revert(on database: any Database) async throws {
+      try await database.schema(User.schema)
+        .deleteField("health_data_consent_granted_at")
+        .deleteField("external_processing_consent_granted_at")
         .update()
     }
   }

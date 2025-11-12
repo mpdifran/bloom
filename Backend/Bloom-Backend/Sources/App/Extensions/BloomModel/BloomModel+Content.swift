@@ -51,3 +51,5 @@ extension MagicScanStatusRequest: @retroactive Content { }
 extension MagicScanStatusResponse: @retroactive Content { }
 extension MagicScanCancelRequest: @retroactive Content { }
 extension MagicScanCompleteTrigger: @retroactive Content { }
+extension UpdateConsentRequest: @retroactive Content { }
+extension ConsentResponse: @retroactive Content { }

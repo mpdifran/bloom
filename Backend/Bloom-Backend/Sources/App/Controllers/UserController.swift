@@ -26,6 +26,7 @@ extension UserController: RouteCollection {
           $0.post("register-device-token", use: registerDeviceToken)
           $0.post("morning-notification-time", use: updateMorningNotificationTime)
           $0.post("test-push-notification", use: testPushNotification)
+          $0.post("consent", use: updateConsent)
           $0.get("logout", use: logout)
           $0.get("delete-account", use: deleteAccount)
         }
@@ -177,6 +178,47 @@ private extension UserController {
     request.logger.info("Test push notification sent to user \(user.id?.value ?? "")")
 
     return Response(status: .ok)
+  }
+
+  @Sendable
+  func updateConsent(_ request: Request) async throws -> ConsentResponse {
+    let user = try request.auth.require(User.self)
+    let body = try request.content.decode(UpdateConsentRequest.self)
+
+    var hasChanges = false
+
+    // Update health data consent if provided
+    if let healthDataConsent = body.healthDataConsent {
+      let newValue: Date? = healthDataConsent ? Date() : nil
+      let currentHasConsent = user.healthDataConsentGrantedAt != nil
+
+      if healthDataConsent != currentHasConsent {
+        user.healthDataConsentGrantedAt = newValue
+        hasChanges = true
+      }
+    }
+
+    // Update external processing consent if provided
+    if let externalProcessingConsent = body.externalProcessingConsent {
+      let newValue: Date? = externalProcessingConsent ? Date() : nil
+      let currentHasConsent = user.externalProcessingConsentGrantedAt != nil
+
+      if externalProcessingConsent != currentHasConsent {
+        user.externalProcessingConsentGrantedAt = newValue
+        hasChanges = true
+      }
+    }
+
+    // Only save if there were changes
+    if hasChanges {
+      try await user.save(on: request.db)
+    }
+
+    // Return current consent state
+    return ConsentResponse(
+      hasHealthDataConsent: user.healthDataConsentGrantedAt != nil,
+      hasExternalProcessingConsent: user.externalProcessingConsentGrantedAt != nil
+    )
   }
 
   @Sendable
