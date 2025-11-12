@@ -48,17 +48,9 @@ private extension HealthSleepObserver {
 
     let newLastSleepAnalysis = sleepAnalyses.last
 
-    if
-      (newLastSleepAnalysis?.endDate ?? .distantPast) > (previousSleepAnalysis?.endDate ?? .distantPast) &&
-        previousSleepAnalysis != nil
-    {
-      // We've triggered from new data, not from app launch
-      // Check if user has Bloom Plus before triggering Today content refresh
-      let hasBloomPro = await EntitlementController.shared.hasBloomPro
-      if hasBloomPro == true {
-        // Trigger Today content refresh when new sleep data is available
-        await TodayContentCoordinator.shared.didDetectNewSleepData()
-      }
+    if newLastSleepAnalysis != previousSleepAnalysis && previousSleepAnalysis != nil {
+      // Clear stale insights and trigger refresh when new sleep data is available
+      await TodayInsightsManager.shared.forceRefreshContent()
     }
 
     lastSleepAnalysis = newLastSleepAnalysis

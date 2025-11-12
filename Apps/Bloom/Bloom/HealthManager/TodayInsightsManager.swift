@@ -100,6 +100,7 @@ final class TodayInsightsManager {
   }
 
   func refreshContentIfNeeded() async {
+    guard EntitlementController.shared.hasBloomPro == true else { return }
     guard shouldRefreshContent() else { return }
     guard !isLoadingContent else { return }
 
@@ -107,7 +108,9 @@ final class TodayInsightsManager {
   }
 
   func forceRefreshContent() async {
+    guard EntitlementController.shared.hasBloomPro == true else { return }
     guard !isLoadingContent else { return }
+    clearStoredContent()
     await loadTodayContent()
   }
 

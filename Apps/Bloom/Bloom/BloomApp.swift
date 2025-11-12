@@ -144,7 +144,7 @@ private extension BloomApp {
 
     Task {
       // Load Today content when app comes to foreground
-      await TodayContentCoordinator.shared.loadContentIfNeeded()
+      await TodayInsightsManager.shared.refreshContentIfNeeded()
     }
     
     Task {
