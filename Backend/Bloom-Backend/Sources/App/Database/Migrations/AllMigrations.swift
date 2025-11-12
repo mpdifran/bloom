@@ -46,4 +46,5 @@ let allMigrations: [Migration] = [
   FoodItemDuplicate.Create(),
   FoodItemRecord.AddLogCount(),
   FoodItemRecord.AddStateIndex(),
+  FoodItemRecord.AddSearchTextColumn(),
 ]

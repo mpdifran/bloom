@@ -450,4 +450,47 @@ extension FoodItemRecord {
       """).run()
     }
   }
+
+  struct AddSearchTextColumn: AsyncMigration {
+    func prepare(on database: Database) async throws {
+      guard let sqlDatabase = database as? SQLDatabase else {
+        fatalError("This migration requires an SQL database.")
+      }
+
+      // Add generated column that combines searchable fields
+      try await sqlDatabase.raw("""
+        ALTER TABLE food_item_records
+        ADD COLUMN search_text TEXT
+        GENERATED ALWAYS AS (
+          COALESCE(brand_name, '') || ' ' ||
+          name || ' ' ||
+          COALESCE(flavour, '')
+        ) STORED
+      """).run()
+
+      // Create GIN trigram index on the search_text column
+      try await sqlDatabase.raw("""
+        CREATE INDEX CONCURRENTLY IF NOT EXISTS trgm_search_text_index
+        ON food_item_records
+        USING gin (search_text gin_trgm_ops)
+      """).run()
+    }
+
+    func revert(on database: Database) async throws {
+      guard let sqlDatabase = database as? SQLDatabase else {
+        fatalError("This migration requires an SQL database.")
+      }
+
+      // Drop index first
+      try await sqlDatabase.raw("""
+        DROP INDEX IF EXISTS trgm_search_text_index
+      """).run()
+
+      // Drop the generated column
+      try await sqlDatabase.raw("""
+        ALTER TABLE food_item_records
+        DROP COLUMN IF EXISTS search_text
+      """).run()
+    }
+  }
 }

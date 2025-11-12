@@ -32,26 +32,17 @@ extension FoodDatabaseService {
     }
 
     let results = try await sqlDatabase.raw("""
-            SELECT id, name, state, brand_name, flavour, category, barcode,
-                   country, calories, protein, carbohydrates, fat,
-                   saturated_fat, trans_fat, polyunsaturated_fat, monounsaturated_fat,
-                   fiber, sugar, cholesterol, sodium, calcium, iron, potassium,
-                   magnesium, zinc, vitamin_a, vitamin_b6, vitamin_b12, vitamin_c,
-                   vitamin_d, vitamin_e, serving_name, serving_value, serving_unit,
-                   source, created_at, updated_at,
+            SELECT *,
                    GREATEST(
                        similarity(name, \(bind: query)) * 1.5,
                        similarity(brand_name, \(bind: query)),
                        similarity(flavour, \(bind: query)) * 0.5,
-                       similarity(brand_name || ' ' || name || ' ' || flavour, \(bind: query)) * 2.0
+                       similarity(search_text, \(bind: query)) * 2.0
                    ) *
                    CASE WHEN state = 'verified' THEN 1.05 ELSE 1.0 END *
                    (1.0 + CASE WHEN country = \(bind: preferredCountry) THEN 0.1 ELSE 0.0 END) AS rank
             FROM food_item_records
-            WHERE (similarity(name, \(bind: query)) > 0.1
-               OR similarity(brand_name, \(bind: query)) > 0.1
-               OR similarity(flavour, \(bind: query)) > 0.1
-               OR similarity(brand_name || ' ' || name || ' ' || flavour, \(bind: query)) > 0.1)
+            WHERE similarity(search_text, \(bind: query)) > 0.1
               AND category = \(bind: category.rawValue)::category
               AND state != 'needsAIProcessing'
             ORDER BY
@@ -74,26 +65,17 @@ extension FoodDatabaseService {
     }
 
     let results = try await sqlDatabase.raw("""
-            SELECT id, name, state, brand_name, flavour, category, barcode,
-                   country, calories, protein, carbohydrates, fat,
-                   saturated_fat, trans_fat, polyunsaturated_fat, monounsaturated_fat,
-                   fiber, sugar, cholesterol, sodium, calcium, iron, potassium,
-                   magnesium, zinc, vitamin_a, vitamin_b6, vitamin_b12, vitamin_c,
-                   vitamin_d, vitamin_e, serving_name, serving_value, serving_unit,
-                   source, created_at, updated_at,
+            SELECT *,
                    GREATEST(
                        similarity(name, \(bind: query)) * 1.5,
                        similarity(brand_name, \(bind: query)),
                        similarity(flavour, \(bind: query)) * 0.5,
-                       similarity(brand_name || ' ' || name || ' ' || flavour, \(bind: query)) * 2.0
+                       similarity(search_text, \(bind: query)) * 2.0
                    ) *
                    CASE WHEN state = 'verified' THEN 1.05 ELSE 1.0 END *
                    (1.0 + CASE WHEN country = \(bind: preferredCountry) THEN 0.1 ELSE 0.0 END) AS rank
             FROM food_item_records
-            WHERE (similarity(name, \(bind: query)) > 0.1
-               OR similarity(brand_name, \(bind: query)) > 0.1
-               OR similarity(flavour, \(bind: query)) > 0.1
-               OR similarity(brand_name || ' ' || name || ' ' || flavour, \(bind: query)) > 0.1)
+            WHERE similarity(search_text, \(bind: query)) > 0.1
               AND state != 'needsAIProcessing'
             ORDER BY
                 rank DESC
