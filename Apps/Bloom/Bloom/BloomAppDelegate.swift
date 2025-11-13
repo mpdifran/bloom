@@ -77,6 +77,13 @@ class BloomAppDelegate: NSObject, UIApplicationDelegate {
         return .newData
       }
 
+      // Check if this is a biological age completion notification
+      if let type = userInfo["type"] as? String,
+         type == BiologicalAgeCompleteTrigger.notificationType {
+        await handleBiologicalAgeComplete()
+        return .newData
+      }
+
       // Otherwise handle as chat notification
       let data = try JSONSerialization.data(withJSONObject: userInfo, options: [])
       await ChatController.shared.handlePushData(data)
@@ -101,6 +108,10 @@ class BloomAppDelegate: NSObject, UIApplicationDelegate {
     await MagicScanStatusChecker.shared.checkStatus(
       processingIdentifiers: [AIFoodProcessingIdentifier(processingIdentifier)]
     )
+  }
+
+  private func handleBiologicalAgeComplete() async {
+    await BiologicalAgeStatusChecker.shared.checkPendingCalculation()
   }
 
   @MainActor

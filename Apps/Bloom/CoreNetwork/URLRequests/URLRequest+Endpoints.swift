@@ -154,8 +154,12 @@ public extension URLRequest {
 
 public extension URLRequest {
   enum BiologicalAge {
-    static func calculate(body: BiologicalAgeRequest) async throws -> URLRequest {
-      try await URLRequest.post("v1/biological-age/calculate", body: body)
+    static func request(body: BiologicalAgeUploadRequest) async throws -> URLRequest {
+      try await URLRequest.post("v1/biological-age/request", body: body)
+    }
+
+    static func checkStatus() async throws -> URLRequest {
+      try await URLRequest.post("v1/biological-age/status")
     }
   }
 }

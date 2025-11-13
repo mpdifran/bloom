@@ -17,6 +17,7 @@ import CoreNetwork
 private extension String {
   static let lastBiologicalAgeRequestDate = "BiologicalAgeViewModel.lastBiologicalAgeRequestDate"
   static let lastBiologicalAgeResponse = "BiologicalAgeViewModel.lastBiologicalAgeResponse"
+  static let hasPendingBiologicalAgeCalculation = "BiologicalAgeViewModel.hasPendingBiologicalAgeCalculation"
 }
 
 @MainActor @Observable
@@ -41,10 +42,18 @@ final class BiologicalAgeViewModel {
     }
   }
 
+  var hasPendingCalculation: Bool {
+    didSet {
+      UserDefaults.group.set(hasPendingCalculation, forKey: .hasPendingBiologicalAgeCalculation)
+    }
+  }
+
   var isCalculatingAge = false
   var lastCalculationError: Error? = nil
 
   private init() {
+    self.hasPendingCalculation = UserDefaults.group.bool(forKey: .hasPendingBiologicalAgeCalculation)
+
     if let date = UserDefaults.group.object(forKey: .lastBiologicalAgeRequestDate) as? Date {
       self.lastRequestDate = date
     }
@@ -67,11 +76,11 @@ extension BiologicalAgeViewModel {
   }
 
   func shouldCalculateBiologicalAge() -> Bool {
-    // Check if we have made a request in the last 3 days
+    // Check if we have made a request in the last 7 days
     guard let lastRequest = lastRequestDate else { return true }
 
-    let threeDaysAgo = Calendar.current.date(byAdding: .day, value: -3, to: Date()) ?? Date()
-    return lastRequest < threeDaysAgo
+    let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
+    return lastRequest < sevenDaysAgo
   }
 
   func calculateBiologicalAgeIfNeeded() async {
@@ -124,16 +133,16 @@ extension BiologicalAgeViewModel {
       let lastBioAge = lastResponse?.biologicalAge
 
       // Create request with health data, current age, and last biological age
-      let request = BiologicalAgeRequest(
+      let request = BiologicalAgeUploadRequest(
         healthContext: healthContext,
         currentAge: currentAge,
         lastBiologicalAge: lastBioAge
       )
 
-      // Make network request
-      let response: BiologicalAgeResponse
+      // Make network request to start background calculation
+      let uploadResponse: BiologicalAgeUploadResponse
       do {
-        response = try await NetworkRequester.shared.getBiologicalAge(request: request)
+        uploadResponse = try await NetworkRequester.shared.requestBiologicalAge(request: request)
       } catch {
         TelemetryDeck.signal(
           "Biological Age Network Error",
@@ -142,16 +151,22 @@ extension BiologicalAgeViewModel {
         throw error
       }
 
-      // Store the response
-      lastResponse = response
+      // Record that we made a request
       lastRequestDate = today
+      hasPendingCalculation = true
 
       TelemetryDeck.signal(
-        "Biological Age Calculated",
+        "Biological Age Requested",
         parameters: [
-          "biologicalAge": String(response.biologicalAge)
+          "status": uploadResponse.status.rawValue
         ]
       )
+
+      // If the response is already completed (shouldn't happen but handle it)
+      if uploadResponse.status == .completed {
+        // Check for the result immediately
+        await BiologicalAgeStatusChecker.shared.checkPendingCalculation()
+      }
 
     } catch {
       lastCalculationError = error
@@ -161,5 +176,23 @@ extension BiologicalAgeViewModel {
         message: error.localizedDescription
       )
     }
+  }
+
+  /// Stores a completed calculation result (called by BiologicalAgeStatusChecker)
+  func storeCalculationResult(_ response: BiologicalAgeResponse) {
+    lastResponse = response
+    hasPendingCalculation = false
+
+    TelemetryDeck.signal(
+      "Biological Age Calculated",
+      parameters: [
+        "biologicalAge": String(response.biologicalAge)
+      ]
+    )
+  }
+
+  /// Clears the pending calculation flag (called by BiologicalAgeStatusChecker on failure or notFound)
+  func clearPendingCalculation() {
+    hasPendingCalculation = false
   }
 }

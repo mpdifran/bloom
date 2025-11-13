@@ -263,11 +263,19 @@ public extension NetworkRequester {
 
 public extension NetworkRequester {
 
-  func getBiologicalAge(request: BiologicalAgeRequest) async throws -> BiologicalAgeResponse {
-    let urlRequest = try await URLRequest.BiologicalAge.calculate(body: request)
+  func requestBiologicalAge(request: BiologicalAgeUploadRequest) async throws -> BiologicalAgeUploadResponse {
+    let urlRequest = try await URLRequest.BiologicalAge.request(body: request)
     return try await URLSession.shared.authenticatedBloomRequestWithResponse(
       request: urlRequest,
-      responseType: BiologicalAgeResponse.self
+      responseType: BiologicalAgeUploadResponse.self
+    )
+  }
+
+  func checkBiologicalAgeStatus() async throws -> BiologicalAgeStatusResponse {
+    let urlRequest = try await URLRequest.BiologicalAge.checkStatus()
+    return try await URLSession.shared.authenticatedBloomRequestWithResponse(
+      request: urlRequest,
+      responseType: BiologicalAgeStatusResponse.self
     )
   }
 }
