@@ -15,6 +15,7 @@ struct BloomPlusLogo: View {
       Text("Plus")
         .fontDesign(.monospaced)
         .foregroundStyle(.white)
+        .fontWeight(.black)
         .padding(4)
         .background {
           RoundedRectangle(cornerRadius: 6)
@@ -22,7 +23,7 @@ struct BloomPlusLogo: View {
         }
     }
     .bold()
-    .font(.caption)
+    .font(.subheadline)
     .background {
       RoundedRectangle(cornerRadius: 6)
         .fill(.regularMaterial)
@@ -32,6 +33,8 @@ struct BloomPlusLogo: View {
 
 #Preview {
   PreviewEnvironment {
-    BloomPlusLogo()
+    BloomScrollView {
+      BloomPlusLogo()
+    }
   }
 }

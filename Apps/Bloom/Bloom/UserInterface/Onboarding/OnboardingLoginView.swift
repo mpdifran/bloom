@@ -23,73 +23,56 @@ struct OnboardingLoginView: View {
   @State private var viewModel = ViewModel()
 
   var body: some View {
-    ScrollView {
-      VStack(alignment: .leading, spacing: 20) {
-        BudImage(.budPhone, dimension: 200)
-          .horizontalAlignment(.leading)
-
-        Text("Let's sign in with your Apple Account.")
-          .fixedSize(horizontal: false, vertical: true)
-          .onboardingTextStyle()
-          .horizontalAlignment(.leading)
-          .padding(.horizontal)
-          .transition(.opacity)
-          .appear(with: 1, currentIndex: index, secondaryIfNotCurrentIndex: false)
-
-        Text("This will let me keep your data safe, block spam, and run things smoothly. Don’t worry, your info stays private unless you choose to share it.")
-          .font(.headline)
-          .fixedSize(horizontal: false, vertical: true)
-          .onboardingTextStyle()
-          .horizontalAlignment(.leading)
-          .padding(.horizontal)
-          .transition(.opacity)
-          .appear(with: 2, currentIndex: index, secondaryIfNotCurrentIndex: false)
-
-        BloomPlusFeaturesListView()
-          .fixedSize(horizontal: false, vertical: true)
-          .transition(.blurReplace)
-          .appear(with: 3, currentIndex: index, secondaryIfNotCurrentIndex: false)
+    Color.clear
+      .overlay {
+        Image(.budWilderness)
+          .resizable()
+          .scaledToFill()
       }
-      .horizontallyCentered()
-    }
-    .groupedBackground()
+    .ignoresSafeArea()
     .animation(.default, value: index)
     .sensoryFeedback(.selection, trigger: index)
     .alert(error: $error)
     .shelf {
-      Group {
-        SignInWithAppleButton(
-          onRequest: { (request) in
-            authorizationState = UUID().uuidString
-            request.state = authorizationState
-            request.requestedScopes = [.fullName, .email]
-          },
-          onCompletion: handleSignInResult
-        )
-        .signInWithAppleButtonStyle(.black)
-        .frame(height: 60)
-        .frame(maxWidth: 400)
-        .clipShape(RoundedRectangle(cornerRadius: 17))
+      DisplayAppIcon()
+        .transition(.blurReplace)
+        .frame(square: 80)
 
-        HStack {
-          Link("Terms of Service", destination: .termsOfService)
-            .frame(height: 44)
-
-          Text("•")
-
-          Link("Privacy Policy", destination: .privacyPolicy)
-            .frame(height: 44)
-        }
-        .foregroundStyle(.tint)
+      Text("Welcome To Bloom")
+        .font(.title)
         .bold()
+        .fontDesign(.rounded)
+
+      SignInWithAppleButton(
+        onRequest: { (request) in
+          authorizationState = UUID().uuidString
+          request.state = authorizationState
+          request.requestedScopes = [.fullName, .email]
+        },
+        onCompletion: handleSignInResult
+      )
+      .signInWithAppleButtonStyle(.black)
+      .frame(height: 60)
+      .frame(maxWidth: 400)
+      .clipShape(RoundedRectangle(cornerRadius: 17))
+
+      HStack {
+        Link("Terms of Service", destination: .termsOfService)
+          .frame(height: 44)
+
+        Text("•")
+
+        Link("Privacy Policy", destination: .privacyPolicy)
+          .frame(height: 44)
       }
-      .appear(with: 3, currentIndex: index, secondaryIfNotCurrentIndex: false)
+      .foregroundStyle(.tint)
+      .bold()
     }
     .onAppear {
       TelemetryDeck.signal("View Login")
     }
     .task {
-      while index < 3 {
+      while index < 1 {
         await advanceIndex()
       }
     }

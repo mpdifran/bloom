@@ -27,7 +27,7 @@ struct BloomPlusFAQView: View {
         )
         BloomPlusFAQCell(
           question: "How is my personal data secured?",
-          answer: "Privacy is one of our core values. Your personal data is only stored on your device, and Bud reads specific data temporarily depending on what you ask. Your chat history is never used for AI training, and can only be accessed by you. We explicitly don't track food you search for, and your food logs only exist on your device."
+          answer: "Privacy is one of our core values. Your personal data is only stored on your device. To power some personalized insight features, we send de-identified, summarized data to OpenAI. This data is never stored on our servers, is discarded after use, and is not used to train AI models. Your food logs are only stored on your device."
         )
         BloomPlusFAQCell(
           question: "How can I cancel my trial?",

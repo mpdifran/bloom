@@ -22,6 +22,7 @@ struct BloomPlusTryBloomHeaderView: View {
         .bold()
         .fontDesign(.rounded)
         .horizontalAlignment(.leading)
+        .fixedSize(horizontal: false, vertical: true)
 
       Text("No generic plans. No one-size-fits-all tips. Just real insights based on your real data.")
         .foregroundStyle(.secondary)
@@ -29,6 +30,7 @@ struct BloomPlusTryBloomHeaderView: View {
     }
     .multilineTextAlignment(.leading)
     .horizontalAlignment(.leading)
+    .fixedSize(horizontal: false, vertical: true)
   }
 }
 
