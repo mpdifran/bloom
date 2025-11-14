@@ -323,6 +323,9 @@ private extension TodaySettingsView {
         }
       }
     }
+
+    // Force persistence by triggering the property wrapper setter
+    todaySettings = todaySettings
   }
 }
 

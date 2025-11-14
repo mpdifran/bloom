@@ -166,6 +166,7 @@ private struct TimePickerSheet: View {
           Button("Save") {
             let hour = Calendar.current.component(.hour, from: selectedTime)
             onSave(hour)
+            dismiss()
           }
           .bold()
         }

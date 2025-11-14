@@ -23,7 +23,7 @@ struct OnboardingNotificationPermissionView: View {
   var body: some View {
     ScrollView {
       VStack(alignment: .leading, spacing: 20) {
-        BudImage(.budWater)
+        BudImage(.budYoga)
 
         Group {
           Text("I'd love to keep in touch with you when it's important.")

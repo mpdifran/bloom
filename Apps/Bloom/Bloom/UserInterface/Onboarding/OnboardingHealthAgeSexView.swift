@@ -189,7 +189,7 @@ private extension OnboardingHealthAgeSexView {
 
   @ViewBuilder
   var doesNotHaveHealthDataContent: some View {
-    BudImage(.budSadWorkout)
+    BudImage(.budThinking)
 
     Text("Uh oh, looks like I wasn't able to get some important information.")
       .appear(with: 1, currentIndex: index, secondaryIfNotCurrentIndex: false)

@@ -144,6 +144,7 @@ struct TodayView: View {
     .animation(.default, value: todayViewModel.isLoadingContent)
     .animation(.default, value: todayViewModel.hasLoadError)
     .animation(.default, value: getBloomPlusHasDismissed)
+    .animation(.default, value: currentTimeMode)
     .tabItem {
       Label("Today", image: .todayTab)
     }
