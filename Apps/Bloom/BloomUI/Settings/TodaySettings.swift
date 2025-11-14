@@ -83,6 +83,11 @@ public struct TodaySettings: Codable, TimeModeSettings {
   public var eveningStartHour: Int
   public var nightStartHour: Int
 
+  public var morningStartMinute: Int
+  public var afternoonStartMinute: Int
+  public var eveningStartMinute: Int
+  public var nightStartMinute: Int
+
   public var morningConfiguration: TimeModeConfiguration
   public var afternoonConfiguration: TimeModeConfiguration
   public var eveningConfiguration: TimeModeConfiguration
@@ -93,6 +98,11 @@ public struct TodaySettings: Codable, TimeModeSettings {
     self.afternoonStartHour = TimeMode.afternoon.defaultStartHour
     self.eveningStartHour = TimeMode.evening.defaultStartHour
     self.nightStartHour = TimeMode.night.defaultStartHour
+
+    self.morningStartMinute = 0
+    self.afternoonStartMinute = 0
+    self.eveningStartMinute = 0
+    self.nightStartMinute = 0
 
     self.morningConfiguration = TimeModeConfiguration(for: .morning)
     self.afternoonConfiguration = TimeModeConfiguration(for: .afternoon)
@@ -215,6 +225,32 @@ public struct TodaySettings: Codable, TimeModeSettings {
       eveningStartHour = hour
     case .night:
       nightStartHour = hour
+    }
+  }
+
+  public func startMinute(for timeMode: TimeMode) -> Int {
+    switch timeMode {
+    case .morning:
+      return morningStartMinute
+    case .afternoon:
+      return afternoonStartMinute
+    case .evening:
+      return eveningStartMinute
+    case .night:
+      return nightStartMinute
+    }
+  }
+
+  public mutating func setStartMinute(_ minute: Int, for timeMode: TimeMode) {
+    switch timeMode {
+    case .morning:
+      morningStartMinute = minute
+    case .afternoon:
+      afternoonStartMinute = minute
+    case .evening:
+      eveningStartMinute = minute
+    case .night:
+      nightStartMinute = minute
     }
   }
 }

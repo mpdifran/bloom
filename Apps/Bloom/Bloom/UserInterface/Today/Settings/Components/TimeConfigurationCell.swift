@@ -12,30 +12,32 @@ import SFSafeSymbols
 struct TimeConfigurationCell: View {
   let timeMode: TimeMode
   let startHour: Int
+  let startMinute: Int
   let todaySettings: TodaySettings
-  let onHourChanged: (Int) -> Void
-  
+  let onTimeChanged: (Int, Int) -> Void
+
   @State private var showingTimePicker = false
-  
+
   private var timeFormatter: DateFormatter {
     let formatter = DateFormatter()
     formatter.timeStyle = .short
     return formatter
   }
-  
+
   private var startTime: Date {
     let calendar = Calendar.current
-    let components = DateComponents(hour: startHour, minute: 0)
+    let components = DateComponents(hour: startHour, minute: startMinute)
     return calendar.date(from: components) ?? Date()
   }
-  
+
   private var endTime: Date {
     let calendar = Calendar.current
     let endHour = getEndHour()
-    let components = DateComponents(hour: endHour, minute: 0)
+    let endMinute = getEndMinute()
+    let components = DateComponents(hour: endHour, minute: endMinute)
     return calendar.date(from: components) ?? Date()
   }
-  
+
   private func getEndHour() -> Int {
     switch timeMode {
     case .morning:
@@ -46,6 +48,19 @@ struct TimeConfigurationCell: View {
       return todaySettings.nightStartHour
     case .night:
       return todaySettings.morningStartHour
+    }
+  }
+
+  private func getEndMinute() -> Int {
+    switch timeMode {
+    case .morning:
+      return todaySettings.afternoonStartMinute
+    case .afternoon:
+      return todaySettings.eveningStartMinute
+    case .evening:
+      return todaySettings.nightStartMinute
+    case .night:
+      return todaySettings.morningStartMinute
     }
   }
   
@@ -102,8 +117,9 @@ struct TimeConfigurationCell: View {
       TimePickerSheet(
         timeMode: timeMode,
         selectedHour: startHour,
-        onSave: { hour in
-          onHourChanged(hour)
+        selectedMinute: startMinute,
+        onSave: { hour, minute in
+          onTimeChanged(hour, minute)
           showingTimePicker = false
         }
       )
@@ -115,18 +131,20 @@ struct TimeConfigurationCell: View {
 private struct TimePickerSheet: View {
   let timeMode: TimeMode
   let selectedHour: Int
-  let onSave: (Int) -> Void
-  
+  let selectedMinute: Int
+  let onSave: (Int, Int) -> Void
+
   @State private var selectedTime: Date
   @Environment(\.dismiss) private var dismiss
-  
-  init(timeMode: TimeMode, selectedHour: Int, onSave: @escaping (Int) -> Void) {
+
+  init(timeMode: TimeMode, selectedHour: Int, selectedMinute: Int, onSave: @escaping (Int, Int) -> Void) {
     self.timeMode = timeMode
     self.selectedHour = selectedHour
+    self.selectedMinute = selectedMinute
     self.onSave = onSave
-    
+
     let calendar = Calendar.current
-    let components = DateComponents(hour: selectedHour, minute: 0)
+    let components = DateComponents(hour: selectedHour, minute: selectedMinute)
     self._selectedTime = State(initialValue: calendar.date(from: components) ?? Date())
   }
   
@@ -165,7 +183,8 @@ private struct TimePickerSheet: View {
         ToolbarItem(placement: .confirmationAction) {
           Button("Save") {
             let hour = Calendar.current.component(.hour, from: selectedTime)
-            onSave(hour)
+            let minute = Calendar.current.component(.minute, from: selectedTime)
+            onSave(hour, minute)
             dismiss()
           }
           .bold()

@@ -99,9 +99,10 @@ private extension TodaySettingsView {
           TimeConfigurationCell(
             timeMode: mode,
             startHour: todaySettings.startHour(for: mode),
+            startMinute: todaySettings.startMinute(for: mode),
             todaySettings: todaySettings,
-            onHourChanged: { hour in
-              adjustTimeModesAfterChange(mode: mode, newHour: hour)
+            onTimeChanged: { hour, minute in
+              adjustTimeModesAfterChange(mode: mode, newHour: hour, newMinute: minute)
             }
           )
         }
@@ -253,79 +254,83 @@ private extension TodaySettingsView {
     }
   }
   
-  func adjustTimeModesAfterChange(mode: TimeMode, newHour: Int) {
-    // Set the new hour for the changed mode
-    todaySettings.setStartHour(newHour, for: mode)
-    
+  func adjustTimeModesAfterChange(mode: TimeMode, newHour: Int, newMinute: Int) {
+    // Create a local copy to modify
+    var settings = todaySettings
+
+    // Set the new hour and minute for the changed mode
+    settings.setStartHour(newHour, for: mode)
+    settings.setStartMinute(newMinute, for: mode)
+
     // Ensure all time modes stay in order with at least 1 hour gap
     switch mode {
     case .morning:
       // If morning is changed, adjust afternoon, evening, and night if needed
       let minAfternoon = min(newHour + 1, 23)
-      if todaySettings.afternoonStartHour <= minAfternoon {
-        todaySettings.afternoonStartHour = min(minAfternoon + 1, 23)
-        
-        let minEvening = min(todaySettings.afternoonStartHour + 1, 23)
-        if todaySettings.eveningStartHour <= minEvening {
-          todaySettings.eveningStartHour = min(minEvening + 1, 23)
-          
-          let minNight = min(todaySettings.eveningStartHour + 1, 23)
-          if todaySettings.nightStartHour <= minNight {
-            todaySettings.nightStartHour = min(minNight + 1, 23)
+      if settings.afternoonStartHour <= minAfternoon {
+        settings.afternoonStartHour = min(minAfternoon + 1, 23)
+
+        let minEvening = min(settings.afternoonStartHour + 1, 23)
+        if settings.eveningStartHour <= minEvening {
+          settings.eveningStartHour = min(minEvening + 1, 23)
+
+          let minNight = min(settings.eveningStartHour + 1, 23)
+          if settings.nightStartHour <= minNight {
+            settings.nightStartHour = min(minNight + 1, 23)
           }
         }
       }
-      
+
     case .afternoon:
       // Adjust morning if it's too close/after
-      if todaySettings.morningStartHour >= newHour {
-        todaySettings.morningStartHour = max(newHour - 1, 0)
+      if settings.morningStartHour >= newHour {
+        settings.morningStartHour = max(newHour - 1, 0)
       }
-      
+
       // Adjust evening and night if needed
       let minEvening = min(newHour + 1, 23)
-      if todaySettings.eveningStartHour <= minEvening {
-        todaySettings.eveningStartHour = min(minEvening + 1, 23)
-        
-        let minNight = min(todaySettings.eveningStartHour + 1, 23)
-        if todaySettings.nightStartHour <= minNight {
-          todaySettings.nightStartHour = min(minNight + 1, 23)
+      if settings.eveningStartHour <= minEvening {
+        settings.eveningStartHour = min(minEvening + 1, 23)
+
+        let minNight = min(settings.eveningStartHour + 1, 23)
+        if settings.nightStartHour <= minNight {
+          settings.nightStartHour = min(minNight + 1, 23)
         }
       }
-      
+
     case .evening:
       // Adjust earlier modes if needed
-      if todaySettings.afternoonStartHour >= newHour {
-        todaySettings.afternoonStartHour = max(newHour - 1, 0)
-        
-        if todaySettings.morningStartHour >= todaySettings.afternoonStartHour {
-          todaySettings.morningStartHour = max(todaySettings.afternoonStartHour - 1, 0)
+      if settings.afternoonStartHour >= newHour {
+        settings.afternoonStartHour = max(newHour - 1, 0)
+
+        if settings.morningStartHour >= settings.afternoonStartHour {
+          settings.morningStartHour = max(settings.afternoonStartHour - 1, 0)
         }
       }
-      
+
       // Adjust night if needed
       let minNight = min(newHour + 1, 23)
-      if todaySettings.nightStartHour <= minNight {
-        todaySettings.nightStartHour = min(minNight + 1, 23)
+      if settings.nightStartHour <= minNight {
+        settings.nightStartHour = min(minNight + 1, 23)
       }
-      
+
     case .night:
       // Adjust earlier modes if needed
-      if todaySettings.eveningStartHour >= newHour {
-        todaySettings.eveningStartHour = max(newHour - 1, 0)
-        
-        if todaySettings.afternoonStartHour >= todaySettings.eveningStartHour {
-          todaySettings.afternoonStartHour = max(todaySettings.eveningStartHour - 1, 0)
-          
-          if todaySettings.morningStartHour >= todaySettings.afternoonStartHour {
-            todaySettings.morningStartHour = max(todaySettings.afternoonStartHour - 1, 0)
+      if settings.eveningStartHour >= newHour {
+        settings.eveningStartHour = max(newHour - 1, 0)
+
+        if settings.afternoonStartHour >= settings.eveningStartHour {
+          settings.afternoonStartHour = max(settings.eveningStartHour - 1, 0)
+
+          if settings.morningStartHour >= settings.afternoonStartHour {
+            settings.morningStartHour = max(settings.afternoonStartHour - 1, 0)
           }
         }
       }
     }
 
-    // Force persistence by triggering the property wrapper setter
-    todaySettings = todaySettings
+    // Assign the modified copy back to trigger persistence
+    todaySettings = settings
   }
 }
 

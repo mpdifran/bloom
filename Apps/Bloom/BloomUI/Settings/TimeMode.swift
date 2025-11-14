@@ -73,16 +73,25 @@ public enum TimeMode: String, CaseIterable, Identifiable, Codable {
   public static func current(for date: Date = .now, settings: any TimeModeSettings) -> TimeMode {
     let calendar = Calendar.current
     let hour = calendar.component(.hour, from: date)
+    let minute = calendar.component(.minute, from: date)
+
+    // Convert to minutes since midnight for accurate comparison
+    let currentMinutes = hour * 60 + minute
+
+    let morningMinutes = settings.morningStartHour * 60 + settings.morningStartMinute
+    let afternoonMinutes = settings.afternoonStartHour * 60 + settings.afternoonStartMinute
+    let eveningMinutes = settings.eveningStartHour * 60 + settings.eveningStartMinute
+    let nightMinutes = settings.nightStartHour * 60 + settings.nightStartMinute
 
     // Check in reverse order (night -> evening -> afternoon -> morning)
     // to find the most recent time mode that has started
-    if hour >= settings.nightStartHour {
+    if currentMinutes >= nightMinutes {
       return .night
-    } else if hour >= settings.eveningStartHour {
+    } else if currentMinutes >= eveningMinutes {
       return .evening
-    } else if hour >= settings.afternoonStartHour {
+    } else if currentMinutes >= afternoonMinutes {
       return .afternoon
-    } else if hour >= settings.morningStartHour {
+    } else if currentMinutes >= morningMinutes {
       return .morning
     } else {
       // If before morning start (e.g., 3 AM), consider it night from previous day
@@ -91,10 +100,15 @@ public enum TimeMode: String, CaseIterable, Identifiable, Codable {
   }
 }
 
-/// Protocol that defines the start hours for each time mode phase
+/// Protocol that defines the start times for each time mode phase
 public protocol TimeModeSettings {
   var morningStartHour: Int { get }
   var afternoonStartHour: Int { get }
   var eveningStartHour: Int { get }
   var nightStartHour: Int { get }
+
+  var morningStartMinute: Int { get }
+  var afternoonStartMinute: Int { get }
+  var eveningStartMinute: Int { get }
+  var nightStartMinute: Int { get }
 }
