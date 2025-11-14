@@ -10,6 +10,7 @@ import AppUI
 import BloomUI
 import BloomModel
 import BloomFoundation
+import TelemetryDeck
 
 struct OnboardingExplanationTodayInsightsView: View {
   let onContinue: () -> Void
@@ -46,6 +47,9 @@ struct OnboardingExplanationTodayInsightsView: View {
           .horizontallyCentered()
       }
       .buttonStyle(.primary)
+    }
+    .onAppear {
+      TelemetryDeck.signal("OB Today Insights Explanation")
     }
   }
 }

@@ -20,6 +20,8 @@ struct OnboardingLoginView: View {
   @State private var authorizationState: String?
   @State private var error: Error?
 
+  @State private var presentedSheet: AnyView?
+
   @State private var viewModel = ViewModel()
 
   var body: some View {
@@ -33,49 +35,74 @@ struct OnboardingLoginView: View {
     .animation(.default, value: index)
     .sensoryFeedback(.selection, trigger: index)
     .alert(error: $error)
-    .shelf {
-      DisplayAppIcon()
-        .transition(.blurReplace)
-        .frame(square: 80)
-
-      Text("Welcome To Bloom")
-        .font(.title)
-        .bold()
-        .fontDesign(.rounded)
-
-      SignInWithAppleButton(
-        onRequest: { (request) in
-          authorizationState = UUID().uuidString
-          request.state = authorizationState
-          request.requestedScopes = [.fullName, .email]
-        },
-        onCompletion: handleSignInResult
-      )
-      .signInWithAppleButtonStyle(.black)
-      .frame(height: 60)
-      .frame(maxWidth: 400)
-      .clipShape(RoundedRectangle(cornerRadius: 17))
-
-      HStack {
-        Link("Terms of Service", destination: .termsOfService)
-          .frame(height: 44)
-
-        Text("•")
-
-        Link("Privacy Policy", destination: .privacyPolicy)
-          .frame(height: 44)
-      }
-      .foregroundStyle(.tint)
-      .bold()
-    }
+    .sheet($presentedSheet)
+//    .shelf {
+//      shelfContent
+//    }
     .onAppear {
       TelemetryDeck.signal("View Login")
+    }
+    .task {
+      await Delay(500)
+      await MainActor.run {
+        presentedSheet = sheetView.asAny
+      }
     }
     .task {
       while index < 1 {
         await advanceIndex()
       }
     }
+  }
+}
+
+private extension OnboardingLoginView {
+
+  var sheetView: some View {
+    VStack {
+      shelfContent
+    }
+    .padding(.horizontal)
+    .padding(.top)
+    .presentationDetentSelfSizing()
+    .interactiveDismissDisabled()
+  }
+
+  @ViewBuilder
+  var shelfContent: some View {
+    DisplayAppIcon()
+      .transition(.blurReplace)
+      .frame(square: 80)
+
+    Text("Welcome To Bloom")
+      .font(.title)
+      .bold()
+      .fontDesign(.rounded)
+
+    SignInWithAppleButton(
+      onRequest: { (request) in
+        authorizationState = UUID().uuidString
+        request.state = authorizationState
+        request.requestedScopes = [.fullName, .email]
+      },
+      onCompletion: handleSignInResult
+    )
+    .signInWithAppleButtonStyle(.black)
+    .frame(height: 60)
+    .frame(maxWidth: 400)
+    .clipShape(RoundedRectangle(cornerRadius: 17))
+
+    HStack {
+      Link("Terms of Service", destination: .termsOfService)
+        .frame(height: 44)
+
+      Text("•")
+
+      Link("Privacy Policy", destination: .privacyPolicy)
+        .frame(height: 44)
+    }
+    .foregroundStyle(.tint)
+    .bold()
   }
 }
 

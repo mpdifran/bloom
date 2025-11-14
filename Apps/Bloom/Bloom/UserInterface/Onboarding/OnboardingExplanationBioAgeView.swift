@@ -11,6 +11,7 @@ import BloomUI
 import BloomModel
 import BloomFoundation
 import DataContainer
+import TelemetryDeck
 
 struct OnboardingExplanationBioAgeView: View {
   let onContinue: () -> Void
@@ -50,6 +51,9 @@ struct OnboardingExplanationBioAgeView: View {
           .horizontallyCentered()
       }
       .buttonStyle(.primary)
+    }
+    .onAppear {
+      TelemetryDeck.signal("OB Bio Age Explanation")
     }
   }
 }

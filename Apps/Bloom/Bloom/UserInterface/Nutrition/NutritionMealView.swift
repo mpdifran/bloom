@@ -44,7 +44,14 @@ struct NutritionMealView: View {
 
   var body: some View {
     VStack(spacing: 16) {
-      mealHeader
+      MealHeaderView(
+        mealName: meal.name,
+        totalCalories: foodItemLogs.totalCalories,
+        totalProtein: foodItemLogs.totalProtein,
+        totalCarbs: foodItemLogs.totalCarbs,
+        totalFat: foodItemLogs.totalFat,
+        onLogTapped: onLogTapped
+      )
 
       VStack(spacing: 8) {
         if foodItemLogs.isEmpty {
@@ -157,53 +164,6 @@ private extension NutritionMealView {
           }
           .tint(.red)
         }
-      }
-    }
-  }
-
-  var mealHeader: some View {
-    HStack {
-      VStack(alignment: .leading, spacing: 6) {
-        HStack(spacing: 12) {
-          Text(meal.name)
-            .font(
-              .system(
-                .headline,
-                design: .rounded,
-                weight: .black
-              )
-            )
-          
-          if !foodItemLogs.isEmpty {
-            MacroDistributionBar(
-              proteinGrams: foodItemLogs.totalProtein,
-              carbsGrams: foodItemLogs.totalCarbs,
-              fatGrams: foodItemLogs.totalFat
-            )
-            .frame(width: 60)
-          }
-        }
-
-        Text("\(foodItemLogs.totalCalories.format()) Cals • \(foodItemLogs.totalProtein.format()) g Protein •  \(foodItemLogs.totalCarbs.format()) g Carbs • \(foodItemLogs.totalFat.format()) g Fats")
-          .font(.caption)
-          .foregroundStyle(.secondary)
-          .bold()
-      }
-
-      Spacer()
-
-      Button {
-        onLogTapped()
-      } label: {
-        Label("Add", systemSymbol: .plus)
-          .padding(.vertical, 8)
-          .padding(.horizontal, 12)
-          .foregroundStyle(.tint)
-          .font(.subheadline)
-          .fontDesign(.rounded)
-          .bold()
-          .background(.background)
-          .clipShape(Capsule())
       }
     }
   }

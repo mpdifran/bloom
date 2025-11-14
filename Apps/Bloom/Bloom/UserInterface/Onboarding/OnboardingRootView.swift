@@ -12,7 +12,9 @@ import TelemetryDeck
 extension OnboardingRootView {
   enum Step {
     case welcome
+    case appExplanation
     case todayExplanation
+    case nutritionExplanation
     case chatExplanation
     case bioAgeExplanation
     case healthKit
@@ -42,10 +44,29 @@ struct OnboardingRootView: View {
       switch step {
       case .welcome:
         OnboardingWelcomeView {
-          setStep(.todayExplanation)
+          switch experimentManager.variant(for: .onboardingFeaturePitch) {
+          case .treatment:
+            setStep(.todayExplanation)
+          case .control:
+            setStep(.appExplanation)
+          }
+        }
+      case .appExplanation:
+        OnboardingAppExplanationView {
+          setStep(.healthKit)
+        }
+        .onAppear {
+          TelemetryDeck.signal("AB: Onboarding Feature Pitch - Control")
         }
       case .todayExplanation:
         OnboardingExplanationTodayInsightsView {
+          setStep(.nutritionExplanation)
+        }
+        .onAppear {
+          TelemetryDeck.signal("AB: Onboarding Feature Pitch - Treatment")
+        }
+      case .nutritionExplanation:
+        OnboardingExplanationNutritionView {
           setStep(.chatExplanation)
         }
       case .chatExplanation:
@@ -57,8 +78,15 @@ struct OnboardingRootView: View {
           setStep(.healthKit)
         }
       case .healthKit:
-        HealthDataConsentView {
-          checkHealthDataAndProceed()
+        switch experimentManager.variant(for: .onboardingFeaturePitch) {
+        case .treatment:
+          OnboardingHealthKitTreatmentView {
+            checkHealthDataAndProceed()
+          }
+        case .control:
+          OnboardingHealthKitView {
+            checkHealthDataAndProceed()
+          }
         }
       case .ageAndSex:
         OnboardingHealthAgeSexView {

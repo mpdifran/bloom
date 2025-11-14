@@ -791,10 +791,12 @@ extension DeveloperSettingsView {
         .padding(.horizontal)
 
       SettingsSectionContainer {
-        ExperimentOverrideView(
-          experimentId: ExperimentIdentifier.onboardingPaywall.value,
-          experimentName: "Onboarding Paywall"
-        )
+        ForEach(Experiment.allCases) { experiment in
+          ExperimentOverrideView(
+            experimentId: experiment.id.value,
+            experimentName: experiment.name
+          )
+        }
       }
     }
   }
