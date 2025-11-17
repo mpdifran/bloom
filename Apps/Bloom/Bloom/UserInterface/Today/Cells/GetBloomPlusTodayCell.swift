@@ -15,28 +15,29 @@ struct GetBloomPlusTodayCell: View {
   @State private var presentedSheet: AnyView?
 
   var body: some View {
-    VStack(alignment: .leading, spacing: 16) {
-      TodayCardCell(
-        symbol: .moonZzz,
-        title: "Tonight's Sleep",
-        content: "This is where you would receive daily insights into your personal data.",
-        color: .mutedPurple
-      )
-      .premiumLocked("Bud’s Got the Scoop—Wanna See It?")
+    VStack(alignment: .leading, spacing: 0) {
+      Image(.budLounging)
+        .resizable()
+        .scaledToFill()
+        .frame(height: 200)
+        .clipped()
 
-      Text("Get personalized insights on what’s boosting (or bumming out) your health. It’s like x-ray vision for your wellness.")
-        .font(.body)
-        .foregroundStyle(.secondary)
-        .padding(.bottom)
+      VStack {
+        Text("Get personalized insights on what’s boosting (or bumming out) your health. It’s like x-ray vision for your wellness.")
+          .font(.body)
+          .foregroundStyle(.secondary)
+          .padding(.bottom)
 
-      Button {
-        TelemetryDeck.signal("Today View Upsell")
-        presentedSheet = BloomPlusPaywall(focus: .todayInsights, showDismiss: true).asAny
-      } label: {
-        Label("Unlock Insights", systemSymbol: .sparkles)
-          .horizontallyCentered()
+        Button {
+          TelemetryDeck.signal("Today View Upsell")
+          presentedSheet = BloomPlusPaywall(focus: .todayInsights, showDismiss: true).asAny
+        } label: {
+          Label("Unlock Insights", systemSymbol: .sparkles)
+            .horizontallyCentered()
+        }
+        .buttonStyle(.tertiary)
       }
-      .buttonStyle(.tertiary)
+      .padding()
     }
     .overlay {
       Button {
@@ -48,9 +49,10 @@ struct GetBloomPlusTodayCell: View {
           .foregroundStyle(.primary, .thickMaterial)
       }
       .frame(square: 44)
+      .padding(8)
       .zStackAlignment(.topTrailing)
     }
-    .cardContainer()
+    .cardContainer(includePadding: false)
     .sheet($presentedSheet)
   }
 }
