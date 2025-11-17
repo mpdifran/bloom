@@ -54,6 +54,11 @@ struct OnboardingFinishView: View {
           TelemetryDeck.signal("OB Finish")
           TelemetryDeck.stopAndSendDurationSignal("Onboarding")
 
+          // Cancel re-engagement notifications since onboarding is complete
+          Task {
+            await ReEngagementScheduler.shared.cancelNotification()
+          }
+
           // Check experiment variant
           let variant = experimentManager.variant(for: .onboardingPaywall)
           switch variant {

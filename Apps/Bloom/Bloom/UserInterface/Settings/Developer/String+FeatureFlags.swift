@@ -13,6 +13,7 @@ extension String {
     static let bypassPaywall = "FeatureFlag.bypassPaywall"
     static let enableOpenAIModelOverride = "FeatureFlag.enableOpenAIModelOverride"
     static let mockMagicScanner = "FeatureFlag.mockMagicScanner"
+    static let reEngagementTestMode = "FeatureFlag.reEngagementTestMode"
   }
   
   enum ExperimentOverrideKey {

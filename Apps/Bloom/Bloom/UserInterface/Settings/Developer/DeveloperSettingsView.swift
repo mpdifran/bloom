@@ -21,6 +21,7 @@ struct DeveloperSettingsView: View {
   @AppStorage(.FeatureFlag.enableOpenAIModelOverride) private var enableOpenAIModelOverride = false
   @AppStorage(.FeatureFlag.bypassPaywall) private var bypassPaywall = false
   @AppStorage(.FeatureFlag.mockMagicScanner) private var mockMagicScanner = false
+  @AppStorage(.FeatureFlag.reEngagementTestMode) private var reEngagementTestMode = false
 
   @State private var authStatus: HKAuthorizationRequestStatus = .unknown
   @State private var shouldPromptForNotificationPermissions = false
@@ -316,6 +317,15 @@ extension DeveloperSettingsView {
           .foregroundStyle(.tint)
           .selectable()
           .frame(height: 60)
+        }
+
+        Divider()
+
+        SettingsCell(
+          "Re-engagement Test Mode",
+          subtitle: "Use minutes instead of days"
+        ) {
+          Toggle("", isOn: $reEngagementTestMode)
         }
       }
     }

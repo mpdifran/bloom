@@ -11,11 +11,14 @@ import BloomUI
 import BloomModel
 import BloomFoundation
 import TelemetryDeck
+import CoreHealth
 
 struct OnboardingExplanationTodayInsightsView: View {
   let onContinue: () -> Void
 
   @State private var index = 0
+
+  @ObservedObject private var healthManager = HealthManager.shared
 
   var body: some View {
     BloomScrollView(padding: .bottom) {
@@ -27,7 +30,7 @@ struct OnboardingExplanationTodayInsightsView: View {
           .zStackAlignment(.top)
 
         VStack {
-          BudImage(.budRunning, dimension: 180)
+          BudImage(.budRunning, dimension: 200)
           helloSection
           todayInsightSection
         }
@@ -57,7 +60,7 @@ struct OnboardingExplanationTodayInsightsView: View {
 private extension OnboardingExplanationTodayInsightsView {
 
   var helloSection: some View {
-    Text("Hi there, I'm Bud!")
+    Text("Hi there \(healthManager.name), I'm Bud!")
       .font(.title)
       .bold()
       .fontDesign(.rounded)
@@ -98,6 +101,13 @@ private extension OnboardingExplanationTodayInsightsView {
         )
         .transition(.blurReplace)
       }
+      if index >= 3 {
+        TonightsSleepTodayCell(
+          recommendations: "Wind down by dimming lights and disconnecting from screens by 10:15 PM. Try gentle stretches or reaing to ease into bedtime and support a deeper sleep."
+        )
+        .transition(.blurReplace)
+        .padding(.horizontal)
+      }
     }
     .horizontalAlignment(.leading)
     .fixedSize(horizontal: false, vertical: true)
@@ -110,9 +120,11 @@ private extension OnboardingExplanationTodayInsightsView {
 private extension OnboardingExplanationTodayInsightsView {
 
   func advanceIndex() async {
-    await Delay(1200)
+    await Delay(500)
     index += 1
-    await Delay(200)
+    await Delay(500)
+    index += 1
+    await Delay(500)
     index += 1
   }
 }

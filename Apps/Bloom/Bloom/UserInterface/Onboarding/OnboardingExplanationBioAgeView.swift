@@ -31,7 +31,7 @@ struct OnboardingExplanationBioAgeView: View {
           .zStackAlignment(.top)
 
         VStack {
-          BudImage(.budCoach, dimension: 180)
+          BudImage(.budCoach, dimension: 200)
           helloSection
           biologicalAgeSection
         }
@@ -149,7 +149,7 @@ private extension OnboardingExplanationBioAgeView {
 private extension OnboardingExplanationBioAgeView {
 
   func advanceIndex() async {
-    await Delay(1000)
+    await Delay(500)
     index += 1
     await Delay(300)
     index += 1

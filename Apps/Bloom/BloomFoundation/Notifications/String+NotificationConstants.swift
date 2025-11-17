@@ -16,6 +16,7 @@ public extension String {
     public static let periodPredictionNear = "period-prediction-near"
     public static let periodPredictionImminent = "period-prediction-imminent"
     public static let periodPredictionLate = "period-prediction-late"
+    public static let reEngagement = "re-engagement"
   }
 
   enum CategoryID {
@@ -24,6 +25,7 @@ public extension String {
     public static let reminders = "reminders"
     public static let trialReminder = "trial-reminder"
     public static let periodPrediction = "period-prediction"
+    public static let reEngagementOnboarding = "re-engagement-onboarding"
   }
 
   enum ActionID {

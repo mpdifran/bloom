@@ -95,6 +95,10 @@ struct BloomApp: App {
           // Schedule period prediction notifications
           await PeriodPredictionScheduler.shared.schedulePeriodPredictionNotifications()
         }
+        .task { @MainActor in
+          // Schedule re-engagement notification on fresh launch
+          await ReEngagementScheduler.shared.scheduleNotificationIfNeeded()
+        }
         .task {
           // Run chat conversation migration on app launch
           ChatConversationMigration.shared.runMigrationIfNeeded()
@@ -123,6 +127,11 @@ private extension BloomApp {
   func onForeground() {
     NutritionTrackingViewModel.shared.updateMealForCurrentTime()
     RatingPromptTracker.shared.incrementEventCount()
+
+    Task { @MainActor in
+      // Schedule re-engagement notification when app comes to foreground
+      await ReEngagementScheduler.shared.scheduleNotificationIfNeeded()
+    }
 
     Task {
       await UserController.shared.identify()

@@ -28,7 +28,7 @@ struct OnboardingExplanationNutritionView: View {
           .zStackAlignment(.top)
 
         VStack {
-          BudImage(.budSuperhero, dimension: 180)
+          BudImage(.budWorkout, dimension: 200)
           helloSection
           nutritionSection
         }
@@ -85,6 +85,7 @@ private extension OnboardingExplanationNutritionView {
           onLogTapped: nil
         )
         .transition(.blurReplace)
+        .padding(.top, 30)
       }
 
       if index >= 2 {
@@ -117,7 +118,7 @@ private extension OnboardingExplanationNutritionView {
 private extension OnboardingExplanationNutritionView {
 
   func advanceIndex() async {
-    await Delay(1000)
+    await Delay(500)
     index += 1
     await Delay(200)
     index += 1

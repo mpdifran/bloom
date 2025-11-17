@@ -28,6 +28,14 @@ extension NotificationManager {
     }
   }
 
+  func requestProvisionalAuthorization() async {
+    do {
+      try await UNUserNotificationCenter.current().requestAuthorization(options: [.provisional, .badge, .sound])
+    } catch {
+      print("Failed to request provisional authorization: \(error)")
+    }
+  }
+
   func shouldRequestAuthorization() async -> Bool {
     let settings = await UNUserNotificationCenter.current().notificationSettings()
     return settings.authorizationStatus == .notDetermined
@@ -53,6 +61,10 @@ extension NotificationManager {
 
   func removeAllScheduledNotifications() {
     center.removeAllPendingNotificationRequests()
+  }
+
+  func removeDeliveredNotifications(withIdentifiers identifiers: [String]) {
+    center.removeDeliveredNotifications(withIdentifiers: identifiers)
   }
   
   func scheduleTrialReminderNotification(for package: Package) async {

@@ -28,7 +28,7 @@ struct OnboardingExplanationChatView: View {
 
 
         VStack {
-          BudImage(.budBicycle, dimension: 180)
+          BudImage(.budBicycle, dimension: 200)
           helloSection
           chatSection
         }
@@ -44,7 +44,7 @@ struct OnboardingExplanationChatView: View {
         index += 1
         onContinue()
       } label: {
-        Text("Neat-o!")
+        Text("Neat-O!")
           .horizontallyCentered()
       }
       .buttonStyle(.primary)
@@ -140,7 +140,7 @@ private extension OnboardingExplanationChatView {
 private extension OnboardingExplanationChatView {
 
   func advanceIndex() async {
-    await Delay(1000)
+    await Delay(500)
     index += 1
     await Delay(800)
     index += 1

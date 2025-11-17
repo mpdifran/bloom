@@ -10,7 +10,7 @@ import CoreHealth
 import TelemetryDeck
 
 extension OnboardingRootView {
-  enum Step {
+  enum Step: CaseIterable {
     case welcome
     case appExplanation
     case todayExplanation
@@ -24,6 +24,13 @@ extension OnboardingRootView {
     case notifications
     case login
     case finish
+  }
+}
+
+extension OnboardingRootView.Step {
+  var progress: Double {
+    let count = Self.allCases.count
+    return Double((Self.allCases.firstIndex(of: self) ?? 0) + 1) / Double(count)
   }
 }
 
@@ -116,6 +123,11 @@ struct OnboardingRootView: View {
     }
     .animation(.easeInOut(duration: 1), value: step)
     .presentationCompactAdaptation(.fullScreenCover)
+    .overlay {
+      ProgressBar(value: self.step.progress, target: 1)
+        .zStackAlignment(.top)
+        .frame(width: 80)
+    }
   }
 }
 
