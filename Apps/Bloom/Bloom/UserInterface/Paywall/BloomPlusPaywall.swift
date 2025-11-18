@@ -125,7 +125,6 @@ private extension BloomPlusPaywall {
       VStack(spacing: 30) {
         BloomPlusTryBloomHeaderView(canTryForFree: selectedPackage?.hasFreeIntroductoryOffer == true)
           .padding(.top)
-          .padding(.top)
           .horizontallyCentered()
           .padding(.horizontal)
 

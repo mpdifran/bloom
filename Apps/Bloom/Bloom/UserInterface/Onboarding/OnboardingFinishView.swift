@@ -22,7 +22,6 @@ struct OnboardingFinishView: View {
 
   @ObservedObject private var healthManager = HealthManager.shared
   @Environment(ThemeController.self) private var themeController
-  @Environment(ExperimentManager.self) private var experimentManager
 
   var body: some View {
     ScrollView {
@@ -59,41 +58,23 @@ struct OnboardingFinishView: View {
             await ReEngagementScheduler.shared.cancelNotification()
           }
 
-          // Check experiment variant
-          let variant = experimentManager.variant(for: .onboardingPaywall)
-          switch variant {
-          case .treatment:
-            // Show paywall for treatment group
-            presentedPaywall = BloomPlusPaywall(
-              focus: .standard,
-              onPurchase: {
-                // Called on purchase after dismiss
-              },
-              onDismiss: {
-                // Called when paywall dismisses for any reason
-                onContinue()
-              }
-            ).asAny
-          case .control:
-            // Continue normally for control group
-            onContinue()
-          }
+          // Show paywall after onboarding
+          presentedPaywall = BloomPlusPaywall(
+            focus: .standard,
+            onPurchase: {
+              // Called on purchase after dismiss
+            },
+            onDismiss: {
+              // Called when paywall dismisses for any reason
+              onContinue()
+            }
+          ).asAny
         }
         .buttonStyle(.onboarding)
       }
     }
     .sheet($presentedSheet)
     .fullScreenCover($presentedPaywall)
-    .onAppear {
-      // Send AB test signals when view appears
-      let variant = experimentManager.variant(for: .onboardingPaywall)
-      switch variant {
-      case .control:
-        TelemetryDeck.signal("AB: Onboarding Paywall Control")
-      case .treatment:
-        TelemetryDeck.signal("AB: Onboarding Paywall Treatment")
-      }
-    }
     .task {
       await advanceForSubscribed()
     }

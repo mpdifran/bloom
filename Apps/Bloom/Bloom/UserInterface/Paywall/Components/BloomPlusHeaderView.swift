@@ -22,8 +22,6 @@ struct BloomPlusHeaderView: View {
 
   var body: some View {
     HStack {
-      Spacer()
-
       if showDismiss {
         Button {
           dismiss()
@@ -35,6 +33,8 @@ struct BloomPlusHeaderView: View {
         }
         .frame(square: 44)
       }
+
+      Spacer()
     }
   }
 }

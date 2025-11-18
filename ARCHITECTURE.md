@@ -1067,15 +1067,12 @@ Add your experiment to `Experiments/Experiment.swift`:
 
 ```swift
 enum Experiment: String, CaseIterable {
-  case softerHealthKitView = "softer_healthkit_view"
-  case onboardingPaywall = "onboarding_paywall"  // New experiment
+  case myNewExperiment = "my_new_experiment"  // New experiment
 
   var name: String {
     switch self {
-    case .softerHealthKitView:
-      return "Softer HealthKit View"
-    case .onboardingPaywall:
-      return "Onboarding Paywall"  // Display name for developer settings
+    case .myNewExperiment:
+      return "My New Experiment"  // Display name for developer settings
     }
   }
 
@@ -1085,14 +1082,13 @@ enum Experiment: String, CaseIterable {
 }
 
 extension ExperimentIdentifier {
-  static let softerHealthKitView = Experiment.softerHealthKitView.id
-  static let onboardingPaywall = Experiment.onboardingPaywall.id  // Convenience accessor
+  static let myNewExperiment = Experiment.myNewExperiment.id  // Convenience accessor
 }
 ```
 
 #### 2. Use ExperimentManager in Your View
 ```swift
-struct OnboardingFinishView: View {
+struct MyFeatureView: View {
   @Environment(ExperimentManager.self) private var experimentManager
 
   var body: some View {
@@ -1107,12 +1103,12 @@ Send AB test signals when the experiment decision point is reached (typically wh
 ```swift
 .task {
   // Send AB test signals when view appears
-  let variant = experimentManager.variant(for: .onboardingPaywall)
+  let variant = experimentManager.variant(for: .myNewExperiment)
   switch variant {
   case .control:
-    TelemetryDeck.signal("AB: Onboarding Paywall Control")
+    TelemetryDeck.signal("AB: My Feature Control")
   case .treatment:
-    TelemetryDeck.signal("AB: Onboarding Paywall Treatment")
+    TelemetryDeck.signal("AB: My Feature Treatment")
   }
 }
 ```
@@ -1122,14 +1118,14 @@ Check the variant and execute different code paths:
 
 ```swift
 Button("Continue") {
-  let variant = experimentManager.variant(for: .onboardingPaywall)
+  let variant = experimentManager.variant(for: .myNewExperiment)
   switch variant {
   case .treatment:
     // Show new feature for treatment group
-    presentedPaywall = BloomPlusPaywall(focus: .standard).asAny
+    showNewFeature()
   case .control:
     // Keep existing behavior for control group
-    onContinue()
+    showExistingFeature()
   }
 }
 ```
@@ -1150,8 +1146,8 @@ var experimentsSection: some View {
       Divider()
 
       ExperimentOverrideView(
-        experimentId: ExperimentIdentifier.onboardingPaywall.value,
-        experimentName: "Onboarding Paywall"
+        experimentId: ExperimentIdentifier.myNewExperiment.value,
+        experimentName: "My New Experiment"
       )
     }
   }
@@ -1162,8 +1158,8 @@ var experimentsSection: some View {
 ```swift
 private func clearAllExperimentOverrides() {
   // Add cleanup for your new experiment
-  let onboardingPaywallKey = String.ExperimentOverrideKey.key(for: ExperimentIdentifier.onboardingPaywall.value)
-  UserDefaults.standard.removeObject(forKey: onboardingPaywallKey)
+  let myNewExperimentKey = String.ExperimentOverrideKey.key(for: ExperimentIdentifier.myNewExperiment.value)
+  UserDefaults.standard.removeObject(forKey: myNewExperimentKey)
 
   // ... other experiments
 }
@@ -1180,8 +1176,8 @@ This allows testing both variants via Settings > Developer > Experiments.
 
 **Naming Convention:**
 - Signal names: `"AB: [Feature] Control"` and `"AB: [Feature] Treatment"`
-- Experiment IDs: Use snake_case (e.g., `onboarding_paywall`)
-- Display names: Use Title Case (e.g., "Onboarding Paywall")
+- Experiment IDs: Use snake_case (e.g., `my_new_experiment`)
+- Display names: Use Title Case (e.g., "My New Experiment")
 
 **Testing:**
 - Use developer overrides in Settings > Developer > Experiments to test both variants in the app
@@ -1191,72 +1187,28 @@ This allows testing both variants via Settings > Developer > Experiments.
   ```swift
   #Preview("Control") {
     PreviewEnvironment(variant: .control) {
-      OnboardingFinishView { }
+      MyFeatureView()
     }
   }
 
   #Preview("Treatment") {
     PreviewEnvironment(variant: .treatment) {
-      OnboardingFinishView { }
+      MyFeatureView()
     }
   }
   ```
 
-### Example: Onboarding Paywall Experiment
+### Ending an Experiment
 
-This experiment tests showing a paywall at the end of onboarding (Apps/Bloom/Bloom/UserInterface/Onboarding/OnboardingFinishView.swift):
+When an experiment is complete and you want to promote the winning variant to production:
 
-**Setup:**
-1. Experiment defined in `Experiment.swift` as `onboardingPaywall`
-2. `ExperimentManager` injected via environment
-3. AB signals sent when finish view appears
-4. Variant checked when "Let's Go!" button is tapped
+1. **Remove experiment logic** from the feature implementation - make the winning variant the default behavior
+2. **Remove AB telemetry signals** - these were specifically for tracking the A/B test
+3. **Remove the experiment definition** from `Experiment.swift`
+4. **Update `clearAllExperimentOverrides()`** in `DeveloperSettingsView.swift` to remove the experiment cleanup
+5. **Update documentation** to reflect the new default behavior
 
-**Behavior:**
-- **Control group**: User taps "Let's Go!" → onboarding completes normally
-- **Treatment group**: User taps "Let's Go!" → paywall appears → on dismiss (purchase or X) → onboarding completes
-
-**Implementation highlights:**
-```swift
-struct OnboardingFinishView: View {
-  @Environment(ExperimentManager.self) private var experimentManager
-  @State private var presentedPaywall: AnyView?
-
-  var body: some View {
-    // View content
-    Button("Let's Go!") {
-      let variant = experimentManager.variant(for: .onboardingPaywall)
-      switch variant {
-      case .treatment:
-        presentedPaywall = BloomPlusPaywall(
-          focus: .standard,
-          onPurchase: { onContinue() }
-        ).asAny
-      case .control:
-        onContinue()
-      }
-    }
-    .fullScreenCover($presentedPaywall)
-    .onChange(of: presentedPaywall) { oldValue, newValue in
-      // Handle dismissal without purchase
-      if oldValue != nil && newValue == nil {
-        onContinue()
-      }
-    }
-    .task {
-      // Send AB signals when view appears
-      let variant = experimentManager.variant(for: .onboardingPaywall)
-      TelemetryDeck.signal(
-        variant == .control
-          ? "AB: Onboarding Paywall Control"
-          : "AB: Onboarding Paywall Treatment"
-      )
-    }
-  }
-}
-```
-
-This pattern ensures both groups complete onboarding successfully while allowing measurement of paywall impact.
+Example: The onboardingPaywall experiment was completed and the treatment variant (showing paywall after onboarding) was promoted to production. All users now see the paywall after completing onboarding.
 
 ## Magic Scanner (AI Food Scanning)
 

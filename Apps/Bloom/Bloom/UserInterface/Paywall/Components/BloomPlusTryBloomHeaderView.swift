@@ -14,8 +14,8 @@ struct BloomPlusTryBloomHeaderView: View {
 
   var body: some View {
     VStack(spacing: 10) {
-      BloomPlusLogo()
-        .horizontallyCentered()
+//      BloomPlusLogo()
+//        .horizontallyCentered()
 
       Text(canTryForFree ? "Prioritize Your Health. On The House." : "Smarter Health Starts Today")
         .font(.largeTitle)

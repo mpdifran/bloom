@@ -837,8 +837,8 @@ extension DeveloperSettingsView {
   
   private func clearAllExperimentOverrides() {
     // Clear all experiment overrides
-    let onboardingPaywallKey = String.ExperimentOverrideKey.key(for: ExperimentIdentifier.onboardingPaywall.value)
-    UserDefaults.standard.removeObject(forKey: onboardingPaywallKey)
+    let onboardingFeaturePitchKey = String.ExperimentOverrideKey.key(for: ExperimentIdentifier.onboardingFeaturePitch.value)
+    UserDefaults.standard.removeObject(forKey: onboardingFeaturePitchKey)
   }
 
   private var currentBudStateLabel: String {
