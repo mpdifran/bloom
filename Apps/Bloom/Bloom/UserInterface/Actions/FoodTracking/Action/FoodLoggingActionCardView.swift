@@ -411,23 +411,15 @@ private extension FoodLoggingActionCardView {
   var aiGenerateButton: some View {
     AsyncButton {
       guard EntitlementController.shared.hasBloomPro == true else {
-        presentedSheet = BloomPlusPaywall {
-          guard EntitlementController.shared.hasBloomPro == true else { return }
+        presentedSheet = BloomPlusPaywall(onPurchase: {
           Task {
-            await Delay(300)
-            do {
-              try await viewModel.generateWithAI(query: searchQuery, modelContext: modelContext)
-              performDismiss?()
-            } catch {
-              viewModel.error = error
-            }
+            await generateWithAI()
           }
-        }.asAny
+        }).asAny
         return
       }
 
-      try await viewModel.generateWithAI(query: searchQuery, modelContext: modelContext)
-      performDismiss?()
+      await generateWithAI()
     } label: {
       Label("Generate with AI", systemSymbol: .sparkles)
         .frame(maxWidth: .infinity)
@@ -435,6 +427,20 @@ private extension FoodLoggingActionCardView {
     .buttonStyle(.primary)
     .padding(.top, 8)
     .transition(.blurReplace)
+  }
+
+  func generateWithAI() async {
+    await Delay(300)
+    do {
+      try await viewModel.generateWithAI(query: searchQuery, modelContext: modelContext)
+      if let performDismiss {
+        performDismiss()
+      } else {
+        dismiss()
+      }
+    } catch {
+      viewModel.error = error
+    }
   }
 
   var foodItemHistoryHeader: some View {
