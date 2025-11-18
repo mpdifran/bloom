@@ -14,7 +14,6 @@ import TelemetryDeck
 import CoreNetwork
 
 private extension String {
-  static let lastTodayContentRequestDate = "TodayInsightsManager.lastTodayContentRequestDate"
   static let lastTodayContentResponse = "TodayInsightsManager.lastTodayContentResponse"
   static let budStateOverride = "TodayInsightsManager.budStateOverride"
 }
@@ -33,12 +32,6 @@ final class TodayInsightsManager {
       } else {
         UserDefaults.standard.removeObject(forKey: .budStateOverride)
       }
-    }
-  }
-
-  private var lastRequestDate: Date? {
-    didSet {
-      UserDefaults.group.set(lastRequestDate, forKey: .lastTodayContentRequestDate)
     }
   }
 
@@ -91,31 +84,31 @@ final class TodayInsightsManager {
 
   func shouldRefreshContent() -> Bool {
     // Check if we have content for today
-    guard todayContent != nil else { return true }
+    guard let content = lastResponse,
+          Calendar.current.isDate(content.day, inSameDayAs: .now) else {
+      return true
+    }
 
-    // Check if we have made a request today
-    guard let lastRequest = lastRequestDate else { return true }
-
-    return !Calendar.current.isDate(lastRequest, inSameDayAs: Date())
+    return false
   }
 
   func refreshContentIfNeeded() async {
     guard EntitlementController.shared.hasBloomPro == true else { return }
-    guard shouldRefreshContent() else { return }
+    // Check if already loading first to prevent race conditions from concurrent callers
     guard !isLoadingContent else { return }
+    guard shouldRefreshContent() else { return }
 
     await loadTodayContent()
   }
 
   func forceRefreshContent() async {
     guard EntitlementController.shared.hasBloomPro == true else { return }
-    guard !isLoadingContent else { return }
+    // Don't check isLoadingContent - we want to override stale in-flight requests
     clearStoredContent()
     await loadTodayContent()
   }
 
   func clearStoredContent() {
-    lastRequestDate = nil
     lastResponse = nil
   }
 
@@ -173,7 +166,6 @@ final class TodayInsightsManager {
         ) : nil
       )
 
-      lastRequestDate = today
       lastResponse = content
 
     } catch {
@@ -186,11 +178,6 @@ final class TodayInsightsManager {
   }
 
   private func loadStoredData() {
-    // Load last request date
-    if let date = UserDefaults.group.object(forKey: .lastTodayContentRequestDate) as? Date {
-      lastRequestDate = date
-    }
-
     // Load last response
     if let data = UserDefaults.group.data(forKey: .lastTodayContentResponse),
        let response = try? JSONDecoder().decode(TodayContentDTO.self, from: data) {

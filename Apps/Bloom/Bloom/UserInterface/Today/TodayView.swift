@@ -150,17 +150,11 @@ struct TodayView: View {
     }
     .onAppear {
       habitsViewModel.checkUpdateSuggestedHabits()
-      Task {
-        todayViewModel.checkEntitlement()
-        await todayViewModel.requestContentIfNeeded()
-      }
+      todayViewModel.checkEntitlement()
     }
     .onForeground {
       habitsViewModel.checkUpdateSuggestedHabits()
-      Task {
-        todayViewModel.checkEntitlement()
-        await todayViewModel.requestContentIfNeeded()
-      }
+      todayViewModel.checkEntitlement()
     }
     .onChange(of: tabController.pendingGoalNavigation) { oldValue, newValue in
       if let goalId = newValue {
