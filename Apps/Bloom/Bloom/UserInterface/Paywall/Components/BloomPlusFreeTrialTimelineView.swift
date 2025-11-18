@@ -113,7 +113,7 @@ private extension BloomPlusFreeTrialTimelineView {
     VStack(spacing: 8) {
       ZStack {
         Circle()
-          .fill(.mutedPink)
+          .fill(.mutedPurple)
           .frame(width: 40, height: 40)
         
         Image(systemSymbol: .creditcardFill)
@@ -142,7 +142,7 @@ private extension BloomPlusFreeTrialTimelineView {
         Rectangle()
           .fill(
             LinearGradient(
-              colors: [.mutedBlue, .mutedIndigo, .mutedPink],
+              colors: [.mutedBlue, .mutedIndigo, .mutedPurple],
               startPoint: .leading,
               endPoint: .trailing
             )
