@@ -27,6 +27,7 @@ struct GetBloomPlusTodayCell: View {
           .font(.body)
           .foregroundStyle(.secondary)
           .padding(.bottom)
+          .fixedSize(horizontal: false, vertical: true)
 
         Button {
           TelemetryDeck.signal("Today View Upsell")

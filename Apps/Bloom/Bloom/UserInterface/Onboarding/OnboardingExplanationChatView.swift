@@ -47,7 +47,7 @@ struct OnboardingExplanationChatView: View {
         Text("Neat-O!")
           .horizontallyCentered()
       }
-      .buttonStyle(.primary)
+      .buttonStyle(.onboarding)
     }
     .onAppear {
       TelemetryDeck.signal("OB Chat Explanation")

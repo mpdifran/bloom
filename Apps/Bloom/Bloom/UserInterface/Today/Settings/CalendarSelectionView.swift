@@ -12,22 +12,34 @@ import AppUI
 struct CalendarSelectionView: View {
   @State private var calendarPreferences = CalendarPreferenceManager.shared
   @State private var calendars: [EKCalendar] = []
-  @State private var hasCalendarPermission = false
-  
+  @State private var alertDetails: AlertDetails?
+
+  @StateObject private var calendarManager = CalendarManager.shared
+
   @Environment(\.dismiss) private var dismiss
   
   var body: some View {
     BloomScrollView(showsChatBar: false) {
-      if hasCalendarPermission && calendars.isNotEmpty {
-        calendarSection
-      } else {
+      if calendarManager.authStatus != .fullAccess {
         noPermissionView
+      } else if calendars.isEmpty {
+        noCalendarsView
+      } else {
+        calendarSection
       }
     }
     .navigationTitle("Calendars")
     .navigationBarTitleDisplayMode(.inline)
-    .task {
-      await checkCalendarPermission()
+    .alert(alertDetails: $alertDetails)
+    .onAppear {
+      calendarManager.checkPermission()
+      guard calendarManager.authStatus == .fullAccess else { return }
+
+      loadCalendars()
+    }
+    .onChange(of: calendarManager.authStatus) { oldValue, newValue in
+      guard newValue == .fullAccess else { return }
+
       loadCalendars()
     }
   }
@@ -68,31 +80,36 @@ private extension CalendarSelectionView {
       }
     }
   }
-  
+
+  var noCalendarsView: some View {
+    ContentUnavailableView(
+      "No Calendars",
+      systemSymbol: .calendar,
+      description: Text("You have no calendars.")
+    )
+    .padding()
+    .fixedSize(horizontal: false, vertical: true)
+    .foregroundStyle(.secondary)
+    .horizontallyCentered()
+  }
+
   var noPermissionView: some View {
-    VStack(spacing: 16) {
-      Image(systemSymbol: .calendarBadgeExclamationmark)
-        .font(.largeTitle)
-        .foregroundStyle(.secondary)
-      
-      Text("Calendar Access Required")
-        .font(.title3)
-        .bold()
-      
-      Text("Allow Bloom to access your calendars to show events in your Today view.")
-        .multilineTextAlignment(.center)
-        .foregroundStyle(.secondary)
-      
-      Button("Grant Access") {
-        Task {
-          await CalendarManager.shared.promptForPermission()
-          await checkCalendarPermission()
-          loadCalendars()
-        }
+    ContentUnavailableView {
+      Label("Allow Calendar Access", systemSymbol: .calendarBadgeExclamationmark)
+    } description: {
+      Text("Allow access in order to filter your calendars here.")
+    } actions: {
+      AsyncButton {
+        await calendarManager.promptForPermission(alertDetails: $alertDetails)
+      } label: {
+        Text("Allow Access")
       }
-      .buttonStyle(.borderedProminent)
+      .buttonStyle(.tertiary)
     }
     .padding()
+    .fixedSize(horizontal: false, vertical: true)
+    .foregroundStyle(.secondary)
+    .horizontallyCentered()
   }
   
   var selectAllButtonTitle: String {
@@ -102,10 +119,6 @@ private extension CalendarSelectionView {
     } else {
       return "Select All"
     }
-  }
-  
-  func checkCalendarPermission() async {
-    hasCalendarPermission = EKEventStore.authorizationStatus(for: .event) == .fullAccess
   }
   
   func loadCalendars() {
@@ -169,6 +182,8 @@ struct CalendarSelectionCell: View {
 
 #Preview {
   PreviewEnvironment {
-    CalendarSelectionView()
+    NavigationStack {
+      CalendarSelectionView()
+    }
   }
 }

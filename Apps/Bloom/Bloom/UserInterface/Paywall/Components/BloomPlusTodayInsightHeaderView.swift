@@ -11,9 +11,6 @@ import BloomUI
 struct BloomPlusTodayInsightHeaderView: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 10) {
-      BloomPlusLogo()
-        .horizontallyCentered()
-
       Text("Feel Better, One Day at a Time")
         .font(.largeTitle)
         .bold()

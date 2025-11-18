@@ -49,7 +49,7 @@ struct OnboardingExplanationTodayInsightsView: View {
         Text("That's Cool!")
           .horizontallyCentered()
       }
-      .buttonStyle(.primary)
+      .buttonStyle(.onboarding)
     }
     .onAppear {
       TelemetryDeck.signal("OB Today Insights Explanation")
@@ -60,12 +60,19 @@ struct OnboardingExplanationTodayInsightsView: View {
 private extension OnboardingExplanationTodayInsightsView {
 
   var helloSection: some View {
-    Text("Hi there \(healthManager.name), I'm Bud!")
+    Text(helloText)
       .font(.title)
       .bold()
       .fontDesign(.rounded)
       .horizontalAlignment(.leading)
       .padding(.horizontal)
+  }
+
+  var helloText: String {
+    if healthManager.name.isNotEmpty {
+      return "Hi there \(healthManager.name), I'm Bud!"
+    }
+    return "Hi there, I'm Bud!"
   }
 
   var todayInsightSection: some View {

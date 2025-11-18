@@ -32,10 +32,15 @@ struct CalendarTodayCell: View {
   @State private var events = [EKEvent]()
   @State private var selectedEvent: EKEvent?
   @State private var presentedSheet: AnyView?
+  @State private var alertDetails: AlertDetails?
+
+  @StateObject private var calendarManager = CalendarManager.shared
 
   var body: some View {
     VStack(spacing: 12) {
-      if events.isEmpty {
+      if calendarManager.authStatus != .fullAccess {
+        noPermissionView
+      } else if events.isEmpty {
         noEventsView
       }
 
@@ -61,20 +66,38 @@ struct CalendarTodayCell: View {
     }
     .cardContainer()
     .sheet($presentedSheet)
+    .alert(alertDetails: $alertDetails)
     .animation(.default, value: events.count)
-    .task {
-      await CalendarManager.shared.promptForPermission()
-      switch day {
-      case .today:
-        self.events = await CalendarManager.shared.eventsToday()
-      case .tomorrow:
-        self.events = await CalendarManager.shared.eventsTomorrow()
+    .onAppear {
+      calendarManager.checkPermission()
+
+      Task {
+        await loadEvents()
       }
+    }
+    .onChange(of: calendarManager.authStatus) { oldValue, newValue in
+      guard newValue == .fullAccess else { return }
+
+      Task {
+        await loadEvents()
+      }
+    }
+    .task {
+      await loadEvents()
     }
   }
 }
 
 private extension CalendarTodayCell {
+
+  func loadEvents() async {
+    switch day {
+    case .today:
+      self.events = await CalendarManager.shared.eventsToday()
+    case .tomorrow:
+      self.events = await CalendarManager.shared.eventsTomorrow()
+    }
+  }
 
   var allDayEvents: [EKEvent] {
     events.filter({ $0.isAllDay })
@@ -94,6 +117,24 @@ private extension CalendarTodayCell {
     .foregroundStyle(.secondary)
     .horizontallyCentered()
 //    .frame(height: 140)
+  }
+
+  var noPermissionView: some View {
+    ContentUnavailableView {
+      Label("Allow Calendar Access", systemSymbol: .calendarBadgeExclamationmark)
+    } description: {
+      Text("Allow access to your calendar to display events here.")
+    } actions: {
+      AsyncButton {
+        await calendarManager.promptForPermission(alertDetails: $alertDetails)
+      } label: {
+        Text("Allow Access")
+      }
+      .buttonStyle(.tertiary)
+    }
+    .fixedSize(horizontal: false, vertical: true)
+    .foregroundStyle(.secondary)
+    .horizontallyCentered()
   }
 }
 

@@ -47,7 +47,7 @@ struct OnboardingExplanationNutritionView: View {
         Text("Delicious!")
           .horizontallyCentered()
       }
-      .buttonStyle(.primary)
+      .buttonStyle(.onboarding)
     }
     .onAppear {
       TelemetryDeck.signal("OB Nutrition Explanation")
@@ -68,7 +68,7 @@ private extension OnboardingExplanationNutritionView {
 
   var nutritionSection: some View {
     VStack(alignment: .leading) {
-      Text("Learn patterns in your eating habits. Scan barcodes for faster logging.")
+      Text("Learn patterns in your eating habits. Scan barcodes for faster logging. Log food by simply taking a picture!")
         .font(.title3)
         .bold()
         .fontDesign(.rounded)

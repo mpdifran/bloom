@@ -8,14 +8,26 @@
 import SwiftUI
 import CoreLocation
 import BloomFoundation
+import AppUI
 
-@MainActor @Observable
-final class LocationManagerViewModel {
+extension CLAuthorizationStatus {
+  var hasAccess: Bool {
+    switch self {
+    case .authorizedAlways, .authorizedWhenInUse:
+      true
+    default:
+      false
+    }
+  }
+}
+
+@MainActor
+final class LocationManagerViewModel: ObservableObject {
   static let shared = LocationManagerViewModel()
 
-  private(set) var currentLocation: CLLocation?
-  private(set) var country: String?
-  private(set) var auth: CLAuthorizationStatus = .notDetermined
+  @Published private(set) var currentLocation: CLLocation?
+  @Published private(set) var country: String?
+  @Published private(set) var auth: CLAuthorizationStatus = .notDetermined
 
   private init() {
     locationManagerDelegate = LocationManagerDelegate(actor: self)
@@ -30,13 +42,24 @@ final class LocationManagerViewModel {
 
 extension LocationManagerViewModel {
 
-  func requestAuth() {
+  func checkPermission() {
+    self.auth = locationManager.authorizationStatus
+  }
+
+  func promptForPermission(alertDetails: Binding<AlertDetails?>) {
+    checkPermission()
+
     switch locationManager.authorizationStatus {
-    case .authorizedAlways, .authorizedWhenInUse:
-      //            startMonitoring()
-      break
-    default:
+    case .notDetermined:
       locationManager.requestWhenInUseAuthorization()
+    case .denied:
+      alertDetails.wrappedValue = permissionAlert
+    case .restricted:
+      alertDetails.wrappedValue = restrictionAlert
+    case .authorizedAlways, .authorizedWhenInUse:
+      break
+    @unknown default:
+      break
     }
   }
 
@@ -121,7 +144,7 @@ private extension LocationManagerViewModel {
         }
         // Map country names and codes to normalized country identifiers
         let normalizedCountry = country.lowercased()
-        
+
         if normalizedCountry == "canada" || normalizedCountry == "ca" {
           self.country = "canada"
         } else if normalizedCountry == "united states" || normalizedCountry == "united states of america" || normalizedCountry == "us" || normalizedCountry == "usa" {
@@ -133,6 +156,43 @@ private extension LocationManagerViewModel {
     } catch {
         print(error)
     }
+  }
+
+  var permissionAlert: AlertDetails {
+    AlertDetails(
+      title: "Location Sharing Denied",
+      message: "Please allow location access in Settings.",
+      buttons: [
+        AlertDetails.Button(
+          title: "Open Settings",
+          action: { [weak self] in
+            self?.openSettings()
+          }
+        ),
+        AlertDetails.Button(
+          title: "Cancel",
+          role: .cancel
+        ) { }
+      ]
+    )
+  }
+
+  var restrictionAlert: AlertDetails {
+    AlertDetails(
+      title: "Location Sharing Restricted",
+      message: "Location sharing is restricted by Screen Time or parental controls. To enable access, have your parent or guardian allow Location sharing for this app in Screen Time settings.",
+      buttons: [
+        AlertDetails.Button(
+          title: "OK",
+          action: { }
+        )
+      ]
+    )
+  }
+
+  func openSettings() {
+    guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+    UIApplication.shared.open(url)
   }
 }
 

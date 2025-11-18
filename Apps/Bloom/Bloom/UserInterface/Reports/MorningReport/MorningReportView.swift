@@ -191,10 +191,6 @@ private extension MorningReportView {
       }
 
       Group {
-        ReportTitledSection("Weather") {
-          MorningReportWeatherCell()
-        }
-
         ReportTitledSection("Calendar") {
           MorningReportCalendarCell()
         }

@@ -50,7 +50,7 @@ struct OnboardingExplanationBioAgeView: View {
         Text("Thanks Bud!")
           .horizontallyCentered()
       }
-      .buttonStyle(.primary)
+      .buttonStyle(.onboarding)
     }
     .onAppear {
       TelemetryDeck.signal("OB Bio Age Explanation")

@@ -157,7 +157,6 @@ private extension BloomPlusPaywall {
       VStack(spacing: 30) {
         BloomPlusTodayInsightHeaderView()
           .padding(.top)
-          .padding(.top)
           .horizontallyCentered()
           .padding(.horizontal)
 
@@ -191,7 +190,6 @@ private extension BloomPlusPaywall {
     VStack {
       VStack(spacing: 30) {
         BloomPlusTryBloomHeaderView(canTryForFree: selectedPackage?.hasFreeIntroductoryOffer == true)
-          .padding(.top)
           .padding(.top)
           .horizontallyCentered()
           .padding(.horizontal)

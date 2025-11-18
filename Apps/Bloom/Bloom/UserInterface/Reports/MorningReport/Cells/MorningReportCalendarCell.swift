@@ -46,7 +46,6 @@ struct MorningReportCalendarCell: View {
     .sheet($presentedSheet)
     .animation(.default, value: events.count)
     .task {
-      await CalendarManager.shared.promptForPermission()
       self.events = await CalendarManager.shared.eventsToday()
     }
   }

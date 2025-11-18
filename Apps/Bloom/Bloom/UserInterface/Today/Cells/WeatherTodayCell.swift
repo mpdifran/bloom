@@ -36,12 +36,15 @@ struct WeatherTodayCell: View {
   @State private var isLoadingWeather = false
   @State private var weather: Weather?
   @State private var locationLocality: String?
+  @State private var alertDetails: AlertDetails?
 
-  private var locationViewModel = LocationManagerViewModel.shared
+  @StateObject private var locationViewModel = LocationManagerViewModel.shared
 
   var body: some View {
     VStack {
-      if isLoadingWeather {
+      if !locationViewModel.auth.hasAccess {
+        permissionView
+      } else if isLoadingWeather {
         loadingView
       } else if let weather {
         TimelineView(.periodic(from: Date(), by: 3600)) { _ in
@@ -53,8 +56,18 @@ struct WeatherTodayCell: View {
     }
     .cardContainer()
     .animation(.default, value: weather)
+    .alert(alertDetails: $alertDetails)
     .task {
-      locationViewModel.requestAuth()
+      if locationViewModel.currentLocation != nil {
+        await loadWeather()
+      }
+    }
+    .onAppear {
+      locationViewModel.checkPermission()
+    }
+    .task {
+      guard locationViewModel.auth.hasAccess else { return }
+
       locationViewModel.requestLocation()
       await loadWeather()
     }
@@ -78,6 +91,24 @@ struct WeatherTodayCell: View {
 
 private extension WeatherTodayCell {
 
+  var permissionView: some View {
+    ContentUnavailableView {
+      Label("Allow Location Access", systemSymbol: .cloudRain)
+    } description: {
+      Text("Allow access to your location in order to see local weather.")
+    } actions: {
+      AsyncButton {
+        locationViewModel.promptForPermission(alertDetails: $alertDetails)
+      } label: {
+        Text("Allow Access")
+      }
+      .buttonStyle(.tertiary)
+    }
+    .fixedSize(horizontal: false, vertical: true)
+    .foregroundStyle(.secondary)
+    .horizontallyCentered()
+  }
+
   var loadingView: some View {
     VStack(spacing: 20) {
       CircularSpinnerView()
@@ -96,6 +127,8 @@ private extension WeatherTodayCell {
       systemSymbol: .cloudDrizzleFill,
       description: Text("There was a problem loading the weather.")
     )
+    .fixedSize(horizontal: false, vertical: true)
+    .foregroundStyle(.secondary)
   }
   
   @ViewBuilder

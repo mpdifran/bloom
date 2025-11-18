@@ -62,7 +62,7 @@ struct FoodLoggingActionCardView: View {
 
   @ObservedObject private var userController = UserController.shared
   @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
-  private var locationViewModel = LocationManagerViewModel.shared
+  @StateObject private var locationViewModel = LocationManagerViewModel.shared
 
   @Query var meals: [MealRecord]
 

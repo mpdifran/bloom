@@ -34,7 +34,7 @@ struct OnboardingHealthKitTreatmentView: View {
 
 
         VStack(spacing: 20) {
-          BudImage(.budCoach, dimension: 180)
+          BudImage(.budCoach, dimension: 200)
           explanationSection
 
           detailsSection

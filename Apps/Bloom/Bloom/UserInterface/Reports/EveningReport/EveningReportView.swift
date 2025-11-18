@@ -66,7 +66,6 @@ struct EveningReportView: View {
         .presentationCompactAdaptation(.fullScreenCover)
         .tint(.indigo)
         .task {
-            await CalendarManager.shared.promptForPermission()
             self.events = await CalendarManager.shared.eventsTomorrow()
         }
         .task {

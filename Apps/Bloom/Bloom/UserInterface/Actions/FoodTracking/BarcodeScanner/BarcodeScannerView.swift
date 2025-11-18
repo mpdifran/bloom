@@ -15,7 +15,7 @@ struct BarcodeScannerView: View {
   @State private var viewModel = ViewModel()
 
   @State private var presentedSheet: AnyView?
-  @State private var locationViewModel = LocationManagerViewModel.shared
+  @StateObject private var locationViewModel = LocationManagerViewModel.shared
   @State private var alertDetails: AlertDetails?
 
   @StateObject var permissionManager = CameraPermissionManager.shared

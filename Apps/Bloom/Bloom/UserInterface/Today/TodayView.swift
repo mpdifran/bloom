@@ -251,6 +251,9 @@ private extension TodayView {
 
       // Show Bloom Plus upsell at the bottom if not dismissed
       if !getBloomPlusHasDismissed {
+        SectionTitleView("Bloom Plus")
+          .padding(.horizontal)
+          .padding(.horizontal)
         GetBloomPlusTodayCell()
           .padding(.horizontal)
       }
@@ -405,6 +408,8 @@ private extension TodayView {
         .padding(.horizontal)
       WeatherTodayCell(day: .tomorrow)
         .padding(.horizontal)
+    @unknown default:
+      EmptyView()
     }
   }
 

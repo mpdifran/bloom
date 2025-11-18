@@ -44,7 +44,7 @@ struct FoodItemPicker: View {
 
   @Environment(\.dismiss) private var dismiss
 
-  private var locationViewModel = LocationManagerViewModel.shared
+  @StateObject private var locationViewModel = LocationManagerViewModel.shared
 
   var body: some View {
     NavigationStack {
