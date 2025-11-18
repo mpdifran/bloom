@@ -12,15 +12,33 @@ import RevenueCat
 struct BloomPlusFreeTrialTimelineView: View {
   
   let package: Package
-  
+
   private var trialEndDate: Date {
-    package.trialEndDate ?? Date()
+    // Calculate prospective trial end date from now
+    guard let introDiscount = package.storeProduct.introductoryDiscount,
+          introDiscount.price == 0 else { return Date() }
+
+    let calendar = Calendar.current
+    let period = introDiscount.subscriptionPeriod
+
+    switch period.unit {
+    case .day:
+      return calendar.date(byAdding: .day, value: period.value, to: Date()) ?? Date()
+    case .week:
+      return calendar.date(byAdding: .weekOfYear, value: period.value, to: Date()) ?? Date()
+    case .month:
+      return calendar.date(byAdding: .month, value: period.value, to: Date()) ?? Date()
+    case .year:
+      return calendar.date(byAdding: .year, value: period.value, to: Date()) ?? Date()
+    @unknown default:
+      return Date()
+    }
   }
-  
+
   private var trialReminderDate: Date {
-    package.trialReminderDate ?? Date()
+    Calendar.current.date(byAdding: .day, value: -2, to: trialEndDate) ?? Date()
   }
-  
+
   private var trialDurationInDays: Int {
     package.trialDurationInDays ?? 0
   }

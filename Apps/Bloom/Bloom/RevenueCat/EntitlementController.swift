@@ -123,21 +123,13 @@ private extension EntitlementController {
     guard let currentEntitlement = customerInfo?.entitlements[.Entitlements.bloomPro] else {
       return
     }
-    
+
     if currentEntitlement.periodType == .trial && currentEntitlement.isActive {
-      // User is in a trial - schedule notification (idempotent operation)
-      Task {
-        do {
-          let offerings = try await Purchases.shared.offerings()
-          // Find the package that matches the current product identifier and has a free trial
-          if let package = offerings.current?.availablePackages.first(where: { 
-            $0.storeProduct.productIdentifier == currentEntitlement.productIdentifier && 
-            $0.hasFreeIntroductoryOffer 
-          }) {
-            await NotificationManager.shared.scheduleTrialReminderNotification(for: package)
-          }
-        } catch {
-          print("EntitlementController: Failed to load offerings for trial notification: \(error)")
+      // User is in a trial - schedule notification using actual expiration date
+      if let expirationDate = currentEntitlement.expirationDate,
+         let reminderDate = Calendar.current.date(byAdding: .day, value: -2, to: expirationDate) {
+        Task {
+          await NotificationManager.shared.scheduleTrialReminderNotification(for: reminderDate)
         }
       }
     } else if currentEntitlement.periodType == .normal && currentEntitlement.isActive {

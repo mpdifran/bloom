@@ -67,27 +67,25 @@ extension NotificationManager {
     center.removeDeliveredNotifications(withIdentifiers: identifiers)
   }
   
-  func scheduleTrialReminderNotification(for package: Package) async {
-    guard let trialReminderDate = package.trialReminderDate else { return }
-    
+  func scheduleTrialReminderNotification(for date: Date) async {
     let content = UNMutableNotificationContent()
-    content.title = "Your Free Trial’s Almost Up! 🌱"
+    content.title = "Your Free Trial's Almost Up! 🌱"
     content.subtitle = "Bud reporting in: 2 days left in your trial! Should I start panicking? (Kidding… kinda.)"
     content.sound = .default
     content.categoryIdentifier = .CategoryID.trialReminder
-    
+
     let dateComponents = Calendar.current.dateComponents(
       [.year, .month, .day, .hour, .minute],
-      from: trialReminderDate
+      from: date
     )
     let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
-    
+
     let request = UNNotificationRequest(
       identifier: .NotificationID.trialReminder,
       content: content,
       trigger: trigger
     )
-    
+
     try? await center.add(request)
   }
   
