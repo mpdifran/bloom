@@ -84,18 +84,16 @@ private extension DayVitalsCalculator {
     async let activeEnergy = HealthStoreFetcher.shared.fetchTotalQuantity(for: .activeEnergyBurned, dateRange: dateRange)
     async let steps = HealthStoreFetcher.shared.fetchTotalQuantity(for: .stepCount, dateRange: dateRange)
     async let walkingDistance = HealthStoreFetcher.shared.fetchTotalQuantity(for: .distanceWalkingRunning, dateRange: dateRange)
-    async let timeInDaylight = HealthStoreFetcher.shared.fetchTotalQuantity(for: .timeInDaylight, dateRange: dateRange)
 
     // Fetch previous week data for trends
     async let previousBasalEnergy = HealthStoreFetcher.shared.fetchCollatedQuantity(for: .basalEnergyBurned, unit: .largeCalorie(), dateRange: previousWeekRange)
     async let previousActiveEnergy = HealthStoreFetcher.shared.fetchCollatedQuantity(for: .activeEnergyBurned, unit: .largeCalorie(), dateRange: previousWeekRange)
     async let previousSteps = HealthStoreFetcher.shared.fetchCollatedQuantity(for: .stepCount, unit: .count(), dateRange: previousWeekRange)
     async let previousWalkingDistance = HealthStoreFetcher.shared.fetchCollatedQuantity(for: .distanceWalkingRunning, unit: .mile(), dateRange: previousWeekRange)
-    async let previousTimeInDaylight = HealthStoreFetcher.shared.fetchCollatedQuantity(for: .timeInDaylight, unit: .minute(), dateRange: previousWeekRange)
 
-    let (basalResult, activeResult, stepsResult, walkingResult, daylightResult, prevBasal, prevActive, prevSteps, prevWalking, prevDaylight) = await (
-      basalEnergy, activeEnergy, steps, walkingDistance, timeInDaylight,
-      previousBasalEnergy, previousActiveEnergy, previousSteps, previousWalkingDistance, previousTimeInDaylight
+    let (basalResult, activeResult, stepsResult, walkingResult, prevBasal, prevActive, prevSteps, prevWalking) = await (
+      basalEnergy, activeEnergy, steps, walkingDistance,
+      previousBasalEnergy, previousActiveEnergy, previousSteps, previousWalkingDistance
     )
 
     guard let basal = basalResult, let active = activeResult else { return nil }
@@ -149,24 +147,12 @@ private extension DayVitalsCalculator {
       nil
     }
 
-    let daylightMetric: MetricWithTrend? = if let daylightResult {
-      await createMetricWithTrend(
-        current: daylightResult,
-        unit: .minute(),
-        previous: prevDaylight.map { $0.quantity },
-        formatter: .noDecimalPlaces
-      )
-    } else {
-      nil
-    }
-
     return ActivityData(
       basalEnergyBurned: basalMetric,
       activeEnergyBurned: activeMetric,
       totalEnergyBurned: totalMetric,
       steps: stepsMetric,
-      walkingDistance: walkingMetric,
-      timeInDaylight: daylightMetric
+      walkingDistance: walkingMetric
     )
   }
 

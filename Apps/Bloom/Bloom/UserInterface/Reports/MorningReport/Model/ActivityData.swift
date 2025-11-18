@@ -14,5 +14,4 @@ struct ActivityData: SendableNetworkModel {
   let totalEnergyBurned: MetricWithTrend
   let steps: MetricWithTrend?
   let walkingDistance: MetricWithTrend?
-  let timeInDaylight: MetricWithTrend?
 }
