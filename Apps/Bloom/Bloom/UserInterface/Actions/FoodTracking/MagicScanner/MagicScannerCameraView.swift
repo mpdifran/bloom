@@ -86,7 +86,6 @@ struct MagicScannerCameraView: View {
     }
     .presentationCompactAdaptation(.fullScreenCover)
     .onAppear {
-      TelemetryDeck.signal("magic_scan_camera_opened")
       Task {
         if !mockMagicScanner {
           await permissionManager.checkPermission()
@@ -112,7 +111,6 @@ struct MagicScannerCameraView: View {
       mockImage = uiImage
       capturedImage = uiImage
       showReviewSheet = true
-      TelemetryDeck.signal("magic_scan_photo_captured", parameters: ["source": "mock"])
     }
     .alert(alertDetails: $alertDetails)
     .sheet(isPresented: $showReviewSheet) {
@@ -220,7 +218,6 @@ private extension MagicScannerCameraView {
         await MainActor.run {
           capturedImage = image
           showReviewSheet = true
-          TelemetryDeck.signal("magic_scan_photo_captured", parameters: ["source": "camera"])
         }
       }
     } label: {
@@ -266,7 +263,6 @@ private extension MagicScannerCameraView {
       }
       capturedImage = uiImage
       showReviewSheet = true
-      TelemetryDeck.signal("magic_scan_photo_captured", parameters: ["source": "gallery"])
     }
   }
 }

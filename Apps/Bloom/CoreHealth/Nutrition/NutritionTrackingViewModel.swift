@@ -301,7 +301,7 @@ public extension NutritionTrackingViewModel {
     // Don't update HealthKit yet - wait until processing completes
 
     if !Bundle.main.isAppExtension {
-      TelemetryDeck.signal("magic_scanner_item_saved")
+      TelemetryDeck.signal("Magic Scan Save Item")
     }
 
     // Notify listeners that food was logged (pending state)
@@ -340,7 +340,7 @@ public extension NutritionTrackingViewModel {
     // Don't update HealthKit yet - wait until processing completes
 
     if !Bundle.main.isAppExtension {
-      TelemetryDeck.signal("ai_text_generation_item_saved")
+      TelemetryDeck.signal("AI Text Item Saved")
     }
 
     // Notify listeners that food was logged (pending state)
@@ -380,7 +380,7 @@ public extension NutritionTrackingViewModel {
     }
 
     if !Bundle.main.isAppExtension {
-      TelemetryDeck.signal("magic_scanner_retry")
+      TelemetryDeck.signal("Magic Scanner Retry")
     }
   }
 
@@ -406,7 +406,12 @@ public extension NutritionTrackingViewModel {
     }
 
     if !Bundle.main.isAppExtension {
-      TelemetryDeck.signal("magic_scanner_failed")
+      TelemetryDeck.errorOccurred(
+        id: "NutritionTrackingViewModel.failMagicScan",
+        category: .thrownException,
+        message: errorMessage
+      )
+      TelemetryDeck.signal("Magic Scanner Failed")
     }
   }
 
@@ -461,7 +466,7 @@ public extension NutritionTrackingViewModel {
     try await updateNutrition(for: dates.asSet())
 
     if !Bundle.main.isAppExtension {
-      TelemetryDeck.signal("magic_scanner_completed")
+      TelemetryDeck.signal("Magic Scan Completed")
     }
 
     // Notify listeners that food was logged
@@ -726,7 +731,7 @@ public extension NutritionTrackingViewModel {
 
     try await updateNutrition(for: [oldDate, newDate])
 
-    TelemetryDeck.signal("food_log_meal_changed", parameters: [
+    TelemetryDeck.signal("Food Log Meal Changed", parameters: [
       "from_meal": foodItemLog.meal.rawValue,
       "to_meal": newMeal.rawValue
     ])

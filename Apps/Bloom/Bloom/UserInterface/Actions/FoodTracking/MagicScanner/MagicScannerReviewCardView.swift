@@ -92,7 +92,11 @@ struct MagicScannerReviewCardView: View {
     guard let squareImage = image.croppedToSquare(),
           let imageData = BackendImageResizer.resize(squareImage) else {
       alertDetails = AlertDetails(title: "Error", message: "Unable to process image")
-      TelemetryDeck.signal("magic_scan_submitted", parameters: ["result": "failure", "error": "image_processing_failed"])
+      TelemetryDeck.errorOccurred(
+        id: "MagicScannerReviewCardView.handleSave",
+        category: .thrownException,
+        message: "Unable to process image"
+      )
       return
     }
 
@@ -121,12 +125,16 @@ struct MagicScannerReviewCardView: View {
       saveComplete.toggle()
       SoundPlayer.playLogHealthData()
 
-      TelemetryDeck.signal("magic_scan_submitted", parameters: ["result": "success"])
+      TelemetryDeck.signal("AI Food Scan")
 
       // Dismiss both sheet and camera
       performDismiss()
     } catch {
-      TelemetryDeck.signal("magic_scan_submitted", parameters: ["result": "failure", "error": error.localizedDescription])
+      TelemetryDeck.errorOccurred(
+        id: "MagicScannerReviewCardView.handleSave.localSave",
+        category: .thrownException,
+        message: error.localizedDescription
+      )
       throw error
     }
   }
