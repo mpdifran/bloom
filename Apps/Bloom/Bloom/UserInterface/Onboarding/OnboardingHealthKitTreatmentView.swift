@@ -34,7 +34,7 @@ struct OnboardingHealthKitTreatmentView: View {
 
 
         VStack(spacing: 20) {
-          BudImage(.budCoach, dimension: 200)
+          BudImage(.budSmoothie, dimension: 200)
           explanationSection
 
           detailsSection
@@ -174,9 +174,15 @@ extension OnboardingHealthKitTreatmentView {
       )
 
       PrivacyDetailCard(
+        symbol: .squareAndArrowDownOnSquare,
+        title: "Writing Data",
+        detail: "Bloom can help facilitate writing specific types of health data, like your weight, water consumption, or what your eat."
+      )
+
+      PrivacyDetailCard(
         symbol: .figure,
         title: "Personalized Insights",
-        detail: "The more health data you share, the more personalized your insights will be."
+        detail: "Bloom can help highlight recommended ranges for common health metrics based on your age and sex."
       )
     }
   }
@@ -234,12 +240,12 @@ private struct PrivacyDetailCard: View {
       HStack {
         Image(systemSymbol: symbol)
           .font(.title3)
-          .foregroundStyle(.tint)
+          .foregroundStyle(.white)
           .frame(square: 30)
           .padding(6)
           .background {
             RoundedRectangle(cornerRadius: 13)
-              .fill(.white)
+              .fill(.tint)
           }
 
         Text(title)

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AppUI
 
 public struct BudImage: View {
   let resource: ImageResource
@@ -23,7 +24,33 @@ public struct BudImage: View {
     Image(resource)
       .resizable()
       .aspectRatio(contentMode: .fit)
-      .frame(width: dimension)
+      .frame(height: dimension)
       .shadow(color: .white, radius: 1)
+  }
+}
+
+#Preview {
+  ScrollView {
+    VStack {
+      Group {
+        BudImage(.budCoach)
+        BudImage(.budYoga)
+        BudImage(.budBicycle)
+        BudImage(.budSalad)
+        BudImage(.budGroggy)
+        BudImage(.budSleepy)
+        BudImage(.budTrophy)
+        BudImage(.budRunning)
+        BudImage(.budWorkout)
+        BudImage(.budSmoothie)
+        BudImage(.budStressed)
+        BudImage(.budThinking)
+        BudImage(.budSuperhero)
+        BudImage(.budStrengthTraining)
+      }
+      .border(.green)
+    }
+    .horizontallyCentered()
+    .padding()
   }
 }
