@@ -9,6 +9,10 @@ import Foundation
 import HealthKit
 import CoreHealth
 
+private extension String {
+  static let lastSleepAnalysisKey = "HealthSleepObserver.lastSleepAnalysis"
+}
+
 public final actor HealthSleepObserver {
   public static let shared = HealthSleepObserver()
 
@@ -25,6 +29,8 @@ public final actor HealthSleepObserver {
 public extension HealthSleepObserver {
 
   func observeSleep() async {
+    loadSleepAnalysis()
+
     sleepBackgroundDeliveryHandle = await HealthStoreFetcher.shared.enableBackgroundDelivery(
       objectType: HKCategoryType(.sleepAnalysis),
       frequency: .immediate
@@ -50,9 +56,32 @@ private extension HealthSleepObserver {
 
     if newLastSleepAnalysis != previousSleepAnalysis && previousSleepAnalysis != nil {
       // Clear stale insights and trigger refresh when new sleep data is available
+      internalLog(.todayInsights, "newLastSleepAnalysis does not match previousSleepAnalysis, forcing refresh of content")
       await TodayInsightsManager.shared.forceRefreshContent()
+    } else if previousSleepAnalysis == nil {
+      internalLog(.todayInsights, "previousSleepAnalysis was nil, skipping content refresh")
+    } else {
+      internalLog(.todayInsights, "newLastSleepAnalysis matched previousSleepAnalysis, skipping content refresh")
     }
 
     lastSleepAnalysis = newLastSleepAnalysis
+    saveSleepAnalysis()
+  }
+
+  func loadSleepAnalysis() {
+    guard let data = UserDefaults.standard.data(forKey: .lastSleepAnalysisKey),
+          let sleepAnalysis = try? JSONDecoder().decode(SleepAnalysis.self, from: data) else {
+      return
+    }
+    lastSleepAnalysis = sleepAnalysis
+  }
+
+  func saveSleepAnalysis() {
+    guard let sleepAnalysis = lastSleepAnalysis,
+          let data = try? JSONEncoder().encode(sleepAnalysis) else {
+      UserDefaults.standard.removeObject(forKey: .lastSleepAnalysisKey)
+      return
+    }
+    UserDefaults.standard.set(data, forKey: .lastSleepAnalysisKey)
   }
 }

@@ -81,6 +81,7 @@ extension TodayView.ViewModel {
   }
 
   func retryLoadContent() async {
+    internalLog(.todayInsights, "User forced refresh of content")
     await todayInsightsManager.forceRefreshContent()
   }
 

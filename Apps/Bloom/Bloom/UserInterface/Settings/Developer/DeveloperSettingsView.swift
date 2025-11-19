@@ -33,6 +33,7 @@ struct DeveloperSettingsView: View {
   @State private var error: Error?
 
   @ObservedObject private var apiHost = APIHost.shared
+  @ObservedObject private var logManager = LogManager.shared
 
   @Environment(\.dismiss) private var dismiss
 
@@ -50,8 +51,12 @@ struct DeveloperSettingsView: View {
           healthPermissionsSection
           featureFlagSection
           experimentsSection
-          adminActionsSection
+          aiInsightsSection
+          healthActionsSection
+          paywallSection
+          migrationSection
           debugSection
+          logsSection
           notificationsSection
           storageSection
           designSection
@@ -253,7 +258,36 @@ extension DeveloperSettingsView {
       }
     }
   }
-  
+
+  var logsSection: some View {
+    VStack {
+      SectionTitleView("Logs")
+        .padding(.horizontal)
+
+      SettingsSectionContainer {
+        SettingsCell("View Logs (\(logManager.logs.count))", iconType: .disclosure) { }
+          .onTapGesture {
+            presentedSheet = LogsListView().asAny
+          }
+
+        Divider()
+
+        AsyncButton(role: .destructive) {
+          logManager.clearLogs()
+          alertDetails = AlertDetails(
+            title: "Logs Cleared",
+            message: "All debug logs have been cleared."
+          )
+        } label: {
+          Text("Clear All Logs")
+            .bold()
+            .horizontallyCentered()
+            .frame(height: 60)
+        }
+      }
+    }
+  }
+
   var notificationsSection: some View {
     VStack {
       SectionTitleView("Notifications")
@@ -331,9 +365,9 @@ extension DeveloperSettingsView {
     }
   }
 
-  var adminActionsSection: some View {
+  var aiInsightsSection: some View {
     VStack {
-      SectionTitleView("Admin Actions")
+      SectionTitleView("AI Insight Actions")
         .padding(.horizontal)
 
       SettingsSectionContainer {
@@ -393,38 +427,28 @@ extension DeveloperSettingsView {
         Divider()
 
         AsyncButton {
-          try await NetworkRequester.shared.deleteChatThread()
-          try modelContext.deleteAll(ChatMessage.self)
-          try modelContext.save()
+          do {
+            let calculator = BiologicalAgeHealthContextCalculator()
+            let healthData = try await calculator.collectBiologicalAgeData()
 
-          alertDetails = AlertDetails(
-            title: "Chat History Deleted",
-            message: "Your chat history has been deleted."
-          )
-        } label: {
-          LabeledContent("Delete Chat History") {
-            Image(systemSymbol: .trash)
+            let jsonString = try JSONEncoder.aiContext.encodeToString(healthData) ?? "Failed to encode"
+
+            UIPasteboard.general.string = jsonString
+
+            await MainActor.run {
+              alertDetails = AlertDetails(
+                title: "Copied to Clipboard",
+                message: "Biological age health context has been copied to your clipboard."
+              )
+            }
+          } catch {
+            await MainActor.run {
+              self.error = error
+            }
           }
-          .bold()
-          .fontDesign(.rounded)
-          .foregroundStyle(.tint)
-          .selectable()
-          .frame(height: 60)
-        }
-
-        Divider()
-
-        AsyncButton {
-          let conversationActor = ConversationModelActor(modelContainer: ContainerHolder.shared.container)
-          try await conversationActor.fixUnassignedMessages()
-
-          alertDetails = AlertDetails(
-            title: "Messages Fixed",
-            message: "All unassigned chat messages have been assigned to the legacy conversation."
-          )
         } label: {
-          LabeledContent("Fix Unassigned Chat Messages") {
-            Image(systemSymbol: .arrowshapeTurnUpForwardCircle)
+          LabeledContent("Copy Biological Age Health Context") {
+            Image(systemSymbol: .heartTextSquare)
           }
           .multilineTextAlignment(.leading)
           .bold()
@@ -436,6 +460,44 @@ extension DeveloperSettingsView {
 
         Divider()
 
+        AsyncButton {
+          await BiologicalAgeViewModel.shared.forceCalculateBiologicalAge()
+
+          // Get the calculated result and show it in the alert
+          let calculatedAge = BiologicalAgeViewModel.shared.currentBiologicalAge
+          let message: String
+
+          if let age = calculatedAge {
+            message = "Biological age calculated: \(String(format: "%.1f", age)) years"
+          } else {
+            message = "Biological age calculation completed. No result available - check that you have enough personal data logged."
+          }
+
+          alertDetails = AlertDetails(
+            title: "Biological Age Calculated",
+            message: message
+          )
+        } label: {
+          LabeledContent("Calculate Biological Age") {
+            Image(systemSymbol: .brainHeadProfile)
+          }
+          .multilineTextAlignment(.leading)
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
+          .selectable()
+          .frame(height: 60)
+        }
+      }
+    }
+  }
+
+  var paywallSection: some View {
+    VStack {
+      SectionTitleView("Paywall")
+        .padding(.horizontal)
+
+      SettingsSectionContainer {
         Button {
           hasShownOnboarding = false
         } label: {
@@ -451,15 +513,59 @@ extension DeveloperSettingsView {
 
         Divider()
 
-        AsyncButton {
-          await VitalsCalculator.shared.forceFetchVitals()
-          await MainActor.run {
-            alertDetails = AlertDetails(title: "Vitals Recalculated", message: "Your Vitals have been recalculated.")
-          }
+        Button {
+          presentedSheet = BloomPlusPaywall().asAny
         } label: {
-          LabeledContent("Recalculate Vitals") {
-            Image(systemSymbol: .arrowTriangleheadClockwiseHeartFill)
+          LabeledContent("Show Paywall") {
+            Image(systemSymbol: .dollarsignSquareFill)
           }
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
+          .selectable()
+          .frame(height: 60)
+        }
+
+#if DEBUG
+        Divider()
+
+        Button {
+          showRCDebugOverlay.toggle()
+        } label: {
+          LabeledContent("Debug RevenueCat") {
+            Image(systemSymbol: .catFill)
+          }
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
+          .selectable()
+          .frame(height: 60)
+        }
+        .debugRevenueCatOverlay(isPresented: $showRCDebugOverlay)
+#endif
+      }
+    }
+  }
+
+  var migrationSection: some View {
+    VStack {
+      SectionTitleView("Migrations")
+        .padding(.horizontal)
+
+      SettingsSectionContainer {
+        AsyncButton {
+          let conversationActor = ConversationModelActor(modelContainer: ContainerHolder.shared.container)
+          try await conversationActor.fixUnassignedMessages()
+
+          alertDetails = AlertDetails(
+            title: "Messages Fixed",
+            message: "All unassigned chat messages have been assigned to the legacy conversation."
+          )
+        } label: {
+          LabeledContent("Fix Unassigned Chat Messages") {
+            Image(systemSymbol: .arrowshapeTurnUpForwardCircle)
+          }
+          .multilineTextAlignment(.leading)
           .bold()
           .fontDesign(.rounded)
           .foregroundStyle(.tint)
@@ -580,6 +686,31 @@ extension DeveloperSettingsView {
           .selectable()
           .frame(height: 60)
         }
+      }
+    }
+  }
+
+  var healthActionsSection: some View {
+    VStack {
+      SectionTitleView("Health Actions")
+        .padding(.horizontal)
+
+      SettingsSectionContainer {
+        AsyncButton {
+          await VitalsCalculator.shared.forceFetchVitals()
+          await MainActor.run {
+            alertDetails = AlertDetails(title: "Vitals Recalculated", message: "Your Vitals have been recalculated.")
+          }
+        } label: {
+          LabeledContent("Recalculate Vitals") {
+            Image(systemSymbol: .arrowTriangleheadClockwiseHeartFill)
+          }
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
+          .selectable()
+          .frame(height: 60)
+        }
 
         Divider()
 
@@ -602,104 +733,6 @@ extension DeveloperSettingsView {
           .selectable()
           .frame(height: 60)
         }
-
-        Divider()
-
-        AsyncButton {
-          do {
-            let calculator = BiologicalAgeHealthContextCalculator()
-            let healthData = try await calculator.collectBiologicalAgeData()
-            
-            let jsonString = try JSONEncoder.aiContext.encodeToString(healthData) ?? "Failed to encode"
-            
-            UIPasteboard.general.string = jsonString
-            
-            await MainActor.run {
-              alertDetails = AlertDetails(
-                title: "Copied to Clipboard",
-                message: "Biological age health context has been copied to your clipboard."
-              )
-            }
-          } catch {
-            await MainActor.run {
-              self.error = error
-            }
-          }
-        } label: {
-          LabeledContent("Copy Biological Age Health Context") {
-            Image(systemSymbol: .heartTextSquare)
-          }
-          .multilineTextAlignment(.leading)
-          .bold()
-          .fontDesign(.rounded)
-          .foregroundStyle(.tint)
-          .selectable()
-          .frame(height: 60)
-        }
-
-        Divider()
-
-        AsyncButton {
-          await BiologicalAgeViewModel.shared.forceCalculateBiologicalAge()
-
-          // Get the calculated result and show it in the alert
-          let calculatedAge = BiologicalAgeViewModel.shared.currentBiologicalAge
-          let message: String
-
-          if let age = calculatedAge {
-            message = "Biological age calculated: \(String(format: "%.1f", age)) years"
-          } else {
-            message = "Biological age calculation completed. No result available - check that you have enough personal data logged."
-          }
-
-          alertDetails = AlertDetails(
-            title: "Biological Age Calculated",
-            message: message
-          )
-        } label: {
-          LabeledContent("Calculate Biological Age") {
-            Image(systemSymbol: .brainHeadProfile)
-          }
-          .multilineTextAlignment(.leading)
-          .bold()
-          .fontDesign(.rounded)
-          .foregroundStyle(.tint)
-          .selectable()
-          .frame(height: 60)
-        }
-
-        Divider()
-
-        Button {
-          presentedSheet = BloomPlusPaywall().asAny
-        } label: {
-          LabeledContent("Show Paywall") {
-            Image(systemSymbol: .dollarsignSquareFill)
-          }
-          .bold()
-          .fontDesign(.rounded)
-          .foregroundStyle(.tint)
-          .selectable()
-          .frame(height: 60)
-        }
-
-        #if DEBUG
-        Divider()
-
-        Button {
-          showRCDebugOverlay.toggle()
-        } label: {
-          LabeledContent("Debug RevenueCat") {
-            Image(systemSymbol: .catFill)
-          }
-          .bold()
-          .fontDesign(.rounded)
-          .foregroundStyle(.tint)
-          .selectable()
-          .frame(height: 60)
-        }
-        .debugRevenueCatOverlay(isPresented: $showRCDebugOverlay)
-        #endif
       }
     }
   }
@@ -834,7 +867,7 @@ extension DeveloperSettingsView {
       }
     }
   }
-  
+
   private func clearAllExperimentOverrides() {
     // Clear all experiment overrides
     let onboardingFeaturePitchKey = String.ExperimentOverrideKey.key(for: ExperimentIdentifier.onboardingFeaturePitch.value)
