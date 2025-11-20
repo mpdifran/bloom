@@ -90,9 +90,13 @@ struct OnboardingPersonalizationView: View {
     .shelf(isVisible: isFocused) {
       if isFocused {
         Button {
-          isFocused = false
+          selectionToggle.toggle()
+          Task {
+            await Delay(500)
+            onContinue()
+          }
         } label: {
-          Text("Done")
+          Text("Continue")
             .horizontallyCentered()
         }
         .buttonStyle(.primary)
@@ -128,10 +132,6 @@ private extension OnboardingPersonalizationView {
     index += 1
     await Delay(300)
     index += 1
-  }
-
-  func advance() {
-    onContinue()
   }
 }
 
@@ -197,8 +197,8 @@ private extension OnboardingPersonalizationView {
             selectionToggle.toggle()
 
             Task {
-              await Delay(300)
-              advance()
+              await Delay(500)
+              onContinue()
             }
           }
         }
