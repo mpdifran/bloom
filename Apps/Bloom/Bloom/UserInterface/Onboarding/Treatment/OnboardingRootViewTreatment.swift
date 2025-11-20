@@ -8,16 +8,18 @@
 import SwiftUI
 
 extension OnboardingRootViewTreatment {
-  enum Step: CaseIterable {
+  enum Step: Int, CaseIterable {
     case warmOpening
+    case personalization
     case finish
   }
 }
 
 struct OnboardingRootViewTreatment: View {
-  let onComplete: (Bool) -> Void
+  let onComplete: () -> Void
 
   @State private var step = Step.warmOpening
+  @State private var wasYesInWarmingStep = false
 
   @Environment(\.dismiss) private var dismiss
 
@@ -25,17 +27,22 @@ struct OnboardingRootViewTreatment: View {
     Group {
       switch step {
       case .warmOpening:
-        OnboardingWarmOpeningView {
+        OnboardingWarmOpeningView { (wasYes) in
+          wasYesInWarmingStep = wasYes
+          setStep(.personalization)
+        }
+      case .personalization:
+        OnboardingPersonalizationView(isYes: wasYesInWarmingStep) {
           setStep(.finish)
         }
       case .finish:
-        EmptyView()
+        Text("End")
       }
     }
     .animation(.easeInOut(duration: 1), value: step)
     .presentationCompactAdaptation(.fullScreenCover)
     .overlay {
-      ContrastingPillLabel("Step 1 of 5")
+      ContrastingPillLabel("Step \(step.rawValue + 1) of \(Step.allCases.count)")
         .zStackAlignment(.top)
     }
   }
@@ -52,6 +59,6 @@ private extension OnboardingRootViewTreatment {
 
 #Preview {
   PreviewEnvironment {
-    OnboardingRootViewTreatment() { (_) in }
+    OnboardingRootViewTreatment() { }
   }
 }

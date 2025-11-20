@@ -14,7 +14,7 @@ import TelemetryDeck
 import CoreHealth
 
 struct OnboardingWarmOpeningView: View {
-  var onContinue: () -> Void
+  var onContinue: (Bool) -> Void
 
   @State private var showBud = false
   @State private var confettiIndex = 0
@@ -52,7 +52,7 @@ struct OnboardingWarmOpeningView: View {
     .shelf(isVisible: index >= 4) {
       HStack {
         Button {
-
+          onContinue(false)
         } label: {
           Text("Tell me more")
             .horizontallyCentered()
@@ -61,7 +61,7 @@ struct OnboardingWarmOpeningView: View {
         .tint(.gray)
 
         Button {
-          onContinue()
+          onContinue(true)
         } label: {
           Text("Yes, Bud!")
             .horizontallyCentered()
@@ -138,6 +138,6 @@ private extension OnboardingWarmOpeningView {
 
 #Preview {
   PreviewEnvironment {
-    OnboardingWarmOpeningView() { }
+    OnboardingWarmOpeningView() { (_) in }
   }
 }

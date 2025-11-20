@@ -28,6 +28,8 @@ struct OnboardingPersonalizationView: View {
 
   @ObservedObject private var healthManager = HealthManager.shared
 
+  @State private var customGoal = ""
+  @State private var selectionToggle = false
   @State private var index = 0
 
   @FocusState private var isFocused: Bool
@@ -71,6 +73,7 @@ struct OnboardingPersonalizationView: View {
         Image(.afternoonScenery)
           .resizable()
           .scaledToFit()
+          .offset(y: -40)
           .parallaxOverscroll()
           .zStackAlignment(.top)
 
@@ -81,11 +84,27 @@ struct OnboardingPersonalizationView: View {
           discussionSection
         }
         .horizontalAlignment(.leading)
-        .padding(.top, 160)
+        .padding(.top, 120)
       }
     }
+    .shelf(isVisible: isFocused) {
+      if isFocused {
+        Button {
+          isFocused = false
+        } label: {
+          Text("Done")
+            .horizontallyCentered()
+        }
+        .buttonStyle(.primary)
+      }
+    }
+    .onAppear {
+      healthManager.focus = ""
+    }
+    .animation(.default, value: healthManager.focus)
     .animation(.default, value: index)
     .sensoryFeedback(.impact, trigger: index)
+    .sensoryFeedback(.success, trigger: selectionToggle)
     .task {
       await advanceIndex()
     }
@@ -103,7 +122,20 @@ private extension OnboardingPersonalizationView {
     index += 1
     await Delay(800)
     index += 1
+    await Delay(300)
+    index += 1
+    await Delay(300)
+    index += 1
+    await Delay(300)
+    index += 1
   }
+
+  func advance() {
+    onContinue()
+  }
+}
+
+private extension OnboardingPersonalizationView {
 
   @ViewBuilder
   var discussionSection: some View {
@@ -140,11 +172,10 @@ private extension OnboardingPersonalizationView {
       }
       .transition(.move(edge: .leading))
     }
-    
-    if index >= 4 {
-      focusAreaSection
-        .transition(.move(edge: .bottom))
 
+    focusAreaSection
+
+    if index >= 7 {
       textInputSection
         .transition(.blurReplace)
     }
@@ -152,18 +183,42 @@ private extension OnboardingPersonalizationView {
 
   var focusAreaSection: some View {
     LazyVGrid(columns: [GridItem(.adaptive(minimum: 140, maximum: 400), spacing: 12)], spacing: 12) {
-      ForEach(suggestions) { suggestion in
-        FocusCardCell(
-          title: suggestion.title,
-          symbol: suggestion.symbol,
-          isSelected: false
-        )
-        .transition(.scale)
-        .tint(suggestion.color)
+      ForEachEnumerated(suggestions) { (index, suggestion) in
+        if canShowFocusCard(for: index) {
+          FocusCardCell(
+            title: suggestion.title,
+            symbol: suggestion.symbol,
+            isSelected: healthManager.focus == suggestion.title
+          )
+          .transition(.move(edge: index % 2 == 0 ? .leading : .trailing))
+          .tint(suggestion.color)
+          .onTapGesture {
+            healthManager.focus = suggestion.title
+            selectionToggle.toggle()
+
+            Task {
+              await Delay(300)
+              advance()
+            }
+          }
+        }
       }
     }
     .padding(.horizontal)
     .padding(.top)
+  }
+
+  func canShowFocusCard(for focusCardIndex: Int) -> Bool {
+    switch focusCardIndex {
+    case 0, 1:
+      return index >= 4
+    case 2, 3:
+      return index >= 5
+    case 4, 5:
+      return index >= 6
+    default:
+      return false
+    }
   }
 
   var textInputSection: some View {
@@ -174,17 +229,21 @@ private extension OnboardingPersonalizationView {
 
       TextField(
         "",
-        text: $healthManager.focus,
+        text: $customGoal,
         prompt: Text("Something else..."),
         axis: .vertical
       )
     }
     .multilineTextAlignment(.leading)
+    .textInputAutocapitalization(.sentences)
     .secondaryOnboardingTextStyle()
     .cardContainer()
     .focused($isFocused)
     .contentTransition(.numericText())
     .padding(.horizontal)
+    .onChange(of: customGoal) { oldValue, newValue in
+      healthManager.focus = newValue
+    }
   }
 }
 
