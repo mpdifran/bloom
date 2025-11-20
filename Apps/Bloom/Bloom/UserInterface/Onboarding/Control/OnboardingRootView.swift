@@ -13,10 +13,6 @@ extension OnboardingRootView {
   enum Step: CaseIterable {
     case welcome
     case appExplanation
-    case todayExplanation
-    case nutritionExplanation
-    case chatExplanation
-    case bioAgeExplanation
     case healthKit
     case ageAndSex
     case focusArea
@@ -44,7 +40,6 @@ struct OnboardingRootView: View {
 
   @ObservedObject private var healthManager = HealthManager.shared
 
-  @Environment(ExperimentManager.self) private var experimentManager
   @Environment(\.dismiss) private var dismiss
 
   var body: some View {
@@ -52,49 +47,31 @@ struct OnboardingRootView: View {
       switch step {
       case .welcome:
         OnboardingWelcomeView {
-          switch experimentManager.variant(for: .onboardingFeaturePitch) {
-          case .treatment:
-            setStep(.todayExplanation)
-          case .control:
-            setStep(.appExplanation)
-          }
+          setStep(.appExplanation)
         }
       case .appExplanation:
         OnboardingAppExplanationView {
           setStep(.healthKit)
         }
-        .onAppear {
-          TelemetryDeck.signal("AB: Onboarding Feature Pitch - Control")
-        }
-      case .todayExplanation:
-        OnboardingExplanationTodayInsightsView {
-          setStep(.nutritionExplanation)
-        }
-        .onAppear {
-          TelemetryDeck.signal("AB: Onboarding Feature Pitch - Treatment")
-        }
-      case .nutritionExplanation:
-        OnboardingExplanationNutritionView {
-          setStep(.chatExplanation)
-        }
-      case .chatExplanation:
-        OnboardingExplanationChatView {
-          setStep(.bioAgeExplanation)
-        }
-      case .bioAgeExplanation:
-        OnboardingExplanationBioAgeView {
-          setStep(.healthKit)
-        }
+//      case .todayExplanation:
+//        OnboardingExplanationTodayInsightsView {
+//          setStep(.nutritionExplanation)
+//        }
+//      case .nutritionExplanation:
+//        OnboardingExplanationNutritionView {
+//          setStep(.chatExplanation)
+//        }
+//      case .chatExplanation:
+//        OnboardingExplanationChatView {
+//          setStep(.bioAgeExplanation)
+//        }
+//      case .bioAgeExplanation:
+//        OnboardingExplanationBioAgeView {
+//          setStep(.healthKit)
+//        }
       case .healthKit:
-        switch experimentManager.variant(for: .onboardingFeaturePitch) {
-        case .treatment:
-          OnboardingHealthKitTreatmentView {
-            checkHealthDataAndProceed()
-          }
-        case .control:
-          OnboardingHealthKitView {
-            checkHealthDataAndProceed()
-          }
+        OnboardingHealthKitView {
+          checkHealthDataAndProceed()
         }
       case .ageAndSex:
         OnboardingHealthAgeSexView {
@@ -128,11 +105,6 @@ struct OnboardingRootView: View {
     }
     .animation(.easeInOut(duration: 1), value: step)
     .presentationCompactAdaptation(.fullScreenCover)
-    .overlay {
-      ProgressBar(value: self.step.progress, target: 1)
-        .zStackAlignment(.top)
-        .frame(width: 80)
-    }
   }
 }
 
