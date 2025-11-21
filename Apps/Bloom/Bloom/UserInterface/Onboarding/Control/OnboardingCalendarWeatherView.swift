@@ -28,7 +28,7 @@ struct OnboardingCalendarWeatherView: View {
   var body: some View {
     BloomScrollView {
       VStack {
-        BudImage(.budCoach, dimension: 160)
+        BudImage(.budBicycle, dimension: 160)
 
         Text("What else would you like to share with me?")
           .font(.title)
@@ -90,7 +90,7 @@ private extension OnboardingCalendarWeatherView {
     TodayCardCell(
       symbol: .calendar,
       title: "Calendar",
-      content: "Share your calendar to see your events for the day, and get insights from Bud on how they affect your health!",
+      content: "See your schedule for the day, and help Bud keep your goals aligned with your routine.",
       color: .mutedRed
     ) {
       AsyncButton {
@@ -116,7 +116,7 @@ private extension OnboardingCalendarWeatherView {
     TodayCardCell(
       symbol: .locationFill,
       title: "Location",
-      content: "Share your location to get weather forecasts alongside your health insights! Your precise location is never shared with Bud, only your current city.",
+      content: "Share your location to get weather forecasts alongside your health insights. Bloom only uses your city-level location, never your precise location.",
       color: .mutedBlue
     ) {
       AsyncButton {

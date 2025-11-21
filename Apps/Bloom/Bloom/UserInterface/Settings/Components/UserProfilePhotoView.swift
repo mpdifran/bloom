@@ -46,14 +46,10 @@ struct UserProfilePhotoView: View {
                 .padding(8)
                 .background {
                   Circle()
-                    .fill(.tint.secondary)
+                    .fill(.thickMaterial)
                     .overlay {
                       Circle()
                         .stroke(.fill)
-                    }
-                    .background {
-                      Circle()
-                        .fill(.background)
                     }
                 }
                 .zStackAlignment(.bottomTrailing)
@@ -89,14 +85,20 @@ private extension UserProfilePhotoView {
         .fill(whiteForegroundColor ? AnyShapeStyle(.tint) : AnyShapeStyle(.tint.secondary))
         .frame(square: dimension)
         .overlay {
-          Text(healthManager.name.prefix(1))
-            .font(.system(size: dimension / 1.4, weight: .heavy))
-            .bold()
-            .fontDesign(.rounded)
-            .minimumScaleFactor(0.05)
-            .padding(dimension / 10)
-            .foregroundStyle(whiteForegroundColor ? AnyShapeStyle(.white) : AnyShapeStyle(.tint))
-            .contentTransition(.numericText())
+          Group {
+            if healthManager.name.isNotEmpty {
+              Text(healthManager.name.prefix(1))
+                .contentTransition(.numericText())
+            } else {
+              Image(systemSymbol: .personFill)
+            }
+          }
+          .font(.system(size: dimension / 1.4, weight: .heavy))
+          .bold()
+          .fontDesign(.rounded)
+          .minimumScaleFactor(0.05)
+          .padding(dimension / 10)
+          .foregroundStyle(whiteForegroundColor ? AnyShapeStyle(.white) : AnyShapeStyle(.tint))
         }
         .animation(.default, value: healthManager.name)
     }

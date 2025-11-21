@@ -19,7 +19,7 @@ struct EditUserProfileCardView: View {
     VStack {
       UserProfilePhotoView(canEdit: true)
 
-      TextField("", text: $healthManager.name, prompt: Text("Your Name"))
+      TextField("", text: $healthManager.name, prompt: Text("Name (Optional)"))
         .font(.title)
         .bold()
         .fontDesign(.rounded)

@@ -14,8 +14,10 @@ public extension String {
     case name = "HealthManager.name"
     case isFemale = "HealthManager.isFemale"
     case height = "HealthManager.height"
+    case birthYear = "HealthManager.birthYear"
     case birthday = "HealthManager.birthday"
     case focus = "HealthManager.healthGoal"
+    case sexKind = "HealthManager.sexKind"
     case weightLossSpeed = "HealthManager.weightLossSpeed"
     case userReportedActivityLevel = "HealthManager.userReportedActivityLevel"
     case targetWeight = "HealthManager.targetWeight"
@@ -56,6 +58,10 @@ public extension HealthDefaults {
     setValue(focus, for: .focus)
   }
 
+  func setSexKind(_ sexKind: SexKind) {
+    setValue(sexKind.rawValue, for: .sexKind)
+  }
+
   func setWeightLossSpeed(_ weightLossSpeed: WeightLossSpeed) {
     setValue(weightLossSpeed.rawValue, for: .weightLossSpeed)
   }
@@ -72,6 +78,14 @@ public extension HealthDefaults {
 public extension HealthDefaults {
   func getIsFemale() -> Bool {
     getValue(for: .isFemale) ?? true
+  }
+
+  func getSexKind() -> SexKind {
+    if let value: String = getValue(for: .sexKind),
+       let kind = SexKind(rawValue: value) {
+      return kind
+    }
+    return .unknown
   }
 
   func getBirthday() -> Date {

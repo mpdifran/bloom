@@ -30,6 +30,7 @@ public extension ImageResource {
   static let budTrophy           = ImageResource(name: "Bud Trophy", bundle: BundleToken.bundle)
   static let budWorkout          = ImageResource(name: "Bud Workout", bundle: BundleToken.bundle)
   static let budYoga             = ImageResource(name: "Bud Yoga", bundle: BundleToken.bundle)
+  static let budHealthApp        = ImageResource(name: "Bud Health App", bundle: BundleToken.bundle)
 }
 
 public extension UIImage {
@@ -55,6 +56,7 @@ public extension UIImage {
   static var budTrophy: UIImage { UIImage(resource: .budTrophy) }
   static var budWorkout: UIImage { UIImage(resource: .budWorkout) }
   static var budYoga: UIImage { UIImage(resource: .budYoga) }
+  static var budHealthApp: UIImage { UIImage(resource: .budHealthApp) }
 }
 
 private class BundleToken {

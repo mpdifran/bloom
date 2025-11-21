@@ -14,17 +14,28 @@ import TelemetryDeck
 import CoreHealth
 import SFSafeSymbols
 
+enum PersonalizationFocus {
+  case understandHealthData
+  case boostEnergyLevels
+  case improveSleep
+  case buildHealthyHabits
+  case reduceStress
+  case improveBodyComposition
+  case custom
+}
+
 struct FocusPair: Identifiable {
   let symbol: SFSymbol
   let title: String
   let color: Color
+  let focus: PersonalizationFocus
 
   var id: String { title }
 }
 
 struct OnboardingPersonalizationView: View {
   let isYes: Bool
-  let onContinue: () -> Void
+  let onContinue: (PersonalizationFocus?) -> Void
 
   @ObservedObject private var healthManager = HealthManager.shared
 
@@ -38,32 +49,38 @@ struct OnboardingPersonalizationView: View {
     FocusPair(
       symbol: .heartFill,
       title: "Understand my health data",
-      color: .mutedPink
+      color: .mutedPink,
+      focus: .understandHealthData
     ),
     FocusPair(
       symbol: .battery100percentBolt,
       title: "Boost energy levels",
-      color: .mutedOrange
+      color: .mutedOrange,
+      focus: .boostEnergyLevels
     ),
     FocusPair(
       symbol: .moonZzzFill,
       title: "Improve sleep",
-      color: .mutedIndigo
+      color: .mutedIndigo,
+      focus: .improveSleep
     ),
     FocusPair(
       symbol: .figureRun,
       title: "Build healthier habits",
-      color: .mutedGreen
+      color: .mutedGreen,
+      focus: .buildHealthyHabits
     ),
     FocusPair(
       symbol: .boltFill,
       title: "Reduce stress",
-      color: .mutedYellow
+      color: .mutedYellow,
+      focus: .reduceStress
     ),
     FocusPair(
       symbol: .gaugeWithDotsNeedle33percent,
       title: "Improve my body composition",
-      color: .mutedBlue
+      color: .mutedBlue,
+      focus: .improveBodyComposition
     )
   ]
 
@@ -84,23 +101,25 @@ struct OnboardingPersonalizationView: View {
           discussionSection
         }
         .horizontalAlignment(.leading)
-        .padding(.top, 120)
+        .padding(.top, 100)
       }
     }
     .shelf(isVisible: isFocused) {
-      if isFocused {
-        Button {
+      Button {
+        if customGoal.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+          isFocused = false
+        } else {
           selectionToggle.toggle()
           Task {
             await Delay(500)
-            onContinue()
+            onContinue(nil)
           }
-        } label: {
-          Text("Continue")
-            .horizontallyCentered()
         }
-        .buttonStyle(.primary)
+      } label: {
+        Text("Continue")
+          .horizontallyCentered()
       }
+      .buttonStyle(.primary)
     }
     .onAppear {
       healthManager.focus = ""
@@ -126,11 +145,17 @@ private extension OnboardingPersonalizationView {
     index += 1
     await Delay(800)
     index += 1
-    await Delay(300)
+    await Delay(100)
     index += 1
-    await Delay(300)
+    await Delay(200)
     index += 1
-    await Delay(300)
+    await Delay(100)
+    index += 1
+    await Delay(200)
+    index += 1
+    await Delay(100)
+    index += 1
+    await Delay(200)
     index += 1
   }
 }
@@ -153,7 +178,7 @@ private extension OnboardingPersonalizationView {
         showTail: true,
         backgroundStyle: .background
       ) {
-        Text(isYes ? "Let's make Bloom work perfectly for you." : "Here's how I help people stay focused on what matters most for their health.")
+        Text(isYes ? "Let's make Bloom work perfectly for you." : "Here's how I help people stay focused on what matters.")
           .secondaryOnboardingTextStyle()
           .fixedSize(horizontal: false, vertical: true)
       }
@@ -198,7 +223,7 @@ private extension OnboardingPersonalizationView {
 
             Task {
               await Delay(500)
-              onContinue()
+              onContinue(suggestion.focus)
             }
           }
         }
@@ -209,16 +234,7 @@ private extension OnboardingPersonalizationView {
   }
 
   func canShowFocusCard(for focusCardIndex: Int) -> Bool {
-    switch focusCardIndex {
-    case 0, 1:
-      return index >= 4
-    case 2, 3:
-      return index >= 5
-    case 4, 5:
-      return index >= 6
-    default:
-      return false
-    }
+    index >= focusCardIndex + 4
   }
 
   var textInputSection: some View {
@@ -276,13 +292,13 @@ private struct FocusCardCell: View {
 
 #Preview("Yes") {
   PreviewEnvironment {
-    OnboardingPersonalizationView(isYes: true) { }
+    OnboardingPersonalizationView(isYes: true) { (_) in }
   }
 }
 
 #Preview("No") {
   PreviewEnvironment {
-    OnboardingPersonalizationView(isYes: false) { }
+    OnboardingPersonalizationView(isYes: false) { (_) in }
   }
 }
 

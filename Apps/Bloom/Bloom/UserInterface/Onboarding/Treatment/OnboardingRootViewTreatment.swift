@@ -11,6 +11,12 @@ extension OnboardingRootViewTreatment {
   enum Step: Int, CaseIterable {
     case warmOpening
     case personalization
+    case trust
+    case healthKit
+    case personalDetails
+    case goalSetup
+    case notifications
+    case otherPermissions
     case finish
   }
 }
@@ -20,6 +26,7 @@ struct OnboardingRootViewTreatment: View {
 
   @State private var step = Step.warmOpening
   @State private var wasYesInWarmingStep = false
+  @State private var personalizationFocus: PersonalizationFocus?
 
   @Environment(\.dismiss) private var dismiss
 
@@ -32,7 +39,32 @@ struct OnboardingRootViewTreatment: View {
           setStep(.personalization)
         }
       case .personalization:
-        OnboardingPersonalizationView(isYes: wasYesInWarmingStep) {
+        OnboardingPersonalizationView(isYes: wasYesInWarmingStep) { (focus) in
+          personalizationFocus = focus
+          setStep(.trust)
+        }
+      case .trust:
+        OnboardingTrustView {
+          setStep(.healthKit)
+        }
+      case .healthKit:
+        OnboardingHealthKitPermissionsView(focus: personalizationFocus) {
+          setStep(.personalDetails)
+        }
+      case .personalDetails:
+        OnboardingUserDetailsView {
+          setStep(.goalSetup)
+        }
+      case .goalSetup:
+        OnboardingGoalSetupView {
+          setStep(.notifications)
+        }
+      case .notifications:
+        OnboardingNotificationPermissionView {
+          setStep(.otherPermissions)
+        }
+      case .otherPermissions:
+        OnboardingCalendarWeatherView {
           setStep(.finish)
         }
       case .finish:

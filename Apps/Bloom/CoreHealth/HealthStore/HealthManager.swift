@@ -129,14 +129,42 @@ public enum WeightLossSpeed: String, CaseIterable, Identifiable, Sendable {
   }
 }
 
+public enum SexKind: String, CaseIterable, Identifiable, Sendable {
+  case female
+  case male
+  case other
+  case unknown
+
+  public var id: Self { self }
+  public var name: String {
+    switch self {
+    case .unknown: return "Prefer not to say"
+    case .male: return "Male"
+    case .female: return "Female"
+    case .other: return "Other"
+    }
+  }
+}
+
 @MainActor
 public final class HealthManager: ObservableObject {
   public static let shared = HealthManager()
 
   @AppStorage(.HealthDefaults.name.key, store: .group) public var name: String = ""
+
+  @available(*, deprecated, message: "Use sexKind instead.")
   @AppStorage(.HealthDefaults.isFemale.key, store: .group) public var isFemale = true
   @AppStorage(.HealthDefaults.height.key, store: .group) public var heightCM: Double = 0
+  @AppStorage(.HealthDefaults.birthYear.key, store: .group) public var birthYear: Int = 0
 
+  @Published public var sexKind: SexKind = .unknown {
+    didSet {
+      healthDefaults.setSexKind(sexKind)
+      self.isFemale = sexKind == .female
+    }
+  }
+
+  @available(*, deprecated, message: "Use birthYear instead.")
   @Published public var birthday = Date.now {
     didSet { healthDefaults.setBirthday(birthday) }
   }
@@ -170,6 +198,7 @@ public final class HealthManager: ObservableObject {
   let healthDefaults = HealthDefaults.shared
 
   private init() {
+    self.sexKind = healthDefaults.getSexKind()
     self.birthday = healthDefaults.getBirthday()
     self.focus = healthDefaults.getFocus()
     self.weightLossSpeed = healthDefaults.getWeightLossSpeed()
@@ -178,6 +207,8 @@ public final class HealthManager: ObservableObject {
     if let activityLevel = healthDefaults.getActivityLevel() {
       self.userReportedActivityLevel = activityLevel
     }
+
+    self.isFemale = sexKind == .female
 
     Task {
       await checkHeightFromHealthKit()

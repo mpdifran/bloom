@@ -34,7 +34,7 @@ struct OnboardingHealthKitTreatmentView: View {
 
 
         VStack(spacing: 20) {
-          BudImage(.budSmoothie, dimension: 200)
+          BudImage(.budHealthApp, dimension: 200)
           explanationSection
 
           detailsSection
@@ -61,7 +61,7 @@ struct OnboardingHealthKitTreatmentView: View {
     .animation(.bouncy, value: showMockHealthApp)
     .sensoryFeedback(.selection, trigger: didContinue)
     .shelf {
-      Text("By continuing, I confirm I’m the age of majority where I live and consent to Bloom’s use of my personal health data as described.")
+      Text("I confirm I’m the age of majority where I live and consent to Bloom’s use of my Personal Data as described.")
         .font(.caption)
         .bold()
         .foregroundStyle(.secondary)
@@ -152,14 +152,12 @@ extension OnboardingHealthKitTreatmentView {
           .resizable()
           .frame(square: 40)
         Text("Your Data, Your Choice")
-          .font(.title)
-          .bold()
-          .fontDesign(.rounded)
+          .primaryOnboardingTextStyle()
         Spacer()
       }
 
-      Text("Bloom uses your Apple Health data to provide personalized insights and help you track goals.")
-        .font(.body)
+      Text("Here's how Bloom uses your Apple Health data.")
+        .secondaryOnboardingTextStyle()
         .multilineTextAlignment(.leading)
     }
     .fixedSize(horizontal: false, vertical: true)
@@ -168,21 +166,21 @@ extension OnboardingHealthKitTreatmentView {
   var detailsSection: some View {
     VStack {
       PrivacyDetailCard(
-        symbol: .iphone,
-        title: "Stays On Device",
-        detail: "Health access allows Bloom to display health data on your device."
+        symbol: .trophyFill,
+        title: "Set and Track Goals",
+        detail: "You can set goals for different health metrics, and track progress."
       )
 
       PrivacyDetailCard(
-        symbol: .squareAndArrowDownOnSquare,
+        symbol: .chartLineUptrendXyaxis,
+        title: "Charts and Visualizations",
+        detail: "Bloom can help you visualize your health data through charts, and show recommended ranges based on your age and sex."
+      )
+
+      PrivacyDetailCard(
+        symbol: .squareAndArrowDownOnSquareFill,
         title: "Writing Data",
         detail: "Bloom can help facilitate writing specific types of health data, like your weight, water consumption, or what your eat."
-      )
-
-      PrivacyDetailCard(
-        symbol: .figure,
-        title: "Personalized Insights",
-        detail: "Bloom can help highlight recommended ranges for common health metrics based on your age and sex."
       )
     }
   }
@@ -226,42 +224,6 @@ private extension OnboardingHealthKitTreatmentView {
         await VitalsCalculator.shared.forceFetchVitals()
       }
     } catch { }
-  }
-}
-
-private struct PrivacyDetailCard: View {
-
-  let symbol: SFSymbol
-  let title: String
-  let detail: String
-
-  var body: some View {
-    VStack(alignment: .leading, spacing: 12) {
-      HStack {
-        Image(systemSymbol: symbol)
-          .font(.title3)
-          .foregroundStyle(.white)
-          .frame(square: 30)
-          .padding(6)
-          .background {
-            RoundedRectangle(cornerRadius: 13)
-              .fill(.tint)
-          }
-
-        Text(title)
-          .font(.title3)
-          .fontDesign(.rounded)
-          .bold()
-      }
-
-      Text(detail)
-        .font(.body)
-        .fontDesign(.rounded)
-        .multilineTextAlignment(.leading)
-        .fixedSize(horizontal: false, vertical: true)
-    }
-    .horizontalAlignment(.leading)
-    .cardContainer()
   }
 }
 

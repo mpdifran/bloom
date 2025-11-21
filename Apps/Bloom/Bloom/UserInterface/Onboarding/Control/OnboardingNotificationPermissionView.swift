@@ -26,7 +26,7 @@ struct OnboardingNotificationPermissionView: View {
         BudImage(.budYoga)
 
         Group {
-          Text("I'd love to keep in touch with you when it's important.")
+          Text("Let me keep you on track with helpful reminders and health insights.")
             .transition(.opacity)
             .appear(with: 1, currentIndex: index, secondaryIfNotCurrentIndex: false)
         }
@@ -80,31 +80,35 @@ struct OnboardingNotificationPermissionView: View {
 
       await Delay(800)
 
-      showContinueButton = true
+      withAnimation {
+        showContinueButton = true
+      }
     }
-    .shelf {
-      if showContinueButton {
-        if isAuthorized {
-          Button("Let's go!") {
-            didContinue.toggle()
+    .shelf(isVisible: showContinueButton) {
+      if isAuthorized {
+        Button("Let's go!") {
+          didContinue.toggle()
+          onContinue()
+        }
+        .buttonStyle(.onboarding)
+      } else {
+        HStack {
+          Button {
             onContinue()
+          } label: {
+            Text("Skip")
+              .horizontallyCentered()
           }
-          .buttonStyle(.onboarding)
-        } else {
-          VStack {
-            Button("Enable Notifications", systemImage: "bell.badge.fill") {
-              NotificationManager.shared.requestAuthorization()
-              isAuthorized = true
-            }
-            .buttonStyle(.onboarding)
+          .buttonStyle(.primaryAlternate)
 
-            Button("Skip") {
-              // TODO: Add welcome to Bloom screen
-              onContinue()
-            }
-            .bold()
-            .frame(height: 44)
+          Button {
+            NotificationManager.shared.requestAuthorization()
+            isAuthorized = true
+          } label: {
+            Label("Enable", systemSymbol: .bellBadgeFill)
+              .horizontallyCentered()
           }
+          .buttonStyle(.primary)
         }
       }
     }

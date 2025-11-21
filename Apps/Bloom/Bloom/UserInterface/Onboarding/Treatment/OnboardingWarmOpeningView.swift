@@ -26,6 +26,7 @@ struct OnboardingWarmOpeningView: View {
         Image(.morningScenery)
           .resizable()
           .scaledToFit()
+          .offset(y: -40)
           .parallaxOverscroll()
           .zStackAlignment(.top)
 
@@ -40,7 +41,7 @@ struct OnboardingWarmOpeningView: View {
           }
           helloSection
         }
-        .padding(.top, 160)
+        .padding(.top, 100)
       }
     }
     .removeScrollEdgeEffect(shouldHide: true)
@@ -57,8 +58,7 @@ struct OnboardingWarmOpeningView: View {
           Text("Tell me more")
             .horizontallyCentered()
         }
-        .buttonStyle(.primary)
-        .tint(.gray)
+        .buttonStyle(.primaryAlternate)
 
         Button {
           onContinue(true)
