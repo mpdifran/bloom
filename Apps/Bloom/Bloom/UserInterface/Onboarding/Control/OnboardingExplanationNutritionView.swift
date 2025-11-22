@@ -47,7 +47,7 @@ struct OnboardingExplanationNutritionView: View {
         Text("Delicious!")
           .horizontallyCentered()
       }
-      .buttonStyle(.onboarding)
+      .buttonStyle(.primary)
     }
     .onAppear {
       TelemetryDeck.signal("OB Nutrition Explanation")

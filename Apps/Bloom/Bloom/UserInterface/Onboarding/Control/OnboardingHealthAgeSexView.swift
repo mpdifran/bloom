@@ -78,12 +78,15 @@ struct OnboardingHealthAgeSexView: View {
               .foregroundStyle(.secondary)
               .multilineTextAlignment(.center)
           }
-          Button("Continue") {
+          Button {
             didContinue.toggle()
             onContinue()
             TelemetryDeck.stopAndSendDurationSignal("OB Age+Sex Duration")
+          } label: {
+            Text("Continue")
+              .horizontallyCentered()
           }
-          .buttonStyle(.onboarding)
+          .buttonStyle(.primary)
           .disabled(shouldDisableContinue)
         }
       }
@@ -160,28 +163,34 @@ private extension OnboardingHealthAgeSexView {
       .appear(with: 2, currentIndex: index, secondaryIfNotCurrentIndex: false)
 
     HStack {
-      Button("Yes") {
+      Button {
         isHealthDataConfirmed = true
         index = 4
         TelemetryDeck.signal(
           "OB Age+Sex - Confirmation",
           parameters: ["health-data-confirmation": "yes"]
         )
+      } label: {
+        Text("Yes")
+          .horizontallyCentered()
       }
-      .buttonStyle(.onboarding)
+      .buttonStyle(.primary)
       .opacity(isHealthDataConfirmed == false ? 0.3 : 1)
 
       Spacer(minLength: 20)
 
-      Button("No") {
+      Button {
         isHealthDataConfirmed = false
         index = 4
         TelemetryDeck.signal(
           "OB Age+Sex - Confirmation",
           parameters: ["health-data-confirmation": "no"]
         )
+      } label: {
+        Text("No")
+          .horizontallyCentered()
       }
-      .buttonStyle(.onboarding)
+      .buttonStyle(.primary)
       .opacity(isHealthDataConfirmed == true ? 0.3 : 1)
     }
     .appear(with: 3, currentIndex: index)

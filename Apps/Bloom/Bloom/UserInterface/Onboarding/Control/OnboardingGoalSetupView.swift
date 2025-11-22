@@ -67,7 +67,7 @@ struct OnboardingGoalSetupView: View {
           Text("Continue")
             .horizontallyCentered()
         }
-        .buttonStyle(.onboarding)
+        .buttonStyle(.primary)
       }
     }
     .alert(error: $error)

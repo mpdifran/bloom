@@ -49,7 +49,7 @@ struct OnboardingExplanationTodayInsightsView: View {
         Text("That's Cool!")
           .horizontallyCentered()
       }
-      .buttonStyle(.onboarding)
+      .buttonStyle(.primary)
     }
     .onAppear {
       TelemetryDeck.signal("OB Today Insights Explanation")

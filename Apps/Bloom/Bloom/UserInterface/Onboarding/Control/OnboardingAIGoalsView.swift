@@ -142,8 +142,9 @@ private extension OnboardingAIGoalsView {
         try await saveAIGoals()
       } label: {
         Text("Continue")
+          .horizontallyCentered()
       }
-      .buttonStyle(.onboarding)
+      .buttonStyle(.primary)
     case .loading, .failed:
       EmptyView()
     }

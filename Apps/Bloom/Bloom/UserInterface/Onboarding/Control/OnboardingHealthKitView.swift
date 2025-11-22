@@ -71,8 +71,9 @@ struct OnboardingHealthKitView: View {
             onContinue()
           } label: {
             Text("Let's go!")
+              .horizontallyCentered()
           }
-          .buttonStyle(.onboarding)
+          .buttonStyle(.primary)
         } else {
           Button {
             didContinue.toggle()
@@ -83,9 +84,10 @@ struct OnboardingHealthKitView: View {
                 .foregroundStyle(.invertedText)
             } else {
               Text("Continue")
+                .horizontallyCentered()
             }
           }
-          .buttonStyle(.onboarding)
+          .buttonStyle(.primary)
         }
 
         HStack {

@@ -77,11 +77,14 @@ struct OnboardingFocusAreaView: View {
         VStack(spacing: 16) {
           healthGoalSuggestionsView
 
-          Button("Let's Do It!") {
+          Button {
             didContinue.toggle()
             onContinue()
+          } label: {
+            Text("Let's Do It!")
+              .horizontallyCentered()
           }
-          .buttonStyle(.onboarding)
+          .buttonStyle(.primary)
           .disabled(!canContinue)
           .padding(.horizontal)
         }

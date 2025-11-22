@@ -141,7 +141,7 @@ private extension OnboardingUserDetailsView {
             .multilineTextAlignment(.trailing)
             .frame(width: 70)
             .fontDesign(.rounded)
-            .keyboardType(.decimalPad)
+            .keyboardType(.numberPad)
             .focused($isAgeFocused)
             .selectAllTextOnBeginEditing()
         }

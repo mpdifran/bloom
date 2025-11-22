@@ -56,7 +56,7 @@ struct OnboardingCalendarWeatherView: View {
         Text(continueButtonTitle)
           .horizontallyCentered()
       }
-      .buttonStyle(.onboarding)
+      .buttonStyle(.primary)
     }
     .task {
       await advanceIndex()

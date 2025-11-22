@@ -90,7 +90,7 @@ struct OnboardingNotificationPermissionView: View {
           didContinue.toggle()
           onContinue()
         }
-        .buttonStyle(.onboarding)
+        .buttonStyle(.primary)
       } else {
         HStack {
           Button {

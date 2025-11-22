@@ -24,12 +24,11 @@ struct OnboardingFinishView: View {
   @Environment(ThemeController.self) private var themeController
 
   var body: some View {
-    BloomScrollView(showsChatBar: false) {
+    BloomScrollView(showsChatBar: false, padding: .bottom) {
       ZStack {
         Image(.morningScenery)
           .resizable()
           .scaledToFit()
-          .offset(y: -40)
           .parallaxOverscroll()
           .zStackAlignment(.top)
 
@@ -46,7 +45,6 @@ struct OnboardingFinishView: View {
             .multilineTextAlignment(.center)
             .appear(with: 3, currentIndex: index, secondaryIfNotCurrentIndex: false)
         }
-        .horizontallyCentered()
         .onboardingTextStyle()
         .padding(.top, 100)
         .padding(.horizontal)
@@ -55,34 +53,17 @@ struct OnboardingFinishView: View {
     .removeScrollEdgeEffect(shouldHide: true)
     .ignoresSafeArea(.all, edges: .top)
     .animation(.default, value: index)
-    .sensoryFeedback(.impact, trigger: index)
+    .sensoryFeedback(.success, trigger: index)
     .sensoryFeedback(.selection, trigger: didContinue)
     .shelf {
       if index >= 3 {
-        Button("Let's Go!") {
-          didContinue.toggle()
-          TelemetryDeck.signal("OB Finish")
-          TelemetryDeck.stopAndSendDurationSignal("Onboarding")
-          TelemetryDeck.stopAndSendDurationSignal("Onboarding V2")
-
-          // Cancel re-engagement notifications since onboarding is complete
-          Task {
-            await ReEngagementScheduler.shared.cancelNotification()
-          }
-
-          // Show paywall after onboarding
-          presentedPaywall = BloomPlusPaywall(
-            focus: .standard,
-            onPurchase: {
-              // Called on purchase after dismiss
-            },
-            onDismiss: {
-              // Called when paywall dismisses for any reason
-              onContinue()
-            }
-          ).asAny
+        AsyncButton {
+          await performFinish()
+        } label: {
+          Text("Let's Go!")
+            .horizontallyCentered()
         }
-        .buttonStyle(.onboarding)
+        .buttonStyle(.primary)
       }
     }
     .sheet($presentedSheet)
@@ -94,6 +75,28 @@ struct OnboardingFinishView: View {
 }
 
 private extension OnboardingFinishView {
+
+  func performFinish() async {
+    didContinue.toggle()
+    TelemetryDeck.signal("OB Finish")
+    TelemetryDeck.stopAndSendDurationSignal("Onboarding")
+    TelemetryDeck.stopAndSendDurationSignal("Onboarding V2")
+
+    // Cancel re-engagement notifications since onboarding is complete
+    await ReEngagementScheduler.shared.cancelNotification()
+
+    // Show paywall after onboarding
+    presentedPaywall = BloomPlusPaywall(
+      focus: .standard,
+      onPurchase: {
+        // Called on purchase after dismiss
+      },
+      onDismiss: {
+        // Called when paywall dismisses for any reason
+        onContinue()
+      }
+    ).asAny
+  }
 
   var usersName: String {
     let trimmedName = healthManager.name.trimmingCharacters(in: .whitespacesAndNewlines)

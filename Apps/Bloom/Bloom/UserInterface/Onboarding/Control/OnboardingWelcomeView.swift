@@ -36,16 +36,22 @@ struct OnboardingWelcomeView: View {
     .shelf {
       if(index >= 4) {
         if isFocused {
-          Button("Done") {
+          Button {
             isFocused = false
+          } label: {
+            Text("Done")
+              .horizontallyCentered()
           }
-          .buttonStyle(.onboarding)
+          .buttonStyle(.primary)
         } else {
-          Button("Looks good!") {
+          Button {
             didContinue.toggle()
             onContinue()
+          } label: {
+            Text("Looks good!")
+              .horizontallyCentered()
           }
-          .buttonStyle(.onboarding)
+          .buttonStyle(.primary)
           .disabled(healthManager.name.isEmpty)
         }
       }

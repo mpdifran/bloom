@@ -48,12 +48,15 @@ struct OnboardingHealthKitPrivacyCard: View {
             .frame(minHeight: 44)
           }
 
-          Button("Continue") {
+          Button {
             dismiss()
             didContinue.toggle()
             onContinue()
+          } label: {
+            Text("Continue")
+              .horizontallyCentered()
           }
-          .buttonStyle(.onboarding)
+          .buttonStyle(.primary)
           .padding(.top)
         }
       }

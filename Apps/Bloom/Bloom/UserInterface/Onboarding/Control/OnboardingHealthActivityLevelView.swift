@@ -53,11 +53,14 @@ struct OnboardingHealthActivityLevelView: View {
     }
     .shelf {
       if activityLevels.isNotEmpty {
-        Button("That looks right") {
+        Button {
           didContinue.toggle()
           onContinue()
+        } label: {
+          Text("That looks right.")
+            .horizontallyCentered()
         }
-        .buttonStyle(.onboarding)
+        .buttonStyle(.primary)
         .disabled(healthManager.userReportedActivityLevel == nil)
       }
     }

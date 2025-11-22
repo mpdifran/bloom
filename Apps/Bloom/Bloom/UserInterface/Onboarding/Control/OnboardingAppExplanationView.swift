@@ -118,8 +118,9 @@ struct OnboardingAppExplanationView: View {
           await onContinue()
         } label: {
           Text("Neat!")
+            .horizontallyCentered()
         }
-        .buttonStyle(.onboarding)
+        .buttonStyle(.primary)
       }
     }
     .task {
