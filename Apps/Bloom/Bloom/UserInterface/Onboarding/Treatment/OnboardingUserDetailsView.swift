@@ -9,6 +9,7 @@ import SwiftUI
 import BloomUI
 import CoreHealth
 import BloomFoundation
+import TelemetryDeck
 
 struct OnboardingUserDetailsView: View {
   let onContinue: () -> Void
@@ -69,6 +70,9 @@ struct OnboardingUserDetailsView: View {
     }
     .task {
       await advanceIndex()
+    }
+    .onAppear {
+      TelemetryDeck.signal("OB User Details")
     }
     .onChange(of: age) { _, newAge in
       guard newAge > 0 else { return }

@@ -129,6 +129,10 @@ private extension OnboardingLoginView {
           do {
             try await viewModel.authenticate(using: credential)
             TelemetryDeck.signal("Did Log In")
+
+            // Sync pending consent if available
+            await ConsentManager.shared.syncPendingConsentIfNeeded()
+
             await MainActor.run {
               onContinue()
             }

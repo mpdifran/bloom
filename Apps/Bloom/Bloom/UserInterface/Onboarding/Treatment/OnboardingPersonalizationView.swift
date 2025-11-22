@@ -111,7 +111,7 @@ struct OnboardingPersonalizationView: View {
         } else {
           selectionToggle.toggle()
           Task {
-            await Delay(500)
+            await Delay(1000)
             onContinue(nil)
           }
         }
@@ -123,6 +123,7 @@ struct OnboardingPersonalizationView: View {
     }
     .onAppear {
       healthManager.focus = ""
+      TelemetryDeck.signal("OB Personalization")
     }
     .animation(.default, value: healthManager.focus)
     .animation(.default, value: index)
@@ -222,7 +223,7 @@ private extension OnboardingPersonalizationView {
             selectionToggle.toggle()
 
             Task {
-              await Delay(500)
+              await Delay(1000)
               onContinue(suggestion.focus)
             }
           }

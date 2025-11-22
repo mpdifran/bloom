@@ -86,7 +86,7 @@ struct OnboardingNotificationPermissionView: View {
     }
     .shelf(isVisible: showContinueButton) {
       if isAuthorized {
-        Button("Let's go!") {
+        Button("Continue") {
           didContinue.toggle()
           onContinue()
         }
@@ -94,6 +94,7 @@ struct OnboardingNotificationPermissionView: View {
       } else {
         HStack {
           Button {
+            didContinue.toggle()
             onContinue()
           } label: {
             Text("Skip")

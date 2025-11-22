@@ -12,8 +12,10 @@ import CoreHealth
 import BloomFoundation
 import SFSafeSymbols
 import TelemetryDeck
+import AppFoundations
 
 struct OnboardingHealthKitTreatmentView: View {
+  let focus: PersonalizationFocus?
   var onContinue: () -> Void
 
   @State private var showMockHealthApp = false
@@ -21,6 +23,7 @@ struct OnboardingHealthKitTreatmentView: View {
   @State private var isWaitingForPermissionSheet = false
   @State private var isAuthorized = false
   @State private var didContinue = false
+  @State private var index = 0
   @State private var error: Error?
 
   var body: some View {
@@ -59,9 +62,10 @@ struct OnboardingHealthKitTreatmentView: View {
     .removeScrollEdgeEffect(shouldHide: true)
     .ignoresSafeArea(.all, edges: .top)
     .animation(.bouncy, value: showMockHealthApp)
+    .animation(.default, value: index)
     .sensoryFeedback(.selection, trigger: didContinue)
     .shelf {
-      Text("I confirm I’m the age of majority where I live and consent to Bloom’s use of my Personal Data as described.")
+      Text("I confirm I’m the age of majority where I live and consent to Bloom using my data as described above.")
         .font(.caption)
         .bold()
         .foregroundStyle(.secondary)
@@ -71,6 +75,12 @@ struct OnboardingHealthKitTreatmentView: View {
 
       AsyncButton {
         didContinue.toggle()
+        do {
+          try await recordOptIn()
+        } catch {
+          self.error = error
+          return
+        }
         await showHealthKitPermissionView()
       } label: {
         Group {
@@ -78,7 +88,7 @@ struct OnboardingHealthKitTreatmentView: View {
             CircularSpinnerView()
               .foregroundStyle(.invertedText)
           } else {
-            Text("Accept and Continue")
+            Text("Agree and Continue")
           }
         }
         .horizontallyCentered()
@@ -93,7 +103,7 @@ struct OnboardingHealthKitTreatmentView: View {
       showMockHealthApp = true
     }
     .onAppear {
-      TelemetryDeck.signal("OB HealthKit v2")
+      TelemetryDeck.signal("OB HealthKit")
     }
     .healthDataAccessRequest(
       store: HealthPermissionChecker.shared.healthStore,
@@ -156,7 +166,7 @@ extension OnboardingHealthKitTreatmentView {
         Spacer()
       }
 
-      Text("Here's how Bloom uses your Apple Health data.")
+      Text(explanationText)
         .secondaryOnboardingTextStyle()
         .multilineTextAlignment(.leading)
     }
@@ -168,19 +178,19 @@ extension OnboardingHealthKitTreatmentView {
       PrivacyDetailCard(
         symbol: .trophyFill,
         title: "Set and Track Goals",
-        detail: "You can set goals for different health metrics, and track progress."
+        detail: "Set goals for the metrics you care about and stay on track over time."
       )
 
       PrivacyDetailCard(
         symbol: .chartLineUptrendXyaxis,
         title: "Charts and Visualizations",
-        detail: "Bloom can help you visualize your health data through charts, and show recommended ranges based on your age and sex."
+        detail: "I’ll help you visualize your health trends and show typical ranges for context."
       )
 
       PrivacyDetailCard(
         symbol: .squareAndArrowDownOnSquareFill,
         title: "Writing Data",
-        detail: "Bloom can help facilitate writing specific types of health data, like your weight, water consumption, or what your eat."
+        detail: "Bloom can help record things like weight, hydration, or what you eat."
       )
     }
   }
@@ -188,11 +198,42 @@ extension OnboardingHealthKitTreatmentView {
 
 private extension OnboardingHealthKitTreatmentView {
 
+  var explanationText: String {
+    switch focus {
+    case .boostEnergyLevels:
+      "Here's how I'll use your data to spot patterns that affect your daily energy and help you feel more energized."
+    case .buildHealthyHabits:
+      "Here's how I’ll use your data to help you build healthy habits and stay consistent over time."
+    case .improveBodyComposition:
+      "Here's how I’ll use your data to help you understand the signals that influence body composition."
+    case .improveSleep:
+      "Here's how I’ll use your data to help you understand what’s affecting your sleep."
+    case .reduceStress:
+      "Here's how I’ll use your data to help you understand what’s impacting your stress levels."
+    case .understandHealthData:
+      "Here's how I’ll help you make sense of your health data and show you what it all means."
+    default:
+      "Here's how I'll use your data to give you personalized insights about your sleep, activity, stress, and overall wellness."
+    }
+  }
+}
+
+private extension OnboardingHealthKitTreatmentView {
+
   func recordOptIn() async throws {
-    try await ConsentManager.shared.recordConsent(
-      healthData: true,
-      externalProcessing: nil
-    )
+    do {
+      try await ConsentManager.shared.recordConsent(
+        healthData: true,
+        externalProcessing: nil
+      )
+    } catch {
+      TelemetryDeck.errorOccurred(
+        id: "OnboardingHealthKitTreatmentView.recordOptIn",
+        category: .thrownException,
+        message: error.localizedDescription
+      )
+      throw NSError(description: "There was a problem recording your consent. Please try again.")
+    }
   }
 
   func showHealthKitPermissionView() async {
@@ -229,6 +270,6 @@ private extension OnboardingHealthKitTreatmentView {
 
 #Preview {
   PreviewEnvironment {
-    OnboardingHealthKitTreatmentView { }
+    OnboardingHealthKitTreatmentView(focus: .improveSleep) { }
   }
 }

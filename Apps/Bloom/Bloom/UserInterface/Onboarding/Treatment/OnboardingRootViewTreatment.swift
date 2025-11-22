@@ -17,6 +17,7 @@ extension OnboardingRootViewTreatment {
     case goalSetup
     case notifications
     case otherPermissions
+    case login
     case finish
   }
 }
@@ -48,7 +49,7 @@ struct OnboardingRootViewTreatment: View {
           setStep(.healthKit)
         }
       case .healthKit:
-        OnboardingHealthKitPermissionsView(focus: personalizationFocus) {
+        OnboardingHealthKitTreatmentView(focus: personalizationFocus) {
           setStep(.personalDetails)
         }
       case .personalDetails:
@@ -65,10 +66,16 @@ struct OnboardingRootViewTreatment: View {
         }
       case .otherPermissions:
         OnboardingCalendarWeatherView {
+          setStep(.login)
+        }
+      case .login:
+        OnboardingLoginView {
           setStep(.finish)
         }
       case .finish:
-        Text("End")
+        OnboardingFinishView {
+          onComplete()
+        }
       }
     }
     .animation(.easeInOut(duration: 1), value: step)

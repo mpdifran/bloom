@@ -24,25 +24,36 @@ struct OnboardingFinishView: View {
   @Environment(ThemeController.self) private var themeController
 
   var body: some View {
-    ScrollView {
-      VStack(spacing: 20) {
-        BudImage(.budTrophy, dimension: 200)
-          .transition(.blurReplace)
-          .appear(with: 1, currentIndex: index, secondaryIfNotCurrentIndex: false)
-          .standardConfetti($index, colors: [themeController.theme.color, .white])
+    BloomScrollView(showsChatBar: false) {
+      ZStack {
+        Image(.morningScenery)
+          .resizable()
+          .scaledToFit()
+          .offset(y: -40)
+          .parallaxOverscroll()
+          .zStackAlignment(.top)
 
-        Text("You made it, \(usersName)!")
-          .appear(with: 2, currentIndex: index, secondaryIfNotCurrentIndex: false)
+        VStack(spacing: 20) {
+          BudImage(.budTrophy, dimension: 260)
+            .transition(.blurReplace)
+            .appear(with: 1, currentIndex: index, secondaryIfNotCurrentIndex: false)
+            .standardConfetti($index, colors: [themeController.theme.color, .white])
 
-        Text("Are you ready to get started?")
-          .multilineTextAlignment(.center)
-          .appear(with: 3, currentIndex: index, secondaryIfNotCurrentIndex: false)
+          Text("You made it, \(usersName)!")
+            .appear(with: 2, currentIndex: index, secondaryIfNotCurrentIndex: false)
+
+          Text("Are you ready to get started?")
+            .multilineTextAlignment(.center)
+            .appear(with: 3, currentIndex: index, secondaryIfNotCurrentIndex: false)
+        }
+        .horizontallyCentered()
+        .onboardingTextStyle()
+        .padding(.top, 100)
+        .padding(.horizontal)
       }
-      .horizontallyCentered()
-      .onboardingTextStyle()
-      .padding()
     }
-    .groupedBackground()
+    .removeScrollEdgeEffect(shouldHide: true)
+    .ignoresSafeArea(.all, edges: .top)
     .animation(.default, value: index)
     .sensoryFeedback(.impact, trigger: index)
     .sensoryFeedback(.selection, trigger: didContinue)
@@ -52,6 +63,7 @@ struct OnboardingFinishView: View {
           didContinue.toggle()
           TelemetryDeck.signal("OB Finish")
           TelemetryDeck.stopAndSendDurationSignal("Onboarding")
+          TelemetryDeck.stopAndSendDurationSignal("Onboarding V2")
 
           // Cancel re-engagement notifications since onboarding is complete
           Task {
@@ -85,7 +97,7 @@ private extension OnboardingFinishView {
 
   var usersName: String {
     let trimmedName = healthManager.name.trimmingCharacters(in: .whitespacesAndNewlines)
-    return trimmedName.isEmpty ? "Friend" : trimmedName
+    return trimmedName.isEmpty ? "friend" : trimmedName
   }
 
   func advanceForSubscribed() async {

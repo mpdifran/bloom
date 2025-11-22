@@ -56,6 +56,9 @@ struct OnboardingTrustView: View {
     .task {
       await advanceIndex()
     }
+    .onAppear {
+      TelemetryDeck.signal("OB Trust")
+    }
   }
 }
 
@@ -85,12 +88,17 @@ private extension OnboardingTrustView {
       if index >= 2 {
         PrivacyDetailCard(
           symbol: .heartFill,
-          title: "On Device by Default",
-          detail: "I analyze your health data on your device by default."
+          title: "On-Device",
+          detail: "I analyze your Personal Data on your device by default."
         )
         .transition(.scale)
       }
       if index >= 3 {
+        BloomPlusLogo()
+          .horizontallyCentered()
+          .transition(.scale)
+          .padding(.top)
+
         PrivacyDetailCard(
           symbol: .brainFill,
           title: "AI Analysis",

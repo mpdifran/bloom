@@ -47,9 +47,18 @@ struct RootView: View {
     Group {
       if !hasShownOnboarding {
         ZStack {
-          OnboardingRootView {
-            withAnimation {
-              hasShownOnboarding = true
+          switch experimentManager.variant(for: .onboardingFeaturePitch) {
+          case .treatment:
+            OnboardingRootViewTreatment {
+              withAnimation {
+                hasShownOnboarding = true
+              }
+            }
+          case .control:
+            OnboardingRootView {
+              withAnimation {
+                hasShownOnboarding = true
+              }
             }
           }
 
@@ -104,6 +113,7 @@ struct RootView: View {
       Task {
         await MagicScanStatusChecker.shared.checkPendingItems(modelContext: modelContext)
         await BiologicalAgeStatusChecker.shared.checkPendingCalculation()
+        await ConsentManager.shared.syncPendingConsentIfNeeded()
       }
     }
     .onOpenURL { url in
