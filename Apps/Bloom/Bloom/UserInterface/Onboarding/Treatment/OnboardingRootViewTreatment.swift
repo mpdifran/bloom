@@ -19,6 +19,21 @@ extension OnboardingRootViewTreatment {
     case otherPermissions
     case login
     case finish
+
+    var stepNumber: Int? {
+      switch self {
+      case .warmOpening: return 1
+      case .personalization: return 2
+      case .trust, .healthKit: return 3
+      case .personalDetails: return 4
+      case .goalSetup: return 5
+      case .notifications, .otherPermissions: return 6
+      case .login: return 7
+      case .finish: return nil
+      }
+    }
+
+    static let stepCount = 7
   }
 }
 
@@ -78,12 +93,15 @@ struct OnboardingRootViewTreatment: View {
         }
       }
     }
-    .animation(.easeInOut(duration: 1), value: step)
     .presentationCompactAdaptation(.fullScreenCover)
     .overlay {
-      ContrastingPillLabel("Step \(step.rawValue + 1) of \(Step.allCases.count)")
-        .zStackAlignment(.top)
+      if let stepNumber = step.stepNumber {
+        ContrastingPillLabel("Step \(stepNumber) of \(Step.stepCount)")
+          .contentTransition(.numericText())
+          .zStackAlignment(.top)
+      }
     }
+    .animation(.default, value: step)
   }
 }
 

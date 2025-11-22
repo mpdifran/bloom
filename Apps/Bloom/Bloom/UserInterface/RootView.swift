@@ -54,11 +54,17 @@ struct RootView: View {
                 hasShownOnboarding = true
               }
             }
+            .onAppear {
+              TelemetryDeck.signal("AB: Onboarding Feature Pitch - Treatment")
+            }
           case .control:
             OnboardingRootView {
               withAnimation {
                 hasShownOnboarding = true
               }
+            }
+            .onAppear {
+              TelemetryDeck.signal("AB: Onboarding Feature Pitch - Control")
             }
           }
 

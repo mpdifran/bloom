@@ -111,7 +111,7 @@ struct OnboardingPersonalizationView: View {
         } else {
           selectionToggle.toggle()
           Task {
-            await Delay(1000)
+            await Delay(800)
             onContinue(nil)
           }
         }
@@ -166,7 +166,7 @@ private extension OnboardingPersonalizationView {
   @ViewBuilder
   var discussionSection: some View {
     if index >= 1 {
-      Text(isYes ? "Awesome!" : "Totally!")
+      Text(isYes ? "Awesome!" : "Can do!")
         .primaryOnboardingTextStyle()
         .transition(.blurReplace)
         .padding(.horizontal)
@@ -179,7 +179,7 @@ private extension OnboardingPersonalizationView {
         showTail: true,
         backgroundStyle: .background
       ) {
-        Text(isYes ? "Let's make Bloom work perfectly for you." : "Here's how I help people stay focused on what matters.")
+        Text(isYes ? "Let's make Bloom work perfectly for you." : "I show you what’s affecting your health and what you can do about it.")
           .secondaryOnboardingTextStyle()
           .fixedSize(horizontal: false, vertical: true)
       }
@@ -223,7 +223,7 @@ private extension OnboardingPersonalizationView {
             selectionToggle.toggle()
 
             Task {
-              await Delay(1000)
+              await Delay(800)
               onContinue(suggestion.focus)
             }
           }

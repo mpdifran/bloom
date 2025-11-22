@@ -53,6 +53,7 @@ struct OnboardingWarmOpeningView: View {
     .shelf(isVisible: index >= 4) {
       HStack {
         Button {
+          TelemetryDeck.signal("OB Warm Opening - Tell me more")
           onContinue(false)
         } label: {
           Text("Tell me more")
@@ -61,6 +62,7 @@ struct OnboardingWarmOpeningView: View {
         .buttonStyle(.primaryAlternate)
 
         Button {
+          TelemetryDeck.signal("OB Warm Opening - Yes Bud")
           onContinue(true)
         } label: {
           Text("Yes, Bud!")

@@ -38,9 +38,20 @@ struct ContrastingPillLabel: View {
 }
 
 #Preview {
+  @Previewable @State var stepCount = 1
+
   PreviewEnvironment {
     BloomScrollView {
-      ContrastingPillLabel("Step 1 of 5")
+      ContrastingPillLabel("Step \(stepCount) of 5")
+        .contentTransition(.numericText())
+
+      Button {
+        stepCount += 1
+      } label: {
+        Text("Increment")
+      }
+      .buttonStyle(.primary)
     }
+    .animation(.default, value: stepCount)
   }
 }
