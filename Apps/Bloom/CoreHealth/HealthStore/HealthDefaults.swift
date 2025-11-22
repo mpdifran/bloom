@@ -34,6 +34,31 @@ public struct HealthDefaults: Sendable {
   nonisolated(unsafe) private static let store: UserDefaults = .group
 
   private init() { }
+
+  public static func migrateFromLegacyKeys() {
+    let store = UserDefaults.group
+    let birthdayKey = "HealthManager.birthday"
+    let isFemaleKey = "HealthManager.isFemale"
+
+    // Only migrate if old keys exist
+    guard store.value(forKey: birthdayKey) != nil || store.value(forKey: isFemaleKey) != nil else {
+      return
+    }
+
+    // Migrate birthday to birthYear
+    if let birthday = store.value(forKey: birthdayKey) as? Date {
+      let birthYear = Calendar.current.component(.year, from: birthday)
+      store.set(birthYear, forKey: "HealthManager.birthYear")
+      store.removeObject(forKey: birthdayKey)
+    }
+
+    // Migrate isFemale to sexKind
+    if let isFemale = store.value(forKey: isFemaleKey) as? Bool {
+      let sexKindRawValue = isFemale ? HKBiologicalSex.female.rawValue : HKBiologicalSex.male.rawValue
+      store.set(sexKindRawValue, forKey: "HealthManager.sexKind")
+      store.removeObject(forKey: isFemaleKey)
+    }
+  }
 }
 
 private extension HealthDefaults {

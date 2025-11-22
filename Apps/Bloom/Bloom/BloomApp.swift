@@ -14,6 +14,7 @@ import RevenueCat
 import CoreHealth
 import BloomFoundation
 import SwiftData
+import HealthKit
 
 @main
 struct BloomApp: App {
@@ -50,7 +51,7 @@ struct BloomApp: App {
 
     NotificationManager.shared.removeAllScheduledNotifications()
     migrateUserDefaults()
-    migrateHealthDefaults()
+    HealthDefaults.migrateFromLegacyKeys()
 
     // Listen for workouts starting from Apple Watch
     WorkoutManager.shared.setupRemoteSessionHandler()
@@ -207,31 +208,6 @@ private extension BloomApp {
         UserDefaults.group.set(value, forKey: key)
         UserDefaults.legacyGroup.removeObject(forKey: key)
       }
-    }
-  }
-
-  func migrateHealthDefaults() {
-    let store = UserDefaults.group
-    let birthdayKey = "HealthManager.birthday"
-    let isFemaleKey = "HealthManager.isFemale"
-
-    // Only migrate if old keys exist
-    guard store.value(forKey: birthdayKey) != nil || store.value(forKey: isFemaleKey) != nil else {
-      return
-    }
-
-    // Migrate birthday to birthYear
-    if let birthday = store.value(forKey: birthdayKey) as? Date {
-      let birthYear = Calendar.current.component(.year, from: birthday)
-      store.set(birthYear, forKey: "HealthManager.birthYear")
-      store.removeObject(forKey: birthdayKey)
-    }
-
-    // Migrate isFemale to sexKind
-    if let isFemale = store.value(forKey: isFemaleKey) as? Bool {
-      let sexKindRawValue = isFemale ? 2 : 1 // HKBiologicalSex.female.rawValue = 2, .male.rawValue = 1
-      store.set(sexKindRawValue, forKey: "HealthManager.sexKind")
-      store.removeObject(forKey: isFemaleKey)
     }
   }
 }
