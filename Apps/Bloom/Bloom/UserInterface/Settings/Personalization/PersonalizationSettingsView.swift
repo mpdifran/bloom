@@ -10,6 +10,7 @@ import DataContainer
 import BloomFoundation
 import SFSafeSymbols
 import CoreHealth
+import HealthKit
 
 struct PersonalizationSettingsView: View {
   @ObservedObject private var healthManager = HealthManager.shared
@@ -42,26 +43,26 @@ private extension PersonalizationSettingsView {
         .padding(.horizontal)
 
       SettingsSectionContainer {
-        SettingsCell("Birthday") {
-          DatePicker(
-            "",
-            selection: $healthManager.birthday,
-            in: ...Date(),
-            displayedComponents: .date
-          )
+        SettingsCell("Birth Year") {
+          Picker("", selection: $healthManager.birthYear) {
+            ForEach((1924...Calendar.current.component(.year, from: .now)).reversed(), id: \.self) { year in
+              Text(String(year))
+                .tag(year)
+            }
+          }
+          .pickerStyle(.menu)
         }
 
         Divider()
 
         SettingsCell("Sex") {
-          Picker("", selection: $healthManager.isFemale) {
-            Text("Male")
-              .tag(false)
-            Text("Female")
-              .tag(true)
+          Picker("", selection: $healthManager.sexKind) {
+            ForEach(HKBiologicalSex.allCases, id: \.self) { sex in
+              Text(sex.name)
+                .tag(sex)
+            }
           }
-          .pickerStyle(.segmented)
-          .frame(width: 150, height: 50)
+          .pickerStyle(.menu)
         }
 
         Divider()

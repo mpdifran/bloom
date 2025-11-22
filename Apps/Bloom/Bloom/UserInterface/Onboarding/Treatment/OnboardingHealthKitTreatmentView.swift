@@ -16,7 +16,7 @@ import AppFoundations
 
 struct OnboardingHealthKitTreatmentView: View {
   let focus: PersonalizationFocus?
-  var onContinue: () -> Void
+  var onContinue: () async -> Void
 
   @State private var showMockHealthApp = false
   @State private var healthPermissionTrigger = false
@@ -118,14 +118,11 @@ struct OnboardingHealthKitTreatmentView: View {
 
       switch result {
       case .success:
-        Task {
-          await fetchHeight()
+        Task { @MainActor in
           await checkAuth()
 
-          await MainActor.run {
-            if isAuthorized {
-              onContinue()
-            }
+          if isAuthorized {
+            await onContinue()
           }
         }
       case .failure(let error):
@@ -240,18 +237,10 @@ private extension OnboardingHealthKitTreatmentView {
     await checkAuth()
 
     if isAuthorized {
-      await fetchHeight()
-      onContinue()
+      await onContinue()
     } else {
       isWaitingForPermissionSheet = true
       healthPermissionTrigger.toggle()
-    }
-  }
-
-  func fetchHeight() async {
-    let quantity = await HealthStoreFetcher.shared.fetchLatestSample(for: .height)?.quantity
-    if let height = quantity?.doubleValue(for: .meterUnit(with: .centi)) {
-      HealthManager.shared.heightCM = height
     }
   }
 

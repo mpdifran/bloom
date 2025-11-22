@@ -6,16 +6,15 @@
 //
 
 import Foundation
+import HealthKit
 internal import TelemetryDeck
 
 public extension String {
   /// Namespace for Health User Default Keys
   enum HealthDefaults: String {
     case name = "HealthManager.name"
-    case isFemale = "HealthManager.isFemale"
     case height = "HealthManager.height"
     case birthYear = "HealthManager.birthYear"
-    case birthday = "HealthManager.birthday"
     case focus = "HealthManager.healthGoal"
     case sexKind = "HealthManager.sexKind"
     case weightLossSpeed = "HealthManager.weightLossSpeed"
@@ -50,15 +49,11 @@ private extension HealthDefaults {
 
 @MainActor
 public extension HealthDefaults {
-  func setBirthday(_ birthday: Date) {
-    setValue(birthday, for: .birthday)
-  }
-
   func set(focus: String) {
     setValue(focus, for: .focus)
   }
 
-  func setSexKind(_ sexKind: SexKind) {
+  func setSexKind(_ sexKind: HKBiologicalSex) {
     setValue(sexKind.rawValue, for: .sexKind)
   }
 
@@ -76,20 +71,16 @@ public extension HealthDefaults {
 }
 
 public extension HealthDefaults {
-  func getIsFemale() -> Bool {
-    getValue(for: .isFemale) ?? true
+  func getBirthYear() -> Int {
+    getValue(for: .birthYear) ?? 0
   }
 
-  func getSexKind() -> SexKind {
-    if let value: String = getValue(for: .sexKind),
-       let kind = SexKind(rawValue: value) {
+  func getSexKind() -> HKBiologicalSex {
+    if let value: Int = getValue(for: .sexKind),
+       let kind = HKBiologicalSex(rawValue: value) {
       return kind
     }
-    return .unknown
-  }
-
-  func getBirthday() -> Date {
-    getValue(for: .birthday) ?? Date.now
+    return .notSet
   }
 
   func getFocus() -> String {

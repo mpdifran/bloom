@@ -11,6 +11,7 @@ import TelemetryDeck
 import CoreHealth
 import BloomFoundation
 import BloomUI
+import HealthKit
 
 @MainActor
 struct OnboardingHealthAgeSexView: View {
@@ -38,7 +39,7 @@ struct OnboardingHealthAgeSexView: View {
         } else {
           hasHealthDataContent(
             age: healthManager.age(),
-            sex: healthManager.isFemale ? "female" : "male"
+            sex: healthManager.sexKind == .female ? "female" : "male"
           )
 
           if isHealthDataConfirmed == false {
@@ -56,9 +57,9 @@ struct OnboardingHealthAgeSexView: View {
     }
     .groupedBackground()
     .animation(.default, value: index)
-    .animation(.default, value: healthManager.birthday)
+    .animation(.default, value: healthManager.birthYear)
     .animation(.default, value: healthManager.heightCM)
-    .animation(.default, value: healthManager.isFemale)
+    .animation(.default, value: healthManager.sexKind)
     .sensoryFeedback(.selection, trigger: index)
     .sensoryFeedback(.selection, trigger: isHealthDataConfirmed)
     .sensoryFeedback(.selection, trigger: didContinue)
@@ -92,28 +93,13 @@ struct OnboardingHealthAgeSexView: View {
       }
     }
     .onAppear {
-      if !isHealthKitDataValid {
-        wasMissingHealthData = true
-        TelemetryDeck.signal(
-          "OB Age+Sex - Health Data Check",
-          parameters: [
-            "sex": healthManager.healthStore.sex()?.personName == nil ? "Not Present" : "Present",
-            "age": healthManager.healthStore.age() == nil ? "Not Present" : "Present",
-            "isMissingHealthData": "yes"
-          ]
-        )
-      } else {
-        TelemetryDeck.signal(
-          "OB Age+Sex - Health Data Check",
-          parameters: [
-            "sex": healthManager.healthStore.sex()?.personName == nil ? "Not Present" : "Present",
-            "age": healthManager.healthStore.age() == nil ? "Not Present" : "Present",
-            "isMissingHealthData": "no"
-          ]
-        )
+      if let age = healthManager.healthStore.age() {
+        let currentYear = Calendar.current.component(.year, from: .now)
+        healthManager.birthYear = currentYear - age
       }
-      healthManager.birthday = healthManager.healthStore.birthday() ?? Date()
-      healthManager.isFemale = healthManager.healthStore.sex() == .female
+      if let sex = healthManager.healthStore.sex() {
+        healthManager.sexKind = sex
+      }
 
       TelemetryDeck.signal("OB Age+Sex")
       TelemetryDeck.startDurationSignal("OB Age+Sex Duration")
@@ -140,9 +126,8 @@ private extension OnboardingHealthAgeSexView {
   var isHealthKitDataValid: Bool {
     let sex = healthManager.healthStore.sex()
     let age = healthManager.healthStore.age()
-    let sexName = sex?.personName
 
-    return sex != nil && age != nil && sexName != nil
+    return sex != nil && age != nil
   }
 
   var hasValidHealthData: Bool {
@@ -209,26 +194,28 @@ private extension OnboardingHealthAgeSexView {
   var ageSexPicker: some View {
     VStack {
       VStack {
-        LabeledContent("Birthday") {
-          DatePicker(
-            "",
-            selection: $healthManager.birthday,
-            in: ...Date(),
-            displayedComponents: .date
-          )
+        LabeledContent("Birth Year") {
+          Picker("", selection: $healthManager.birthYear) {
+            ForEach((1924...Calendar.current.component(.year, from: .now)).reversed(), id: \.self) { year in
+              Text(String(year))
+                .tag(year)
+            }
+          }
+          .pickerStyle(.wheel)
+          .frame(height: 100)
         }
-        
+
         Divider()
-        
+
         LabeledContent("Sex") {
-          Picker("", selection: $healthManager.isFemale) {
-            Text("Male")
-              .tag(false)
-            Text("Female")
-              .tag(true)
+          Picker("", selection: $healthManager.sexKind) {
+            ForEach(HKBiologicalSex.allCases, id: \.self) { sex in
+              Text(sex.name)
+                .tag(sex)
+            }
           }
           .pickerStyle(.segmented)
-          .frame(width: 150, height: 50)
+          .frame(height: 50)
         }
       }
       .cardContainer(fill: .background.secondary)

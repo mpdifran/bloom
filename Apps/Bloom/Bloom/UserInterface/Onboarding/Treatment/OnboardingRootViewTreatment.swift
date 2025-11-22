@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreHealth
 
 extension OnboardingRootViewTreatment {
   enum Step: Int, CaseIterable {
@@ -44,6 +45,8 @@ struct OnboardingRootViewTreatment: View {
   @State private var wasYesInWarmingStep = false
   @State private var personalizationFocus: PersonalizationFocus?
 
+  @ObservedObject private var healthManager = HealthManager.shared
+
   @Environment(\.dismiss) private var dismiss
 
   var body: some View {
@@ -65,6 +68,7 @@ struct OnboardingRootViewTreatment: View {
         }
       case .healthKit:
         OnboardingHealthKitTreatmentView(focus: personalizationFocus) {
+          await healthManager.syncPersonalDataFromHealthKit()
           setStep(.personalDetails)
         }
       case .personalDetails:

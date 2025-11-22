@@ -120,10 +120,9 @@ private extension OnboardingRootView {
     // Check if we already have complete health data from HealthKit
     let sex = healthManager.healthStore.sex()
     let age = healthManager.healthStore.age()
-    let sexName = sex?.personName
     
     // Check if all required health data is present (height is now optional)
-    let hasAllHealthData = sex != nil && age != nil && sexName != nil
+    let hasAllHealthData = sex != nil && age != nil
     
     // Also check if user is 18 or older (if age is available)
     let isAgeValid = (age ?? 1) >= 18
@@ -133,9 +132,14 @@ private extension OnboardingRootView {
     if isHealthKitDataValid {
       // Skip the age/sex screen and go directly to focus area
       // Make sure to set the health data values
-      healthManager.birthday = healthManager.healthStore.birthday() ?? Date()
-      healthManager.isFemale = healthManager.healthStore.sex() == .female
-      
+      if let age = healthManager.healthStore.age() {
+        let currentYear = Calendar.current.component(.year, from: .now)
+        healthManager.birthYear = currentYear - age
+      }
+      if let sex = healthManager.healthStore.sex() {
+        healthManager.sexKind = sex
+      }
+
       setStep(.focusArea)
     } else {
       // Need to collect age/sex data

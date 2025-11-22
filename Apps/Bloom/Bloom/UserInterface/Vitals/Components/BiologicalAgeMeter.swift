@@ -20,7 +20,11 @@ struct BiologicalAgeMeter: View {
   private let maxAgeDifference = 10.0 // Maximum years difference to display
 
   init(chronologicalAge: Int? = nil, biologicalAge: Double?) {
-    self.chronologicalAge = chronologicalAge ?? HealthDefaults.shared.getBirthday().toAge()
+    self.chronologicalAge = chronologicalAge ?? {
+      let birthYear = HealthDefaults.shared.getBirthYear()
+      guard birthYear > 0 else { return 0 }
+      return Calendar.current.component(.year, from: .now) - birthYear
+    }()
     self.biologicalAge = biologicalAge
   }
 

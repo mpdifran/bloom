@@ -10,6 +10,7 @@ import BloomUI
 import CoreHealth
 import BloomFoundation
 import TelemetryDeck
+import HealthKit
 
 struct OnboardingUserDetailsView: View {
   let onContinue: () -> Void
@@ -152,9 +153,9 @@ private extension OnboardingUserDetailsView {
 
         LabeledContent("Sex") {
           Picker("", selection: $healthManager.sexKind) {
-            ForEach(SexKind.allCases) { sexKind in
-              Text(sexKind.name)
-                .tag(sexKind)
+            ForEach(HKBiologicalSex.allCases, id: \.self) { sex in
+              Text(sex.name)
+                .tag(sex)
             }
           }
         }

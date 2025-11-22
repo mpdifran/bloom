@@ -86,9 +86,12 @@ struct OnboardingNotificationPermissionView: View {
     }
     .shelf(isVisible: showContinueButton) {
       if isAuthorized {
-        Button("Continue") {
+        Button {
           didContinue.toggle()
           onContinue()
+        } label: {
+          Text("Continue")
+            .horizontallyCentered()
         }
         .buttonStyle(.primary)
       } else {

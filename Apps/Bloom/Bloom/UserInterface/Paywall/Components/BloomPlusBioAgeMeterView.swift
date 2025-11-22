@@ -50,7 +50,9 @@ struct BloomPlusBioAgeMeterView: View {
 private extension BloomPlusBioAgeMeterView {
 
   var userAge: Int {
-    let age = HealthDefaults.shared.getBirthday().toAge()
+    let birthYear = HealthDefaults.shared.getBirthYear()
+    guard birthYear > 0 else { return 30 }
+    let age = Calendar.current.component(.year, from: .now) - birthYear
     return age > 5 ? age : 30
   }
 

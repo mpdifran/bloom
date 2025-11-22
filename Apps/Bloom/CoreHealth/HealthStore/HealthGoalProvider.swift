@@ -19,11 +19,15 @@ public final class HealthGoalProvider: Sendable {
 
 private extension HealthGoalProvider {
   var isFemale: Bool {
-    healthDefaults.getIsFemale()
+    // TODO: Update to use more appropriate guidelines for .other and .notSet
+    healthDefaults.getSexKind() == .female
   }
 
   var age: Int {
-    healthDefaults.getBirthday().toAge()
+    let birthYear = healthDefaults.getBirthYear()
+    guard birthYear > 0 else { return 0 }
+    let currentYear = Calendar.current.component(.year, from: .now)
+    return currentYear - birthYear
   }
 }
 
