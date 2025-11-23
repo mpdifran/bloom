@@ -15,12 +15,10 @@ import HealthKit
 struct OnboardingUserDetailsView: View {
   let onContinue: () -> Void
 
-  @State private var age: Int = 0
   @State private var index = 0
   @State private var onContinueToggle = false
 
   @FocusState private var isFocused: Bool
-  @FocusState private var isAgeFocused: Bool
 
   @ObservedObject private var healthManager = HealthManager.shared
 
@@ -41,10 +39,9 @@ struct OnboardingUserDetailsView: View {
     .animation(.default, value: cannotContinue)
     .sensoryFeedback(.impact, trigger: index)
     .shelf(isVisible: index >= 4) {
-      if isAgeFocused || isFocused {
+      if isFocused {
         Button {
           isFocused = false
-          isAgeFocused = false
         } label: {
           Text("Done")
             .horizontallyCentered()
@@ -75,11 +72,6 @@ struct OnboardingUserDetailsView: View {
     .onAppear {
       TelemetryDeck.signal("OB User Details")
     }
-    .onChange(of: age) { _, newAge in
-      guard newAge > 0 else { return }
-      let currentYear = Calendar.current.component(.year, from: .now)
-      healthManager.birthYear = currentYear - newAge
-    }
   }
 }
 
@@ -99,10 +91,18 @@ private extension OnboardingUserDetailsView {
   }
 
   var cannotContinue: Bool {
-    age < 18
+    let birthYear = healthManager.birthYear
+    guard birthYear > 0 else { return true }
+    let currentYear = Calendar.current.component(.year, from: .now)
+    let age = currentYear - birthYear
+    return age < 18
   }
 
   var statusText: String? {
+    let birthYear = healthManager.birthYear
+    guard birthYear > 0 else { return nil }
+    let currentYear = Calendar.current.component(.year, from: .now)
+    let age = currentYear - birthYear
     if age < 18 {
       return "You must be at least 18 years old to use Bloom."
     }
@@ -136,15 +136,14 @@ private extension OnboardingUserDetailsView {
 
     if index >= 3 {
       VStack {
-        LabeledContent("Age") {
-          TextField("", value: $age, formatter: NumberFormatter.noDecimalPlaces)
-            .textFieldStyle(.roundedBorder)
-            .multilineTextAlignment(.trailing)
-            .frame(width: 70)
-            .fontDesign(.rounded)
-            .keyboardType(.numberPad)
-            .focused($isAgeFocused)
-            .selectAllTextOnBeginEditing()
+        LabeledContent("Birth Year") {
+          Picker("", selection: $healthManager.birthYear) {
+            ForEach((1924...Calendar.current.component(.year, from: .now)).reversed(), id: \.self) { year in
+              Text(String(year))
+                .tag(year)
+            }
+          }
+          .pickerStyle(.menu)
         }
         .bold()
         .frame(height: 40)

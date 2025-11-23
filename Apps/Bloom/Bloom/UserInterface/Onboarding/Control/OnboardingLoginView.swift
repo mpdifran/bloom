@@ -74,12 +74,12 @@ private extension OnboardingLoginView {
       .transition(.blurReplace)
       .frame(square: 80)
 
-    Text("Welcome To Bloom")
+    Text("Create your Bloom account")
       .font(.title)
       .bold()
       .fontDesign(.rounded)
 
-    SignInWithAppleButton(
+    SignInWithAppleButton(.continue,
       onRequest: { (request) in
         authorizationState = UUID().uuidString
         request.state = authorizationState

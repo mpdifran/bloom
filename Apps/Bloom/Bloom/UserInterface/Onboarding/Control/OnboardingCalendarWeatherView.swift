@@ -63,6 +63,7 @@ struct OnboardingCalendarWeatherView: View {
     }
     .onAppear {
       TelemetryDeck.signal("OB Other Permissions")
+      calendarManager.checkPermission()
     }
   }
 }

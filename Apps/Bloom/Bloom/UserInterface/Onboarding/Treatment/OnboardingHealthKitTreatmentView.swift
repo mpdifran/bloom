@@ -18,7 +18,6 @@ struct OnboardingHealthKitTreatmentView: View {
   let focus: PersonalizationFocus?
   var onContinue: () async -> Void
 
-  @State private var showMockHealthApp = false
   @State private var healthPermissionTrigger = false
   @State private var isWaitingForPermissionSheet = false
   @State private var isAuthorized = false
@@ -41,19 +40,6 @@ struct OnboardingHealthKitTreatmentView: View {
           explanationSection
 
           detailsSection
-
-//          if showMockHealthApp {
-//            MockHealthAppPermissionView()
-//              .horizontallyCentered()
-//              .transition(.move(edge: .bottom))
-//              .onTapGesture {
-//                didContinue.toggle()
-//                Task {
-//                  await showHealthKitPermissionView()
-//                }
-//              }
-//              .padding(.bottom, -200)
-//          }
         }
         .padding(.horizontal)
         .padding(.top, 160)
@@ -61,10 +47,10 @@ struct OnboardingHealthKitTreatmentView: View {
     }
     .removeScrollEdgeEffect(shouldHide: true)
     .ignoresSafeArea(.all, edges: .top)
-    .animation(.bouncy, value: showMockHealthApp)
     .animation(.default, value: index)
-    .sensoryFeedback(.selection, trigger: didContinue)
-    .shelf {
+    .sensoryFeedback(.impact, trigger: index)
+    .sensoryFeedback(.success, trigger: didContinue)
+    .shelf(isVisible: index >= 5) {
       Text("I confirm I’m the age of majority where I live and consent to Bloom using my data as described above.")
         .font(.caption)
         .bold()
@@ -99,8 +85,7 @@ struct OnboardingHealthKitTreatmentView: View {
     }
     .alert(error: $error)
     .task {
-      await Delay(600)
-      showMockHealthApp = true
+      await advanceIndex()
     }
     .onAppear {
       TelemetryDeck.signal("OB HealthKit")
@@ -136,6 +121,21 @@ struct OnboardingHealthKitTreatmentView: View {
 
 extension OnboardingHealthKitTreatmentView {
 
+  func advanceIndex() async {
+    await Delay(800)
+    index += 1
+    await Delay(1000)
+    index += 1
+    await Delay(300)
+    index += 1
+    await Delay(300)
+    index += 1
+    await Delay(500)
+    withAnimation {
+      index += 1
+    }
+  }
+
   var privacyEmailView: some View {
     HStack {
       Link("Privacy Policy", destination: .privacyPolicy)
@@ -154,41 +154,49 @@ extension OnboardingHealthKitTreatmentView {
   @ViewBuilder
   var explanationSection: some View {
     VStack(alignment: .leading, spacing: 16) {
-      HStack {
-        Image(.healthAppIcon)
-          .resizable()
-          .frame(square: 40)
-        Text("Your Data, Your Choice")
-          .primaryOnboardingTextStyle()
-        Spacer()
-      }
+      if index >= 1 {
+        HStack {
+          Image(.healthAppIcon)
+            .resizable()
+            .frame(square: 40)
+          Text("Your Data, Your Choice")
+            .primaryOnboardingTextStyle()
+          Spacer()
+        }
 
-      Text(explanationText)
-        .secondaryOnboardingTextStyle()
-        .multilineTextAlignment(.leading)
+        Text(explanationText)
+          .secondaryOnboardingTextStyle()
+          .multilineTextAlignment(.leading)
+      }
     }
     .fixedSize(horizontal: false, vertical: true)
   }
 
   var detailsSection: some View {
     VStack {
-      PrivacyDetailCard(
-        symbol: .trophyFill,
-        title: "Set and Track Goals",
-        detail: "Set goals for the metrics you care about and stay on track over time."
-      )
+      if index >= 2 {
+        PrivacyDetailCard(
+          symbol: .trophyFill,
+          title: "Set and Track Goals",
+          detail: "Set goals for the metrics you care about and stay on track over time."
+        )
+      }
 
-      PrivacyDetailCard(
-        symbol: .chartLineUptrendXyaxis,
-        title: "Charts and Visualizations",
-        detail: "I’ll help you visualize your health trends and show typical ranges for context."
-      )
+      if index >= 3 {
+        PrivacyDetailCard(
+          symbol: .chartLineUptrendXyaxis,
+          title: "Charts and Visualizations",
+          detail: "I’ll help you visualize your health trends and show typical ranges for context."
+        )
+      }
 
-      PrivacyDetailCard(
-        symbol: .squareAndArrowDownOnSquareFill,
-        title: "Writing Data",
-        detail: "Bloom can help record things like weight, hydration, or what you eat."
-      )
+      if index >= 4 {
+        PrivacyDetailCard(
+          symbol: .squareAndArrowDownOnSquareFill,
+          title: "Writing Data",
+          detail: "Bloom can help record things like weight, hydration, or what you eat."
+        )
+      }
     }
   }
 }
