@@ -129,9 +129,6 @@ struct NewConversationChatBar: View {
     .sensoryFeedback(.impact, trigger: didSendToggle)
     .alert(error: $error)
     .sheet($presentedSheet)
-    .onAppear {
-      isFocused = true
-    }
   }
 
   @available(iOS 26.0, *)
@@ -204,7 +201,7 @@ struct NewConversationChatBar: View {
       TextField(
         "",
         text: $text,
-        prompt: Text("Message"),
+        prompt: Text("New Chat"),
         axis: .vertical
       )
       .focused($isFocused)

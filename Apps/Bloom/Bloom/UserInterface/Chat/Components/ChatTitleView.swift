@@ -51,12 +51,13 @@ private extension ChatTitleView {
   }
 
   var title: String {
-    conversation?.name ?? "New Chat Where the title goes onto multiple lines"
+    conversation?.name ?? "New Chat"
   }
 
   var contentView: some View {
     HStack(spacing: 6) {
       BudImage(.budCoach, dimension: 40)
+        .layoutPriority(10)
 
       Text(title)
         .fontDesign(.rounded)
@@ -64,7 +65,6 @@ private extension ChatTitleView {
         .contentTransition(.numericText())
         .lineLimit(2)
         .multilineTextAlignment(.leading)
-        .layoutPriority(10)
         .minimumScaleFactor(0.8)
     }
     .onTapGesture {
