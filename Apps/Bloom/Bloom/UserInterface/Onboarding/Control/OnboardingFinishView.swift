@@ -54,7 +54,7 @@ struct OnboardingFinishView: View {
     .ignoresSafeArea(.all, edges: .top)
     .animation(.default, value: index)
     .sensoryFeedback(.success, trigger: index)
-    .sensoryFeedback(.selection, trigger: didContinue)
+    .sensoryFeedback(.impact, trigger: didContinue)
     .shelf {
       if index >= 3 {
         AsyncButton {

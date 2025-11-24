@@ -70,7 +70,7 @@ struct OnboardingNotificationPermissionView: View {
     .animation(.default, value: showContinueButton)
     .sensoryFeedback(.selection, trigger: index)
     .sensoryFeedback(.success, trigger: notificationIndex)
-    .sensoryFeedback(.selection, trigger: didContinue)
+    .sensoryFeedback(.impact, trigger: didContinue)
     .task {
       while index < 2 {
         await advanceIndex()

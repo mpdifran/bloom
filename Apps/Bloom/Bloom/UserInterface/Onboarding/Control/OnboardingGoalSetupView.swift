@@ -76,7 +76,7 @@ struct OnboardingGoalSetupView: View {
     .animation(.default, value: activeHabits)
     .animation(.default, value: suggestedGoals)
     .sensoryFeedback(.selection, trigger: index)
-    .sensoryFeedback(.selection, trigger: didContinue)
+    .sensoryFeedback(.impact, trigger: didContinue)
     .sheet($presentedSheet)
     .task {
       while index < 2 {

@@ -19,6 +19,7 @@ struct OnboardingWarmOpeningView: View {
   @State private var showBud = false
   @State private var confettiIndex = 0
   @State private var index = 0
+  @State private var continueToggle = false
 
   var body: some View {
     BloomScrollView(showsChatBar: false, padding: .bottom) {
@@ -49,11 +50,13 @@ struct OnboardingWarmOpeningView: View {
     .animation(.default, value: showBud)
     .animation(.bouncy, value: index)
     .sensoryFeedback(.success, trigger: showBud)
-    .sensoryFeedback(.impact, trigger: index)
+    .sensoryFeedback(.selection, trigger: index)
+    .sensoryFeedback(.impact, trigger: continueToggle)
     .shelf(isVisible: index >= 4) {
       HStack {
         Button {
           TelemetryDeck.signal("OB Warm Opening - Tell me more")
+          continueToggle.toggle()
           onContinue(false)
         } label: {
           Text("Tell me more")
@@ -63,6 +66,7 @@ struct OnboardingWarmOpeningView: View {
 
         Button {
           TelemetryDeck.signal("OB Warm Opening - Yes Bud")
+          continueToggle.toggle()
           onContinue(true)
         } label: {
           Text("Yes, Bud!")

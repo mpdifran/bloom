@@ -43,7 +43,7 @@ struct OnboardingLoginView: View {
       TelemetryDeck.signal("View Login")
     }
     .task {
-      await Delay(500)
+      await Delay(800)
       await MainActor.run {
         presentedSheet = sheetView.asAny
       }

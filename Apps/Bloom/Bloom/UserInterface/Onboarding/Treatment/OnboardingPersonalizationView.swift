@@ -109,6 +109,7 @@ struct OnboardingPersonalizationView: View {
         if customGoal.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
           isFocused = false
         } else {
+          isFocused = false
           selectionToggle.toggle()
           Task {
             await Delay(800)
@@ -116,7 +117,7 @@ struct OnboardingPersonalizationView: View {
           }
         }
       } label: {
-        Text("Continue")
+        Text(customGoal.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "Done" : "Continue")
           .horizontallyCentered()
       }
       .buttonStyle(.primary)
@@ -127,8 +128,8 @@ struct OnboardingPersonalizationView: View {
     }
     .animation(.default, value: healthManager.focus)
     .animation(.default, value: index)
-    .sensoryFeedback(.impact, trigger: index)
-    .sensoryFeedback(.success, trigger: selectionToggle)
+    .sensoryFeedback(.selection, trigger: index)
+    .sensoryFeedback(.impact, trigger: selectionToggle)
     .task {
       await advanceIndex()
     }

@@ -51,8 +51,8 @@ struct OnboardingTrustView: View {
       .buttonStyle(.primary)
     }
     .animation(.default, value: index)
-    .sensoryFeedback(.impact, trigger: index)
-    .sensoryFeedback(.success, trigger: didContinueToggle)
+    .sensoryFeedback(.selection, trigger: index)
+    .sensoryFeedback(.impact, trigger: didContinueToggle)
     .task {
       await advanceIndex()
     }

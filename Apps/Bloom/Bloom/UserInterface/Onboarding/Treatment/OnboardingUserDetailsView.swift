@@ -37,7 +37,8 @@ struct OnboardingUserDetailsView: View {
     }
     .animation(.default, value: index)
     .animation(.default, value: cannotContinue)
-    .sensoryFeedback(.impact, trigger: index)
+    .sensoryFeedback(.selection, trigger: index)
+    .sensoryFeedback(.impact, trigger: onContinueToggle)
     .shelf(isVisible: index >= 4) {
       if isFocused {
         Button {

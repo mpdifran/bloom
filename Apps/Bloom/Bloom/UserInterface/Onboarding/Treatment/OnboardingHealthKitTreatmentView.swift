@@ -48,8 +48,8 @@ struct OnboardingHealthKitTreatmentView: View {
     .removeScrollEdgeEffect(shouldHide: true)
     .ignoresSafeArea(.all, edges: .top)
     .animation(.default, value: index)
-    .sensoryFeedback(.impact, trigger: index)
-    .sensoryFeedback(.success, trigger: didContinue)
+    .sensoryFeedback(.selection, trigger: index)
+    .sensoryFeedback(.impact, trigger: didContinue)
     .shelf(isVisible: index >= 5) {
       Text("I confirm I’m the age of majority where I live and consent to Bloom using my data as described above.")
         .font(.caption)

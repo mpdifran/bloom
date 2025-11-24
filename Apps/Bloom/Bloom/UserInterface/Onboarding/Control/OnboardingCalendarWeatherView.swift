@@ -45,8 +45,9 @@ struct OnboardingCalendarWeatherView: View {
       }
       .padding(.top, 40)
     }
-    .sensoryFeedback(.impact, trigger: didContinueToggle)
     .animation(.default, value: index)
+    .sensoryFeedback(.selection, trigger: index)
+    .sensoryFeedback(.impact, trigger: didContinueToggle)
     .alert(alertDetails: $alertDetails)
     .shelf {
       Button {
