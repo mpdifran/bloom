@@ -22,6 +22,9 @@ struct DeveloperSettingsView: View {
   @AppStorage(.FeatureFlag.bypassPaywall) private var bypassPaywall = false
   @AppStorage(.FeatureFlag.mockMagicScanner) private var mockMagicScanner = false
   @AppStorage(.FeatureFlag.reEngagementTestMode) private var reEngagementTestMode = false
+  @AppStorage("OnboardingRootViewTreatment.currentStep") private var onboardingCurrentStep = 0
+  @AppStorage("OnboardingRootViewTreatment.wasYesInWarmingStep") private var onboardingWasYesInWarmingStep = false
+  @AppStorage("OnboardingRootViewTreatment.personalizationFocus") private var onboardingPersonalizationFocus: String?
 
   @State private var authStatus: HKAuthorizationRequestStatus = .unknown
   @State private var shouldPromptForNotificationPermissions = false
@@ -500,6 +503,9 @@ extension DeveloperSettingsView {
       SettingsSectionContainer {
         Button {
           hasShownOnboarding = false
+          onboardingCurrentStep = 0
+          onboardingWasYesInWarmingStep = false
+          onboardingPersonalizationFocus = nil
         } label: {
           LabeledContent("Reset Onboarding") {
             Image(systemSymbol: .arrowUturnBackwardSquareFill)

@@ -201,8 +201,7 @@ private extension OnboardingHealthAgeSexView {
                 .tag(year)
             }
           }
-          .pickerStyle(.wheel)
-          .frame(height: 100)
+          .pickerStyle(.menu)
         }
 
         Divider()
@@ -214,8 +213,7 @@ private extension OnboardingHealthAgeSexView {
                 .tag(sex)
             }
           }
-          .pickerStyle(.segmented)
-          .frame(height: 50)
+          .pickerStyle(.menu)
         }
       }
       .cardContainer(fill: .background.secondary)

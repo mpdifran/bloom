@@ -56,15 +56,29 @@ struct OnboardingUserDetailsView: View {
             .multilineTextAlignment(.center)
         }
 
-        Button {
-          onContinueToggle.toggle()
-          onContinue()
-        } label: {
-          Text("Continue")
-            .horizontallyCentered()
+        HStack {
+          if !cannotContinue {
+            Button {
+              onContinueToggle.toggle()
+              onContinue()
+            } label: {
+              Text("Skip")
+                .horizontallyCentered()
+            }
+            .buttonStyle(.primaryAlternate)
+            .disabled(cannotContinue)
+          }
+          
+          Button {
+            onContinueToggle.toggle()
+            onContinue()
+          } label: {
+            Text("Continue")
+              .horizontallyCentered()
+          }
+          .buttonStyle(.primary)
+          .disabled(cannotContinue)
         }
-        .buttonStyle(.primary)
-        .disabled(cannotContinue)
       }
     }
     .task {

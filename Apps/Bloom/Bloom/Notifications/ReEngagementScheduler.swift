@@ -19,7 +19,7 @@ actor ReEngagementScheduler {
 
   /// Schedules or cancels re-engagement notification based on onboarding status
   @MainActor
-  func scheduleNotificationIfNeeded() async {
+  func scheduleNotificationIfNeeded(focus: PersonalizationFocus? = nil) async {
     // Check if onboarding is complete
     @AppStorage("hasShownOnboardingV3") var hasShownOnboarding: Bool = false
 
@@ -38,7 +38,7 @@ actor ReEngagementScheduler {
       await requestProvisionalAuthIfNeeded()
 
       // Now schedule notification for 1 day from now
-      await scheduleNotification()
+      await scheduleNotification(focus: focus)
     }
   }
 
@@ -51,14 +51,14 @@ actor ReEngagementScheduler {
 
   // MARK: - Private Methods
 
-  private func scheduleNotification() async {
+  private func scheduleNotification(focus: PersonalizationFocus?) async {
     // Calculate trigger date: 1 day from now (or minutes in test mode) at 11am
     guard let triggerDate = calculateTriggerDate() else {
       print("[Re-Engagement] Failed to calculate trigger date")
       return
     }
 
-    let content = createNotificationContent()
+    let content = createNotificationContent(focus: focus)
 
     let dateComponents = Calendar.current.dateComponents(
       [.year, .month, .day, .hour, .minute],
@@ -104,8 +104,8 @@ actor ReEngagementScheduler {
 
     if isTestModeEnabled {
       // Test mode: 1 minute from now
-      triggerDate = calendar.date(byAdding: .minute, value: 1, to: now)
-      print("[Re-Engagement] Test mode - scheduling for 1 minute from now")
+      triggerDate = calendar.date(byAdding: .minute, value: 3, to: now)
+      print("[Re-Engagement] Test mode - scheduling for 3 minutes from now")
     } else {
       // Normal mode: 1 day from now at 11am
       guard let targetDate = calendar.date(byAdding: .day, value: 1, to: now) else {
@@ -133,10 +133,27 @@ actor ReEngagementScheduler {
     return finalTriggerDate
   }
 
-  private func createNotificationContent() -> UNMutableNotificationContent {
+  private func createNotificationContent(focus: PersonalizationFocus?) -> UNMutableNotificationContent {
+    let message = switch focus {
+    case .understandHealthData:
+      "Finish setting up Bloom so I can start explaining what your health data really means in simple, friendly language."
+    case .boostEnergyLevels:
+      "Let’s finish your setup so I can start showing you what’s draining your energy, and what could help boost it."
+    case .improveSleep:
+      "Complete your setup and I’ll start showing you what’s affecting your sleep patterns and how to improve them."
+    case .buildHealthyHabits:
+      "Let’s wrap up your setup so I can help you build small, healthy habits that actually stick."
+    case .reduceStress:
+      "Finish your Bloom setup and I’ll start helping you spot what’s adding stress, and what brings you back to calm."
+    case .improveBodyComposition:
+      "Complete your setup so I can help you understand the factors influencing your body composition and how to make steady progress."
+    case .custom, nil:
+      "Want me to finish setting up your health insights? It only takes a moment."
+    }
+
     let content = UNMutableNotificationContent()
     content.title = "Hey, it's Bud 👋"
-    content.subtitle = "Ready to unlock your personalized health insights? We're almost there!"
+    content.body = message
     content.sound = .default
     content.categoryIdentifier = .CategoryID.reEngagementOnboarding
 
@@ -174,7 +191,7 @@ actor ReEngagementScheduler {
       for request in requests {
         print("[Re-Engagement] ID: \(request.identifier)")
         print("[Re-Engagement] Title: \(request.content.title)")
-        print("[Re-Engagement] Subtitle: \(request.content.subtitle)")
+        print("[Re-Engagement] Body: \(request.content.body)")
         if let trigger = request.trigger as? UNCalendarNotificationTrigger {
           if let nextDate = trigger.nextTriggerDate() {
             let secondsUntil = Int(nextDate.timeIntervalSinceNow)

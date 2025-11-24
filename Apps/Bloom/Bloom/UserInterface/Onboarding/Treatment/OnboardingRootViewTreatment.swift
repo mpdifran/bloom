@@ -41,13 +41,17 @@ extension OnboardingRootViewTreatment {
 struct OnboardingRootViewTreatment: View {
   let onComplete: () -> Void
 
-  @State private var step = Step.warmOpening
-  @State private var wasYesInWarmingStep = false
-  @State private var personalizationFocus: PersonalizationFocus?
+  @AppStorage("OnboardingRootViewTreatment.currentStep") private var currentStepRawValue = Step.warmOpening.rawValue
+  @AppStorage("OnboardingRootViewTreatment.wasYesInWarmingStep") private var wasYesInWarmingStep = false
+  @AppStorage("OnboardingRootViewTreatment.personalizationFocus") private var personalizationFocusRawValue: String?
 
   @ObservedObject private var healthManager = HealthManager.shared
 
   @Environment(\.dismiss) private var dismiss
+
+  var step: Step {
+    Step(rawValue: currentStepRawValue) ?? .warmOpening
+  }
 
   var body: some View {
     Group {
@@ -59,7 +63,7 @@ struct OnboardingRootViewTreatment: View {
         }
       case .personalization:
         OnboardingPersonalizationView(isYes: wasYesInWarmingStep) { (focus) in
-          personalizationFocus = focus
+          self.personalizationFocusRawValue = focus?.rawValue
           setStep(.trust)
         }
       case .trust:
@@ -67,7 +71,7 @@ struct OnboardingRootViewTreatment: View {
           setStep(.healthKit)
         }
       case .healthKit:
-        OnboardingHealthKitTreatmentView(focus: personalizationFocus) {
+        OnboardingHealthKitTreatmentView(focus: PersonalizationFocus(rawValue: personalizationFocusRawValue ?? "")) {
           await healthManager.syncPersonalDataFromHealthKit()
           setStep(.personalDetails)
         }
@@ -93,6 +97,7 @@ struct OnboardingRootViewTreatment: View {
         }
       case .finish:
         OnboardingFinishView {
+          clearSavedState()
           onComplete()
         }
       }
@@ -113,8 +118,14 @@ private extension OnboardingRootViewTreatment {
 
   func setStep(_ step: Step) {
     withAnimation {
-      self.step = step
+      self.currentStepRawValue = step.rawValue
     }
+  }
+
+  func clearSavedState() {
+    currentStepRawValue = Step.warmOpening.rawValue
+    wasYesInWarmingStep = false
+    personalizationFocusRawValue = nil
   }
 }
 

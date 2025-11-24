@@ -60,14 +60,26 @@ struct OnboardingGoalSetupView: View {
     }
     .shelf {
       if index == 2 && !isLoadingGoals {
-        Button {
-          didContinue.toggle()
-          onContinue()
-        } label: {
-          Text("Continue")
-            .horizontallyCentered()
+
+        HStack {
+          Button {
+            didContinue.toggle()
+            onContinue()
+          } label: {
+            Text("Skip")
+              .horizontallyCentered()
+          }
+          .buttonStyle(.primaryAlternate)
+
+          Button {
+            didContinue.toggle()
+            onContinue()
+          } label: {
+            Text("Continue")
+              .horizontallyCentered()
+          }
+          .buttonStyle(.primary)
         }
-        .buttonStyle(.primary)
       }
     }
     .alert(error: $error)

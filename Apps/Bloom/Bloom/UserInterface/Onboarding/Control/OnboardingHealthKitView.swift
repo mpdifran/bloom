@@ -81,6 +81,7 @@ struct OnboardingHealthKitView: View {
           } label: {
             if isWaitingForPermissionSheet {
               CircularSpinnerView()
+                .horizontallyCentered()
                 .foregroundStyle(.invertedText)
             } else {
               Text("Continue")

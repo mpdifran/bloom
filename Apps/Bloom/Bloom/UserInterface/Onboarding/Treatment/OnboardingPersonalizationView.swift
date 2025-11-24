@@ -14,7 +14,7 @@ import TelemetryDeck
 import CoreHealth
 import SFSafeSymbols
 
-enum PersonalizationFocus {
+enum PersonalizationFocus: String {
   case understandHealthData
   case boostEnergyLevels
   case improveSleep
@@ -224,6 +224,7 @@ private extension OnboardingPersonalizationView {
             selectionToggle.toggle()
 
             Task {
+              await ReEngagementScheduler.shared.scheduleNotificationIfNeeded(focus: suggestion.focus)
               await Delay(800)
               onContinue(suggestion.focus)
             }

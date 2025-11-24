@@ -55,16 +55,14 @@ struct OnboardingFinishView: View {
     .animation(.default, value: index)
     .sensoryFeedback(.success, trigger: index)
     .sensoryFeedback(.impact, trigger: didContinue)
-    .shelf {
-      if index >= 3 {
-        AsyncButton {
-          await performFinish()
-        } label: {
-          Text("Let's Go!")
-            .horizontallyCentered()
-        }
-        .buttonStyle(.primary)
+    .shelf(isVisible: index >= 3) {
+      AsyncButton {
+        await performFinish()
+      } label: {
+        Text("Let's Go!")
+          .horizontallyCentered()
       }
+      .buttonStyle(.primary)
     }
     .sheet($presentedSheet)
     .fullScreenCover($presentedPaywall)
@@ -104,7 +102,7 @@ private extension OnboardingFinishView {
   }
 
   func advanceForSubscribed() async {
-    while index < 5 {
+    while index < 3 {
       await advanceIndex()
     }
   }
@@ -112,7 +110,9 @@ private extension OnboardingFinishView {
   func advanceIndex() async {
     await Delay(1000)
 
-    index += 1
+    withAnimation {
+      index += 1
+    }
   }
 }
 

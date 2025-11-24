@@ -199,6 +199,8 @@ public extension HealthManager {
     if let age = healthStore.age() {
       let currentYear = Calendar.current.component(.year, from: .now)
       birthYear = currentYear - age
+    } else {
+      birthYear = Calendar.current.component(.year, from: .now)
     }
 
     await checkHeightFromHealthKit()

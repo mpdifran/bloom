@@ -28,7 +28,7 @@ extension TargetMetric {
       [HKQuantityType(.timeInDaylight)]
     case .meditationMinutes:
       [HKCategoryType(.mindfulSession)]
-    case .exerciseMinutes:
+    case .exerciseMinutes, .workoutMinutes:
       [HKWorkoutType.workoutType()]
     case .stepCount:
       [HKQuantityType(.stepCount)]
@@ -49,7 +49,7 @@ extension TargetMetric {
       []
     case .calories, .proteinIntake, .waterIntake, .fiberIntake:
       [.daily]
-    case .timeInDaylight, .meditationMinutes, .exerciseMinutes, .stepCount, .walkingRunningDistance, .runDistance, .runDuration, .bikeDistance, .bikeDuration, .mobilityAndFlexibilityDuration, .strengthTrainingDuration, .cardioDuration, .highIntensityIntervalTrainingDuration, .targetHeartRateZone1, .targetHeartRateZone2, .targetHeartRateZone3, .targetHeartRateZone4, .targetHeartRateZone5:
+    case .timeInDaylight, .meditationMinutes, .exerciseMinutes, .workoutMinutes, .stepCount, .walkingRunningDistance, .runDistance, .runDuration, .bikeDistance, .bikeDuration, .mobilityAndFlexibilityDuration, .strengthTrainingDuration, .cardioDuration, .highIntensityIntervalTrainingDuration, .targetHeartRateZone1, .targetHeartRateZone2, .targetHeartRateZone3, .targetHeartRateZone4, .targetHeartRateZone5:
       [.daily, .weekly, .monthly, .yearly]
     @unknown default:
       fatalError("Unhandled TargetMetric case.")
@@ -72,7 +72,7 @@ extension TargetMetric {
         .minute()
     case .meditationMinutes:
         .minute()
-    case .exerciseMinutes:
+    case .exerciseMinutes, .workoutMinutes:
         .minute()
     case .stepCount:
         .count()
@@ -111,7 +111,7 @@ extension TargetMetric {
       return HKQuantity(unit: defaultUnit, doubleValue: 5)
     case .meditationMinutes:
       return HKQuantity(unit: defaultUnit, doubleValue: 5)
-    case .exerciseMinutes:
+    case .exerciseMinutes, .workoutMinutes:
       return HKQuantity(unit: defaultUnit, doubleValue: 30)
     case .proteinIntake:
       return HKQuantity(unit: defaultUnit, doubleValue: 60)
@@ -163,6 +163,8 @@ extension TargetMetric {
       return HKQuantityRange(unit: defaultUnit, range: 10...30)
     case .exerciseMinutes:
       return HKQuantityRange(unit: defaultUnit, range: 20...30)
+    case .workoutMinutes:
+      return HKQuantityRange(unit: defaultUnit, range: 30...60)
     case .proteinIntake:
       return nil
     case .calories:
@@ -210,7 +212,7 @@ extension TargetMetric {
       NumberFormatter.noDecimalPlaces
     case .meditationMinutes:
       NumberFormatter.noDecimalPlaces
-    case .exerciseMinutes:
+    case .exerciseMinutes, .workoutMinutes:
       NumberFormatter.noDecimalPlaces
     case .proteinIntake:
       NumberFormatter.noDecimalPlaces
@@ -261,6 +263,10 @@ extension TargetMetric {
       return await HealthStoreFetcher.shared.fetchTotalMeditationMinutes(dateRange: dateRange)
     case .exerciseMinutes:
       return await HealthStoreFetcher.shared.fetchTotalQuantity(for: .appleExerciseTime, dateRange: dateRange) ?? defaultQuantity
+    case .workoutMinutes:
+      let workouts = await HealthStoreFetcher.shared.fetchWorkouts(dateRange: dateRange)
+      let totalDuration = workouts.sum { $0.duration }
+      return HKQuantity(unit: .second(), doubleValue: totalDuration)
     case .stepCount:
       return await HealthStoreFetcher.shared.fetchTotalQuantity(for: .stepCount, dateRange: dateRange) ?? defaultQuantity
     case .walkingRunningDistance:
@@ -344,6 +350,12 @@ extension TargetMetric {
       return await HealthStoreFetcher.shared.fetchCollatedMeditationMinutes(dateRange: dateRange)
     case .exerciseMinutes:
       return await HealthStoreFetcher.shared.fetchCollatedQuantity(for: .appleExerciseTime, unit: unit, dateRange: dateRange)
+    case .workoutMinutes:
+      let workouts = await HealthStoreFetcher.shared.fetchCollatedWorkouts(activityTypes: [], dateRange: dateRange)
+      return workouts.map {
+        let total = $0.workouts.sum(keyPath: \.duration)
+        return DateQuantitySample(date: $0.date, quantity: HKQuantity(unit: .second(), doubleValue: total))
+      }
     case .stepCount:
       return await HealthStoreFetcher.shared.fetchCollatedQuantity(for: .stepCount, unit: unit, dateRange: dateRange)
     case .walkingRunningDistance:

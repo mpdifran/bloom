@@ -19,7 +19,8 @@ public extension TargetMetric {
     case .fiberIntake: "Fiber Intake"
     case .timeInDaylight: "Time in Daylight"
     case .meditationMinutes: "Meditation Minutes"
-    case .exerciseMinutes: "Exercise Minutes"
+    case .exerciseMinutes: "Apple Watch Exercise Minutes"
+    case .workoutMinutes: "Workout Duration"
     case .stepCount: "Steps"
     case .walkingRunningDistance: "Walking + Running Distance"
     case .runDistance: "Running Distance"
@@ -48,7 +49,8 @@ public extension TargetMetric {
     case .fiberIntake: "leaf.fill"
     case .timeInDaylight: "sun.max.fill"
     case .meditationMinutes: "figure.mind.and.body"
-    case .exerciseMinutes: "figure.step.training"
+    case .exerciseMinutes: "applewatch.side.right"
+    case .workoutMinutes: "figure.step.training"
     case .stepCount: "figure.walk"
     case .walkingRunningDistance: "figure.walk"
     case .runDistance, .runDuration: "figure.run"
@@ -75,7 +77,7 @@ public extension TargetMetric {
     case .walkingRunningDistance: .mutedGreen
     case .timeInDaylight: .mutedOrange
     case .meditationMinutes: .mutedLightBlue
-    case .exerciseMinutes: .mutedGreen
+    case .exerciseMinutes, .workoutMinutes: .mutedGreen
     case .proteinIntake: .protein
     case .calories: .mutedOrange
     case .runDistance, .runDuration, .bikeDistance, .bikeDuration, .mobilityAndFlexibilityDuration, .strengthTrainingDuration, .cardioDuration, .highIntensityIntervalTrainingDuration: .mutedGreen
@@ -90,6 +92,8 @@ public extension TargetMetric {
 
   var related: [TargetMetric] {
     switch self {
+    case .exerciseMinutes, .workoutMinutes:
+      [.exerciseMinutes, .workoutMinutes].filter({ $0 != self })
     case .stepCount, .walkingRunningDistance:
       [.stepCount, .walkingRunningDistance].filter({ $0 != self })
     case .runDistance, .runDuration:
