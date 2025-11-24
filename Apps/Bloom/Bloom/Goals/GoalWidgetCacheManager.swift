@@ -33,21 +33,12 @@ public final class GoalWidgetCacheManager {
 
       let goals = try modelContext.fetch(descriptor)
 
-      // Convert to widget data format
-      let goalWidgetData = await withTaskGroup(of: GoalWidgetData?.self) { group in
-        for goal in goals {
-          group.addTask {
-            await self.convertToWidgetData(goal: goal, modelContext: modelContext)
-          }
+      // Convert to widget data format sequentially
+      var goalWidgetData: [GoalWidgetData] = []
+      for goal in goals {
+        if let data = await convertToWidgetData(goal: goal, modelContext: modelContext) {
+          goalWidgetData.append(data)
         }
-
-        var results: [GoalWidgetData] = []
-        for await data in group {
-          if let data = data {
-            results.append(data)
-          }
-        }
-        return results
       }
 
       // Cache all goals
@@ -77,6 +68,8 @@ public final class GoalWidgetCacheManager {
       gridData = .monthly(await calculateMonthlyGridData(for: goal, modelContext: modelContext))
     case .yearly:
       gridData = .yearly(await calculateYearlyGridData(for: goal, modelContext: modelContext))
+    @unknown default:
+      gridData = .daily(GoalWidgetData.DailyGridData(weeks: []))
     }
 
     return GoalWidgetData(
@@ -117,6 +110,8 @@ public final class GoalWidgetCacheManager {
         return 0
       }
       dateRange = DateRange(yearInterval.start, yearInterval.end)
+    @unknown default:
+      return 0
     }
 
     // Fetch the total quantity for the period
