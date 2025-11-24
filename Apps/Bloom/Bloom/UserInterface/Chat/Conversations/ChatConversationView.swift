@@ -33,6 +33,8 @@ struct ChatConversationView: View {
   @State private var error: Error?
   @State private var presentedSheet: AnyView?
 
+  @FocusState private var isFocused
+
   var body: some View {
     BloomScrollView {
       if pinnedConversations.isEmpty && unpinnedConversations.isEmpty {
@@ -56,11 +58,26 @@ struct ChatConversationView: View {
         }
       }
     }
-    .navigationTitle("Conversations")
+    .navigationTitle("Chat with Bud")
     .alert(error: $error)
     .sheet($presentedSheet)
     .animation(.default, value: pinnedConversations)
     .animation(.default, value: unpinnedConversations)
+    .safeAreaInset(edge: .bottom) {
+      NewConversationChatMessageBar(
+        tabController: tabController,
+        themeController: themeController,
+        onSelectConversation: onSelectConversation
+      )
+      .focused($isFocused)
+    }
+    .onAppear {
+      guard pinnedConversations.isEmpty && unpinnedConversations.isEmpty else {
+        return
+      }
+
+      isFocused = true
+    }
   }
 }
 
