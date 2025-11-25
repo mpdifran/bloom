@@ -98,6 +98,10 @@ struct BloomPlusPaywall: View {
     .task {
       await viewModel.loadOfferings()
     }
+    .task {
+      // Track any paywall appearance for periodic paywall timer
+      await PeriodicPaywallManager.shared.updateLastShownDate()
+    }
     .presentationCompactAdaptation(.fullScreenCover)
     .animation(.default, value: selectedPackage)
     .onChange(of: entitlementController.hasBloomPro) { _, _ in

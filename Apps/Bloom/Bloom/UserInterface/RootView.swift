@@ -115,11 +115,20 @@ struct RootView: View {
         )
       }
     }
+    .task {
+      // Check periodic paywall experiment on app launch
+      await checkPeriodicPaywall()
+    }
     .onForeground {
       Task {
         await MagicScanStatusChecker.shared.checkPendingItems(modelContext: modelContext)
         await BiologicalAgeStatusChecker.shared.checkPendingCalculation()
         await ConsentManager.shared.syncPendingConsentIfNeeded()
+      }
+
+      Task {
+        // Check periodic paywall experiment on foreground
+        await checkPeriodicPaywall()
       }
     }
     .onOpenURL { url in
@@ -133,6 +142,25 @@ struct RootView: View {
 }
 
 private extension RootView {
+
+  func checkPeriodicPaywall() async {
+    guard hasShownOnboarding else { return }
+
+    let variant = experimentManager.variant(for: .periodicPaywall)
+    switch variant {
+    case .treatment:
+      TelemetryDeck.signal("AB: Periodic Paywall - Treatment")
+      let shouldShow = await PeriodicPaywallManager.shared.shouldShowPaywall()
+      if shouldShow {
+        presentedPaywall = BloomPlusPaywall(
+          focus: .standard,
+          showDismiss: true
+        ).asAny
+      }
+    case .control:
+      TelemetryDeck.signal("AB: Periodic Paywall - Control")
+    }
+  }
 
   func handleURL(_ url: URL) {
     // Support both custom URL scheme (bloom://) and universal links (https://api.trybloom.app)
