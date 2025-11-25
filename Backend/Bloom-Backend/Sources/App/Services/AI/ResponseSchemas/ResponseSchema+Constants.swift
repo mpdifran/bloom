@@ -135,6 +135,18 @@ extension ResponseSchema {
       ]
     )
   )
+
+  static let magicScanDetection = ResponseSchema(
+    name: "magicScanDetection",
+    schema: Schema.Object(
+      properties: [
+        "foodItems": Schema.Parameter(
+          description: "The individual food items detected in the image. Extract visible brand names from packaging.",
+          arrayOf: .object(.AIEstimate.detectedFood)
+        )
+      ]
+    )
+  )
 }
 
 extension Schema.Object {
@@ -173,6 +185,14 @@ extension Schema.Object.AIEstimate {
       "vitaminC": Schema.Parameter(ref: "quantity"),
       "vitaminD": Schema.Parameter(ref: "quantity"),
       "vitaminE": Schema.Parameter(ref: "quantity")
+    ]
+  )
+
+  static let detectedFood = Schema.Object(
+    properties: [
+      "name": Schema.Parameter(type: .string, description: "The name of the food item. Do not include the brand name here. Capitalize the first letter in each word."),
+      "brandName": Schema.Parameter(type: .optionalString, description: "The brand name visible on packaging. Look carefully for brand names on labels, bottles, cans, and boxes. If no brand is visible, omit this property. Capitalize the first letter in each word."),
+      "servingCount": Schema.Parameter(type: .number, description: "The estimated number of servings visible in the image. Be conservative. Use decimals for partial servings (e.g., 0.5 for half a serving).")
     ]
   )
 }

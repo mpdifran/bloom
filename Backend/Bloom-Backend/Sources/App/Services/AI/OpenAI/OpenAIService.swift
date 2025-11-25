@@ -563,6 +563,213 @@ extension OpenAIService {
       )
     }
   }
+
+  /// Pass 1: Detect foods and brands in the image without estimating nutrition.
+  /// Returns detected food names, brands (if visible), and serving counts.
+  func detectFoodsMagicScan(
+    image: Data?,
+    contextText: String?
+  ) async throws -> OpenAIDetectFoodsResponse {
+    let model = ModelID.GPT4.gpt_4o_mini
+
+    var messages: [Chat.Message] = []
+
+    if let image = image {
+      // Image-based detection
+      let imageProcessor = ImageProcessor()
+      guard let imageType = imageProcessor.determineImageType(image) else {
+        throw Abort(.badRequest, reason: "Unsupported image type")
+      }
+
+      messages = [
+        Chat.Message(
+          role: .system,
+          content: [
+            .text("""
+              Identify all visible foods in this image. For each item extract:
+              - name: specific food name
+              - brand: brand name if visible on packaging (look carefully at labels, bottles, cans, boxes)
+              - servingCount: estimated number of servings visible
+
+              Be concise and conservative with serving counts.
+              """)
+          ]
+        ),
+        Chat.Message(
+          role: .user,
+          content: [
+            .imageData(image, "image/\(imageType)")
+          ]
+        )
+      ]
+
+      if let contextText = contextText, !contextText.isEmpty {
+        messages.append(
+          Chat.Message(
+            role: .user,
+            content: [
+              .text(contextText)
+            ]
+          )
+        )
+      }
+    } else if let contextText = contextText, !contextText.isEmpty {
+      // Text-only detection
+      messages = [
+        Chat.Message(
+          role: .system,
+          content: [
+            .text("Identify the foods described by the user. Extract name, brand (if mentioned), and serving count.")
+          ]
+        ),
+        Chat.Message(
+          role: .user,
+          content: [
+            .text(contextText)
+          ]
+        )
+      ]
+    } else {
+      throw Abort(.badRequest, reason: "Either image or contextText must be provided")
+    }
+
+    let response = try await openAI.chats.create(
+      model: model,
+      messages: messages,
+      responseFormat: ResponseFormat(type: .jsonSchema(.magicScanDetection))
+    )
+
+    guard let parsedResponse = try response.parse(OpenAIDetectFoodsResponse.self) else {
+      throw Abort(.internalServerError, reason: "Failed to parse OpenAI detection response")
+    }
+
+    return parsedResponse
+  }
+
+  /// Pass 2: Estimate nutrition for specific foods that weren't found in the database.
+  /// Provides enhanced prompts with database context and portion estimation guidelines.
+  func estimateNutritionForUnknownFoods(
+    image: Data?,
+    contextText: String?,
+    unknownFoods: [OpenAIDetectFoodsResponse.DetectedFood],
+    databaseMatches: [(food: OpenAIDetectFoodsResponse.DetectedFood, match: FoodItem)]
+  ) async throws -> [MagicScanStatusResponse.Serving] {
+    guard !unknownFoods.isEmpty else { return [] }
+
+    let model = ModelID.GPT4.gpt_4o_mini
+
+    // Build context about database matches
+    let databaseContext: String
+    if !databaseMatches.isEmpty {
+      let matchDescriptions = databaseMatches.compactMap { food, match in
+        guard let calories = match.calories else { return nil }
+        return "\(food.name)\(food.brandName.map { " (\($0))" } ?? ""): \(Int(calories.value)) \(calories.unit)"
+      }.joined(separator: ", ")
+      databaseContext = matchDescriptions.isEmpty ? "" : "We found verified data for: \(matchDescriptions)."
+    } else {
+      databaseContext = ""
+    }
+
+    // Build list of unknown foods to estimate
+    let unknownList = unknownFoods.map { food in
+      "\(food.name)\(food.brandName.map { " (\($0))" } ?? "") - \(food.servingCount) serving(s)"
+    }.joined(separator: ", ")
+
+    var messages: [Chat.Message] = []
+
+    if let image = image {
+      // Image-based nutrition estimation
+      let imageProcessor = ImageProcessor()
+      guard let imageType = imageProcessor.determineImageType(image) else {
+        throw Abort(.badRequest, reason: "Unsupported image type")
+      }
+
+      messages = [
+        Chat.Message(
+          role: .system,
+          content: [
+            .text("""
+              You are a nutrition expert. \(databaseContext)
+
+              Please estimate nutrition ONLY for these unknown items: \(unknownList)
+
+              Guidelines:
+              - Portion estimation: Use visual cues (plate size, utensils for scale), standard portions (chicken breast ~170g, 1 cup rice ~200g)
+              - Validate calories: should equal approximately 4×(protein+carbs) + 9×fat in grams
+              - Realistic bounds: typical meals 200-800 cal, single servings 50-500 cal
+              - Be conservative if uncertain
+
+              Return complete nutrition data for each unknown food item.
+              """)
+          ]
+        ),
+        Chat.Message(
+          role: .user,
+          content: [
+            .imageData(image, "image/\(imageType)")
+          ]
+        )
+      ]
+
+      if let contextText = contextText, !contextText.isEmpty {
+        messages.append(
+          Chat.Message(
+            role: .user,
+            content: [
+              .text(contextText)
+            ]
+          )
+        )
+      }
+    } else if let contextText = contextText, !contextText.isEmpty {
+      // Text-only nutrition estimation
+      messages = [
+        Chat.Message(
+          role: .system,
+          content: [
+            .text("""
+              You are a nutrition expert. \(databaseContext)
+
+              Estimate nutrition for: \(unknownList)
+
+              Guidelines:
+              - Use standard portions (chicken breast ~170g, 1 cup rice ~200g)
+              - Validate: calories ≈ 4×(protein+carbs) + 9×fat
+              - Realistic bounds: typical meals 200-800 cal, servings 50-500 cal
+
+              Return complete nutrition data.
+              """)
+          ]
+        ),
+        Chat.Message(
+          role: .user,
+          content: [
+            .text(contextText)
+          ]
+        )
+      ]
+    } else {
+      throw Abort(.badRequest, reason: "Either image or contextText must be provided")
+    }
+
+    let response = try await openAI.chats.create(
+      model: model,
+      messages: messages,
+      responseFormat: ResponseFormat(type: .jsonSchema(.magicScanEstimate))
+    )
+
+    guard let parsedResponse = try response.parse(OpenAIEstimateCaloriesResponse.self) else {
+      throw Abort(.internalServerError, reason: "Failed to parse OpenAI nutrition response")
+    }
+
+    // Convert to servings
+    return parsedResponse.foodItems.map { item in
+      MagicScanStatusResponse.Serving(
+        servings: item.servingCount,
+        item: item.asFoodItem()
+      )
+    }
+  }
 }
 
 extension OpenAIService {

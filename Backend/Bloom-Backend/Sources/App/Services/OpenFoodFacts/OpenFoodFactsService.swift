@@ -109,6 +109,43 @@ extension OpenFoodFactsService {
 
     return foodItems
   }
+
+  /// Search for products on OpenFoodFacts and import the best match if found.
+  /// Used by magic scan to find branded products.
+  func searchAndImportProduct(
+    name: String,
+    brand: String?
+  ) async throws -> [FoodItem] {
+    // Build search query with name and brand
+    var searchTerms = name
+    if let brand = brand, !brand.isEmpty {
+      searchTerms = "\(brand) \(name)"
+    }
+
+    // Search OpenFoodFacts
+    guard let searchResponse = try await searchProducts(query: searchTerms) else {
+      return []
+    }
+
+    // Get the first product with complete nutrition data
+    guard let bestProduct = searchResponse.products.first(where: { product in
+      product.nutriments.energyServing != nil &&
+      product.productName != nil &&
+      !product.id.isEmpty
+    }) else {
+      return []
+    }
+
+    // Check if we already have this product in our database
+    let barcode = bestProduct.id
+    if try await foodDatabaseService.searchFoods(barcode: barcode).isNotEmpty {
+      // Already in database, don't import again
+      return []
+    }
+
+    // Import the product using existing insertProduct logic
+    return try await insertProduct(barcode: barcode)
+  }
 }
 
 private extension OpenFoodFactsService {
@@ -135,6 +172,34 @@ private extension OpenFoodFactsService {
 
     return try response.content.decode(
       OpenFoodFactsProductResponse.self,
+      using: JSONDecoder.openFoodFacts
+    )
+  }
+
+  func searchProducts(query: String) async throws -> OpenFoodFactsSearchResponse? {
+    guard !query.isEmpty else { return nil }
+
+    // OpenFoodFacts search API endpoint
+    let searchURL = URL(string: "https://world.openfoodfacts.net/cgi/search.pl")!
+      .appending(queryItems: [
+        URLQueryItem(name: "search_terms", value: query),
+        URLQueryItem(name: "search_simple", value: "1"),
+        URLQueryItem(name: "action", value: "process"),
+        URLQueryItem(name: "json", value: "1"),
+        URLQueryItem(name: "page_size", value: "5"),
+        URLQueryItem(
+          name: "fields",
+          value: "code,product_name_en,brands,nutriments,ingredients_text_en,serving_size,serving_quantity,serving_quantity_unit,selected_images,countries_tags"
+        )
+      ])
+
+    let response = try await client.get(
+      URI(string: searchURL.absoluteString),
+      headers: defaultHeaders
+    )
+
+    return try response.content.decode(
+      OpenFoodFactsSearchResponse.self,
       using: JSONDecoder.openFoodFacts
     )
   }

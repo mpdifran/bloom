@@ -121,6 +121,8 @@ extension FoodController {
     }
   }
 
+  /// **DEPRECATED**: This endpoint is deprecated in favor of the magic scan endpoints (v1/food/magic-scan-*).
+  /// Only maintained for legacy client compatibility.
   @Sendable
   func estimateFoodCalories(_ request: Request) async throws -> EstimateFoodCaloriesResponse {
     let requestBody = try request.content.decode(EstimateFoodCaloriesRequest.self)
@@ -234,7 +236,8 @@ extension FoodController {
       processingIdentifier: requestBody.processingIdentifier,
       userId: userId,
       imageFileName: imageFileName,
-      contextText: requestBody.contextText
+      contextText: requestBody.contextText,
+      country: requestBody.country
     )
 
     // Trigger background processing
@@ -243,6 +246,8 @@ extension FoodController {
         processingIdentifier: requestBody.processingIdentifier,
         imageStorage: request.imageStorage,
         openAIService: request.openAIService,
+        foodDatabaseService: request.foodDatabaseService,
+        openFoodFactsService: request.openFoodFactsService,
         db: request.db,
         application: request.application
       )
