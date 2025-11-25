@@ -176,12 +176,14 @@ public extension NetworkRequester {
   func uploadMagicScan(
     imageData: Data?,
     contextText: String?,
-    processingIdentifier: AIFoodProcessingIdentifier
+    processingIdentifier: AIFoodProcessingIdentifier,
+    country: String
   ) async throws -> MagicScanUploadResponse {
     let body = MagicScanUploadRequest(
       foodImage: imageData.map { ImageFile(data: $0, fileExtension: "jpg") },
       contextText: contextText,
-      processingIdentifier: processingIdentifier
+      processingIdentifier: processingIdentifier,
+      country: country
     )
 
     let request = try await URLRequest.Food.uploadMagicScan(body: body)

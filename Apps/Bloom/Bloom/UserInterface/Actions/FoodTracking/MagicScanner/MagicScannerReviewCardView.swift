@@ -25,8 +25,10 @@ struct MagicScannerReviewCardView: View {
 
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
+
   @FocusState private var isContextFieldFocused: Bool
 
+  @StateObject private var locationViewModel = LocationManagerViewModel.shared
   @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
 
   var body: some View {
@@ -85,6 +87,9 @@ struct MagicScannerReviewCardView: View {
       }
       .buttonStyle(.primary)
     }
+    .onAppear {
+      locationViewModel.requestLocation()
+    }
   }
 
   private func handleSave() async throws {
@@ -108,7 +113,8 @@ struct MagicScannerReviewCardView: View {
       _ = try await NetworkRequester.shared.uploadMagicScan(
         imageData: imageData,
         contextText: contextText.isEmpty ? nil : contextText,
-        processingIdentifier: processingIdentifier
+        processingIdentifier: processingIdentifier,
+        country: locationViewModel.country ?? "usa"
       )
 
       // Only save locally if upload succeeded

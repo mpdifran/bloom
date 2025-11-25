@@ -26,7 +26,9 @@ struct VoiceLoggerView: View {
 
   @FocusState private var isTextFieldFocused: Bool
 
+  @StateObject private var locationViewModel = LocationManagerViewModel.shared
   @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
+
   @Environment(\.modelContext) private var modelContext
   @Environment(\.dismiss) private var dismiss
 
@@ -53,6 +55,9 @@ struct VoiceLoggerView: View {
       .shelf {
         saveButton
       }
+    }
+    .onAppear {
+      locationViewModel.requestLocation()
     }
     .task {
       TelemetryDeck.signal("voice_logger_opened")
@@ -180,7 +185,8 @@ private extension VoiceLoggerView {
       _ = try await NetworkRequester.shared.uploadMagicScan(
         imageData: nil,
         contextText: viewModel.transcript,
-        processingIdentifier: processingIdentifier
+        processingIdentifier: processingIdentifier,
+        country: locationViewModel.country ?? "usa"
       )
 
       // Save locally if upload succeeded

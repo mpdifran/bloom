@@ -368,7 +368,8 @@ public extension NutritionTrackingViewModel {
       _ = try await NetworkRequester.shared.uploadMagicScan(
         imageData: imageData,
         contextText: foodItemLog.contextText,
-        processingIdentifier: AIFoodProcessingIdentifier(processingIdentifier)
+        processingIdentifier: AIFoodProcessingIdentifier(processingIdentifier),
+        country: "usa" // Default to USA for retry operations
       )
     } catch {
       try await failMagicScan(

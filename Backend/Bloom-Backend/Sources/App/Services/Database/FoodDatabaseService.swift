@@ -615,7 +615,7 @@ extension FoodDatabaseService {
           similarity(name, \(bind: query)) * 1.5,
           similarity(brand_name, \(bind: query)),
           similarity(flavour, \(bind: query)) * 0.5,
-          word_similarity(\(bind: query), search_text) * 2.0
+          word_similarity(\(bind: query), search_text) * 1.3
         ) *
         -- Boost verified items significantly
         CASE WHEN state = 'verified' THEN 1.2
@@ -625,20 +625,40 @@ extension FoodDatabaseService {
         (1.0 + CASE WHEN country = \(bind: preferredCountry) THEN 0.1 ELSE 0.0 END) AS similarity_score
       FROM food_item_records
       WHERE (
-        search_text %> \(bind: query)
-        OR similarity(name, \(bind: query)) > 0.3
+        similarity(name, \(bind: query)) > 0.5
+        OR (brand_name IS NOT NULL AND similarity(brand_name, \(bind: query)) > 0.5)
       )
       \(brandFilter)
       AND state != 'needsAIProcessing'
+      AND (
+        GREATEST(
+          similarity(name, \(bind: query)) * 1.5,
+          similarity(brand_name, \(bind: query)),
+          similarity(flavour, \(bind: query)) * 0.5,
+          word_similarity(\(bind: query), search_text) * 1.3
+        ) *
+        CASE WHEN state = 'verified' THEN 1.2
+             WHEN source = 'Open Food Facts' THEN 1.1
+             ELSE 1.0 END *
+        (1.0 + CASE WHEN country = \(bind: preferredCountry) THEN 0.1 ELSE 0.0 END)
+      ) > 0.4
       ORDER BY similarity_score DESC
       LIMIT 3
     """).all(decodingFluent: FoodItemRecord.self)
 
     return results.compactMap { record in
       guard let foodItem = record.asFoodItem() else { return nil }
-      // Extract similarity score from the query result
-      // Note: The similarity_score is calculated in SQL but we'll approximate it here
-      let score = 0.7 // Default confidence score - will be refined with actual SQL score
+
+      // Calculate similarity score based on query matching
+      // This approximates the SQL trigram similarity for confidence assessment
+      let score = calculateSimilarityScore(
+        query: query,
+        name: record.name,
+        brandName: record.brandName,
+        isVerified: record.state == .verified,
+        source: record.source
+      )
+
       return FoodItemMatch(
         foodItem: foodItem,
         similarityScore: score,
@@ -646,6 +666,59 @@ extension FoodDatabaseService {
         isVerified: record.state == .verified
       )
     }
+  }
+
+  /// Calculate an approximate similarity score for magic scan matching
+  private func calculateSimilarityScore(
+    query: String,
+    name: String,
+    brandName: String?,
+    isVerified: Bool,
+    source: String?
+  ) -> Double {
+    let queryLower = query.lowercased()
+    let nameLower = name.lowercased()
+    let brandLower = brandName?.lowercased()
+
+    var baseScore: Double = 0.0
+
+    // Check name similarity
+    if nameLower == queryLower {
+      baseScore = 1.0
+    } else if nameLower.contains(queryLower) {
+      baseScore = 0.8
+    } else if queryLower.contains(nameLower) {
+      baseScore = 0.75
+    } else if nameLower.hasPrefix(queryLower) || queryLower.hasPrefix(nameLower) {
+      baseScore = 0.7
+    } else {
+      // Check for word overlap
+      let nameWords = Set(nameLower.split(separator: " ").map(String.init))
+      let queryWords = Set(queryLower.split(separator: " ").map(String.init))
+      let overlap = nameWords.intersection(queryWords)
+
+      if !overlap.isEmpty {
+        baseScore = 0.5 + (Double(overlap.count) / Double(max(nameWords.count, queryWords.count)) * 0.3)
+      } else {
+        baseScore = 0.4
+      }
+    }
+
+    // Check brand similarity if available
+    if let brandLower = brandLower {
+      if brandLower.contains(queryLower) || queryLower.contains(brandLower) {
+        baseScore = max(baseScore, 0.7)
+      }
+    }
+
+    // Apply boosts
+    if isVerified {
+      baseScore *= 1.2
+    } else if source == "Open Food Facts" {
+      baseScore *= 1.1
+    }
+
+    return min(baseScore, 1.0) // Cap at 1.0
   }
 }
 

@@ -232,7 +232,8 @@ extension FoodLoggingActionCardView.ViewModel {
     _ = try await NetworkRequester.shared.uploadMagicScan(
       imageData: nil,
       contextText: query,
-      processingIdentifier: processingIdentifier
+      processingIdentifier: processingIdentifier,
+      country: country
     )
 
     // Only save locally if upload succeeded
