@@ -52,7 +52,6 @@ struct OnboardingWelcomeView: View {
               .horizontallyCentered()
           }
           .buttonStyle(.primary)
-          .disabled(healthManager.name.isEmpty)
         }
       }
     }
