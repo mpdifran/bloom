@@ -295,75 +295,14 @@ extension MagicScanJobManager {
         return
       }
 
-      // PASS 1: Detect foods (names, brands, serving counts)
-      let detection = try await openAIService.detectFoodsMagicScan(
+      // AI-FIRST APPROACH: Single comprehensive pass for detection and nutrition estimation
+      logger.info("Starting AI-first magic scan detection and nutrition estimation")
+      let allServings = try await openAIService.detectAndEstimateFoodsMagicScan(
         image: imageData,
         contextText: job.contextText
       )
 
-      // Use country from request, or default to "usa"
-      let preferredCountry = job.country ?? "usa"
-
-      // DATABASE LOOKUP PHASE: Search for matches and attempt OpenFoodFacts imports
-      var databaseMatches: [(food: OpenAIDetectFoodsResponse.DetectedFood, match: FoodItem)] = []
-      var unknownFoods: [OpenAIDetectFoodsResponse.DetectedFood] = []
-
-      for detectedFood in detection.foodItems {
-        // Search database for this food
-        let matches = try await foodDatabaseService.searchFoodsForMagicScan(
-          query: detectedFood.name,
-          brand: detectedFood.brandName,
-          preferredCountry: preferredCountry
-        )
-
-        if let bestMatch = matches.first {
-          logger.info("Found database match for '\(detectedFood.name)': \(bestMatch.foodItem.name)")
-          databaseMatches.append((detectedFood, bestMatch.foodItem))
-        } else if detectedFood.brandName != nil {
-          // Try importing from OpenFoodFacts for brand-name products
-          logger.info("Attempting OpenFoodFacts import for '\(detectedFood.name)' brand '\(detectedFood.brandName ?? "")'")
-          let imported = try await openFoodFactsService.searchAndImportProduct(
-            name: detectedFood.name,
-            brand: detectedFood.brandName
-          )
-
-          if let importedItem = imported.first {
-            logger.info("Successfully imported from OpenFoodFacts: \(importedItem.name)")
-            databaseMatches.append((detectedFood, importedItem))
-          } else {
-            unknownFoods.append(detectedFood)
-          }
-        } else {
-          unknownFoods.append(detectedFood)
-        }
-      }
-
-      // PASS 2: Estimate nutrition only for unknowns
-      var allServings: [MagicScanStatusResponse.Serving] = []
-
-      // Add database matches as servings
-      for (detectedFood, matchedItem) in databaseMatches {
-        allServings.append(
-          MagicScanStatusResponse.Serving(
-            servings: detectedFood.servingCount,
-            item: matchedItem
-          )
-        )
-      }
-
-      // Estimate nutrition for unknowns
-      if !unknownFoods.isEmpty {
-        logger.info("Estimating nutrition for \(unknownFoods.count) unknown foods")
-        let estimatedServings = try await openAIService.estimateNutritionForUnknownFoods(
-          image: imageData,
-          contextText: job.contextText,
-          unknownFoods: unknownFoods,
-          databaseMatches: databaseMatches
-        )
-        allServings.append(contentsOf: estimatedServings)
-      }
-
-      logger.info("Magic scan results: \(databaseMatches.count) from database, \(unknownFoods.count) AI estimated")
+      logger.info("Magic scan completed: \(allServings.count) food items detected and estimated by AI")
 
       // Validate nutrition data
       let validator = MagicScanValidator(logger: logger)

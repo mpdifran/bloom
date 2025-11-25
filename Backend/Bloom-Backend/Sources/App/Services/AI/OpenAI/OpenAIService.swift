@@ -564,121 +564,20 @@ extension OpenAIService {
     }
   }
 
-  /// Pass 1: Detect foods and brands in the image without estimating nutrition.
-  /// Returns detected food names, brands (if visible), and serving counts.
-  func detectFoodsMagicScan(
+  /// AI-FIRST APPROACH: Single-pass comprehensive food detection and nutrition estimation.
+  /// Detects all foods and estimates complete nutrition in one API call.
+  /// Prioritizes main dishes over condiments and uses enhanced prompts for better accuracy.
+  func detectAndEstimateFoodsMagicScan(
     image: Data?,
     contextText: String?
-  ) async throws -> OpenAIDetectFoodsResponse {
-    let model = ModelID.GPT4.gpt_4o_mini
-
-    var messages: [Chat.Message] = []
-
-    if let image = image {
-      // Image-based detection
-      let imageProcessor = ImageProcessor()
-      guard let imageType = imageProcessor.determineImageType(image) else {
-        throw Abort(.badRequest, reason: "Unsupported image type")
-      }
-
-      messages = [
-        Chat.Message(
-          role: .system,
-          content: [
-            .text("""
-              Identify all visible foods in this image. For each item extract:
-              - name: specific food name
-              - brand: brand name if visible on packaging (look carefully at labels, bottles, cans, boxes)
-              - servingCount: estimated number of servings visible
-
-              Be concise and conservative with serving counts.
-              """)
-          ]
-        ),
-        Chat.Message(
-          role: .user,
-          content: [
-            .imageData(image, "image/\(imageType)")
-          ]
-        )
-      ]
-
-      if let contextText = contextText, !contextText.isEmpty {
-        messages.append(
-          Chat.Message(
-            role: .user,
-            content: [
-              .text(contextText)
-            ]
-          )
-        )
-      }
-    } else if let contextText = contextText, !contextText.isEmpty {
-      // Text-only detection
-      messages = [
-        Chat.Message(
-          role: .system,
-          content: [
-            .text("Identify the foods described by the user. Extract name, brand (if mentioned), and serving count.")
-          ]
-        ),
-        Chat.Message(
-          role: .user,
-          content: [
-            .text(contextText)
-          ]
-        )
-      ]
-    } else {
-      throw Abort(.badRequest, reason: "Either image or contextText must be provided")
-    }
-
-    let response = try await openAI.chats.create(
-      model: model,
-      messages: messages,
-      responseFormat: ResponseFormat(type: .jsonSchema(.magicScanDetection))
-    )
-
-    guard let parsedResponse = try response.parse(OpenAIDetectFoodsResponse.self) else {
-      throw Abort(.internalServerError, reason: "Failed to parse OpenAI detection response")
-    }
-
-    return parsedResponse
-  }
-
-  /// Pass 2: Estimate nutrition for specific foods that weren't found in the database.
-  /// Provides enhanced prompts with database context and portion estimation guidelines.
-  func estimateNutritionForUnknownFoods(
-    image: Data?,
-    contextText: String?,
-    unknownFoods: [OpenAIDetectFoodsResponse.DetectedFood],
-    databaseMatches: [(food: OpenAIDetectFoodsResponse.DetectedFood, match: FoodItem)]
   ) async throws -> [MagicScanStatusResponse.Serving] {
-    guard !unknownFoods.isEmpty else { return [] }
-
-    let model = ModelID.GPT4.gpt_4o_mini
-
-    // Build context about database matches
-    let databaseContext: String
-    if !databaseMatches.isEmpty {
-      let matchDescriptions = databaseMatches.compactMap { food, match in
-        guard let calories = match.calories else { return nil }
-        return "\(food.name)\(food.brandName.map { " (\($0))" } ?? ""): \(Int(calories.value)) \(calories.unit)"
-      }.joined(separator: ", ")
-      databaseContext = matchDescriptions.isEmpty ? "" : "We found verified data for: \(matchDescriptions)."
-    } else {
-      databaseContext = ""
-    }
-
-    // Build list of unknown foods to estimate
-    let unknownList = unknownFoods.map { food in
-      "\(food.name)\(food.brandName.map { " (\($0))" } ?? "") - \(food.servingCount) serving(s)"
-    }.joined(separator: ", ")
+    // Use GPT-4o for better vision capabilities
+    let model = ModelID.GPT4.gpt_4o
 
     var messages: [Chat.Message] = []
 
     if let image = image {
-      // Image-based nutrition estimation
+      // Image-based comprehensive detection and estimation
       let imageProcessor = ImageProcessor()
       guard let imageType = imageProcessor.determineImageType(image) else {
         throw Abort(.badRequest, reason: "Unsupported image type")
@@ -689,17 +588,30 @@ extension OpenAIService {
           role: .system,
           content: [
             .text("""
-              You are a nutrition expert. \(databaseContext)
+              You are an expert nutritionist analyzing food images. Identify ALL visible foods and estimate their complete nutrition.
 
-              Please estimate nutrition ONLY for these unknown items: \(unknownList)
+              PRIORITIES:
+              1. Main dishes (proteins, starches, vegetables) FIRST
+              2. Side dishes and accompaniments second
+              3. Sauces, condiments, and garnishes last
+              4. Do NOT mistake sauces for main items (e.g., "steak sauce" is NOT the same as "steak")
 
-              Guidelines:
-              - Portion estimation: Use visual cues (plate size, utensils for scale), standard portions (chicken breast ~170g, 1 cup rice ~200g)
-              - Validate calories: should equal approximately 4×(protein+carbs) + 9×fat in grams
-              - Realistic bounds: typical meals 200-800 cal, single servings 50-500 cal
+              For each food item:
+              - Identify the actual food (e.g., "Grilled Steak", not "Steak Sauce" when you see a steak)
+              - Estimate portion size in grams using visual cues:
+                * Plate diameter (~26cm standard dinner plate)
+                * Utensil size (fork ~20cm, knife ~23cm)
+                * Hand comparisons (palm ~85g for protein)
+                * Standard portions: chicken breast ~170g, 1 cup rice ~200g, 1 cup vegetables ~150g
+              - Provide complete nutrition per serving
+
+              VALIDATION:
+              - Calories should ≈ 4×(protein+carbs in g) + 9×(fat in g)
+              - Typical meal: 200-800 calories
+              - Single serving: 50-500 calories
               - Be conservative if uncertain
 
-              Return complete nutrition data for each unknown food item.
+              Detect brand names only if visible on packaging (labels, bottles, cans, boxes).
               """)
           ]
         ),
@@ -716,28 +628,28 @@ extension OpenAIService {
           Chat.Message(
             role: .user,
             content: [
-              .text(contextText)
+              .text("Additional context: \(contextText)")
             ]
           )
         )
       }
     } else if let contextText = contextText, !contextText.isEmpty {
-      // Text-only nutrition estimation
+      // Text-only comprehensive detection and estimation
       messages = [
         Chat.Message(
           role: .system,
           content: [
             .text("""
-              You are a nutrition expert. \(databaseContext)
+              You are an expert nutritionist. Based on the user's description, identify all foods and estimate complete nutrition.
 
-              Estimate nutrition for: \(unknownList)
+              Use standard portion sizes:
+              - Protein (chicken, steak, fish): 170g
+              - Grains (rice, pasta): 1 cup cooked = 200g
+              - Vegetables: 1 cup = 150g
+              - Fruits: 1 medium = 150g
 
-              Guidelines:
-              - Use standard portions (chicken breast ~170g, 1 cup rice ~200g)
-              - Validate: calories ≈ 4×(protein+carbs) + 9×fat
-              - Realistic bounds: typical meals 200-800 cal, servings 50-500 cal
-
-              Return complete nutrition data.
+              Provide complete nutrition per serving.
+              Validate: calories ≈ 4×(protein+carbs in g) + 9×(fat in g)
               """)
           ]
         ),
@@ -759,7 +671,7 @@ extension OpenAIService {
     )
 
     guard let parsedResponse = try response.parse(OpenAIEstimateCaloriesResponse.self) else {
-      throw Abort(.internalServerError, reason: "Failed to parse OpenAI nutrition response")
+      throw Abort(.internalServerError, reason: "Failed to parse OpenAI response")
     }
 
     // Convert to servings
