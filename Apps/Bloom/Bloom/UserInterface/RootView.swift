@@ -45,81 +45,80 @@ struct RootView: View {
 
   var body: some View {
     Group {
-      TestFlightThankYouView()
-//      if !hasShownOnboarding {
-//        ZStack {
-//          switch experimentManager.variant(for: .onboardingFeaturePitch) {
-//          case .treatment:
-//            OnboardingRootViewTreatment {
-//              withAnimation {
-//                hasShownOnboarding = true
-//              }
-//            }
-//            .onAppear {
-//              TelemetryDeck.signal("AB: Onboarding Feature Pitch - Treatment")
-//            }
-//          case .control:
-//            OnboardingRootView {
-//              withAnimation {
-//                hasShownOnboarding = true
-//              }
-//            }
-//            .onAppear {
-//              TelemetryDeck.signal("AB: Onboarding Feature Pitch - Control")
-//            }
-//          }
-//
-//        #if DEBUG
-//          Button {
-//            withAnimation {
-//              hasShownOnboarding = true
-//            }
-//          } label: {
-//            Text("Skip")
-//              .padding()
-//          }
-//          .bold()
-//          .fontDesign(.rounded)
-//          .zStackAlignment(.topTrailing)
-//        #endif
-//        }
-//      } else if !userController.isAuthenticated {
-//        OnboardingLoginView { }
-//      } else {
-//        if #available(iOS 26, *) {
-//          newContentView
-//        } else {
-//          legacyContentView
-//        }
-//      }
+      if !hasShownOnboarding {
+        ZStack {
+          switch experimentManager.variant(for: .onboardingFeaturePitch) {
+          case .treatment:
+            OnboardingRootViewTreatment {
+              withAnimation {
+                hasShownOnboarding = true
+              }
+            }
+            .onAppear {
+              TelemetryDeck.signal("AB: Onboarding Feature Pitch - Treatment")
+            }
+          case .control:
+            OnboardingRootView {
+              withAnimation {
+                hasShownOnboarding = true
+              }
+            }
+            .onAppear {
+              TelemetryDeck.signal("AB: Onboarding Feature Pitch - Control")
+            }
+          }
+
+        #if DEBUG
+          Button {
+            withAnimation {
+              hasShownOnboarding = true
+            }
+          } label: {
+            Text("Skip")
+              .padding()
+          }
+          .bold()
+          .fontDesign(.rounded)
+          .zStackAlignment(.topTrailing)
+        #endif
+        }
+      } else if !userController.isAuthenticated {
+        OnboardingLoginView { }
+      } else {
+        if #available(iOS 26, *) {
+          newContentView
+        } else {
+          legacyContentView
+        }
+      }
     }
-//    .sheet($presentedSheet)
-//    .sheet(isPresented: $shouldShowLogPeriodSheet) {
-//      CycleTrackingActionCardView {
-//        shouldShowLogPeriodSheet = false
-//      }
-//    }
-//    .fullScreenCover($presentedPaywall)
+    .sheet($presentedSheet)
+    .sheet(isPresented: $shouldShowLogPeriodSheet) {
+      CycleTrackingActionCardView {
+        shouldShowLogPeriodSheet = false
+      }
+    }
+    .fullScreenCover($presentedPaywall)
     .alert(alertDetails: $alertDetails)
     .animation(.easeInOut(duration: 1), value: userController.isAuthenticated)
     .animation(.easeInOut(duration: 1), value: hasShownOnboarding)
     .onChange(of: tabController.toggleToDismiss) { oldValue, newValue in
       dismiss()
     }
-//    .onReceive(NotificationCenter.default.publisher(for: .showLogPeriodSheet)) { _ in
-//      if HealthManager.shared.sex() == .female {
-//        shouldShowLogPeriodSheet = true
-//      } else {
-//        alertDetails = AlertDetails(
-//          title: "Not Supported",
-//          message: "Period tracking is not supported for male users."
-//        )
-//      }
-//    }
-//    .task {
-//      // Check periodic paywall experiment on app launch
-//      await checkPeriodicPaywall()
-//    }
+    .onReceive(NotificationCenter.default.publisher(for: .showLogPeriodSheet)) { _ in
+      if HealthManager.shared.sex() == .female {
+        shouldShowLogPeriodSheet = true
+      } else {
+        alertDetails = AlertDetails(
+          title: "Not Supported",
+          message: "Period tracking is not supported for male users."
+        )
+      }
+    }
+    .task {
+      // Check periodic paywall experiment on app launch
+      await checkPeriodicPaywall()
+    }
     .onForeground {
       Task {
         await MagicScanStatusChecker.shared.checkPendingItems(modelContext: modelContext)
@@ -127,14 +126,14 @@ struct RootView: View {
         await ConsentManager.shared.syncPendingConsentIfNeeded()
       }
 
-//      Task {
-//        // Check periodic paywall experiment on foreground
-//        await checkPeriodicPaywall()
-//      }
+      Task {
+        // Check periodic paywall experiment on foreground
+        await checkPeriodicPaywall()
+      }
     }
-//    .onOpenURL { url in
-//      handleURL(url)
-//    }
+    .onOpenURL { url in
+      handleURL(url)
+    }
     .tint(themeController.theme.color)
     .environment(themeController)
     .environment(experimentManager)
