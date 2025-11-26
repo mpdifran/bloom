@@ -17,6 +17,13 @@ extension URL {
   static let subreddit = URL(string: "https://www.reddit.com/r/tryBloom")!
 }
 
+// MARK: - TestFlight
+
+extension URL {
+  static let testFlightPromoAppStoreListing = URL(string: "https://apps.apple.com/app/apple-store/id6739955926?pt=127532637&ct=TestFlight-Loyalty&mt=8")!
+  static let testFlightPromo = URL(string: "https://apps.apple.com/redeem?ctx=offercodes&id=6739955926&code=TESTFLIGHT")!
+}
+
 // MARK: - Legal
 
 extension URL {
