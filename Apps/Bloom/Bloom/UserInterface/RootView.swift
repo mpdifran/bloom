@@ -54,17 +54,11 @@ struct RootView: View {
                 hasShownOnboarding = true
               }
             }
-            .onAppear {
-              TelemetryDeck.signal("AB: Onboarding Feature Pitch - Treatment")
-            }
           case .control:
             OnboardingRootView {
               withAnimation {
                 hasShownOnboarding = true
               }
-            }
-            .onAppear {
-              TelemetryDeck.signal("AB: Onboarding Feature Pitch - Control")
             }
           }
 
@@ -149,7 +143,7 @@ private extension RootView {
     let variant = experimentManager.variant(for: .periodicPaywall)
     switch variant {
     case .treatment:
-      TelemetryDeck.signal("AB: Periodic Paywall - Treatment")
+      TelemetryDeck.signal("AB: Periodic Paywall v2 - Treatment")
       let shouldShow = await PeriodicPaywallManager.shared.shouldShowPaywall()
       if shouldShow {
         presentedPaywall = BloomPlusPaywall(
@@ -158,7 +152,7 @@ private extension RootView {
         ).asAny
       }
     case .control:
-      TelemetryDeck.signal("AB: Periodic Paywall - Control")
+      TelemetryDeck.signal("AB: Periodic Paywall v2 - Control")
     }
   }
 
