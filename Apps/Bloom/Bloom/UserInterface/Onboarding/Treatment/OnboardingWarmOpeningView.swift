@@ -81,7 +81,7 @@ struct OnboardingWarmOpeningView: View {
     .onAppear {
       TelemetryDeck.signal("OB Warm Opening")
       TelemetryDeck.startDurationSignal("Onboarding V2")
-      TelemetryDeck.signal("AB: Onboarding Revamp - Treatment")
+      TelemetryDeck.signal("AB: Onboarding Revamp v2 - Treatment")
     }
   }
 }

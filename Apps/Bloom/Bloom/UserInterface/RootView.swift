@@ -141,18 +141,21 @@ private extension RootView {
     guard hasShownOnboarding else { return }
 
     let variant = experimentManager.variant(for: .periodicPaywall)
+    let shouldShow = await PeriodicPaywallManager.shared.shouldShowPaywall()
+
     switch variant {
     case .treatment:
-      TelemetryDeck.signal("AB: Periodic Paywall v2 - Treatment")
-      let shouldShow = await PeriodicPaywallManager.shared.shouldShowPaywall()
       if shouldShow {
+        TelemetryDeck.signal("AB: Periodic Paywall v3 - Treatment")
         presentedPaywall = BloomPlusPaywall(
           focus: .standard,
           showDismiss: true
         ).asAny
       }
     case .control:
-      TelemetryDeck.signal("AB: Periodic Paywall v2 - Control")
+      if shouldShow {
+        TelemetryDeck.signal("AB: Periodic Paywall v3 - Control")
+      }
     }
   }
 
