@@ -7,6 +7,7 @@
 
 import Foundation
 import BloomFoundation
+import BloomUI
 import HealthKit
 import DataContainer
 @preconcurrency import CoreHealth
@@ -71,49 +72,85 @@ private extension ChatVitalConverter {
 
 extension ChatVitalConverter {
 
-  func generateDemographics() async -> HealthVitalData.UserInfo? {
-//    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .demographics) else {
-//      return nil
-//    }
+  func generateDemographics(enabledCategories: Set<AIHealthCategory>? = nil) async -> HealthVitalData.UserInfo? {
+    // Check if we should send demographics and/or location
+    let shouldFetchDemographics = shouldFetch(category: .demographics, enabledCategories: enabledCategories)
+    let shouldFetchLocation = shouldFetch(category: .location, enabledCategories: enabledCategories)
 
-    let age = await HealthManager.shared.age()
-    let sex = await HealthManager.shared.sex().name
-    let height = await HealthManager.shared.height()
-    let focus = await HealthManager.shared.focus
-    let workoutEquipment = Array(await HealthManager.shared.selectedWorkoutEquipment)
+    // If both disabled, return nil (nothing to send)
+    guard shouldFetchDemographics || shouldFetchLocation else {
+      return nil
+    }
 
-    // Fetch user facts
-    let userFactModelActor = UserFactModelActor.standard()
-    let userFactDTOs = try? await userFactModelActor.fetchAllUserFacts()
-    let userFacts = userFactDTOs?.map { dto in
-      ChatUserFactsData.UserFact(
-        id: dto.id,
-        fact: dto.fact,
-        dateAdded: dto.dateAdded,
-        revisitDate: dto.revisitDate
-      )
-    } ?? []
-    
-    // Fetch location
-    let locationString = await LocationManagerViewModel.shared.locationString()
+    // Conditionally fetch demographics data (only if .demographics enabled)
+    let age: Int?
+    let sex: String?
+    let heightString: String?
+    let focus: String?
+    let workoutEquipment: [String]
+    let userFacts: [ChatUserFactsData.UserFact]
 
-    let heightString: String? = await {
-      guard height.doubleValue(for: .meterUnit(with: .centi)) > 0 else { return nil }
-      let heightUnit = await HKUnit.meterUnit(with: .centi).localizedUnit()
-      return await height.displayString(for: heightUnit, formatter: .oneDecimalPlace)
-    }()
+    if shouldFetchDemographics {
+      age = await HealthManager.shared.age()
+      sex = await HealthManager.shared.sex().name
+      let height = await HealthManager.shared.height()
+      focus = await HealthManager.shared.focus
+      workoutEquipment = Array(await HealthManager.shared.selectedWorkoutEquipment)
+
+      // Fetch user facts
+      let userFactModelActor = UserFactModelActor.standard()
+      let userFactDTOs = try? await userFactModelActor.fetchAllUserFacts()
+      userFacts = userFactDTOs?.map { dto in
+        ChatUserFactsData.UserFact(
+          id: dto.id,
+          fact: dto.fact,
+          dateAdded: dto.dateAdded,
+          revisitDate: dto.revisitDate
+        )
+      } ?? []
+
+      heightString = await {
+        guard height.doubleValue(for: .meterUnit(with: .centi)) > 0 else { return nil }
+        let heightUnit = await HKUnit.meterUnit(with: .centi).localizedUnit()
+        return await height.displayString(for: heightUnit, formatter: .oneDecimalPlace)
+      }()
+    } else {
+      // Demographics disabled - nil out all demographic fields
+      age = nil
+      sex = nil
+      heightString = nil
+      focus = nil
+      workoutEquipment = []
+      userFacts = []
+    }
+
+    // Conditionally fetch location (independent of demographics)
+    let locationString: String?
+    if shouldFetchLocation {
+      locationString = await LocationManagerViewModel.shared.locationString()
+    } else {
+      locationString = nil
+    }
 
     return HealthVitalData.UserInfo(
       age: age,
       sex: sex,
       height: heightString,
-      focus: focus.isNotEmpty ? focus : nil,
+      focus: focus,
       currentDate: DateFormatter.dateTimeMediumWithTimeZone.string(from: .now),
       timeZone: TimeZone.current.identifier,
       location: locationString,
       workoutEquipment: workoutEquipment,
       userFacts: userFacts
     )
+  }
+
+  private func shouldFetch(category: AIHealthCategory, enabledCategories: Set<AIHealthCategory>?) -> Bool {
+    guard let enabledCategories = enabledCategories else {
+      // No filtering - fetch everything (backward compatibility)
+      return true
+    }
+    return enabledCategories.contains(category)
   }
 
   func generateActivityLevel(from date: Date) async -> HealthVitalData.ActivityLevel? {

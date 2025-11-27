@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import BloomFoundation
+import BloomUI
 import DataContainer
 import BloomModel
 import TelemetryDeck
@@ -77,12 +78,20 @@ final class TodayInsightsManager {
     guard let content = todayContent,
           let data = content.budState.data(using: .utf8),
           let budState = try? JSONDecoder().decode(TodayReportResponse.BudState.self, from: data) else {
-      return nil
+      // Return default BudState (.proudCoach) when insights disabled
+      // Return nil only when insights enabled but content unavailable
+      return isInsightsEnabled() ? nil : .proudCoach
     }
     return budState
   }
 
   func shouldRefreshContent() -> Bool {
+    // Early return if insights are disabled
+    guard isInsightsEnabled() else {
+      internalLog(.todayInsights, "Today Insights disabled in settings, returning false for shouldRefreshContent()")
+      return false
+    }
+
     // Check if we have content for today
     guard let content = lastResponse,
           Calendar.current.isDate(content.day, inSameDayAs: .now) else {
@@ -96,6 +105,24 @@ final class TodayInsightsManager {
     }
 
     return false
+  }
+
+  private func isInsightsEnabled() -> Bool {
+    guard let data = UserDefaults.standard.data(forKey: "AIFeatures.settings"),
+          let settings = try? JSONDecoder().decode(AIFeatureSettings.self, from: data) else {
+      // Default to false if settings don't exist
+      return false
+    }
+    return settings.todayInsightsEnabled
+  }
+
+  private func getEnabledCategories() -> Set<AIHealthCategory> {
+    guard let data = UserDefaults.standard.data(forKey: "AIDataSharing.settings"),
+          let settings = try? JSONDecoder().decode(AIDataSharingSettings.self, from: data) else {
+      // Default to empty set (no data shared)
+      return []
+    }
+    return settings.enabledCategories
   }
 
   func refreshContentIfNeeded() async {
@@ -120,6 +147,12 @@ final class TodayInsightsManager {
   }
 
   private func loadTodayContent() async {
+    // Check if insights are enabled before loading
+    guard isInsightsEnabled() else {
+      internalLog(.todayInsights, "Today Insights disabled, skipping load")
+      return
+    }
+
     isLoadingContent = true
     hasLoadError = false
 
@@ -132,9 +165,15 @@ final class TodayInsightsManager {
     do {
       let today = Date()
 
+      // Get enabled categories for privacy filtering
+      let enabledCategories = getEnabledCategories()
+
       // Generate health context for yesterday (insights are based on previous day's data)
       let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today) ?? today
-      let healthContext = try await DayReviewCalculator.shared.calculateDayReviewHealthDataString(for: yesterday)
+      let healthContext = try await DayReviewCalculator.shared.calculateDayReviewHealthDataString(
+        for: yesterday,
+        enabledCategories: enabledCategories
+      )
 
       // Get current timezone
       let timezone = TimeZone.current.identifier

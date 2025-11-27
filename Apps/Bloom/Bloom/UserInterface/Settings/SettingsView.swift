@@ -8,6 +8,7 @@
 import SFSafeSymbols
 import SwiftUI
 import AppUI
+import BloomUI
 import SwiftData
 import DataContainer
 import HealthKit
@@ -30,6 +31,8 @@ struct SettingsView: View {
   @AppStorage("TodayView.showWeightWidget") private var showWeightWidget: Bool = true
   @AppStorage("TodayView.showNutritionTodayWidget") private var showNutritionTodayWidget: Bool = true
   @AppStorage(.FeatureFlag.developerMode) private var showDeveloperMode: Bool = false
+
+  @AIFeatureSettingsStorage("AIFeatures.settings") private var aiFeatureSettings = AIFeatureSettings()
 
   @Environment(\.openURL) private var openURL
   @Environment(\.modelContext) private var modelContext
@@ -62,6 +65,7 @@ struct SettingsView: View {
         userSection
         healthPermissionsSection
         healthGoalsSection
+        aiPrivacySection
         habitsSection
         remindersSection
         workoutEquipmentSection
@@ -158,6 +162,42 @@ private extension SettingsView {
         }
         .onTapGesture {
           presentedSheet = PersonalizationSettingsView().asAny
+        }
+      }
+    }
+  }
+
+  var aiPrivacySection: some View {
+    VStack {
+      SectionTitleView("AI & Privacy")
+        .padding(.horizontal)
+
+      SettingsSectionContainer {
+        SettingsCell("AI Chat (Bud)") {
+          Toggle("", isOn: Binding(
+            get: { aiFeatureSettings.chatEnabled },
+            set: { aiFeatureSettings.chatEnabled = $0 }
+          ))
+          .tint(.mutedGreen)
+        }
+
+        Divider()
+
+        SettingsCell("Biological Age Calculations") {
+          Toggle("", isOn: Binding(
+            get: { aiFeatureSettings.biologicalAgeEnabled },
+            set: { aiFeatureSettings.biologicalAgeEnabled = $0 }
+          ))
+          .tint(.mutedGreen)
+        }
+
+        Divider()
+
+        SettingsCell("Health Data Shared with AI", iconType: .disclosure) {
+          EmptyView()
+        }
+        .onTapGesture {
+          presentedSheet = AIDataSharingView().asAny
         }
       }
     }

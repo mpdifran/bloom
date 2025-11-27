@@ -8,6 +8,7 @@
 import Foundation
 import DataContainer
 import BloomFoundation
+import BloomUI
 import HealthKit
 import CoreHealth
 
@@ -28,18 +29,25 @@ extension DayVitalsCalculator {
     return String(data: jsonData, encoding: .utf8) ?? "{}"
   }
   
-  func calculateVitals(for date: Date) async -> DayVitalsData {
-    async let activity = generateActivityData(for: date)
-    async let bodyComposition = generateBodyCompositionData(for: date)
-    async let heartHealth = generateHeartHealthData(for: date)
-    async let nutrition = generateNutritionData(for: date)
-    async let sleep = generateSleepData(for: date)
-    async let stress = generateStressData(for: date)
-    async let exercise = generateExerciseData(for: date)
-    async let trainingLoad = generateTrainingLoadData(for: date)
-    async let mindfulness = generateMindfulnessData(for: date)
-    async let menstrualHealth = generateMenstrualHealthData(for: date)
-    async let digestiveHealth = generateDigestiveHealthData(for: date)
+  func calculateVitals(for date: Date, enabledCategories: Set<AIHealthCategory>? = nil) async -> DayVitalsData {
+    // Helper to check if a category is enabled (nil = fetch all for backward compatibility)
+    func isEnabled(_ category: AIHealthCategory) -> Bool {
+      guard let enabledCategories = enabledCategories else { return true }
+      return enabledCategories.contains(category)
+    }
+
+    // Conditionally fetch vitals based on enabled categories - privacy-first approach
+    async let activity = isEnabled(.physicalActivity) ? generateActivityData(for: date) : nil
+    async let bodyComposition = isEnabled(.bodyMetrics) ? generateBodyCompositionData(for: date) : nil
+    async let heartHealth = isEnabled(.bodyMetrics) ? generateHeartHealthData(for: date) : nil
+    async let nutrition = isEnabled(.nutrition) ? generateNutritionData(for: date) : nil
+    async let sleep = isEnabled(.sleep) ? generateSleepData(for: date) : nil
+    async let stress = isEnabled(.mentalWellness) ? generateStressData(for: date) : nil
+    async let exercise = isEnabled(.physicalActivity) ? generateExerciseData(for: date) : nil
+    async let trainingLoad = isEnabled(.physicalActivity) ? generateTrainingLoadData(for: date) : nil
+    async let mindfulness = isEnabled(.mentalWellness) ? generateMindfulnessData(for: date) : nil
+    async let menstrualHealth = isEnabled(.menstrualHealth) ? generateMenstrualHealthData(for: date) : nil
+    async let digestiveHealth = isEnabled(.digestiveHealth) ? generateDigestiveHealthData(for: date) : nil
 
     let (activityResult, bodyCompositionResult, heartHealthResult, nutritionResult, sleepResult, stressResult, exerciseResult, trainingLoadResult, mindfulnessResult, menstrualHealthResult, digestiveHealthResult) = await (
       activity,

@@ -14,6 +14,8 @@ import CoreHealth
 
 struct TodaySettingsView: View {
   @TodaySettingsStorage("TodayView.settings") private var todaySettings = TodaySettings()
+  @AIFeatureSettingsStorage("AIFeatures.settings") private var aiFeatureSettings = AIFeatureSettings()
+  @AIDataSharingSettingsStorage("AIDataSharing.settings") private var aiDataSharingSettings = AIDataSharingSettings()
 
   @State private var selectedTimeMode: TimeMode = .morning
   @State private var editingTimeMode: TimeMode?
@@ -24,6 +26,7 @@ struct TodaySettingsView: View {
   var body: some View {
     NavigationStack {
       BloomScrollView(showsChatBar: false) {
+        aiInsightsSection
         calendarSection
         timeConfigurationSection
         sectionsConfigurationSection
@@ -54,6 +57,45 @@ private extension TodaySettingsView {
 
   func loadCalendarSettings() async {
     // CalendarPreferenceManager handles initialization automatically
+  }
+
+  var aiInsightsSection: some View {
+    VStack {
+      SectionTitleView("AI Insights")
+        .padding(.horizontal)
+
+      SettingsSectionContainer {
+        SettingsCell("Today Insights", subtitle: "Personalized insights from your health data") {
+          Toggle("", isOn: Binding(
+            get: { aiFeatureSettings.todayInsightsEnabled },
+            set: { aiFeatureSettings.todayInsightsEnabled = $0 }
+          ))
+          .tint(.mutedGreen)
+        }
+
+        if aiFeatureSettings.todayInsightsEnabled {
+          Divider()
+
+          SettingsCell("Data Shared with AI", subtitle: enabledCategoriesText, iconType: .disclosure) {
+            EmptyView()
+          }
+          .onTapGesture {
+            navigationPushView = AIDataSharingView().asAny
+          }
+        }
+      }
+    }
+  }
+
+  var enabledCategoriesText: String {
+    let count = aiDataSharingSettings.enabledCategories.count
+    if count == 0 {
+      return "No data selected"
+    } else if count == 1 {
+      return "1 category selected"
+    } else {
+      return "\(count) categories selected"
+    }
   }
 
   var calendarSection: some View {

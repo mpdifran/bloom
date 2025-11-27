@@ -9,6 +9,7 @@ import SwiftUI
 import DataContainer
 import BloomModel
 import BloomFoundation
+import BloomUI
 import SwiftData
 import CoreHealth
 import HealthKit
@@ -206,7 +207,8 @@ extension ChatController {
       try await saveMessage(userMessage)
     }
 
-    let demographics = await ChatVitalConverter.shared.generateDemographics()
+    let enabledCategories = getEnabledCategories()
+    let demographics = await ChatVitalConverter.shared.generateDemographics(enabledCategories: enabledCategories)
     let stringData = try encoder.encodeToString(demographics) ?? ""
 
     let fileIDs: [String]
@@ -283,7 +285,8 @@ extension ChatController {
       try await saveMessage(assistantMessage)
     }
 
-    let demographics = await ChatVitalConverter.shared.generateDemographics()
+    let enabledCategories = getEnabledCategories()
+    let demographics = await ChatVitalConverter.shared.generateDemographics(enabledCategories: enabledCategories)
     let stringData = try encoder.encodeToString(demographics) ?? ""
 
     let socketMessage = SocketMessage.MessageRequest(
@@ -946,13 +949,24 @@ private extension ChatController {
   
   func sendToolRequestCountTelemetry() {
     guard toolRequestCount > 0 else { return }
-    
+
     TelemetryDeck.signal(
       "Chat Tool Request Count",
       floatValue: Double(toolRequestCount)
     )
-    
+
     // Reset the tool request count after sending
     toolRequestCount = 0
+  }
+
+  // MARK: - Privacy Controls
+
+  func getEnabledCategories() -> Set<AIHealthCategory> {
+    guard let data = UserDefaults.standard.data(forKey: "AIDataSharing.settings"),
+          let settings = try? JSONDecoder().decode(AIDataSharingSettings.self, from: data) else {
+      // Default to no data shared (privacy-first)
+      return []
+    }
+    return settings.enabledCategories
   }
 }

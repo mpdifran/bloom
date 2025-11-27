@@ -191,20 +191,18 @@ private extension TodayView {
   @ViewBuilder
   var bloomPlusContent: some View {
     VStack {
-      // Hero section with Bud and summary
-      if todayViewModel.todayContent != nil || todayViewModel.isLoadingContent || todayViewModel.hasLoadError {
-        TodayHeroCell(
-          budState: todayViewModel.budState,
-          summary: todayViewModel.todayContent?.summary,
-          hasError: todayViewModel.hasLoadError,
-          isLoading: todayViewModel.todayContent == nil,
-          onReload: {
-            await todayViewModel.retryLoadContent()
-          }
-        )
-        .padding(.horizontal)
-        .padding(.bottom)
-      }
+      // Hero section with Bud and summary (always shown, mirrors non-subscriber experience when insights disabled)
+      TodayHeroCell(
+        budState: todayViewModel.budState,
+        summary: todayViewModel.todayContent?.summary,
+        hasError: todayViewModel.hasLoadError,
+        isLoading: todayViewModel.todayContent == nil && todayViewModel.isLoadingContent,
+        onReload: todayViewModel.hasLoadError ? {
+          await todayViewModel.retryLoadContent()
+        } : nil
+      )
+      .padding(.horizontal)
+      .padding(.bottom)
 
       // Dynamic sections based on time mode and settings
       let configuration = todaySettings.configuration(for: currentTimeMode)
