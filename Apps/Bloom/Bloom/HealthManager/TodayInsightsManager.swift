@@ -111,10 +111,6 @@ final class TodayInsightsManager {
     AIFeatureSettings.shared.todayInsightsEnabled
   }
 
-  private func getEnabledCategories() -> Set<AIHealthCategory> {
-    AIDataSharingSettings.shared.enabledCategories
-  }
-
   func refreshContentIfNeeded() async {
     guard EntitlementController.shared.hasBloomPro == true else { return }
     // Check if already loading first to prevent race conditions from concurrent callers
@@ -155,15 +151,9 @@ final class TodayInsightsManager {
     do {
       let today = Date()
 
-      // Get enabled categories for privacy filtering
-      let enabledCategories = getEnabledCategories()
-
       // Generate health context for yesterday (insights are based on previous day's data)
       let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today) ?? today
-      let healthContext = try await DayReviewCalculator.shared.calculateDayReviewHealthDataString(
-        for: yesterday,
-        enabledCategories: enabledCategories
-      )
+      let healthContext = try await DayReviewCalculator.shared.calculateDayReviewHealthDataString(for: yesterday)
 
       // Get current timezone
       let timezone = TimeZone.current.identifier

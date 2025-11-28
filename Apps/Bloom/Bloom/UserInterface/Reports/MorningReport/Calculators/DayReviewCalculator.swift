@@ -18,32 +18,38 @@ final actor DayReviewCalculator {
 
 extension DayReviewCalculator {
 
-  func calculateDayReviewHealthDataString(
-    for date: Date,
-    enabledCategories: Set<AIHealthCategory>? = nil
-  ) async throws -> String {
-    let healthData = try await calculateDayReviewHealthData(for: date, enabledCategories: enabledCategories)
+  func calculateDayReviewHealthDataString(for date: Date) async throws -> String {
+    let healthData = try await calculateDayReviewHealthData(for: date)
     let jsonData = try JSONEncoder.aiContext.encode(healthData)
     return String(data: jsonData, encoding: .utf8) ?? "{}"
   }
 
-  func calculateDayReviewHealthData(
-    for date: Date,
-    enabledCategories: Set<AIHealthCategory>? = nil
-  ) async throws -> DayReviewHealthData {
-    // If enabledCategories is provided, use it for filtering. Otherwise, fetch all data (nil = no filtering)
-    let shouldFetchDemographicsOrLocation =
-      shouldFetch(category: .demographics, enabledCategories: enabledCategories) ||
-      shouldFetch(category: .location, enabledCategories: enabledCategories)
-    let shouldFetchGoals = shouldFetch(category: .goals, enabledCategories: enabledCategories)
-    let shouldFetchWeather = shouldFetch(category: .weather, enabledCategories: enabledCategories)
-    let shouldFetchCalendarEvents = shouldFetch(category: .calendarEvents, enabledCategories: enabledCategories)
+  func calculateDayReviewHealthData(for date: Date) async throws -> DayReviewHealthData {
+    // Privacy check: If Today Insights is disabled, return empty data
+    guard await AIFeatureSettings.shared.todayInsightsEnabled else {
+      return DayReviewHealthData(
+        demographics: nil,
+        vitals: nil,
+        goalProgress: nil,
+        weather: nil,
+        simplifiedWeather: nil,
+        events: nil
+      )
+    }
+
+    // Access enabled categories from settings singleton
+    let shouldFetchDemographics = await shouldFetch(category: .demographics)
+    let shouldFetchLocation = await shouldFetch(category: .location)
+    let shouldFetchDemographicsOrLocation = shouldFetchDemographics || shouldFetchLocation
+    let shouldFetchGoals = await shouldFetch(category: .goals)
+    let shouldFetchWeather = await shouldFetch(category: .weather)
+    let shouldFetchCalendarEvents = await shouldFetch(category: .calendarEvents)
 
     // Fetch enabled data concurrently - demographics/location filtered internally by generateDemographics()
     async let demographics = shouldFetchDemographicsOrLocation
-      ? ChatVitalConverter.shared.generateDemographics(enabledCategories: enabledCategories)
+      ? ChatVitalConverter.shared.generateDemographics(enabledCategories: AIDataSharingSettings.shared.enabledCategories)
       : nil
-    async let vitals = DayVitalsCalculator.shared.calculateVitals(for: date, enabledCategories: enabledCategories)
+    async let vitals = DayVitalsCalculator.shared.calculateVitals(for: date, enabledCategories: AIDataSharingSettings.shared.enabledCategories)
     async let goalProgress = shouldFetchGoals ? try GoalProgressCalculator.shared.calculateGoalProgress(for: date) : nil
     async let simplifiedWeather = shouldFetchWeather ? DayReviewWeatherCalculator.shared.calculateSimplifiedWeatherData(for: date) : nil
     async let events = shouldFetchCalendarEvents ? DayReviewEventCalculator.shared.calculateEventData(for: date) : nil
@@ -66,11 +72,7 @@ extension DayReviewCalculator {
     )
   }
 
-  private func shouldFetch(category: AIHealthCategory, enabledCategories: Set<AIHealthCategory>?) -> Bool {
-    guard let enabledCategories = enabledCategories else {
-      // No filtering - fetch everything
-      return true
-    }
-    return enabledCategories.contains(category)
+  private func shouldFetch(category: AIHealthCategory) async -> Bool {
+    await AIDataSharingSettings.shared.enabledCategories.contains(category)
   }
 }

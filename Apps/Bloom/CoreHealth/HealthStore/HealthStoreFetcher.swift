@@ -157,6 +157,20 @@ public extension HealthStoreFetcher {
     return HKQuantity(unit: unit, doubleValue: average)
   }
 
+  func fetchDailyAverage(
+    for quantityType: HKQuantityTypeIdentifier,
+    unit: HKUnit,
+    dateRange: DateRange,
+    option: HKStatisticsOptions = .discreteAverage
+  ) async -> HKQuantity? {
+    try? await healthStore.fetchDailyAverageQuantity(
+      for: quantityType,
+      unit: unit,
+      dateRange: dateRange,
+      option: option
+    )
+  }
+
   func fetchSamples(
     for sampleType: HKSampleType,
     dateRange: DateRange,

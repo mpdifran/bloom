@@ -209,7 +209,9 @@ extension ChatController {
 
     let enabledCategories = await getEnabledCategories()
     let demographics = await ChatVitalConverter.shared.generateDemographics(enabledCategories: enabledCategories)
-    let stringData = try encoder.encodeToString(demographics) ?? ""
+    let dateTime = await ChatVitalConverter.shared.generateDateTime()
+    let chatContext = HealthVitalData.ChatContext(userInfo: demographics, dateTime: dateTime)
+    let stringData = try encoder.encodeToString(chatContext) ?? ""
 
     let fileIDs: [String]
     if let imageData {
@@ -287,7 +289,9 @@ extension ChatController {
 
     let enabledCategories = await getEnabledCategories()
     let demographics = await ChatVitalConverter.shared.generateDemographics(enabledCategories: enabledCategories)
-    let stringData = try encoder.encodeToString(demographics) ?? ""
+    let dateTime = await ChatVitalConverter.shared.generateDateTime()
+    let chatContext = HealthVitalData.ChatContext(userInfo: demographics, dateTime: dateTime)
+    let stringData = try encoder.encodeToString(chatContext) ?? ""
 
     let socketMessage = SocketMessage.MessageRequest(
       text: "",

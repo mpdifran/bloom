@@ -137,11 +137,16 @@ extension ChatVitalConverter {
       sex: sex,
       height: heightString,
       focus: focus,
-      currentDate: DateFormatter.dateTimeMediumWithTimeZone.string(from: .now),
-      timeZone: TimeZone.current.identifier,
       location: locationString,
       workoutEquipment: workoutEquipment,
       userFacts: userFacts
+    )
+  }
+
+  func generateDateTime() -> HealthVitalData.DateTime {
+    HealthVitalData.DateTime(
+      currentDate: DateFormatter.dateTimeMediumWithTimeZone.string(from: .now),
+      timeZone: TimeZone.current.identifier
     )
   }
 

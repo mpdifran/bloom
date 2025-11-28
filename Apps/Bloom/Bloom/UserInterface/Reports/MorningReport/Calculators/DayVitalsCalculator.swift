@@ -183,13 +183,11 @@ private extension DayVitalsCalculator {
 private extension DayVitalsCalculator {
   
   func generateBodyCompositionData(for date: Date) async -> BodyCompositionData? {
-    let dateRange = DateRange.duringDay(date)
-    
-    // Fetch daily values
-    let bodyMassQuantity = await HealthStoreFetcher.shared.fetchMostRecentSample(for: .bodyMass, dateRange: dateRange)?.quantity
-    let bodyFatQuantity = await HealthStoreFetcher.shared.fetchMostRecentSample(for: .bodyFatPercentage, dateRange: dateRange)?.quantity
-    let leanBodyMassQuantity = await HealthStoreFetcher.shared.fetchMostRecentSample(for: .leanBodyMass, dateRange: dateRange)?.quantity
-    
+    // Fetch latest values (body composition is infrequently measured)
+    let bodyMassQuantity = await HealthStoreFetcher.shared.fetchLatestSample(for: .bodyMass)?.quantity
+    let bodyFatQuantity = await HealthStoreFetcher.shared.fetchLatestSample(for: .bodyFatPercentage)?.quantity
+    let leanBodyMassQuantity = await HealthStoreFetcher.shared.fetchLatestSample(for: .leanBodyMass)?.quantity
+
     // Fetch averages from the vitals (using the core VitalsCalculator)
     let bodyCompositionSummary = await VitalsCalculator.shared.bodyCompositionSummary
 
@@ -225,23 +223,25 @@ private extension DayVitalsCalculator {
   
   func generateHeartHealthData(for date: Date) async -> HeartHealthData? {
     let dateRange = DateRange.duringDay(date)
-    
-    async let vo2Max = HealthStoreFetcher.shared.fetchMostRecentSample(for: .vo2Max, dateRange: dateRange)?.quantity
-    async let rhr = HealthStoreFetcher.shared.fetchMostRecentSample(for: .restingHeartRate, dateRange: dateRange)?.quantity
-    async let hrRecovery = HealthStoreFetcher.shared.fetchMostRecentSample(for: .heartRateRecoveryOneMinute, dateRange: dateRange)?.quantity
-    async let hrv = HealthStoreFetcher.shared.fetchMostRecentSample(for: .heartRateVariabilitySDNN, dateRange: dateRange)?.quantity
-    
+
+    // VO2 Max: infrequently measured, use latest available value
+    async let vo2Max = HealthStoreFetcher.shared.fetchLatestSample(for: .vo2Max)?.quantity
+    // RHR, HR Recovery, HRV: frequently measured, use daily average
+    async let rhr = await HealthStoreFetcher.shared.fetchDailyAverage(for: .restingHeartRate, unit: .bpm(), dateRange: dateRange)
+    async let hrRecovery = await HealthStoreFetcher.shared.fetchDailyAverage(for: .heartRateRecoveryOneMinute, unit: .bpm(), dateRange: dateRange)
+    async let hrv = await HealthStoreFetcher.shared.fetchDailyAverage(for: .heartRateVariabilitySDNN, unit: .secondUnit(with: .milli), dateRange: dateRange)
+
     let (vo2Result, rhrResult, recoveryResult, hrvResult) = await (
       vo2Max,
       rhr,
       hrRecovery,
       hrv
     )
-    
+
     guard vo2Result != nil || rhrResult != nil || recoveryResult != nil || hrvResult != nil else {
       return nil
     }
-    
+
     return HeartHealthData(
       vo2Max: await vo2Result?.displayString(for: .vo2Max(), formatter: .noDecimalPlaces),
       restingHeartRate: await rhrResult?.displayString(for: .bpm(), formatter: .noDecimalPlaces),
@@ -366,34 +366,31 @@ private extension DayVitalsCalculator {
   
   func generateStressData(for date: Date) async -> StressData? {
     let dateRange = DateRange.duringDay(date)
-    
-    let hrvQuantity = await HealthStoreFetcher.shared.fetchMostRecentSample(
+
+    // HRV: frequently measured, use daily average
+    let hrvQuantity = await HealthStoreFetcher.shared.fetchDailyAverage(
       for: .heartRateVariabilitySDNN,
+      unit: .secondUnit(with: .milli),
       dateRange: dateRange
-    )?.quantity
-    
-    let systolicQuantity = await HealthStoreFetcher.shared.fetchMostRecentSample(
-      for: .bloodPressureSystolic,
-      dateRange: dateRange
-    )?.quantity
-    let diastolicQuantity = await HealthStoreFetcher.shared.fetchMostRecentSample(
-      for: .bloodPressureDiastolic,
-      dateRange: dateRange
-    )?.quantity
-    
+    )
+
+    // Blood pressure: infrequently measured, use latest available
+    let systolicSample = await HealthStoreFetcher.shared.fetchLatestSample(for: .bloodPressureSystolic)
+    let diastolicSample = await HealthStoreFetcher.shared.fetchLatestSample(for: .bloodPressureDiastolic)
+
     let bloodPressure: BloodPressureData?
-    if let systolic = systolicQuantity, let diastolic = diastolicQuantity {
+    if let systolicSample, let diastolicSample {
       bloodPressure = BloodPressureData(
-        systolic: await systolic.displayString(for: .millimeterOfMercury(), formatter: .noDecimalPlaces, showUnits: false),
-        diastolic: await diastolic.displayString(for: .millimeterOfMercury(), formatter: .noDecimalPlaces, showUnits: false),
-        date: date
+        systolic: await systolicSample.quantity.displayString(for: .millimeterOfMercury(), formatter: .noDecimalPlaces, showUnits: false),
+        diastolic: await diastolicSample.quantity.displayString(for: .millimeterOfMercury(), formatter: .noDecimalPlaces, showUnits: false),
+        date: systolicSample.startDate
       )
     } else {
       bloodPressure = nil
     }
-    
+
     guard hrvQuantity != nil || bloodPressure != nil else { return nil }
-    
+
     return StressData(
       heartRateVariability: await hrvQuantity?.displayString(for: .secondUnit(with: .milli), formatter: .noDecimalPlaces),
       bloodPressure: bloodPressure

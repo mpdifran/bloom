@@ -115,7 +115,7 @@ public enum AIHealthCategory: String, Codable, CaseIterable, Sendable {
     case .physicalActivity:
       return "Steps, workouts, training load, and exercise data."
     case .bodyMetrics:
-      return "Body composition, weight, resting heart rate, and HRV."
+      return "Body composition, weight, resting heart rate, vO2 Max, and HRV."
     case .mentalWellness:
       return "Stress levels and mindfulness activity."
     case .sleep:

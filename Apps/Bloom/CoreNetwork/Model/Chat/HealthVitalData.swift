@@ -559,13 +559,31 @@ extension HealthVitalData.FoodItem {
 // MARK: - UserInfo
 
 extension HealthVitalData {
+  public struct DateTime: SendableNetworkModel {
+    public let currentDate: String
+    public let timeZone: String
+
+    public init(currentDate: String, timeZone: String) {
+      self.currentDate = currentDate
+      self.timeZone = timeZone
+    }
+  }
+
+  public struct ChatContext: SendableNetworkModel {
+    public let userInfo: UserInfo?
+    public let dateTime: DateTime
+
+    public init(userInfo: UserInfo?, dateTime: DateTime) {
+      self.userInfo = userInfo
+      self.dateTime = dateTime
+    }
+  }
+
   public struct UserInfo: SendableNetworkModel {
     public let age: Int?
     public let sex: String?
     public let height: String?
     public let focus: String?
-    public let currentDate: String
-    public let timeZone: String
     public let location: String?
     public let workoutEquipment: [String]
     public let userFacts: [ChatUserFactsData.UserFact]
@@ -575,8 +593,6 @@ extension HealthVitalData {
       sex: String?,
       height: String?,
       focus: String?,
-      currentDate: String,
-      timeZone: String,
       location: String?,
       workoutEquipment: [String],
       userFacts: [ChatUserFactsData.UserFact]
@@ -585,8 +601,6 @@ extension HealthVitalData {
       self.sex = sex
       self.height = height
       self.focus = focus
-      self.currentDate = currentDate
-      self.timeZone = timeZone
       self.location = location
       self.workoutEquipment = workoutEquipment
       self.userFacts = userFacts
