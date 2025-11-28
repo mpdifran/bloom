@@ -20,12 +20,13 @@ struct AIDataSharingView: View {
     NavigationStack {
       BloomScrollView(showsChatBar: false) {
         explanationSection
+        turnOnAllButton
         healthDataSection
         otherDataSection
         linksSection
       }
       .groupedBackground()
-      .navigationTitle("Personal Data Controls")
+      .navigationTitle("Data Shared with AI")
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         if showDismiss {
@@ -33,7 +34,16 @@ struct AIDataSharingView: View {
             DismissButton()
           }
         }
+        ToolbarItem(placement: .primaryAction) {
+          Button {
+            openURL(.emailBloom(subject: "Bloom: AI Privacy Question"))
+          } label: {
+            Image(systemSymbol: .questionmark)
+          }
+          .buttonStyle(.plain)
+        }
       }
+      .animation(.default, value: settings.enabledCategories)
     }
   }
 }
@@ -51,32 +61,66 @@ private extension AIDataSharingView {
     }
   }
 
+  var applicableCategories: [AIHealthCategory] {
+    let healthCategories = AIHealthCategory.healthCategories.filter { category in
+      // Filter out menstrual health for non-female users
+      if category == .menstrualHealth && !shouldShowMenstrualHealth {
+        return false
+      }
+      return true
+    }
+    return healthCategories + AIHealthCategory.otherCategories
+  }
+
+  var allCategoriesEnabled: Bool {
+    let applicable = Set(applicableCategories)
+    return applicable.isSubset(of: settings.enabledCategories)
+  }
+
+  var turnOnAllButton: some View {
+    Button {
+      if allCategoriesEnabled {
+        // Turn off all
+        applicableCategories.forEach { category in
+          settings.enabledCategories.remove(category)
+        }
+      } else {
+        // Turn on all
+        applicableCategories.forEach { category in
+          settings.enabledCategories.insert(category)
+        }
+      }
+    } label: {
+      Text(allCategoriesEnabled ? "Turn Off All" : "Turn On All")
+        .horizontallyCentered()
+    }
+    .buttonStyle(.primaryAlternate)
+  }
+
   @ViewBuilder
   var explanationSection: some View {
-    VStack(alignment: .leading, spacing: 8) {
-      HStack {
-        Image(systemSymbol: .heartTextClipboardFill)
-          .foregroundStyle(.mutedRed, .fill.secondary)
-          .font(.largeTitle)
-        Text("Choose What You Want Bloom To Use")
-      }
-      .font(.title2)
-      .bold()
-      .fontDesign(.rounded)
+    VStack(alignment: .leading) {
+      DisplayAppIcon()
+        .frame(square: 100)
+        .horizontallyCentered()
+        .padding(.bottom)
 
-      Text("I only send the data you enable for features like Today Insights, Chat with Bud, and Biological Age, and only when needed.")
-        .font(.body)
+      Text("Choose What You Want Bloom To Use")
+        .bold()
+
+      Text("Only the data you enable is used for AI features like Today Insights, Chat with Bud, and Biological Age.")
         .foregroundStyle(.secondary)
-        .fixedSize(horizontal: false, vertical: true)
     }
+    .font(.title3)
+    .fontDesign(.rounded)
     .horizontalAlignment(.leading)
-    .cardContainer()
+    .padding(.bottom, 40)
   }
 
   @ViewBuilder
   var healthDataSection: some View {
     VStack {
-      SectionTitleView("Health Data")
+      SectionTitleView("Personal Data")
         .padding(.horizontal)
 
       SettingsSectionContainer {
@@ -146,9 +190,9 @@ private extension AIDataSharingView {
   var linksSection: some View {
     HStack {
       Button {
-        openURL(.emailBloom(subject: "Bloom: AI Privacy Question"))
+        openURL(.termsOfService)
       } label: {
-        Text("Questions?")
+        Text("Terms of Service")
           .horizontallyCentered()
       }
       .buttonStyle(.primaryAlternate)
