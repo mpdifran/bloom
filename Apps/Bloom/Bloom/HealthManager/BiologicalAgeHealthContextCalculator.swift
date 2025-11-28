@@ -12,6 +12,7 @@ import CoreHealth
 import CoreNetwork
 import BloomFoundation
 import SwiftData
+import BloomUI
 
 actor BiologicalAgeHealthContextCalculator {
 
@@ -23,16 +24,33 @@ actor BiologicalAgeHealthContextCalculator {
   }
   
   func collectBiologicalAgeData() async throws -> BiologicalAgeHealthData {
+    // Privacy check: If biological age is disabled, return minimal data
+    guard await AIFeatureSettings.shared.biologicalAgeEnabled else {
+      return BiologicalAgeHealthData(
+        sevenDayAverage: BiologicalAgeHealthData.SevenDayAverage(
+          cardiovascular: nil,
+          sleep: nil,
+          activity: nil,
+          mobility: nil,
+          nutrition: nil,
+          bodyComposition: nil,
+          recovery: nil
+        ),
+        biologicalSex: nil
+      )
+    }
+
     let dateRange = DateRange.trailingDaysFromNow(7)
 
-    async let cardiovascular = fetchCardiovascularHealth(dateRange: dateRange)
-    async let sleep = fetchSleepMetrics(dateRange: dateRange)
-    async let activity = fetchActivityMetrics(dateRange: dateRange)
-    async let mobility = fetchMobilityMetrics(dateRange: dateRange)
-    async let nutrition = fetchNutritionMetrics(dateRange: dateRange)
-    async let body = fetchBodyMetrics()
-    async let recovery = fetchRecoveryIndicators(dateRange: dateRange)
-    async let sex = fetchBiologicalSex()
+    // Check category consent before fetching each type of data
+    async let cardiovascular = await shouldFetch(category: .bodyMetrics) ? fetchCardiovascularHealth(dateRange: dateRange) : nil
+    async let sleep = await shouldFetch(category: .sleep) ? fetchSleepMetrics(dateRange: dateRange) : nil
+    async let activity = await shouldFetch(category: .physicalActivity) ? fetchActivityMetrics(dateRange: dateRange) : nil
+    async let mobility = await shouldFetch(category: .physicalActivity) ? fetchMobilityMetrics(dateRange: dateRange) : nil
+    async let nutrition = await shouldFetch(category: .nutrition) ? fetchNutritionMetrics(dateRange: dateRange) : nil
+    async let body = await shouldFetch(category: .bodyMetrics) ? fetchBodyMetrics() : nil
+    async let recovery = await shouldFetch(category: .physicalActivity) ? fetchRecoveryIndicators(dateRange: dateRange) : nil
+    async let sex = await shouldFetch(category: .demographics) ? fetchBiologicalSex() : nil
 
     return BiologicalAgeHealthData(
       sevenDayAverage: BiologicalAgeHealthData.SevenDayAverage(
@@ -46,6 +64,10 @@ actor BiologicalAgeHealthContextCalculator {
       ),
       biologicalSex: await sex
     )
+  }
+
+  private func shouldFetch(category: AIHealthCategory) async -> Bool {
+    await AIDataSharingSettings.shared.enabledCategories.contains(category)
   }
 
   func fetchCurrentAge() async -> Int? {

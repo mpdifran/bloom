@@ -66,8 +66,6 @@ struct SettingsView: View {
         healthPermissionsSection
         healthGoalsSection
         aiPrivacySection
-        habitsSection
-        remindersSection
         workoutEquipmentSection
         unitsSection
         subscriptionSection
@@ -187,11 +185,11 @@ private extension SettingsView {
 
         Divider()
 
-        SettingsCell("Health Data Shared with AI", iconType: .disclosure) {
+        SettingsCell("Data Shared with AI", iconType: .disclosure) {
           EmptyView()
         }
         .onTapGesture {
-          presentedSheet = AIDataSharingView().asAny
+          presentedSheet = AIDataSharingView(showDismiss: true).asAny
         }
       }
     }

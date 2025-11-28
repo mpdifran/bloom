@@ -13,6 +13,7 @@ import BloomFoundation
 import TelemetryDeck
 import SwiftData
 import CoreNetwork
+import BloomUI
 
 private extension String {
   static let lastBiologicalAgeRequestDate = "BiologicalAgeViewModel.lastBiologicalAgeRequestDate"
@@ -97,6 +98,9 @@ extension BiologicalAgeViewModel {
 
   private func calculateAndStoreBiologicalAge() async {
     guard EntitlementController.shared.hasBloomPro == true else { return }
+
+    // Privacy check: Don't calculate if biological age feature is disabled
+    guard await AIFeatureSettings.shared.biologicalAgeEnabled else { return }
 
     isCalculatingAge = true
     lastCalculationError = nil
