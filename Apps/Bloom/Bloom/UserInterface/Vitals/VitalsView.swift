@@ -76,6 +76,15 @@ struct VitalsView: View {
       .animation(.default, value: viewModel.vitals)
       .toolbar {
         SettingsProfileViewToolbarButton()
+        ToolbarItem(placement: .cancellationAction) {
+          Button {
+            presentedSheet = YouSettingsView().asAny
+          } label: {
+            Image(systemSymbol: .sliderHorizontal3)
+              .bold()
+          }
+          .buttonStyle(.plain)
+        }
       }
       .onChange(of: tabController.pendingVitalNavigation) { oldValue, newValue in
         if let vitalKind = newValue {

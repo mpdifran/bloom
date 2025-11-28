@@ -32,7 +32,7 @@ struct SettingsView: View {
   @AppStorage("TodayView.showNutritionTodayWidget") private var showNutritionTodayWidget: Bool = true
   @AppStorage(.FeatureFlag.developerMode) private var showDeveloperMode: Bool = false
 
-  @AIFeatureSettingsStorage("AIFeatures.settings") private var aiFeatureSettings = AIFeatureSettings()
+  @ObservedObject private var aiFeatureSettings = AIFeatureSettings.shared
 
   @Environment(\.openURL) private var openURL
   @Environment(\.modelContext) private var modelContext
@@ -174,20 +174,14 @@ private extension SettingsView {
 
       SettingsSectionContainer {
         SettingsCell("AI Chat (Bud)") {
-          Toggle("", isOn: Binding(
-            get: { aiFeatureSettings.chatEnabled },
-            set: { aiFeatureSettings.chatEnabled = $0 }
-          ))
+          Toggle("", isOn: $aiFeatureSettings.chatEnabled)
           .tint(.mutedGreen)
         }
 
         Divider()
 
         SettingsCell("Biological Age Calculations") {
-          Toggle("", isOn: Binding(
-            get: { aiFeatureSettings.biologicalAgeEnabled },
-            set: { aiFeatureSettings.biologicalAgeEnabled = $0 }
-          ))
+          Toggle("", isOn: $aiFeatureSettings.biologicalAgeEnabled)
           .tint(.mutedGreen)
         }
 

@@ -108,21 +108,11 @@ final class TodayInsightsManager {
   }
 
   private func isInsightsEnabled() -> Bool {
-    guard let data = UserDefaults.standard.data(forKey: "AIFeatures.settings"),
-          let settings = try? JSONDecoder().decode(AIFeatureSettings.self, from: data) else {
-      // Default to false if settings don't exist
-      return false
-    }
-    return settings.todayInsightsEnabled
+    AIFeatureSettings.shared.todayInsightsEnabled
   }
 
   private func getEnabledCategories() -> Set<AIHealthCategory> {
-    guard let data = UserDefaults.standard.data(forKey: "AIDataSharing.settings"),
-          let settings = try? JSONDecoder().decode(AIDataSharingSettings.self, from: data) else {
-      // Default to empty set (no data shared)
-      return []
-    }
-    return settings.enabledCategories
+    AIDataSharingSettings.shared.enabledCategories
   }
 
   func refreshContentIfNeeded() async {

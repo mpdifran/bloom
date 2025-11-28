@@ -1,26 +1,42 @@
 import Foundation
+import Combine
 
 /// Settings controlling which AI-powered features are enabled
-public struct AIFeatureSettings: Codable, Sendable {
-    /// Whether Today Insights feature is enabled
-    public var todayInsightsEnabled: Bool
+@MainActor
+public final class AIFeatureSettings: ObservableObject {
+  public static let shared = AIFeatureSettings()
 
-    /// Whether AI Chat (Bud) is enabled
-    public var chatEnabled: Bool
-
-    /// Whether Biological Age calculations are enabled
-    public var biologicalAgeEnabled: Bool
-
-    public init(
-        todayInsightsEnabled: Bool = false,
-        chatEnabled: Bool = false,
-        biologicalAgeEnabled: Bool = false
-    ) {
-        self.todayInsightsEnabled = todayInsightsEnabled
-        self.chatEnabled = chatEnabled
-        self.biologicalAgeEnabled = biologicalAgeEnabled
+  /// Whether Today Insights feature is enabled
+  @Published public var todayInsightsEnabled: Bool {
+    didSet {
+      UserDefaults.standard.set(todayInsightsEnabled, forKey: Keys.todayInsights)
     }
+  }
 
-    /// Default settings with all features disabled (opt-in model)
-    public static let `default` = AIFeatureSettings()
+  /// Whether AI Chat (Bud) is enabled
+  @Published public var chatEnabled: Bool {
+    didSet {
+      UserDefaults.standard.set(chatEnabled, forKey: Keys.chat)
+    }
+  }
+
+  /// Whether Biological Age calculations are enabled
+  @Published public var biologicalAgeEnabled: Bool {
+    didSet {
+      UserDefaults.standard.set(biologicalAgeEnabled, forKey: Keys.biologicalAge)
+    }
+  }
+
+  private init() {
+    // Load from UserDefaults (all default to false - opt-in model)
+    todayInsightsEnabled = UserDefaults.standard.bool(forKey: Keys.todayInsights)
+    chatEnabled = UserDefaults.standard.bool(forKey: Keys.chat)
+    biologicalAgeEnabled = UserDefaults.standard.bool(forKey: Keys.biologicalAge)
+  }
+
+  private enum Keys {
+    static let todayInsights = "AIFeatures.todayInsightsEnabled"
+    static let chat = "AIFeatures.chatEnabled"
+    static let biologicalAge = "AIFeatures.biologicalAgeEnabled"
+  }
 }

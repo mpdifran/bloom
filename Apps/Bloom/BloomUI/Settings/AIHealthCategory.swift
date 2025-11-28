@@ -1,5 +1,6 @@
-import Foundation
+import SwiftUI
 import SFSafeSymbols
+import BloomFoundation
 
 /// Categories of health data that can be shared with AI features
 public enum AIHealthCategory: String, Codable, CaseIterable, Sendable {
@@ -27,7 +28,7 @@ public enum AIHealthCategory: String, Codable, CaseIterable, Sendable {
     case .bodyMetrics:
       return "Body Metrics"
     case .mentalWellness:
-      return "Mental Wellness"
+      return "Stress and Mindfulness"
     case .sleep:
       return "Sleep"
     case .nutrition:
@@ -79,15 +80,44 @@ public enum AIHealthCategory: String, Codable, CaseIterable, Sendable {
     }
   }
 
+  public var color: Color {
+    switch self {
+    case .physicalActivity:
+        .mutedGreen
+    case .bodyMetrics:
+        .mutedYellow
+    case .mentalWellness:
+        .mutedPurple
+    case .sleep:
+        .remSleep
+    case .nutrition:
+        .mutedGreen
+    case .digestiveHealth:
+        .brown
+    case .menstrualHealth:
+        .mutedPink
+    case .demographics:
+        .mutedIndigo
+    case .goals:
+        .mutedOrange
+    case .location:
+        .mutedBlue
+    case .weather:
+        .mutedLightBlue
+    case .calendarEvents:
+        .mutedRed
+    }
+  }
+
   /// Description of what data this category includes
   public var description: String {
     switch self {
     case .physicalActivity:
       return "Steps, workouts, training load, and exercise data."
     case .bodyMetrics:
-      return "Body composition, weight, and heart metrics."
+      return "Body composition, weight, resting heart rate, and HRV."
     case .mentalWellness:
-      return "Stress levels and mindfulness data."
+      return "Stress levels and mindfulness activity."
     case .sleep:
       return "Sleep duration, quality, and stages."
     case .nutrition:
@@ -103,7 +133,7 @@ public enum AIHealthCategory: String, Codable, CaseIterable, Sendable {
     case .location:
       return "Your coarse location (city, state, country)."
     case .weather:
-      return "Local weather conditions."
+      return "Weather conditions for your location."
     case .calendarEvents:
       return "Events from your selected calendars."
     }

@@ -4,10 +4,43 @@ import HealthKit
 import CoreHealth
 
 struct AIDataSharingView: View {
-  @AIDataSharingSettingsStorage("AIDataSharing.settings") private var settings = AIDataSharingSettings()
+
+  let showDismiss: Bool
+
+  init(showDismiss: Bool = false) {
+    self.showDismiss = showDismiss
+  }
+
+  @ObservedObject private var settings = AIDataSharingSettings.shared
   @ObservedObject private var healthManager = HealthManager.shared
 
-  private var shouldShowMenstrualHealth: Bool {
+  @Environment(\.openURL) private var openURL
+
+  var body: some View {
+    NavigationStack {
+      BloomScrollView(showsChatBar: false) {
+        explanationSection
+        healthDataSection
+        otherDataSection
+        linksSection
+      }
+      .groupedBackground()
+      .navigationTitle("Personal Data Controls")
+      .navigationBarTitleDisplayMode(.inline)
+      .toolbar {
+        if showDismiss {
+          ToolbarItem(placement: .cancellationAction) {
+            DismissButton()
+          }
+        }
+      }
+    }
+  }
+}
+
+private extension AIDataSharingView {
+
+  var shouldShowMenstrualHealth: Bool {
     switch healthManager.sex() {
     case .female, .other:
       true
@@ -18,33 +51,20 @@ struct AIDataSharingView: View {
     }
   }
 
-  var body: some View {
-    NavigationStack {
-      BloomScrollView(showsChatBar: false) {
-          explanationSection
-          healthDataSection
-          otherDataSection
-      }
-      .groupedBackground()
-      .navigationTitle("Personal Data Controls")
-      .navigationBarTitleDisplayMode(.inline)
-      .toolbar {
-        ToolbarItem(placement: .cancellationAction) {
-          DismissButton()
-        }
-      }
-    }
-  }
-
   @ViewBuilder
-  private var explanationSection: some View {
+  var explanationSection: some View {
     VStack(alignment: .leading, spacing: 8) {
-      Text("Control What's Shared")
-        .font(.title2)
-        .bold()
-        .fontDesign(.rounded)
+      HStack {
+        Image(systemSymbol: .heartTextClipboardFill)
+          .foregroundStyle(.mutedRed, .fill.secondary)
+          .font(.largeTitle)
+        Text("Choose What You Want Bloom To Use")
+      }
+      .font(.title2)
+      .bold()
+      .fontDesign(.rounded)
 
-      Text("Control what health data is shared with AI-powered features like Today Insights, Chat with Bud, and Biological Age calculations.")
+      Text("I only send the data you enable for features like Today Insights, Chat with Bud, and Biological Age, and only when needed.")
         .font(.body)
         .foregroundStyle(.secondary)
         .fixedSize(horizontal: false, vertical: true)
@@ -54,7 +74,7 @@ struct AIDataSharingView: View {
   }
 
   @ViewBuilder
-  private var healthDataSection: some View {
+  var healthDataSection: some View {
     VStack {
       SectionTitleView("Health Data")
         .padding(.horizontal)
@@ -94,7 +114,7 @@ struct AIDataSharingView: View {
   }
 
   @ViewBuilder
-  private var otherDataSection: some View {
+  var otherDataSection: some View {
     VStack {
       SectionTitleView("Other Data")
         .padding(.horizontal)
@@ -122,6 +142,28 @@ struct AIDataSharingView: View {
       }
     }
   }
+
+  var linksSection: some View {
+    HStack {
+      Button {
+        openURL(.emailBloom(subject: "Bloom: AI Privacy Question"))
+      } label: {
+        Text("Questions?")
+          .horizontallyCentered()
+      }
+      .buttonStyle(.primaryAlternate)
+
+      Button {
+        openURL(.privacyPolicy)
+      } label: {
+        Text("Privacy Policy")
+          .horizontallyCentered()
+      }
+      .buttonStyle(.primary)
+    }
+    .padding(.top)
+    .padding(.top)
+  }
 }
 
 private struct CategoryToggleCell: View {
@@ -132,10 +174,10 @@ private struct CategoryToggleCell: View {
     Toggle(isOn: $isEnabled) {
       HStack {
         RoundedRectangle(cornerRadius: 17)
-          .fill(.tint)
+          .fill(category.color)
           .frame(square: 45)
           .overlay {
-            Image(systemName: category.icon)
+            Image(systemSymbol: category.icon)
               .font(.title2)
               .foregroundStyle(.white)
           }

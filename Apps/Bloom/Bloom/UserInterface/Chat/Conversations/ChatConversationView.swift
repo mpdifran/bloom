@@ -59,6 +59,17 @@ struct ChatConversationView: View {
       }
     }
     .navigationTitle("Chat with Bud")
+    .toolbar {
+      ToolbarItem(placement: .primaryAction) {
+        Button {
+          presentedSheet = ChatSettingsView().asAny
+        } label: {
+          Image(systemSymbol: .sliderHorizontal3)
+            .bold()
+        }
+        .buttonStyle(.plain)
+      }
+    }
     .alert(error: $error)
     .sheet($presentedSheet)
     .animation(.default, value: pinnedConversations)

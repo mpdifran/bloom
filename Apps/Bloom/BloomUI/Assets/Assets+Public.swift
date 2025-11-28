@@ -59,6 +59,22 @@ public extension UIImage {
   static var budHealthApp: UIImage { UIImage(resource: .budHealthApp) }
 }
 
+public extension ShapeStyle where Self == Color {
+  // Sleep
+  static var awakeSleep: Self { Color("AwakeSleep", bundle: BundleToken.bundle) }
+  static var coreSleep: Self  { Color("CoreSleep", bundle: BundleToken.bundle) }
+  static var deepSleep: Self  { Color("DeepSleep", bundle: BundleToken.bundle) }
+  static var remSleep: Self   { Color("REMSleep", bundle: BundleToken.bundle) }
+}
+
+public extension Color {
+  // Sleep
+  static let awakeSleep = Color("AwakeSleep", bundle: BundleToken.bundle)
+  static let coreSleep  = Color("CoreSleep", bundle: BundleToken.bundle)
+  static let deepSleep  = Color("DeepSleep", bundle: BundleToken.bundle)
+  static let remSleep   = Color("REMSleep", bundle: BundleToken.bundle)
+}
+
 private class BundleToken {
   static let bundle: Bundle = {
     #if SWIFT_PACKAGE

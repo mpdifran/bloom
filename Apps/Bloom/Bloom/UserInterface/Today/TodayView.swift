@@ -117,7 +117,7 @@ struct TodayView: View {
       .toolbar {
         SettingsProfileViewToolbarButton()
 
-        ToolbarItem(placement: .topBarLeading) {
+        ToolbarItem(placement: .cancellationAction) {
           Button {
             presentedSheet = TodaySettingsView().asAny
           } label: {

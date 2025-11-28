@@ -207,7 +207,7 @@ extension ChatController {
       try await saveMessage(userMessage)
     }
 
-    let enabledCategories = getEnabledCategories()
+    let enabledCategories = await getEnabledCategories()
     let demographics = await ChatVitalConverter.shared.generateDemographics(enabledCategories: enabledCategories)
     let stringData = try encoder.encodeToString(demographics) ?? ""
 
@@ -285,7 +285,7 @@ extension ChatController {
       try await saveMessage(assistantMessage)
     }
 
-    let enabledCategories = getEnabledCategories()
+    let enabledCategories = await getEnabledCategories()
     let demographics = await ChatVitalConverter.shared.generateDemographics(enabledCategories: enabledCategories)
     let stringData = try encoder.encodeToString(demographics) ?? ""
 
@@ -961,12 +961,7 @@ private extension ChatController {
 
   // MARK: - Privacy Controls
 
-  func getEnabledCategories() -> Set<AIHealthCategory> {
-    guard let data = UserDefaults.standard.data(forKey: "AIDataSharing.settings"),
-          let settings = try? JSONDecoder().decode(AIDataSharingSettings.self, from: data) else {
-      // Default to no data shared (privacy-first)
-      return []
-    }
-    return settings.enabledCategories
+  func getEnabledCategories() async -> Set<AIHealthCategory> {
+    await AIDataSharingSettings.shared.enabledCategories
   }
 }

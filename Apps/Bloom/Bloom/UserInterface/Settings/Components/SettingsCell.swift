@@ -46,6 +46,7 @@ struct SettingsCell<Content>: View where Content: View {
           Text(subtitle)
             .font(.caption)
             .foregroundStyle(.secondary)
+            .lineLimit(2)
         }
       }
       .layoutPriority(10)
@@ -60,6 +61,7 @@ struct SettingsCell<Content>: View where Content: View {
       }
       .foregroundStyle(.secondary)
     }
+    .padding(.vertical, 16)
     .frame(minHeight: 60)
     .selectable()
   }
@@ -135,6 +137,12 @@ private extension SettingsCell {
 
             SettingsCell("User ID") {
               Text("21345-3terdgf-xbbfxg-hrae-g4a-t5s4ysrt-htxr-g")
+            }
+          }
+
+          SettingsSectionContainer {
+            SettingsCell("Biological Age", subtitle: "Estimate your biological age based on your data") {
+              Toggle("", isOn: .constant(false))
             }
           }
         }

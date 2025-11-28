@@ -49,12 +49,6 @@ public extension ShapeStyle where Self == Color {
   static var vitaminD: Self   { Color("Vitamin D", bundle: BundleToken.bundle) }
   static var vitaminE: Self   { Color("Vitamin E", bundle: BundleToken.bundle) }
 
-  // Sleep
-  static var awakeSleep: Self { Color("AwakeSleep", bundle: BundleToken.bundle) }
-  static var coreSleep: Self  { Color("CoreSleep", bundle: BundleToken.bundle) }
-  static var deepSleep: Self  { Color("DeepSleep", bundle: BundleToken.bundle) }
-  static var remSleep: Self   { Color("REMSleep", bundle: BundleToken.bundle) }
-
   // Vitals Severity
   static var vitalGood: Self    { Color("VitalGood", bundle: BundleToken.bundle) }
   static var vitalGreat: Self   { Color("VitalGreat", bundle: BundleToken.bundle) }
@@ -102,12 +96,6 @@ public extension Color {
   static let vitaminC   = Color("Vitamin C", bundle: BundleToken.bundle)
   static let vitaminD   = Color("Vitamin D", bundle: BundleToken.bundle)
   static let vitaminE   = Color("Vitamin E", bundle: BundleToken.bundle)
-
-  // Sleep
-  static let awakeSleep = Color("AwakeSleep", bundle: BundleToken.bundle)
-  static let coreSleep  = Color("CoreSleep", bundle: BundleToken.bundle)
-  static let deepSleep  = Color("DeepSleep", bundle: BundleToken.bundle)
-  static let remSleep   = Color("REMSleep", bundle: BundleToken.bundle)
   
   // Vitals Severity
   static let vitalGood    = Color("VitalGood", bundle: BundleToken.bundle)
