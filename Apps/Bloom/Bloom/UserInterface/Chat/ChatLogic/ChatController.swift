@@ -533,10 +533,25 @@ private extension ChatController {
                   await self.record(queryAreas: queryNames, conversationID: conversationID)
                 }
 
+                // Get enabled categories once before the loop
+                let enabledCategories = await getEnabledCategories()
+
                 let results: [String] = await withTaskGroup(of: String.self) { group in
                   for query in queries {
                     group.addTask {
-                      await queryPerformer.perform(query: query)
+                      // Check if this data type is allowed
+                      if let requiredCategory = QueryDataTypeMapper.category(for: query.dataType) {
+                        if enabledCategories.contains(requiredCategory) {
+                          // Category is enabled - proceed with query
+                          return await queryPerformer.perform(query: query)
+                        } else {
+                          // Category is restricted - return error message
+                          return QueryDataTypeMapper.restrictionMessage(for: requiredCategory)
+                        }
+                      } else {
+                        // No category restriction - proceed (safe fallback)
+                        return await queryPerformer.perform(query: query)
+                      }
                     }
                   }
                   var allResults = [String]()
