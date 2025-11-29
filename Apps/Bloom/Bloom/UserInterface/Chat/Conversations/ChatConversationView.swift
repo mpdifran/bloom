@@ -35,9 +35,13 @@ struct ChatConversationView: View {
 
   @FocusState private var isFocused
 
+  @ObservedObject private var aiFeatureSettings = AIFeatureSettings.shared
+
   var body: some View {
     BloomScrollView {
-      if pinnedConversations.isEmpty && unpinnedConversations.isEmpty {
+      if !aiFeatureSettings.chatEnabled {
+        featureDisabledView
+      } else if pinnedConversations.isEmpty && unpinnedConversations.isEmpty {
         noContentView
       } else {
         if pinnedConversations.isNotEmpty {
@@ -74,13 +78,16 @@ struct ChatConversationView: View {
     .sheet($presentedSheet)
     .animation(.default, value: pinnedConversations)
     .animation(.default, value: unpinnedConversations)
+    .animation(.default, value: aiFeatureSettings.chatEnabled)
     .safeAreaInset(edge: .bottom) {
-      NewConversationChatMessageBar(
-        tabController: tabController,
-        themeController: themeController,
-        onSelectConversation: onSelectConversation
-      )
-      .focused($isFocused)
+      if aiFeatureSettings.chatEnabled {
+        NewConversationChatMessageBar(
+          tabController: tabController,
+          themeController: themeController,
+          onSelectConversation: onSelectConversation
+        )
+        .focused($isFocused)
+      }
     }
     .onAppear {
       guard pinnedConversations.isEmpty && unpinnedConversations.isEmpty else {
@@ -93,6 +100,34 @@ struct ChatConversationView: View {
 }
 
 private extension ChatConversationView {
+
+  var featureDisabledView: some View {
+    VStack {
+      Spacer()
+      BudImage(.budThinking, dimension: 200)
+
+      Text("Bud can’t help right now")
+        .font(.title)
+        .bold()
+        .fontDesign(.rounded)
+      Text("To chat with Bud about your health, you’ll need to turn Chat back on. You’re always in control of what data gets used.")
+        .font(.body)
+        .foregroundStyle(.secondary)
+
+      VStack {
+        Toggle(isOn: $aiFeatureSettings.chatEnabled) {
+          Text("Chat with Bud")
+            .font(.body)
+            .bold()
+        }
+      }
+      .cardContainer()
+
+      Spacer()
+    }
+    .multilineTextAlignment(.center)
+    .horizontallyCentered()
+  }
 
   var noContentView: some View {
     ContentUnavailableView {
