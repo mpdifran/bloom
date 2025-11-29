@@ -48,4 +48,8 @@ let allMigrations: [Migration] = [
   FoodItemRecord.AddLogCount(),
   FoodItemRecord.AddStateIndex(),
   FoodItemRecord.AddSearchTextColumn(),
+  UserConsentRecord.Create(),
+  UserConsentRecord.AddUserIDIndex(),
+  UserConsentRecord.MigrateExistingConsent(),
+  User.RemoveOldConsentFields(),
 ]

@@ -8,6 +8,7 @@
 import Foundation
 import Vapor
 import SignInWithApple
+import Fluent
 import BloomModel
 
 struct UserController { }
@@ -26,6 +27,7 @@ extension UserController: RouteCollection {
           $0.post("register-device-token", use: registerDeviceToken)
           $0.post("morning-notification-time", use: updateMorningNotificationTime)
           $0.post("test-push-notification", use: testPushNotification)
+          $0.get("consent", use: getConsent)
           $0.post("consent", use: updateConsent)
           $0.get("logout", use: logout)
           $0.get("delete-account", use: deleteAccount)
@@ -181,43 +183,106 @@ private extension UserController {
   }
 
   @Sendable
+  func getConsent(_ request: Request) async throws -> ConsentResponse {
+    let user = try request.auth.require(User.self)
+
+    // Get the most recent consent record
+    let latestRecord = try await user.$consentRecords.query(on: request.db)
+      .sort(\.$createdAt, .descending)
+      .first()
+
+    // If no record exists, return all nil values
+    guard let record = latestRecord else {
+      return ConsentResponse()
+    }
+
+    // Return the latest consent state
+    return ConsentResponse(
+      createdAt: record.createdAt ?? Date(),
+      healthDataConsentScreenVersion: record.healthDataConsentScreenVersion,
+      externalHealthDataScreenVersion: record.externalHealthDataScreenVersion,
+      healthDataConsent: record.healthDataConsent,
+      chatWithBudConsent: record.chatWithBudConsent,
+      todayInsightsConsent: record.todayInsightsConsent,
+      biologicalAgeConsent: record.biologicalAgeConsent,
+      physicalActivityConsent: record.physicalActivityConsent,
+      bodyMetricsConsent: record.bodyMetricsConsent,
+      mentalWellnessConsent: record.mentalWellnessConsent,
+      sleepConsent: record.sleepConsent,
+      nutritionConsent: record.nutritionConsent,
+      digestiveHealthConsent: record.digestiveHealthConsent,
+      menstrualHealthConsent: record.menstrualHealthConsent,
+      demographicsConsent: record.demographicsConsent,
+      goalsConsent: record.goalsConsent,
+      locationConsent: record.locationConsent,
+      weatherConsent: record.weatherConsent,
+      calendarEventsConsent: record.calendarEventsConsent
+    )
+  }
+
+  @Sendable
   func updateConsent(_ request: Request) async throws -> ConsentResponse {
     let user = try request.auth.require(User.self)
+    let userID = try user.requireID()
     let body = try request.content.decode(UpdateConsentRequest.self)
 
-    var hasChanges = false
+    // Get the most recent consent record for copy-forward logic
+    let previousRecord = try await user.$consentRecords.query(on: request.db)
+      .sort(\.$createdAt, .descending)
+      .first()
 
-    // Update health data consent if provided
-    if let healthDataConsent = body.healthDataConsent {
-      let newValue: Date? = healthDataConsent ? Date() : nil
-      let currentHasConsent = user.healthDataConsentGrantedAt != nil
-
-      if healthDataConsent != currentHasConsent {
-        user.healthDataConsentGrantedAt = newValue
-        hasChanges = true
-      }
+    // Helper to get value from request or previous record
+    func getValue<T>(_ requestValue: T?, _ previousValue: T?) -> T? {
+      requestValue ?? previousValue
     }
 
-    // Update external processing consent if provided
-    if let externalProcessingConsent = body.externalProcessingConsent {
-      let newValue: Date? = externalProcessingConsent ? Date() : nil
-      let currentHasConsent = user.externalProcessingConsentGrantedAt != nil
+    // Create new consent record with copy-forward logic
+    let newRecord = UserConsentRecord(
+      userID: userID,
+      healthDataConsentScreenVersion: getValue(body.healthDataConsentScreenVersion, previousRecord?.healthDataConsentScreenVersion),
+      externalHealthDataScreenVersion: getValue(body.externalHealthDataScreenVersion, previousRecord?.externalHealthDataScreenVersion),
+      healthDataConsent: getValue(body.healthDataConsent, previousRecord?.healthDataConsent),
+      chatWithBudConsent: getValue(body.chatWithBudConsent, previousRecord?.chatWithBudConsent),
+      todayInsightsConsent: getValue(body.todayInsightsConsent, previousRecord?.todayInsightsConsent),
+      biologicalAgeConsent: getValue(body.biologicalAgeConsent, previousRecord?.biologicalAgeConsent),
+      physicalActivityConsent: getValue(body.physicalActivityConsent, previousRecord?.physicalActivityConsent),
+      bodyMetricsConsent: getValue(body.bodyMetricsConsent, previousRecord?.bodyMetricsConsent),
+      mentalWellnessConsent: getValue(body.mentalWellnessConsent, previousRecord?.mentalWellnessConsent),
+      sleepConsent: getValue(body.sleepConsent, previousRecord?.sleepConsent),
+      nutritionConsent: getValue(body.nutritionConsent, previousRecord?.nutritionConsent),
+      digestiveHealthConsent: getValue(body.digestiveHealthConsent, previousRecord?.digestiveHealthConsent),
+      menstrualHealthConsent: getValue(body.menstrualHealthConsent, previousRecord?.menstrualHealthConsent),
+      demographicsConsent: getValue(body.demographicsConsent, previousRecord?.demographicsConsent),
+      goalsConsent: getValue(body.goalsConsent, previousRecord?.goalsConsent),
+      locationConsent: getValue(body.locationConsent, previousRecord?.locationConsent),
+      weatherConsent: getValue(body.weatherConsent, previousRecord?.weatherConsent),
+      calendarEventsConsent: getValue(body.calendarEventsConsent, previousRecord?.calendarEventsConsent)
+    )
 
-      if externalProcessingConsent != currentHasConsent {
-        user.externalProcessingConsentGrantedAt = newValue
-        hasChanges = true
-      }
-    }
+    // Save the new record
+    try await newRecord.save(on: request.db)
 
-    // Only save if there were changes
-    if hasChanges {
-      try await user.save(on: request.db)
-    }
-
-    // Return current consent state
+    // Return the new consent state
     return ConsentResponse(
-      hasHealthDataConsent: user.healthDataConsentGrantedAt != nil,
-      hasExternalProcessingConsent: user.externalProcessingConsentGrantedAt != nil
+      createdAt: newRecord.createdAt ?? Date(),
+      healthDataConsentScreenVersion: newRecord.healthDataConsentScreenVersion,
+      externalHealthDataScreenVersion: newRecord.externalHealthDataScreenVersion,
+      healthDataConsent: newRecord.healthDataConsent,
+      chatWithBudConsent: newRecord.chatWithBudConsent,
+      todayInsightsConsent: newRecord.todayInsightsConsent,
+      biologicalAgeConsent: newRecord.biologicalAgeConsent,
+      physicalActivityConsent: newRecord.physicalActivityConsent,
+      bodyMetricsConsent: newRecord.bodyMetricsConsent,
+      mentalWellnessConsent: newRecord.mentalWellnessConsent,
+      sleepConsent: newRecord.sleepConsent,
+      nutritionConsent: newRecord.nutritionConsent,
+      digestiveHealthConsent: newRecord.digestiveHealthConsent,
+      menstrualHealthConsent: newRecord.menstrualHealthConsent,
+      demographicsConsent: newRecord.demographicsConsent,
+      goalsConsent: newRecord.goalsConsent,
+      locationConsent: newRecord.locationConsent,
+      weatherConsent: newRecord.weatherConsent,
+      calendarEventsConsent: newRecord.calendarEventsConsent
     )
   }
 
@@ -238,3 +303,4 @@ private extension UserController {
     return Response(status: .ok)
   }
 }
+
