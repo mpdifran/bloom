@@ -171,21 +171,32 @@ private extension SettingsView {
         .padding(.horizontal)
 
       SettingsSectionContainer {
-        SettingsCell("AI Chat (Bud)") {
+        SettingsCell("Today Insights") {
+          Toggle("", isOn: $aiFeatureSettings.todayInsightsEnabled)
+            .tint(.mutedOrange)
+        }
+
+        Divider()
+
+        SettingsCell("Chat with Bud") {
           Toggle("", isOn: $aiFeatureSettings.chatEnabled)
-          .tint(.mutedGreen)
+          .tint(.mutedLightBlue)
         }
 
         Divider()
 
         SettingsCell("Biological Age Calculations") {
           Toggle("", isOn: $aiFeatureSettings.biologicalAgeEnabled)
-          .tint(.mutedGreen)
+            .tint(.mutedGreen)
         }
+      }
 
-        Divider()
-
-        SettingsCell("Data Shared with AI", iconType: .disclosure) {
+      SettingsSectionContainer {
+        SettingsCell(
+          "Data Shared with AI",
+          subtitle: "Personalized insights from your data",
+          iconType: .disclosure
+        ) {
           EmptyView()
         }
         .onTapGesture {

@@ -20,7 +20,7 @@ struct ChatSettingsView: View {
       BloomScrollView(showsChatBar: false) {
         featureSection
       }
-      .navigationTitle("Chat Settings")
+      .navigationTitle("Preferences")
       .navigationBarTitleDisplayMode(.inline)
       .navigationDestination($navigationPushView)
       .presentationDragIndicator(.visible)

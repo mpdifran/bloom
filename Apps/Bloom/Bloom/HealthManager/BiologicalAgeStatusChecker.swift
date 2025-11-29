@@ -9,6 +9,7 @@ import Foundation
 import CoreNetwork
 import TelemetryDeck
 import BloomModel
+import BloomUI
 
 @MainActor
 final class BiologicalAgeStatusChecker {
@@ -18,6 +19,11 @@ final class BiologicalAgeStatusChecker {
 
   /// Checks if there's a pending biological age calculation
   func checkPendingCalculation() async {
+    // Privacy check: Don't check status if biological age feature is disabled
+    guard await AIFeatureSettings.shared.biologicalAgeEnabled else {
+      return
+    }
+
     // Only check status if we have a pending calculation
     guard BiologicalAgeViewModel.shared.hasPendingCalculation else {
       return

@@ -32,7 +32,7 @@ struct TodaySettingsView: View {
         sectionsConfigurationSection
       }
       .tint(selectedTimeMode.tintColor)
-      .navigationTitle("Today Settings")
+      .navigationTitle("Preferences")
       .navigationBarTitleDisplayMode(.inline)
       .sensoryFeedback(.selection, trigger: selectedTimeMode)
       .navigationDestination($navigationPushView)

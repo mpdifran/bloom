@@ -9,6 +9,7 @@ import SwiftUI
 import AppUI
 import DataContainer
 import CoreHealth
+import BloomUI
 
 struct VitalsView: View {
 
@@ -22,13 +23,19 @@ struct VitalsView: View {
 
   @Environment(TabController.self) private var tabController: TabController
 
+  @ObservedObject private var aiFeatureSettings = AIFeatureSettings.shared
+
   var body: some View {
     NavigationStack(path: $path) {
       BloomScrollView {
-        SectionTitleView("Biological Age")
-          .padding(.horizontal)
+        // Only show biological age section if user doesn't have Pro (to show upsell)
+        // or if they have Pro and the feature is enabled
+        if entitlementController.hasBloomPro != true || aiFeatureSettings.biologicalAgeEnabled {
+          SectionTitleView("Biological Age")
+            .padding(.horizontal)
 
-        bioAgeMeter
+          bioAgeMeter
+        }
 
         if viewModel.vitals.isNotEmpty {
           SectionTitleView("Vitals")
@@ -74,6 +81,7 @@ struct VitalsView: View {
       .navigationDestination($presentedNavigationDestination)
       .sheet($presentedSheet)
       .animation(.default, value: viewModel.vitals)
+      .animation(.default, value: aiFeatureSettings.biologicalAgeEnabled)
       .toolbar {
         SettingsProfileViewToolbarButton()
         ToolbarItem(placement: .cancellationAction) {
@@ -104,35 +112,38 @@ private extension VitalsView {
   @ViewBuilder
   var bioAgeMeter: some View {
     if entitlementController.hasBloomPro == true {
-      VStack(spacing: 0) {
-        BiologicalAgeMeter(
-          biologicalAge: biologicalAgeViewModel.currentBiologicalAge
-        )
-        .frame(square: 200)
+      // Only show biological age meter if the feature is enabled
+      if aiFeatureSettings.biologicalAgeEnabled {
+        VStack(spacing: 0) {
+          BiologicalAgeMeter(
+            biologicalAge: biologicalAgeViewModel.currentBiologicalAge
+          )
+          .frame(square: 200)
 
-        Divider()
+          Divider()
 
-        Button {
-          presentedNavigationDestination = BiologicalAgeDetailsView().asAny
-        } label: {
-          HStack {
-            Text("View Details")
-              .bold()
-              .fontDesign(.rounded)
+          Button {
+            presentedNavigationDestination = BiologicalAgeDetailsView().asAny
+          } label: {
+            HStack {
+              Text("View Details")
+                .bold()
+                .fontDesign(.rounded)
 
-            Spacer()
+              Spacer()
 
-            DisclosureIndicator()
+              DisclosureIndicator()
+            }
+            .frame(height: 50)
+            .selectable()
           }
-          .frame(height: 50)
-          .selectable()
+          .buttonStyle(.plain)
         }
-        .buttonStyle(.plain)
+        .horizontallyCentered()
+        .padding(.horizontal)
+        .padding(.top)
+        .cardContainer(includePadding: false)
       }
-      .horizontallyCentered()
-      .padding(.horizontal)
-      .padding(.top)
-      .cardContainer(includePadding: false)
     } else {
       BioAgeMeterGetBloomPlusCell()
     }

@@ -20,7 +20,7 @@ struct YouSettingsView: View {
       BloomScrollView(showsChatBar: false) {
         featureSection
       }
-      .navigationTitle("You Settings")
+      .navigationTitle("Preferences")
       .navigationBarTitleDisplayMode(.inline)
       .navigationDestination($navigationPushView)
       .presentationDragIndicator(.visible)
