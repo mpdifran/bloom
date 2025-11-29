@@ -218,7 +218,19 @@ public actor ConversationModelActor {
     // Capture the constant for use in predicates
     let legacyID = String.legacyConversationID
 
-    // Fetch or create the legacy conversation
+    // First, check if there are any messages that need fixing (orphaned messages only)
+    let allMessagesPredicate = #Predicate<ChatMessage> { message in
+      message.conversation == nil
+    }
+    let allMessagesDescriptor = FetchDescriptor<ChatMessage>(predicate: allMessagesPredicate)
+    let messagesToFix = try modelContext.fetch(allMessagesDescriptor)
+
+    // Return early if there are no messages to fix
+    guard !messagesToFix.isEmpty else {
+      return
+    }
+
+    // Fetch or create the legacy conversation (only if needed)
     let predicate = #Predicate<ChatConversation> { conversation in
       conversation.id == legacyID
     }
@@ -238,14 +250,7 @@ public actor ConversationModelActor {
       legacyConversation = conversation
     }
 
-    // Find all messages without a conversation OR with a different conversation
-    let allMessagesPredicate = #Predicate<ChatMessage> { message in
-      message.conversation == nil || message.conversation?.id != legacyID
-    }
-    let allMessagesDescriptor = FetchDescriptor<ChatMessage>(predicate: allMessagesPredicate)
-    let messagesToFix = try modelContext.fetch(allMessagesDescriptor)
-
-    // Assign them to the legacy conversation
+    // Assign unassigned messages to the legacy conversation
     for message in messagesToFix {
       message.conversation = legacyConversation
     }
