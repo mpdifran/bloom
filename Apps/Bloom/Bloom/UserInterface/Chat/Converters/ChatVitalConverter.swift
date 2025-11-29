@@ -33,24 +33,25 @@ extension ChatVitalConverter {
 
   func convertHealthDataString() async throws -> String {
     let startDate = determineSearchStartDate()
+    let enabledCategories = await AIDataSharingSettings.shared.enabledCategories
 
-    guard let healthData = await convertHealthData(from: startDate) else { return "" }
+    guard let healthData = await convertHealthData(from: startDate, enabledCategories: enabledCategories) else { return "" }
 
     let data = try JSONEncoder.bloomModel.encode(healthData)
     return String(data: data, encoding: .utf8) ?? "{}"
   }
 
-  func convertHealthData(from startDate: Date) async -> HealthVitalData? {
+  func convertHealthData(from startDate: Date, enabledCategories: Set<AIHealthCategory>) async -> HealthVitalData? {
     let healthData = await HealthVitalData(
-      activityLevel: generateActivityLevel(from: startDate),
-      bodyComposition: generateBodyComposition(from: startDate),
-      bowelMovements: generateBowelMovements(form: startDate),
-      exerciseEffectiveness: generateExerciseEffectiveness(from: startDate),
-      heartHealth: generateHeartHealth(from: startDate),
-      menstrualHealth: generateMenstrualHealth(from: startDate),
-      nutrition: generateNutritionHealth(from: startDate),
-      sleep: generateSleep(from: startDate),
-      stress: generateStress(from: startDate)
+      activityLevel: generateActivityLevel(from: startDate, enabledCategories: enabledCategories),
+      bodyComposition: generateBodyComposition(from: startDate, enabledCategories: enabledCategories),
+      bowelMovements: generateBowelMovements(form: startDate, enabledCategories: enabledCategories),
+      exerciseEffectiveness: generateExerciseEffectiveness(from: startDate, enabledCategories: enabledCategories),
+      heartHealth: generateHeartHealth(from: startDate, enabledCategories: enabledCategories),
+      menstrualHealth: generateMenstrualHealth(from: startDate, enabledCategories: enabledCategories),
+      nutrition: generateNutritionHealth(from: startDate, enabledCategories: enabledCategories),
+      sleep: generateSleep(from: startDate, enabledCategories: enabledCategories),
+      stress: generateStress(from: startDate, enabledCategories: enabledCategories)
     )
 
     return healthData.isEmpty ? nil : healthData
@@ -72,10 +73,10 @@ private extension ChatVitalConverter {
 
 extension ChatVitalConverter {
 
-  func generateDemographics(enabledCategories: Set<AIHealthCategory>? = nil) async -> HealthVitalData.UserInfo? {
+  func generateDemographics(enabledCategories: Set<AIHealthCategory>) async -> HealthVitalData.UserInfo? {
     // Check if we should send demographics and/or location
-    let shouldFetchDemographics = shouldFetch(category: .demographics, enabledCategories: enabledCategories)
-    let shouldFetchLocation = shouldFetch(category: .location, enabledCategories: enabledCategories)
+    let shouldFetchDemographics = enabledCategories.contains(.demographics)
+    let shouldFetchLocation = enabledCategories.contains(.location)
 
     // If both disabled, return nil (nothing to send)
     guard shouldFetchDemographics || shouldFetchLocation else {
@@ -150,18 +151,10 @@ extension ChatVitalConverter {
     )
   }
 
-  private func shouldFetch(category: AIHealthCategory, enabledCategories: Set<AIHealthCategory>?) -> Bool {
-    guard let enabledCategories = enabledCategories else {
-      // No filtering - fetch everything (backward compatibility)
-      return true
+  func generateActivityLevel(from date: Date, enabledCategories: Set<AIHealthCategory>) async -> HealthVitalData.ActivityLevel? {
+    guard enabledCategories.contains(.physicalActivity) else {
+      return nil
     }
-    return enabledCategories.contains(category)
-  }
-
-  func generateActivityLevel(from date: Date) async -> HealthVitalData.ActivityLevel? {
-//    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .activityLevel) else {
-//      return nil
-//    }
 
     let dateRange = DateRange.fromDateToNow(date)
 
@@ -192,10 +185,10 @@ extension ChatVitalConverter {
     )
   }
 
-  func generateBodyComposition(from date: Date) async -> HealthVitalData.BodyComposition? {
-//    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .bodyComposition) else {
-//      return nil
-//    }
+  func generateBodyComposition(from date: Date, enabledCategories: Set<AIHealthCategory>) async -> HealthVitalData.BodyComposition? {
+    guard enabledCategories.contains(.bodyMetrics) else {
+      return nil
+    }
 
     let dateRange = DateRange.fromDateToNow(date)
 
@@ -234,10 +227,10 @@ extension ChatVitalConverter {
     )
   }
 
-  func generateBowelMovements(form date: Date) async -> HealthVitalData.BowelMovements? {
-//    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .bowelMovements) else {
-//      return nil
-//    }
+  func generateBowelMovements(form date: Date, enabledCategories: Set<AIHealthCategory>) async -> HealthVitalData.BowelMovements? {
+    guard enabledCategories.contains(.digestiveHealth) else {
+      return nil
+    }
 
     let modelActor = BowelMovementModelActor.standard()
     let dateRange = DateRange.fromDateToNow(date)
@@ -262,10 +255,10 @@ extension ChatVitalConverter {
     }
   }
 
-  func generateExerciseEffectiveness(from date: Date) async -> HealthVitalData.ExerciseEffectiveness? {
-//    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .exerciseEffectiveness) else {
-//      return nil
-//    }
+  func generateExerciseEffectiveness(from date: Date, enabledCategories: Set<AIHealthCategory>) async -> HealthVitalData.ExerciseEffectiveness? {
+    guard enabledCategories.contains(.physicalActivity) else {
+      return nil
+    }
 
     guard let heartRateZones = await HealthStoreFetcher.shared.heartRateZones() else {
       return nil
@@ -321,10 +314,10 @@ extension ChatVitalConverter {
     )
   }
 
-  func generateHeartHealth(from date: Date) async -> HealthVitalData.HeartHealth? {
-//    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .heartHealth) else {
-//      return nil
-//    }
+  func generateHeartHealth(from date: Date, enabledCategories: Set<AIHealthCategory>) async -> HealthVitalData.HeartHealth? {
+    guard enabledCategories.contains(.bodyMetrics) else {
+      return nil
+    }
 
     let dateRange = DateRange.fromDateToNow(date)
 
@@ -365,7 +358,11 @@ extension ChatVitalConverter {
     )
   }
 
-  func generateNutritionHealth(from date: Date) async -> HealthVitalData.Nutrition? {
+  func generateNutritionHealth(from date: Date, enabledCategories: Set<AIHealthCategory>) async -> HealthVitalData.Nutrition? {
+    guard enabledCategories.contains(.nutrition) else {
+      return nil
+    }
+
     let dateRange = DateRange.fromDateToNow(date)
 
     var logs = [HealthVitalData.FoodLogDay]()
@@ -475,10 +472,10 @@ extension ChatVitalConverter {
     return await quantity.displayString(for: unit)
   }
 
-  func generateMenstrualHealth(from date: Date) async -> HealthVitalData.MenstrualHealth? {
-//    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .menstrualHealth) else {
-//      return nil
-//    }
+  func generateMenstrualHealth(from date: Date, enabledCategories: Set<AIHealthCategory>) async -> HealthVitalData.MenstrualHealth? {
+    guard enabledCategories.contains(.menstrualHealth) else {
+      return nil
+    }
 
     guard let shiftedDate = Calendar.current.date(byAdding: .month, value: -1, to: date) else {
       return nil
@@ -507,10 +504,10 @@ extension ChatVitalConverter {
     return HealthVitalData.MenstrualHealth(cycles: cycleSamples)
   }
 
-  func generateSleep(from date: Date) async -> HealthVitalData.Sleep? {
-//    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .sleep) else {
-//      return nil
-//    }
+  func generateSleep(from date: Date, enabledCategories: Set<AIHealthCategory>) async -> HealthVitalData.Sleep? {
+    guard enabledCategories.contains(.sleep) else {
+      return nil
+    }
 
     let dateRange = DateRange.fromDateToNow(date)
 
@@ -570,10 +567,10 @@ extension ChatVitalConverter {
     return HealthVitalData.Sleep(sleepDetails: sleepDays)
   }
 
-  func generateStress(from date: Date) async -> HealthVitalData.Stress? {
-//    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .stress) else {
-//      return nil
-//    }
+  func generateStress(from date: Date, enabledCategories: Set<AIHealthCategory>) async -> HealthVitalData.Stress? {
+    guard enabledCategories.contains(.mentalWellness) else {
+      return nil
+    }
 
     let dateRange = DateRange.fromDateToNow(date)
 
