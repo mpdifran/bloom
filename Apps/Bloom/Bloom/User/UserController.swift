@@ -192,8 +192,7 @@ extension UserController {
 
   func updateConsent(healthData: Bool?, externalProcessing: Bool?) async throws -> ConsentResponse {
     let request = UpdateConsentRequest(
-      healthDataConsent: healthData,
-      externalProcessingConsent: externalProcessing
+      healthDataConsent: healthData
     )
     return try await NetworkRequester.shared.updateConsent(request: request)
   }
