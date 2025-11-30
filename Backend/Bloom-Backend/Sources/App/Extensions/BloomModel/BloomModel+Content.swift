@@ -56,3 +56,12 @@ extension MagicScanCancelRequest: @retroactive Content { }
 extension MagicScanCompleteTrigger: @retroactive Content { }
 extension UpdateConsentRequest: @retroactive Content { }
 extension ConsentResponse: @retroactive Content { }
+extension GetStorageStatsResponse: @retroactive Content { }
+extension GetOrphanedImagesResponse: @retroactive Content { }
+extension DeleteOrphanedImagesRequest: @retroactive Content { }
+extension DeleteOrphanedImagesResponse: @retroactive Content { }
+extension GetLargeImagesRequest: @retroactive Content { }
+extension GetLargeImagesResponse: @retroactive Content { }
+extension GeneratePresignedURLRequest: @retroactive Content { }
+extension GeneratePresignedURLResponse: @retroactive Content { }
+extension ReplaceImageRequest: @retroactive Content { }

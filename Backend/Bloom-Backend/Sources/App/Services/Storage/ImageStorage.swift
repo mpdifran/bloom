@@ -50,6 +50,18 @@ protocol ImageStorage: Sendable {
   ///   - path: The storage path to clean up
   /// - Returns: Number of images deleted
   func deleteOldImages(olderThan date: Date, path: StoragePath) async throws -> Int
+
+  /// List all objects in a storage path
+  /// - Parameter path: The storage path to list
+  /// - Returns: Array of S3 objects with metadata
+  func listObjects(path: StoragePath) async throws -> [S3.Object]
+
+  /// Replace an existing image with new data, keeping the same filename
+  /// - Parameters:
+  ///   - fileName: The name of the file to replace
+  ///   - path: The storage path where the file is located
+  ///   - imageData: The new image data
+  func replaceImage(fileName: String, path: StoragePath, imageData: Data) async throws
 }
 
 struct S3Storage: ImageStorage {
@@ -189,6 +201,41 @@ struct S3Storage: ImageStorage {
       return objectsToDelete.count
     } catch {
       logger.error("Failed to delete old images from S3: \(error)")
+      throw error
+    }
+  }
+
+  func listObjects(path: StoragePath) async throws -> [S3.Object] {
+    let prefix = "\(path.rawValue)/"
+
+    let listRequest = S3.ListObjectsV2Request(
+      bucket: bucketName,
+      prefix: prefix
+    )
+
+    do {
+      let response = try await s3.listObjectsV2(listRequest)
+      return response.contents ?? []
+    } catch {
+      logger.error("Failed to list objects from S3 path \(prefix): \(error)")
+      throw error
+    }
+  }
+
+  func replaceImage(fileName: String, path: StoragePath, imageData: Data) async throws {
+    let objectKey = "\(path.rawValue)/\(fileName)"
+
+    let putObjectRequest = S3.PutObjectRequest(
+      body: .data(imageData, byteBufferAllocator: allocator),
+      bucket: bucketName,
+      key: objectKey
+    )
+
+    do {
+      _ = try await s3.putObject(putObjectRequest)
+      logger.info("Replaced image in S3: \(objectKey)")
+    } catch {
+      logger.error("Failed to replace image in S3: \(error)")
       throw error
     }
   }

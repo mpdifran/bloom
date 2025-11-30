@@ -349,11 +349,94 @@ extension NetworkStack {
     return try JSONDecoder.bloomModel.decode(MarkItemsDistinctResponse.self, from: data)
   }
   
+  // MARK: - Storage Management
+
+  func getStorageStats() async throws -> GetStorageStatsResponse {
+    let urlRequest = await createAuthenticatedRequest(
+      path: "v1/admin/storage/stats",
+      method: .get
+    )
+
+    let (data, response) = try await URLSession.shared.data(for: urlRequest)
+
+    try await Self.checkStatusCode(data: data, response: response)
+
+    return try JSONDecoder.bloomModel.decode(GetStorageStatsResponse.self, from: data)
+  }
+
+  func getOrphanedImages() async throws -> GetOrphanedImagesResponse {
+    let urlRequest = await createAuthenticatedRequest(
+      path: "v1/admin/storage/orphaned-images",
+      method: .get
+    )
+
+    let (data, response) = try await URLSession.shared.data(for: urlRequest)
+
+    try await Self.checkStatusCode(data: data, response: response)
+
+    return try JSONDecoder.bloomModel.decode(GetOrphanedImagesResponse.self, from: data)
+  }
+
+  func deleteOrphanedImages(request: DeleteOrphanedImagesRequest) async throws -> DeleteOrphanedImagesResponse {
+    let urlRequest = try await createAuthenticatedRequest(
+      path: "v1/admin/storage/orphaned-images",
+      method: .delete,
+      body: request
+    )
+
+    let (data, response) = try await URLSession.shared.data(for: urlRequest)
+
+    try await Self.checkStatusCode(data: data, response: response)
+
+    return try JSONDecoder.bloomModel.decode(DeleteOrphanedImagesResponse.self, from: data)
+  }
+
+  func getLargeImages(thresholdBytes: Int64 = 512_000) async throws -> GetLargeImagesResponse {
+    let urlRequest = await createAuthenticatedRequest(
+      path: "v1/admin/storage/large-images",
+      method: .get,
+      queryItems: [.init(name: "thresholdBytes", value: "\(thresholdBytes)")]
+    )
+
+    let (data, response) = try await URLSession.shared.data(for: urlRequest)
+
+    try await Self.checkStatusCode(data: data, response: response)
+
+    return try JSONDecoder.bloomModel.decode(GetLargeImagesResponse.self, from: data)
+  }
+
+  func generatePresignedURL(request: GeneratePresignedURLRequest) async throws -> URL {
+    let urlRequest = try await createAuthenticatedRequest(
+      path: "v1/admin/storage/generate-presigned-url",
+      method: .post,
+      body: request
+    )
+
+    let (data, response) = try await URLSession.shared.data(for: urlRequest)
+
+    try await Self.checkStatusCode(data: data, response: response)
+
+    let urlResponse = try JSONDecoder.bloomModel.decode(GeneratePresignedURLResponse.self, from: data)
+    return urlResponse.url
+  }
+
+  func replaceImage(request: ReplaceImageRequest) async throws {
+    let urlRequest = try await createAuthenticatedRequest(
+      path: "v1/admin/storage/replace-image",
+      method: .post,
+      body: request
+    )
+
+    let (data, response) = try await URLSession.shared.data(for: urlRequest)
+
+    try await Self.checkStatusCode(data: data, response: response)
+  }
+
   private static func checkStatusCode(data: Data, response: URLResponse) async throws {
     guard let httpResponse = response as? HTTPURLResponse else {
       throw NetworkError.invalidResponse
     }
-    
+
     if !(200...299).contains(httpResponse.statusCode) {
       // Try to decode the error message
       let errorResponse = try? JSONDecoder.bloomModel.decode(NetworkErrorResponse.self, from: data)

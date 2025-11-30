@@ -55,6 +55,14 @@ struct SidebarView: View {
           systemImage: "exclamationmark.bubble"
         )
       }
+      NavigationLink {
+        StorageManagementView()
+      } label: {
+        createLabel(
+          title: "Storage Management",
+          systemImage: "externaldrive"
+        )
+      }
     }
     .shelf {
       metadataView
