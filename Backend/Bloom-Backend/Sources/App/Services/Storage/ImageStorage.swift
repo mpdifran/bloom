@@ -174,36 +174,51 @@ struct S3Storage: ImageStorage {
 
   func deleteOldImages(olderThan date: Date, path: StoragePath) async throws -> Int {
     let prefix = "\(path.rawValue)/"
-
-    let listRequest = S3.ListObjectsV2Request(
-      bucket: bucketName,
-      prefix: prefix
-    )
+    var allOldObjects: [S3.Object] = []
+    var continuationToken: String? = nil
 
     do {
-      let response = try await s3.listObjectsV2(listRequest)
+      // Paginate through all objects (S3 limits to 1000 per request)
+      repeat {
+        let listRequest = S3.ListObjectsV2Request(
+          bucket: bucketName,
+          continuationToken: continuationToken,
+          prefix: prefix
+        )
 
-      let oldObjects = response.contents?.filter { object in
-        guard let lastModified = object.lastModified else { return false }
-        return lastModified < date
-      } ?? []
+        let response = try await s3.listObjectsV2(listRequest)
 
-      guard !oldObjects.isEmpty else {
+        let oldObjects = response.contents?.filter { object in
+          guard let lastModified = object.lastModified else { return false }
+          return lastModified < date
+        } ?? []
+
+        allOldObjects.append(contentsOf: oldObjects)
+        continuationToken = response.nextContinuationToken
+      } while continuationToken != nil
+
+      guard !allOldObjects.isEmpty else {
         logger.info("No old images to delete from S3 path: \(prefix)")
         return 0
       }
 
-      let objectsToDelete = oldObjects.compactMap { $0.key }.map { S3.ObjectIdentifier(key: $0) }
+      let objectsToDelete = allOldObjects.compactMap { $0.key }.map { S3.ObjectIdentifier(key: $0) }
 
-      let deleteRequest = S3.DeleteObjectsRequest(
-        bucket: bucketName,
-        delete: S3.Delete(objects: objectsToDelete)
-      )
+      // S3 DeleteObjects has a limit of 1000 objects per request
+      // Batch delete in chunks of 1000
+      var totalDeleted = 0
+      for chunk in objectsToDelete.chunked(into: 1000) {
+        let deleteRequest = S3.DeleteObjectsRequest(
+          bucket: bucketName,
+          delete: S3.Delete(objects: chunk)
+        )
 
-      _ = try await s3.deleteObjects(deleteRequest)
+        _ = try await s3.deleteObjects(deleteRequest)
+        totalDeleted += chunk.count
+      }
 
-      logger.info("Deleted \(objectsToDelete.count) old images from S3 path: \(prefix)")
-      return objectsToDelete.count
+      logger.info("Deleted \(totalDeleted) old images from S3 path: \(prefix)")
+      return totalDeleted
     } catch {
       logger.error("Failed to delete old images from S3: \(error)")
       throw error
@@ -212,15 +227,29 @@ struct S3Storage: ImageStorage {
 
   func listObjects(path: StoragePath) async throws -> [S3.Object] {
     let prefix = "\(path.rawValue)/"
-
-    let listRequest = S3.ListObjectsV2Request(
-      bucket: bucketName,
-      prefix: prefix
-    )
+    var allObjects: [S3.Object] = []
+    var continuationToken: String? = nil
 
     do {
-      let response = try await s3.listObjectsV2(listRequest)
-      return response.contents ?? []
+      // Paginate through all objects (S3 limits to 1000 per request)
+      repeat {
+        let listRequest = S3.ListObjectsV2Request(
+          bucket: bucketName,
+          continuationToken: continuationToken,
+          prefix: prefix
+        )
+
+        let response = try await s3.listObjectsV2(listRequest)
+
+        if let contents = response.contents {
+          allObjects.append(contentsOf: contents)
+        }
+
+        continuationToken = response.nextContinuationToken
+      } while continuationToken != nil
+
+      logger.info("Listed \(allObjects.count) objects from S3 path: \(prefix)")
+      return allObjects
     } catch {
       logger.error("Failed to list objects from S3 path \(prefix): \(error)")
       throw error
@@ -242,6 +271,19 @@ struct S3Storage: ImageStorage {
     } catch {
       logger.error("Failed to replace image in S3: \(error)")
       throw error
+    }
+  }
+}
+
+// MARK: - Array Extensions
+
+extension Array {
+  /// Split array into chunks of specified size
+  /// - Parameter size: Maximum size of each chunk
+  /// - Returns: Array of arrays, each containing up to `size` elements
+  func chunked(into size: Int) -> [[Element]] {
+    stride(from: 0, to: count, by: size).map {
+      Array(self[$0..<Swift.min($0 + size, count)])
     }
   }
 }
