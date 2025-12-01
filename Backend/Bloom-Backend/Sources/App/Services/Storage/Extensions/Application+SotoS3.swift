@@ -32,12 +32,11 @@ extension Application {
         credentialProvider: .static(
           accessKeyId: accessKey,
           secretAccessKey: secretKey
-        ),
-        httpClientProvider: .createNew
+        )
       )
     } else {
       // Fallback to default credential providers (AWS_ACCESS_KEY_ID, etc.)
-      client = AWSClient(httpClientProvider: .createNew)
+      client = AWSClient()
     }
 
     storage[AWSClientKey.self] = client

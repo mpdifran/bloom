@@ -6,6 +6,7 @@
 //
 
 import BloomModel
+import NIOFoundationCompat
 import Vapor
 import SotoS3
 
@@ -93,7 +94,7 @@ struct S3Storage: ImageStorage {
     let filename = "\(UUID().uuidString).\(imageType)"
 
     let putObjectRequest = S3.PutObjectRequest(
-        body: .data(image.data, byteBufferAllocator: allocator),
+        body: AWSHTTPBody(bytes: image.data),
         bucket: bucketName,
         key: "\(path.rawValue)/\(filename)"
     )
@@ -137,10 +138,14 @@ struct S3Storage: ImageStorage {
 
     let response = try await s3.getObject(getObjectRequest)
 
-    guard let data = response.body?.asData() else {
+    // Collect the response body into a ByteBuffer, then convert to Data
+    let buffer = try await response.body.collect(upTo: 100 * 1024 * 1024) // 100MB limit
+    guard buffer.readableBytes > 0 else {
       logger.warning("No data in S3 response for: \(objectKey)")
       return nil
     }
+
+    let data = Data(buffer: buffer)
 
     guard let fileExtension = fileName.split(separator: ".").last.map(String.init) else {
       logger.warning("Could not determine file extension for: \(fileName)")
@@ -226,7 +231,7 @@ struct S3Storage: ImageStorage {
     let objectKey = "\(path.rawValue)/\(fileName)"
 
     let putObjectRequest = S3.PutObjectRequest(
-      body: .data(imageData, byteBufferAllocator: allocator),
+      body: AWSHTTPBody(bytes: imageData),
       bucket: bucketName,
       key: objectKey
     )
