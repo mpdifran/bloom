@@ -65,7 +65,7 @@ private extension TodaySettingsView {
         .padding(.horizontal)
 
       SettingsSectionContainer {
-        SettingsCell("Today Insights", subtitle: "Personalized insights from your data") {
+        SettingsCell("Today Insights", subtitle: "Personalized insights from your data.") {
           Toggle("", isOn: $aiFeatureSettings.todayInsightsEnabled)
             .tint(.mutedOrange)
         }

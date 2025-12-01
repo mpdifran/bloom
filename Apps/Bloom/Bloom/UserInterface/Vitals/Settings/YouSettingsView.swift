@@ -41,7 +41,7 @@ private extension YouSettingsView {
         .padding(.horizontal)
 
       SettingsSectionContainer {
-        SettingsCell("Biological Age", subtitle: "Estimate your biological age based on your data") {
+        SettingsCell("Biological Age", subtitle: "Estimate your biological age based on your data.") {
           Toggle("", isOn: $aiFeatureSettings.biologicalAgeEnabled)
             .tint(.mutedGreen)
         }

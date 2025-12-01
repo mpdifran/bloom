@@ -86,13 +86,21 @@ private extension AdminStorageController {
     let imageStorage = request.imageStorage
     let db = request.db
 
+    // Get pagination parameters
+    let limit = (try? request.query.get(Int.self, at: "limit")) ?? 100
+    let offset = (try? request.query.get(Int.self, at: "offset")) ?? 0
+
     // Get all filenames from S3 for each path
     async let nutritionLabelFiles = imageStorage.listObjects(path: .nutritionLabel)
     async let foodPackagingFiles = imageStorage.listObjects(path: .foodPackaging)
     // Note: chat-images are not tracked in FoodItemRecord, so we can't determine orphans
 
-    // Get all referenced filenames from database
-    let foodRecords = try await FoodItemRecord.query(on: db).all()
+    // OPTIMIZED: Only fetch the specific fields we need, not all 40+ fields
+    let foodRecords = try await FoodItemRecord.query(on: db)
+      .field(\.$nutritionLabelImage)
+      .field(\.$packagingImage)
+      .all()
+
     let referencedNutritionLabels = Set(foodRecords.compactMap { $0.nutritionLabelImage })
     let referencedPackagingImages = Set(foodRecords.compactMap { $0.packagingImage })
 
@@ -126,13 +134,19 @@ private extension AdminStorageController {
       }
     }
 
+    // Calculate totals from ALL orphaned images
     let totalCount = orphanedImages.count
     let totalBytes = orphanedImages.reduce(0) { $0 + $1.sizeBytes }
 
+    // Apply pagination to results
+    let paginatedImages = Array(orphanedImages.dropFirst(offset).prefix(limit))
+    let hasMore = (offset + limit) < totalCount
+
     return GetOrphanedImagesResponse(
-      orphanedImages: orphanedImages,
+      orphanedImages: paginatedImages,
       totalCount: totalCount,
-      totalBytes: totalBytes
+      totalBytes: totalBytes,
+      hasMore: hasMore
     )
   }
 

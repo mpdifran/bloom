@@ -94,7 +94,7 @@ private extension AIDataSharingView {
       Text(allCategoriesEnabled ? "Turn Off All" : "Turn On All")
         .horizontallyCentered()
     }
-    .buttonStyle(.primaryAlternate)
+    .buttonStyle(.primary)
   }
 
   @ViewBuilder
@@ -138,7 +138,7 @@ private extension AIDataSharingView {
               }
             }
 
-            CategoryToggleCell(
+            HealthCategoryToggleCell(
               category: category,
               isEnabled: Binding(
                 get: { settings.enabledCategories.contains(category) },
@@ -169,7 +169,7 @@ private extension AIDataSharingView {
             Divider()
           }
 
-          CategoryToggleCell(
+          HealthCategoryToggleCell(
             category: category,
             isEnabled: Binding(
               get: { settings.enabledCategories.contains(category) },
@@ -207,38 +207,6 @@ private extension AIDataSharingView {
     }
     .padding(.top)
     .padding(.top)
-  }
-}
-
-private struct CategoryToggleCell: View {
-  let category: AIHealthCategory
-  @Binding var isEnabled: Bool
-
-  var body: some View {
-    Toggle(isOn: $isEnabled) {
-      HStack {
-        RoundedRectangle(cornerRadius: 17)
-          .fill(category.color)
-          .frame(square: 45)
-          .overlay {
-            Image(systemSymbol: category.icon)
-              .font(.title2)
-              .foregroundStyle(.white)
-          }
-
-        VStack(alignment: .leading, spacing: 4) {
-          Text(category.displayName)
-            .font(.body)
-            .fontDesign(.rounded)
-            .bold()
-
-          Text(category.description)
-            .font(.body)
-            .foregroundStyle(.secondary)
-        }
-      }
-    }
-    .padding(.vertical, 8)
   }
 }
 
