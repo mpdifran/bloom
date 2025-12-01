@@ -179,13 +179,21 @@ final class StorageManagementViewModel {
     let downloadURL = try await networkStack.generatePresignedURL(request: presignedURLRequest)
 
     // 2. Download the image
-    let (imageData, _) = try await URLSession.shared.data(from: downloadURL)
+    let (imageData, response) = try await URLSession.shared.data(from: downloadURL)
 
     // 3. Resize the image
     guard let originalImage = NSImage(data: imageData) else {
-      throw NSError(domain: "ImageProcessing", code: 1, userInfo: [
+      // Enhanced error message with debugging info
+      var errorInfo: [String: Any] = [
         NSLocalizedDescriptionKey: "Failed to create image from data"
-      ])
+      ]
+      if let httpResponse = response as? HTTPURLResponse {
+        errorInfo["statusCode"] = httpResponse.statusCode
+        errorInfo["contentType"] = httpResponse.value(forHTTPHeaderField: "Content-Type") ?? "unknown"
+        errorInfo["dataSize"] = imageData.count
+      }
+
+      throw NSError(domain: "ImageProcessing", code: 1, userInfo: errorInfo)
     }
 
     guard let resizedImage = originalImage.resized(toMaxWidth: CGFloat(maxWidth)) else {

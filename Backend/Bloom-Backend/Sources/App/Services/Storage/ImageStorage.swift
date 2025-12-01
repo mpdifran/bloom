@@ -110,9 +110,10 @@ struct S3Storage: ImageStorage {
     path: StoragePath,
     expiration: TimeAmount
   ) async throws -> URL? {
-    let objectKey = "\(path)/\(fileName)"
+    let objectKey = "\(path.rawValue)/\(fileName)"
+    let encodedKey = objectKey.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? objectKey
     let region = s3.region
-    let url = URL(string: "https://\(bucketName).s3.\(region).amazonaws.com/\(objectKey)")!
+    let url = URL(string: "https://\(bucketName).s3.\(region).amazonaws.com/\(encodedKey)")!
     do {
       /// Reference: https://soto.codes/2020/12/presigned-urls.html
       let image = try await s3.signURL(
