@@ -88,7 +88,7 @@ private extension AdminSalesController {
       imageURL: imageURL ?? createSale.imageURL,
       saleProductId: createSale.saleProductId,
       compareProductId: createSale.compareProductId,
-      targetAudience: SaleRecord.TargetAudienceEnum.from(createSale.targetAudience),
+      targetAudiences: createSale.targetAudiences.map { SaleRecord.TargetAudienceEnum.from($0) },
       startDate: createSale.startDate,
       endDate: createSale.endDate,
       displayFrequencyDays: createSale.displayFrequencyDays,
@@ -140,7 +140,7 @@ private extension AdminSalesController {
     existingRecord.imageURL = updateSale.imageURL
     existingRecord.saleProductId = updateSale.saleProductId
     existingRecord.compareProductId = updateSale.compareProductId
-    existingRecord.targetAudience = SaleRecord.TargetAudienceEnum.from(updateSale.targetAudience)
+    existingRecord.targetAudiences = updateSale.targetAudiences.map { SaleRecord.TargetAudienceEnum.from($0) }
     existingRecord.startDate = updateSale.startDate
     existingRecord.endDate = updateSale.endDate
     existingRecord.displayFrequencyDays = updateSale.displayFrequencyDays
@@ -210,7 +210,7 @@ extension SaleRecord {
       imageURL: imageURL,
       saleProductId: saleProductId,
       compareProductId: compareProductId,
-      targetAudience: targetAudience.toSharedModel(),
+      targetAudiences: targetAudiences.map { $0.toSharedModel() },
       startDate: startDate,
       endDate: endDate,
       displayFrequencyDays: displayFrequencyDays,

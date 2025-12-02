@@ -14,7 +14,7 @@ public struct SaleDetails: Codable, Equatable, Sendable, Identifiable {
   public let imageURL: String?
   public let saleProductId: String
   public let compareProductId: String?
-  public let targetAudience: TargetAudience
+  public let targetAudiences: [TargetAudience]
   public let startDate: Date
   public let endDate: Date
   public let displayFrequencyDays: Int
@@ -30,7 +30,7 @@ public struct SaleDetails: Codable, Equatable, Sendable, Identifiable {
     imageURL: String?,
     saleProductId: String,
     compareProductId: String?,
-    targetAudience: TargetAudience,
+    targetAudiences: [TargetAudience],
     startDate: Date,
     endDate: Date,
     displayFrequencyDays: Int,
@@ -45,7 +45,7 @@ public struct SaleDetails: Codable, Equatable, Sendable, Identifiable {
     self.imageURL = imageURL
     self.saleProductId = saleProductId
     self.compareProductId = compareProductId
-    self.targetAudience = targetAudience
+    self.targetAudiences = targetAudiences
     self.startDate = startDate
     self.endDate = endDate
     self.displayFrequencyDays = displayFrequencyDays

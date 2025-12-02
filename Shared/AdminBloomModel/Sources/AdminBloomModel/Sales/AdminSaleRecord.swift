@@ -8,14 +8,14 @@
 import Foundation
 import BloomModel
 
-public struct AdminSaleRecord: Codable, Equatable, Sendable {
+public struct AdminSaleRecord: Codable, Equatable, Sendable, Hashable {
   public let id: String?
   public let title: String
   public let bodyText: String
   public let imageURL: String?
   public let saleProductId: String
   public let compareProductId: String?
-  public let targetAudience: TargetAudience
+  public let targetAudiences: [TargetAudience]
   public let startDate: Date
   public let endDate: Date
   public let displayFrequencyDays: Int
@@ -31,7 +31,7 @@ public struct AdminSaleRecord: Codable, Equatable, Sendable {
     imageURL: String?,
     saleProductId: String,
     compareProductId: String?,
-    targetAudience: TargetAudience,
+    targetAudiences: [TargetAudience],
     startDate: Date,
     endDate: Date,
     displayFrequencyDays: Int,
@@ -46,7 +46,7 @@ public struct AdminSaleRecord: Codable, Equatable, Sendable {
     self.imageURL = imageURL
     self.saleProductId = saleProductId
     self.compareProductId = compareProductId
-    self.targetAudience = targetAudience
+    self.targetAudiences = targetAudiences
     self.startDate = startDate
     self.endDate = endDate
     self.displayFrequencyDays = displayFrequencyDays

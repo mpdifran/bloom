@@ -31,8 +31,8 @@ final class SaleRecord: Model, @unchecked Sendable {
   @Field(key: "compare_product_id")
   var compareProductId: String?
 
-  @Enum(key: "target_audience")
-  var targetAudience: TargetAudienceEnum
+  @Field(key: "target_audiences")
+  var targetAudiences: [TargetAudienceEnum]
 
   @Field(key: "start_date")
   var startDate: Date
@@ -64,7 +64,7 @@ final class SaleRecord: Model, @unchecked Sendable {
     imageURL: String?,
     saleProductId: String,
     compareProductId: String?,
-    targetAudience: TargetAudienceEnum,
+    targetAudiences: [TargetAudienceEnum],
     startDate: Date,
     endDate: Date,
     displayFrequencyDays: Int,
@@ -77,7 +77,7 @@ final class SaleRecord: Model, @unchecked Sendable {
     self.imageURL = imageURL
     self.saleProductId = saleProductId
     self.compareProductId = compareProductId
-    self.targetAudience = targetAudience
+    self.targetAudiences = targetAudiences
     self.startDate = startDate
     self.endDate = endDate
     self.displayFrequencyDays = displayFrequencyDays
@@ -93,7 +93,7 @@ final class SaleRecord: Model, @unchecked Sendable {
       imageURL: imageURL,
       saleProductId: saleProductId,
       compareProductId: compareProductId,
-      targetAudience: targetAudience.toSharedModel(),
+      targetAudiences: targetAudiences.map { $0.toSharedModel() },
       startDate: startDate,
       endDate: endDate,
       displayFrequencyDays: displayFrequencyDays,

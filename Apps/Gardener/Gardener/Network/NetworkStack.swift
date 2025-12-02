@@ -432,6 +432,74 @@ extension NetworkStack {
     try await Self.checkStatusCode(data: data, response: response)
   }
 
+  // MARK: - Sales
+
+  func getAllSales() async throws -> AdminSalesListResponse {
+    let urlRequest = await createAuthenticatedRequest(
+      path: "v1/admin/sales",
+      method: .get
+    )
+
+    let (data, response) = try await URLSession.shared.data(for: urlRequest)
+
+    try await Self.checkStatusCode(data: data, response: response)
+
+    return try JSONDecoder.bloomModel.decode(AdminSalesListResponse.self, from: data)
+  }
+
+  func createSale(request: AdminCreateSaleRequest) async throws -> AdminSaleResponse {
+    let urlRequest = try await createAuthenticatedRequest(
+      path: "v1/admin/sales/create",
+      method: .post,
+      body: request
+    )
+
+    let (data, response) = try await URLSession.shared.data(for: urlRequest)
+
+    try await Self.checkStatusCode(data: data, response: response)
+
+    return try JSONDecoder.bloomModel.decode(AdminSaleResponse.self, from: data)
+  }
+
+  func updateSale(request: AdminUpdateSaleRequest) async throws -> AdminSaleResponse {
+    let urlRequest = try await createAuthenticatedRequest(
+      path: "v1/admin/sales/update",
+      method: .patch,
+      body: request
+    )
+
+    let (data, response) = try await URLSession.shared.data(for: urlRequest)
+
+    try await Self.checkStatusCode(data: data, response: response)
+
+    return try JSONDecoder.bloomModel.decode(AdminSaleResponse.self, from: data)
+  }
+
+  func deleteSale(id: String) async throws {
+    let urlRequest = await createAuthenticatedRequest(
+      path: "v1/admin/sales/\(id)",
+      method: .delete
+    )
+
+    let (data, response) = try await URLSession.shared.data(for: urlRequest)
+
+    try await Self.checkStatusCode(data: data, response: response)
+  }
+
+  func uploadSaleImage(request: AdminUploadSaleImageRequest) async throws -> AdminUploadSaleImageResponse {
+    let urlRequest = try await createAuthenticatedRequest(
+      path: "v1/admin/sales/\(request.saleId)/upload-image",
+      method: .post,
+      body: request
+    )
+
+    let (data, response) = try await URLSession.shared.data(for: urlRequest)
+
+    try await Self.checkStatusCode(data: data, response: response)
+
+    return try JSONDecoder.bloomModel.decode(AdminUploadSaleImageResponse.self, from: data)
+  }
+
   private static func checkStatusCode(data: Data, response: URLResponse) async throws {
     guard let httpResponse = response as? HTTPURLResponse else {
       throw NetworkError.invalidResponse

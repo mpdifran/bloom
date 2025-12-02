@@ -1,5 +1,5 @@
 {
-  "originHash" : "0b1bd7a1e8b2314d3ef52905a33320477ff911e0eda3a9886c01c5aedf1a1ed1",
+  "originHash" : "058e5e6f32231fc939f6cd8b442c471ebfc41c85b4635504fbfa64a86e683d90",
   "pins" : [
     {
       "identity" : "appfoundations",
@@ -15,8 +15,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mpdifran/AppUI",
       "state" : {
-        "revision" : "5cf918eadbbcbe728ca922864b86c8daf29d74f1",
-        "version" : "1.1.0"
+        "revision" : "b0240228ffe0d2a0c834e3e26b5848d41638645a",
+        "version" : "2.0.3"
+      }
+    },
+    {
+      "identity" : "bugsnag-cocoa",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/bugsnag/bugsnag-cocoa",
+      "state" : {
+        "revision" : "f4348c29cc881ce80e4e22a46f29d7f5a18e924b",
+        "version" : "6.34.1"
       }
     },
     {

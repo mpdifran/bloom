@@ -53,4 +53,5 @@ let allMigrations: [Migration] = [
   UserConsentRecord.MigrateExistingConsent(),
   User.RemoveOldConsentFields(),
   SaleRecord.Create(),
+  SaleRecord.UpdateTargetAudiences(),
 ]

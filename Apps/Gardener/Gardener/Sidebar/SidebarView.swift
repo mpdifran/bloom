@@ -63,6 +63,14 @@ struct SidebarView: View {
           systemImage: "externaldrive"
         )
       }
+      NavigationLink {
+        SalesListView()
+      } label: {
+        createLabel(
+          title: "Sales Management",
+          systemImage: "tag.fill"
+        )
+      }
     }
     .shelf {
       metadataView
