@@ -13,6 +13,8 @@ func routes(_ app: Application) throws {
   try app.register(collection: AdminChatController())
   try app.register(collection: AdminStorageController())
   try app.register(collection: HealthReportController())
+  try app.register(collection: SalesController())
+  try app.register(collection: AdminSalesController())
 
   // IMPORTANT: Fallback controller must be registered LAST
   // to avoid catching API endpoints

@@ -52,4 +52,5 @@ let allMigrations: [Migration] = [
   UserConsentRecord.AddUserIDIndex(),
   UserConsentRecord.MigrateExistingConsent(),
   User.RemoveOldConsentFields(),
+  SaleRecord.Create(),
 ]

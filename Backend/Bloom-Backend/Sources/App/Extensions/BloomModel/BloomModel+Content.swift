@@ -65,3 +65,7 @@ extension GetLargeImagesResponse: @retroactive Content { }
 extension GeneratePresignedURLRequest: @retroactive Content { }
 extension GeneratePresignedURLResponse: @retroactive Content { }
 extension ReplaceImageRequest: @retroactive Content { }
+extension SalesResponse: @retroactive Content { }
+extension AdminSalesListResponse: @retroactive Content { }
+extension AdminSaleResponse: @retroactive Content { }
+extension AdminUploadSaleImageResponse: @retroactive Content { }
