@@ -41,10 +41,14 @@ private extension YouSettingsView {
         .padding(.horizontal)
 
       SettingsSectionContainer {
-        SettingsCell("Biological Age", subtitle: "Estimate your biological age based on your data.") {
-          Toggle("", isOn: $aiFeatureSettings.biologicalAgeEnabled)
-            .tint(.mutedGreen)
-        }
+        PrivacyAIFeatureOptInCell(
+          title: "Biological Age",
+          subtitle: "Estimate your biological age based on your data.",
+          isEnabled: $aiFeatureSettings.biologicalAgeEnabled) {
+            BiologicalAgeIcon()
+              .frame(width: 40)
+          }
+          .tint(.mutedGreen)
       }
 
       SettingsSectionContainer {

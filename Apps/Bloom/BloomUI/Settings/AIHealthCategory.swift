@@ -89,7 +89,7 @@ public enum AIHealthCategory: String, Codable, CaseIterable, Sendable {
     case .mentalWellness:
         .mutedPurple
     case .sleep:
-        .remSleep
+        .coreSleep
     case .nutrition:
         .mutedGreen
     case .digestiveHealth:

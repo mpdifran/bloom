@@ -20,8 +20,8 @@ private extension Int {
 
 struct ChatWithBudIcon: View {
 
-  @State private var showChatBubble = false
-  @State private var showResponseRect = false
+  @State private var showChatBubble = true
+  @State private var showResponseRect = true
 
   var body: some View {
     GeometryReader { proxy in
@@ -45,7 +45,7 @@ struct ChatWithBudIcon: View {
             if showResponseRect {
               RoundedRectangle(cornerRadius: innerCornerRadius(for: proxy))
                 .fill(.fill)
-                .transition(.scale(scale: 0.1, anchor: .bottom).combined(with: .opacity))
+                .transition(.scale(scale: 0.1, anchor: .leading).combined(with: .opacity))
             }
           }
           .padding(padding(for: proxy))
@@ -57,8 +57,10 @@ struct ChatWithBudIcon: View {
     .aspectRatio(6/9, contentMode: .fit)
     .animation(.bouncy(duration: .animationDuration), value: showChatBubble)
     .animation(.bouncy(duration: .animationDuration), value: showResponseRect)
-    .task {
-      await runAnimationLoop()
+    .onAppear {
+      Task {
+        await runAnimationLoop()
+      }
     }
   }
 }
@@ -70,7 +72,7 @@ private extension ChatWithBudIcon {
   }
 
   func padding(for proxy: GeometryProxy) -> CGFloat {
-    proxy.size.width / 15
+    proxy.size.width / 10
   }
 
   func bubbleScale(for proxy: GeometryProxy) -> CGFloat {
@@ -86,10 +88,10 @@ private extension ChatWithBudIcon {
 
   func runAnimationLoop() async {
     while true {
-      await animateSequenceIn()
-      try? await Task.sleep(for: .seconds(.onPause))
       await animateSequenceOut()
       try? await Task.sleep(for: .seconds(.offPause))
+      await animateSequenceIn()
+      try? await Task.sleep(for: .seconds(.onPause))
     }
   }
 

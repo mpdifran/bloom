@@ -37,6 +37,7 @@ struct HealthCategoryToggleCell: View {
         }
       }
     }
+    .tint(category.color)
     .padding(.vertical, 8)
   }
 }

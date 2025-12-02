@@ -19,10 +19,10 @@ private extension Int {
 }
 
 struct TodayInsightsIcon: View {
-  @State private var showTop = false
-  @State private var showMiddleLeft = false
-  @State private var showMiddleRight = false
-  @State private var showBottom = false
+  @State private var showTop = true
+  @State private var showMiddleLeft = true
+  @State private var showMiddleRight = true
+  @State private var showBottom = true
   @State private var isAnimatingOut = false
 
   var body: some View {
@@ -58,8 +58,10 @@ struct TodayInsightsIcon: View {
               .offset(y: showBottom ? 0 : (isAnimatingOut ? -animationDistance(for: proxy) : animationDistance(for: proxy)))
           }
           .padding(padding(for: proxy))
-          .task {
-            await runAnimationLoop()
+          .onAppear {
+            Task {
+              await runAnimationLoop()
+            }
           }
         }
         .clipped()
@@ -75,11 +77,11 @@ private extension TodayInsightsIcon {
   }
 
   func padding(for proxy: GeometryProxy) -> CGFloat {
-    proxy.size.width / 15
+    proxy.size.width / 10
   }
 
   func internalPadding(for proxy: GeometryProxy) -> CGFloat {
-    proxy.size.width / 25
+    proxy.size.width / 18
   }
 
   func innerCornerRadius(for proxy: GeometryProxy) -> CGFloat {
@@ -96,10 +98,10 @@ private extension TodayInsightsIcon {
 
   func runAnimationLoop() async {
     while true {
-      await animateSequenceIn()
-      try? await Task.sleep(for: .seconds(.onPause))
       await animateSequenceOut()
       try? await Task.sleep(for: .seconds(.offPause))
+      await animateSequenceIn()
+      try? await Task.sleep(for: .seconds(.onPause))
     }
   }
 

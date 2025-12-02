@@ -9,6 +9,7 @@ import SwiftUI
 import AppUI
 import BloomUI
 import CoreHealth
+import SFSafeSymbols
 
 struct PrivacyUnknownOptInView: View {
 
@@ -18,6 +19,10 @@ struct PrivacyUnknownOptInView: View {
 
   @State private var isAISectionExpanded = false
   @State private var isAISectionEnabled = false
+  @State private var isHealthDataSectionExpanded = false
+  @State private var isHealthDataSectionEnabled = false
+  @State private var isOtherDataSectionExpanded = false
+  @State private var isOtherDataSectionEnabled = false
 
   @Environment(\.openURL) private var openURL
 
@@ -89,7 +94,8 @@ private extension PrivacyUnknownOptInView {
       HStack {
         DisplayAppIcon(overrideAppIcon: .healthAppIcon)
           .frame(square: 30)
-        Text("How Bloom Uses Your Data")
+        Text("Accessing Data on Device")
+          .fixedSize(horizontal: false, vertical: true)
       }
       .font(.title3)
       .bold()
@@ -97,10 +103,8 @@ private extension PrivacyUnknownOptInView {
 
       Group {
         Text("Bloom reads your personal data from your device to let you set goals, view charts, and understand your progress.")
-        Spacer()
-        Text("Certain features (like Today Insights, Chat with Bud, or Biological Age) require sending only the data you choose to Bloom’s servers.")
       }
-      .font(.subheadline)
+      .font(.headline)
       .bold()
       .fontDesign(.rounded)
       .foregroundStyle(.secondary)
@@ -147,24 +151,13 @@ private extension PrivacyUnknownOptInView {
         }
         .tint(.mutedGreen)
     } label: {
-      HStack {
-        VStack(alignment: .leading) {
-          Text("Bloom Plus")
-
-          Text("Enable AI powered features like Today Inisghts, Chat with Bud, and Biological Age.")
-            .font(.subheadline)
-            .foregroundStyle(.secondary)
-            .fixedSize(horizontal: false, vertical: true)
-        }
-        if !isAISectionExpanded {
-          Toggle("", isOn: $isAISectionEnabled)
-            .frame(maxWidth: 80)
-            .tint(.mutedLightBlue)
-        }
-      }
-      .font(.body)
-      .bold()
-      .fontDesign(.rounded)
+      DisclosureOverallToggleView(
+        icon: .starFill,
+        title: "Bloom Plus Features",
+        subtitle: "Enable AI powered features like Today Inisghts, Chat with Bud, and Biological Age.",
+        isExpanded: isAISectionExpanded,
+        isEnabled: $isAISectionEnabled
+      )
     }
     .disclosureGroupStyle(
       PrivacySectionDisclosureGroupStyle(
@@ -176,9 +169,10 @@ private extension PrivacyUnknownOptInView {
 
   @ViewBuilder
   var healthDataSection: some View {
-    SectionTitleView("Share Personal Data")
+    SectionTitleView("Personal Data")
       .padding(.horizontal)
-    SettingsSectionContainer {
+
+    DisclosureGroup(isExpanded: $isHealthDataSectionExpanded) {
       ForEach(Array(AIHealthCategory.healthCategories.enumerated()), id: \.element) { index, category in
         // Skip menstrual health for non-female users
         if category == .menstrualHealth && !shouldShowMenstrualHealth {
@@ -208,15 +202,29 @@ private extension PrivacyUnknownOptInView {
           )
         }
       }
+    } label: {
+      DisclosureOverallToggleView(
+        icon: .heartFill,
+        title: "Personal Data Categories",
+        subtitle: "Personal Data Categories (such as sleep, physical activity, or nutrition) allow you to control what data is shared with our AI services.",
+        isExpanded: isHealthDataSectionExpanded,
+        isEnabled: $isHealthDataSectionEnabled
+      )
     }
+    .disclosureGroupStyle(
+      PrivacySectionDisclosureGroupStyle(
+        expandButtonTitle: "Choose Categories Individually",
+        isExpanded: $isHealthDataSectionExpanded
+      )
+    )
   }
 
   @ViewBuilder
   var otherDataSection: some View {
-    SectionTitleView("Share Other Data")
+    SectionTitleView("Other Data")
       .padding(.horizontal)
 
-    SettingsSectionContainer {
+    DisclosureGroup(isExpanded: $isOtherDataSectionExpanded) {
       ForEach(Array(AIHealthCategory.otherCategories.enumerated()), id: \.element) { index, category in
         if index > 0 {
           Divider()
@@ -236,7 +244,21 @@ private extension PrivacyUnknownOptInView {
           )
         )
       }
+    } label: {
+      DisclosureOverallToggleView(
+        icon: .squareFillOnCircleFill,
+        title: "Other Data Categories",
+        subtitle: "Other Data Categories (such as location, calendar, and weather) allow you to control what data is shared with our AI services.",
+        isExpanded: isOtherDataSectionExpanded,
+        isEnabled: $isOtherDataSectionEnabled
+      )
     }
+    .disclosureGroupStyle(
+      PrivacySectionDisclosureGroupStyle(
+        expandButtonTitle: "Choose Categories Individually",
+        isExpanded: $isOtherDataSectionExpanded
+      )
+    )
   }
 
   @ViewBuilder
@@ -273,48 +295,36 @@ private extension PrivacyUnknownOptInView {
   }
 }
 
-private struct PrivacyAIFeatureOptInCell<IconView: View>: View {
-
+private struct DisclosureOverallToggleView: View {
+  let icon: SFSymbol
   let title: String
   let subtitle: String
+  let isExpanded: Bool
   @Binding var isEnabled: Bool
-  let iconBuilder: () -> IconView
-
-  init(
-    title: String,
-    subtitle: String,
-    isEnabled: Binding<Bool>,
-    @ViewBuilder iconBuilder: @escaping () -> IconView
-  ) {
-    self.title = title
-    self.subtitle = subtitle
-    self._isEnabled = isEnabled
-    self.iconBuilder = iconBuilder
-  }
 
   var body: some View {
-    Toggle(isOn: $isEnabled) {
-      HStack {
-        iconBuilder()
-          .padding(.trailing, 8)
-
-        VStack(alignment: .leading) {
+    HStack {
+      VStack(alignment: .leading) {
+        HStack {
+          Image(systemSymbol: icon)
           Text(title)
-            .bold()
-            .fontDesign(.rounded)
-            .minimumScaleFactor(0.7)
-            .lineLimit(2)
-
-          Text(subtitle)
-            .font(.caption)
-            .foregroundStyle(.secondary)
-            .lineLimit(2)
+            .fixedSize(horizontal: false, vertical: true)
+            .multilineTextAlignment(.leading)
         }
+
+        Text(subtitle)
+          .font(.headline)
+          .foregroundStyle(.secondary)
+          .fixedSize(horizontal: false, vertical: true)
       }
-      .padding(.vertical, 16)
-      .frame(minHeight: 60)
+      if !isExpanded {
+        Toggle("", isOn: $isEnabled)
+          .frame(maxWidth: 80)
+      }
     }
-    .fixedSize(horizontal: false, vertical: true)
+    .font(.title3)
+    .bold()
+    .fontDesign(.rounded)
   }
 }
 

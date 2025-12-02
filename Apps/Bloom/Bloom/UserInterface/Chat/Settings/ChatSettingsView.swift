@@ -41,10 +41,14 @@ private extension ChatSettingsView {
         .padding(.horizontal)
 
       SettingsSectionContainer {
-        SettingsCell("Chat with Bud", subtitle: "Chat with Bud about your health and wellness.") {
-          Toggle("", isOn: $aiFeatureSettings.chatEnabled)
-            .tint(.mutedLightBlue)
-        }
+        PrivacyAIFeatureOptInCell(
+          title: "Chat with Bud",
+          subtitle: "Chat with Bud about your health and wellness.",
+          isEnabled: $aiFeatureSettings.chatEnabled) {
+            ChatWithBudIcon()
+              .frame(width: 40)
+          }
+          .tint(.mutedLightBlue)
       }
 
       SettingsSectionContainer {

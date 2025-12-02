@@ -16,6 +16,7 @@ struct TodaySettingsView: View {
   @TodaySettingsStorage("TodayView.settings") private var todaySettings = TodaySettings()
   @ObservedObject private var aiFeatureSettings = AIFeatureSettings.shared
   @ObservedObject private var aiDataSharingSettings = AIDataSharingSettings.shared
+  @ObservedObject private var entitlementController = EntitlementController.shared
 
   @State private var selectedTimeMode: TimeMode = .morning
   @State private var editingTimeMode: TimeMode?
@@ -26,7 +27,9 @@ struct TodaySettingsView: View {
   var body: some View {
     NavigationStack {
       BloomScrollView(showsChatBar: false) {
-        aiInsightsSection
+        if entitlementController.hasBloomPro == true {
+          aiInsightsSection
+        }
         calendarSection
         timeConfigurationSection
         sectionsConfigurationSection
@@ -65,10 +68,14 @@ private extension TodaySettingsView {
         .padding(.horizontal)
 
       SettingsSectionContainer {
-        SettingsCell("Today Insights", subtitle: "Personalized insights from your data.") {
-          Toggle("", isOn: $aiFeatureSettings.todayInsightsEnabled)
-            .tint(.mutedOrange)
-        }
+        PrivacyAIFeatureOptInCell(
+          title: "Today Insights",
+          subtitle: "Personalized insights from your data.",
+          isEnabled: $aiFeatureSettings.todayInsightsEnabled) {
+            TodayInsightsIcon()
+              .frame(width: 40)
+          }
+          .tint(.mutedOrange)
       }
 
       SettingsSectionContainer {

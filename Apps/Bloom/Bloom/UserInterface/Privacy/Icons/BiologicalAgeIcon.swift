@@ -23,7 +23,7 @@ struct BiologicalAgeIcon: View {
 
   @State private var showChatBubble = true
   @State private var showResponseRect = true
-  @State private var bioAge = 30
+  @State private var bioAge = 25
   @State private var ageIndex = 0
 
   private let ages = [27, 38, 22, 35]
@@ -59,11 +59,10 @@ struct BiologicalAgeIcon: View {
     .aspectRatio(6/9, contentMode: .fit)
     .animation(.bouncy(duration: .animationDuration), value: showChatBubble)
     .animation(.bouncy(duration: .animationDuration), value: showResponseRect)
-//    .task {
-//      await runAnimationLoop()
-//    }
-    .task {
-      await runAgeLoop()
+    .onAppear {
+      Task {
+        await runAgeLoop()
+      }
     }
   }
 }
@@ -75,7 +74,7 @@ private extension BiologicalAgeIcon {
   }
 
   func padding(for proxy: GeometryProxy) -> CGFloat {
-    proxy.size.width / 15
+    proxy.size.width / 10
   }
 
   func bubbleScale(for proxy: GeometryProxy) -> CGFloat {
