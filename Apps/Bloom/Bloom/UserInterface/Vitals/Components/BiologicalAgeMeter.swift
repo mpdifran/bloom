@@ -82,7 +82,7 @@ struct BiologicalAgeMeter: View {
       .frame(width: geometry.size.width, height: geometry.size.height)
     }
     .aspectRatio(1, contentMode: .fit)
-    .animation(.bouncy(duration: 1.5, extraBounce: 0.3), value: biologicalAge)
+    .animation(.easeInOut(duration: 1.5), value: biologicalAge)
   }
 }
 

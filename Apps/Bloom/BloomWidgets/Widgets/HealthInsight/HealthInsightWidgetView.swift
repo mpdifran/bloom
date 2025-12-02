@@ -100,9 +100,9 @@ private extension HealthInsightWidgetView {
 
   func gradientForPriority(_ priority: Int) -> AnyShapeStyle {
     if priority < 4 {
-      return AnyShapeStyle(LinearGradient(colors: [.mutedBlue, .mutedGreen], startPoint: .bottom, endPoint: .top))
+      return AnyShapeStyle(LinearGradient(colors: [.mutedBlue, .mutedGreen], startPoint: .bottomLeading, endPoint: .topTrailing))
     } else if priority < 8 {
-      return AnyShapeStyle(LinearGradient(colors: [.mutedYellow, .mutedRed], startPoint: .bottom, endPoint: .top))
+      return AnyShapeStyle(LinearGradient(colors: [.mutedYellow, .mutedRed], startPoint: .bottom, endPoint: .topLeading))
     } else {
       return AnyShapeStyle(LinearGradient(colors: [.mutedPurple, .mutedPink], startPoint: .bottom, endPoint: .top))
     }

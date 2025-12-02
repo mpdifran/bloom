@@ -32,10 +32,10 @@ struct ChatWithBudIcon: View {
 
             if showChatBubble {
               ChatBubbleShape(tailPosition: .trailing)
-                .foregroundStyle(.blue)
-                .frame(width: 60, height: 40)
+                .foregroundStyle(.mutedLightBlue)
+                .frame(width: 70, height: 40)
                 .scaleEffect(x: bubbleScale(for: proxy), y: bubbleScale(for: proxy), anchor: .center)
-                .frame(width: 60 * bubbleScale(for: proxy), height: 40 * bubbleScale(for: proxy))
+                .frame(width: 70 * bubbleScale(for: proxy), height: 40 * bubbleScale(for: proxy))
                 .horizontalAlignment(.trailing)
                 .transition(.move(edge: .trailing).combined(with: .opacity))
             }
@@ -54,7 +54,7 @@ struct ChatWithBudIcon: View {
         }
         .clipped()
     }
-    .aspectRatio(6/7, contentMode: .fit)
+    .aspectRatio(6/9, contentMode: .fit)
     .animation(.bouncy(duration: .animationDuration), value: showChatBubble)
     .animation(.bouncy(duration: .animationDuration), value: showResponseRect)
     .task {
@@ -70,31 +70,15 @@ private extension ChatWithBudIcon {
   }
 
   func padding(for proxy: GeometryProxy) -> CGFloat {
-    proxy.size.width / 20
+    proxy.size.width / 15
   }
 
   func bubbleScale(for proxy: GeometryProxy) -> CGFloat {
     proxy.size.width / 100
   }
 
-  func bubbleLength(for proxy: GeometryProxy) -> CGFloat {
-    proxy.size.width * 0.8
-  }
-
-  func bubbleHeight(for proxy: GeometryProxy) -> CGFloat {
-    proxy.size.width * 0.5
-  }
-
   func innerCornerRadius(for proxy: GeometryProxy) -> CGFloat {
     outerCornerRadius(for: proxy) - padding(for: proxy)
-  }
-
-  func innerRectHeight(for proxy: GeometryProxy) -> CGFloat {
-    (proxy.size.height - 4 * padding(for: proxy)) / 3
-  }
-
-  func animationDistance(for proxy: GeometryProxy) -> CGFloat {
-    proxy.size.width / 6
   }
 }
 
@@ -126,10 +110,10 @@ private extension ChatWithBudIcon {
   PreviewEnvironment {
     BloomScrollView {
       ChatWithBudIcon()
-        .frame(width: 80)
+        .frame(width: 40)
 
       ChatWithBudIcon()
-        .frame(width: 40)
+        .frame(width: 80)
 
       ChatWithBudIcon()
         .frame(width: 120)

@@ -73,12 +73,23 @@ public struct GetOrphanedImagesResponse: Codable, Sendable {
   public let totalCount: Int
   public let totalBytes: Int64
   public let hasMore: Bool
+  public let hasMoreRecords: Bool
+  public let nextDbOffset: Int?
 
-  public init(orphanedImages: [OrphanedImageInfo], totalCount: Int, totalBytes: Int64, hasMore: Bool = false) {
+  public init(
+    orphanedImages: [OrphanedImageInfo],
+    totalCount: Int,
+    totalBytes: Int64,
+    hasMore: Bool = false,
+    hasMoreRecords: Bool = false,
+    nextDbOffset: Int? = nil
+  ) {
     self.orphanedImages = orphanedImages
     self.totalCount = totalCount
     self.totalBytes = totalBytes
     self.hasMore = hasMore
+    self.hasMoreRecords = hasMoreRecords
+    self.nextDbOffset = nextDbOffset
   }
 
   public var totalMB: Double {

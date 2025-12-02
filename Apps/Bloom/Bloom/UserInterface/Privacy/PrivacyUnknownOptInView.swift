@@ -29,8 +29,8 @@ struct PrivacyUnknownOptInView: View {
         .parallaxOverscroll()
 
       VStack(alignment: .leading, spacing: 10) {
-//        explanationSection
-//        healthConsentSection
+        explanationSection
+        healthConsentSection
         aiFeatureSection
         healthDataSection
         otherDataSection
@@ -95,12 +95,16 @@ private extension PrivacyUnknownOptInView {
       .bold()
       .fontDesign(.rounded)
 
-      Text("Bloom allows you to set and track goals, view your data in charts and visualizations, and helps you write data to the Health App.")
-        .font(.subheadline)
-        .bold()
-        .fontDesign(.rounded)
-        .foregroundStyle(.secondary)
-        .fixedSize(horizontal: false, vertical: true)
+      Group {
+        Text("Bloom reads your personal data from your device to let you set goals, view charts, and understand your progress.")
+        Spacer()
+        Text("Certain features (like Today Insights, Chat with Bud, or Biological Age) require sending only the data you choose to Bloom’s servers.")
+      }
+      .font(.subheadline)
+      .bold()
+      .fontDesign(.rounded)
+      .foregroundStyle(.secondary)
+      .fixedSize(horizontal: false, vertical: true)
     }
     .horizontalAlignment(.leading)
     .cardContainer()
@@ -108,32 +112,44 @@ private extension PrivacyUnknownOptInView {
 
   @ViewBuilder
   var aiFeatureSection: some View {
+    SectionTitleView("Bloom Plus")
+      .padding(.horizontal)
+
     DisclosureGroup(isExpanded: $isAISectionExpanded) {
-      SettingsCell("Today Insights", subtitle: "Personalized insights from your data.") {
-        Toggle("", isOn: $aiFeatureSettings.todayInsightsEnabled)
-          .tint(.mutedOrange)
-      }
-      .fixedSize(horizontal: false, vertical: true)
+      PrivacyAIFeatureOptInCell(
+        title: "Today Insights",
+        subtitle: "Personalized insights from your data.",
+        isEnabled: $aiFeatureSettings.todayInsightsEnabled) {
+          TodayInsightsIcon()
+            .frame(width: 40)
+        }
+        .tint(.mutedOrange)
 
       Divider()
 
-      SettingsCell("Chat with Bud", subtitle: "Chat with Bud about your health and wellness.") {
-        Toggle("", isOn: $aiFeatureSettings.chatEnabled)
-          .tint(.mutedLightBlue)
-      }
-      .fixedSize(horizontal: false, vertical: true)
+      PrivacyAIFeatureOptInCell(
+        title: "Chat with Bud",
+        subtitle: "Chat with Bud about your health and wellness.",
+        isEnabled: $aiFeatureSettings.chatEnabled) {
+          ChatWithBudIcon()
+            .frame(width: 40)
+        }
+        .tint(.mutedLightBlue)
 
       Divider()
 
-      SettingsCell("Biological Age", subtitle: "Estimate your biological age based on your data.") {
-        Toggle("", isOn: $aiFeatureSettings.biologicalAgeEnabled)
-          .tint(.mutedGreen)
-      }
-      .fixedSize(horizontal: false, vertical: true)
+      PrivacyAIFeatureOptInCell(
+        title: "Biological Age",
+        subtitle: "Estimate your biological age based on your data.",
+        isEnabled: $aiFeatureSettings.biologicalAgeEnabled) {
+          BiologicalAgeIcon()
+            .frame(width: 40)
+        }
+        .tint(.mutedGreen)
     } label: {
       HStack {
         VStack(alignment: .leading) {
-          Text("AI Features")
+          Text("Bloom Plus")
 
           Text("Enable AI powered features like Today Inisghts, Chat with Bud, and Biological Age.")
             .font(.subheadline)
@@ -152,26 +168,10 @@ private extension PrivacyUnknownOptInView {
     }
     .disclosureGroupStyle(
       PrivacySectionDisclosureGroupStyle(
-        expandButtonTitle: "Select Individually",
+        expandButtonTitle: "Choose Features Individually",
         isExpanded: $isAISectionExpanded
       )
     )
-
-
-
-//    SectionTitleView("AI Features")
-//      .padding(.horizontal)
-//    SettingsSectionContainer {
-//
-//    }
-//
-//    Text("""
-//        You can always update your choices later in the app.
-//        """)
-//    .bold()
-//    .foregroundStyle(.secondary)
-//    .font(.caption)
-//    .padding(.horizontal)
   }
 
   @ViewBuilder
@@ -270,6 +270,51 @@ private extension PrivacyUnknownOptInView {
     @unknown default:
       false
     }
+  }
+}
+
+private struct PrivacyAIFeatureOptInCell<IconView: View>: View {
+
+  let title: String
+  let subtitle: String
+  @Binding var isEnabled: Bool
+  let iconBuilder: () -> IconView
+
+  init(
+    title: String,
+    subtitle: String,
+    isEnabled: Binding<Bool>,
+    @ViewBuilder iconBuilder: @escaping () -> IconView
+  ) {
+    self.title = title
+    self.subtitle = subtitle
+    self._isEnabled = isEnabled
+    self.iconBuilder = iconBuilder
+  }
+
+  var body: some View {
+    Toggle(isOn: $isEnabled) {
+      HStack {
+        iconBuilder()
+          .padding(.trailing, 8)
+
+        VStack(alignment: .leading) {
+          Text(title)
+            .bold()
+            .fontDesign(.rounded)
+            .minimumScaleFactor(0.7)
+            .lineLimit(2)
+
+          Text(subtitle)
+            .font(.caption)
+            .foregroundStyle(.secondary)
+            .lineLimit(2)
+        }
+      }
+      .padding(.vertical, 16)
+      .frame(minHeight: 60)
+    }
+    .fixedSize(horizontal: false, vertical: true)
   }
 }
 

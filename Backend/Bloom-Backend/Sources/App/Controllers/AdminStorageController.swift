@@ -86,16 +86,12 @@ private extension AdminStorageController {
     let imageStorage = request.imageStorage
     let db = request.db
 
-    // Get pagination parameters
+    // Get pagination parameters for results
     let limit = (try? request.query.get(Int.self, at: "limit")) ?? 100
     let offset = (try? request.query.get(Int.self, at: "offset")) ?? 0
 
-    // Get all filenames from S3 for each path
-    async let nutritionLabelFiles = imageStorage.listObjects(path: .nutritionLabel)
-    async let foodPackagingFiles = imageStorage.listObjects(path: .foodPackaging)
-    // Note: chat-images are not tracked in FoodItemRecord, so we can't determine orphans
-
-    // OPTIMIZED: Only fetch the specific fields we need, not all 40+ fields
+    // STEP 1: Get ALL referenced images from database (lightweight - just filenames)
+    // This is fast because we're only fetching 2 string fields per record
     let foodRecords = try await FoodItemRecord.query(on: db)
       .field(\.$nutritionLabelImage)
       .field(\.$packagingImage)
@@ -104,37 +100,54 @@ private extension AdminStorageController {
     let referencedNutritionLabels = Set(foodRecords.compactMap { $0.nutritionLabelImage })
     let referencedPackagingImages = Set(foodRecords.compactMap { $0.packagingImage })
 
-    var orphanedImages: [OrphanedImageInfo] = []
+    // STEP 2: Get database chunking parameters for S3 processing
+    let dbLimit = (try? request.query.get(Int.self, at: "dbLimit")) ?? 500
+    let dbOffset = (try? request.query.get(Int.self, at: "dbOffset")) ?? 0
 
-    // Find orphaned nutrition label images
+    // STEP 3: Fetch S3 objects in parallel
+    async let nutritionLabelFiles = imageStorage.listObjects(path: .nutritionLabel)
+    async let foodPackagingFiles = imageStorage.listObjects(path: .foodPackaging)
+
+    // Combine all S3 objects
     let nutritionFiles = try await nutritionLabelFiles
+    let packagingFiles = try await foodPackagingFiles
+    var allS3Objects: [(filename: String, path: String, size: Int64, lastModified: Date?)] = []
+
     for object in nutritionFiles {
       guard let filename = object.key?.split(separator: "/").last.map(String.init) else { continue }
-      if !referencedNutritionLabels.contains(filename) {
-        orphanedImages.append(OrphanedImageInfo(
-          filename: filename,
-          path: "nutrition-label",
-          sizeBytes: object.size ?? 0,
-          lastModified: object.lastModified
-        ))
-      }
+      allS3Objects.append((filename, "nutrition-label", object.size ?? 0, object.lastModified))
     }
-
-    // Find orphaned packaging images
-    let packagingFiles = try await foodPackagingFiles
     for object in packagingFiles {
       guard let filename = object.key?.split(separator: "/").last.map(String.init) else { continue }
-      if !referencedPackagingImages.contains(filename) {
+      allS3Objects.append((filename, "food-packaging", object.size ?? 0, object.lastModified))
+    }
+
+    // STEP 4: Process only a chunk of S3 objects
+    let s3Chunk = Array(allS3Objects.dropFirst(dbOffset).prefix(dbLimit))
+    let hasMoreRecords = (dbOffset + dbLimit) < allS3Objects.count
+    let nextDbOffset = hasMoreRecords ? dbOffset + dbLimit : nil
+
+    // STEP 5: Find orphaned images in this chunk
+    var orphanedImages: [OrphanedImageInfo] = []
+    for (filename, path, size, lastModified) in s3Chunk {
+      let isOrphaned: Bool
+      if path == "nutrition-label" {
+        isOrphaned = !referencedNutritionLabels.contains(filename)
+      } else {
+        isOrphaned = !referencedPackagingImages.contains(filename)
+      }
+
+      if isOrphaned {
         orphanedImages.append(OrphanedImageInfo(
           filename: filename,
-          path: "food-packaging",
-          sizeBytes: object.size ?? 0,
-          lastModified: object.lastModified
+          path: path,
+          sizeBytes: size,
+          lastModified: lastModified
         ))
       }
     }
 
-    // Calculate totals from ALL orphaned images
+    // Calculate totals for this chunk
     let totalCount = orphanedImages.count
     let totalBytes = orphanedImages.reduce(0) { $0 + $1.sizeBytes }
 
@@ -146,7 +159,9 @@ private extension AdminStorageController {
       orphanedImages: paginatedImages,
       totalCount: totalCount,
       totalBytes: totalBytes,
-      hasMore: hasMore
+      hasMore: hasMore,
+      hasMoreRecords: hasMoreRecords,
+      nextDbOffset: nextDbOffset
     )
   }
 

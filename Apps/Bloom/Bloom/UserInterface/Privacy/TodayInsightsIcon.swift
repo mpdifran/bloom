@@ -15,7 +15,7 @@ private extension TimeInterval {
 }
 
 private extension Int {
-  static let offsetDelay: Int = 50 // ms
+  static let offsetDelay: Int = 100 // ms
 }
 
 struct TodayInsightsIcon: View {
@@ -30,22 +30,22 @@ struct TodayInsightsIcon: View {
       RoundedRectangle(cornerRadius: outerCornerRadius(for: proxy))
         .fill(.background.secondary)
         .overlay {
-          VStack(spacing: padding(for: proxy)) {
+          VStack(spacing: internalPadding(for: proxy)) {
             RoundedRectangle(cornerRadius: innerCornerRadius(for: proxy))
               .fill(.mutedOrange.gradient)
               .frame(height: innerRectHeight(for: proxy))
               .opacity(showTop ? 1 : 0)
               .offset(y: showTop ? 0 : (isAnimatingOut ? -animationDistance(for: proxy) : animationDistance(for: proxy)))
 
-            HStack(spacing: padding(for: proxy)) {
+            HStack(spacing: internalPadding(for: proxy)) {
               RoundedRectangle(cornerRadius: innerCornerRadius(for: proxy))
-                .fill(.mutedBlue.gradient)
+                .fill(LinearGradient(colors: [.mutedPurple, .mutedPink], startPoint: .bottom, endPoint: .top))
                 .frame(height: innerRectHeight(for: proxy))
                 .opacity(showMiddleLeft ? 1 : 0)
                 .offset(y: showMiddleLeft ? 0 : (isAnimatingOut ? -animationDistance(for: proxy) : animationDistance(for: proxy)))
 
               RoundedRectangle(cornerRadius: innerCornerRadius(for: proxy))
-                .fill(.mutedGreen.gradient)
+                .fill(LinearGradient(colors: [.mutedBlue, .mutedGreen], startPoint: .bottomLeading, endPoint: .topTrailing))
                 .frame(height: innerRectHeight(for: proxy))
                 .opacity(showMiddleRight ? 1 : 0)
                 .offset(y: showMiddleRight ? 0 : (isAnimatingOut ? -animationDistance(for: proxy) : animationDistance(for: proxy)))
@@ -64,7 +64,7 @@ struct TodayInsightsIcon: View {
         }
         .clipped()
     }
-    .aspectRatio(6/7, contentMode: .fit)
+    .aspectRatio(6/9, contentMode: .fit)
   }
 }
 
@@ -75,7 +75,11 @@ private extension TodayInsightsIcon {
   }
 
   func padding(for proxy: GeometryProxy) -> CGFloat {
-    proxy.size.width / 20
+    proxy.size.width / 15
+  }
+
+  func internalPadding(for proxy: GeometryProxy) -> CGFloat {
+    proxy.size.width / 25
   }
 
   func innerCornerRadius(for proxy: GeometryProxy) -> CGFloat {
@@ -83,7 +87,7 @@ private extension TodayInsightsIcon {
   }
 
   func innerRectHeight(for proxy: GeometryProxy) -> CGFloat {
-    (proxy.size.height - 4 * padding(for: proxy)) / 3
+    (proxy.size.height - 2 * padding(for: proxy) - 2 * internalPadding(for: proxy)) / 3
   }
 
   func animationDistance(for proxy: GeometryProxy) -> CGFloat {
@@ -127,6 +131,12 @@ private extension TodayInsightsIcon {
     BloomScrollView {
       TodayInsightsIcon()
         .frame(width: 40)
+
+      TodayInsightsIcon()
+        .frame(width: 80)
+
+      TodayInsightsIcon()
+        .frame(width: 120)
     }
   }
 }
