@@ -54,8 +54,8 @@ Implement a comprehensive sales infrastructure that allows admins to create, man
 - **Filtering:**
   - `isActive = true`
   - Within date range (`startDate ≤ now ≤ endDate`)
-  - Matches user's subscription status (free/subscribed/expired)
-- **Logic:** Query user's subscription history to determine if free/subscribed/expired, then filter sales by matching targetAudience
+- **Logic:** Returns all active sales; client filters by user's subscription status using RevenueCat data
+- **Architecture Decision:** Client-side filtering simplifies backend and allows real-time RevenueCat status
 
 #### Admin Endpoints (AdminSalesController)
 
@@ -199,15 +199,24 @@ Implement a comprehensive sales infrastructure that allows admins to create, man
 #### Core Methods
 
 **`fetchActiveSales() async`**
-- Make API call to `/v1/sales/active`
+- Make API call to `/v1/sales/active` (returns all active sales)
+- Filter sales client-side by determining user's subscription status
 - Update cached sales in UserDefaults
 - Update last fetch timestamp
+
+**`determineUserAudience() -> TargetAudience`**
+- Check `EntitlementController.customerInfo` (RevenueCat)
+- Logic:
+  - If has active entitlement → `.subscribedUsers`
+  - If has entitlement history but `isActive == false` → `.expiredUsers` (includes expired trials)
+  - If no entitlement history → `.freeUsers`
+- Return user's current audience segment
 
 **`shouldShowSaleModal() -> SaleDetails?`**
 - Check if any active sale should auto-present
 - Criteria:
-  - Sale is active and within date range
-  - User matches targetAudience
+  - Sale is within date range
+  - Sale's `targetAudience` is `.allUsers` OR matches user's determined audience
   - displayFrequencyDays has elapsed since last shown to this user
   - Sale not dismissed
 - Return sale to present, or nil
@@ -215,13 +224,14 @@ Implement a comprehensive sales infrastructure that allows admins to create, man
 **`shouldShowBannerInToday() -> SaleDetails?`**
 - Check if should show banner in Today Insights
 - Criteria:
-  - Sale is active and within date range
-  - User matches targetAudience
+  - Sale is within date range
+  - Sale's `targetAudience` is `.allUsers` OR matches user's determined audience
   - Sale not dismissed by user
 - Return sale to show, or nil
 
 **`activeSaleForSettings() -> SaleDetails?`**
 - Return active sale for Settings view (always visible, not dismissible)
+- Filter by matching `targetAudience`
 
 **`dismissSale(id: String)`**
 - Mark sale as dismissed for Today Insights banner
@@ -358,11 +368,11 @@ extension URLRequest {
 
 ### Backend Testing
 - CRUD operations via Postman/Insomnia
-- Audience filtering for all 4 types (allUsers, freeUsers, subscribedUsers, expiredUsers)
 - `isActive` filtering (only return active sales)
 - Date range filtering (only return sales within window)
 - Image upload and S3 URL generation
 - Validation: `saleProductId` and `telemetryEventName` required
+- Note: Audience filtering tested on client, not backend
 
 ### Gardener Testing
 - Create sales with various configurations
@@ -419,7 +429,16 @@ extension URLRequest {
 - **allUsers:** Everyone
 - **freeUsers:** Users who never subscribed
 - **subscribedUsers:** Currently have active subscription
-- **expiredUsers:** Previously subscribed, now expired (re-engagement opportunity)
+- **expiredUsers:** Previously subscribed, now expired (includes expired free trials - re-engagement opportunity)
+
+### Client-Side Audience Filtering
+- **Architecture Decision:** Backend returns all active sales; iOS client filters by user's subscription status
+- **Rationale:**
+  - Client has real-time RevenueCat CustomerInfo data
+  - Simpler backend (no need to sync subscription status from client to server)
+  - No additional database fields or migrations needed
+  - Client can instantly react to subscription changes without waiting for backend sync
+- **Implementation:** SalesManager uses EntitlementController to determine user's audience, then filters sales locally
 
 ### displayFrequencyDays
 - **Purpose:** Control how often auto-modal appears per user
