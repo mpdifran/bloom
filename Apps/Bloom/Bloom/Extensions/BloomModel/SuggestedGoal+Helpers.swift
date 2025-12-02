@@ -20,6 +20,7 @@ extension SuggestedGoal.Metric {
     case .fiberIntake: TargetMetric.fiberIntake
     case .meditationMinutes: TargetMetric.meditationMinutes
     case .exerciseMinutes: TargetMetric.exerciseMinutes
+    case .workoutMinutes: TargetMetric.workoutMinutes
     case .walkingRunningDistance: TargetMetric.walkingRunningDistance
     case .runDistance: TargetMetric.runDistance
     case .runDuration: TargetMetric.runDuration
@@ -45,6 +46,7 @@ extension SuggestedGoal.Metric {
     case .fiberIntake: "fiber intake"
     case .meditationMinutes: "meditation minutes"
     case .exerciseMinutes: "exercise minutes"
+    case .workoutMinutes: "workout minutes"
     case .stepCount: "steps"
     case .walkingRunningDistance: "walking-running distance"
     case .runDistance: "running distance"
@@ -113,6 +115,8 @@ extension TargetMetric {
       return .targetHeartRateZone4Minutes
     case .targetHeartRateZone5:
       return .targetHeartRateZone5Minutes
+    case .workoutMinutes:
+      return .workoutMinutes
     @unknown default:
       fatalError("Unknown Target Metric")
     }

@@ -60,6 +60,11 @@ final class TodayInsightsManager {
   }
 
   var todayContent: TodayContentDTO? {
+    // Return nil if insights are disabled (keep cached data but don't expose it)
+    guard isInsightsEnabled() else {
+      return nil
+    }
+
     // Check if stored content is from today
     guard let content = lastResponse,
           Calendar.current.isDate(content.day, inSameDayAs: Date()) else {
@@ -75,12 +80,16 @@ final class TodayInsightsManager {
       return overrideState
     }
 
+    // Return default BudState when insights are disabled (keep cached data but don't expose it)
+    guard isInsightsEnabled() else {
+      return .proudCoach
+    }
+
     guard let content = todayContent,
           let data = content.budState.data(using: .utf8),
           let budState = try? JSONDecoder().decode(TodayReportResponse.BudState.self, from: data) else {
-      // Return default BudState (.proudCoach) when insights disabled
-      // Return nil only when insights enabled but content unavailable
-      return isInsightsEnabled() ? nil : .proudCoach
+      // Return nil when insights enabled but content unavailable
+      return nil
     }
     return budState
   }

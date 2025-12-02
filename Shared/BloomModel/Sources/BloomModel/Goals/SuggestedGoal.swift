@@ -37,6 +37,7 @@ public extension SuggestedGoal {
     case fiberIntake
     case meditationMinutes
     case exerciseMinutes
+    case workoutMinutes
     case stepCount
     case walkingRunningDistance
     case runDistance
@@ -85,7 +86,7 @@ public extension SuggestedGoal.Metric {
       return [.mL, .oz]
     case .fiberIntake:
       return [.g]
-    case .meditationMinutes, .exerciseMinutes, .runDuration, .bikeDuration, .mobilityAndFlexibilityDuration,
+    case .meditationMinutes, .exerciseMinutes, .workoutMinutes, .runDuration, .bikeDuration, .mobilityAndFlexibilityDuration,
          .strengthTrainingDuration, .cardioDuration, .highIntensityIntervalTrainingDuration,
          .targetHeartRateZone1Minutes, .targetHeartRateZone2Minutes,
          .targetHeartRateZone3Minutes, .targetHeartRateZone4Minutes,

@@ -22,6 +22,7 @@ extension TodayView {
 
     private let todayInsightsManager = TodayInsightsManager.shared
     private var entitlementCancellable: AnyCancellable?
+    private var aiFeatureSettingsCancellable: AnyCancellable?
 
     private init() {
       checkEntitlement()
@@ -40,6 +41,9 @@ extension TodayView {
 
       // Observe entitlement changes
       observeEntitlementChanges()
+
+      // Observe AI feature settings changes
+      observeAIFeatureSettingsChanges()
     }
   }
 }
@@ -100,17 +104,35 @@ extension TodayView.ViewModel {
       .removeDuplicates()
       .sink { [weak self] newValue in
         guard let self = self else { return }
-        
+
         let wasBloomPlus = self.hasBloomPlus
         let isBloomPlus = newValue == true
         self.hasBloomPlus = isBloomPlus
-        
+
         // If user just got Bloom Plus, immediately load content
         if !wasBloomPlus && isBloomPlus {
           Task {
             await self.requestContentIfNeeded()
           }
         }
+      }
+  }
+
+  func observeAIFeatureSettingsChanges() {
+    // Listen for Today Insights toggle changes using Combine
+    aiFeatureSettingsCancellable = AIFeatureSettings.shared.$todayInsightsEnabled
+      .dropFirst() // Skip the initial value
+      .removeDuplicates()
+      .sink { [weak self] _ in
+        guard let self = self else { return }
+
+        // Trigger view refresh when setting changes
+        // The computed properties (todayContent, budState) will return appropriate values
+        // based on the new setting state
+        withObservationTracking {
+          _ = self.todayContent
+          _ = self.budState
+        } onChange: {}
       }
   }
   

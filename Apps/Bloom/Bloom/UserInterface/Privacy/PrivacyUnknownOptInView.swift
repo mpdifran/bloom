@@ -45,7 +45,7 @@ struct PrivacyUnknownOptInView: View {
       .padding(.horizontal)
       .padding(.top)
     }
-    .removeScrollEdgeEffect(shouldHide: true)
+//    .removeScrollEdgeEffect(shouldHide: true)
     .ignoresSafeArea(.all, edges: .top)
     .shelf {
       shelfContent
@@ -169,7 +169,7 @@ private extension PrivacyUnknownOptInView {
 
   @ViewBuilder
   var healthDataSection: some View {
-    SectionTitleView("Personal Data")
+    SectionTitleView("Sharing Personal Data")
       .padding(.horizontal)
 
     DisclosureGroup(isExpanded: $isHealthDataSectionExpanded) {
@@ -221,7 +221,7 @@ private extension PrivacyUnknownOptInView {
 
   @ViewBuilder
   var otherDataSection: some View {
-    SectionTitleView("Other Data")
+    SectionTitleView("Sharing Other Data")
       .padding(.horizontal)
 
     DisclosureGroup(isExpanded: $isOtherDataSectionExpanded) {
