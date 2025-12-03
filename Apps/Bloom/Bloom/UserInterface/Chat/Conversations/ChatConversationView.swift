@@ -114,14 +114,15 @@ private extension ChatConversationView {
         .font(.body)
         .foregroundStyle(.secondary)
 
-      VStack {
-        Toggle(isOn: $aiFeatureSettings.chatEnabled) {
-          Text("Chat with Bud")
-            .font(.body)
-            .bold()
+      PrivacyAIFeatureOptInCell(
+        title: "Chat with Bud",
+        subtitle: "Chat with Bud about your health and wellness.",
+        isEnabled: $aiFeatureSettings.chatEnabled) {
+          ChatWithBudIcon()
+            .frame(width: 40)
         }
-      }
-      .cardContainer()
+        .tint(.mutedLightBlue)
+        .cardContainer()
 
       Spacer()
     }

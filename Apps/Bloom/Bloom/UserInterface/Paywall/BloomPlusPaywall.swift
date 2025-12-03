@@ -109,9 +109,12 @@ struct BloomPlusPaywall: View {
 
       TelemetryDeck.signal("Paywall Purchase Complete")
       TelemetryDeck.signal("AB: Periodic Paywall v3 - Success")
-      dismiss()
-      onPurchase()
-      onDismiss()
+
+      presentedSheet = WelcomeToBloomPlusView {
+        dismiss()
+        onPurchase()
+        onDismiss()
+      }.asAny
     }
     .onChange(of: viewModel.packages) { _, _ in
       if let package = viewModel.packages.first(where: { $0.hasFreeIntroductoryOffer }) {

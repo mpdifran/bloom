@@ -45,6 +45,7 @@ struct PrivacyAIFeatureOptInCell<IconView: View>: View {
             .foregroundStyle(.secondary)
             .lineLimit(2)
         }
+        .multilineTextAlignment(.leading)
       }
       .frame(minHeight: 60)
     }

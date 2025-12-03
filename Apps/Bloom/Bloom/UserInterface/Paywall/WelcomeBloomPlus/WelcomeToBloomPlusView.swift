@@ -14,6 +14,8 @@ import AppUI
 
 struct WelcomeToBloomPlusView: View {
 
+  let onDismiss: () -> Void
+
   @ObservedObject private var aiFeatureSettings = AIFeatureSettings.shared
   @ObservedObject private var aiDataSharingSettings = AIDataSharingSettings.shared
 
@@ -175,7 +177,7 @@ private extension WelcomeToBloomPlusView {
   @ViewBuilder
   var shelfContent: some View {
     AsyncButton {
-
+      onDismiss()
     } label: {
       Text("Continue")
         .horizontallyCentered()
@@ -186,6 +188,6 @@ private extension WelcomeToBloomPlusView {
 
 #Preview {
   PreviewEnvironment {
-    WelcomeToBloomPlusView()
+    WelcomeToBloomPlusView() { }
   }
 }
