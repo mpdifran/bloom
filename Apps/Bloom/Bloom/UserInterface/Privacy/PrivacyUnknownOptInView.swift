@@ -122,12 +122,13 @@ private extension PrivacyUnknownOptInView {
     DisclosureGroup(isExpanded: $isAISectionExpanded) {
       PrivacyAIFeatureOptInCell(
         title: "Today Insights",
-        subtitle: "Personalized insights from your data.",
+        subtitle: "Personalized daily insights from your data.",
         isEnabled: $aiFeatureSettings.todayInsightsEnabled) {
           TodayInsightsIcon()
             .frame(width: 40)
         }
         .tint(.mutedOrange)
+        .padding(.vertical)
 
       Divider()
 
@@ -139,6 +140,7 @@ private extension PrivacyUnknownOptInView {
             .frame(width: 40)
         }
         .tint(.mutedLightBlue)
+        .padding(.vertical)
 
       Divider()
 
@@ -150,6 +152,7 @@ private extension PrivacyUnknownOptInView {
             .frame(width: 40)
         }
         .tint(.mutedGreen)
+        .padding(.vertical)
     } label: {
       DisclosureOverallToggleView(
         icon: .starFill,
@@ -158,6 +161,7 @@ private extension PrivacyUnknownOptInView {
         isExpanded: isAISectionExpanded,
         isEnabled: $isAISectionEnabled
       )
+      .tint(.mutedYellow)
     }
     .disclosureGroupStyle(
       PrivacySectionDisclosureGroupStyle(
@@ -210,6 +214,7 @@ private extension PrivacyUnknownOptInView {
         isExpanded: isHealthDataSectionExpanded,
         isEnabled: $isHealthDataSectionEnabled
       )
+      .tint(.mutedPink)
     }
     .disclosureGroupStyle(
       PrivacySectionDisclosureGroupStyle(
@@ -252,6 +257,7 @@ private extension PrivacyUnknownOptInView {
         isExpanded: isOtherDataSectionExpanded,
         isEnabled: $isOtherDataSectionEnabled
       )
+      .tint(.mutedIndigo)
     }
     .disclosureGroupStyle(
       PrivacySectionDisclosureGroupStyle(
@@ -306,7 +312,14 @@ private struct DisclosureOverallToggleView: View {
     HStack {
       VStack(alignment: .leading) {
         HStack {
-          Image(systemSymbol: icon)
+          RoundedRectangle(cornerRadius: 13)
+            .fill(.tint)
+            .frame(square: 44)
+            .overlay {
+              Image(systemSymbol: icon)
+                .foregroundStyle(.white)
+            }
+
           Text(title)
             .fixedSize(horizontal: false, vertical: true)
             .multilineTextAlignment(.leading)

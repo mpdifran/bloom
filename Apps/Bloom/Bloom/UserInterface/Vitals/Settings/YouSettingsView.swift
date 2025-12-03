@@ -49,6 +49,7 @@ private extension YouSettingsView {
               .frame(width: 40)
           }
           .tint(.mutedGreen)
+          .padding(.vertical)
       }
 
       SettingsSectionContainer {

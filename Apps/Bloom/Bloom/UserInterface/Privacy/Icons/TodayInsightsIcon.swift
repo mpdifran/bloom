@@ -73,7 +73,7 @@ struct TodayInsightsIcon: View {
 private extension TodayInsightsIcon {
 
   func outerCornerRadius(for proxy: GeometryProxy) -> CGFloat {
-    proxy.size.width / 6
+    proxy.size.width / 4
   }
 
   func padding(for proxy: GeometryProxy) -> CGFloat {

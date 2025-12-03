@@ -70,7 +70,7 @@ struct BiologicalAgeIcon: View {
 private extension BiologicalAgeIcon {
 
   func outerCornerRadius(for proxy: GeometryProxy) -> CGFloat {
-    proxy.size.width / 6
+    proxy.size.width / 4
   }
 
   func padding(for proxy: GeometryProxy) -> CGFloat {

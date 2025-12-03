@@ -46,7 +46,6 @@ struct PrivacyAIFeatureOptInCell<IconView: View>: View {
             .lineLimit(2)
         }
       }
-      .padding(.vertical, 16)
       .frame(minHeight: 60)
     }
     .fixedSize(horizontal: false, vertical: true)
@@ -61,7 +60,7 @@ struct PrivacyAIFeatureOptInCell<IconView: View>: View {
     BloomScrollView {
       PrivacyAIFeatureOptInCell(
         title: "Today Insights",
-        subtitle: "Personalized insights from your data.",
+        subtitle: "Personalized daily insights from your data.",
         isEnabled: $isEnabled) {
           TodayInsightsIcon()
             .frame(width: 40)

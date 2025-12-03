@@ -70,12 +70,13 @@ private extension TodaySettingsView {
       SettingsSectionContainer {
         PrivacyAIFeatureOptInCell(
           title: "Today Insights",
-          subtitle: "Personalized insights from your data.",
+          subtitle: "Personalized daily insights from your data.",
           isEnabled: $aiFeatureSettings.todayInsightsEnabled) {
             TodayInsightsIcon()
               .frame(width: 40)
           }
           .tint(.mutedOrange)
+          .padding(.vertical)
       }
 
       SettingsSectionContainer {

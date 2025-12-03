@@ -49,6 +49,7 @@ private extension ChatSettingsView {
               .frame(width: 40)
           }
           .tint(.mutedLightBlue)
+          .padding(.vertical)
       }
 
       SettingsSectionContainer {
