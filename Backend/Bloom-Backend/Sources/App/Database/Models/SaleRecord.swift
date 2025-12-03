@@ -32,7 +32,20 @@ final class SaleRecord: Model, @unchecked Sendable {
   var compareProductId: String?
 
   @Field(key: "target_audiences")
-  var targetAudiences: [TargetAudienceEnum]
+  private var targetAudiencesString: String
+
+  var targetAudiences: [TargetAudienceEnum] {
+    get {
+      targetAudiencesString
+        .split(separator: ",")
+        .compactMap { TargetAudienceEnum(rawValue: String($0)) }
+    }
+    set {
+      targetAudiencesString = newValue
+        .map(\.rawValue)
+        .joined(separator: ",")
+    }
+  }
 
   @Field(key: "start_date")
   var startDate: Date

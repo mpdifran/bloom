@@ -189,4 +189,45 @@ extension SaleRecord {
         .update()
     }
   }
+
+  struct ConvertTargetAudiencesToText: AsyncMigration {
+    func prepare(on database: Database) async throws {
+      guard let sqlDatabase = database as? SQLDatabase else {
+        fatalError("This migration requires an SQL database.")
+      }
+
+      // Drop the GIN index first
+      try await sqlDatabase.raw("""
+        DROP INDEX IF EXISTS sales_target_audiences_index;
+      """).run()
+
+      // Convert the column from target_audience[] to text
+      // This casts the enum array to text array, then joins with commas
+      try await sqlDatabase.raw("""
+        ALTER TABLE sales
+        ALTER COLUMN target_audiences TYPE text
+        USING array_to_string(target_audiences::text[], ',');
+      """).run()
+    }
+
+    func revert(on database: Database) async throws {
+      guard let sqlDatabase = database as? SQLDatabase else {
+        fatalError("This migration requires an SQL database.")
+      }
+
+      // Convert back from text to target_audience[]
+      // Split by comma, cast each to target_audience enum, create array
+      try await sqlDatabase.raw("""
+        ALTER TABLE sales
+        ALTER COLUMN target_audiences TYPE target_audience[]
+        USING string_to_array(target_audiences, ',')::target_audience[];
+      """).run()
+
+      // Recreate the GIN index
+      try await sqlDatabase.raw("""
+        CREATE INDEX CONCURRENTLY IF NOT EXISTS sales_target_audiences_index
+        ON sales USING GIN (target_audiences);
+      """).run()
+    }
+  }
 }

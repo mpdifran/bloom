@@ -30,6 +30,10 @@ final class SalesStore: ObservableObject {
       let response = try await service.getAllSales()
       sales = response.sales
     } catch {
+      // Ignore cancellation errors - these are expected when tasks are cancelled
+      if let urlError = error as? URLError, urlError.code == .cancelled {
+        return
+      }
       self.error = error
     }
 
