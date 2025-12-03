@@ -25,6 +25,9 @@ final class SaleRecord: Model, @unchecked Sendable {
   @Field(key: "image_url")
   var imageURL: String?
 
+  @Field(key: "image_id")
+  var imageId: String?
+
   @Field(key: "sale_product_id")
   var saleProductId: String
 
@@ -49,6 +52,21 @@ final class SaleRecord: Model, @unchecked Sendable {
   @Field(key: "telemetry_event_name")
   var telemetryEventName: String
 
+  @Field(key: "purchase_button_title")
+  var purchaseButtonTitle: String?
+
+  @Field(key: "purchase_button_gradient_colors")
+  var purchaseButtonGradientColors: [String]?
+
+  @Field(key: "purchase_button_footer_text")
+  var purchaseButtonFooterText: String?
+
+  @Field(key: "discount_badge_background_color")
+  var discountBadgeBackgroundColor: String?
+
+  @Field(key: "discount_badge_foreground_color")
+  var discountBadgeForegroundColor: String?
+
   @Timestamp(key: "created_at", on: .create)
   var createdAt: Date?
 
@@ -62,6 +80,7 @@ final class SaleRecord: Model, @unchecked Sendable {
     title: String,
     bodyText: String,
     imageURL: String?,
+    imageId: String?,
     saleProductId: String,
     compareProductId: String?,
     targetAudiences: [TargetAudienceEnum],
@@ -69,12 +88,18 @@ final class SaleRecord: Model, @unchecked Sendable {
     endDate: Date,
     displayFrequencyDays: Int,
     isActive: Bool,
-    telemetryEventName: String
+    telemetryEventName: String,
+    purchaseButtonTitle: String?,
+    purchaseButtonGradientColors: [String]?,
+    purchaseButtonFooterText: String?,
+    discountBadgeBackgroundColor: String?,
+    discountBadgeForegroundColor: String?
   ) {
     self.id = id
     self.title = title
     self.bodyText = bodyText
     self.imageURL = imageURL
+    self.imageId = imageId
     self.saleProductId = saleProductId
     self.compareProductId = compareProductId
     self.targetAudiences = targetAudiences
@@ -83,6 +108,11 @@ final class SaleRecord: Model, @unchecked Sendable {
     self.displayFrequencyDays = displayFrequencyDays
     self.isActive = isActive
     self.telemetryEventName = telemetryEventName
+    self.purchaseButtonTitle = purchaseButtonTitle
+    self.purchaseButtonGradientColors = purchaseButtonGradientColors
+    self.purchaseButtonFooterText = purchaseButtonFooterText
+    self.discountBadgeBackgroundColor = discountBadgeBackgroundColor
+    self.discountBadgeForegroundColor = discountBadgeForegroundColor
   }
 
   func asDetails() -> SaleDetails {
@@ -91,6 +121,7 @@ final class SaleRecord: Model, @unchecked Sendable {
       title: title,
       bodyText: bodyText,
       imageURL: imageURL,
+      imageId: imageId,
       saleProductId: saleProductId,
       compareProductId: compareProductId,
       targetAudiences: targetAudiences.map { $0.toSharedModel() },
@@ -99,6 +130,11 @@ final class SaleRecord: Model, @unchecked Sendable {
       displayFrequencyDays: displayFrequencyDays,
       isActive: isActive,
       telemetryEventName: telemetryEventName,
+      purchaseButtonTitle: purchaseButtonTitle,
+      purchaseButtonGradientColors: purchaseButtonGradientColors,
+      purchaseButtonFooterText: purchaseButtonFooterText,
+      discountBadgeBackgroundColor: discountBadgeBackgroundColor,
+      discountBadgeForegroundColor: discountBadgeForegroundColor,
       createdAt: createdAt,
       updatedAt: updatedAt
     )
@@ -109,14 +145,12 @@ extension SaleRecord {
   enum TargetAudienceEnum: String, Codable, FluentEnum {
     static let schema = "target_audience"
 
-    case allUsers
     case freeUsers
     case subscribedUsers
     case expiredUsers
 
     func toSharedModel() -> BloomModel.TargetAudience {
       switch self {
-      case .allUsers: return .allUsers
       case .freeUsers: return .freeUsers
       case .subscribedUsers: return .subscribedUsers
       case .expiredUsers: return .expiredUsers
@@ -125,7 +159,6 @@ extension SaleRecord {
 
     static func from(_ sharedModel: BloomModel.TargetAudience) -> TargetAudienceEnum {
       switch sharedModel {
-      case .allUsers: return .allUsers
       case .freeUsers: return .freeUsers
       case .subscribedUsers: return .subscribedUsers
       case .expiredUsers: return .expiredUsers

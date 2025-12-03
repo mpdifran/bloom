@@ -112,6 +112,9 @@ struct RootView: View {
     .task {
       // Check periodic paywall experiment on app launch
       await checkPeriodicPaywall()
+
+      // Check for active sales
+      await checkAndShowSale()
     }
     .onForeground {
       Task {
@@ -123,6 +126,11 @@ struct RootView: View {
       Task {
         // Check periodic paywall experiment on foreground
         await checkPeriodicPaywall()
+      }
+
+      Task {
+        // Check for active sales
+        await checkAndShowSale()
       }
     }
     .onOpenURL { url in
@@ -157,6 +165,20 @@ private extension RootView {
         TelemetryDeck.signal("AB: Periodic Paywall v3 - Control")
       }
     }
+  }
+
+  func checkAndShowSale() async {
+    guard hasShownOnboarding else { return }
+    guard userController.isAuthenticated else { return }
+
+    // TODO: Enable this when we're ready
+//    if let sale = await SalesManager.shared.shouldShowSale() {
+//      presentedSheet = SaleModalView(sale: sale).asAny
+//
+//      Task {
+//        await SalesManager.shared.markSaleAsShown(sale.id)
+//      }
+//    }
   }
 
   func handleURL(_ url: URL) {

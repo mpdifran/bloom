@@ -54,4 +54,8 @@ let allMigrations: [Migration] = [
   User.RemoveOldConsentFields(),
   SaleRecord.Create(),
   SaleRecord.UpdateTargetAudiences(),
+  SaleRecord.AddImageId(),
+  SaleRecord.AddPurchaseButtonCustomization(),
+  SaleRecord.AddPurchaseButtonFooterText(),
+  SaleRecord.AddDiscountBadgeColors(),
 ]

@@ -69,6 +69,7 @@ private extension AdminSalesController {
     }
 
     var imageURL: String? = nil
+    var imageId: String? = nil
     if let imageFile = requestBody.image {
       let metadata = try await request.imageStorage.store(
         image: imageFile,
@@ -79,6 +80,7 @@ private extension AdminSalesController {
         path: .saleImages,
         expiration: .hours(365 * 24) // Long expiration for sale images (365 days)
       )?.absoluteString
+      imageId = UUID().uuidString
     }
 
     let newRecord = SaleRecord(
@@ -86,6 +88,7 @@ private extension AdminSalesController {
       title: createSale.title,
       bodyText: createSale.bodyText,
       imageURL: imageURL ?? createSale.imageURL,
+      imageId: imageId,
       saleProductId: createSale.saleProductId,
       compareProductId: createSale.compareProductId,
       targetAudiences: createSale.targetAudiences.map { SaleRecord.TargetAudienceEnum.from($0) },
@@ -93,7 +96,12 @@ private extension AdminSalesController {
       endDate: createSale.endDate,
       displayFrequencyDays: createSale.displayFrequencyDays,
       isActive: createSale.isActive,
-      telemetryEventName: createSale.telemetryEventName
+      telemetryEventName: createSale.telemetryEventName,
+      purchaseButtonTitle: createSale.purchaseButtonTitle,
+      purchaseButtonGradientColors: createSale.purchaseButtonGradientColors,
+      purchaseButtonFooterText: createSale.purchaseButtonFooterText,
+      discountBadgeBackgroundColor: createSale.discountBadgeBackgroundColor,
+      discountBadgeForegroundColor: createSale.discountBadgeForegroundColor
     )
 
     try await newRecord.save(on: request.db)
@@ -146,6 +154,11 @@ private extension AdminSalesController {
     existingRecord.displayFrequencyDays = updateSale.displayFrequencyDays
     existingRecord.isActive = updateSale.isActive
     existingRecord.telemetryEventName = updateSale.telemetryEventName
+    existingRecord.purchaseButtonTitle = updateSale.purchaseButtonTitle
+    existingRecord.purchaseButtonGradientColors = updateSale.purchaseButtonGradientColors
+    existingRecord.purchaseButtonFooterText = updateSale.purchaseButtonFooterText
+    existingRecord.discountBadgeBackgroundColor = updateSale.discountBadgeBackgroundColor
+    existingRecord.discountBadgeForegroundColor = updateSale.discountBadgeForegroundColor
 
     try await existingRecord.save(on: request.db)
 
@@ -193,8 +206,9 @@ private extension AdminSalesController {
       throw Abort(.internalServerError, reason: "Failed to generate image URL")
     }
 
-    // Update the sale record with the new image URL
+    // Update the sale record with the new image URL and generate new imageId
     existingRecord.imageURL = imageURL.absoluteString
+    existingRecord.imageId = UUID().uuidString
     try await existingRecord.save(on: request.db)
 
     return AdminUploadSaleImageResponse(imageURL: imageURL.absoluteString)
@@ -208,6 +222,7 @@ extension SaleRecord {
       title: title,
       bodyText: bodyText,
       imageURL: imageURL,
+      imageId: imageId,
       saleProductId: saleProductId,
       compareProductId: compareProductId,
       targetAudiences: targetAudiences.map { $0.toSharedModel() },
@@ -216,6 +231,11 @@ extension SaleRecord {
       displayFrequencyDays: displayFrequencyDays,
       isActive: isActive,
       telemetryEventName: telemetryEventName,
+      purchaseButtonTitle: purchaseButtonTitle,
+      purchaseButtonGradientColors: purchaseButtonGradientColors,
+      purchaseButtonFooterText: purchaseButtonFooterText,
+      discountBadgeBackgroundColor: discountBadgeBackgroundColor,
+      discountBadgeForegroundColor: discountBadgeForegroundColor,
       createdAt: createdAt,
       updatedAt: updatedAt
     )

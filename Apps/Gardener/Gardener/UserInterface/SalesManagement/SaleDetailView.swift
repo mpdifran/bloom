@@ -22,6 +22,8 @@ struct SaleDetailView: View {
         productsSection
         targetingSection
         scheduleSection
+        purchaseButtonSection
+        discountBadgeColorsSection
         analyticsSection
         statusSection
       }
@@ -101,17 +103,6 @@ struct SaleDetailView: View {
         .font(.caption)
         .foregroundStyle(.secondary)
 
-      Toggle("All Users", isOn: Binding(
-        get: { viewModel.targetAudiences.contains(.allUsers) },
-        set: { isOn in
-          if isOn {
-            viewModel.targetAudiences.insert(.allUsers)
-          } else {
-            viewModel.targetAudiences.remove(.allUsers)
-          }
-        }
-      ))
-
       Toggle("Free Users", isOn: Binding(
         get: { viewModel.targetAudiences.contains(.freeUsers) },
         set: { isOn in
@@ -158,6 +149,48 @@ struct SaleDetailView: View {
               in: 1...30)
 
       Text("How often the sale modal will auto-show to users")
+        .font(.caption)
+        .foregroundStyle(.secondary)
+    }
+  }
+
+  private var purchaseButtonSection: some View {
+    Section("Purchase Button Customization") {
+      TextField("Button Title (Optional)", text: $viewModel.purchaseButtonTitle)
+
+      Text("Leave empty to use default button text")
+        .font(.caption)
+        .foregroundStyle(.secondary)
+
+      TextField("Gradient Colors (Optional)", text: $viewModel.purchaseButtonGradientColors)
+
+      Text("Comma-separated hex colors (e.g., #FF5733, #C70039)")
+        .font(.caption)
+        .foregroundStyle(.secondary)
+
+      TextField("Footer Text (Optional)", text: $viewModel.purchaseButtonFooterText)
+
+      Text("Leave empty to use default footer text")
+        .font(.caption)
+        .foregroundStyle(.secondary)
+    }
+  }
+
+  private var discountBadgeColorsSection: some View {
+    Section("Discount Badge Colors") {
+      TextField("Background Color (Optional)", text: $viewModel.discountBadgeBackgroundColor)
+
+      Text("Hex color for badge background (e.g., #3798C8)")
+        .font(.caption)
+        .foregroundStyle(.secondary)
+
+      TextField("Foreground/Text Color (Optional)", text: $viewModel.discountBadgeForegroundColor)
+
+      Text("Hex color for badge text (e.g., #FFFFFF)")
+        .font(.caption)
+        .foregroundStyle(.secondary)
+
+      Text("Leave empty to use defaults (blue background, white text)")
         .font(.caption)
         .foregroundStyle(.secondary)
     }
@@ -215,6 +248,7 @@ struct SaleDetailView: View {
     title: "Summer Sale",
     bodyText: "Get 50% off all premium features this summer!",
     imageURL: nil,
+    imageId: nil,
     saleProductId: "bloom_pro_annual",
     compareProductId: "bloom_pro_monthly",
     targetAudiences: [.freeUsers, .expiredUsers],
@@ -223,6 +257,11 @@ struct SaleDetailView: View {
     displayFrequencyDays: 7,
     isActive: true,
     telemetryEventName: "sale_summer_2024_shown",
+    purchaseButtonTitle: "Get 50% Off",
+    purchaseButtonGradientColors: ["#FF5733", "#C70039"],
+    purchaseButtonFooterText: "Limited time offer!",
+    discountBadgeBackgroundColor: nil,
+    discountBadgeForegroundColor: nil,
     createdAt: Date(),
     updatedAt: Date()
   )

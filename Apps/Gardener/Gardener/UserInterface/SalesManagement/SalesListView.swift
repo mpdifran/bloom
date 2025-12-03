@@ -69,6 +69,7 @@ struct SalesListView: View {
         title: "",
         bodyText: "",
         imageURL: nil,
+        imageId: nil,
         saleProductId: "",
         compareProductId: nil,
         targetAudiences: [],
@@ -77,6 +78,11 @@ struct SalesListView: View {
         displayFrequencyDays: 7,
         isActive: false,
         telemetryEventName: "",
+        purchaseButtonTitle: nil,
+        purchaseButtonGradientColors: nil,
+        purchaseButtonFooterText: nil,
+        discountBadgeBackgroundColor: nil,
+        discountBadgeForegroundColor: nil,
         createdAt: nil,
         updatedAt: nil
       )

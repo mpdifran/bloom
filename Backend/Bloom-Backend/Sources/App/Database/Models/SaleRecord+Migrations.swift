@@ -14,7 +14,6 @@ extension SaleRecord {
   struct Create: AsyncMigration {
     func prepare(on database: Database) async throws {
       let targetAudienceEnumType = try await database.enum(TargetAudienceEnum.self)
-        .case(.allUsers)
         .case(.freeUsers)
         .case(.subscribedUsers)
         .case(.expiredUsers)
@@ -113,6 +112,66 @@ extension SaleRecord {
 
       try await database.schema(SaleRecord.schema)
         .field("target_audience", targetAudienceEnumType, .required)
+        .update()
+    }
+  }
+
+  struct AddImageId: AsyncMigration {
+    func prepare(on database: Database) async throws {
+      try await database.schema(SaleRecord.schema)
+        .field("image_id", .string)
+        .update()
+    }
+
+    func revert(on database: Database) async throws {
+      try await database.schema(SaleRecord.schema)
+        .deleteField("image_id")
+        .update()
+    }
+  }
+
+  struct AddPurchaseButtonCustomization: AsyncMigration {
+    func prepare(on database: Database) async throws {
+      try await database.schema(SaleRecord.schema)
+        .field("purchase_button_title", .string)
+        .field("purchase_button_gradient_colors", .array(of: .string))
+        .update()
+    }
+
+    func revert(on database: Database) async throws {
+      try await database.schema(SaleRecord.schema)
+        .deleteField("purchase_button_title")
+        .deleteField("purchase_button_gradient_colors")
+        .update()
+    }
+  }
+
+  struct AddPurchaseButtonFooterText: AsyncMigration {
+    func prepare(on database: Database) async throws {
+      try await database.schema(SaleRecord.schema)
+        .field("purchase_button_footer_text", .string)
+        .update()
+    }
+
+    func revert(on database: Database) async throws {
+      try await database.schema(SaleRecord.schema)
+        .deleteField("purchase_button_footer_text")
+        .update()
+    }
+  }
+
+  struct AddDiscountBadgeColors: AsyncMigration {
+    func prepare(on database: Database) async throws {
+      try await database.schema(SaleRecord.schema)
+        .field("discount_badge_background_color", .string)
+        .field("discount_badge_foreground_color", .string)
+        .update()
+    }
+
+    func revert(on database: Database) async throws {
+      try await database.schema(SaleRecord.schema)
+        .deleteField("discount_badge_background_color")
+        .deleteField("discount_badge_foreground_color")
         .update()
     }
   }

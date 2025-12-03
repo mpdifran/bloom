@@ -26,6 +26,7 @@ final class EntitlementController: ObservableObject {
   static let shared = EntitlementController()
 
   @Published var hasBloomPro: Bool?
+  @Published var allOfferings: Offerings?
 
   @AppStorage(.FeatureFlag.bypassPaywall) private var bypassPaywall = false {
     didSet {
@@ -38,6 +39,10 @@ final class EntitlementController: ObservableObject {
   private init() {
     loadPreviousSubscriptionState()
     observeCustomerInfo()
+
+    Task {
+      await fetchOfferings()
+    }
   }
 
   private var customerInfo: CustomerInfo?
@@ -215,5 +220,36 @@ private extension EntitlementController {
         )
       }
     }
+  }
+}
+
+// MARK: - Package Lookup
+
+extension EntitlementController {
+
+  func fetchOfferings() async {
+    do {
+      let offerings = try await Purchases.shared.offerings()
+      await MainActor.run {
+        self.allOfferings = offerings
+      }
+    } catch {
+      // Handle error silently
+    }
+  }
+
+  func package(for productId: String) -> Package? {
+    guard let offerings = allOfferings else { return nil }
+
+    // Check all offerings, not just current
+    for offering in offerings.all.values {
+      if let package = offering.availablePackages.first(where: {
+        $0.storeProduct.productIdentifier == productId
+      }) {
+        return package
+      }
+    }
+
+    return nil
   }
 }

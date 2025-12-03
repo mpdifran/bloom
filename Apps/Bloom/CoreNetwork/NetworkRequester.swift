@@ -352,3 +352,16 @@ public extension NetworkRequester {
     )
   }
 }
+
+// MARK: - Sales
+
+public extension NetworkRequester {
+
+  func getActiveSales() async throws -> SalesResponse {
+    let request = await URLRequest.Sales.getActiveSales()
+    return try await URLSession.shared.authenticatedBloomRequestWithResponse(
+      request: request,
+      responseType: SalesResponse.self
+    )
+  }
+}

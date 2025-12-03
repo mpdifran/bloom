@@ -23,6 +23,11 @@ final class SaleDetailViewModel: ObservableObject {
   @Published var displayFrequencyDays: Int
   @Published var isActive: Bool
   @Published var telemetryEventName: String
+  @Published var purchaseButtonTitle: String
+  @Published var purchaseButtonGradientColors: String
+  @Published var purchaseButtonFooterText: String
+  @Published var discountBadgeBackgroundColor: String
+  @Published var discountBadgeForegroundColor: String
 
   // UI state
   @Published var error: Error?
@@ -69,6 +74,11 @@ final class SaleDetailViewModel: ObservableObject {
     self.displayFrequencyDays = sale.displayFrequencyDays
     self.isActive = sale.isActive
     self.telemetryEventName = sale.telemetryEventName
+    self.purchaseButtonTitle = sale.purchaseButtonTitle ?? ""
+    self.purchaseButtonGradientColors = sale.purchaseButtonGradientColors?.joined(separator: ", ") ?? ""
+    self.purchaseButtonFooterText = sale.purchaseButtonFooterText ?? ""
+    self.discountBadgeBackgroundColor = sale.discountBadgeBackgroundColor ?? ""
+    self.discountBadgeForegroundColor = sale.discountBadgeForegroundColor ?? ""
   }
 
   func save() async {
@@ -83,6 +93,7 @@ final class SaleDetailViewModel: ObservableObject {
         title: title,
         bodyText: bodyText,
         imageURL: selectedImage != nil ? nil : imageURL, // Clear if new image
+        imageId: nil,
         saleProductId: saleProductId,
         compareProductId: compareProductId.isEmpty ? nil : compareProductId,
         targetAudiences: Array(targetAudiences),
@@ -91,6 +102,11 @@ final class SaleDetailViewModel: ObservableObject {
         displayFrequencyDays: displayFrequencyDays,
         isActive: isActive,
         telemetryEventName: telemetryEventName,
+        purchaseButtonTitle: purchaseButtonTitle.isEmpty ? nil : purchaseButtonTitle,
+        purchaseButtonGradientColors: parseGradientColors(),
+        purchaseButtonFooterText: purchaseButtonFooterText.isEmpty ? nil : purchaseButtonFooterText,
+        discountBadgeBackgroundColor: discountBadgeBackgroundColor.isEmpty ? nil : discountBadgeBackgroundColor,
+        discountBadgeForegroundColor: discountBadgeForegroundColor.isEmpty ? nil : discountBadgeForegroundColor,
         createdAt: createdAt,
         updatedAt: updatedAt
       )
@@ -126,6 +142,7 @@ final class SaleDetailViewModel: ObservableObject {
         title: title,
         bodyText: bodyText,
         imageURL: imageURL,
+        imageId: nil,
         saleProductId: saleProductId,
         compareProductId: compareProductId.isEmpty ? nil : compareProductId,
         targetAudiences: Array(targetAudiences),
@@ -134,6 +151,11 @@ final class SaleDetailViewModel: ObservableObject {
         displayFrequencyDays: displayFrequencyDays,
         isActive: isActive,
         telemetryEventName: telemetryEventName,
+        purchaseButtonTitle: purchaseButtonTitle.isEmpty ? nil : purchaseButtonTitle,
+        purchaseButtonGradientColors: parseGradientColors(),
+        purchaseButtonFooterText: purchaseButtonFooterText.isEmpty ? nil : purchaseButtonFooterText,
+        discountBadgeBackgroundColor: discountBadgeBackgroundColor.isEmpty ? nil : discountBadgeBackgroundColor,
+        discountBadgeForegroundColor: discountBadgeForegroundColor.isEmpty ? nil : discountBadgeForegroundColor,
         createdAt: createdAt,
         updatedAt: updatedAt
       )
@@ -166,5 +188,14 @@ final class SaleDetailViewModel: ObservableObject {
       return nil // Will be uploaded
     }
     return imageURL
+  }
+
+  private func parseGradientColors() -> [String]? {
+    let colors = purchaseButtonGradientColors
+      .split(separator: ",")
+      .map { $0.trimmingCharacters(in: .whitespaces) }
+      .filter { !$0.isEmpty }
+
+    return colors.isEmpty ? nil : colors
   }
 }

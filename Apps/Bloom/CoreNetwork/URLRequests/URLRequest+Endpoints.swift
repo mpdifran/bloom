@@ -163,3 +163,11 @@ public extension URLRequest {
     }
   }
 }
+
+public extension URLRequest {
+  enum Sales {
+    static func getActiveSales() async -> URLRequest {
+      await URLRequest.get("v1/sales/active")
+    }
+  }
+}
