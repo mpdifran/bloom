@@ -25,9 +25,6 @@ final class SaleRecord: Model, @unchecked Sendable {
   @Field(key: "image_url")
   var imageURL: String?
 
-  @Field(key: "image_id")
-  var imageId: String?
-
   @Field(key: "sale_product_id")
   var saleProductId: String
 
@@ -80,7 +77,6 @@ final class SaleRecord: Model, @unchecked Sendable {
     title: String,
     bodyText: String,
     imageURL: String?,
-    imageId: String?,
     saleProductId: String,
     compareProductId: String?,
     targetAudiences: [TargetAudienceEnum],
@@ -99,7 +95,6 @@ final class SaleRecord: Model, @unchecked Sendable {
     self.title = title
     self.bodyText = bodyText
     self.imageURL = imageURL
-    self.imageId = imageId
     self.saleProductId = saleProductId
     self.compareProductId = compareProductId
     self.targetAudiences = targetAudiences
@@ -121,7 +116,6 @@ final class SaleRecord: Model, @unchecked Sendable {
       title: title,
       bodyText: bodyText,
       imageURL: imageURL,
-      imageId: imageId,
       saleProductId: saleProductId,
       compareProductId: compareProductId,
       targetAudiences: targetAudiences.map { $0.toSharedModel() },

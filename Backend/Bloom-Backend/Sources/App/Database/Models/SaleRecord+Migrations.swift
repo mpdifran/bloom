@@ -175,4 +175,18 @@ extension SaleRecord {
         .update()
     }
   }
+
+  struct RemoveImageId: AsyncMigration {
+    func prepare(on database: Database) async throws {
+      try await database.schema(SaleRecord.schema)
+        .deleteField("image_id")
+        .update()
+    }
+
+    func revert(on database: Database) async throws {
+      try await database.schema(SaleRecord.schema)
+        .field("image_id", .string)
+        .update()
+    }
+  }
 }

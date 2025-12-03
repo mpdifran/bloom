@@ -71,7 +71,6 @@ struct SalesListView: View {
           title: "New Sale",
           bodyText: "This is a new sale.",
           imageURL: nil,
-          imageId: nil,
           saleProductId: "",
           compareProductId: nil,
           targetAudiences: [.freeUsers],

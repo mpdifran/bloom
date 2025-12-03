@@ -13,7 +13,6 @@ public struct AdminSaleRecord: Codable, Equatable, Sendable, Hashable {
   public let title: String
   public let bodyText: String
   public let imageURL: String?
-  public let imageId: String?
   public let saleProductId: String
   public let compareProductId: String?
   public let targetAudiences: [TargetAudience]
@@ -35,7 +34,6 @@ public struct AdminSaleRecord: Codable, Equatable, Sendable, Hashable {
     title: String,
     bodyText: String,
     imageURL: String?,
-    imageId: String?,
     saleProductId: String,
     compareProductId: String?,
     targetAudiences: [TargetAudience],
@@ -56,7 +54,6 @@ public struct AdminSaleRecord: Codable, Equatable, Sendable, Hashable {
     self.title = title
     self.bodyText = bodyText
     self.imageURL = imageURL
-    self.imageId = imageId
     self.saleProductId = saleProductId
     self.compareProductId = compareProductId
     self.targetAudiences = targetAudiences

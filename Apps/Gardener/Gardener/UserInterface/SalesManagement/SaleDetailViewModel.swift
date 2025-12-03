@@ -93,7 +93,6 @@ final class SaleDetailViewModel: ObservableObject {
         title: title,
         bodyText: bodyText,
         imageURL: selectedImage != nil ? nil : imageURL, // Clear if new image
-        imageId: nil,
         saleProductId: saleProductId,
         compareProductId: compareProductId.isEmpty ? nil : compareProductId,
         targetAudiences: Array(targetAudiences),
@@ -142,7 +141,6 @@ final class SaleDetailViewModel: ObservableObject {
         title: title,
         bodyText: bodyText,
         imageURL: imageURL,
-        imageId: nil,
         saleProductId: saleProductId,
         compareProductId: compareProductId.isEmpty ? nil : compareProductId,
         targetAudiences: Array(targetAudiences),

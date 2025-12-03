@@ -52,7 +52,6 @@ private extension AdminSalesController {
     try validateSale(createSale, isActivating: createSale.isActive)
 
     var imageURL: String? = nil
-    var imageId: String? = nil
     if let imageFile = requestBody.image {
       let metadata = try await request.imageStorage.store(
         image: imageFile,
@@ -63,7 +62,6 @@ private extension AdminSalesController {
         path: .saleImages,
         expiration: .hours(365 * 24) // Long expiration for sale images (365 days)
       )?.absoluteString
-      imageId = UUID().uuidString
     }
 
     let newRecord = SaleRecord(
@@ -71,7 +69,6 @@ private extension AdminSalesController {
       title: createSale.title,
       bodyText: createSale.bodyText,
       imageURL: imageURL ?? createSale.imageURL,
-      imageId: imageId,
       saleProductId: createSale.saleProductId,
       compareProductId: createSale.compareProductId,
       targetAudiences: createSale.targetAudiences.map { SaleRecord.TargetAudienceEnum.from($0) },
@@ -172,9 +169,8 @@ private extension AdminSalesController {
       throw Abort(.internalServerError, reason: "Failed to generate image URL")
     }
 
-    // Update the sale record with the new image URL and generate new imageId
+    // Update the sale record with the new image URL
     existingRecord.imageURL = imageURL.absoluteString
-    existingRecord.imageId = UUID().uuidString
     try await existingRecord.save(on: request.db)
 
     return AdminUploadSaleImageResponse(imageURL: imageURL.absoluteString)
@@ -219,7 +215,6 @@ extension SaleRecord {
       title: title,
       bodyText: bodyText,
       imageURL: imageURL,
-      imageId: imageId,
       saleProductId: saleProductId,
       compareProductId: compareProductId,
       targetAudiences: targetAudiences.map { $0.toSharedModel() },

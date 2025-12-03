@@ -58,4 +58,5 @@ let allMigrations: [Migration] = [
   SaleRecord.AddPurchaseButtonCustomization(),
   SaleRecord.AddPurchaseButtonFooterText(),
   SaleRecord.AddDiscountBadgeColors(),
+  SaleRecord.RemoveImageId(),
 ]

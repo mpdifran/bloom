@@ -248,7 +248,6 @@ struct SaleDetailView: View {
     title: "Summer Sale",
     bodyText: "Get 50% off all premium features this summer!",
     imageURL: nil,
-    imageId: nil,
     saleProductId: "bloom_pro_annual",
     compareProductId: "bloom_pro_monthly",
     targetAudiences: [.freeUsers, .expiredUsers],

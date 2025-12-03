@@ -17,7 +17,6 @@ struct SaleModalView: View {
   let sale: SaleDetails
 
   @Environment(\.dismiss) private var dismiss
-  @State private var saleImage: UIImage?
 
   var body: some View {
     NavigationStack {
@@ -42,16 +41,6 @@ struct SaleModalView: View {
       }
     }
     .task {
-      // Load image from cache
-      if let imageId = sale.imageId,
-         let imagePath = await SalesManager.shared.getCachedImagePath(imageId: imageId) {
-        saleImage = UIImage(contentsOfFile: imagePath.path)
-      }
-
-      #if DEBUG
-      saleImage = UIImage(resource: .budLounging)
-      #endif
-
       // Log telemetry when sale is shown
       TelemetryDeck.signal(sale.telemetryEventName)
     }
@@ -63,14 +52,9 @@ private extension SaleModalView {
   @ViewBuilder
   var saleImageView: some View {
     Group {
-      if let saleImage {
-        // Cached image loaded successfully
-        Image(uiImage: saleImage)
-          .resizable()
-          .scaledToFill()
-      } else if let imageURLString = sale.imageURL,
-                let imageURL = URL(string: imageURLString) {
-        // No cached image, but URL available - use AsyncImage
+      if let imageURLString = sale.imageURL,
+         let imageURL = URL(string: imageURLString) {
+        // Load image from S3 URL
         AsyncImage(url: imageURL) { phase in
           switch phase {
           case .success(let image):
@@ -86,9 +70,10 @@ private extension SaleModalView {
           }
         }
       } else {
-        // No cached image and no URL - show placeholder
-        Rectangle()
-          .fill(.fill)
+        // No URL - show default image
+        Image(.budLounging)
+          .resizable()
+          .scaledToFill()
       }
     }
     .frame(height: .imageHeight)
@@ -104,6 +89,7 @@ private extension SaleModalView {
   var timeRemainingBadge: some View {
     if let timeRemaining = timeRemainingText {
       Text(timeRemaining)
+        .foregroundStyle(.white)
         .font(.subheadline)
         .fontDesign(.rounded)
         .bold()
@@ -327,7 +313,6 @@ private struct GradientButtonStyle: ButtonStyle {
           title: "New Year, New You!",
           bodyText: "Get a jump on the new year with the best deal you'll see on Bloom! Your rate is locked in indefinitely.",
           imageURL: nil,
-          imageId: "image_123",
           saleProductId: "bloom_2999_1y_7d0",
           compareProductId: "bloom_pro_yearly",
           targetAudiences: [.freeUsers, .expiredUsers],
