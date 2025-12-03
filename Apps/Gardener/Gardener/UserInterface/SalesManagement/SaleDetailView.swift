@@ -15,19 +15,28 @@ struct SaleDetailView: View {
   @Environment(\.dismiss) private var dismiss
 
   var body: some View {
-    ScrollView {
-      Form {
-        imageSection
-        basicInfoSection
-        productsSection
-        targetingSection
-        scheduleSection
-        purchaseButtonSection
-        discountBadgeColorsSection
-        analyticsSection
-        statusSection
+    VStack(spacing: 0) {
+      // Fixed preview at top
+      SalePreviewView(viewModel: viewModel)
+        .padding()
+
+      Divider()
+
+      // Scrollable form underneath
+      ScrollView {
+        Form {
+          imageSection
+          basicInfoSection
+          productsSection
+          targetingSection
+          scheduleSection
+          purchaseButtonSection
+          discountBadgeColorsSection
+          analyticsSection
+          statusSection
+        }
+        .formStyle(.grouped)
       }
-      .formStyle(.grouped)
     }
     .navigationTitle(viewModel.isNewSale ? "New Sale" : "Edit Sale")
     .shelf {
