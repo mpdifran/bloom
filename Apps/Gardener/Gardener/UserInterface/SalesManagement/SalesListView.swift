@@ -11,10 +11,11 @@ import SwiftUI
 
 struct SalesListView: View {
   @ObservedObject private var store = SalesStore.shared
-  @State private var presentedSheet: AnyView?
+  @State private var navigationPath = NavigationPath()
 
   var body: some View {
-    Group {
+    NavigationStack(path: $navigationPath) {
+      Group {
       if store.isLoading && store.sales.isEmpty {
         ProgressView()
       } else if store.sales.isEmpty {
@@ -30,25 +31,25 @@ struct SalesListView: View {
           }
         }
       }
-    }
-    .navigationTitle("Sales Management")
-    .navigationDestination(for: AdminSaleRecord.self) { sale in
-      let viewModel = SaleDetailViewModel(sale: sale, store: store)
-      SaleDetailView(viewModel: viewModel)
-    }
-    .sheet($presentedSheet)
-    .toolbar {
-      ToolbarItem(placement: .primaryAction) {
-        refreshButton
       }
-      ToolbarItem(placement: .primaryAction) {
-        addButton
+      .navigationTitle("Sales Management")
+      .navigationDestination(for: AdminSaleRecord.self) { sale in
+        let viewModel = SaleDetailViewModel(sale: sale, store: store)
+        SaleDetailView(viewModel: viewModel)
       }
+      .toolbar {
+        ToolbarItem(placement: .primaryAction) {
+          refreshButton
+        }
+        ToolbarItem(placement: .primaryAction) {
+          addButton
+        }
+      }
+      .task {
+        await store.loadSales()
+      }
+      .alert(error: $store.error)
     }
-    .task {
-      await store.loadSales()
-    }
-    .alert(error: $store.error)
   }
 
   private var refreshButton: some View {
@@ -63,33 +64,38 @@ struct SalesListView: View {
   }
 
   private var addButton: some View {
-    Button {
-      let newSale = AdminSaleRecord(
-        id: nil,
-        title: "",
-        bodyText: "",
-        imageURL: nil,
-        imageId: nil,
-        saleProductId: "",
-        compareProductId: nil,
-        targetAudiences: [],
-        startDate: Date(),
-        endDate: Date().addingTimeInterval(86400 * 7), // 7 days from now
-        displayFrequencyDays: 7,
-        isActive: false,
-        telemetryEventName: "",
-        purchaseButtonTitle: nil,
-        purchaseButtonGradientColors: nil,
-        purchaseButtonFooterText: nil,
-        discountBadgeBackgroundColor: nil,
-        discountBadgeForegroundColor: nil,
-        createdAt: nil,
-        updatedAt: nil
-      )
-      let viewModel = SaleDetailViewModel(sale: newSale, store: store)
-      presentedSheet = NavigationStack {
-        SaleDetailView(viewModel: viewModel)
-      }.asAny
+    AsyncButton {
+      Task {
+        let newSale = AdminSaleRecord(
+          id: nil,
+          title: "New Sale",
+          bodyText: "This is a new sale.",
+          imageURL: nil,
+          imageId: nil,
+          saleProductId: "",
+          compareProductId: nil,
+          targetAudiences: [.freeUsers],
+          startDate: Date(),
+          endDate: Date().addingTimeInterval(86400 * 7), // 7 days from now
+          displayFrequencyDays: 7,
+          isActive: false,
+          telemetryEventName: "",
+          purchaseButtonTitle: "Upgrade",
+          purchaseButtonGradientColors: nil,
+          purchaseButtonFooterText: "Share with up to 5 family members",
+          discountBadgeBackgroundColor: nil,
+          discountBadgeForegroundColor: nil,
+          createdAt: nil,
+          updatedAt: nil
+        )
+
+        // Create sale in backend immediately
+        if let createdSale = try await store.create(sale: newSale, image: nil) {
+          // Sale is automatically added to store.sales by the create method
+          // Navigate to the newly created sale
+          navigationPath.append(createdSale)
+        }
+      }
     } label: {
       Label("Add Sale", systemImage: "plus")
     }

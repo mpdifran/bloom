@@ -48,25 +48,8 @@ private extension AdminSalesController {
     let requestBody = try request.content.decode(AdminCreateSaleRequest.self)
     let createSale = requestBody.sale
 
-    // Validation
-    guard !createSale.title.isEmpty else {
-      throw Abort(.badRequest, reason: "Title is required")
-    }
-    guard !createSale.bodyText.isEmpty else {
-      throw Abort(.badRequest, reason: "Body text is required")
-    }
-    guard !createSale.saleProductId.isEmpty else {
-      throw Abort(.badRequest, reason: "Sale product ID is required")
-    }
-    guard !createSale.telemetryEventName.isEmpty else {
-      throw Abort(.badRequest, reason: "Telemetry event name is required")
-    }
-    guard createSale.displayFrequencyDays >= 1 && createSale.displayFrequencyDays <= 30 else {
-      throw Abort(.badRequest, reason: "Display frequency days must be between 1 and 30")
-    }
-    guard createSale.startDate < createSale.endDate else {
-      throw Abort(.badRequest, reason: "Start date must be before end date")
-    }
+    // Validation - only for active sales
+    try validateSale(createSale, isActivating: createSale.isActive)
 
     var imageURL: String? = nil
     var imageId: String? = nil
@@ -122,25 +105,8 @@ private extension AdminSalesController {
       throw Abort(.notFound, reason: "Sale not found")
     }
 
-    // Validation
-    guard !updateSale.title.isEmpty else {
-      throw Abort(.badRequest, reason: "Title is required")
-    }
-    guard !updateSale.bodyText.isEmpty else {
-      throw Abort(.badRequest, reason: "Body text is required")
-    }
-    guard !updateSale.saleProductId.isEmpty else {
-      throw Abort(.badRequest, reason: "Sale product ID is required")
-    }
-    guard !updateSale.telemetryEventName.isEmpty else {
-      throw Abort(.badRequest, reason: "Telemetry event name is required")
-    }
-    guard updateSale.displayFrequencyDays >= 1 && updateSale.displayFrequencyDays <= 30 else {
-      throw Abort(.badRequest, reason: "Display frequency days must be between 1 and 30")
-    }
-    guard updateSale.startDate < updateSale.endDate else {
-      throw Abort(.badRequest, reason: "Start date must be before end date")
-    }
+    // Validation - only for active sales
+    try validateSale(updateSale, isActivating: updateSale.isActive)
 
     // Update fields
     existingRecord.title = updateSale.title
@@ -212,6 +178,37 @@ private extension AdminSalesController {
     try await existingRecord.save(on: request.db)
 
     return AdminUploadSaleImageResponse(imageURL: imageURL.absoluteString)
+  }
+
+  // MARK: - Validation
+
+  private func validateSale(_ sale: AdminSaleRecord, isActivating: Bool) throws {
+    // Only validate if the sale is active
+    guard isActivating else { return }
+
+    // Required fields for active sales
+    guard !sale.title.isEmpty else {
+      throw Abort(.badRequest, reason: "Title is required for active sales")
+    }
+    guard !sale.bodyText.isEmpty else {
+      throw Abort(.badRequest, reason: "Body text is required for active sales")
+    }
+    guard !sale.saleProductId.isEmpty else {
+      throw Abort(.badRequest, reason: "Sale product ID is required for active sales")
+    }
+    guard !sale.telemetryEventName.isEmpty else {
+      throw Abort(.badRequest, reason: "Telemetry event name is required for active sales")
+    }
+
+    // Range validations
+    guard sale.displayFrequencyDays >= 1 && sale.displayFrequencyDays <= 30 else {
+      throw Abort(.badRequest, reason: "Display frequency must be 1-30 days for active sales")
+    }
+
+    // Logical validations
+    guard sale.startDate < sale.endDate else {
+      throw Abort(.badRequest, reason: "Start date must be before end date for active sales")
+    }
   }
 }
 

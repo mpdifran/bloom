@@ -338,7 +338,7 @@ private struct GradientButtonStyle: ButtonStyle {
           telemetryEventName: "preview_sale",
           purchaseButtonTitle: "Upgrade",
           purchaseButtonGradientColors: ["#5BBDE1", "#3798C8", "#3EC17D"],
-          purchaseButtonFooterText: "Share with up to 5 family members!",
+          purchaseButtonFooterText: "Share with up to 5 family members",
           discountBadgeBackgroundColor: nil,
           discountBadgeForegroundColor: nil,
           createdAt: .now,
