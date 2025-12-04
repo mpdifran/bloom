@@ -57,10 +57,9 @@ private extension AdminSalesController {
         image: imageFile,
         path: .saleImages
       )
-      imageURL = try await request.imageStorage.generateImageURL(
+      imageURL = request.imageStorage.generatePublicURL(
         fileName: metadata.filename,
-        path: .saleImages,
-        expiration: .hours(365 * 24) // Long expiration for sale images (365 days)
+        path: .saleImages
       )?.absoluteString
     }
 
@@ -161,10 +160,9 @@ private extension AdminSalesController {
       path: .saleImages
     )
 
-    guard let imageURL = try await request.imageStorage.generateImageURL(
+    guard let imageURL = request.imageStorage.generatePublicURL(
       fileName: metadata.filename,
-      path: .saleImages,
-      expiration: .hours(365 * 24) // Long expiration for sale images (365 days)
+      path: .saleImages
     ) else {
       throw Abort(.internalServerError, reason: "Failed to generate image URL")
     }

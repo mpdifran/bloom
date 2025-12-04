@@ -11,11 +11,10 @@ import SwiftUI
 
 struct SalesListView: View {
   @ObservedObject private var store = SalesStore.shared
-  @State private var navigationPath = NavigationPath()
+  @State private var selectedSale: AdminSaleRecord?
 
   var body: some View {
-    NavigationStack(path: $navigationPath) {
-      Group {
+    Group {
       if store.isLoading && store.sales.isEmpty {
         ProgressView()
       } else if store.sales.isEmpty {
@@ -25,19 +24,19 @@ struct SalesListView: View {
           description: Text("Create your first sale to get started")
         )
       } else {
-        List(store.sales, id: \.id) { sale in
-          NavigationLink(value: sale) {
+        List(store.sales, id: \.id, selection: $selectedSale) { sale in
+          NavigationLink {
+            let viewModel = SaleDetailViewModel(sale: sale, store: store)
+            SaleDetailView(viewModel: viewModel)
+          } label: {
             SaleRow(sale: sale)
+              .tag(sale)
           }
         }
       }
-      }
-      .navigationTitle("Sales Management")
-      .navigationDestination(for: AdminSaleRecord.self) { sale in
-        let viewModel = SaleDetailViewModel(sale: sale, store: store)
-        SaleDetailView(viewModel: viewModel)
-      }
-      .toolbar {
+    }
+    .navigationTitle("Sales Management")
+    .toolbar {
         ToolbarItem(placement: .primaryAction) {
           refreshButton
         }
@@ -49,7 +48,6 @@ struct SalesListView: View {
         await store.loadSales()
       }
       .alert(error: $store.error)
-    }
   }
 
   private var refreshButton: some View {
@@ -91,8 +89,8 @@ struct SalesListView: View {
         // Create sale in backend immediately
         if let createdSale = try await store.create(sale: newSale, image: nil) {
           // Sale is automatically added to store.sales by the create method
-          // Navigate to the newly created sale
-          navigationPath.append(createdSale)
+          // Select the newly created sale
+          selectedSale = createdSale
         }
       }
     } label: {
@@ -153,7 +151,11 @@ private struct SaleRow: View {
 }
 
 #Preview {
-  NavigationStack {
+  NavigationSplitView {
+    Text("Sidebar")
+  } content: {
     SalesListView()
+  } detail: {
+    Text("Detail")
   }
 }

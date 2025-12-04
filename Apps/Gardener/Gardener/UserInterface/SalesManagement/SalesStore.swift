@@ -55,14 +55,39 @@ final class SalesStore: ObservableObject {
   }
 
   func update(sale: AdminSaleRecord, image: NSImage?) async throws -> AdminSaleRecord? {
-    // If there's a new image, upload it separately
+    var saleToUpdate = sale
+
+    // If there's a new image, upload it separately and update the sale object
     if let image, let saleId = sale.id, let data = image.pngData() {
       let imageFile = ImageFile(data: data, fileExtension: "png")
       let uploadRequest = AdminUploadSaleImageRequest(saleId: saleId, image: imageFile)
-      _ = try await service.uploadSaleImage(request: uploadRequest)
+      let uploadResponse = try await service.uploadSaleImage(request: uploadRequest)
+
+      // Update the sale with the new imageURL BEFORE calling updateSale
+      saleToUpdate = AdminSaleRecord(
+        id: saleToUpdate.id,
+        title: saleToUpdate.title,
+        bodyText: saleToUpdate.bodyText,
+        imageURL: uploadResponse.imageURL,  // Use the uploaded URL
+        saleProductId: saleToUpdate.saleProductId,
+        compareProductId: saleToUpdate.compareProductId,
+        targetAudiences: saleToUpdate.targetAudiences,
+        startDate: saleToUpdate.startDate,
+        endDate: saleToUpdate.endDate,
+        displayFrequencyDays: saleToUpdate.displayFrequencyDays,
+        isActive: saleToUpdate.isActive,
+        telemetryEventName: saleToUpdate.telemetryEventName,
+        purchaseButtonTitle: saleToUpdate.purchaseButtonTitle,
+        purchaseButtonGradientColors: saleToUpdate.purchaseButtonGradientColors,
+        purchaseButtonFooterText: saleToUpdate.purchaseButtonFooterText,
+        discountBadgeBackgroundColor: saleToUpdate.discountBadgeBackgroundColor,
+        discountBadgeForegroundColor: saleToUpdate.discountBadgeForegroundColor,
+        createdAt: saleToUpdate.createdAt,
+        updatedAt: saleToUpdate.updatedAt
+      )
     }
 
-    let request = AdminUpdateSaleRequest(sale: sale)
+    let request = AdminUpdateSaleRequest(sale: saleToUpdate)  // Use updated sale
     let response = try await service.updateSale(request: request)
 
     if let index = sales.firstIndex(where: { $0.id == sale.id }) {

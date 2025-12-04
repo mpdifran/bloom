@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppKit
+import AdminBloomModel
 
 private extension CGFloat {
   static let imageHeight: CGFloat = 250
@@ -16,22 +17,19 @@ struct SalePreviewView: View {
   @ObservedObject var viewModel: SaleDetailViewModel
 
   var body: some View {
-    GroupBox {
-      VStack(spacing: 0) {
-        saleImageView
+    VStack(spacing: 0) {
+      saleImageView
 
-        VStack(spacing: 12) {
-          textContentSection
-          discountBadgeSection
-          purchaseSection
-        }
-        .padding()
+      VStack(spacing: 12) {
+        textContentSection
+        discountBadgeSection
+        purchaseSection
       }
-    } label: {
-      Text("Preview")
-        .font(.headline)
+      .padding()
     }
-    .frame(maxWidth: .infinity)
+    .background(.background.secondary)
+    .clipShape(RoundedRectangle(cornerRadius: 17))
+    .frame(width: 340)
   }
 }
 
@@ -39,7 +37,7 @@ private extension SalePreviewView {
 
   @ViewBuilder
   var saleImageView: some View {
-    ZStack(alignment: .topTrailing) {
+    ZStack {
       Group {
         if let selectedImage = viewModel.selectedImage {
           // Show selected NSImage
@@ -55,9 +53,36 @@ private extension SalePreviewView {
               image
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-            case .empty, .failure:
+            case .empty:
+              // Loading state
               Rectangle()
                 .fill(Color.gray.opacity(0.2))
+                .overlay {
+                  VStack {
+                    ProgressView()
+                    Text("Loading...")
+                      .font(.caption)
+                      .foregroundColor(.secondary)
+                  }
+                }
+            case .failure(let error):
+              // Error state with details
+              Rectangle()
+                .fill(Color.red.opacity(0.1))
+                .overlay {
+                  VStack {
+                    Image(systemName: "exclamationmark.triangle")
+                      .foregroundColor(.red)
+                    Text("Failed to load")
+                      .font(.caption)
+                      .foregroundColor(.secondary)
+                    Text(error.localizedDescription)
+                      .font(.caption2)
+                      .foregroundColor(.secondary)
+                      .multilineTextAlignment(.center)
+                      .padding(.horizontal)
+                  }
+                }
             @unknown default:
               Rectangle()
                 .fill(Color.gray.opacity(0.2))
@@ -76,8 +101,13 @@ private extension SalePreviewView {
       .frame(height: .imageHeight)
       .clipped()
 
+      mockDismissButton
+        .padding()
+        .zStackAlignment(.topLeading)
+
       timeRemainingBadge
-        .padding(8)
+        .padding()
+        .zStackAlignment(.topTrailing)
     }
   }
 
@@ -104,6 +134,7 @@ private extension SalePreviewView {
         .font(.title2)
         .bold()
         .multilineTextAlignment(.center)
+        .fixedSize(horizontal: false, vertical: true)
     }
 
     if !viewModel.bodyText.isEmpty {
@@ -111,6 +142,7 @@ private extension SalePreviewView {
         .font(.body)
         .multilineTextAlignment(.center)
         .foregroundColor(.secondary)
+        .fixedSize(horizontal: false, vertical: true)
     }
   }
 
@@ -121,7 +153,7 @@ private extension SalePreviewView {
 
     if hasBackgroundColor || hasForegroundColor {
       HStack(spacing: 12) {
-        Text("50% OFF")
+        Text("50% OFF (example)")
           .font(.body)
           .bold()
           .foregroundColor(parsedForegroundColor)
@@ -133,6 +165,16 @@ private extension SalePreviewView {
           }
       }
     }
+  }
+
+  var mockDismissButton: some View {
+    Image(systemName: "xmark")
+      .bold()
+      .padding(6)
+      .background {
+        Circle()
+          .fill(.regularMaterial)
+      }
   }
 
   @ViewBuilder
@@ -212,11 +254,14 @@ struct GradientButtonStyleMacOS: ButtonStyle {
   let hexColors: [String]
 
   func makeBody(configuration: Configuration) -> some View {
-    configuration.label
-      .bold()
-      .foregroundColor(.white)
-      .background(gradientBackground)
-      .cornerRadius(8)
+    HStack {
+      configuration.label
+    }
+    .bold()
+    .padding(.horizontal)
+    .background(gradientBackground)
+    .foregroundStyle(.invertedText)
+    .clipShape(Capsule())
   }
 
   @ViewBuilder
@@ -250,4 +295,16 @@ extension Color {
 
     self.init(red: r, green: g, blue: b)
   }
+}
+
+#Preview {
+  VStack {
+    SalePreviewView(
+      viewModel: SaleDetailViewModel(
+        sale: .defaultSale,
+        store: SalesStore.shared
+      )
+    )
+  }
+  .horizontallyCentered()
 }

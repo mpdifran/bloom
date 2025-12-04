@@ -34,6 +34,10 @@ protocol ImageStorage: Sendable {
     expiration: TimeAmount
   ) async throws -> URL?
 
+  /// Generate a public (non-signed) URL for accessing an image
+  /// Use this for images in publicly accessible S3 paths (e.g., sale-images)
+  func generatePublicURL(fileName: String, path: StoragePath) -> URL?
+
   /// Retrieve image data from storage
   /// - Parameters:
   ///   - fileName: The name of the file to retrieve
@@ -128,6 +132,13 @@ struct S3Storage: ImageStorage {
       logger.error("Failed to create S3 signed URL: \(error)")
       return nil
     }
+  }
+
+  func generatePublicURL(fileName: String, path: StoragePath) -> URL? {
+    let objectKey = "\(path.rawValue)/\(fileName)"
+    let encodedKey = objectKey.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? objectKey
+    let region = s3.region
+    return URL(string: "https://\(bucketName).s3.\(region).amazonaws.com/\(encodedKey)")
   }
 
   func retrieveImage(fileName: String, path: StoragePath) async throws -> ImageFile? {

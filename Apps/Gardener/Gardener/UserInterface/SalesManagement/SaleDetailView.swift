@@ -19,6 +19,7 @@ struct SaleDetailView: View {
       // Fixed preview at top
       SalePreviewView(viewModel: viewModel)
         .padding()
+        .fixedSize(horizontal: false, vertical: true)
 
       Divider()
 

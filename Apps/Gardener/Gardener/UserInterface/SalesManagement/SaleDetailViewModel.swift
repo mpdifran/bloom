@@ -36,24 +36,53 @@ final class SaleDetailViewModel: ObservableObject {
   @Published var isImageChanged = false
 
   private let saleId: String?
-  private let imageURL: String?
+  @Published private var imageURL: String?
   private let createdAt: Date?
   private let updatedAt: Date?
   private let store: SalesStore
+
+  // Original values for change detection
+  private let originalTitle: String
+  private let originalBodyText: String
+  private let originalSaleProductId: String
+  private let originalCompareProductId: String
+  private let originalTargetAudiences: Set<TargetAudience>
+  private let originalStartDate: Date
+  private let originalEndDate: Date
+  private let originalDisplayFrequencyDays: Int
+  private let originalIsActive: Bool
+  private let originalTelemetryEventName: String
+  private let originalPurchaseButtonTitle: String
+  private let originalPurchaseButtonGradientColors: String
+  private let originalPurchaseButtonFooterText: String
+  private let originalDiscountBadgeBackgroundColor: String
+  private let originalDiscountBadgeForegroundColor: String
 
   var isNewSale: Bool {
     saleId == nil
   }
 
+  var hasChanges: Bool {
+    title != originalTitle ||
+    bodyText != originalBodyText ||
+    saleProductId != originalSaleProductId ||
+    compareProductId != originalCompareProductId ||
+    targetAudiences != originalTargetAudiences ||
+    startDate != originalStartDate ||
+    endDate != originalEndDate ||
+    displayFrequencyDays != originalDisplayFrequencyDays ||
+    isActive != originalIsActive ||
+    telemetryEventName != originalTelemetryEventName ||
+    purchaseButtonTitle != originalPurchaseButtonTitle ||
+    purchaseButtonGradientColors != originalPurchaseButtonGradientColors ||
+    purchaseButtonFooterText != originalPurchaseButtonFooterText ||
+    discountBadgeBackgroundColor != originalDiscountBadgeBackgroundColor ||
+    discountBadgeForegroundColor != originalDiscountBadgeForegroundColor ||
+    isImageChanged
+  }
+
   var canSave: Bool {
-    !title.isEmpty &&
-    !bodyText.isEmpty &&
-    !saleProductId.isEmpty &&
-    !telemetryEventName.isEmpty &&
-    !targetAudiences.isEmpty &&
-    displayFrequencyDays >= 1 &&
-    displayFrequencyDays <= 30 &&
-    startDate < endDate
+    isNewSale || hasChanges
   }
 
   init(sale: AdminSaleRecord, store: SalesStore) {
@@ -79,6 +108,23 @@ final class SaleDetailViewModel: ObservableObject {
     self.purchaseButtonFooterText = sale.purchaseButtonFooterText ?? ""
     self.discountBadgeBackgroundColor = sale.discountBadgeBackgroundColor ?? ""
     self.discountBadgeForegroundColor = sale.discountBadgeForegroundColor ?? ""
+
+    // Store original values for change detection
+    self.originalTitle = sale.title
+    self.originalBodyText = sale.bodyText
+    self.originalSaleProductId = sale.saleProductId
+    self.originalCompareProductId = sale.compareProductId ?? ""
+    self.originalTargetAudiences = Set(sale.targetAudiences)
+    self.originalStartDate = sale.startDate
+    self.originalEndDate = sale.endDate
+    self.originalDisplayFrequencyDays = sale.displayFrequencyDays
+    self.originalIsActive = sale.isActive
+    self.originalTelemetryEventName = sale.telemetryEventName
+    self.originalPurchaseButtonTitle = sale.purchaseButtonTitle ?? ""
+    self.originalPurchaseButtonGradientColors = sale.purchaseButtonGradientColors?.joined(separator: ", ") ?? ""
+    self.originalPurchaseButtonFooterText = sale.purchaseButtonFooterText ?? ""
+    self.originalDiscountBadgeBackgroundColor = sale.discountBadgeBackgroundColor ?? ""
+    self.originalDiscountBadgeForegroundColor = sale.discountBadgeForegroundColor ?? ""
   }
 
   func save() async {
@@ -111,9 +157,13 @@ final class SaleDetailViewModel: ObservableObject {
       )
 
       if isNewSale {
-        _ = try await store.create(sale: sale, image: selectedImage)
+        if let updatedSale = try await store.create(sale: sale, image: selectedImage) {
+          imageURL = updatedSale.imageURL
+        }
       } else {
-        _ = try await store.update(sale: sale, image: isImageChanged ? selectedImage : nil)
+        if let updatedSale = try await store.update(sale: sale, image: isImageChanged ? selectedImage : nil) {
+          imageURL = updatedSale.imageURL
+        }
       }
 
       selectedImage = nil
