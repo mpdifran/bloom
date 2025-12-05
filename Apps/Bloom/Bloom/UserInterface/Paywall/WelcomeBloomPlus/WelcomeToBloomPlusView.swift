@@ -104,6 +104,14 @@ private extension WelcomeToBloomPlusView {
       }
       .tint(.mutedGreen)
       .cardContainer()
+
+    Text("Choose which features can use the data enabled above.")
+      .font(.caption)
+      .bold()
+      .foregroundStyle(.secondary)
+      .multilineTextAlignment(.leading)
+      .fixedSize(horizontal: false, vertical: true)
+      .padding(.horizontal)
   }
 
   @ViewBuilder
@@ -142,7 +150,7 @@ private extension WelcomeToBloomPlusView {
       presentedSheet = AIDataSharingView(showDismiss: true).asAny
     }
 
-    Text("Choose what Personal Data Bud can use to personalize your insights.")
+    Text("Choose what Personal Data Bud can use with the features below.")
       .font(.caption)
       .bold()
       .foregroundStyle(.secondary)

@@ -93,7 +93,7 @@ private extension PrivacyUnknownOptInView {
     VStack(alignment: .leading) {
       HStack {
         DisplayAppIcon(overrideAppIcon: .healthAppIcon)
-          .frame(square: 30)
+          .frame(square: 40)
         Text("Accessing Data on Device")
           .fixedSize(horizontal: false, vertical: true)
       }
@@ -157,7 +157,7 @@ private extension PrivacyUnknownOptInView {
       DisclosureOverallToggleView(
         icon: .starFill,
         title: "Bloom Plus Features",
-        subtitle: "Enable AI powered features like Today Inisghts, Chat with Bud, and Biological Age.",
+        subtitle: "Enable AI powered features like Today Inisghts, Chat with Bud, and Biological Age, which use the data categories below.",
         isExpanded: isAISectionExpanded,
         isEnabled: $isAISectionEnabled
       )
@@ -169,6 +169,14 @@ private extension PrivacyUnknownOptInView {
         isExpanded: $isAISectionExpanded
       )
     )
+
+    Text("Enabling a feature and a data category means Bloom may use that category to provide that feature.")
+      .font(.caption)
+      .bold()
+      .foregroundStyle(.secondary)
+      .multilineTextAlignment(.leading)
+      .fixedSize(horizontal: false, vertical: true)
+      .padding(.horizontal)
   }
 
   @ViewBuilder
@@ -210,7 +218,7 @@ private extension PrivacyUnknownOptInView {
       DisclosureOverallToggleView(
         icon: .heartFill,
         title: "Personal Data Categories",
-        subtitle: "Personal Data Categories (such as sleep, physical activity, or nutrition) allow you to control what data is shared with our AI services.",
+        subtitle: "Personal Data Categories (such as sleep, physical activity, or nutrition) allow you to control what data is shared with the Bloom Plus features enabled above.",
         isExpanded: isHealthDataSectionExpanded,
         isEnabled: $isHealthDataSectionEnabled
       )
@@ -253,7 +261,7 @@ private extension PrivacyUnknownOptInView {
       DisclosureOverallToggleView(
         icon: .squareFillOnCircleFill,
         title: "Other Data Categories",
-        subtitle: "Other Data Categories (such as location, calendar, and weather) allow you to control what data is shared with our AI services.",
+        subtitle: "Other Data Categories (such as location, calendar, and weather) allow you to control what data is shared with the Bloom Plus features enabled above.",
         isExpanded: isOtherDataSectionExpanded,
         isEnabled: $isOtherDataSectionEnabled
       )
