@@ -173,20 +173,20 @@ struct SaleDetailView: View {
   }
 
   private var purchaseButtonSection: some View {
-    Section("Purchase Button Customization") {
-      TextField("Button Title (Optional)", text: $viewModel.purchaseButtonTitle)
+    Group {
+      Section("Purchase Button Customization") {
+        TextField("Button Title (Optional)", text: $viewModel.purchaseButtonTitle)
+        TextField("Footer Text (Optional)", text: $viewModel.purchaseButtonFooterText)
+      }
 
-      TextField("Gradient Colors (Optional)", text: $viewModel.purchaseButtonGradientColors)
-
-      TextField("Footer Text (Optional)", text: $viewModel.purchaseButtonFooterText)
+      GradientColorsEditor(colors: $viewModel.purchaseButtonGradientColors)
     }
   }
 
   private var discountBadgeColorsSection: some View {
     Section("Discount Badge Colors") {
-      TextField("Background Color (Optional)", text: $viewModel.discountBadgeBackgroundColor)
-
-      TextField("Foreground/Text Color (Optional)", text: $viewModel.discountBadgeForegroundColor)
+      HexColorPicker(title: "Background Color", hexString: $viewModel.discountBadgeBackgroundColor)
+      HexColorPicker(title: "Text Color", hexString: $viewModel.discountBadgeForegroundColor)
     }
   }
 

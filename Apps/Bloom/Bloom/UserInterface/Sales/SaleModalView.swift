@@ -273,7 +273,7 @@ private struct GradientButtonStyle: ButtonStyle {
       .padding(.vertical, 16)
       .padding(.horizontal)
       .background(gradientBackground)
-      .foregroundStyle(.invertedText)
+      .foregroundStyle(.white)
       .clipShape(Capsule())
     } else {
       HStack {
@@ -283,7 +283,7 @@ private struct GradientButtonStyle: ButtonStyle {
       .padding(.vertical, 16)
       .padding(.horizontal)
       .background(gradientBackground)
-      .foregroundStyle(.invertedText)
+      .foregroundStyle(.white)
       .clipShape(RoundedRectangle(cornerRadius: 17))
     }
   }

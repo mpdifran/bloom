@@ -24,7 +24,7 @@ final class SaleDetailViewModel: ObservableObject {
   @Published var isActive: Bool
   @Published var telemetryEventName: String
   @Published var purchaseButtonTitle: String
-  @Published var purchaseButtonGradientColors: String
+  @Published var purchaseButtonGradientColors: [String]
   @Published var purchaseButtonFooterText: String
   @Published var discountBadgeBackgroundColor: String
   @Published var discountBadgeForegroundColor: String
@@ -53,7 +53,7 @@ final class SaleDetailViewModel: ObservableObject {
   private let originalIsActive: Bool
   private let originalTelemetryEventName: String
   private let originalPurchaseButtonTitle: String
-  private let originalPurchaseButtonGradientColors: String
+  private let originalPurchaseButtonGradientColors: [String]
   private let originalPurchaseButtonFooterText: String
   private let originalDiscountBadgeBackgroundColor: String
   private let originalDiscountBadgeForegroundColor: String
@@ -104,7 +104,7 @@ final class SaleDetailViewModel: ObservableObject {
     self.isActive = sale.isActive
     self.telemetryEventName = sale.telemetryEventName
     self.purchaseButtonTitle = sale.purchaseButtonTitle ?? ""
-    self.purchaseButtonGradientColors = sale.purchaseButtonGradientColors?.joined(separator: ", ") ?? ""
+    self.purchaseButtonGradientColors = sale.purchaseButtonGradientColors ?? []
     self.purchaseButtonFooterText = sale.purchaseButtonFooterText ?? ""
     self.discountBadgeBackgroundColor = sale.discountBadgeBackgroundColor ?? ""
     self.discountBadgeForegroundColor = sale.discountBadgeForegroundColor ?? ""
@@ -121,7 +121,7 @@ final class SaleDetailViewModel: ObservableObject {
     self.originalIsActive = sale.isActive
     self.originalTelemetryEventName = sale.telemetryEventName
     self.originalPurchaseButtonTitle = sale.purchaseButtonTitle ?? ""
-    self.originalPurchaseButtonGradientColors = sale.purchaseButtonGradientColors?.joined(separator: ", ") ?? ""
+    self.originalPurchaseButtonGradientColors = sale.purchaseButtonGradientColors ?? []
     self.originalPurchaseButtonFooterText = sale.purchaseButtonFooterText ?? ""
     self.originalDiscountBadgeBackgroundColor = sale.discountBadgeBackgroundColor ?? ""
     self.originalDiscountBadgeForegroundColor = sale.discountBadgeForegroundColor ?? ""
@@ -148,7 +148,7 @@ final class SaleDetailViewModel: ObservableObject {
         isActive: isActive,
         telemetryEventName: telemetryEventName,
         purchaseButtonTitle: purchaseButtonTitle.isEmpty ? nil : purchaseButtonTitle,
-        purchaseButtonGradientColors: parseGradientColors(),
+        purchaseButtonGradientColors: purchaseButtonGradientColors.isEmpty ? nil : purchaseButtonGradientColors,
         purchaseButtonFooterText: purchaseButtonFooterText.isEmpty ? nil : purchaseButtonFooterText,
         discountBadgeBackgroundColor: discountBadgeBackgroundColor.isEmpty ? nil : discountBadgeBackgroundColor,
         discountBadgeForegroundColor: discountBadgeForegroundColor.isEmpty ? nil : discountBadgeForegroundColor,
@@ -200,7 +200,7 @@ final class SaleDetailViewModel: ObservableObject {
         isActive: isActive,
         telemetryEventName: telemetryEventName,
         purchaseButtonTitle: purchaseButtonTitle.isEmpty ? nil : purchaseButtonTitle,
-        purchaseButtonGradientColors: parseGradientColors(),
+        purchaseButtonGradientColors: purchaseButtonGradientColors.isEmpty ? nil : purchaseButtonGradientColors,
         purchaseButtonFooterText: purchaseButtonFooterText.isEmpty ? nil : purchaseButtonFooterText,
         discountBadgeBackgroundColor: discountBadgeBackgroundColor.isEmpty ? nil : discountBadgeBackgroundColor,
         discountBadgeForegroundColor: discountBadgeForegroundColor.isEmpty ? nil : discountBadgeForegroundColor,
@@ -236,14 +236,5 @@ final class SaleDetailViewModel: ObservableObject {
       return nil // Will be uploaded
     }
     return imageURL
-  }
-
-  private func parseGradientColors() -> [String]? {
-    let colors = purchaseButtonGradientColors
-      .split(separator: ",")
-      .map { $0.trimmingCharacters(in: .whitespaces) }
-      .filter { !$0.isEmpty }
-
-    return colors.isEmpty ? nil : colors
   }
 }

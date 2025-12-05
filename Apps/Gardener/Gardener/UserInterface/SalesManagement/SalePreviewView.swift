@@ -153,7 +153,7 @@ private extension SalePreviewView {
 
     if hasBackgroundColor || hasForegroundColor {
       HStack(spacing: 12) {
-        Text("50% OFF (example)")
+        Text("50% OFF")
           .font(.body)
           .bold()
           .foregroundColor(parsedForegroundColor)
@@ -236,15 +236,11 @@ private extension SalePreviewView {
   }
 
   func parseGradientColors() -> [String] {
-    let colorsString = viewModel.purchaseButtonGradientColors
-    if colorsString.isEmpty {
+    let colors = viewModel.purchaseButtonGradientColors
+    if colors.isEmpty {
       return ["#007AFF"] // Default blue
     }
-
-    return colorsString
-      .components(separatedBy: ",")
-      .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-      .filter { !$0.isEmpty }
+    return colors
   }
 }
 
@@ -260,7 +256,7 @@ struct GradientButtonStyleMacOS: ButtonStyle {
     .bold()
     .padding(.horizontal)
     .background(gradientBackground)
-    .foregroundStyle(.invertedText)
+    .foregroundStyle(.white)
     .clipShape(Capsule())
   }
 
@@ -294,6 +290,16 @@ extension Color {
     let b = Double(rgb & 0x0000FF) / 255.0
 
     self.init(red: r, green: g, blue: b)
+  }
+
+  func toHex() -> String? {
+    guard let nsColor = NSColor(self).usingColorSpace(.sRGB) else { return nil }
+
+    let r = Int(nsColor.redComponent * 255)
+    let g = Int(nsColor.greenComponent * 255)
+    let b = Int(nsColor.blueComponent * 255)
+
+    return String(format: "#%02X%02X%02X", r, g, b)
   }
 }
 
