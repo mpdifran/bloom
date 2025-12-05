@@ -88,7 +88,7 @@ struct BloomPlusPaywall: View {
     }
     .tintedBackground(tint: .paywallBackground)
     .alert(error: $error)
-    .shelf {
+    .shelf(includePadding: false) {
       purchaseShelf
     }
     .sheet($presentedSheet)
@@ -232,11 +232,6 @@ private extension BloomPlusPaywall {
 
   var purchaseShelf: some View {
     VStack {
-      Text("By continuing, you agree to process data with OpenAI")
-        .font(.caption)
-        .multilineTextAlignment(.center)
-        .horizontallyCentered()
-
       AsyncButton {
         guard let package = selectedPackage ?? viewModel.packages.first else { return }
 
@@ -300,6 +295,8 @@ private extension BloomPlusPaywall {
         .foregroundStyle(.tint)
       }
     }
+    .padding(.horizontal)
+    .padding(.top)
   }
 }
 
