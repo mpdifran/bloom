@@ -18,6 +18,7 @@ struct SaleDetailView: View {
     HStack(spacing: 0) {
       // Fixed preview at top
       SalePreviewView(viewModel: viewModel)
+        .shadow(radius: 20)
         .padding()
         .fixedSize()
 
@@ -64,6 +65,7 @@ struct SaleDetailView: View {
           Text(imageURL)
             .font(.caption)
             .lineLimit(2)
+            .textSelection(.enabled)
         } else {
           Text("No image selected")
             .font(.caption)
