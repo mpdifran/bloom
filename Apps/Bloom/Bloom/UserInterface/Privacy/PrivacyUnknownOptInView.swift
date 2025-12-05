@@ -18,11 +18,8 @@ struct PrivacyUnknownOptInView: View {
   @ObservedObject private var aiDataSharingSettings = AIDataSharingSettings.shared
 
   @State private var isAISectionExpanded = false
-  @State private var isAISectionEnabled = false
   @State private var isHealthDataSectionExpanded = false
-  @State private var isHealthDataSectionEnabled = false
   @State private var isOtherDataSectionExpanded = false
-  @State private var isOtherDataSectionEnabled = false
 
   @Environment(\.openURL) private var openURL
 
@@ -159,7 +156,7 @@ private extension PrivacyUnknownOptInView {
         title: "Bloom Plus Features",
         subtitle: "Enable AI powered features like Today Inisghts, Chat with Bud, and Biological Age, which use the data categories below.",
         isExpanded: isAISectionExpanded,
-        isEnabled: $isAISectionEnabled
+        isEnabled: isAISectionEnabledBinding
       )
       .tint(.mutedYellow)
     }
@@ -220,7 +217,7 @@ private extension PrivacyUnknownOptInView {
         title: "Personal Data Categories",
         subtitle: "Personal Data Categories (such as sleep, physical activity, or nutrition) allow you to control what data is shared with the Bloom Plus features enabled above.",
         isExpanded: isHealthDataSectionExpanded,
-        isEnabled: $isHealthDataSectionEnabled
+        isEnabled: isHealthDataSectionEnabledBinding
       )
       .tint(.mutedPink)
     }
@@ -263,7 +260,7 @@ private extension PrivacyUnknownOptInView {
         title: "Other Data Categories",
         subtitle: "Other Data Categories (such as location, calendar, and weather) allow you to control what data is shared with the Bloom Plus features enabled above.",
         isExpanded: isOtherDataSectionExpanded,
-        isEnabled: $isOtherDataSectionEnabled
+        isEnabled: isOtherDataSectionEnabledBinding
       )
       .tint(.mutedIndigo)
     }
@@ -306,6 +303,57 @@ private extension PrivacyUnknownOptInView {
     @unknown default:
       false
     }
+  }
+
+  var isAISectionEnabledBinding: Binding<Bool> {
+    Binding(
+      get: {
+        aiFeatureSettings.todayInsightsEnabled &&
+        aiFeatureSettings.chatEnabled &&
+        aiFeatureSettings.biologicalAgeEnabled
+      },
+      set: { newValue in
+        aiFeatureSettings.todayInsightsEnabled = newValue
+        aiFeatureSettings.chatEnabled = newValue
+        aiFeatureSettings.biologicalAgeEnabled = newValue
+      }
+    )
+  }
+
+  var isHealthDataSectionEnabledBinding: Binding<Bool> {
+    Binding(
+      get: {
+        let categoriesToCheck = AIHealthCategory.healthCategories.filter { category in
+          category != .menstrualHealth || shouldShowMenstrualHealth
+        }
+        return categoriesToCheck.allSatisfy { aiDataSharingSettings.enabledCategories.contains($0) }
+      },
+      set: { newValue in
+        let categoriesToModify = AIHealthCategory.healthCategories.filter { category in
+          category != .menstrualHealth || shouldShowMenstrualHealth
+        }
+        if newValue {
+          aiDataSharingSettings.enabledCategories.formUnion(categoriesToModify)
+        } else {
+          aiDataSharingSettings.enabledCategories.subtract(categoriesToModify)
+        }
+      }
+    )
+  }
+
+  var isOtherDataSectionEnabledBinding: Binding<Bool> {
+    Binding(
+      get: {
+        AIHealthCategory.otherCategories.allSatisfy { aiDataSharingSettings.enabledCategories.contains($0) }
+      },
+      set: { newValue in
+        if newValue {
+          aiDataSharingSettings.enabledCategories.formUnion(AIHealthCategory.otherCategories)
+        } else {
+          aiDataSharingSettings.enabledCategories.subtract(AIHealthCategory.otherCategories)
+        }
+      }
+    )
   }
 }
 

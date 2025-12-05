@@ -133,7 +133,7 @@ public enum AIHealthCategory: String, Codable, CaseIterable, Sendable {
     case .location:
       return "Your coarse location (city, state, country)."
     case .weather:
-      return "Weather conditions for your location."
+      return "Weather conditions for your location, but not your location itself."
     case .calendarEvents:
       return "Events from your selected calendars."
     }
