@@ -15,11 +15,11 @@ struct SaleDetailView: View {
   @Environment(\.dismiss) private var dismiss
 
   var body: some View {
-    VStack(spacing: 0) {
+    HStack(spacing: 0) {
       // Fixed preview at top
       SalePreviewView(viewModel: viewModel)
         .padding()
-        .fixedSize(horizontal: false, vertical: true)
+        .fixedSize()
 
       Divider()
 
@@ -91,28 +91,38 @@ struct SaleDetailView: View {
     Section("Basic Information") {
       TextField("Title", text: $viewModel.title)
 
-      Text("Body Text")
-        .font(.caption)
-        .foregroundStyle(.secondary)
-      TextEditor(text: $viewModel.bodyText)
-        .frame(height: 100)
+      VStack(alignment: .leading) {
+        Text("Body Text")
+        TextEditor(text: $viewModel.bodyText)
+          .frame(height: 100)
+      }
     }
   }
 
   private var productsSection: some View {
     Section("Products") {
-      TextField("Sale Product ID (Required)", text: $viewModel.saleProductId)
+      TextField(text: $viewModel.saleProductId) {
+        VStack(alignment: .leading) {
+          Text("Sale Product ID")
+          Text("Required")
+            .font(.caption)
+            .foregroundStyle(.secondary)
+        }
+      }
 
-      TextField("Compare Product ID (Optional)", text: $viewModel.compareProductId)
+      TextField(text: $viewModel.compareProductId) {
+        VStack(alignment: .leading) {
+          Text("Comparison Product ID")
+          Text("Optional")
+            .font(.caption)
+            .foregroundStyle(.secondary)
+        }
+      }
     }
   }
 
   private var targetingSection: some View {
     Section("Targeting") {
-      Text("Target Audiences (select at least one)")
-        .font(.caption)
-        .foregroundStyle(.secondary)
-
       Toggle("Free Users", isOn: Binding(
         get: { viewModel.targetAudiences.contains(.freeUsers) },
         set: { isOn in
@@ -150,17 +160,13 @@ struct SaleDetailView: View {
 
   private var scheduleSection: some View {
     Section("Schedule") {
-      DatePicker("Start Date", selection: $viewModel.startDate)
+      DatePicker("Start Date", selection: $viewModel.startDate, displayedComponents: .date)
 
-      DatePicker("End Date", selection: $viewModel.endDate)
+      DatePicker("End Date", selection: $viewModel.endDate, displayedComponents: .date)
 
-      Stepper("Display Frequency: \(viewModel.displayFrequencyDays) days",
+      Stepper("Display Frequency: Every \(viewModel.displayFrequencyDays) days",
               value: $viewModel.displayFrequencyDays,
               in: 1...30)
-
-      Text("How often the sale modal will auto-show to users")
-        .font(.caption)
-        .foregroundStyle(.secondary)
     }
   }
 
@@ -168,21 +174,9 @@ struct SaleDetailView: View {
     Section("Purchase Button Customization") {
       TextField("Button Title (Optional)", text: $viewModel.purchaseButtonTitle)
 
-      Text("Leave empty to use default button text")
-        .font(.caption)
-        .foregroundStyle(.secondary)
-
       TextField("Gradient Colors (Optional)", text: $viewModel.purchaseButtonGradientColors)
 
-      Text("Comma-separated hex colors (e.g., #FF5733, #C70039)")
-        .font(.caption)
-        .foregroundStyle(.secondary)
-
       TextField("Footer Text (Optional)", text: $viewModel.purchaseButtonFooterText)
-
-      Text("Leave empty to use default footer text")
-        .font(.caption)
-        .foregroundStyle(.secondary)
     }
   }
 
@@ -190,39 +184,19 @@ struct SaleDetailView: View {
     Section("Discount Badge Colors") {
       TextField("Background Color (Optional)", text: $viewModel.discountBadgeBackgroundColor)
 
-      Text("Hex color for badge background (e.g., #3798C8)")
-        .font(.caption)
-        .foregroundStyle(.secondary)
-
       TextField("Foreground/Text Color (Optional)", text: $viewModel.discountBadgeForegroundColor)
-
-      Text("Hex color for badge text (e.g., #FFFFFF)")
-        .font(.caption)
-        .foregroundStyle(.secondary)
-
-      Text("Leave empty to use defaults (blue background, white text)")
-        .font(.caption)
-        .foregroundStyle(.secondary)
     }
   }
 
   private var analyticsSection: some View {
     Section("Analytics") {
       TextField("Telemetry Event Name (Required)", text: $viewModel.telemetryEventName)
-
-      Text("TelemetryDeck event name logged when sale appears")
-        .font(.caption)
-        .foregroundStyle(.secondary)
     }
   }
 
   private var statusSection: some View {
     Section("Status") {
       Toggle("Active", isOn: $viewModel.isActive)
-
-      Text("Only active sales are shown to users")
-        .font(.caption)
-        .foregroundStyle(.secondary)
     }
   }
 

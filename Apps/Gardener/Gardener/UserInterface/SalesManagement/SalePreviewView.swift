@@ -201,12 +201,12 @@ private extension SalePreviewView {
 private extension SalePreviewView {
 
   var timeRemainingText: String? {
-    let now = Date()
+    let startDate = viewModel.startDate
     let endDate = viewModel.endDate
 
-    guard endDate > now else { return nil }
+    guard endDate > startDate else { return nil }
 
-    let timeInterval = endDate.timeIntervalSince(now)
+    let timeInterval = endDate.timeIntervalSince(startDate)
     let hours = Int(timeInterval / 3600)
     let days = hours / 24
 
