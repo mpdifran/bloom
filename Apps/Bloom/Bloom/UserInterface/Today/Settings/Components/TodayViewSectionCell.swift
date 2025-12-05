@@ -60,9 +60,9 @@ struct TodayViewSectionCell: View {
     .cardContainer()
     .onTapGesture {
       if isLocked {
-        presentedSheet = BloomPlusPaywall(focus: .todayInsights, showDismiss: true)
-          .tint(themeController.theme.color)
-          .asAny
+        EntitledAction(presentedSheet: $presentedSheet) {
+          // Do nothing
+        }
       }
     }
     .sheet($presentedSheet)

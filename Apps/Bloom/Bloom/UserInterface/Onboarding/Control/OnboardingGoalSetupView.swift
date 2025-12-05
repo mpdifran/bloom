@@ -226,13 +226,6 @@ private extension OnboardingGoalSetupView {
   }
   
   func saveGoal(_ suggestedGoal: SuggestedGoal) {
-    let currentHabitCount = activeHabits.count
-    
-    if let maxGoals = entitlementController.maxGoals, currentHabitCount >= maxGoals {
-      showPaywall()
-      return
-    }
-    
     let habit = Habit(
       targetMetric: suggestedGoal.metric.targetMetric,
       timePeriod: GoalTimePeriod(rawValue: suggestedGoal.timePeriod.rawValue) ?? .daily,
@@ -278,17 +271,13 @@ private extension OnboardingGoalSetupView {
     let currentHabitCount = activeHabits.count
     
     if let maxGoals = entitlementController.maxGoals, currentHabitCount >= maxGoals {
-      showPaywall()
+      EntitledPresent(presentedSheet: $presentedSheet) {
+        NewGoalCard()
+      }
       return
     }
     
     presentedSheet = NewGoalCard().asAny
-  }
-  
-  func showPaywall() {
-    presentedSheet = BloomPlusPaywall {
-      // After successful purchase, allow continuing with goal creation
-    }.asAny
   }
 
   func calculateAverageQuantity(for goal: SuggestedGoal) -> HKQuantity {

@@ -19,6 +19,7 @@ struct WelcomeToBloomPlusView: View {
   @ObservedObject private var aiFeatureSettings = AIFeatureSettings.shared
   @ObservedObject private var aiDataSharingSettings = AIDataSharingSettings.shared
 
+  @Environment(\.dismiss) private var dismiss
   @Environment(\.openURL) private var openURL
 
   @State private var presentedSheet: AnyView?
@@ -185,6 +186,7 @@ private extension WelcomeToBloomPlusView {
   @ViewBuilder
   var shelfContent: some View {
     AsyncButton {
+      dismiss()
       onDismiss()
     } label: {
       Text("Continue")

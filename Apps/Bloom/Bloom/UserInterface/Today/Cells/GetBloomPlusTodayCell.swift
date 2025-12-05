@@ -11,8 +11,9 @@ import TelemetryDeck
 
 struct GetBloomPlusTodayCell: View {
 
+  let launchPaywall: () -> Void
+
   @AppStorage("GetBloomPlusTodayCell.hasDismissed") private var hasDismissed = false
-  @State private var presentedSheet: AnyView?
 
   var body: some View {
     VStack(alignment: .leading, spacing: 0) {
@@ -31,7 +32,7 @@ struct GetBloomPlusTodayCell: View {
 
         Button {
           TelemetryDeck.signal("Today View Upsell")
-          presentedSheet = BloomPlusPaywall(focus: .todayInsights, showDismiss: true).asAny
+          launchPaywall()
         } label: {
           Label("Unlock Insights", systemSymbol: .sparkles)
             .horizontallyCentered()
@@ -54,7 +55,6 @@ struct GetBloomPlusTodayCell: View {
       .zStackAlignment(.topTrailing)
     }
     .cardContainer(includePadding: false)
-    .sheet($presentedSheet)
   }
 }
 
@@ -76,7 +76,9 @@ private extension GetBloomPlusTodayCell {
 #Preview {
   PreviewEnvironment {
     BloomScrollView {
-      GetBloomPlusTodayCell()
+      GetBloomPlusTodayCell {
+        
+      }
     }
   }
 }

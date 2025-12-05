@@ -14,52 +14,80 @@ func EntitledPresent<Content>(presentedSheet: Binding<AnyView?>, content: @escap
   if EntitlementController.shared.hasBloomPro == true {
     presentedSheet.wrappedValue = content().asAny
   } else {
-    presentedSheet.wrappedValue = BloomPlusPaywall {
+    presentedSheet.wrappedValue = BloomPlusPaywall(onDismiss: {
       guard EntitlementController.shared.hasBloomPro == true else { return }
 
       Task {
         await Delay(300)
-        presentedSheet.wrappedValue = content().asAny
+
+        presentedSheet.wrappedValue = WelcomeToBloomPlusView {
+          Task {
+            await Delay(300)
+            presentedSheet.wrappedValue = content().asAny
+          }
+        }.asAny
       }
-    }.asAny
+
+    }).asAny
   }
 }
 
 @MainActor
 func EntitledAction(
   presentedSheet: Binding<AnyView?>,
+  focus: BloomPlusPaywall.Focus = .standard,
   action: @escaping () -> Void
 ) {
   if EntitlementController.shared.hasBloomPro == true {
     action()
   } else {
-    presentedSheet.wrappedValue = BloomPlusPaywall {
+    presentedSheet.wrappedValue = BloomPlusPaywall(focus: focus, onDismiss: {
       guard EntitlementController.shared.hasBloomPro == true else { return }
 
       Task {
         await Delay(300)
-        action()
+        await MainActor.run {
+          presentedSheet.wrappedValue = WelcomeToBloomPlusView {
+            Task {
+              await Delay(300)
+              action()
+            }
+          }.asAny
+        }
       }
-    }.asAny
+    }).asAny
   }
 }
 
 @MainActor
-func EntitledAction(
+func AsyncEntitledAction(
   presentedSheet: Binding<AnyView?>,
-  focus: BloomPlusPaywall.Focus,
-  action: @escaping () -> Void
-) {
+  focus: BloomPlusPaywall.Focus = .standard,
+  action: @escaping () async -> Void
+) async {
   if EntitlementController.shared.hasBloomPro == true {
-    action()
+    await action()
   } else {
-    presentedSheet.wrappedValue = BloomPlusPaywall(focus: focus) {
-      guard EntitlementController.shared.hasBloomPro == true else { return }
+    await withCheckedContinuation { (continuation: CheckedContinuation<Void, Never>) in
+      presentedSheet.wrappedValue = BloomPlusPaywall(focus: focus, onDismiss: {
+        guard EntitlementController.shared.hasBloomPro == true else {
+          continuation.resume()
+          return
+        }
 
-      Task {
-        await Delay(300)
-        action()
-      }
-    }.asAny
+        Task {
+          await Delay(300)
+          await withCheckedContinuation { (welcomeContinuation: CheckedContinuation<Void, Never>) in
+            presentedSheet.wrappedValue = WelcomeToBloomPlusView {
+              welcomeContinuation.resume()
+            }.asAny
+          }
+
+          await Delay(300)
+          await action()
+          continuation.resume()
+        }
+      }).asAny
+    }
   }
 }

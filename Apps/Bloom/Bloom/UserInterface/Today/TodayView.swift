@@ -246,8 +246,12 @@ private extension TodayView {
         SectionTitleView("Bloom Plus")
           .padding(.horizontal)
           .padding(.horizontal)
-        GetBloomPlusTodayCell()
-          .padding(.horizontal)
+        GetBloomPlusTodayCell {
+          EntitledAction(presentedSheet: $presentedSheet, focus: .todayInsights) {
+            // Do nothing
+          }
+        }
+        .padding(.horizontal)
       }
     }
   }

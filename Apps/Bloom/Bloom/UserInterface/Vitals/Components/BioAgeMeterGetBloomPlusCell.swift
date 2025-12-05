@@ -10,7 +10,7 @@ import TelemetryDeck
 
 struct BioAgeMeterGetBloomPlusCell: View {
 
-  @State private var presentedSheet: AnyView?
+  let launchPaywall: () -> Void
 
   var body: some View {
     VStack(alignment: .leading) {
@@ -27,7 +27,7 @@ struct BioAgeMeterGetBloomPlusCell: View {
 
       Button {
         TelemetryDeck.signal("Biological Age Upsell")
-        presentedSheet = BloomPlusPaywall(focus: .biologicalAge, showDismiss: true).asAny
+        launchPaywall()
       } label: {
         Label("Unlock My True Age", systemSymbol: .sparkles)
           .horizontallyCentered()
@@ -35,14 +35,15 @@ struct BioAgeMeterGetBloomPlusCell: View {
       .buttonStyle(.tertiary)
     }
     .cardContainer()
-    .sheet($presentedSheet)
   }
 }
 
 #Preview {
   PreviewEnvironment {
     BloomScrollView {
-      BioAgeMeterGetBloomPlusCell()
+      BioAgeMeterGetBloomPlusCell {
+
+      }
     }
   }
 }

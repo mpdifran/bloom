@@ -410,16 +410,9 @@ private extension FoodLoggingActionCardView {
 
   var aiGenerateButton: some View {
     AsyncButton {
-      guard EntitlementController.shared.hasBloomPro == true else {
-        presentedSheet = BloomPlusPaywall(onPurchase: {
-          Task {
-            await generateWithAI()
-          }
-        }).asAny
-        return
+      await AsyncEntitledAction(presentedSheet: $presentedSheet) {
+        await generateWithAI()
       }
-
-      await generateWithAI()
     } label: {
       Label("Generate with AI", systemSymbol: .sparkles)
         .frame(maxWidth: .infinity)

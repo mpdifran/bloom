@@ -394,13 +394,17 @@ private extension SettingsView {
           } else {
             SettingsCell("Subscribe to Bloom Plus", iconType: .disclosure) { }
             .onTapGesture {
-              presentedSheet = BloomPlusPaywall().asAny
+              EntitledAction(presentedSheet: $presentedSheet) {
+                // Do nothing
+              }
             }
           }
         } else {
           SettingsCell("Subscribe to Bloom Plus", iconType: .disclosure) { }
           .onTapGesture {
-            presentedSheet = BloomPlusPaywall().asAny
+            EntitledAction(presentedSheet: $presentedSheet) {
+              // Do nothing
+            }
           }
         }
       }

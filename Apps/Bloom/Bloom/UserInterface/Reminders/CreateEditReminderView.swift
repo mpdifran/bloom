@@ -231,18 +231,14 @@ private extension CreateEditReminderView {
     // Check if creating a new reminder and user has reached their limit
     if existingReminder == nil {
       if let maxReminders = entitlementController.maxReminders, allReminders.count >= maxReminders {
-        // Show paywall if at limit
-        presentedSheet = BloomPlusPaywall {
-          // After successful purchase, try saving again
-          if entitlementController.hasBloomPro == true {
-            Task {
-              await Delay(300)
-              await MainActor.run {
-                saveReminderWithoutCheck()
-              }
+        EntitledAction(presentedSheet: $presentedSheet) {
+          Task {
+            await Delay(300)
+            await MainActor.run {
+              saveReminderWithoutCheck()
             }
           }
-        }.asAny
+        }
         return
       }
     }

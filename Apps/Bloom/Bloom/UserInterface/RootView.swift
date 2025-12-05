@@ -155,10 +155,9 @@ private extension RootView {
     case .treatment:
       if shouldShow {
         TelemetryDeck.signal("AB: Periodic Paywall v3 - Treatment")
-        presentedPaywall = BloomPlusPaywall(
-          focus: .standard,
-          showDismiss: true
-        ).asAny
+        EntitledAction(presentedSheet: $presentedSheet) {
+          // Do nothing
+        }
       }
     case .control:
       if shouldShow {
@@ -217,7 +216,9 @@ private extension RootView {
         focus = .standard
       }
 
-      presentedPaywall = BloomPlusPaywall(focus: focus).asAny
+      EntitledAction(presentedSheet: $presentedPaywall, focus: focus) {
+        // Do nothing
+      }
     case "/action/magic-scan":
       EntitledAction(presentedSheet: $presentedSheet) {
         presentedSheet = MagicScannerCameraView().asAny

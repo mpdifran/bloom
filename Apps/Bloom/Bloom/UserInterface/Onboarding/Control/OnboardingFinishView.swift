@@ -18,7 +18,6 @@ struct OnboardingFinishView: View {
   @State private var index = 1
   @State private var didContinue = false
   @State private var presentedSheet: AnyView?
-  @State private var presentedPaywall: AnyView?
 
   @ObservedObject private var healthManager = HealthManager.shared
   @Environment(ThemeController.self) private var themeController
@@ -65,7 +64,6 @@ struct OnboardingFinishView: View {
       .buttonStyle(.primary)
     }
     .sheet($presentedSheet)
-    .fullScreenCover($presentedPaywall)
     .task {
       await advanceForSubscribed()
     }
@@ -85,14 +83,19 @@ private extension OnboardingFinishView {
     await ReEngagementScheduler.shared.cancelNotification()
 
     // Show paywall after onboarding
-    presentedPaywall = BloomPlusPaywall(
+    presentedSheet = BloomPlusPaywall(
       focus: .standard,
-      onPurchase: {
-        // Called on purchase after dismiss
-      },
       onDismiss: {
-        // Called when paywall dismisses for any reason
-        onContinue()
+        if EntitlementController.shared.hasBloomPro == true {
+          Task {
+            await Delay(300)
+            presentedSheet = WelcomeToBloomPlusView {
+              onContinue()
+            }.asAny
+          }
+        } else {
+          onContinue()
+        }
       }
     ).asAny
   }

@@ -144,16 +144,12 @@ private extension NewGoalCard {
     let currentHabitCount = (try? modelContext.fetch(FetchDescriptor<Habit>(predicate: #Predicate<Habit> { $0.endDate == nil })).count) ?? 0
     
     if let maxGoals = entitlementController.maxGoals, currentHabitCount >= maxGoals {
-      // Show paywall if at limit
-      presentedSheet = BloomPlusPaywall {
-        // After successful purchase, try saving again
-        if entitlementController.hasBloomPro == true {
-          Task {
-            await Delay(300)
-            saveNewGoalWithoutCheck()
-          }
+      EntitledAction(presentedSheet: $presentedSheet) {
+        Task {
+          await Delay(300)
+          saveNewGoalWithoutCheck()
         }
-      }.asAny
+      }
       return
     }
     

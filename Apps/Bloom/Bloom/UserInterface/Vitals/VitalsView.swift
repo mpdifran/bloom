@@ -145,7 +145,11 @@ private extension VitalsView {
         .cardContainer(includePadding: false)
       }
     } else {
-      BioAgeMeterGetBloomPlusCell()
+      BioAgeMeterGetBloomPlusCell {
+        EntitledAction(presentedSheet: $presentedSheet, focus: .biologicalAge) {
+          // Do nothing
+        }
+      }
     }
   }
 }
