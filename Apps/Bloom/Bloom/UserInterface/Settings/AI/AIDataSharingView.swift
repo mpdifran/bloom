@@ -15,6 +15,7 @@ struct AIDataSharingView: View {
   @ObservedObject private var healthManager = HealthManager.shared
 
   @Environment(\.openURL) private var openURL
+  @Environment(\.scenePhase) private var scenePhase
 
   var body: some View {
     NavigationStack {
@@ -44,6 +45,18 @@ struct AIDataSharingView: View {
         }
       }
       .animation(.default, value: settings.enabledCategories)
+      .onDisappear {
+        Task {
+          await ConsentManager.shared.syncGranularConsentSilently()
+        }
+      }
+      .onChange(of: scenePhase) { _, newPhase in
+        if newPhase == .background {
+          Task {
+            await ConsentManager.shared.syncGranularConsentSilently()
+          }
+        }
+      }
     }
   }
 }

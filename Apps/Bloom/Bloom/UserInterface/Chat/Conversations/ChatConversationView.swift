@@ -79,6 +79,11 @@ struct ChatConversationView: View {
     .animation(.default, value: pinnedConversations)
     .animation(.default, value: unpinnedConversations)
     .animation(.default, value: aiFeatureSettings.chatEnabled)
+    .onChange(of: aiFeatureSettings.chatEnabled) { _, _ in
+      Task {
+        await ConsentManager.shared.syncGranularConsentSilently()
+      }
+    }
     .safeAreaInset(edge: .bottom) {
       if aiFeatureSettings.chatEnabled {
         NewConversationChatMessageBar(

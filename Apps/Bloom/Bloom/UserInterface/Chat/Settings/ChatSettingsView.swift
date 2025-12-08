@@ -29,6 +29,11 @@ struct ChatSettingsView: View {
           DismissButton()
         }
       }
+      .onChange(of: aiFeatureSettings.chatEnabled) { _, _ in
+        Task {
+          await ConsentManager.shared.syncGranularConsentSilently()
+        }
+      }
     }
   }
 }

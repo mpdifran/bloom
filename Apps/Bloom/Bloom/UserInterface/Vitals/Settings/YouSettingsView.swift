@@ -29,6 +29,11 @@ struct YouSettingsView: View {
           DismissButton()
         }
       }
+      .onChange(of: aiFeatureSettings.biologicalAgeEnabled) { _, _ in
+        Task {
+          await ConsentManager.shared.syncGranularConsentSilently()
+        }
+      }
     }
   }
 }

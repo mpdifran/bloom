@@ -44,6 +44,11 @@ struct TodaySettingsView: View {
           DismissButton()
         }
       }
+      .onChange(of: aiFeatureSettings.todayInsightsEnabled) { _, _ in
+        Task {
+          await ConsentManager.shared.syncGranularConsentSilently()
+        }
+      }
     }
     .presentationDragIndicator(.visible)
     .sheet($presentedSheet)

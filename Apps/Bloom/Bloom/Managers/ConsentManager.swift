@@ -12,6 +12,7 @@ final class ConsentManager: ObservableObject {
 
   @AppStorage("pendingHealthDataConsent") private var pendingHealthDataConsent: Bool?
   @AppStorage("pendingHealthDataConsentScreenVersion") private var pendingHealthDataConsentScreenVersion: String?
+  @AppStorage("pendingGranularConsent") private var pendingGranularConsent: Bool = false
 
   private init() { }
 }
@@ -64,29 +65,91 @@ extension ConsentManager {
     let _ = try await NetworkRequester.shared.updateConsent(request: request)
   }
 
+  func recordGranularConsentUpdate() async throws {
+    let aiFeatures = AIFeatureSettings.shared
+    let aiDataSharing = AIDataSharingSettings.shared
+
+    let request = UpdateConsentRequest(
+      healthDataConsentScreenVersion: nil,
+      externalHealthDataScreenVersion: nil,
+      healthDataConsent: true,
+      chatWithBudConsent: aiFeatures.chatEnabled,
+      todayInsightsConsent: aiFeatures.todayInsightsEnabled,
+      biologicalAgeConsent: aiFeatures.biologicalAgeEnabled,
+      physicalActivityConsent: aiDataSharing.enabledCategories.contains(.physicalActivity),
+      bodyMetricsConsent: aiDataSharing.enabledCategories.contains(.bodyMetrics),
+      mentalWellnessConsent: aiDataSharing.enabledCategories.contains(.mentalWellness),
+      sleepConsent: aiDataSharing.enabledCategories.contains(.sleep),
+      nutritionConsent: aiDataSharing.enabledCategories.contains(.nutrition),
+      digestiveHealthConsent: aiDataSharing.enabledCategories.contains(.digestiveHealth),
+      menstrualHealthConsent: aiDataSharing.enabledCategories.contains(.menstrualHealth),
+      demographicsConsent: aiDataSharing.enabledCategories.contains(.demographics),
+      goalsConsent: aiDataSharing.enabledCategories.contains(.goals),
+      locationConsent: aiDataSharing.enabledCategories.contains(.location),
+      weatherConsent: aiDataSharing.enabledCategories.contains(.weather),
+      calendarEventsConsent: aiDataSharing.enabledCategories.contains(.calendarEvents)
+    )
+
+    let _ = try await NetworkRequester.shared.updateConsent(request: request)
+  }
+
+  /// Syncs granular consent silently. On failure, sets pending flag for retry.
+  /// Call this when user changes settings (on view disappear or app background).
+  func syncGranularConsentSilently() async {
+    guard UserController.shared.isAuthenticated else {
+      pendingGranularConsent = true
+      return
+    }
+
+    do {
+      try await recordGranularConsentUpdate()
+      pendingGranularConsent = false
+    } catch {
+      pendingGranularConsent = true
+      TelemetryDeck.errorOccurred(
+        id: "ConsentManager.syncGranularConsentSilently",
+        category: .thrownException,
+        message: error.localizedDescription
+      )
+    }
+  }
+
   /// Checks for pending consent and syncs to backend if user is authenticated.
   /// Call this after login or on app foreground.
   /// Silently fails and keeps pending consent for retry if sync fails.
   func syncPendingConsentIfNeeded() async {
-    guard
-      UserController.shared.isAuthenticated,
-      pendingHealthDataConsent == true,
-      let pendingHealthDataConsentScreenVersion
-    else { return }
+    guard UserController.shared.isAuthenticated else { return }
 
-    do {
-      try await syncToBackend(
-        healthData: true,
-        healthDataConsentScreenVersion: pendingHealthDataConsentScreenVersion
-      )
-      clearPendingConsent()
-    } catch {
-      // Keep pending consent in storage for next retry
-      TelemetryDeck.errorOccurred(
-        id: "ConsentManager.syncPendingConsentIfNeeded",
-        category: .thrownException,
-        message: error.localizedDescription
-      )
+    // Sync pending health data consent
+    if pendingHealthDataConsent == true, let pendingHealthDataConsentScreenVersion {
+      do {
+        try await syncToBackend(
+          healthData: true,
+          healthDataConsentScreenVersion: pendingHealthDataConsentScreenVersion
+        )
+        self.pendingHealthDataConsent = nil
+        self.pendingHealthDataConsentScreenVersion = nil
+      } catch {
+        TelemetryDeck.errorOccurred(
+          id: "ConsentManager.syncPendingConsentIfNeeded",
+          category: .thrownException,
+          message: error.localizedDescription
+        )
+      }
+    }
+
+    // Sync pending granular consent
+    if pendingGranularConsent {
+      do {
+        try await recordGranularConsentUpdate()
+        pendingGranularConsent = false
+      } catch {
+        TelemetryDeck.errorOccurred(
+          id: "ConsentManager.syncPendingGranularConsent",
+          category: .thrownException,
+          message: error.localizedDescription
+        )
+      }
     }
   }
 
@@ -94,6 +157,7 @@ extension ConsentManager {
   func clearPendingConsent() {
     pendingHealthDataConsent = nil
     pendingHealthDataConsentScreenVersion = nil
+    pendingGranularConsent = false
   }
 }
 
