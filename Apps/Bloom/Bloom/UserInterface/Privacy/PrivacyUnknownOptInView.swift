@@ -118,38 +118,17 @@ private extension PrivacyUnknownOptInView {
       .padding(.horizontal)
 
     DisclosureGroup(isExpanded: $isAISectionExpanded) {
-      PrivacyAIFeatureOptInCell(
-        title: "Today Insights",
-        subtitle: "Personalized daily insights from your data.",
-        isEnabled: $aiFeatureSettings.todayInsightsEnabled) {
-          TodayInsightsIcon()
-            .frame(width: 40)
-        }
-        .tint(.mutedOrange)
+      TodayInsightsPrivacyAIFeatureOptInCell(extraContext: "Bud will use the Personal Data Categories enabled below.")
         .padding(.vertical)
 
       Divider()
 
-      PrivacyAIFeatureOptInCell(
-        title: "Chat with Bud",
-        subtitle: "Chat with Bud about your health and wellness.",
-        isEnabled: $aiFeatureSettings.chatEnabled) {
-          ChatWithBudIcon()
-            .frame(width: 40)
-        }
-        .tint(.mutedLightBlue)
+      ChatPrivacyAIFeatureOptInCell(extraContext: "Bud can reference the Personal Data Categories enabled below in chats.")
         .padding(.vertical)
 
       Divider()
 
-      PrivacyAIFeatureOptInCell(
-        title: "Biological Age",
-        subtitle: "Estimate your biological age based on your data.",
-        isEnabled: $aiFeatureSettings.biologicalAgeEnabled) {
-          BiologicalAgeIcon()
-            .frame(width: 40)
-        }
-        .tint(.mutedGreen)
+      BiologicalAgePrivacyAIFeatureOptInCell(extraContext: "Bud will use the enabled Personal Data Categories to calculate your biological age.")
         .padding(.vertical)
     } label: {
       DisclosureOverallToggleView(

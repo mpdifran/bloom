@@ -19,6 +19,8 @@ private extension Int {
 }
 
 struct TodayInsightsIcon: View {
+  let isEnabled: Bool
+
   @State private var showTop = true
   @State private var showMiddleLeft = true
   @State private var showMiddleRight = true
@@ -58,6 +60,19 @@ struct TodayInsightsIcon: View {
               .offset(y: showBottom ? 0 : (isAnimatingOut ? -animationDistance(for: proxy) : animationDistance(for: proxy)))
           }
           .padding(padding(for: proxy))
+          .saturation(isEnabled ? 1 : 0)
+          .onChange(of: isEnabled) { oldValue, newValue in
+            if newValue {
+              Task {
+                await runAnimationLoop()
+              }
+            } else {
+              showTop = true
+              showMiddleLeft = true
+              showMiddleRight = true
+              showBottom = true
+            }
+          }
           .onAppear {
             Task {
               await runAnimationLoop()
@@ -97,7 +112,7 @@ private extension TodayInsightsIcon {
   }
 
   func runAnimationLoop() async {
-    while true {
+    while isEnabled {
       await animateSequenceOut()
       try? await Task.sleep(for: .seconds(.offPause))
       await animateSequenceIn()
@@ -131,13 +146,13 @@ private extension TodayInsightsIcon {
 #Preview {
   PreviewEnvironment {
     BloomScrollView {
-      TodayInsightsIcon()
+      TodayInsightsIcon(isEnabled: true)
         .frame(width: 40)
 
-      TodayInsightsIcon()
+      TodayInsightsIcon(isEnabled: false)
         .frame(width: 80)
 
-      TodayInsightsIcon()
+      TodayInsightsIcon(isEnabled: true)
         .frame(width: 120)
     }
   }

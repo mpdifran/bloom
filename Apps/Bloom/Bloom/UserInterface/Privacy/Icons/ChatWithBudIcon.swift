@@ -19,6 +19,7 @@ private extension Int {
 }
 
 struct ChatWithBudIcon: View {
+  let isEnabled: Bool
 
   @State private var showChatBubble = true
   @State private var showResponseRect = true
@@ -55,8 +56,20 @@ struct ChatWithBudIcon: View {
         .clipped()
     }
     .aspectRatio(6/9, contentMode: .fit)
+    .saturation(isEnabled ? 1 : 0)
     .animation(.bouncy(duration: .animationDuration), value: showChatBubble)
     .animation(.bouncy(duration: .animationDuration), value: showResponseRect)
+    .animation(.default, value: isEnabled)
+    .onChange(of: isEnabled) { oldValue, newValue in
+      if newValue {
+        Task {
+          await runAnimationLoop()
+        }
+      } else {
+        showChatBubble = true
+        showResponseRect = true
+      }
+    }
     .onAppear {
       Task {
         await runAnimationLoop()
@@ -87,7 +100,7 @@ private extension ChatWithBudIcon {
 private extension ChatWithBudIcon {
 
   func runAnimationLoop() async {
-    while true {
+    while isEnabled {
       await animateSequenceOut()
       try? await Task.sleep(for: .seconds(.offPause))
       await animateSequenceIn()
@@ -111,13 +124,13 @@ private extension ChatWithBudIcon {
 #Preview {
   PreviewEnvironment {
     BloomScrollView {
-      ChatWithBudIcon()
+      ChatWithBudIcon(isEnabled: true)
         .frame(width: 40)
 
-      ChatWithBudIcon()
+      ChatWithBudIcon(isEnabled: false)
         .frame(width: 80)
 
-      ChatWithBudIcon()
+      ChatWithBudIcon(isEnabled: true)
         .frame(width: 120)
     }
   }

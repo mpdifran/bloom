@@ -119,14 +119,7 @@ private extension ChatConversationView {
         .font(.body)
         .foregroundStyle(.secondary)
 
-      PrivacyAIFeatureOptInCell(
-        title: "Chat with Bud",
-        subtitle: "Chat with Bud about your health and wellness.",
-        isEnabled: $aiFeatureSettings.chatEnabled) {
-          ChatWithBudIcon()
-            .frame(width: 40)
-        }
-        .tint(.mutedLightBlue)
+      ChatPrivacyAIFeatureOptInCell()
         .cardContainer()
 
       Spacer()

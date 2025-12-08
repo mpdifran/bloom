@@ -45,17 +45,8 @@ private extension YouSettingsView {
       SectionTitleView("Biological Age")
         .padding(.horizontal)
 
-      SettingsSectionContainer {
-        PrivacyAIFeatureOptInCell(
-          title: "Biological Age",
-          subtitle: "Estimate your biological age based on your data.",
-          isEnabled: $aiFeatureSettings.biologicalAgeEnabled) {
-            BiologicalAgeIcon()
-              .frame(width: 40)
-          }
-          .tint(.mutedGreen)
-          .padding(.vertical)
-      }
+      BiologicalAgePrivacyAIFeatureOptInCell(extraContext: "Bud will use the Personal Data Categories enabled below to calculate your biological age.")
+        .cardContainer()
 
       AIDataShareCell()
         .cardContainer()

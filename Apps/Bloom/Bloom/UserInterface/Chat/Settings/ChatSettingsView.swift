@@ -45,19 +45,8 @@ private extension ChatSettingsView {
       SectionTitleView("Chat with Bud")
         .padding(.horizontal)
 
-      SettingsSectionContainer {
-        PrivacyAIFeatureOptInCell(
-          title: "Chat with Bud",
-          subtitle: "Chat with Bud about your health and wellness.",
-          isEnabled: $aiFeatureSettings.chatEnabled) {
-            ChatWithBudIcon()
-              .frame(width: 40)
-          }
-          .tint(.mutedLightBlue)
-          .padding(.vertical)
-      }
-
-
+      ChatPrivacyAIFeatureOptInCell(extraContext: "Bud can reference the Personal Data Categories enabled below in chats.")
+        .cardContainer()
 
       AIDataShareCell()
         .cardContainer()

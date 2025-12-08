@@ -76,51 +76,8 @@ private extension WelcomeToBloomPlusView {
   }
 
   @ViewBuilder
-  var aiFeaturesSection: some View {
-    SectionTitleView("Features")
-      .padding(.horizontal)
-    PrivacyAIFeatureOptInCell(
-      title: "Today Insights",
-      subtitle: "Personalized daily insights from your data.",
-      isEnabled: $aiFeatureSettings.todayInsightsEnabled) {
-        TodayInsightsIcon()
-          .frame(width: 40)
-      }
-      .tint(.mutedOrange)
-      .cardContainer()
-
-    PrivacyAIFeatureOptInCell(
-      title: "Chat with Bud",
-      subtitle: "Chat with Bud about your health and wellness.",
-      isEnabled: $aiFeatureSettings.chatEnabled) {
-        ChatWithBudIcon()
-          .frame(width: 40)
-      }
-      .tint(.mutedLightBlue)
-      .cardContainer()
-
-    PrivacyAIFeatureOptInCell(
-      title: "Biological Age",
-      subtitle: "Estimate your biological age based on your data.",
-      isEnabled: $aiFeatureSettings.biologicalAgeEnabled) {
-        BiologicalAgeIcon()
-          .frame(width: 40)
-      }
-      .tint(.mutedGreen)
-      .cardContainer()
-
-    Text("Choose which features can use the data enabled above.")
-      .font(.caption)
-      .bold()
-      .foregroundStyle(.secondary)
-      .multilineTextAlignment(.leading)
-      .fixedSize(horizontal: false, vertical: true)
-      .padding(.horizontal)
-  }
-
-  @ViewBuilder
   var sharingSection: some View {
-    SectionTitleView("Sharing Personal Data")
+    SectionTitleView("Sharing With AI")
       .padding(.horizontal)
 
     AIDataShareCell()
@@ -130,6 +87,29 @@ private extension WelcomeToBloomPlusView {
       }
 
     Text("Choose what Personal Data Bud can use with the features below.")
+      .font(.caption)
+      .bold()
+      .foregroundStyle(.secondary)
+      .multilineTextAlignment(.leading)
+      .fixedSize(horizontal: false, vertical: true)
+      .padding(.horizontal)
+  }
+
+  @ViewBuilder
+  var aiFeaturesSection: some View {
+    SectionTitleView("Features")
+      .padding(.horizontal)
+
+    TodayInsightsPrivacyAIFeatureOptInCell(extraContext: "Bud will use the Personal Data Categories enabled above.")
+      .cardContainer()
+
+    ChatPrivacyAIFeatureOptInCell(extraContext: "Bud can reference the Personal Data Categories enabled above in chats.")
+      .cardContainer()
+
+    BiologicalAgePrivacyAIFeatureOptInCell(extraContext: "Bud will use the enabled Personal Data Categories to calculate your biological age.")
+      .cardContainer()
+
+    Text("Choose which features can use the data enabled above.")
       .font(.caption)
       .bold()
       .foregroundStyle(.secondary)

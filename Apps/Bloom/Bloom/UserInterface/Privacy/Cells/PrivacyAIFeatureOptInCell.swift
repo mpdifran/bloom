@@ -30,11 +30,11 @@ struct PrivacyAIFeatureOptInCell<IconView: View>: View {
     Toggle(isOn: $isEnabled) {
       HStack {
         iconBuilder()
-          .saturation(isEnabled ? 1 : 0)
           .padding(.trailing, 8)
 
         VStack(alignment: .leading) {
           Text(title)
+            .font(.body)
             .bold()
             .fontDesign(.rounded)
             .minimumScaleFactor(0.7)
@@ -43,7 +43,7 @@ struct PrivacyAIFeatureOptInCell<IconView: View>: View {
           Text(subtitle)
             .font(.caption)
             .foregroundStyle(.secondary)
-            .lineLimit(2)
+            .fixedSize(horizontal: false, vertical: true)
         }
         .multilineTextAlignment(.leading)
       }
@@ -63,7 +63,7 @@ struct PrivacyAIFeatureOptInCell<IconView: View>: View {
         title: "Today Insights",
         subtitle: "Personalized daily insights from your data.",
         isEnabled: $isEnabled) {
-          TodayInsightsIcon()
+          TodayInsightsIcon(isEnabled: true)
             .frame(width: 40)
         }
         .cardContainer()

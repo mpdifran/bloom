@@ -20,13 +20,12 @@ private extension Int {
 }
 
 struct BiologicalAgeIcon: View {
+  let isEnabled: Bool
 
-  @State private var showChatBubble = true
-  @State private var showResponseRect = true
   @State private var bioAge = 25
   @State private var ageIndex = 0
 
-  private let ages = [27, 38, 22, 35]
+  private let ages = [27, 35, 22, 32]
 
   var body: some View {
     GeometryReader { proxy in
@@ -34,21 +33,18 @@ struct BiologicalAgeIcon: View {
         .fill(.background.secondary)
         .overlay {
           VStack(spacing: padding(for: proxy)) {
-
-            if showChatBubble {
-              MiniBioAgeMeter(chronologicalAge: 30, biologicalAge: Double(bioAge))
-                .frame(height: proxy.size.width * 0.7)
-                .transition(.opacity)
-            }
+            MiniBioAgeMeter(chronologicalAge: 30, biologicalAge: Double(bioAge))
+              .frame(height: proxy.size.width * 0.7)
+              .transition(.opacity)
 
             Spacer(minLength: 0)
 
-            if showResponseRect {
-              RoundedRectangle(cornerRadius: innerCornerRadius(for: proxy))
-                .fill(.fill)
-                .shimmer()
-                .transition(.scale(scale: 0.1, anchor: .bottom).combined(with: .opacity))
-            }
+            RoundedRectangle(cornerRadius: innerCornerRadius(for: proxy))
+              .fill(.fill)
+              .if(isEnabled) {
+                $0.shimmer()
+              }
+              .transition(.scale(scale: 0.1, anchor: .bottom).combined(with: .opacity))
           }
           .padding(padding(for: proxy))
           .horizontallyCentered()
@@ -57,8 +53,17 @@ struct BiologicalAgeIcon: View {
         .clipped()
     }
     .aspectRatio(6/9, contentMode: .fit)
-    .animation(.bouncy(duration: .animationDuration), value: showChatBubble)
-    .animation(.bouncy(duration: .animationDuration), value: showResponseRect)
+    .animation(.default, value: isEnabled)
+    .saturation(isEnabled ? 1 : 0)
+    .onChange(of: isEnabled) { oldValue, newValue in
+      if newValue {
+        Task {
+          await runAgeLoop()
+        }
+      } else {
+        bioAge = 27
+      }
+    }
     .onAppear {
       Task {
         await runAgeLoop()
@@ -89,32 +94,11 @@ private extension BiologicalAgeIcon {
 private extension BiologicalAgeIcon {
 
   func runAgeLoop() async {
-    while true {
+    while isEnabled {
       ageIndex = (ageIndex + 1) % ages.count
       self.bioAge = ages[ageIndex]
       await Delay(.ageDelay)
     }
-  }
-
-  func runAnimationLoop() async {
-    while true {
-      await animateSequenceIn()
-      try? await Task.sleep(for: .seconds(.onPause))
-      await animateSequenceOut()
-      try? await Task.sleep(for: .seconds(.offPause))
-    }
-  }
-
-  func animateSequenceIn() async {
-    showChatBubble = true
-    await Delay(.offsetDelay)
-    showResponseRect = true
-  }
-
-  func animateSequenceOut() async {
-    showResponseRect = false
-    await Delay(.offsetDelay)
-    showChatBubble = false
   }
 }
 
@@ -217,13 +201,13 @@ private extension MiniBioAgeMeter {
 #Preview {
   PreviewEnvironment {
     BloomScrollView {
-      BiologicalAgeIcon()
+      BiologicalAgeIcon(isEnabled: true)
         .frame(width: 40)
 
-      BiologicalAgeIcon()
+      BiologicalAgeIcon(isEnabled: false)
         .frame(width: 80)
 
-      BiologicalAgeIcon()
+      BiologicalAgeIcon(isEnabled: true)
         .frame(width: 120)
     }
   }

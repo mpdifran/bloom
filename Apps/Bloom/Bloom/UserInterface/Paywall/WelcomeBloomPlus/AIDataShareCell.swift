@@ -16,14 +16,21 @@ struct AIDataShareCell: View {
       AIDataShareIcon()
 
       VStack(alignment: .leading) {
-        Text("Data Shared with AI")
+        Text("Personal Data Categories")
           .font(.body)
           .bold()
+
+        Text("Select which categories are shared with AI.")
+          .font(.caption)
+          .fixedSize(horizontal: false, vertical: true)
+          .foregroundStyle(.secondary)
+
         Text(aiDataSharingSettings.enabledCategoriesText)
           .font(.caption)
-          .bold()
+          .fixedSize(horizontal: false, vertical: true)
           .foregroundStyle(aiDataSharingSettings.enabledCategories.isEmpty ? .mutedRed : .secondary)
       }
+      .multilineTextAlignment(.leading)
 
       Spacer()
 
