@@ -24,7 +24,6 @@ struct RootView: View {
 
   @ObservedObject private var entitlementController = EntitlementController.shared
   @State private var presentedSheet: AnyView?
-  @State private var presentedPaywall: AnyView?
 
   @State private var selectionToggle = false
   @State private var shouldShowLogPeriodSheet = false
@@ -92,7 +91,6 @@ struct RootView: View {
         shouldShowLogPeriodSheet = false
       }
     }
-    .fullScreenCover($presentedPaywall)
     .alert(alertDetails: $alertDetails)
     .animation(.easeInOut(duration: 1), value: userController.isAuthenticated)
     .animation(.easeInOut(duration: 1), value: hasShownOnboarding)
@@ -110,14 +108,7 @@ struct RootView: View {
       }
     }
     .onForegroundTask {
-      // TODO: Manage these sheets better
-      await checkPeriodicPaywall()
-      await checkAndShowSale()
-    }
-    .onForegroundTask {
-      if await ConsentManager.shared.hasUnknownConsentStates() {
-        presentedSheet = PrivacyUnknownOptInView().asAny
-      }
+      await checkModalSheetToPresent()
     }
     .onForegroundTask {
       await MagicScanStatusChecker.shared.checkPendingItems(modelContext: modelContext)
@@ -136,39 +127,22 @@ struct RootView: View {
 
 private extension RootView {
 
-  func checkPeriodicPaywall() async {
-    guard hasShownOnboarding else { return }
+  func checkModalSheetToPresent() async {
+    guard
+      hasShownOnboarding,
+      userController.isAuthenticated
+    else { return }
 
-    let variant = experimentManager.variant(for: .periodicPaywall)
-    let shouldShow = await PeriodicPaywallManager.shared.shouldShowPaywall()
+    let sheetKind = await RootViewModalPresentationManager.shared.determineSheetToPresent()
 
-    switch variant {
-    case .treatment:
-      if shouldShow {
-        TelemetryDeck.signal("AB: Periodic Paywall v3 - Treatment")
-        EntitledAction(presentedSheet: $presentedSheet) {
-          // Do nothing
-        }
-      }
-    case .control:
-      if shouldShow {
-        TelemetryDeck.signal("AB: Periodic Paywall v3 - Control")
-      }
+    switch sheetKind {
+    case .privacyUnknownSheet:
+      presentedSheet = PrivacyUnknownOptInView().asAny
+    case .sale(let saleDetails):
+      presentedSheet = SaleModalView(sale: saleDetails).asAny
+    case nil:
+      break
     }
-  }
-
-  func checkAndShowSale() async {
-    guard hasShownOnboarding else { return }
-    guard userController.isAuthenticated else { return }
-
-    // TODO: Enable this when we're ready
-//    if let sale = await SalesManager.shared.shouldShowSale() {
-//      presentedSheet = SaleModalView(sale: sale).asAny
-//
-//      Task {
-//        await SalesManager.shared.markSaleAsShown(sale.id)
-//      }
-//    }
   }
 
   func handleURL(_ url: URL) {
@@ -185,7 +159,6 @@ private extension RootView {
 
     // Dismiss any presented views before handling navigation
     presentedSheet = nil
-    presentedPaywall = nil
     shouldShowLogPeriodSheet = false
     tabController.isShowingChat = false
 
@@ -207,7 +180,7 @@ private extension RootView {
         focus = .standard
       }
 
-      EntitledAction(presentedSheet: $presentedPaywall, focus: focus) {
+      EntitledAction(presentedSheet: $presentedSheet, focus: focus) {
         // Do nothing
       }
     case "/action/magic-scan":
