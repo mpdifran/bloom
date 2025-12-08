@@ -186,6 +186,7 @@ private extension WelcomeToBloomPlusView {
   @ViewBuilder
   var shelfContent: some View {
     AsyncButton {
+      try await ConsentManager.shared.recordGranularConsent(externalHealthDataScreenVersion: "WelcomeToBloomPlusView.v1")
       dismiss()
       onDismiss()
     } label: {

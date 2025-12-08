@@ -51,24 +51,24 @@ public struct UpdateConsentRequest: Codable, Hashable, Sendable {
   public let calendarEventsConsent: Bool?
 
   public init(
-    healthDataConsentScreenVersion: String? = nil,
-    externalHealthDataScreenVersion: String? = nil,
-    healthDataConsent: Bool? = nil,
-    chatWithBudConsent: Bool? = nil,
-    todayInsightsConsent: Bool? = nil,
-    biologicalAgeConsent: Bool? = nil,
-    physicalActivityConsent: Bool? = nil,
-    bodyMetricsConsent: Bool? = nil,
-    mentalWellnessConsent: Bool? = nil,
-    sleepConsent: Bool? = nil,
-    nutritionConsent: Bool? = nil,
-    digestiveHealthConsent: Bool? = nil,
-    menstrualHealthConsent: Bool? = nil,
-    demographicsConsent: Bool? = nil,
-    goalsConsent: Bool? = nil,
-    locationConsent: Bool? = nil,
-    weatherConsent: Bool? = nil,
-    calendarEventsConsent: Bool? = nil
+    healthDataConsentScreenVersion: String?,
+    externalHealthDataScreenVersion: String?,
+    healthDataConsent: Bool?,
+    chatWithBudConsent: Bool?,
+    todayInsightsConsent: Bool?,
+    biologicalAgeConsent: Bool?,
+    physicalActivityConsent: Bool?,
+    bodyMetricsConsent: Bool?,
+    mentalWellnessConsent: Bool?,
+    sleepConsent: Bool?,
+    nutritionConsent: Bool?,
+    digestiveHealthConsent: Bool?,
+    menstrualHealthConsent: Bool?,
+    demographicsConsent: Bool?,
+    goalsConsent: Bool?,
+    locationConsent: Bool?,
+    weatherConsent: Bool?,
+    calendarEventsConsent: Bool?
   ) {
     self.healthDataConsentScreenVersion = healthDataConsentScreenVersion
     self.externalHealthDataScreenVersion = externalHealthDataScreenVersion

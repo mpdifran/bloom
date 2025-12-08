@@ -22,6 +22,7 @@ struct PrivacyUnknownOptInView: View {
   @State private var isOtherDataSectionExpanded = false
 
   @Environment(\.openURL) private var openURL
+  @Environment(\.dismiss) private var dismiss
 
   var body: some View {
     BloomScrollView(showsChatBar: false, padding: .bottom) {
@@ -283,7 +284,8 @@ private extension PrivacyUnknownOptInView {
       .padding(.horizontal)
 
     AsyncButton {
-
+      try await ConsentManager.shared.recordGranularConsent(externalHealthDataScreenVersion: "PrivacyUnknownOptInView.v1")
+      dismiss()
     } label: {
       Text("Accept and Continue")
         .horizontallyCentered()

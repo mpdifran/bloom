@@ -189,13 +189,6 @@ extension UserController {
   func updatePushNotificationToken(_ token: String) async throws {
     try await NetworkRequester.shared.register(deviceToken: token)
   }
-
-  func updateConsent(healthData: Bool?, externalProcessing: Bool?) async throws -> ConsentResponse {
-    let request = UpdateConsentRequest(
-      healthDataConsent: healthData
-    )
-    return try await NetworkRequester.shared.updateConsent(request: request)
-  }
 }
 
 private extension UserController {

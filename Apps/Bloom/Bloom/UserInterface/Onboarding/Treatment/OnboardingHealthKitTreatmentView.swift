@@ -229,7 +229,7 @@ private extension OnboardingHealthKitTreatmentView {
     do {
       try await ConsentManager.shared.recordConsent(
         healthData: true,
-        externalProcessing: nil
+        healthDataConsentScreenVersion: "OnboardingHealthKitView.v1"
       )
     } catch {
       TelemetryDeck.errorOccurred(
