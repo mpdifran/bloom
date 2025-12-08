@@ -21,7 +21,6 @@ struct BloomApp: App {
 
   @UIApplicationDelegateAdaptor(BloomAppDelegate.self) var appDelegate
 
-  private let foregroundPublisher = NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
   private let tokenManager = PushNotificationTokenManager.shared
 
   init() {
@@ -42,8 +41,8 @@ struct BloomApp: App {
 
     // Link TelemetryDeck with RevenueCat
     Purchases.shared.attribution.setAttributes([
-        "$telemetryDeckUserId": TelemetryManager.shared.hashedDefaultUser,
-        "$telemetryDeckAppId": .telemetryDeckAppID
+      "$telemetryDeckUserId": TelemetryManager.shared.hashedDefaultUser,
+      "$telemetryDeckAppId": .telemetryDeckAppID
     ])
     _ = EntitlementController.shared
 
@@ -61,11 +60,48 @@ struct BloomApp: App {
     WindowGroup {
       RootView()
         .tint(.accent)
-        .onReceive(foregroundPublisher) { _ in
-          onForeground()
+        .onForeground {
+          NutritionTrackingViewModel.shared.updateMealForCurrentTime()
+          RatingPromptTracker.shared.incrementEventCount()
+        }
+        .onForegroundTask {
+          await UserController.shared.identify()
+        }
+        .onForegroundTask {
+          await tokenManager.refreshTokenIfNeeded()
+        }
+        .onForegroundTask {
+          await VitalsCalculator.shared.refreshVitals()
+        }
+        .onForegroundTask {
+          await TodayInsightsManager.shared.refreshContentIfNeeded()
+        }
+        .onForegroundTask {
+          await BiologicalAgeViewModel.shared.calculateBiologicalAgeIfNeeded()
+        }
+        .onForegroundTask {
+          await RemindersManager.shared.rescheduleAllReminders()
+          ReminderTriggerObserver.shared.startObserving()
+        }
+        .onForegroundTask {
+          await PeriodPredictionScheduler.shared.schedulePeriodPredictionNotifications()
+        }
+        .onForegroundTask {
+          TelemetryDeck.signal(
+            "Health Goal",
+            parameters: ["healthGoal": HealthDefaults.shared.getFocus()]
+          )
+        }
+        .onForegroundTask { @MainActor in
+          await ReEngagementScheduler.shared.scheduleNotificationIfNeeded()
+        }
+        .onForegroundTask {
+          let modelContext = ModelContext(ContainerHolder.shared.container)
+          await GoalWidgetCacheManager.shared.updateCache(modelContext: modelContext)
         }
         .task {
-          await VitalsCalculator.shared.refreshVitals()
+          let modelContext = ModelContext(ContainerHolder.shared.container)
+          await GoalWidgetHealthObserver.shared.startObserving(modelContext: modelContext)
         }
         .task {
           await HealthSleepObserver.shared.observeSleep()
@@ -74,7 +110,7 @@ struct BloomApp: App {
           await TrainingLoadObserver.shared.observeTrainingLoad()
         }
         .task {
-          await BiologicalAgeViewModel.shared.calculateBiologicalAgeIfNeeded()
+          await NotificationCategoryManager.shared.registerNotificationCategories()
         }
         .task {
           do {
@@ -88,36 +124,13 @@ struct BloomApp: App {
           }
         }
         .task {
-          // Register notification categories with actions
-          await NotificationCategoryManager.shared.registerNotificationCategories()
-          // Schedule all reminder notifications on app launch
-          await RemindersManager.shared.rescheduleAllReminders()
-          // Start observing HealthKit changes for reminder triggers
-          ReminderTriggerObserver.shared.startObserving()
-          // Schedule period prediction notifications
-          await PeriodPredictionScheduler.shared.schedulePeriodPredictionNotifications()
-        }
-        .task { @MainActor in
-          // Schedule re-engagement notification on fresh launch
-          await ReEngagementScheduler.shared.scheduleNotificationIfNeeded()
-        }
-        .task {
-          // Run chat conversation migration on app launch
           ChatConversationMigration.shared.runMigrationIfNeeded()
         }
         .task {
-          // Run PNG to JPEG migration on app launch
           PngToJpegMigration.shared.runMigrationIfNeeded()
         }
-        .task {
-          // Update goal widget cache on app launch
-          let modelContext = ModelContext(ContainerHolder.shared.container)
-          await GoalWidgetCacheManager.shared.updateCache(modelContext: modelContext)
-        }
-        .task {
-          // Start observing health data changes for goal widgets
-          let modelContext = ModelContext(ContainerHolder.shared.container)
-          await GoalWidgetHealthObserver.shared.startObserving(modelContext: modelContext)
+        .task { @MainActor in
+          ImageResizeMigration.shared.runMigrationIfNeeded()
         }
     }
     .modelContainer(ContainerHolder.shared.container)
@@ -125,77 +138,6 @@ struct BloomApp: App {
 }
 
 private extension BloomApp {
-
-  func onForeground() {
-    NutritionTrackingViewModel.shared.updateMealForCurrentTime()
-    RatingPromptTracker.shared.incrementEventCount()
-
-    Task { @MainActor in
-      // Schedule re-engagement notification when app comes to foreground
-      await ReEngagementScheduler.shared.scheduleNotificationIfNeeded()
-    }
-
-    Task {
-      await UserController.shared.identify()
-    }
-
-    Task {
-      await VitalsCalculator.shared.refreshVitals()
-    }
-
-    Task {
-      // Reschedule reminders when app comes to foreground
-      await RemindersManager.shared.rescheduleAllReminders()
-    }
-
-    Task {
-      // Reschedule period prediction notifications when app comes to foreground
-      await PeriodPredictionScheduler.shared.schedulePeriodPredictionNotifications()
-    }
-
-    Task {
-      // Load Today content when app comes to foreground
-      await TodayInsightsManager.shared.refreshContentIfNeeded()
-    }
-    
-    Task {
-      // Check if APNs token needs refresh
-      await tokenManager.refreshTokenIfNeeded()
-    }
-
-    Task {
-      // Calculate biological age if needed (once every 3 days)
-      await BiologicalAgeViewModel.shared.calculateBiologicalAgeIfNeeded()
-    }
-
-    Task { @MainActor in
-      // Run image resize migration in background
-      ImageResizeMigration.shared.runMigrationIfNeeded()
-    }
-
-    Task { @MainActor in
-      // Run PNG to JPEG migration in background
-      PngToJpegMigration.shared.runMigrationIfNeeded()
-    }
-
-    Task { @MainActor in
-      // Run chat conversation migration in background
-      ChatConversationMigration.shared.runMigrationIfNeeded()
-    }
-
-    Task { @MainActor in
-      // Update goal widget cache
-      let modelContext = ModelContext(ContainerHolder.shared.container)
-      await GoalWidgetCacheManager.shared.updateCache(modelContext: modelContext)
-    }
-
-    TelemetryDeck.signal(
-      "Health Goal",
-      parameters: [
-        "healthGoal": HealthDefaults.shared.getFocus()
-      ]
-    )
-  }
 
   func migrateUserDefaults() {
     let keys = UserDefaults.legacyGroup.dictionaryRepresentation().keys

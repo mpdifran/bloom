@@ -121,10 +121,24 @@ extension ConsentManager {
 
     do {
       let response = try await NetworkRequester.shared.getConsent()
-      // Check if any granular consent fields are nil (unknown)
-      return response.chatWithBudConsent == nil ||
-             response.todayInsightsConsent == nil ||
-             response.biologicalAgeConsent == nil
+      // Check if any feature consent fields are nil (unknown)
+      let hasUnknownFeatures = response.chatWithBudConsent == nil ||
+                               response.todayInsightsConsent == nil ||
+                               response.biologicalAgeConsent == nil
+      // Check if any health data category consent fields are nil (unknown)
+      let hasUnknownCategories = response.physicalActivityConsent == nil ||
+                                 response.bodyMetricsConsent == nil ||
+                                 response.mentalWellnessConsent == nil ||
+                                 response.sleepConsent == nil ||
+                                 response.nutritionConsent == nil ||
+                                 response.digestiveHealthConsent == nil ||
+                                 response.menstrualHealthConsent == nil ||
+                                 response.demographicsConsent == nil ||
+                                 response.goalsConsent == nil ||
+                                 response.locationConsent == nil ||
+                                 response.weatherConsent == nil ||
+                                 response.calendarEventsConsent == nil
+      return hasUnknownFeatures || hasUnknownCategories
     } catch {
       return false
     }

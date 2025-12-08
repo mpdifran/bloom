@@ -109,36 +109,20 @@ struct RootView: View {
         )
       }
     }
-    .task {
-      // Check periodic paywall experiment on app launch
+    .onForegroundTask {
+      // TODO: Manage these sheets better
       await checkPeriodicPaywall()
-
-      // Check for active sales
       await checkAndShowSale()
     }
-    .onForeground {
-      Task {
-        await MagicScanStatusChecker.shared.checkPendingItems(modelContext: modelContext)
-        await BiologicalAgeStatusChecker.shared.checkPendingCalculation()
-        await ConsentManager.shared.syncPendingConsentIfNeeded()
+    .onForegroundTask {
+      if await ConsentManager.shared.hasUnknownConsentStates() {
+        presentedSheet = PrivacyUnknownOptInView().asAny
       }
-
-      Task {
-        // Check periodic paywall experiment on foreground
-        await checkPeriodicPaywall()
-      }
-
-      Task {
-        // Check for active sales
-        await checkAndShowSale()
-      }
-
-      Task {
-        // Check for unknown consent states
-        if await ConsentManager.shared.hasUnknownConsentStates() {
-          presentedSheet = PrivacyUnknownOptInView().asAny
-        }
-      }
+    }
+    .onForegroundTask {
+      await MagicScanStatusChecker.shared.checkPendingItems(modelContext: modelContext)
+      await BiologicalAgeStatusChecker.shared.checkPendingCalculation()
+      await ConsentManager.shared.syncPendingConsentIfNeeded()
     }
     .onOpenURL { url in
       handleURL(url)
