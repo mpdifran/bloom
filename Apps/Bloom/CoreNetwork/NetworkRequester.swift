@@ -63,6 +63,15 @@ public extension NetworkRequester {
       responseType: ConsentResponse.self
     )
   }
+
+  func getConsent() async throws -> ConsentResponse {
+    let request = await URLRequest.User.getConsent()
+
+    return try await URLSession.shared.authenticatedBloomRequestWithResponse(
+      request: request,
+      responseType: ConsentResponse.self
+    )
+  }
 }
 
 // MARK: - Food

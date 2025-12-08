@@ -114,6 +114,22 @@ extension ConsentManager {
     }
   }
 
+  /// Checks if user has any unknown consent states that need to be addressed.
+  /// Returns true if PrivacyUnknownOptInView should be shown.
+  func hasUnknownConsentStates() async -> Bool {
+    guard UserController.shared.isAuthenticated else { return false }
+
+    do {
+      let response = try await NetworkRequester.shared.getConsent()
+      // Check if any granular consent fields are nil (unknown)
+      return response.chatWithBudConsent == nil ||
+             response.todayInsightsConsent == nil ||
+             response.biologicalAgeConsent == nil
+    } catch {
+      return false
+    }
+  }
+
   /// Checks for pending consent and syncs to backend if user is authenticated.
   /// Call this after login or on app foreground.
   /// Silently fails and keeps pending consent for retry if sync fails.

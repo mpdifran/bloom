@@ -132,6 +132,13 @@ struct RootView: View {
         // Check for active sales
         await checkAndShowSale()
       }
+
+      Task {
+        // Check for unknown consent states
+        if await ConsentManager.shared.hasUnknownConsentStates() {
+          presentedSheet = PrivacyUnknownOptInView().asAny
+        }
+      }
     }
     .onOpenURL { url in
       handleURL(url)

@@ -100,7 +100,7 @@ private extension PrivacyUnknownOptInView {
       .fontDesign(.rounded)
 
       Group {
-        Text("Bloom reads your personal data from your device to let you set goals, view charts, and understand your progress.")
+        Text("Bloom reads your Personal Data from the Health app on your device in order to let you set goals, view charts, and understand your progress.")
       }
       .font(.headline)
       .bold()

@@ -64,6 +64,9 @@ private extension WelcomeToBloomPlusView {
 
   @ViewBuilder
   var explanationSection: some View {
+    BloomPlusLogo()
+      .horizontallyCentered()
+
     Text("Welcome to the Club!")
       .onboardingTextStyle()
     Text("You’ve unlocked deeper insights, smarter guidance, and Bud’s full brainpower.")
