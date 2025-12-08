@@ -120,36 +120,11 @@ private extension WelcomeToBloomPlusView {
     SectionTitleView("Sharing Personal Data")
       .padding(.horizontal)
 
-    HStack {
-      RoundedRectangle(cornerRadius: 13)
-        .fill(.mutedPink)
-        .frame(square: 44)
-        .overlay {
-          Image(systemSymbol: .heartFill)
-            .foregroundStyle(.white)
-            .font(.title2)
-            .bold()
-        }
-
-      VStack(alignment: .leading) {
-        Text("Data Shared with AI")
-          .font(.body)
-          .bold()
-        Text(aiDataSharingSettings.enabledCategoriesText)
-          .font(.caption)
-          .bold()
-          .foregroundStyle(aiDataSharingSettings.enabledCategories.isEmpty ? .mutedRed : .secondary)
+    AIDataShareCell()
+      .cardContainer()
+      .onTapGesture {
+        presentedSheet = AIDataSharingView(showDismiss: true).asAny
       }
-
-      Spacer()
-
-      DisclosureIndicator()
-    }
-    .fontDesign(.rounded)
-    .cardContainer()
-    .onTapGesture {
-      presentedSheet = AIDataSharingView(showDismiss: true).asAny
-    }
 
     Text("Choose what Personal Data Bud can use with the features below.")
       .font(.caption)

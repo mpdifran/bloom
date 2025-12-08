@@ -84,14 +84,11 @@ private extension TodaySettingsView {
           .padding(.vertical)
       }
 
-      SettingsSectionContainer {
-        SettingsCell("Data Shared with AI", subtitle: aiDataSharingSettings.enabledCategoriesText, iconType: .disclosure) {
-          EmptyView()
-        }
+      AIDataShareCell()
+        .cardContainer()
         .onTapGesture {
           navigationPushView = AIDataSharingView().asAny
         }
-      }
     }
   }
 
