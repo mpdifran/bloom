@@ -11,6 +11,7 @@ import BloomUI
 import CoreHealth
 import SFSafeSymbols
 import AppUI
+import TelemetryDeck
 
 struct WelcomeToBloomPlusView: View {
 
@@ -58,6 +59,9 @@ struct WelcomeToBloomPlusView: View {
       confettiIndex += 1
       await Delay(1000)
       confettiIndex += 1
+    }
+    .onAppear {
+      TelemetryDeck.signal("View WelcomeToBloomPlusView")
     }
   }
 }
