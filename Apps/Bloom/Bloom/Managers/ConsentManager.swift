@@ -135,7 +135,7 @@ extension ConsentManager {
   /// Checks if user has any unknown consent states that need to be addressed.
   /// Returns true if PrivacyUnknownOptInView should be shown.
   func missingConsentStates() async -> [ConsentType] {
-//    guard !hasCheckedConsentState else { return [] }
+    guard !hasCheckedConsentState else { return [] }
     guard UserController.shared.isAuthenticated else { return [] }
 
     do {
