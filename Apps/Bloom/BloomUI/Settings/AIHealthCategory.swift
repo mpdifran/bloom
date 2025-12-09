@@ -111,32 +111,32 @@ public enum AIHealthCategory: String, Codable, CaseIterable, Sendable {
 
   /// Description of what data this category includes
   public var description: String {
-    switch self {
-    case .physicalActivity:
-      return "Steps, workouts, training load, and exercise data."
-    case .bodyMetrics:
-      return "Body composition, weight, resting heart rate, vO2 Max, and HRV."
-    case .mentalWellness:
-      return "Stress levels and mindfulness activity."
-    case .sleep:
-      return "Sleep duration, quality, and stages."
-    case .nutrition:
-      return "Meals, calories, macros, and water intake."
-    case .digestiveHealth:
-      return "Bowel movements and patterns."
-    case .menstrualHealth:
-      return "Cycle tracking and related data."
-    case .demographics:
-      return "Age, biological sex, height, and your focus."
-    case .goals:
-      return "Your health goals and progress."
-    case .location:
-      return "Your coarse location (city, state, country)."
-    case .weather:
-      return "Weather conditions for your location, but not your location itself."
-    case .calendarEvents:
-      return "Events from your selected calendars."
-    }
+      switch self {
+      case .physicalActivity:
+          return "Steps, workouts, training load, and exercise data. Used to provide personalized activity insights and answer your activity-related questions."
+      case .bodyMetrics:
+          return "Body composition, weight, resting heart rate, vO2 Max, and HRV. Used to help Bud understand changes in your physiology and answer related questions."
+      case .mentalWellness:
+          return "Stress levels and mindfulness activity. Used to help Bud answer questions about stress patterns and provide personalized insights."
+      case .sleep:
+          return "Sleep duration, quality, and stages. Used to help Bud answer questions about your sleep patterns and provide personalized insights."
+      case .nutrition:
+          return "Meals, calories, macros, and water intake. Used to help Bud answer questions about your nutrition and provide personalized insights."
+      case .digestiveHealth:
+          return "Bowel movements and patterns. Used to help Bud answer questions about digestive health and provide personalized insights."
+      case .menstrualHealth:
+          return "Cycle tracking and related data. Used to help Bud answer questions about menstrual health and provide personalized insights."
+      case .demographics:
+          return "Age, biological sex, height, and your focus. Used to help Bud personalize responses and tailor insights to you."
+      case .goals:
+          return "Your health goals and progress. Used to help Bud contextualize your questions and generate personalized suggestions."
+      case .location:
+          return "Your coarse location (city, state, country). Used to help Bud understand environmental context and provide location-aware insights, without knowing your exact position."
+      case .weather:
+          return "Weather conditions for your location, but not your location itself. Used to help Bud understand external factors that may affect your health."
+      case .calendarEvents:
+          return "Events from your selected calendars. Used to help Bud understand your schedule context and answer related questions."
+      }
   }
 
   /// Whether this is health data (vs other data like weather/calendar)

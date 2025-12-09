@@ -6,6 +6,13 @@ import BloomUI
 import BloomModel
 import CoreNetwork
 
+extension ConsentManager {
+  enum ConsentType {
+    case healthData
+    case aiFeatures
+  }
+}
+
 @MainActor
 final class ConsentManager: ObservableObject {
   static let shared = ConsentManager()
@@ -13,6 +20,7 @@ final class ConsentManager: ObservableObject {
   @AppStorage("pendingHealthDataConsent") private var pendingHealthDataConsent: Bool?
   @AppStorage("pendingHealthDataConsentScreenVersion") private var pendingHealthDataConsentScreenVersion: String?
   @AppStorage("pendingGranularConsent") private var pendingGranularConsent: Bool = false
+  @AppStorage("hasCheckedConsentState") private var hasCheckedConsentState: Bool = false
 
   private init() { }
 }
@@ -25,10 +33,20 @@ extension ConsentManager {
   /// - Parameters:
   ///   - healthData: Whether user consents to health data access (typically true when called)
   ///   - healthDataConsentScreenVersion: The version of the screen used to ask for consent
-  func recordConsent(healthData: Bool?, healthDataConsentScreenVersion: String) async throws {
+  func recordConsent(healthData: Bool?, healthDataConsentScreenVersion: String) async {
     if UserController.shared.isAuthenticated {
       // User is authenticated - sync immediately to backend
-      try await syncToBackend(healthData: healthData, healthDataConsentScreenVersion: healthDataConsentScreenVersion)
+      do {
+        try await syncToBackend(healthData: healthData, healthDataConsentScreenVersion: healthDataConsentScreenVersion)
+      } catch {
+        // Swallow error
+        TelemetryDeck.errorOccurred(
+          id: "ConsentManager.recordConsent",
+          category: .thrownException,
+          message: error.localizedDescription
+        )
+        storePendingConsent(healthData: healthData, healthDataConsentScreenVersion: healthDataConsentScreenVersion)
+      }
     } else {
       // User not authenticated yet - store locally for later sync
       storePendingConsent(healthData: healthData, healthDataConsentScreenVersion: healthDataConsentScreenVersion)
@@ -116,32 +134,46 @@ extension ConsentManager {
 
   /// Checks if user has any unknown consent states that need to be addressed.
   /// Returns true if PrivacyUnknownOptInView should be shown.
-  func hasUnknownConsentStates() async -> Bool {
-    guard UserController.shared.isAuthenticated else { return false }
+  func missingConsentStates() async -> [ConsentType] {
+//    guard !hasCheckedConsentState else { return [] }
+    guard UserController.shared.isAuthenticated else { return [] }
 
     do {
       let response = try await NetworkRequester.shared.getConsent()
+
       // Check if any feature consent fields are nil (unknown)
       let hasUnknownFeatures = response.chatWithBudConsent == nil ||
                                response.todayInsightsConsent == nil ||
                                response.biologicalAgeConsent == nil
       // Check if any health data category consent fields are nil (unknown)
       let hasUnknownCategories = response.physicalActivityConsent == nil ||
-                                 response.bodyMetricsConsent == nil ||
-                                 response.mentalWellnessConsent == nil ||
-                                 response.sleepConsent == nil ||
-                                 response.nutritionConsent == nil ||
-                                 response.digestiveHealthConsent == nil ||
-                                 response.menstrualHealthConsent == nil ||
-                                 response.demographicsConsent == nil ||
-                                 response.goalsConsent == nil ||
-                                 response.locationConsent == nil ||
-                                 response.weatherConsent == nil ||
-                                 response.calendarEventsConsent == nil
-      return hasUnknownFeatures || hasUnknownCategories
+                                  response.bodyMetricsConsent == nil ||
+                                  response.mentalWellnessConsent == nil ||
+                                  response.sleepConsent == nil ||
+                                  response.nutritionConsent == nil ||
+                                  response.digestiveHealthConsent == nil
+      let hasUnknownCategories2 = response.menstrualHealthConsent == nil ||
+                                  response.demographicsConsent == nil ||
+                                  response.goalsConsent == nil ||
+                                  response.locationConsent == nil ||
+                                  response.weatherConsent == nil ||
+                                  response.calendarEventsConsent == nil
+
+      var consentTypes = [ConsentType]()
+      if response.healthDataConsent == nil {
+        consentTypes.append(.healthData)
+      }
+      if hasUnknownFeatures || hasUnknownCategories || hasUnknownCategories2 {
+        consentTypes.append(.aiFeatures)
+      }
+      return consentTypes
     } catch {
-      return false
+      return []
     }
+  }
+
+  func markConsentAsChecked() {
+    hasCheckedConsentState = true
   }
 
   /// Checks for pending consent and syncs to backend if user is authenticated.

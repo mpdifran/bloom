@@ -1,5 +1,5 @@
 //
-//  PrivacyUnknownOptInView.swift
+//  ExistingUserAIDataConsentView.swift
 //  Bloom
 //
 //  Created by Mark DiFranco on 2025-11-29.
@@ -10,19 +10,21 @@ import AppUI
 import BloomUI
 import CoreHealth
 import SFSafeSymbols
+import TelemetryDeck
 
-struct PrivacyUnknownOptInView: View {
+struct ExistingUserAIDataConsentView: View {
+  let onContinue: () -> Void
 
   @ObservedObject private var healthManager = HealthManager.shared
   @ObservedObject private var aiFeatureSettings = AIFeatureSettings.shared
   @ObservedObject private var aiDataSharingSettings = AIDataSharingSettings.shared
 
+  @State private var alertDetails: AlertDetails?
   @State private var isAISectionExpanded = false
   @State private var isHealthDataSectionExpanded = false
   @State private var isOtherDataSectionExpanded = false
 
   @Environment(\.openURL) private var openURL
-  @Environment(\.dismiss) private var dismiss
 
   var body: some View {
     BloomScrollView(showsChatBar: false, padding: .bottom) {
@@ -33,7 +35,6 @@ struct PrivacyUnknownOptInView: View {
 
       VStack(alignment: .leading, spacing: 10) {
         explanationSection
-        healthConsentSection
         aiFeatureSection
         healthDataSection
         otherDataSection
@@ -43,22 +44,25 @@ struct PrivacyUnknownOptInView: View {
       .padding(.horizontal)
       .padding(.top)
     }
-//    .removeScrollEdgeEffect(shouldHide: true)
     .ignoresSafeArea(.all, edges: .top)
     .shelf {
       shelfContent
     }
     .presentationCompactAdaptation(.fullScreenCover)
+    .alert(alertDetails: $alertDetails)
+    .onAppear {
+      TelemetryDeck.signal("View ExistingUserAIDataConsentView")
+    }
   }
 }
 
-private extension PrivacyUnknownOptInView {
+private extension ExistingUserAIDataConsentView {
 
   @ViewBuilder
   var explanationSection: some View {
     Text("Your Data, Your Choice")
       .onboardingTextStyle()
-    Text("To keep helping you with personalized health insights, I need your permission for a few things. You’re always in control.")
+    Text("To keep helping you with personalized health insights, and to provide personalized responses to your questions, I need your permission for a few things. You’re always in control of what you share.")
       .secondaryOnboardingTextStyle()
       .foregroundStyle(.secondary)
       .fixedSize(horizontal: false, vertical: true)
@@ -87,73 +91,48 @@ private extension PrivacyUnknownOptInView {
   }
 
   @ViewBuilder
-  var healthConsentSection: some View {
-    VStack(alignment: .leading) {
-      HStack {
-        DisplayAppIcon(overrideAppIcon: .healthAppIcon)
-          .frame(square: 40)
-        Text("Accessing Data on Device")
-          .fixedSize(horizontal: false, vertical: true)
-      }
-      .font(.title3)
-      .bold()
-      .fontDesign(.rounded)
-
-      Group {
-        Text("Bloom reads your Personal Data from the Health app on your device in order to let you set goals, view charts, and understand your progress.")
-      }
-      .font(.headline)
-      .bold()
-      .fontDesign(.rounded)
-      .foregroundStyle(.secondary)
-      .fixedSize(horizontal: false, vertical: true)
-    }
-    .horizontalAlignment(.leading)
-    .cardContainer()
-  }
-
-  @ViewBuilder
   var aiFeatureSection: some View {
     SectionTitleView("Bloom Plus")
       .padding(.horizontal)
 
-    DisclosureGroup(isExpanded: $isAISectionExpanded) {
-      TodayInsightsPrivacyAIFeatureOptInCell(extraContext: "Bud will use the Personal Data Categories enabled below.")
-        .padding(.vertical)
+    TodayInsightsPrivacyAIFeatureOptInCell(extraContext: "Bud will use the Personal Data Categories enabled below.")
+      .cardContainer()
 
-      Divider()
+    ChatPrivacyAIFeatureOptInCell(extraContext: "Bud can reference the Personal Data Categories enabled below in chats.")
+      .cardContainer()
 
-      ChatPrivacyAIFeatureOptInCell(extraContext: "Bud can reference the Personal Data Categories enabled below in chats.")
-        .padding(.vertical)
+    BiologicalAgePrivacyAIFeatureOptInCell(extraContext: "Bud will use the enabled Personal Data Categories to calculate your biological age.")
+      .cardContainer()
 
-      Divider()
-
-      BiologicalAgePrivacyAIFeatureOptInCell(extraContext: "Bud will use the enabled Personal Data Categories to calculate your biological age.")
-        .padding(.vertical)
-    } label: {
-      DisclosureOverallToggleView(
-        icon: .starFill,
-        title: "Bloom Plus Features",
-        subtitle: "Enable AI powered features like Today Inisghts, Chat with Bud, and Biological Age, which use the data categories below.",
-        isExpanded: isAISectionExpanded,
-        isEnabled: isAISectionEnabledBinding
-      )
-      .tint(.mutedYellow)
-    }
-    .disclosureGroupStyle(
-      PrivacySectionDisclosureGroupStyle(
-        expandButtonTitle: "Choose Features Individually",
-        isExpanded: $isAISectionExpanded
-      )
-    )
-
-    Text("Enabling a feature and a data category means Bloom may use that category to provide that feature.")
-      .font(.caption)
-      .bold()
-      .foregroundStyle(.secondary)
-      .multilineTextAlignment(.leading)
-      .fixedSize(horizontal: false, vertical: true)
-      .padding(.horizontal)
+//    DisclosureGroup(isExpanded: $isAISectionExpanded) {
+//      TodayInsightsPrivacyAIFeatureOptInCell(extraContext: "Bud will use the Personal Data Categories enabled below.")
+//        .padding(.vertical)
+//
+//      Divider()
+//
+//      ChatPrivacyAIFeatureOptInCell(extraContext: "Bud can reference the Personal Data Categories enabled below in chats.")
+//        .padding(.vertical)
+//
+//      Divider()
+//
+//      BiologicalAgePrivacyAIFeatureOptInCell(extraContext: "Bud will use the enabled Personal Data Categories to calculate your biological age.")
+//        .padding(.vertical)
+//    } label: {
+//      DisclosureOverallToggleView(
+//        icon: .starFill,
+//        title: "Bloom Plus Features",
+//        subtitle: "Enable AI powered features like Today Inisghts, Chat with Bud, and Biological Age, which use the data categories below.",
+//        isExpanded: isAISectionExpanded,
+//        isEnabled: isAISectionEnabledBinding
+//      )
+//      .tint(.mutedYellow)
+//    }
+//    .disclosureGroupStyle(
+//      PrivacySectionDisclosureGroupStyle(
+//        expandButtonTitle: "Choose Features Individually",
+//        isExpanded: $isAISectionExpanded
+//      )
+//    )
   }
 
   @ViewBuilder
@@ -254,26 +233,61 @@ private extension PrivacyUnknownOptInView {
 
   @ViewBuilder
   var shelfContent: some View {
-    Text("I confirm I’m the age of majority where I live and consent to Bloom using my data as described above.")
+    Text("You can change these settings anytime.")
       .font(.caption)
       .bold()
       .foregroundStyle(.secondary)
-      .multilineTextAlignment(.leading)
-      .horizontalAlignment(.leading)
       .padding(.horizontal)
 
     AsyncButton {
-      try await ConsentManager.shared.recordGranularConsent(externalHealthDataScreenVersion: "PrivacyUnknownOptInView.v1")
-      dismiss()
+      if aiDataSharingSettings.enabledCategories.isNotEmpty {
+        if await !showConfirmationAlert() {
+          return
+        }
+      }
+
+      try await logConfirmation()
+      onContinue()
     } label: {
-      Text("Accept and Continue")
+      Text("Continue")
         .horizontallyCentered()
     }
     .buttonStyle(.primary)
   }
 }
 
-private extension PrivacyUnknownOptInView {
+private extension ExistingUserAIDataConsentView {
+
+  func showConfirmationAlert() async -> Bool {
+    await withCheckedContinuation { continuation in
+      alertDetails = AlertDetails(
+        title: "Before You Continue",
+        message: confirmationAlertBody,
+        buttons: [
+          AlertDetails.Button(title: "Edit Choices", role: .cancel, action: {
+            continuation.resume(returning: false)
+          }),
+          AlertDetails.Button(title: "Agree", action: {
+            continuation.resume(returning: true)
+          })
+        ]
+      )
+    }
+  }
+
+  var confirmationAlertBody: String {
+    let numCategories = aiDataSharingSettings.enabledCategories.count
+    let personalDataCategoriesText = numCategories == 1 ? "1 Personal Data category" : "\(numCategories) Personal Data categories"
+
+    return "Bud will only use the \(personalDataCategoriesText) you turned on to generate personalized responses to your questions about health and wellness, and to generate personalized insights.\n\nDo you agree to Bud using the Personal Data categories you selected for these purposes?"
+  }
+
+  func logConfirmation() async throws {
+    try await ConsentManager.shared.recordGranularConsent(externalHealthDataScreenVersion: "ExistingUserAIDataConsentView.v1")
+  }
+}
+
+private extension ExistingUserAIDataConsentView {
 
   var shouldShowMenstrualHealth: Bool {
     switch healthManager.sex() {
@@ -410,6 +424,6 @@ private struct PrivacySectionDisclosureGroupStyle: DisclosureGroupStyle {
 
 #Preview {
   PreviewEnvironment {
-    PrivacyUnknownOptInView()
+    ExistingUserAIDataConsentView() { }
   }
 }

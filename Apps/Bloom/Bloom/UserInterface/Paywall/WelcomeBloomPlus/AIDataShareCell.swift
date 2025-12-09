@@ -20,7 +20,7 @@ struct AIDataShareCell: View {
           .font(.body)
           .bold()
 
-        Text("Select which categories are shared with AI.")
+        Text("Select which categories Bud may use.")
           .font(.caption)
           .fixedSize(horizontal: false, vertical: true)
           .foregroundStyle(.secondary)

@@ -23,6 +23,7 @@ struct WelcomeToBloomPlusView: View {
   @Environment(\.openURL) private var openURL
 
   @State private var presentedSheet: AnyView?
+  @State private var alertDetails: AlertDetails?
   @State private var confettiIndex = 0
 
   var body: some View {
@@ -33,7 +34,7 @@ struct WelcomeToBloomPlusView: View {
         .standardConfetti($confettiIndex, colors: [.mutedOrange, .mutedBlue, .mutedPurple, .mutedPink])
         .parallaxOverscroll()
 
-      VStack(alignment: .leading, spacing: 10) {
+      VStack {
         explanationSection
         sharingSection
         aiFeaturesSection
@@ -48,6 +49,7 @@ struct WelcomeToBloomPlusView: View {
       shelfContent
     }
     .sheet($presentedSheet)
+    .alert(alertDetails: $alertDetails)
     .presentationCompactAdaptation(.fullScreenCover)
     .sensoryFeedback(.impact, trigger: confettiIndex)
     .task {
@@ -69,15 +71,17 @@ private extension WelcomeToBloomPlusView {
 
     Text("Welcome to the Club!")
       .onboardingTextStyle()
+      .multilineTextAlignment(.center)
     Text("You’ve unlocked deeper insights, smarter guidance, and Bud’s full brainpower.")
       .secondaryOnboardingTextStyle()
       .foregroundStyle(.secondary)
       .fixedSize(horizontal: false, vertical: true)
+      .multilineTextAlignment(.center)
   }
 
   @ViewBuilder
   var sharingSection: some View {
-    SectionTitleView("Sharing With AI")
+    SectionTitleView("Sharing With Bud")
       .padding(.horizontal)
 
     AIDataShareCell()
@@ -85,14 +89,6 @@ private extension WelcomeToBloomPlusView {
       .onTapGesture {
         presentedSheet = AIDataSharingView(showDismiss: true).asAny
       }
-
-    Text("Choose what Personal Data Bud can use with the features below.")
-      .font(.caption)
-      .bold()
-      .foregroundStyle(.secondary)
-      .multilineTextAlignment(.leading)
-      .fixedSize(horizontal: false, vertical: true)
-      .padding(.horizontal)
   }
 
   @ViewBuilder
@@ -100,22 +96,14 @@ private extension WelcomeToBloomPlusView {
     SectionTitleView("Features")
       .padding(.horizontal)
 
-    TodayInsightsPrivacyAIFeatureOptInCell(extraContext: "Bud will use the Personal Data Categories enabled above.")
+    TodayInsightsPrivacyAIFeatureOptInCell(extraContext: "Bud uses the Personal Data you turn on to generate personalized daily insights.")
       .cardContainer()
 
-    ChatPrivacyAIFeatureOptInCell(extraContext: "Bud can reference the Personal Data Categories enabled above in chats.")
+    ChatPrivacyAIFeatureOptInCell(extraContext: "Bud uses the Personal Data you turn on to answer your health and wellness questions.")
       .cardContainer()
 
-    BiologicalAgePrivacyAIFeatureOptInCell(extraContext: "Bud will use the enabled Personal Data Categories to calculate your biological age.")
+    BiologicalAgePrivacyAIFeatureOptInCell(extraContext: "Bud uses the Personal Data you turn on to calculate your biological age.")
       .cardContainer()
-
-    Text("Choose which features can use the data enabled above.")
-      .font(.caption)
-      .bold()
-      .foregroundStyle(.secondary)
-      .multilineTextAlignment(.leading)
-      .fixedSize(horizontal: false, vertical: true)
-      .padding(.horizontal)
   }
 
   @ViewBuilder
@@ -144,7 +132,13 @@ private extension WelcomeToBloomPlusView {
   @ViewBuilder
   var shelfContent: some View {
     AsyncButton {
-      try await ConsentManager.shared.recordGranularConsent(externalHealthDataScreenVersion: "WelcomeToBloomPlusView.v1")
+      if aiDataSharingSettings.enabledCategories.isNotEmpty {
+        if await !showConfirmationAlert() {
+          return
+        }
+      }
+
+      try await logConfirmation()
       dismiss()
       onDismiss()
     } label: {
@@ -152,6 +146,37 @@ private extension WelcomeToBloomPlusView {
         .horizontallyCentered()
     }
     .buttonStyle(.primary)
+  }
+}
+
+private extension WelcomeToBloomPlusView {
+
+  func showConfirmationAlert() async -> Bool {
+    await withCheckedContinuation { continuation in
+      alertDetails = AlertDetails(
+        title: "Before You Continue",
+        message: confirmationAlertBody,
+        buttons: [
+          AlertDetails.Button(title: "Edit Choices", role: .cancel, action: {
+            continuation.resume(returning: false)
+          }),
+          AlertDetails.Button(title: "Agree", action: {
+            continuation.resume(returning: true)
+          })
+        ]
+      )
+    }
+  }
+
+  var confirmationAlertBody: String {
+    let numCategories = aiDataSharingSettings.enabledCategories.count
+    let personalDataCategoriesText = numCategories == 1 ? "1 Personal Data category" : "\(numCategories) Personal Data categories"
+
+    return "Bud will only use the \(personalDataCategoriesText) you turned on to generate personalized responses to your questions about health and wellness, and to generate personalized insights.\n\nDo you agree to Bud using the Personal Data categories you selected for these purposes?"
+  }
+
+  func logConfirmation() async throws {
+    try await ConsentManager.shared.recordGranularConsent(externalHealthDataScreenVersion: "WelcomeToBloomPlusView.v1")
   }
 }
 

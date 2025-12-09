@@ -26,12 +26,12 @@ struct HealthCategoryToggleCell: View {
 
         VStack(alignment: .leading, spacing: 4) {
           Text(category.displayName)
-            .font(.body)
+            .font(.subheadline)
             .fontDesign(.rounded)
             .bold()
 
           Text(category.description)
-            .font(.subheadline)
+            .font(.caption)
             .foregroundStyle(.secondary)
             .fixedSize(horizontal: false, vertical: true)
         }

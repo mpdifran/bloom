@@ -136,8 +136,8 @@ private extension RootView {
     let sheetKind = await RootViewModalPresentationManager.shared.determineSheetToPresent()
 
     switch sheetKind {
-    case .privacyUnknownSheet:
-      presentedSheet = PrivacyUnknownOptInView().asAny
+    case .privacyUnknownSheet(let missingConsentTypes):
+      presentedSheet = ExistingUserConsentContainerView(missingConsentTypes: missingConsentTypes).asAny
     case .sale(let saleDetails):
       presentedSheet = SaleModalView(sale: saleDetails).asAny
     case nil:

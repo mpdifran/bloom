@@ -10,12 +10,13 @@ import BloomModel
 
 extension RootViewModalPresentationManager {
   enum SheetKind {
-    case privacyUnknownSheet
+    case privacyUnknownSheet([ConsentManager.ConsentType])
     case sale(SaleDetails)
   }
 }
 
 /// Manages sheets that are presented on app foreground. Uses a priority system to determine the one sheet to show, or nil if no sheet should be shown.
+@MainActor
 final class RootViewModalPresentationManager {
   static let shared = RootViewModalPresentationManager()
 
@@ -26,10 +27,11 @@ extension RootViewModalPresentationManager {
 
   /// Determines which sheet to present, or `nil` if no sheet should be shown.
   func determineSheetToPresent() async -> SheetKind? {
-    if await ConsentManager.shared.hasUnknownConsentStates() {
-      return .privacyUnknownSheet
-    }
+    let missingConsentStates = await ConsentManager.shared.missingConsentStates()
 
+    if missingConsentStates.isNotEmpty {
+      return .privacyUnknownSheet(missingConsentStates)
+    }
     if let sale = await SalesManager.shared.shouldShowSale() {
       return .sale(sale)
     }

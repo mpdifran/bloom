@@ -26,7 +26,7 @@ struct OnboardingHealthKitTreatmentView: View {
   @State private var error: Error?
 
   var body: some View {
-    BloomScrollView(padding: .bottom) {
+    BloomScrollView(showsChatBar: false, padding: .bottom) {
       ZStack {
         Image(.afternoonScenery)
           .resizable()
@@ -51,22 +51,17 @@ struct OnboardingHealthKitTreatmentView: View {
     .sensoryFeedback(.selection, trigger: index)
     .sensoryFeedback(.impact, trigger: didContinue)
     .shelf(isVisible: index >= 5) {
-      Text("I confirm I’m the age of majority where I live and consent to Bloom using my data as described above.")
+      Text("I confirm I’m the age of majority where I live and consent to Bloom reading and writing my Health app data for the purposes described above.")
         .font(.caption)
         .bold()
         .foregroundStyle(.secondary)
-        .multilineTextAlignment(.leading)
-        .horizontalAlignment(.leading)
+        .multilineTextAlignment(.center)
+        .horizontallyCentered()
         .padding(.horizontal)
 
       AsyncButton {
         didContinue.toggle()
-        do {
-          try await recordOptIn()
-        } catch {
-          self.error = error
-          return
-        }
+        await recordOptIn()
         await showHealthKitPermissionView()
       } label: {
         Group {
@@ -74,7 +69,7 @@ struct OnboardingHealthKitTreatmentView: View {
             CircularSpinnerView()
               .foregroundStyle(.invertedText)
           } else {
-            Text("Agree and Continue")
+            Text("Continue")
           }
         }
         .horizontallyCentered()
@@ -225,20 +220,11 @@ private extension OnboardingHealthKitTreatmentView {
 
 private extension OnboardingHealthKitTreatmentView {
 
-  func recordOptIn() async throws {
-    do {
-      try await ConsentManager.shared.recordConsent(
-        healthData: true,
-        healthDataConsentScreenVersion: "OnboardingHealthKitView.v1"
-      )
-    } catch {
-      TelemetryDeck.errorOccurred(
-        id: "OnboardingHealthKitTreatmentView.recordOptIn",
-        category: .thrownException,
-        message: error.localizedDescription
-      )
-      throw NSError(description: "There was a problem recording your consent. Please try again.")
-    }
+  func recordOptIn() async {
+    await ConsentManager.shared.recordConsent(
+      healthData: true,
+      healthDataConsentScreenVersion: "OnboardingHealthKitView.v1"
+    )
   }
 
   func showHealthKitPermissionView() async {

@@ -121,7 +121,7 @@ private extension AIDataSharingView {
       Text("Choose What You Want Bloom To Use")
         .bold()
 
-      Text("Only the categories you enable are used for AI features like Today Insights, Chat with Bud, and Biological Age.")
+      Text("Bloom uses the Personal Data categories you turn on to formulate personalized responses to your questions about health and wellness, and to generate personalized insights.")
         .foregroundStyle(.secondary)
     }
     .font(.title3)
