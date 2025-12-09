@@ -21,13 +21,12 @@ struct AIDataSharingView: View {
     NavigationStack {
       BloomScrollView(showsChatBar: false) {
         explanationSection
-        turnOnAllButton
         healthDataSection
         otherDataSection
         linksSection
       }
       .groupedBackground()
-      .navigationTitle("Data Shared with AI")
+      .navigationTitle("Personal Data Categories")
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         if showDismiss {
@@ -43,6 +42,9 @@ struct AIDataSharingView: View {
           }
           .buttonStyle(.plain)
         }
+      }
+      .shelf {
+        turnOnAllButton
       }
       .animation(.default, value: settings.enabledCategories)
       .onDisappear {
@@ -107,16 +109,21 @@ private extension AIDataSharingView {
       Text(allCategoriesEnabled ? "Turn Off All" : "Turn On All")
         .horizontallyCentered()
     }
-    .buttonStyle(.primary)
+    .if(allCategoriesEnabled) {
+      $0.buttonStyle(.primaryAlternate)
+    }
+    .if(!allCategoriesEnabled) {
+      $0.buttonStyle(.primary)
+    }
   }
 
   @ViewBuilder
   var explanationSection: some View {
     VStack(alignment: .leading) {
-      DisplayAppIcon()
-        .frame(square: 100)
+      AIDataShareIcon()
+        .scaleEffect(x: 1.4, y: 1.4)
         .horizontallyCentered()
-        .padding(.bottom)
+        .padding(.vertical)
 
       Text("Choose What You Want Bloom To Use")
         .bold()
@@ -127,7 +134,6 @@ private extension AIDataSharingView {
     .font(.title3)
     .fontDesign(.rounded)
     .horizontalAlignment(.leading)
-    .padding(.bottom, 40)
   }
 
   @ViewBuilder
