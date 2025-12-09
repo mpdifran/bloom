@@ -24,7 +24,7 @@
     "_developerTeamID" : "GUJ47GUV2Q",
     "_disableDialogs" : false,
     "_failTransactionsEnabled" : false,
-    "_lastSynchronizedDate" : 780853891.18701601,
+    "_lastSynchronizedDate" : 787003985.39277101,
     "_locale" : "en_US",
     "_renewalBillingIssuesEnabled" : false,
     "_storefront" : "USA",
@@ -111,10 +111,10 @@
           "codeOffers" : [
             {
               "eligibility" : [
-                "expired",
-                "new"
+                "new",
+                "expired"
               ],
-              "internalID" : "4E2BDDDE",
+              "internalID" : "B9DBC6AC",
               "isStackable" : false,
               "numberOfPeriods" : 1,
               "paymentMode" : "free",
@@ -123,11 +123,11 @@
             },
             {
               "eligibility" : [
-                "expired",
                 "new",
-                "existing"
+                "existing",
+                "expired"
               ],
-              "internalID" : "7B59498C",
+              "internalID" : "9DD53DE7",
               "isStackable" : true,
               "numberOfPeriods" : 1,
               "paymentMode" : "free",
@@ -137,10 +137,10 @@
             {
               "eligibility" : [
                 "new",
-                "expired",
-                "existing"
+                "existing",
+                "expired"
               ],
-              "internalID" : "711B95EA",
+              "internalID" : "2D291DBF",
               "isStackable" : true,
               "numberOfPeriods" : 1,
               "paymentMode" : "free",
@@ -149,11 +149,11 @@
             },
             {
               "eligibility" : [
+                "existing",
                 "new",
-                "expired",
-                "existing"
+                "expired"
               ],
-              "internalID" : "F6BACC05",
+              "internalID" : "84C80783",
               "isStackable" : false,
               "numberOfPeriods" : 1,
               "paymentMode" : "free",
@@ -163,11 +163,11 @@
             {
               "displayPrice" : "19.99",
               "eligibility" : [
-                "new",
                 "expired",
-                "existing"
+                "existing",
+                "new"
               ],
-              "internalID" : "FA4CCA5C",
+              "internalID" : "1A8BBBFB",
               "isStackable" : true,
               "numberOfPeriods" : 1,
               "paymentMode" : "payAsYouGo",
@@ -177,10 +177,10 @@
             {
               "displayPrice" : "29.99",
               "eligibility" : [
-                "expired",
-                "new"
+                "new",
+                "expired"
               ],
-              "internalID" : "7ED3377B",
+              "internalID" : "8E224A5B",
               "isStackable" : false,
               "numberOfPeriods" : 1,
               "paymentMode" : "payUpFront",
@@ -193,7 +193,7 @@
           "groupNumber" : 1,
           "internalID" : "6740501424",
           "introductoryOffer" : {
-            "internalID" : "25F220B4",
+            "internalID" : "AD1064BA",
             "numberOfPeriods" : 1,
             "paymentMode" : "free",
             "subscriptionPeriod" : "P3D"
@@ -263,7 +263,7 @@
           "groupNumber" : 1,
           "internalID" : "6751232035",
           "introductoryOffer" : {
-            "internalID" : "B3059D4A",
+            "internalID" : "51D07B16",
             "numberOfPeriods" : 1,
             "paymentMode" : "free",
             "subscriptionPeriod" : "P3D"
@@ -281,7 +281,16 @@
           "subscriptionGroupID" : "21758930",
           "type" : "RecurringSubscription",
           "winbackOffers" : [
-
+            {
+              "displayPrice" : "9.99",
+              "internalID" : "687009E0",
+              "isEligible" : true,
+              "numberOfPeriods" : 1,
+              "offerID" : "bloom_999_1y_wb",
+              "paymentMode" : "payAsYouGo",
+              "referenceName" : "Bloom Plus - Yearly - 9.99 - WB",
+              "subscriptionPeriod" : "P1Y"
+            }
           ]
         }
       ]
@@ -354,14 +363,79 @@
 
           ],
           "codeOffers" : [
-
+            {
+              "eligibility" : [
+                "expired",
+                "new"
+              ],
+              "internalID" : "BCC720FD",
+              "isStackable" : false,
+              "numberOfPeriods" : 1,
+              "paymentMode" : "free",
+              "referenceName" : "BetaList",
+              "subscriptionPeriod" : "P1M"
+            },
+            {
+              "eligibility" : [
+                "new",
+                "expired",
+                "existing"
+              ],
+              "internalID" : "442695DC",
+              "isStackable" : false,
+              "numberOfPeriods" : 1,
+              "paymentMode" : "free",
+              "referenceName" : "Free Year Giveaway",
+              "subscriptionPeriod" : "P1Y"
+            },
+            {
+              "displayPrice" : "14.99",
+              "eligibility" : [
+                "new",
+                "expired",
+                "existing"
+              ],
+              "internalID" : "97C323F6",
+              "isStackable" : false,
+              "numberOfPeriods" : 1,
+              "paymentMode" : "payUpFront",
+              "referenceName" : "IndieAppSales",
+              "subscriptionPeriod" : "P1Y"
+            },
+            {
+              "displayPrice" : "6.99",
+              "eligibility" : [
+                "expired",
+                "existing",
+                "new"
+              ],
+              "internalID" : "636476C1",
+              "isStackable" : false,
+              "numberOfPeriods" : 1,
+              "paymentMode" : "payUpFront",
+              "referenceName" : "TestFlight",
+              "subscriptionPeriod" : "P1Y"
+            },
+            {
+              "displayPrice" : "9.99",
+              "eligibility" : [
+                "expired",
+                "new"
+              ],
+              "internalID" : "64DE1B6A",
+              "isStackable" : true,
+              "numberOfPeriods" : 1,
+              "paymentMode" : "payAsYouGo",
+              "referenceName" : "Hulry",
+              "subscriptionPeriod" : "P1Y"
+            }
           ],
           "displayPrice" : "29.99",
           "familyShareable" : false,
           "groupNumber" : 1,
           "internalID" : "6753174998",
           "introductoryOffer" : {
-            "internalID" : "DCF67C0F",
+            "internalID" : "4A2C2265",
             "numberOfPeriods" : 1,
             "paymentMode" : "free",
             "subscriptionPeriod" : "P1W"
@@ -377,6 +451,52 @@
           "recurringSubscriptionPeriod" : "P1Y",
           "referenceName" : "Bloom Plus - Yearly - 29.99 - 1 Week Free",
           "subscriptionGroupID" : "21793379",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+            {
+              "displayPrice" : "14.99",
+              "internalID" : "E5A1AC4D",
+              "isEligible" : true,
+              "numberOfPeriods" : 1,
+              "offerID" : "bloom_1499_1y_wb",
+              "paymentMode" : "payAsYouGo",
+              "referenceName" : "Bloom Plus - Yearly - 14.99 - WB",
+              "subscriptionPeriod" : "P1Y"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id" : "21855139",
+      "localizations" : [
+
+      ],
+      "name" : "New Years",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "19.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "6756326235",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Full access to Bloom",
+              "displayName" : "Bloom Plus - New Years Special",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "bloom_1999_1y",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Bloom Plus - Yearly - 19.99",
+          "subscriptionGroupID" : "21855139",
           "type" : "RecurringSubscription",
           "winbackOffers" : [
 

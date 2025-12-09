@@ -28,18 +28,22 @@ extension SalesController: RouteCollection {
 private extension SalesController {
 
   @Sendable
-  func getActiveSales(_ request: Request) async throws -> SalesResponse {
+  func getActiveSales(_ request: Request) async throws -> Response {
     _ = try request.auth.require(User.self)
-    let now = Date()
 
-    // Query all active sales within their date range
-    // Client will filter based on user's subscription status
+    // Query all active sales
+    // Client will filter based on date range and user's subscription status
     let sales = try await SaleRecord.query(on: request.db)
       .filter(\.$isActive == true)
-      .filter(\.$startDate <= now)
-      .filter(\.$endDate >= now)
       .all()
 
-    return SalesResponse(sales: sales.map { $0.asDetails() })
+    let response = SalesResponse(sales: sales.map { $0.asDetails() })
+    let data = try JSONEncoder.bloomModel.encode(response)
+
+    return Response(
+      status: .ok,
+      headers: ["Content-Type": "application/json"],
+      body: .init(data: data)
+    )
   }
 }

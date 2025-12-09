@@ -99,6 +99,9 @@ struct BloomApp: App {
           let modelContext = ModelContext(ContainerHolder.shared.container)
           await GoalWidgetCacheManager.shared.updateCache(modelContext: modelContext)
         }
+        .onForegroundTask {
+          await SalesManager.shared.refreshSalesIfNeeded()
+        }
         .task {
           let modelContext = ModelContext(ContainerHolder.shared.container)
           await GoalWidgetHealthObserver.shared.startObserving(modelContext: modelContext)

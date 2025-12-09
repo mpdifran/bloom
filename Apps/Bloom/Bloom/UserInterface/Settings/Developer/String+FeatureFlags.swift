@@ -21,4 +21,8 @@ extension String {
       return "ExperimentOverride.\(experimentId)"
     }
   }
+
+  enum SaleOverrideKey {
+    static let overriddenSaleId = "SaleOverride.overriddenSaleId"
+  }
 }

@@ -69,6 +69,11 @@ public struct SaleDetails: Codable, Equatable, Sendable, Identifiable {
     self.createdAt = createdAt
     self.updatedAt = updatedAt
   }
+
+  /// Returns true if the sale is active and the given date is within the sale's date range
+  public func isCurrentlyActive(at date: Date = Date()) -> Bool {
+    isActive && date >= startDate && date <= endDate
+  }
 }
 
 public enum TargetAudience: String, Codable, Equatable, Sendable, CaseIterable {

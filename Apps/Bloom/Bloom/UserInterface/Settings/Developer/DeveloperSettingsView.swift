@@ -57,6 +57,7 @@ struct DeveloperSettingsView: View {
           aiInsightsSection
           healthActionsSection
           paywallSection
+          salesSection
           migrationSection
           debugSection
           logsSection
@@ -553,6 +554,10 @@ extension DeveloperSettingsView {
     }
   }
 
+  var salesSection: some View {
+    SalesDebugView()
+  }
+
   var migrationSection: some View {
     VStack {
       SectionTitleView("Migrations")
@@ -878,6 +883,9 @@ extension DeveloperSettingsView {
     // Clear all experiment overrides
     let onboardingFeaturePitchKey = String.ExperimentOverrideKey.key(for: ExperimentIdentifier.onboardingFeaturePitch.value)
     UserDefaults.standard.removeObject(forKey: onboardingFeaturePitchKey)
+
+    // Clear sale override
+    UserDefaults.group.removeObject(forKey: String.SaleOverrideKey.overriddenSaleId)
   }
 
   private var currentBudStateLabel: String {

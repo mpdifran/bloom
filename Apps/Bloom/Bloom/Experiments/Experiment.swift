@@ -14,14 +14,11 @@ enum ExperimentVariant: String, CaseIterable {
 
 enum Experiment: String, CaseIterable, Identifiable {
   case onboardingFeaturePitch = "onboarding_feature_pitch"
-  case periodicPaywall = "periodic_paywall"
 
   var name: String {
     switch self {
     case .onboardingFeaturePitch:
       return "Onboarding Feature Pitch"
-    case .periodicPaywall:
-      return "Periodic Paywall"
     }
   }
 
@@ -32,5 +29,4 @@ enum Experiment: String, CaseIterable, Identifiable {
 
 extension ExperimentIdentifier {
   static let onboardingFeaturePitch = Experiment.onboardingFeaturePitch.id
-  static let periodicPaywall = Experiment.periodicPaywall.id
 }
