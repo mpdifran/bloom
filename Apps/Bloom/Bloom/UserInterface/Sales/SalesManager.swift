@@ -16,7 +16,7 @@ actor SalesManager {
   @Storage(key: "lastShownSaleDates", defaultValue: [:])
   private var lastShownSaleDates: [String: Double]
 
-  @Storage(key: "cachedSales", defaultValue: [])
+  @CodableStorage(key: "cachedSales", defaultValue: [])
   private var cachedSales: [SaleDetails]
 
   @Storage(key: "salesLastFetchedDate", defaultValue: nil)

@@ -32,9 +32,9 @@ extension RootViewModalPresentationManager {
     if missingConsentStates.isNotEmpty {
       return .privacyUnknownSheet(missingConsentStates)
     }
-    if let sale = await SalesManager.shared.shouldShowSale() {
-      return .sale(sale)
-    }
+//    if let sale = await SalesManager.shared.shouldShowSale() {
+//      return .sale(sale)
+//    }
 
     return nil
   }
