@@ -65,7 +65,11 @@ struct SettingsView: View {
         userSection
         healthPermissionsSection
         healthGoalsSection
-        aiPrivacySection
+
+        if entitlementController.hasBloomPro == true {
+          aiPrivacySection
+        }
+
         workoutEquipmentSection
         unitsSection
         subscriptionSection
@@ -170,39 +174,20 @@ private extension SettingsView {
       SectionTitleView("AI & Privacy")
         .padding(.horizontal)
 
-      SettingsSectionContainer {
-        SettingsCell("Today Insights") {
-          Toggle("", isOn: $aiFeatureSettings.todayInsightsEnabled)
-            .tint(.mutedOrange)
-        }
+      TodayInsightsPrivacyAIFeatureOptInCell()
+        .cardContainer()
 
-        Divider()
+      ChatPrivacyAIFeatureOptInCell()
+        .cardContainer()
 
-        SettingsCell("Chat with Bud") {
-          Toggle("", isOn: $aiFeatureSettings.chatEnabled)
-          .tint(.mutedLightBlue)
-        }
+      BiologicalAgePrivacyAIFeatureOptInCell()
+        .cardContainer()
 
-        Divider()
-
-        SettingsCell("Biological Age Calculations") {
-          Toggle("", isOn: $aiFeatureSettings.biologicalAgeEnabled)
-            .tint(.mutedGreen)
-        }
-      }
-
-      SettingsSectionContainer {
-        SettingsCell(
-          "Data Shared with AI",
-          subtitle: "Personalized insights from your data",
-          iconType: .disclosure
-        ) {
-          EmptyView()
-        }
+      AIDataShareCell()
+        .cardContainer()
         .onTapGesture {
           presentedSheet = AIDataSharingView(showDismiss: true).asAny
         }
-      }
     }
   }
 
