@@ -6,103 +6,133 @@
 import AppUI
 import BloomModel
 import SwiftUI
+import SFSafeSymbols
 
 struct SalesDebugView: View {
   @State private var sales: [SaleDetails] = []
   @State private var eligibilityStates: [String: SaleEligibilityState] = [:]
   @State private var lastFetchedDate: Date?
   @State private var isLoading = true
-  @State private var isRefreshing = false
+
   @AppStorage(String.SaleOverrideKey.overriddenSaleId, store: .group)
   private var overriddenSaleId: String?
+
+  @AppStorage(String.SaleOverrideKey.alwaysShowOnForeground, store: .group)
+  private var alwaysShowOnForeground = false
 
   var body: some View {
     VStack {
       SectionTitleView("Sales")
         .padding(.horizontal)
 
-      SettingsSectionContainer {
-        if isLoading {
-          ProgressView()
-            .frame(height: 60)
-        } else if sales.isEmpty {
-          Text("No cached sales")
-            .horizontallyCentered()
-            .foregroundStyle(.secondary)
-            .frame(height: 60)
-        } else {
-          ForEach(sales) { sale in
-            if let state = eligibilityStates[sale.id] {
-              SaleDebugCell(
-                sale: sale,
-                eligibilityState: state,
-                isOverridden: overriddenSaleId == sale.id,
-                onOverrideChanged: { isOverridden in
-                  if isOverridden {
-                    overriddenSaleId = sale.id
-                  } else {
-                    overriddenSaleId = nil
-                  }
-                }
-              )
-
-              if sale.id != sales.last?.id {
-                Divider()
-              }
-            }
-          }
-        }
-
-        Divider()
-
-        AsyncButton {
-          isRefreshing = true
-          await SalesManager.shared.forceRefreshSales()
-          await loadSales()
-          isRefreshing = false
-        } label: {
-          LabeledContent("Refresh Sales") {
-            if isRefreshing {
-              ProgressView()
-            } else {
-              Image(systemName: "arrow.clockwise")
-            }
-          }
-          .bold()
-          .fontDesign(.rounded)
-          .foregroundStyle(.tint)
-          .frame(height: 60)
-        }
-        .disabled(isRefreshing)
-
-        if overriddenSaleId != nil {
-          Divider()
-
-          Button(role: .destructive) {
-            overriddenSaleId = nil
-          } label: {
-            Text("Clear Override")
-              .bold()
-              .fontDesign(.rounded)
-              .horizontallyCentered()
-              .frame(height: 60)
-          }
-        }
+      if isLoading {
+        loadingView
+      } else if sales.isEmpty {
+        noContentView
+      } else {
+        saleContentView
       }
+
+      if overriddenSaleId != nil {
+        alwaysShowToggle
+        clearLastViewedDateButton
+      }
+
+      refreshButton
 
       if let lastFetched = lastFetchedDate {
-        Text("Last fetched: \(lastFetched.formatted(date: .abbreviated, time: .shortened))")
-          .font(.caption)
-          .foregroundStyle(.secondary)
-          .padding(.horizontal)
+        lastFetchedLabel(lastFetched: lastFetched)
       }
     }
+    .animation(.default, value: overriddenSaleId)
+    .animation(.default, value: sales)
+    .animation(.default, value: isLoading)
     .task {
       await loadSales()
     }
   }
+}
 
-  private func loadSales() async {
+private extension SalesDebugView {
+
+  var loadingView: some View {
+    ProgressView()
+      .horizontallyCentered()
+      .frame(height: 60)
+      .cardContainer()
+  }
+
+  var noContentView: some View {
+    Text("No cached sales")
+      .horizontallyCentered()
+      .foregroundStyle(.secondary)
+      .frame(height: 60)
+      .cardContainer()
+  }
+
+  var saleContentView: some View {
+    ForEach(sales) { sale in
+      if let state = eligibilityStates[sale.id] {
+        SaleDebugCell(
+          sale: sale,
+          eligibilityState: state,
+          isOverridden: overriddenSaleId == sale.id,
+          onOverrideChanged: { isOverridden in
+            if isOverridden {
+              overriddenSaleId = sale.id
+            } else {
+              overriddenSaleId = nil
+            }
+          }
+        )
+        .cardContainer()
+      }
+    }
+  }
+
+  var refreshButton: some View {
+    AsyncButton {
+      await SalesManager.shared.forceRefreshSales()
+      await loadSales()
+    } label: {
+      Text("Refresh Sales")
+        .horizontallyCentered()
+    }
+    .buttonStyle(.primary)
+  }
+
+  var alwaysShowToggle: some View {
+    Toggle("Always Show on Foreground", isOn: $alwaysShowOnForeground)
+      .padding(.horizontal)
+      .cardContainer()
+  }
+
+  var clearLastViewedDateButton: some View {
+    Button(role: .destructive) {
+      Task {
+        if let saleId = overriddenSaleId {
+          await SalesManager.shared.clearLastShownDate(for: saleId)
+          await loadSales()
+        }
+      }
+    } label: {
+      Text("Clear Last Viewed Date")
+        .horizontallyCentered()
+    }
+    .buttonStyle(.primary)
+  }
+
+  func lastFetchedLabel(lastFetched: Date) -> some View {
+    Text("Last fetched: \(lastFetched.formatted(date: .abbreviated, time: .shortened))")
+      .font(.caption)
+      .foregroundStyle(.secondary)
+      .padding(.horizontal)
+  }
+}
+
+private extension SalesDebugView {
+
+  func loadSales() async {
     isLoading = true
     sales = await SalesManager.shared.getCachedSales()
     lastFetchedDate = await SalesManager.shared.getLastFetchedDate()

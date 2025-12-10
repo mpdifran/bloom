@@ -138,8 +138,8 @@ private extension RootView {
     switch sheetKind {
     case .privacyUnknownSheet(let missingConsentTypes):
       presentedSheet = ExistingUserConsentContainerView(missingConsentTypes: missingConsentTypes).asAny
-    case .sale(let saleDetails):
-      presentedSheet = SaleModalView(sale: saleDetails).asAny
+    case .sale(let saleDetails, let preloadedImage):
+      presentedSheet = SaleModalView(sale: saleDetails, preloadedImage: preloadedImage).asAny
     case nil:
       break
     }

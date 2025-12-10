@@ -28,6 +28,13 @@ protocol ImageStorage: Sendable {
   ///   - path: Where to store the image.
   func store(image: ImageFile, path: StoragePath) async throws -> ImageFileMetadata
 
+  /// Store the provided image file
+  /// - Parameters:
+  ///   - image: The image to store
+  ///   - path: Where to store the image.
+  ///   - existingFilename: Optional filename to reuse (for replacing existing images while keeping URL)
+  func store(image: ImageFile, path: StoragePath, existingFilename: String?) async throws -> ImageFileMetadata
+
   func generateImageURL(
     fileName: String,
     path: StoragePath,
@@ -91,12 +98,16 @@ struct S3Storage: ImageStorage {
 
   private let imageProcessing = ImageProcessor()
 
-  func store(image: ImageFile, path: StoragePath) async throws -> ImageFileMetadata {
+  func store(image: BloomModel.ImageFile, path: StoragePath) async throws -> ImageFileMetadata {
+    try await store(image: image, path: path, existingFilename: nil)
+  }
+
+  func store(image: ImageFile, path: StoragePath, existingFilename: String?) async throws -> ImageFileMetadata {
     guard let imageType = imageProcessing.determineImageType(image.data) else {
       throw Abort(.badRequest, reason: "Unsupported image type")
     }
 
-    let filename = "\(UUID().uuidString).\(imageType)"
+    let filename = existingFilename ?? "\(UUID().uuidString).\(imageType)"
 
     let putObjectRequest = S3.PutObjectRequest(
         body: AWSHTTPBody(bytes: image.data),

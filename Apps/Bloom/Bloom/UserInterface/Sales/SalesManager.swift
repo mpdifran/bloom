@@ -9,6 +9,7 @@ import BloomFoundation
 import BloomModel
 import CoreNetwork
 import Foundation
+import UIKit
 
 actor SalesManager {
   static let shared = SalesManager()
@@ -26,7 +27,7 @@ actor SalesManager {
 
   // MARK: - Public Methods
 
-  func shouldShowSale() async -> SaleDetails? {
+  func shouldShowSale() async -> (SaleDetails, UIImage?)? {
     // 1. Use cached sales (populated by foreground task)
     let sales = cachedSales
     guard sales.isNotEmpty else { return nil }
@@ -34,33 +35,91 @@ actor SalesManager {
     // 2. Check for override first
     if let overriddenId = UserDefaults.group.string(forKey: String.SaleOverrideKey.overriddenSaleId),
        let overriddenSale = sales.first(where: { $0.id == overriddenId }) {
-      return overriddenSale
-    }
+      // If "always show on foreground" is enabled, skip frequency check
+      let alwaysShow = UserDefaults.group.bool(forKey: String.SaleOverrideKey.alwaysShowOnForeground)
+      if alwaysShow {
+        let image = await loadImage(for: overriddenSale)
+        return (overriddenSale, image)
+      }
 
-    // 3. Filter by user type and date range
-    guard let applicableSale = await findApplicableSale(from: sales) else {
+      // Otherwise, check frequency for the override sale
+      let calendar = Calendar.current
+      let today = calendar.startOfDay(for: Date())
+
+      if let lastShownTimestamp = lastShownSaleDates[overriddenSale.id] {
+        let lastShownDate = Date(timeIntervalSince1970: lastShownTimestamp)
+        let lastShownDay = calendar.startOfDay(for: lastShownDate)
+        let daysSince = calendar.dateComponents([.day], from: lastShownDay, to: today).day ?? 0
+
+        if daysSince >= overriddenSale.displayFrequencyDays {
+          let image = await loadImage(for: overriddenSale)
+          return (overriddenSale, image)
+        }
+      } else {
+        // Never shown before
+        let image = await loadImage(for: overriddenSale)
+        return (overriddenSale, image)
+      }
+
+      // Override sale exists but doesn't meet frequency, don't show any sale
       return nil
     }
 
-    // 4. Check display frequency using calendar days
-    if let lastShownTimestamp = lastShownSaleDates[applicableSale.id] {
-      let lastShownDate = Date(timeIntervalSince1970: lastShownTimestamp)
+    // 3. Filter by user type and date range
+    let applicableSales = await findApplicableSales(from: sales)
+    guard applicableSales.isNotEmpty else { return nil }
 
-      let calendar = Calendar.current
-      let lastShownDay = calendar.startOfDay(for: lastShownDate)
-      let today = calendar.startOfDay(for: Date())
-      let daysSince = calendar.dateComponents([.day], from: lastShownDay, to: today).day ?? 0
+    // 4. Find first sale that meets display frequency
+    let calendar = Calendar.current
+    let today = calendar.startOfDay(for: Date())
 
-      guard daysSince >= applicableSale.displayFrequencyDays else {
-        return nil
+    for sale in applicableSales {
+      // Check display frequency
+      if let lastShownTimestamp = lastShownSaleDates[sale.id] {
+        let lastShownDate = Date(timeIntervalSince1970: lastShownTimestamp)
+        let lastShownDay = calendar.startOfDay(for: lastShownDate)
+        let daysSince = calendar.dateComponents([.day], from: lastShownDay, to: today).day ?? 0
+
+        guard daysSince >= sale.displayFrequencyDays else {
+          continue
+        }
       }
+
+      // Check product availability via RevenueCat
+      let productAvailable = await MainActor.run {
+        EntitlementController.shared.package(for: sale.saleProductId) != nil
+      }
+      guard productAvailable else {
+        continue
+      }
+
+      let image = await loadImage(for: sale)
+      return (sale, image)
     }
 
-    return applicableSale
+    return nil
+  }
+
+  private func loadImage(for sale: SaleDetails) async -> UIImage? {
+    guard let imageURLString = sale.imageURL,
+          let imageURL = URL(string: imageURLString) else {
+      return nil
+    }
+
+    guard let (data, _) = try? await URLSession.shared.data(from: imageURL),
+          let image = UIImage(data: data) else {
+      return nil
+    }
+
+    return image
   }
 
   func markSaleAsShown(_ saleId: String) async {
     lastShownSaleDates[saleId] = Date().timeIntervalSince1970
+  }
+
+  func clearLastShownDate(for saleId: String) {
+    lastShownSaleDates[saleId] = nil
   }
 
   /// Refreshes cached sales if needed based on time since last fetch
@@ -153,11 +212,11 @@ actor SalesManager {
     }
   }
 
-  private func findApplicableSale(from sales: [SaleDetails]) async -> SaleDetails? {
+  private func findApplicableSales(from sales: [SaleDetails]) async -> [SaleDetails] {
     let userType = await determineUserType()
     let now = Date()
 
-    return sales.first { sale in
+    return sales.filter { sale in
       sale.targetAudiences.contains(userType) && sale.isCurrentlyActive(at: now)
     }
   }

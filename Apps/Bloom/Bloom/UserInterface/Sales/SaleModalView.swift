@@ -15,6 +15,7 @@ private extension CGFloat {
 
 struct SaleModalView: View {
   let sale: SaleDetails
+  let preloadedImage: UIImage?
 
   @Environment(\.dismiss) private var dismiss
 
@@ -52,9 +53,14 @@ private extension SaleModalView {
   @ViewBuilder
   var saleImageView: some View {
     Group {
-      if let imageURLString = sale.imageURL,
-         let imageURL = URL(string: imageURLString) {
-        // Load image from S3 URL
+      if let preloadedImage {
+        // Use preloaded image for instant display
+        Image(uiImage: preloadedImage)
+          .resizable()
+          .scaledToFill()
+      } else if let imageURLString = sale.imageURL,
+                let imageURL = URL(string: imageURLString) {
+        // Fallback to AsyncImage if preload failed
         AsyncImage(url: imageURL) { phase in
           switch phase {
           case .success(let image):
@@ -328,7 +334,8 @@ private struct GradientButtonStyle: ButtonStyle {
           discountBadgeForegroundColor: nil,
           createdAt: .now,
           updatedAt: .now
-        )
+        ),
+        preloadedImage: nil
       )
     }
   }

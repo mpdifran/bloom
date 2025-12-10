@@ -7,11 +7,12 @@
 
 import SwiftUI
 import BloomModel
+import UIKit
 
 extension RootViewModalPresentationManager {
   enum SheetKind {
     case privacyUnknownSheet([ConsentManager.ConsentType])
-    case sale(SaleDetails)
+    case sale(SaleDetails, UIImage?)
   }
 }
 
@@ -32,9 +33,9 @@ extension RootViewModalPresentationManager {
     if missingConsentStates.isNotEmpty {
       return .privacyUnknownSheet(missingConsentStates)
     }
-//    if let sale = await SalesManager.shared.shouldShowSale() {
-//      return .sale(sale)
-//    }
+    if let (sale, image) = await SalesManager.shared.shouldShowSale() {
+      return .sale(sale, image)
+    }
 
     return nil
   }

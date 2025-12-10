@@ -24,5 +24,6 @@ extension String {
 
   enum SaleOverrideKey {
     static let overriddenSaleId = "SaleOverride.overriddenSaleId"
+    static let alwaysShowOnForeground = "SaleOverride.alwaysShowOnForeground"
   }
 }

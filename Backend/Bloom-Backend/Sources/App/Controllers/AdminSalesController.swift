@@ -55,7 +55,8 @@ private extension AdminSalesController {
     if let imageFile = requestBody.image {
       let metadata = try await request.imageStorage.store(
         image: imageFile,
-        path: .saleImages
+        path: .saleImages,
+        existingFilename: nil
       )
       imageURL = request.imageStorage.generatePublicURL(
         fileName: metadata.filename,
@@ -155,9 +156,17 @@ private extension AdminSalesController {
     let requestBody = try request.content.decode(AdminUploadSaleImageRequest.self)
     let imageFile = requestBody.image
 
+    // Extract existing filename to reuse (keeps same URL for caching)
+    var existingFilename: String?
+    if let existingURL = existingRecord.imageURL,
+       let url = URL(string: existingURL) {
+      existingFilename = url.lastPathComponent
+    }
+
     let metadata = try await request.imageStorage.store(
       image: imageFile,
-      path: .saleImages
+      path: .saleImages,
+      existingFilename: existingFilename
     )
 
     guard let imageURL = request.imageStorage.generatePublicURL(
