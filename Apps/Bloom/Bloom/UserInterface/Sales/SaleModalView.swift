@@ -6,6 +6,7 @@
 //
 
 import BloomModel
+import RevenueCat
 import SwiftUI
 import TelemetryDeck
 
@@ -13,11 +14,26 @@ private extension CGFloat {
   static let imageHeight: CGFloat = 250
 }
 
+// MARK: - Sale Purchase Error
+
+enum SalePurchaseError: LocalizedError {
+  case productNotFound
+
+  var errorDescription: String? {
+    switch self {
+    case .productNotFound:
+      return "Unable to find the product. Please try again later."
+    }
+  }
+}
+
 struct SaleModalView: View {
   let sale: SaleDetails
   let preloadedImage: UIImage?
 
   @Environment(\.dismiss) private var dismiss
+  @ObservedObject private var entitlementController = EntitlementController.shared
+  @State private var error: Error?
 
   var body: some View {
     NavigationStack {
@@ -50,6 +66,11 @@ struct SaleModalView: View {
       TelemetryDeck.signal(sale.telemetryEventName)
       await SalesManager.shared.markSaleAsShown(sale.id)
     }
+    .onChange(of: entitlementController.hasBloomPro) { _, hasBloomPro in
+      guard hasBloomPro == true else { return }
+      dismiss()
+    }
+    .alert(error: $error)
   }
 }
 
@@ -168,8 +189,7 @@ private extension SaleModalView {
   var purchaseSection: some View {
     if let gradientColors = sale.purchaseButtonGradientColors, !gradientColors.isEmpty {
       AsyncButton {
-        // TODO: Open paywall with sale.saleProductId
-        dismiss()
+        try await purchaseSaleProduct()
       } label: {
         Text(sale.purchaseButtonTitle ?? "View Offer")
           .horizontallyCentered()
@@ -177,8 +197,7 @@ private extension SaleModalView {
       .buttonStyle(GradientButtonStyle(hexColors: gradientColors))
     } else {
       AsyncButton {
-        // TODO: Open paywall with sale.saleProductId
-        dismiss()
+        try await purchaseSaleProduct()
       } label: {
         Text(sale.purchaseButtonTitle ?? "View Offer")
           .horizontallyCentered()
@@ -267,6 +286,13 @@ private extension SaleModalView {
     }
     return .white
   }
+
+  func purchaseSaleProduct() async throws {
+    guard let package = EntitlementController.shared.package(for: sale.saleProductId) else {
+      throw SalePurchaseError.productNotFound
+    }
+    _ = try await Purchases.shared.purchase(package: package)
+  }
 }
 
 // MARK: - Gradient Button Style
@@ -274,7 +300,7 @@ private extension SaleModalView {
 private struct GradientButtonStyle: ButtonStyle {
   let hexColors: [String]
 
-  func makeBody(configuration: Configuration) -> some View {
+  func makeBody(configuration: ButtonStyle.Configuration) -> some View {
     if #available(iOS 26.0, *) {
       HStack {
         configuration.label
