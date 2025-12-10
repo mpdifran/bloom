@@ -63,11 +63,14 @@ struct SaleModalView: View {
     }
     .task {
       // Log telemetry when sale is shown
-      TelemetryDeck.signal(sale.telemetryEventName)
+      TelemetryDeck.signal("View Sale Modal", parameters: ["sale" : sale.telemetryEventName])
       await SalesManager.shared.markSaleAsShown(sale.id)
     }
     .onChange(of: entitlementController.hasBloomPro) { _, hasBloomPro in
       guard hasBloomPro == true else { return }
+
+      TelemetryDeck.signal("Sale Modal Purchase", parameters: ["sale" : sale.telemetryEventName])
+
       dismiss()
     }
     .alert(error: $error)
@@ -291,6 +294,9 @@ private extension SaleModalView {
     guard let package = EntitlementController.shared.package(for: sale.saleProductId) else {
       throw SalePurchaseError.productNotFound
     }
+
+    TelemetryDeck.signal("Sale Modal Attempt Purchase", parameters: ["sale" : sale.telemetryEventName])
+
     _ = try await Purchases.shared.purchase(package: package)
   }
 }
