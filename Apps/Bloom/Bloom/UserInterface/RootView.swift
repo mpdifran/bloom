@@ -135,6 +135,14 @@ private extension RootView {
 
     let sheetKind = await RootViewModalPresentationManager.shared.determineSheetToPresent()
 
+    if sheetKind != nil {
+      // Dismiss any presented views before handling navigation
+      presentedSheet = nil
+      shouldShowLogPeriodSheet = false
+      tabController.isShowingChat = false
+      await Delay(300)
+    }
+
     switch sheetKind {
     case .privacyUnknownSheet(let missingConsentTypes):
       presentedSheet = ExistingUserConsentContainerView(missingConsentTypes: missingConsentTypes).asAny

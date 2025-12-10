@@ -41,9 +41,14 @@ struct SaleModalView: View {
         }
       }
     }
+    .background {
+      Color(.secondarySystemBackground)
+        .ignoresSafeArea()
+    }
     .task {
       // Log telemetry when sale is shown
       TelemetryDeck.signal(sale.telemetryEventName)
+      await SalesManager.shared.markSaleAsShown(sale.id)
     }
   }
 }
@@ -149,7 +154,7 @@ private extension SaleModalView {
             }
         }
       }
-      .font(.body)
+      .font(.title2)
       .minimumScaleFactor(0.8)
       .fontWeight(.heavy)
       .fontWidth(.compressed)
@@ -204,16 +209,15 @@ private extension SaleModalView {
     }
 
     // Calculate percentage discount
-    let salePrice = salePackage.storeProduct.price
-    let comparePrice = comparePackage.storeProduct.price
+    let salePrice = (salePackage.storeProduct.price as NSDecimalNumber).doubleValue
+    let comparePrice = (comparePackage.storeProduct.price as NSDecimalNumber).doubleValue
 
     guard comparePrice > salePrice else { return nil }
 
     let discount = ((comparePrice - salePrice) / comparePrice) * 100
-    let discountInt = Int(truncating: discount as NSDecimalNumber)
 
-    // Round DOWN to nearest 5% (don't over-promise)
-    return (discountInt / 5) * 5
+    // Round to nearest 1%
+    return Int(discount.rounded())
   }
 
   var trialOfferText: String? {

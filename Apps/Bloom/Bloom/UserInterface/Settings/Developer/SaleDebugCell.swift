@@ -39,6 +39,8 @@ struct SaleDebugCell: View {
         criteriaRow(label: "Within date range", met: eligibilityState.isWithinDateRange)
         audienceCriteriaRow
         frequencyCriteriaRow
+        saleProductCriteriaRow
+        compareProductCriteriaRow
       }
       .font(.subheadline)
 
@@ -95,6 +97,27 @@ struct SaleDebugCell: View {
         .foregroundStyle(met ? .green : .red)
       Text(frequencyText)
         .foregroundStyle(met ? .primary : .secondary)
+    }
+  }
+
+  private var saleProductCriteriaRow: some View {
+    let found = EntitlementController.shared.package(for: sale.saleProductId) != nil
+    return HStack(spacing: 6) {
+      Image(systemName: found ? "checkmark.circle.fill" : "xmark.circle.fill")
+        .foregroundStyle(found ? .green : .red)
+      Text("Sale Product: \(sale.saleProductId)")
+        .foregroundStyle(found ? .primary : .secondary)
+    }
+  }
+
+  private var compareProductCriteriaRow: some View {
+    let productId = sale.compareProductId
+    let found = productId.flatMap { EntitlementController.shared.package(for: $0) } != nil
+    return HStack(spacing: 6) {
+      Image(systemName: found ? "checkmark.circle.fill" : "xmark.circle.fill")
+        .foregroundStyle(found ? .green : .red)
+      Text("Compare Product: \(productId ?? "none")")
+        .foregroundStyle(found ? .primary : .secondary)
     }
   }
 
