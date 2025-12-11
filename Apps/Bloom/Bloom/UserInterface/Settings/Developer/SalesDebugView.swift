@@ -103,7 +103,6 @@ private extension SalesDebugView {
 
   var alwaysShowToggle: some View {
     Toggle("Always Show on Foreground", isOn: $alwaysShowOnForeground)
-      .padding(.horizontal)
       .cardContainer()
   }
 

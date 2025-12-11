@@ -137,10 +137,11 @@ private extension RootView {
 
     if sheetKind != nil {
       // Dismiss any presented views before handling navigation
+      dismiss()
       presentedSheet = nil
       shouldShowLogPeriodSheet = false
       tabController.isShowingChat = false
-      await Delay(300)
+      await Delay(600)
     }
 
     switch sheetKind {

@@ -123,17 +123,19 @@ private extension SaleModalView {
   @ViewBuilder
   var timeRemainingBadge: some View {
     if let timeRemaining = timeRemainingText {
-      Text(timeRemaining)
-        .foregroundStyle(.white)
-        .font(.subheadline)
-        .fontDesign(.rounded)
-        .bold()
-        .padding(.horizontal, 12)
-        .padding(.vertical, 4)
-        .background {
-          RoundedRectangle(cornerRadius: 10)
-            .fill(.mutedRed)
-        }
+      TimelineView(.everyMinute) { _ in
+        Text(timeRemaining)
+          .foregroundStyle(.white)
+          .font(.subheadline)
+          .fontDesign(.rounded)
+          .bold()
+          .padding(.horizontal, 12)
+          .padding(.vertical, 4)
+          .background {
+            RoundedRectangle(cornerRadius: 10)
+              .fill(.mutedRed)
+          }
+      }
     }
   }
 
