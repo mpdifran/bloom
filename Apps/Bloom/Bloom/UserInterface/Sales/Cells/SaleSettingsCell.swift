@@ -180,7 +180,6 @@ private extension SaleSettingsCell {
 private extension SaleSettingsCell {
 
   var discountPercentage: Int? {
-    return 50
     // Get packages from EntitlementController
     guard let salePackage = EntitlementController.shared.package(for: sale.saleProductId) else {
       return nil
@@ -204,7 +203,6 @@ private extension SaleSettingsCell {
   }
 
   var trialOfferText: String? {
-    return "7 Days Free"
     guard let salePackage = EntitlementController.shared.package(for: sale.saleProductId) else {
       return nil
     }

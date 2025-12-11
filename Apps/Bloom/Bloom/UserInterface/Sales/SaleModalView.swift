@@ -37,7 +37,7 @@ struct SaleModalView: View {
 
   var body: some View {
     NavigationStack {
-      CardView {
+      CardView(cornerRadius: 60) {
         saleImageView
 
         VStack {
@@ -47,7 +47,6 @@ struct SaleModalView: View {
         }
         .padding(.horizontal)
         .padding(.top)
-        .padding(.bottom, -40)
       }
       .fontDesign(.rounded)
       .ignoresSafeArea(edges: .top)
@@ -81,43 +80,47 @@ private extension SaleModalView {
 
   @ViewBuilder
   var saleImageView: some View {
-    Group {
-      if let preloadedImage {
-        // Use preloaded image for instant display
-        Image(uiImage: preloadedImage)
-          .resizable()
-          .scaledToFill()
-      } else if let imageURLString = sale.imageURL,
-                let imageURL = URL(string: imageURLString) {
-        // Fallback to AsyncImage if preload failed
-        AsyncImage(url: imageURL) { phase in
-          switch phase {
-          case .success(let image):
-            image
-              .resizable()
-              .scaledToFill()
-          case .empty, .failure:
-            Rectangle()
-              .fill(.fill)
-          @unknown default:
-            Rectangle()
-              .fill(.fill)
+    GeometryReader { proxy in
+      Group {
+        if let preloadedImage {
+          // Use preloaded image for instant display
+          Image(uiImage: preloadedImage)
+            .resizable()
+            .scaledToFill()
+        } else if let imageURLString = sale.imageURL,
+                  let imageURL = URL(string: imageURLString) {
+          // Fallback to AsyncImage if preload failed
+          AsyncImage(url: imageURL) { phase in
+            switch phase {
+            case .success(let image):
+              image
+                .resizable()
+                .scaledToFill()
+            case .empty, .failure:
+              Rectangle()
+                .fill(.fill)
+            @unknown default:
+              Rectangle()
+                .fill(.fill)
+            }
           }
+        } else {
+          // No URL - show default image
+          Image(.budLounging)
+            .resizable()
+            .scaledToFill()
         }
-      } else {
-        // No URL - show default image
-        Image(.budLounging)
-          .resizable()
-          .scaledToFill()
+      }
+      .frame(width: proxy.size.width)
+      .clipped()
+      .overlay {
+        timeRemainingBadge
+          .padding()
+          .padding(.horizontal)
+          .zStackAlignment(.topTrailing)
       }
     }
     .frame(height: .imageHeight)
-    .clipped()
-    .overlay {
-      timeRemainingBadge
-        .padding()
-        .zStackAlignment(.topTrailing)
-    }
   }
 
   @ViewBuilder
@@ -181,7 +184,7 @@ private extension SaleModalView {
         }
       }
       .font(.title2)
-      .minimumScaleFactor(0.8)
+      .minimumScaleFactor(0.6)
       .fontWeight(.heavy)
       .fontWidth(.compressed)
       .fontDesign(.rounded)

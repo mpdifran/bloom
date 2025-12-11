@@ -8,14 +8,16 @@
 import SwiftUI
 
 struct CardView<Content>: View where Content: View {
-
+  let cornerRadius: CGFloat
   let contentBuilder: () -> Content
 
   @Environment(ThemeController.self) private var themeController
 
   init(
+    cornerRadius: CGFloat = 30,
     @ViewBuilder contentBuilder: @escaping () -> Content
   ) {
+    self.cornerRadius = cornerRadius
     self.contentBuilder = contentBuilder
   }
 
@@ -26,7 +28,7 @@ struct CardView<Content>: View where Content: View {
       }
       .horizontallyCentered()
       .presentationDetentSelfSizing()
-      .presentationCornerRadius(30)
+      .presentationCornerRadius(cornerRadius)
       .presentationDragIndicator(.visible)
     } else {
       VStack {
@@ -34,7 +36,7 @@ struct CardView<Content>: View where Content: View {
       }
       .horizontallyCentered()
       .presentationDetentSelfSizing()
-      .presentationCornerRadius(30)
+      .presentationCornerRadius(cornerRadius)
       .presentationDragIndicator(.visible)
       .presentationBackground(themeController.theme.backgroundColor)
     }

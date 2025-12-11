@@ -164,6 +164,11 @@ struct TodayView: View {
     .task {
       activeSales = await SalesManager.shared.getApplicableSalesWithImages()
     }
+    .onChange(of: entitlementController.hasBloomPro) { _, _ in
+      Task {
+        activeSales = await SalesManager.shared.getApplicableSalesWithImages()
+      }
+    }
     .onChange(of: tabController.pendingGoalNavigation) { oldValue, newValue in
       if let goalId = newValue {
         // Try to find the matching habit by targetMetric rawValue
