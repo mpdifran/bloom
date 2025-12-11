@@ -46,18 +46,9 @@ struct RootView: View {
     Group {
       if !hasShownOnboarding {
         ZStack {
-          switch experimentManager.variant(for: .onboardingFeaturePitch) {
-          case .treatment:
-            OnboardingRootViewTreatment {
-              withAnimation {
-                hasShownOnboarding = true
-              }
-            }
-          case .control:
-            OnboardingRootView {
-              withAnimation {
-                hasShownOnboarding = true
-              }
+          OnboardingRootViewTreatment {
+            withAnimation {
+              hasShownOnboarding = true
             }
           }
 

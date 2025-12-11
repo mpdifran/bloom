@@ -44,7 +44,10 @@ struct ExperimentOverrideView: View {
   PreviewEnvironment {
     BloomScrollView {
       SettingsSectionContainer {
-        ExperimentOverrideView(experimentId: ExperimentIdentifier.onboardingFeaturePitch.value, experimentName: "Onboarding Feature Pitch")
+        ExperimentOverrideView(
+          experimentId: ExperimentIdentifier.standard.value,
+          experimentName: "Standard Experiment"
+        )
       }
     }
   }

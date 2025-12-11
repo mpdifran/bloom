@@ -881,8 +881,10 @@ extension DeveloperSettingsView {
 
   private func clearAllExperimentOverrides() {
     // Clear all experiment overrides
-    let onboardingFeaturePitchKey = String.ExperimentOverrideKey.key(for: ExperimentIdentifier.onboardingFeaturePitch.value)
-    UserDefaults.standard.removeObject(forKey: onboardingFeaturePitchKey)
+    for experiment in Experiment.allCases {
+      let key = String.ExperimentOverrideKey.key(for: experiment.id.value)
+      UserDefaults.standard.removeObject(forKey: key)
+    }
 
     // Clear sale override
     UserDefaults.group.removeObject(forKey: String.SaleOverrideKey.overriddenSaleId)
