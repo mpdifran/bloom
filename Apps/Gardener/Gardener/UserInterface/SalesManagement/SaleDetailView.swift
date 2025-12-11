@@ -16,11 +16,16 @@ struct SaleDetailView: View {
 
   var body: some View {
     HStack(spacing: 0) {
-      // Fixed preview at top
-      SalePreviewView(viewModel: viewModel)
-        .shadow(radius: 20)
-        .padding()
-        .fixedSize()
+      // Preview panel
+      VStack(spacing: 20) {
+        SaleDetailsCellPreview(viewModel: viewModel)
+          .shadow(radius: 20)
+
+        SalePreviewView(viewModel: viewModel)
+          .shadow(radius: 20)
+      }
+      .padding()
+      .fixedSize(horizontal: false, vertical: true)
 
       Divider()
 

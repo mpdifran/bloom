@@ -28,7 +28,7 @@ struct SalePreviewView: View {
       .padding()
     }
     .background(.background.secondary)
-    .clipShape(RoundedRectangle(cornerRadius: 17))
+    .clipShape(RoundedRectangle(cornerRadius: 60))
     .frame(width: 340)
   }
 }
@@ -37,78 +37,82 @@ private extension SalePreviewView {
 
   @ViewBuilder
   var saleImageView: some View {
-    ZStack {
-      Group {
-        if let selectedImage = viewModel.selectedImage {
-          // Show selected NSImage
-          Image(nsImage: selectedImage)
-            .resizable()
-            .aspectRatio(contentMode: .fill)
-        } else if let imageURLString = viewModel.currentImageURL, !imageURLString.isEmpty,
-                  let imageURL = URL(string: imageURLString) {
-          // Load image from URL
-          AsyncImage(url: imageURL) { phase in
-            switch phase {
-            case .success(let image):
-              image
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-            case .empty:
-              // Loading state
-              Rectangle()
-                .fill(Color.gray.opacity(0.2))
-                .overlay {
-                  VStack {
-                    ProgressView()
-                    Text("Loading...")
-                      .font(.caption)
-                      .foregroundColor(.secondary)
+    GeometryReader { proxy in
+      ZStack {
+        Group {
+          if let selectedImage = viewModel.selectedImage {
+            // Show selected NSImage
+            Image(nsImage: selectedImage)
+              .resizable()
+              .aspectRatio(contentMode: .fill)
+          } else if let imageURLString = viewModel.currentImageURL, !imageURLString.isEmpty,
+                    let imageURL = URL(string: imageURLString) {
+            // Load image from URL
+            AsyncImage(url: imageURL) { phase in
+              switch phase {
+              case .success(let image):
+                image
+                  .resizable()
+                  .aspectRatio(contentMode: .fill)
+              case .empty:
+                // Loading state
+                Rectangle()
+                  .fill(Color.gray.opacity(0.2))
+                  .overlay {
+                    VStack {
+                      ProgressView()
+                      Text("Loading...")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    }
                   }
-                }
-            case .failure(let error):
-              // Error state with details
-              Rectangle()
-                .fill(Color.red.opacity(0.1))
-                .overlay {
-                  VStack {
-                    Image(systemName: "exclamationmark.triangle")
-                      .foregroundColor(.red)
-                    Text("Failed to load")
-                      .font(.caption)
-                      .foregroundColor(.secondary)
-                    Text(error.localizedDescription)
-                      .font(.caption2)
-                      .foregroundColor(.secondary)
-                      .multilineTextAlignment(.center)
-                      .padding(.horizontal)
+              case .failure(let error):
+                // Error state with details
+                Rectangle()
+                  .fill(Color.red.opacity(0.1))
+                  .overlay {
+                    VStack {
+                      Image(systemName: "exclamationmark.triangle")
+                        .foregroundColor(.red)
+                      Text("Failed to load")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                      Text(error.localizedDescription)
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+                    }
                   }
-                }
-            @unknown default:
-              Rectangle()
-                .fill(Color.gray.opacity(0.2))
+              @unknown default:
+                Rectangle()
+                  .fill(Color.gray.opacity(0.2))
+              }
             }
+          } else {
+            // Placeholder
+            Rectangle()
+              .fill(Color.gray.opacity(0.2))
+              .overlay {
+                Text("No Image")
+                  .foregroundColor(.secondary)
+              }
           }
-        } else {
-          // Placeholder
-          Rectangle()
-            .fill(Color.gray.opacity(0.2))
-            .overlay {
-              Text("No Image")
-                .foregroundColor(.secondary)
-            }
         }
+        .frame(width: proxy.size.width)
+        .clipped()
+
+        mockDismissButton
+          .padding()
+          .zStackAlignment(.topLeading)
+
+        timeRemainingBadge
+          .padding()
+          .padding(.horizontal)
+          .zStackAlignment(.topTrailing)
       }
-      .frame(height: .imageHeight)
-      .clipped()
-
-      mockDismissButton
-        .padding()
-        .zStackAlignment(.topLeading)
-
-      timeRemainingBadge
-        .padding()
-        .zStackAlignment(.topTrailing)
     }
+    .frame(height: .imageHeight)
   }
 
   @ViewBuilder
@@ -194,6 +198,8 @@ private extension SalePreviewView {
         .font(.subheadline)
         .bold()
         .foregroundColor(.secondary)
+        .multilineTextAlignment(.center)
+        .padding(.horizontal)
     }
   }
 }

@@ -34,11 +34,11 @@ struct SaleDetailsCell: View {
     .cardContainer(includePadding: false)
     .sheet($presentedSheet)
     .onTapGesture {
-      TelemetryDeck.signal("Tap Sale Settings Cell", parameters: ["sale": sale.telemetryEventName])
+      TelemetryDeck.signal("Tap Sale Details Cell", parameters: ["sale": sale.telemetryEventName])
       presentedSheet = SaleModalView(sale: sale, preloadedImage: preloadedImage).asAny
     }
     .onAppear {
-      TelemetryDeck.signal("View Sale Settings Cell", parameters: ["sale": sale.telemetryEventName])
+      TelemetryDeck.signal("View Sale Details Cell", parameters: ["sale": sale.telemetryEventName])
     }
   }
 }

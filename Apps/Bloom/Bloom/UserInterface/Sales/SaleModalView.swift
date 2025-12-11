@@ -217,6 +217,8 @@ private extension SaleModalView {
         .font(.subheadline)
         .bold()
         .foregroundStyle(.secondary)
+        .multilineTextAlignment(.center)
+        .padding(.horizontal)
     }
   }
 }
