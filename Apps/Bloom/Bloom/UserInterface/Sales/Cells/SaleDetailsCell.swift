@@ -1,5 +1,5 @@
 //
-//  SaleSettingsCell.swift
+//  SaleDetailsCell.swift
 //  Bloom
 //
 //  Created by Mark DiFranco on 2025-12-11.
@@ -12,18 +12,19 @@ import SFSafeSymbols
 import TelemetryDeck
 
 private extension CGFloat {
-  static let imageHeight: CGFloat = 150
+  static let imageWidth: CGFloat = 130
 }
 
-struct SaleSettingsCell: View {
+struct SaleDetailsCell: View {
   let sale: SaleDetails
   let preloadedImage: UIImage?
 
   @State private var presentedSheet: AnyView?
 
   var body: some View {
-    VStack(spacing: 0) {
+    HStack(spacing: 0) {
       saleImageView
+
       VStack(alignment: .leading) {
         saleDescriptionView
       }
@@ -42,7 +43,7 @@ struct SaleSettingsCell: View {
   }
 }
 
-private extension SaleSettingsCell {
+private extension SaleDetailsCell {
 
   @ViewBuilder
   var saleImageView: some View {
@@ -76,12 +77,12 @@ private extension SaleSettingsCell {
           .scaledToFill()
       }
     }
-    .frame(height: .imageHeight)
+    .frame(width: .imageWidth)
     .clipped()
     .overlay {
       timeRemainingBadge
-        .padding()
-        .zStackAlignment(.topTrailing)
+        .padding(8)
+        .zStackAlignment(.bottom)
     }
   }
 
@@ -91,11 +92,11 @@ private extension SaleSettingsCell {
       TimelineView(.everyMinute) { _ in
         Text(timeRemaining)
           .foregroundStyle(.white)
-          .font(.subheadline)
+          .font(.caption)
           .fontDesign(.rounded)
           .bold()
-          .padding(.horizontal, 12)
-          .padding(.vertical, 4)
+          .padding(.horizontal, 6)
+          .padding(.vertical, 2)
           .background {
             RoundedRectangle(cornerRadius: 10)
               .fill(.mutedRed)
@@ -147,7 +148,6 @@ private extension SaleSettingsCell {
       Spacer()
       Image(systemSymbol: .chevronForward)
         .font(.subheadline)
-        .foregroundStyle(.secondary)
     }
     .font(.headline)
     .bold()
@@ -177,7 +177,7 @@ private extension SaleSettingsCell {
   }
 }
 
-private extension SaleSettingsCell {
+private extension SaleDetailsCell {
 
   var discountPercentage: Int? {
     // Get packages from EntitlementController
@@ -254,7 +254,7 @@ private extension SaleSettingsCell {
 #Preview {
   PreviewEnvironment {
     BloomScrollView(showsChatBar: false) {
-      SaleSettingsCell(
+      SaleDetailsCell(
         sale: SaleDetails(
           id: "sale_123",
           title: "New Year, New You!",

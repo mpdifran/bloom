@@ -61,7 +61,6 @@ struct SaleModalView: View {
         .ignoresSafeArea()
     }
     .task {
-      // Log telemetry when sale is shown
       TelemetryDeck.signal("View Sale Modal", parameters: ["sale": sale.telemetryEventName])
       await SalesManager.shared.markSaleAsShown(sale.id)
     }

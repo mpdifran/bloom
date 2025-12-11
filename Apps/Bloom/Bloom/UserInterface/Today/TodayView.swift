@@ -87,7 +87,7 @@ struct TodayView: View {
               }
 
               salesSection
-                .padding(.top)
+                .padding(.horizontal)
 
               MedicalDisclaimerFooterView()
                 .padding(.horizontal)
@@ -546,9 +546,10 @@ private extension TodayView {
 
   @ViewBuilder
   var salesSection: some View {
+    SectionTitleView("Sales")
+      .padding(.horizontal)
     ForEach(activeSales, id: \.sale.id) { saleData in
-      SaleSettingsCell(sale: saleData.sale, preloadedImage: saleData.image)
-        .padding(.horizontal)
+      SaleDetailsCell(sale: saleData.sale, preloadedImage: saleData.image)
     }
   }
 }
