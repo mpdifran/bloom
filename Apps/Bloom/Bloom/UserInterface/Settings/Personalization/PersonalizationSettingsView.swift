@@ -14,7 +14,11 @@ import HealthKit
 
 struct PersonalizationSettingsView: View {
   @ObservedObject private var healthManager = HealthManager.shared
+
   @State private var presentedSheet: AnyView?
+
+  @FocusState private var isFocused: Bool
+
   @Environment(\.dismiss) private var dismiss
   
   var body: some View {
@@ -31,6 +35,15 @@ struct PersonalizationSettingsView: View {
         }
       }
       .sheet($presentedSheet)
+    }
+    .shelf(isVisible: isFocused) {
+      Button {
+        isFocused = false
+      } label: {
+        Text("Done")
+          .horizontallyCentered()
+      }
+      .buttonStyle(.primary)
     }
   }
 }
@@ -69,6 +82,7 @@ private extension PersonalizationSettingsView {
 
         SettingsCell("Height") {
           HeightEditorTextField()
+            .focused($isFocused)
         }
         
         if healthManager.sex() == .female {
