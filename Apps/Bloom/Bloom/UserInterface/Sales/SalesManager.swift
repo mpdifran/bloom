@@ -158,7 +158,7 @@ actor SalesManager {
     cachedSales = sales
     lastFetchedDate = now.timeIntervalSince1970
     for sale in newSales {
-      TelemetryDeck.signal("Cached Sale", parameters: ["sale" : sale.telemetryEventName])
+      TelemetryDeck.signal("Cached Sale", parameters: ["sale": sale.telemetryEventName])
     }
   }
 
