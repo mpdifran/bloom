@@ -60,6 +60,8 @@ struct TodayView: View {
   @AppStorage("TodayView.showNutritionTodayWidget") private var showNutritionTodayWidget: Bool = true
   @AppStorage("GetBloomPlusTodayCell.hasDismissed") private var getBloomPlusHasDismissed = false
 
+  @State private var activeSales: [(sale: SaleDetails, image: UIImage?)] = []
+
   @Namespace private var namespace
 
   var body: some View {
@@ -83,6 +85,9 @@ struct TodayView: View {
               } else {
                 nonBloomPlusContent
               }
+
+              salesSection
+                .padding(.top)
 
               MedicalDisclaimerFooterView()
                 .padding(.horizontal)
@@ -155,6 +160,9 @@ struct TodayView: View {
     .onForeground {
       habitsViewModel.checkUpdateSuggestedHabits()
       todayViewModel.checkEntitlement()
+    }
+    .task {
+      activeSales = await SalesManager.shared.getApplicableSalesWithImages()
     }
     .onChange(of: tabController.pendingGoalNavigation) { oldValue, newValue in
       if let goalId = newValue {
@@ -529,6 +537,14 @@ private extension TodayView {
         habit.targetMetric == targetMetric
       })
     })
+  }
+
+  @ViewBuilder
+  var salesSection: some View {
+    ForEach(activeSales, id: \.sale.id) { saleData in
+      SaleSettingsCell(sale: saleData.sale, preloadedImage: saleData.image)
+        .padding(.horizontal)
+    }
   }
 }
 

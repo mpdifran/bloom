@@ -101,6 +101,36 @@ actor SalesManager {
     return nil
   }
 
+  func getApplicableSalesWithImages() async -> [(sale: SaleDetails, image: UIImage?)] {
+    let sales = cachedSales
+    guard sales.isNotEmpty else { return [] }
+
+    // Check for override first (same logic as shouldShowSale)
+    if let overriddenId = UserDefaults.group.string(forKey: String.SaleOverrideKey.overriddenSaleId),
+       let overriddenSale = sales.first(where: { $0.id == overriddenId }) {
+      let image = await loadImage(for: overriddenSale)
+      return [(sale: overriddenSale, image: image)]
+    }
+
+    // Normal flow: get applicable sales
+    let applicableSales = await findApplicableSales(from: sales)
+
+    return await withTaskGroup(of: (SaleDetails, UIImage?).self) { group in
+      for sale in applicableSales {
+        group.addTask {
+          let image = await self.loadImage(for: sale)
+          return (sale, image)
+        }
+      }
+
+      var results: [(sale: SaleDetails, image: UIImage?)] = []
+      for await result in group {
+        results.append((sale: result.0, image: result.1))
+      }
+      return results
+    }
+  }
+
   private func loadImage(for sale: SaleDetails) async -> UIImage? {
     guard let imageURLString = sale.imageURL,
           let imageURL = URL(string: imageURLString) else {
