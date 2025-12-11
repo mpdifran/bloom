@@ -10,7 +10,7 @@ import AppKit
 import AdminBloomModel
 
 private extension CGFloat {
-  static let imageHeight: CGFloat = 250
+  static let imageHeight: CGFloat = 300
 }
 
 struct SalePreviewView: View {

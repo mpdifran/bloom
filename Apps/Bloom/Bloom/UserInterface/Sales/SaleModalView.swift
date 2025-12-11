@@ -11,7 +11,7 @@ import SwiftUI
 import TelemetryDeck
 
 private extension CGFloat {
-  static let imageHeight: CGFloat = 250
+  static let imageHeight: CGFloat = 300
 }
 
 // MARK: - Sale Purchase Error
@@ -63,13 +63,13 @@ struct SaleModalView: View {
     }
     .task {
       // Log telemetry when sale is shown
-      TelemetryDeck.signal("View Sale Modal", parameters: ["sale" : sale.telemetryEventName])
+      TelemetryDeck.signal("View Sale Modal", parameters: ["sale": sale.telemetryEventName])
       await SalesManager.shared.markSaleAsShown(sale.id)
     }
     .onChange(of: entitlementController.hasBloomPro) { _, hasBloomPro in
       guard hasBloomPro == true else { return }
 
-      TelemetryDeck.signal("Sale Modal Purchase", parameters: ["sale" : sale.telemetryEventName])
+      TelemetryDeck.signal("Sale Modal Purchase", parameters: ["sale": sale.telemetryEventName])
 
       dismiss()
     }
@@ -295,7 +295,7 @@ private extension SaleModalView {
       throw SalePurchaseError.productNotFound
     }
 
-    TelemetryDeck.signal("Sale Modal Attempt Purchase", parameters: ["sale" : sale.telemetryEventName])
+    TelemetryDeck.signal("Sale Modal Attempt Purchase", parameters: ["sale": sale.telemetryEventName])
 
     _ = try await Purchases.shared.purchase(package: package)
   }
@@ -354,7 +354,7 @@ private struct GradientButtonStyle: ButtonStyle {
           id: "sale_123",
           title: "New Year, New You!",
           bodyText: "Get a jump on the new year with the best deal you'll see on Bloom! Your rate is locked in indefinitely.",
-          imageURL: nil,
+          imageURL: "https://lotus-labs-bloom-default.s3.us-east-1.amazonaws.com/sale-images/1C133E72-8B03-487C-998C-D3CBC1ACD28D.png",
           saleProductId: "bloom_2999_1y_7d0",
           compareProductId: "bloom_pro_yearly",
           targetAudiences: [.freeUsers, .expiredUsers],
