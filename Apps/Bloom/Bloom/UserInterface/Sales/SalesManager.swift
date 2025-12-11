@@ -10,6 +10,7 @@ import BloomModel
 import CoreNetwork
 import Foundation
 import UIKit
+import TelemetryDeck
 
 actor SalesManager {
   static let shared = SalesManager()
@@ -141,15 +142,24 @@ actor SalesManager {
 
     // Fetch and cache
     guard let sales = try? await NetworkRequester.shared.getActiveSales().sales else { return }
-    cachedSales = sales
-    lastFetchedDate = now.timeIntervalSince1970
+
+    cache(sales, now: now)
   }
 
   /// Force refreshes sales from the backend (for debug view)
   func forceRefreshSales() async {
     guard let sales = try? await NetworkRequester.shared.getActiveSales().sales else { return }
+
+    cache(sales, now: .now)
+  }
+
+  func cache(_ sales: [SaleDetails], now: Date) {
+    let newSales = sales.filter({ !cachedSales.contains($0) })
     cachedSales = sales
-    lastFetchedDate = Date().timeIntervalSince1970
+    lastFetchedDate = now.timeIntervalSince1970
+    for sale in newSales {
+      TelemetryDeck.signal("Cached Sale", parameters: ["sale" : sale.telemetryEventName])
+    }
   }
 
   /// Returns cached sales (for debug view)
