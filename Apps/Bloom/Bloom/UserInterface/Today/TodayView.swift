@@ -546,10 +546,12 @@ private extension TodayView {
 
   @ViewBuilder
   var salesSection: some View {
-    SectionTitleView("Sales")
-      .padding(.horizontal)
-    ForEach(activeSales, id: \.sale.id) { saleData in
-      SaleDetailsCell(sale: saleData.sale, preloadedImage: saleData.image)
+    if activeSales.isNotEmpty {
+      SectionTitleView("Sales")
+        .padding(.horizontal)
+      ForEach(activeSales, id: \.sale.id) { saleData in
+        SaleDetailsCell(sale: saleData.sale, preloadedImage: saleData.image)
+      }
     }
   }
 }
