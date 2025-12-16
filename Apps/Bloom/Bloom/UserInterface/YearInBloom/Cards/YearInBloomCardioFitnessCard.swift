@@ -15,8 +15,8 @@ struct YearInBloomCardioFitnessCard: View {
   var body: some View {
     YearInBloomCard(
       title: "Cardio Fitness",
-      focusStat: formattedLatestVO2Max,
-      focusStatLabel: stats.currentCardioFitnessLevel?.name ?? "Unknown",
+      focusStat: stats.currentCardioFitnessLevel?.name ?? "Unknown",
+      focusStatLabel: formattedLatestVO2Max,
       includeDivider: false
     ) {
       vo2MaxChart
@@ -30,6 +30,27 @@ private extension YearInBloomCardioFitnessCard {
 
   var vo2MaxChart: some View {
     Chart {
+      // Threshold indicators (only show if within visible range)
+      if let thresholds = vo2MaxThresholds {
+        if thresholds.2 >= minVO2Max && thresholds.2 <= maxVO2Max {
+          RuleMark(y: .value("Low", thresholds.2))
+            .foregroundStyle(HeartHealthMonthlySummary.CardioFitnessLevel.belowAverage.color.opacity(0.5))
+            .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 4]))
+        }
+
+        if thresholds.1 >= minVO2Max && thresholds.1 <= maxVO2Max {
+          RuleMark(y: .value("Below Average", thresholds.1))
+            .foregroundStyle(HeartHealthMonthlySummary.CardioFitnessLevel.aboveAverage.color.opacity(0.5))
+            .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 4]))
+        }
+
+        if thresholds.0 >= minVO2Max && thresholds.0 <= maxVO2Max {
+          RuleMark(y: .value("Above Average", thresholds.0))
+            .foregroundStyle(HeartHealthMonthlySummary.CardioFitnessLevel.high.color.opacity(0.5))
+            .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 4]))
+        }
+      }
+
       ForEach(monthlyDataWithValues) { data in
         LineMark(
           x: .value("Month", data.date, unit: .month),
@@ -51,13 +72,15 @@ private extension YearInBloomCardioFitnessCard {
         }
       }
     }
+    .chartYScale(domain: minVO2Max...maxVO2Max)
+    .chartXScale(domain: yearStart...yearEnd)
     .chartXAxis {
       AxisMarks(values: .stride(by: .month)) { _ in
         AxisValueLabel(format: .dateTime.month(.narrow), centered: true)
       }
     }
     .chartYAxis {
-      AxisMarks { value in
+      AxisMarks(values: [minVO2Max, (minVO2Max + maxVO2Max) / 2, maxVO2Max]) { value in
         AxisGridLine()
         if let doubleValue = value.as(Double.self) {
           AxisValueLabel {
@@ -67,11 +90,33 @@ private extension YearInBloomCardioFitnessCard {
       }
     }
     .chartLegend(.hidden)
-    .frame(height: 140)
+    .frame(height: 200)
   }
 
   var monthlyDataWithValues: [MonthlyVO2MaxData] {
     stats.monthlyVO2Max.filter { $0.averageVO2Max != nil }
+  }
+
+  var minVO2Max: Double {
+    let values = monthlyDataWithValues.compactMap(\.averageVO2Max)
+    return (values.min() ?? 0) - 2
+  }
+
+  var maxVO2Max: Double {
+    let values = monthlyDataWithValues.compactMap(\.averageVO2Max)
+    return (values.max() ?? 50) + 2
+  }
+
+  var yearStart: Date {
+    Calendar.current.date(from: DateComponents(year: stats.year, month: 1, day: 1))!
+  }
+
+  var yearEnd: Date {
+    Calendar.current.date(from: DateComponents(year: stats.year, month: 12, day: 31))!
+  }
+
+  var vo2MaxThresholds: (Double, Double, Double)? {
+    HealthGoalProvider.shared.goalVO2MaxForUser()
   }
 
   func colorForLevel(_ level: HeartHealthMonthlySummary.CardioFitnessLevel?) -> Color {

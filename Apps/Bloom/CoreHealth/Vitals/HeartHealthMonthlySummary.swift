@@ -48,10 +48,10 @@ public extension HeartHealthMonthlySummary {
 
     public var name: String {
       switch self {
-      case .low: "Low"
-      case .belowAverage: "Below Average"
-      case .aboveAverage: "Above Average"
-      case .high: "High"
+      case .low: "Poor"
+      case .belowAverage: "Fair"
+      case .aboveAverage: "Good"
+      case .high: "Excellent"
       }
     }
 
