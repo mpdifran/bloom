@@ -179,6 +179,11 @@ private extension YearInBloomCalculator {
         return total + calories
       }
 
+      // Calculate total distance for this workout type
+      let typeDistance = typeWorkouts.reduce(0.0) { total, workout in
+        total + (workout.totalDistanceWalkingRunningCycling?.doubleValue(for: .meter()) ?? 0)
+      }
+
       // Calculate zone minutes for this workout type
       let typeReports = reportsByType[type] ?? []
       let zoneMinutes: ZoneMinutesBreakdown?
@@ -202,7 +207,8 @@ private extension YearInBloomCalculator {
         totalDurationMinutes: typeDuration,
         totalCaloriesBurned: typeCalories,
         percentage: totalDuration > 0 ? (typeDuration / totalDuration) * 100 : 0,
-        zoneMinutes: zoneMinutes
+        zoneMinutes: zoneMinutes,
+        totalDistanceMeters: typeDistance > 0 ? typeDistance : nil
       )
     }
 

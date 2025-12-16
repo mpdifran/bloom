@@ -50,14 +50,14 @@ private extension YearInBloomExerciseEffectivenessCard {
             x: .value("Month", month.date, unit: .month),
             y: .value("Minutes", month.zone1)
           )
-          .foregroundStyle(.black)
+          .foregroundStyle(.black.opacity(0.2))
 
           // Zone 2
           BarMark(
             x: .value("Month", month.date, unit: .month),
             y: .value("Minutes", month.zone2)
           )
-          .foregroundStyle(.black.opacity(0.65))
+          .foregroundStyle(.black.opacity(0.4))
 
           // Zone 3 (already scaled ×2)
           BarMark(
@@ -71,14 +71,14 @@ private extension YearInBloomExerciseEffectivenessCard {
             x: .value("Month", month.date, unit: .month),
             y: .value("Minutes", month.zone4)
           )
-          .foregroundStyle(.black.opacity(0.4))
+          .foregroundStyle(.black.opacity(0.65))
 
           // Zone 5 (already scaled ×3, top)
           BarMark(
             x: .value("Month", month.date, unit: .month),
             y: .value("Minutes", month.zone5)
           )
-          .foregroundStyle(.black.opacity(0.2))
+          .foregroundStyle(.black)
 
           // Star for high-performing months
           if month.total >= 600 {
@@ -192,7 +192,6 @@ private extension YearInBloomExerciseEffectivenessCard {
             .fontDesign(.rounded)
             .bold()
             .foregroundStyle(.black)
-            .contentTransition(.numericText())
             .padding(.vertical, 4)
             .padding(.horizontal, 16)
             .background(.black.opacity(0.2), in: Capsule())
@@ -215,11 +214,11 @@ private extension YearInBloomExerciseEffectivenessCard {
 
   var legendView: some View {
     HStack(spacing: 12) {
-      zoneLegendItem(color: .black, label: "Zone 1")
-      zoneLegendItem(color: .black.opacity(0.65), label: "Zone 2")
+      zoneLegendItem(color: .black.opacity(0.2), label: "Zone 1")
+      zoneLegendItem(color: .black.opacity(0.4), label: "Zone 2")
       zoneLegendItem(color: .black.opacity(0.55), label: "Zone 3")
-      zoneLegendItem(color: .black.opacity(0.4), label: "Zone 4")
-      zoneLegendItem(color: .black.opacity(0.2), label: "Zone 5")
+      zoneLegendItem(color: .black.opacity(0.65), label: "Zone 4")
+      zoneLegendItem(color: .black, label: "Zone 5")
       Spacer()
     }
     .font(.caption2)

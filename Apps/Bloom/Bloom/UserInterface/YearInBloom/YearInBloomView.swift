@@ -113,6 +113,7 @@ private extension YearInBloomView {
     ScrollView {
       VStack {
         YearInBloomExerciseEffectivenessCard(stats: stats)
+        YearInBloomWalkingRunningDistanceCard(stats: stats)
       }
       .padding()
     }

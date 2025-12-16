@@ -53,11 +53,12 @@ public extension YearInBloomWorkoutStats {
             zone3Minutes: 300,
             zone4Minutes: 150,
             zone5Minutes: 50
-          )
+          ),
+          totalDistanceMeters: 312000 // 312 km
         ),
         WorkoutTypeStats(
-          activityTypeRawValue: 46, // Swimming
-          activityName: "Swimming",
+          activityTypeRawValue: 37, // Running
+          activityName: "Running",
           count: 35,
           totalDurationMinutes: 2625,
           totalCaloriesBurned: 21000,
@@ -68,7 +69,40 @@ public extension YearInBloomWorkoutStats {
             zone3Minutes: 250,
             zone4Minutes: 100,
             zone5Minutes: 30
-          )
+          ),
+          totalDistanceMeters: 245000 // 245 km
+        ),
+        WorkoutTypeStats(
+          activityTypeRawValue: 13, // Cycling
+          activityName: "Cycling",
+          count: 20,
+          totalDurationMinutes: 1800,
+          totalCaloriesBurned: 12000,
+          percentage: 19,
+          zoneMinutes: ZoneMinutesBreakdown(
+            zone1Minutes: 100,
+            zone2Minutes: 200,
+            zone3Minutes: 150,
+            zone4Minutes: 80,
+            zone5Minutes: 20
+          ),
+          totalDistanceMeters: 520000 // 520 km
+        ),
+        WorkoutTypeStats(
+          activityTypeRawValue: 24, // Hiking
+          activityName: "Hiking",
+          count: 15,
+          totalDurationMinutes: 1200,
+          totalCaloriesBurned: 9000,
+          percentage: 12,
+          zoneMinutes: ZoneMinutesBreakdown(
+            zone1Minutes: 80,
+            zone2Minutes: 160,
+            zone3Minutes: 120,
+            zone4Minutes: 60,
+            zone5Minutes: 15
+          ),
+          totalDistanceMeters: 85000 // 85 km
         ),
         WorkoutTypeStats(
           activityTypeRawValue: 50, // Yoga
@@ -76,7 +110,7 @@ public extension YearInBloomWorkoutStats {
           count: 40,
           totalDurationMinutes: 2400,
           totalCaloriesBurned: 16000,
-          percentage: 25,
+          percentage: 8,
           zoneMinutes: ZoneMinutesBreakdown(
             zone1Minutes: 100,
             zone2Minutes: 200,
@@ -84,6 +118,7 @@ public extension YearInBloomWorkoutStats {
             zone4Minutes: 80,
             zone5Minutes: 20
           )
+          // No distance for Yoga
         )
       ],
       longestStreak: StreakInfo(

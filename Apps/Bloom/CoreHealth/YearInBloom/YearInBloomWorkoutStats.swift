@@ -123,6 +123,7 @@ public struct WorkoutTypeStats: Sendable, Codable, Hashable, Identifiable {
   public let totalCaloriesBurned: Double
   public let percentage: Double // of total duration
   public let zoneMinutes: ZoneMinutesBreakdown?
+  public let totalDistanceMeters: Double?
 
   public init(
     activityTypeRawValue: UInt,
@@ -131,7 +132,8 @@ public struct WorkoutTypeStats: Sendable, Codable, Hashable, Identifiable {
     totalDurationMinutes: Double,
     totalCaloriesBurned: Double,
     percentage: Double,
-    zoneMinutes: ZoneMinutesBreakdown? = nil
+    zoneMinutes: ZoneMinutesBreakdown? = nil,
+    totalDistanceMeters: Double? = nil
   ) {
     self.activityTypeRawValue = activityTypeRawValue
     self.activityName = activityName
@@ -140,6 +142,7 @@ public struct WorkoutTypeStats: Sendable, Codable, Hashable, Identifiable {
     self.totalCaloriesBurned = totalCaloriesBurned
     self.percentage = percentage
     self.zoneMinutes = zoneMinutes
+    self.totalDistanceMeters = totalDistanceMeters
   }
 
   public var activityType: HKWorkoutActivityType {
@@ -276,6 +279,18 @@ public extension YearInBloomWorkoutStats {
   /// Peak month by calories
   var peakMonthByCalories: MonthlyWorkoutStats? {
     monthlyStats.max { $0.totalCaloriesBurned < $1.totalCaloriesBurned }
+  }
+
+  /// Workout types that have distance data, sorted by distance (highest first)
+  var workoutTypesByDistance: [WorkoutTypeStats] {
+    topWorkoutTypes
+      .filter { $0.totalDistanceMeters != nil && $0.totalDistanceMeters! > 0 }
+      .sorted { ($0.totalDistanceMeters ?? 0) > ($1.totalDistanceMeters ?? 0) }
+  }
+
+  /// Total distance across all workout types in meters
+  var totalDistanceMeters: Double {
+    topWorkoutTypes.compactMap(\.totalDistanceMeters).reduce(0, +)
   }
 
   /// Monthly zone minutes for charting (with scaled values)
