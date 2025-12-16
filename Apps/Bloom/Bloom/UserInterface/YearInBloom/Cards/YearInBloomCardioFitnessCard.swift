@@ -17,7 +17,9 @@ struct YearInBloomCardioFitnessCard: View {
       title: "Cardio Fitness",
       focusStat: stats.currentCardioFitnessLevel?.name ?? "Unknown",
       focusStatLabel: formattedLatestVO2Max,
-      includeDivider: false
+      includeDivider: false,
+      foregroundFill: .white,
+      backgroundFill: .black
     ) {
       vo2MaxChart
     }
@@ -33,21 +35,36 @@ private extension YearInBloomCardioFitnessCard {
       // Threshold indicators (only show if within visible range)
       if let thresholds = vo2MaxThresholds {
         if thresholds.2 >= minVO2Max && thresholds.2 <= maxVO2Max {
-          RuleMark(y: .value("Low", thresholds.2))
-            .foregroundStyle(HeartHealthMonthlySummary.CardioFitnessLevel.belowAverage.color.opacity(0.5))
+          RuleMark(y: .value(HeartHealthMonthlySummary.CardioFitnessLevel.belowAverage.name, thresholds.2))
+            .foregroundStyle(HeartHealthMonthlySummary.CardioFitnessLevel.belowAverage.color)
             .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 4]))
+            .annotation(position: .top, alignment: .leading) {
+              Text(HeartHealthMonthlySummary.CardioFitnessLevel.belowAverage.name)
+                .font(.caption2)
+                .foregroundStyle(HeartHealthMonthlySummary.CardioFitnessLevel.belowAverage.color)
+            }
         }
 
         if thresholds.1 >= minVO2Max && thresholds.1 <= maxVO2Max {
-          RuleMark(y: .value("Below Average", thresholds.1))
-            .foregroundStyle(HeartHealthMonthlySummary.CardioFitnessLevel.aboveAverage.color.opacity(0.5))
+          RuleMark(y: .value(HeartHealthMonthlySummary.CardioFitnessLevel.aboveAverage.name, thresholds.1))
+            .foregroundStyle(HeartHealthMonthlySummary.CardioFitnessLevel.aboveAverage.color)
             .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 4]))
+            .annotation(position: .top, alignment: .leading) {
+              Text(HeartHealthMonthlySummary.CardioFitnessLevel.aboveAverage.name)
+                .font(.caption2)
+                .foregroundStyle(HeartHealthMonthlySummary.CardioFitnessLevel.aboveAverage.color)
+            }
         }
 
         if thresholds.0 >= minVO2Max && thresholds.0 <= maxVO2Max {
-          RuleMark(y: .value("Above Average", thresholds.0))
-            .foregroundStyle(HeartHealthMonthlySummary.CardioFitnessLevel.high.color.opacity(0.5))
+          RuleMark(y: .value(HeartHealthMonthlySummary.CardioFitnessLevel.high.name, thresholds.0))
+            .foregroundStyle(HeartHealthMonthlySummary.CardioFitnessLevel.high.color)
             .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 4]))
+            .annotation(position: .top, alignment: .leading) {
+              Text(HeartHealthMonthlySummary.CardioFitnessLevel.high.name)
+                .font(.caption2)
+                .foregroundStyle(HeartHealthMonthlySummary.CardioFitnessLevel.high.color)
+            }
         }
       }
 
@@ -56,7 +73,7 @@ private extension YearInBloomCardioFitnessCard {
           x: .value("Month", data.date, unit: .month),
           y: .value("VO2 Max", data.averageVO2Max ?? 0)
         )
-        .foregroundStyle(colorForLevel(data.cardioFitnessLevel))
+        .foregroundStyle(yearlyAverageColor)
         .interpolationMethod(.catmullRom)
         .lineStyle(StrokeStyle(lineWidth: 2))
 
@@ -66,8 +83,8 @@ private extension YearInBloomCardioFitnessCard {
         )
         .symbol {
           Circle()
-            .strokeBorder(colorForLevel(data.cardioFitnessLevel), lineWidth: 2)
-            .background(Circle().fill(.background))
+            .strokeBorder(yearlyAverageColor, lineWidth: 2)
+            .background(Circle().fill(.black))
             .frame(width: 8, height: 8)
         }
       }
@@ -77,11 +94,13 @@ private extension YearInBloomCardioFitnessCard {
     .chartXAxis {
       AxisMarks(values: .stride(by: .month)) { _ in
         AxisValueLabel(format: .dateTime.month(.narrow), centered: true)
+          .foregroundStyle(.secondary)
       }
     }
     .chartYAxis {
       AxisMarks(values: [minVO2Max, (minVO2Max + maxVO2Max) / 2, maxVO2Max]) { value in
         AxisGridLine()
+          .foregroundStyle(.secondary)
         if let doubleValue = value.as(Double.self) {
           AxisValueLabel {
             Text("\(Int(doubleValue))")
@@ -91,6 +110,8 @@ private extension YearInBloomCardioFitnessCard {
     }
     .chartLegend(.hidden)
     .frame(height: 200)
+    .foregroundStyle(.white)
+    .environment(\.colorScheme, .dark)
   }
 
   var monthlyDataWithValues: [MonthlyVO2MaxData] {
@@ -119,8 +140,18 @@ private extension YearInBloomCardioFitnessCard {
     HealthGoalProvider.shared.goalVO2MaxForUser()
   }
 
-  func colorForLevel(_ level: HeartHealthMonthlySummary.CardioFitnessLevel?) -> Color {
-    guard let level else { return .mutedRed }
+  var yearlyAverageColor: Color {
+    let values = monthlyDataWithValues.compactMap(\.averageVO2Max)
+    guard !values.isEmpty else { return .white }
+    let average = values.reduce(0, +) / Double(values.count)
+
+    guard let thresholds = vo2MaxThresholds else { return .white }
+    let level: HeartHealthMonthlySummary.CardioFitnessLevel
+    if average < thresholds.2 { level = .low }
+    else if average < thresholds.1 { level = .belowAverage }
+    else if average < thresholds.0 { level = .aboveAverage }
+    else { level = .high }
+
     return level.color
   }
 }
