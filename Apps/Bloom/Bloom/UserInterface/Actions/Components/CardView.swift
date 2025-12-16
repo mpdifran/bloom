@@ -14,7 +14,7 @@ struct CardView<Content>: View where Content: View {
   @Environment(ThemeController.self) private var themeController
 
   init(
-    cornerRadius: CGFloat = 30,
+    cornerRadius: CGFloat = 60,
     @ViewBuilder contentBuilder: @escaping () -> Content
   ) {
     self.cornerRadius = cornerRadius

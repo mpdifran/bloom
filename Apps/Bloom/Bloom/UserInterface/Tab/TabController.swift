@@ -18,6 +18,7 @@ enum Tab: CaseIterable, Identifiable {
   case today
   case nutrition
   case vitals
+  case trends
   case workouts
 }
 
@@ -31,6 +32,8 @@ extension Tab {
       "You"
     case .nutrition:
       "Nutrition"
+    case .trends:
+      "Trends"
     case .workouts:
       "Workouts"
     }
@@ -44,6 +47,8 @@ extension Tab {
       Image(systemSymbol: .figure)
     case .nutrition:
       Image(.nutritionTab)
+    case .trends:
+      Image(systemSymbol: .chartLineUptrendXyaxis)
     case .workouts:
       Image(.workoutsTab)
     }

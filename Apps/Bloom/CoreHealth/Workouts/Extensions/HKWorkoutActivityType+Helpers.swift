@@ -270,9 +270,9 @@ public extension HKWorkoutActivityType {
     case .underwaterDiving:
       "water.waves.and.arrow.down"
     case .other:
-      "figure.run"
+      "chevron.right.2"
     @unknown default:
-      "figure.run"
+      "chevron.right.2"
     }
   }
 }

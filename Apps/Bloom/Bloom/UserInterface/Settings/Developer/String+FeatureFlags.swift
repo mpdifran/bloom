@@ -14,6 +14,7 @@ extension String {
     static let enableOpenAIModelOverride = "FeatureFlag.enableOpenAIModelOverride"
     static let mockMagicScanner = "FeatureFlag.mockMagicScanner"
     static let reEngagementTestMode = "FeatureFlag.reEngagementTestMode"
+    static let showTrendsTab = "FeatureFlag.showTrendsTab"
   }
   
   enum ExperimentOverrideKey {

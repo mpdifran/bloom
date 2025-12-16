@@ -24,6 +24,8 @@ struct BloomTabView: View {
           NutritionView()
         case .vitals:
           VitalsView()
+        case .trends:
+          TrendsView()
         case .workouts:
           WorkoutsTabView()
         }
