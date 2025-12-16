@@ -21,6 +21,7 @@ struct YearInBloomCard<FS, BS, Content>: View where FS: ShapeStyle, BS: ShapeSty
   let focusStat: String
   let focusStatLabel: String
   let includePadding: Bool
+  let includeDivider: Bool
   let foregroundFill: FS
   let backgroundFill: BS
   let content: () -> Content
@@ -30,6 +31,7 @@ struct YearInBloomCard<FS, BS, Content>: View where FS: ShapeStyle, BS: ShapeSty
     focusStat: String,
     focusStatLabel: String,
     includePadding: Bool = true,
+    includeDivider: Bool = true,
     foregroundFill: FS = ForegroundStyle.foreground,
     backgroundFill: BS = BackgroundStyle.background,
     @ViewBuilder content: @escaping () -> Content
@@ -38,6 +40,7 @@ struct YearInBloomCard<FS, BS, Content>: View where FS: ShapeStyle, BS: ShapeSty
     self.focusStat = focusStat
     self.focusStatLabel = focusStatLabel
     self.includePadding = includePadding
+    self.includeDivider = includeDivider
     self.foregroundFill = foregroundFill
     self.backgroundFill = backgroundFill
     self.content = content
@@ -45,22 +48,23 @@ struct YearInBloomCard<FS, BS, Content>: View where FS: ShapeStyle, BS: ShapeSty
 
   var body: some View {
     VStack {
-      VStack(alignment: .leading) {
-        HStack {
+      HStack {
+        VStack(alignment: .leading) {
           Text(title)
-          Spacer()
-        }
-        .font(.caption)
-        .bold()
-        .foregroundStyle(foregroundFill)
-
-        VStack(alignment: .leading, spacing: 0) {
-          Text(focusStat)
-            .font(.system(size: 40))
-          Text(focusStatLabel.uppercased())
             .font(.caption)
+            .bold()
+            .foregroundStyle(foregroundFill)
+
+          VStack(alignment: .leading, spacing: 0) {
+            Text(focusStat)
+              .font(.system(size: 40))
+            Text(focusStatLabel.uppercased())
+              .font(.caption)
+          }
+          .fontWeight(.heavy)
         }
-        .fontWeight(.heavy)
+
+        Spacer()
       }
       .foregroundStyle(foregroundFill)
       .fontDesign(.rounded)
@@ -68,7 +72,9 @@ struct YearInBloomCard<FS, BS, Content>: View where FS: ShapeStyle, BS: ShapeSty
         $0.padding()
       }
 
-      Divider()
+      if includeDivider {
+        Divider()
+      }
 
       content()
     }
@@ -85,6 +91,16 @@ struct YearInBloomCard<FS, BS, Content>: View where FS: ShapeStyle, BS: ShapeSty
         focusStatLabel: "Zone Minutes",
         foregroundFill: .black,
         backgroundFill: .mutedPink) {
+          Text("Hello World")
+            .frame(height: 160)
+        }
+
+      YearInBloomCard(
+        title: "vO2 Max",
+        focusStat: "38.1",
+        focusStatLabel: "ML/KG/min",
+        foregroundFill: .mutedRed,
+        backgroundFill: .black) {
           Text("Hello World")
             .frame(height: 160)
         }

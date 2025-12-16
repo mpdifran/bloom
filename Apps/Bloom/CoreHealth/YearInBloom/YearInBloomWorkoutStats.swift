@@ -17,6 +17,7 @@ public struct YearInBloomWorkoutStats: Sendable, Codable, Hashable {
   public let topWorkoutTypes: [WorkoutTypeStats]
   public let longestStreak: StreakInfo
   public let bestMonth: MonthlyWorkoutStats?
+  public let monthlyVO2Max: [MonthlyVO2MaxData]
   public let generatedDate: Date
 
   public init(
@@ -26,6 +27,7 @@ public struct YearInBloomWorkoutStats: Sendable, Codable, Hashable {
     topWorkoutTypes: [WorkoutTypeStats],
     longestStreak: StreakInfo,
     bestMonth: MonthlyWorkoutStats?,
+    monthlyVO2Max: [MonthlyVO2MaxData] = [],
     generatedDate: Date
   ) {
     self.year = year
@@ -34,6 +36,7 @@ public struct YearInBloomWorkoutStats: Sendable, Codable, Hashable {
     self.topWorkoutTypes = topWorkoutTypes
     self.longestStreak = longestStreak
     self.bestMonth = bestMonth
+    self.monthlyVO2Max = monthlyVO2Max
     self.generatedDate = generatedDate
   }
 }
@@ -232,6 +235,28 @@ public struct ZoneMinutesBreakdown: Sendable, Codable, Hashable {
   }
 }
 
+// MARK: - Monthly VO2 Max Data
+
+public struct MonthlyVO2MaxData: Identifiable, Sendable, Codable, Hashable {
+  public var id: Date { date }
+  public let date: Date
+  public let averageVO2Max: Double? // ml/kg/min
+
+  public init(date: Date, averageVO2Max: Double?) {
+    self.date = date
+    self.averageVO2Max = averageVO2Max
+  }
+
+  public var cardioFitnessLevel: HeartHealthMonthlySummary.CardioFitnessLevel? {
+    guard let vo2Max = averageVO2Max,
+          let goal = HealthGoalProvider.shared.goalVO2MaxForUser() else { return nil }
+    if vo2Max < goal.2 { return .low }
+    else if vo2Max < goal.1 { return .belowAverage }
+    else if vo2Max < goal.0 { return .aboveAverage }
+    else { return .high }
+  }
+}
+
 // MARK: - Chart Data Helpers
 
 public extension YearInBloomWorkoutStats {
@@ -291,6 +316,16 @@ public extension YearInBloomWorkoutStats {
   /// Total distance across all workout types in meters
   var totalDistanceMeters: Double {
     topWorkoutTypes.compactMap(\.totalDistanceMeters).reduce(0, +)
+  }
+
+  /// Latest VO2 max value from months with data
+  var latestVO2Max: Double? {
+    monthlyVO2Max.last(where: { $0.averageVO2Max != nil })?.averageVO2Max
+  }
+
+  /// Current cardio fitness level based on latest VO2 max
+  var currentCardioFitnessLevel: HeartHealthMonthlySummary.CardioFitnessLevel? {
+    monthlyVO2Max.last(where: { $0.averageVO2Max != nil })?.cardioFitnessLevel
   }
 
   /// Monthly zone minutes for charting (with scaled values)

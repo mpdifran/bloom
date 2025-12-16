@@ -109,6 +109,14 @@ private extension YearInBloomCalculator {
     // Find best month by duration
     let bestMonth = monthlyStats.max { $0.totalDurationMinutes < $1.totalDurationMinutes }
 
+    // Fetch VO2 max data for the year
+    let vo2MaxSamples = await HealthStoreFetcher.shared.fetchCollatedAverage(
+      quantityType: .vo2Max,
+      unit: .vo2Max(),
+      dateRange: dateRange
+    )
+    let monthlyVO2Max = calculateMonthlyVO2Max(samples: vo2MaxSamples, year: year)
+
     return YearInBloomWorkoutStats(
       year: year,
       monthlyStats: monthlyStats,
@@ -116,6 +124,7 @@ private extension YearInBloomCalculator {
       topWorkoutTypes: topWorkoutTypes,
       longestStreak: longestStreak,
       bestMonth: bestMonth,
+      monthlyVO2Max: monthlyVO2Max,
       generatedDate: .now
     )
   }
@@ -258,6 +267,26 @@ private extension YearInBloomCalculator {
       streakStartDate: longestStart,
       streakEndDate: longestEnd
     )
+  }
+
+  func calculateMonthlyVO2Max(samples: [DateQuantitySample], year: Int) -> [MonthlyVO2MaxData] {
+    let calendar = Calendar.current
+    let samplesByMonth = Dictionary(grouping: samples) { sample in
+      calendar.component(.month, from: sample.date)
+    }
+
+    return (1...12).map { (month: Int) -> MonthlyVO2MaxData in
+      let date = calendar.date(from: DateComponents(year: year, month: month, day: 15))!
+      let monthSamples = samplesByMonth[month] ?? []
+      let average: Double?
+      if monthSamples.isEmpty {
+        average = nil
+      } else {
+        let sum = monthSamples.map { $0.quantity.doubleValue(for: .vo2Max()) }.reduce(0.0, +)
+        average = sum / Double(monthSamples.count)
+      }
+      return MonthlyVO2MaxData(date: date, averageVO2Max: average)
+    }
   }
 }
 

@@ -70,7 +70,7 @@ extension TrendsView {
   func gradientColors(for year: Int) -> [Color] {
     switch year {
     case 2025:
-      [.green, .teal, .mint]
+      [.mutedLightBlue, .green, .mint]
     default:
       [.green, .teal, .mint]
     }

@@ -29,6 +29,22 @@ public extension YearInBloomWorkoutStats {
 
     let totalZones = monthlyStats.compactMap(\.zoneMinutes).reduce(ZoneMinutesBreakdown.zero, +)
 
+    // Monthly VO2 max data with variation (values in ml/kg/min)
+    let monthlyVO2Max = [
+      MonthlyVO2MaxData(date: Calendar.current.date(from: DateComponents(year: 2024, month: 1, day: 15))!, averageVO2Max: 38.5),
+      MonthlyVO2MaxData(date: Calendar.current.date(from: DateComponents(year: 2024, month: 2, day: 15))!, averageVO2Max: 39.2),
+      MonthlyVO2MaxData(date: Calendar.current.date(from: DateComponents(year: 2024, month: 3, day: 15))!, averageVO2Max: 40.1),
+      MonthlyVO2MaxData(date: Calendar.current.date(from: DateComponents(year: 2024, month: 4, day: 15))!, averageVO2Max: 41.5),
+      MonthlyVO2MaxData(date: Calendar.current.date(from: DateComponents(year: 2024, month: 5, day: 15))!, averageVO2Max: 42.8),
+      MonthlyVO2MaxData(date: Calendar.current.date(from: DateComponents(year: 2024, month: 6, day: 15))!, averageVO2Max: 44.2),
+      MonthlyVO2MaxData(date: Calendar.current.date(from: DateComponents(year: 2024, month: 7, day: 15))!, averageVO2Max: 45.0),
+      MonthlyVO2MaxData(date: Calendar.current.date(from: DateComponents(year: 2024, month: 8, day: 15))!, averageVO2Max: 44.5),
+      MonthlyVO2MaxData(date: Calendar.current.date(from: DateComponents(year: 2024, month: 9, day: 15))!, averageVO2Max: 43.8),
+      MonthlyVO2MaxData(date: Calendar.current.date(from: DateComponents(year: 2024, month: 10, day: 15))!, averageVO2Max: 42.5),
+      MonthlyVO2MaxData(date: Calendar.current.date(from: DateComponents(year: 2024, month: 11, day: 15))!, averageVO2Max: 41.2),
+      MonthlyVO2MaxData(date: Calendar.current.date(from: DateComponents(year: 2024, month: 12, day: 15))!, averageVO2Max: 40.0)
+    ]
+
     return YearInBloomWorkoutStats(
       year: 2024,
       monthlyStats: monthlyStats,
@@ -127,6 +143,7 @@ public extension YearInBloomWorkoutStats {
         streakEndDate: Calendar.current.date(from: DateComponents(year: 2024, month: 6, day: 14))
       ),
       bestMonth: monthlyStats.max { $0.totalDurationMinutes < $1.totalDurationMinutes },
+      monthlyVO2Max: monthlyVO2Max,
       generatedDate: .now
     )
   }

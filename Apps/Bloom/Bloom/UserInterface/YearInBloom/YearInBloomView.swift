@@ -76,7 +76,7 @@ private extension YearInBloomView {
       backgroundGradient
         .aspectRatio(1, contentMode: .fill)
         .rotationEffect(.degrees(rotation))
-        .scaleEffect(1.5)
+        .scaleEffect(1.1)
     }
     .overlay {
       Rectangle()
@@ -96,15 +96,15 @@ private extension YearInBloomView {
         [0.0, 1.0], [0.75, 1.0], [1.0, 1.0]
       ],
       colors: [
-        gradientColors[0],                                      // top-left: solid color
-        gradientColors[1 % gradientColors.count].opacity(0.7),  // top-center: semi-transparent
-        gradientColors[2 % gradientColors.count],               // top-right: solid
-        .clear,                                                 // middle-left: clear
-        gradientColors[0].opacity(0.8),                         // center: semi-transparent
-        gradientColors[1 % gradientColors.count],               // middle-right: solid
-        .clear,                                                 // bottom-left: clear
-        gradientColors[2 % gradientColors.count].opacity(0.6),  // bottom-center: semi-transparent
-        gradientColors[0]                                       // bottom-right: solid
+        gradientColors[0],
+        gradientColors[1 % gradientColors.count].opacity(0.4),
+        .clear,
+        .clear,
+        gradientColors[2 % gradientColors.count].opacity(0.5),
+        gradientColors[1 % gradientColors.count],
+        .clear,
+        gradientColors[2 % gradientColors.count].opacity(0.3),
+        .clear
       ]
     )
   }
@@ -114,6 +114,7 @@ private extension YearInBloomView {
       VStack {
         YearInBloomExerciseEffectivenessCard(stats: stats)
         YearInBloomWalkingRunningDistanceCard(stats: stats)
+        YearInBloomCardioFitnessCard(stats: stats)
       }
       .padding()
     }
