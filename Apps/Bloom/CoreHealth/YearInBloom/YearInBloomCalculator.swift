@@ -15,6 +15,7 @@ public final actor YearInBloomCalculator {
   @AsyncStreamable public var workoutStats: YearInBloomWorkoutStats?
   @AsyncStreamable public var sleepStats: YearInBloomSleepStats?
   @AsyncStreamable public var menstrualStats: YearInBloomMenstrualStats?
+  @AsyncStreamable public var heartHealthStats: YearInBloomHeartHealthStats?
   @AsyncStreamable public var isCalculating: Bool = false
 
   private init() { }
@@ -61,6 +62,16 @@ public extension YearInBloomCalculator {
     }
 
     menstrualStats = stats
+  }
+
+  /// Compile heart health stats for the given year
+  func compileHeartHealth(for year: Int) async {
+    guard let stats = await calculateHeartHealthStats(for: year) else {
+      heartHealthStats = nil
+      return
+    }
+
+    heartHealthStats = stats
   }
 }
 
@@ -722,6 +733,103 @@ private extension YearInBloomCalculator {
 
     guard efficiencies.isNotEmpty else { return nil }
     return efficiencies.reduce(0, +) / Double(efficiencies.count)
+  }
+
+  // MARK: - Heart Health Stats Calculation
+
+  func calculateHeartHealthStats(for year: Int) async -> YearInBloomHeartHealthStats? {
+    let currentYear = Calendar.current.component(.year, from: .now)
+    let yearsFromNow = currentYear - year
+    let dateRange = DateRange.specificYear(yearsFromNow)
+    let calendar = Calendar.current
+
+    // Fetch resting heart rate data
+    let restingHRSamples = await HealthStoreFetcher.shared.fetchCollatedAverage(
+      quantityType: .restingHeartRate,
+      unit: .bpm(),
+      interval: DateComponents(day: 1),
+      dateRange: dateRange
+    )
+
+    // Fetch workout heart rate reports for max HR
+    let workoutReports = await HealthStoreFetcher.shared.fetchWorkoutHeartRateReports(dateRange: dateRange)
+
+    // Fetch HRV data
+    let hrvSamples = await HealthStoreFetcher.shared.fetchCollatedAverage(
+      quantityType: .heartRateVariabilitySDNN,
+      unit: .secondUnit(with: .milli),
+      interval: DateComponents(day: 1),
+      dateRange: dateRange
+    )
+
+    // Group data by month
+    let restingHRByMonth = Dictionary(grouping: restingHRSamples) { sample in
+      calendar.component(.month, from: sample.date)
+    }
+    let workoutReportsByMonth = Dictionary(grouping: workoutReports) { report in
+      calendar.component(.month, from: report.workout.startDate)
+    }
+    let hrvByMonth = Dictionary(grouping: hrvSamples) { sample in
+      calendar.component(.month, from: sample.date)
+    }
+
+    // Calculate monthly heart rate data
+    var monthlyHeartRateData = [MonthlyHeartRateData]()
+    var monthlyHRVData = [MonthlyHRVData]()
+
+    for month in 1...12 {
+      let date = calendar.date(from: DateComponents(year: year, month: month, day: 15))!
+
+      // Calculate average resting HR for the month
+      let monthRestingHRSamples = restingHRByMonth[month] ?? []
+      let averageRestingHR: Double?
+      if monthRestingHRSamples.isNotEmpty {
+        let sum = monthRestingHRSamples.reduce(0.0) { $0 + $1.quantity.doubleValue(for: .bpm()) }
+        averageRestingHR = sum / Double(monthRestingHRSamples.count)
+      } else {
+        averageRestingHR = nil
+      }
+
+      // Calculate max HR from workout reports for the month
+      let monthWorkoutReports = workoutReportsByMonth[month] ?? []
+      let maxHRValues = monthWorkoutReports.compactMap(\.maxHeartRate)
+      let averageMaxHR: Double? = maxHRValues.isNotEmpty ? maxHRValues.max() : nil
+
+      monthlyHeartRateData.append(MonthlyHeartRateData(
+        date: date,
+        averageRestingHR: averageRestingHR,
+        averageMaxHR: averageMaxHR
+      ))
+
+      // Calculate average HRV for the month
+      let monthHRVSamples = hrvByMonth[month] ?? []
+      let averageHRV: Double?
+      if monthHRVSamples.isNotEmpty {
+        let sum = monthHRVSamples.reduce(0.0) { $0 + $1.quantity.doubleValue(for: .secondUnit(with: .milli)) }
+        averageHRV = sum / Double(monthHRVSamples.count)
+      } else {
+        averageHRV = nil
+      }
+
+      monthlyHRVData.append(MonthlyHRVData(date: date, averageHRV: averageHRV))
+    }
+
+    // Calculate yearly average resting HR
+    let allRestingHRValues = restingHRSamples.map { $0.quantity.doubleValue(for: .bpm()) }
+    let yearlyAverageRestingHR: Double? = allRestingHRValues.isNotEmpty
+      ? allRestingHRValues.reduce(0, +) / Double(allRestingHRValues.count)
+      : nil
+
+    // Only return stats if we have some data
+    guard restingHRSamples.isNotEmpty || hrvSamples.isNotEmpty else { return nil }
+
+    return YearInBloomHeartHealthStats(
+      year: year,
+      monthlyHeartRateData: monthlyHeartRateData,
+      monthlyHRVData: monthlyHRVData,
+      yearlyAverageRestingHR: yearlyAverageRestingHR,
+      generatedDate: .now
+    )
   }
 }
 

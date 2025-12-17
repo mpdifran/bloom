@@ -123,6 +123,10 @@ private extension YearInBloomView {
         if let menstrualStats = viewModel.menstrualStats {
           YearInBloomMenstrualCycleCard(stats: menstrualStats)
         }
+
+        if let heartHealthStats = viewModel.heartHealthStats {
+          YearInBloomHeartHealthCard(stats: heartHealthStats)
+        }
       }
       .padding()
     }
