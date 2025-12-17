@@ -15,6 +15,7 @@ struct YearInBloomExerciseEffectivenessCard: View {
   let stats: YearInBloomWorkoutStats
 
   @State private var selectedMonth: MonthlyZoneMinutesData?
+  @State private var rawSelectedDate: Date?
   @State private var selectedWorkoutType: WorkoutTypeStats?
   @State private var showAllWorkoutTypes = false
 
@@ -103,24 +104,9 @@ private extension YearInBloomExerciseEffectivenessCard {
       }
       .chartYAxis(.hidden)
       .chartLegend(.hidden)
+      .chartXSelection(value: $rawSelectedDate)
       .chartOverlay { proxy in
-        GeometryReader { geometry in
-          Rectangle()
-            .fill(.clear)
-            .contentShape(Rectangle())
-            .gesture(
-              DragGesture(minimumDistance: 0)
-                .onChanged { value in
-                  let xPosition = value.location.x
-                  if let date: Date = proxy.value(atX: xPosition) {
-                    selectedMonth = findNearestMonth(to: date)
-                  }
-                }
-                .onEnded { _ in
-                  selectedMonth = nil
-                }
-            )
-
+        GeometryReader { _ in
           // Annotation overlay
           if let selected = selectedMonth,
              let xPosition = proxy.position(forX: selected.date) {
@@ -137,6 +123,13 @@ private extension YearInBloomExerciseEffectivenessCard {
         }
       }
       .frame(height: 140)
+      .onChange(of: rawSelectedDate) { _, newValue in
+        if let date = newValue {
+          selectedMonth = findNearestMonth(to: date)
+        } else {
+          selectedMonth = nil
+        }
+      }
     }
   }
 

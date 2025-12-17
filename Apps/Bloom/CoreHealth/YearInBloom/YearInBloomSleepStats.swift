@@ -114,6 +114,10 @@ public struct SleepScoreExtreme: Sendable, Codable, Hashable {
     self.month = month
   }
 
+  public var isPerfect: Bool {
+    score >= 100
+  }
+
   public var shortMonthName: String {
     let formatter = DateFormatter()
     formatter.dateFormat = "MMM"
@@ -215,10 +219,20 @@ public struct MonthlySleepStageChartData: Identifiable, Sendable, Equatable {
   public var remPercentDisplay: Int { Int(remPercent * 100) }
   public var awakePercentDisplay: Int { Int(awakePercent * 100) }
 
-  public var coreMinutesDisplay: Int { Int(coreMinutes) }
-  public var deepMinutesDisplay: Int { Int(deepMinutes) }
-  public var remMinutesDisplay: Int { Int(remMinutes) }
-  public var awakeMinutesDisplay: Int { Int(awakeMinutes) }
+  public var coreMinutesDisplay: String { Self.formatDuration(coreMinutes) }
+  public var deepMinutesDisplay: String { Self.formatDuration(deepMinutes) }
+  public var remMinutesDisplay: String { Self.formatDuration(remMinutes) }
+  public var awakeMinutesDisplay: String { Self.formatDuration(awakeMinutes) }
+
+  private static func formatDuration(_ minutes: Double) -> String {
+    let hours = Int(minutes) / 60
+    let mins = Int(minutes) % 60
+    if hours > 0 {
+      return "\(hours)h \(mins)m"
+    } else {
+      return "\(mins)m"
+    }
+  }
 }
 
 // MARK: - Sleep Stage Data Point (for stacked charts)
@@ -328,8 +342,8 @@ public extension YearInBloomSleepStats {
   func sleepStageDataPoints() -> [SleepStageDataPoint] {
     monthlySleepStageData().flatMap { month in
       [
-        SleepStageDataPoint(date: month.date, stage: .core, minutes: month.coreMinutes),
         SleepStageDataPoint(date: month.date, stage: .deep, minutes: month.deepMinutes),
+        SleepStageDataPoint(date: month.date, stage: .core, minutes: month.coreMinutes),
         SleepStageDataPoint(date: month.date, stage: .rem, minutes: month.remMinutes),
         SleepStageDataPoint(date: month.date, stage: .awake, minutes: month.awakeMinutes)
       ]
