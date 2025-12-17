@@ -20,7 +20,7 @@ struct YearInBloomExerciseEffectivenessCard: View {
 
   var body: some View {
     YearInBloomCard(
-      title: "Exercise Effectiveness",
+      title: "Heart Rate Zones",
       focusStat: totalScaledZoneMinutes.formatted(),
       focusStatLabel: "Zone Minutes",
       foregroundFill: .black,

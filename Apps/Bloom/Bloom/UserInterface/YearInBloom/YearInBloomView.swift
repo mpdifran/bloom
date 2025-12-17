@@ -111,10 +111,14 @@ private extension YearInBloomView {
 
   func contentView(stats: YearInBloomWorkoutStats) -> some View {
     ScrollView {
-      VStack {
+      VStack(spacing: 20) {
         YearInBloomExerciseEffectivenessCard(stats: stats)
         YearInBloomWalkingRunningDistanceCard(stats: stats)
         YearInBloomCardioFitnessCard(stats: stats)
+
+        if let sleepStats = viewModel.sleepStats {
+          YearInBloomSleepStagesCard(stats: sleepStats)
+        }
       }
       .padding()
     }

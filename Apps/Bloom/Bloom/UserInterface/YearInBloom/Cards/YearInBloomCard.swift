@@ -69,7 +69,8 @@ struct YearInBloomCard<FS, BS, Content>: View where FS: ShapeStyle, BS: ShapeSty
       .foregroundStyle(foregroundFill)
       .fontDesign(.rounded)
       .if(!includePadding) {
-        $0.padding()
+        $0.padding(.horizontal)
+          .padding(.top)
       }
 
       if includeDivider {

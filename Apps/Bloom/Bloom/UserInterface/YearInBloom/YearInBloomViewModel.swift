@@ -12,6 +12,7 @@ import CoreHealth
 @MainActor @Observable
 final class YearInBloomViewModel {
   var stats: YearInBloomWorkoutStats?
+  var sleepStats: YearInBloomSleepStats?
   var isLoading = false
   var error: Error?
 
@@ -25,10 +26,10 @@ final class YearInBloomViewModel {
     isLoading = true
     error = nil
 
-    do {
-      await YearInBloomCalculator.shared.compile(for: year)
-      stats = await YearInBloomCalculator.shared.workoutStats
-    }
+    await YearInBloomCalculator.shared.compile(for: year)
+    await YearInBloomCalculator.shared.compileSleep(for: year)
+    stats = await YearInBloomCalculator.shared.workoutStats
+    sleepStats = await YearInBloomCalculator.shared.sleepStats
 
     isLoading = false
   }
@@ -38,7 +39,9 @@ final class YearInBloomViewModel {
     error = nil
 
     await YearInBloomCalculator.shared.compile(for: year)
+    await YearInBloomCalculator.shared.compileSleep(for: year)
     stats = await YearInBloomCalculator.shared.workoutStats
+    sleepStats = await YearInBloomCalculator.shared.sleepStats
 
     isLoading = false
   }

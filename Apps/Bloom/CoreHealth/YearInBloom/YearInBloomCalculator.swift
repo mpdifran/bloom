@@ -13,6 +13,7 @@ public final actor YearInBloomCalculator {
   public static let shared = YearInBloomCalculator()
 
   @AsyncStreamable public var workoutStats: YearInBloomWorkoutStats?
+  @AsyncStreamable public var sleepStats: YearInBloomSleepStats?
   @AsyncStreamable public var isCalculating: Bool = false
 
   private init() { }
@@ -33,6 +34,16 @@ public extension YearInBloomCalculator {
     }
 
     workoutStats = stats
+  }
+
+  /// Compile sleep stats for the given year
+  func compileSleep(for year: Int) async {
+    guard let stats = await calculateSleepStats(for: year) else {
+      sleepStats = nil
+      return
+    }
+
+    sleepStats = stats
   }
 }
 
@@ -287,6 +298,133 @@ private extension YearInBloomCalculator {
       }
       return MonthlyVO2MaxData(date: date, averageVO2Max: average)
     }
+  }
+
+  func calculateSleepStats(for year: Int) async -> YearInBloomSleepStats? {
+    let currentYear = Calendar.current.component(.year, from: .now)
+    let yearsFromNow = currentYear - year
+    let dateRange = DateRange.specificYear(yearsFromNow)
+
+    // Fetch all sleep data for the year
+    let sleepAnalyses = await HealthStoreFetcher.shared.fetchSleepAnalysis(dateRange: dateRange)
+
+    // Filter to only include analyses with detailed sleep categories
+    let detailedAnalyses = sleepAnalyses.filter { $0.hasDetailedSleepCategories }
+
+    guard detailedAnalyses.isNotEmpty else { return nil }
+
+    // Group by month
+    let calendar = Calendar.current
+    let analysesByMonth = Dictionary(grouping: detailedAnalyses) { analysis in
+      calendar.component(.month, from: analysis.normalizedDate)
+    }
+
+    // Calculate monthly stats for all 12 months
+    var monthlySleepStats = [MonthlySleepStats]()
+
+    for month in 1...12 {
+      let monthAnalyses = analysesByMonth[month] ?? []
+
+      let stat: MonthlySleepStats
+      if monthAnalyses.isEmpty {
+        stat = MonthlySleepStats(
+          month: month,
+          sleepSessionCount: 0,
+          averageCoreSleepPercent: 0,
+          averageDeepSleepPercent: 0,
+          averageRemSleepPercent: 0,
+          averageAwakeSleepPercent: 0,
+          averageCoreSleepMinutes: 0,
+          averageDeepSleepMinutes: 0,
+          averageRemSleepMinutes: 0,
+          averageAwakeSleepMinutes: 0,
+          averageSleepDurationMinutes: 0,
+          averageSleepScore: 0,
+          averageBedtimeMinutes: 0,
+          averageWakeTimeMinutes: 0
+        )
+      } else {
+        // Calculate average bedtime (startDate) and wake time (endDate) as minutes from noon
+        let bedtimes = monthAnalyses.map { getMinutesFromNoon(from: $0.startDate) }
+        let wakeTimes = monthAnalyses.map { getMinutesFromNoon(from: $0.endDate) }
+        let avgBedtime = bedtimes.reduce(0, +) / Double(bedtimes.count)
+        let avgWakeTime = wakeTimes.reduce(0, +) / Double(wakeTimes.count)
+
+        stat = MonthlySleepStats(
+          month: month,
+          sleepSessionCount: monthAnalyses.count,
+          averageCoreSleepPercent: monthAnalyses.average(keyPath: \.coreSleepPercent),
+          averageDeepSleepPercent: monthAnalyses.average(keyPath: \.deepSleepPercent),
+          averageRemSleepPercent: monthAnalyses.average(keyPath: \.remSleepPercent),
+          averageAwakeSleepPercent: monthAnalyses.average(keyPath: \.awakeSleepPercent),
+          averageCoreSleepMinutes: monthAnalyses.average(keyPath: \.coreSleepMinutes),
+          averageDeepSleepMinutes: monthAnalyses.average(keyPath: \.deepSleepMinutes),
+          averageRemSleepMinutes: monthAnalyses.average(keyPath: \.remSleepMinutes),
+          averageAwakeSleepMinutes: monthAnalyses.average(keyPath: \.awakeSleepMinutes),
+          averageSleepDurationMinutes: monthAnalyses.average(keyPath: \.overallMinutes),
+          averageSleepScore: monthAnalyses.average(keyPath: \.overallScoreDouble),
+          averageBedtimeMinutes: avgBedtime,
+          averageWakeTimeMinutes: avgWakeTime
+        )
+      }
+      monthlySleepStats.append(stat)
+    }
+
+    // Calculate year totals
+    let yearTotals = SleepYearTotals(
+      totalSleepSessions: detailedAnalyses.count,
+      averageCoreSleepPercent: detailedAnalyses.average(keyPath: \.coreSleepPercent),
+      averageDeepSleepPercent: detailedAnalyses.average(keyPath: \.deepSleepPercent),
+      averageRemSleepPercent: detailedAnalyses.average(keyPath: \.remSleepPercent),
+      averageAwakeSleepPercent: detailedAnalyses.average(keyPath: \.awakeSleepPercent),
+      averageSleepDurationMinutes: detailedAnalyses.average(keyPath: \.overallMinutes),
+      averageSleepScore: detailedAnalyses.average(keyPath: \.overallScoreDouble)
+    )
+
+    // Find lowest individual sleep score (excluding 0)
+    let lowestAnalysis = detailedAnalyses
+      .filter { $0.overallScore > 0 }
+      .min { $0.overallScoreDouble < $1.overallScoreDouble }
+    let lowestSleepScore = lowestAnalysis.map { analysis in
+      SleepScoreExtreme(
+        score: analysis.overallScore,
+        month: calendar.component(.month, from: analysis.normalizedDate)
+      )
+    }
+
+    // Find highest individual sleep score
+    let highestAnalysis = detailedAnalyses
+      .max { $0.overallScoreDouble < $1.overallScoreDouble }
+    let highestSleepScore = highestAnalysis.map { analysis in
+      SleepScoreExtreme(
+        score: analysis.overallScore,
+        month: calendar.component(.month, from: analysis.normalizedDate)
+      )
+    }
+
+    return YearInBloomSleepStats(
+      year: year,
+      monthlySleepStats: monthlySleepStats,
+      yearTotals: yearTotals,
+      lowestSleepScore: lowestSleepScore,
+      highestSleepScore: highestSleepScore,
+      generatedDate: .now
+    )
+  }
+
+  /// Convert time to minutes from noon (0 = 12 PM, 720 = 12 AM, 1080 = 6 AM)
+  /// This avoids wraparound issues since sleep times naturally span evening to morning
+  func getMinutesFromNoon(from date: Date) -> Double {
+    let calendar = Calendar.current
+    let components = calendar.dateComponents([.hour, .minute], from: date)
+    let hours = Double(components.hour ?? 0)
+    let minutes = Double(components.minute ?? 0)
+    let minutesFromMidnight = hours * 60 + minutes
+    var minutesFromNoon = minutesFromMidnight - 720
+    if minutesFromNoon < 0 {
+      minutesFromNoon += 1440
+    }
+    return minutesFromNoon
   }
 }
 
