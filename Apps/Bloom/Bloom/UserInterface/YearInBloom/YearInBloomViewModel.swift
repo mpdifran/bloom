@@ -13,6 +13,7 @@ import CoreHealth
 final class YearInBloomViewModel {
   var stats: YearInBloomWorkoutStats?
   var sleepStats: YearInBloomSleepStats?
+  var menstrualStats: YearInBloomMenstrualStats?
   var isLoading = false
   var error: Error?
 
@@ -28,8 +29,10 @@ final class YearInBloomViewModel {
 
     await YearInBloomCalculator.shared.compile(for: year)
     await YearInBloomCalculator.shared.compileSleep(for: year)
+    await YearInBloomCalculator.shared.compileMenstrual(for: year)
     stats = await YearInBloomCalculator.shared.workoutStats
     sleepStats = await YearInBloomCalculator.shared.sleepStats
+    menstrualStats = await YearInBloomCalculator.shared.menstrualStats
 
     isLoading = false
   }
@@ -40,8 +43,10 @@ final class YearInBloomViewModel {
 
     await YearInBloomCalculator.shared.compile(for: year)
     await YearInBloomCalculator.shared.compileSleep(for: year)
+    await YearInBloomCalculator.shared.compileMenstrual(for: year)
     stats = await YearInBloomCalculator.shared.workoutStats
     sleepStats = await YearInBloomCalculator.shared.sleepStats
+    menstrualStats = await YearInBloomCalculator.shared.menstrualStats
 
     isLoading = false
   }

@@ -14,6 +14,7 @@ public final actor YearInBloomCalculator {
 
   @AsyncStreamable public var workoutStats: YearInBloomWorkoutStats?
   @AsyncStreamable public var sleepStats: YearInBloomSleepStats?
+  @AsyncStreamable public var menstrualStats: YearInBloomMenstrualStats?
   @AsyncStreamable public var isCalculating: Bool = false
 
   private init() { }
@@ -44,6 +45,22 @@ public extension YearInBloomCalculator {
     }
 
     sleepStats = stats
+  }
+
+  /// Compile menstrual cycle stats for the given year
+  func compileMenstrual(for year: Int) async {
+    // Don't compile for males
+    guard HealthDefaults.shared.getSexKind() != .male else {
+      menstrualStats = nil
+      return
+    }
+
+    guard let stats = await calculateMenstrualStats(for: year) else {
+      menstrualStats = nil
+      return
+    }
+
+    menstrualStats = stats
   }
 }
 
@@ -425,6 +442,286 @@ private extension YearInBloomCalculator {
       minutesFromNoon += 1440
     }
     return minutesFromNoon
+  }
+
+  // MARK: - Menstrual Stats Calculation
+
+  func calculateMenstrualStats(for year: Int) async -> YearInBloomMenstrualStats? {
+    let currentYear = Calendar.current.component(.year, from: .now)
+    let yearsFromNow = currentYear - year
+    let dateRange = DateRange.specificYear(yearsFromNow)
+
+    // Fetch menstrual cycles for the year
+    let cycles = await HealthStoreFetcher.shared.fetchMenstrualFlowSamples(dateRange: dateRange)
+
+    guard cycles.isNotEmpty else { return nil }
+
+    let calendar = Calendar.current
+
+    // Calculate cycle durations (days between consecutive cycle starts)
+    var cycleDurations: [(duration: Int, startDate: Date)] = []
+    let sortedCycles = cycles.sorted { $0.startDate < $1.startDate }
+
+    for i in 0..<(sortedCycles.count - 1) {
+      let currentCycle = sortedCycles[i]
+      let nextCycle = sortedCycles[i + 1]
+      if let days = calendar.dateComponents([.day], from: currentCycle.startDate, to: nextCycle.startDate).day {
+        // Only count reasonable cycle lengths (21-45 days)
+        if days >= 21 && days <= 45 {
+          cycleDurations.append((duration: days, startDate: currentCycle.startDate))
+        }
+      }
+    }
+
+    guard cycleDurations.isNotEmpty else { return nil }
+
+    // Calculate average, shortest, longest
+    let averageDuration = Double(cycleDurations.map(\.duration).reduce(0, +)) / Double(cycleDurations.count)
+    let shortest = cycleDurations.min { $0.duration < $1.duration }
+    let longest = cycleDurations.max { $0.duration < $1.duration }
+
+    // Calculate phase-based metrics
+    let phaseMetrics = await calculatePhaseMetrics(cycles: sortedCycles, year: year)
+
+    return YearInBloomMenstrualStats(
+      year: year,
+      totalCycles: cycles.count,
+      averageCycleDuration: averageDuration,
+      shortestCycle: shortest.map { CycleExtreme(duration: $0.duration, startDate: $0.startDate) },
+      longestCycle: longest.map { CycleExtreme(duration: $0.duration, startDate: $0.startDate) },
+      follicularActivityIncrease: phaseMetrics.follicularActivityIncrease,
+      lutealRestingHRChange: phaseMetrics.lutealRestingHRChange,
+      lutealSleepEfficiencyChange: phaseMetrics.lutealSleepEfficiencyChange,
+      generatedDate: .now
+    )
+  }
+
+  struct PhaseMetrics {
+    let follicularActivityIncrease: Double?
+    let lutealRestingHRChange: Double?
+    let lutealSleepEfficiencyChange: Double?
+  }
+
+  func calculatePhaseMetrics(cycles: [MenstrualCycle], year: Int) async -> PhaseMetrics {
+    let calendar = Calendar.current
+    let currentYear = Calendar.current.component(.year, from: .now)
+    let yearsFromNow = currentYear - year
+    let dateRange = DateRange.specificYear(yearsFromNow)
+
+    // Determine follicular and luteal date ranges for each cycle
+    var follicularDates: [Date] = []
+    var lutealDates: [Date] = []
+
+    for i in 0..<cycles.count {
+      let cycle = cycles[i]
+      let cycleStartDate = cycle.startDate
+
+      // Determine cycle duration (use next cycle start if available, otherwise assume 28 days)
+      let cycleDuration: Int
+      if i < cycles.count - 1 {
+        let nextCycle = cycles[i + 1]
+        cycleDuration = calendar.dateComponents([.day], from: cycleStartDate, to: nextCycle.startDate).day ?? 28
+      } else {
+        cycleDuration = 28
+      }
+
+      // Skip if cycle is unreasonably short or long
+      guard cycleDuration >= 21 && cycleDuration <= 45 else { continue }
+
+      let menstruationDuration = cycle.menstruationDurationDays ?? 5
+      let ovulationDay = cycleDuration / 2
+
+      // Follicular phase: after menstruation ends until 2 days before ovulation (day ~6 to ~12)
+      let follicularStart = menstruationDuration + 1
+      let follicularEnd = ovulationDay - 2
+
+      // Luteal phase: after ovulation until end of cycle (day ~15 to ~28)
+      let lutealStart = ovulationDay + 2
+      let lutealEnd = cycleDuration
+
+      // Add dates to respective arrays
+      for day in follicularStart...follicularEnd {
+        if let date = calendar.date(byAdding: .day, value: day - 1, to: cycleStartDate) {
+          // Only include dates within the target year
+          if calendar.component(.year, from: date) == year {
+            follicularDates.append(date)
+          }
+        }
+      }
+
+      for day in lutealStart...lutealEnd {
+        if let date = calendar.date(byAdding: .day, value: day - 1, to: cycleStartDate) {
+          if calendar.component(.year, from: date) == year {
+            lutealDates.append(date)
+          }
+        }
+      }
+    }
+
+    // Fetch health data for the year
+    async let activeEnergy = HealthStoreFetcher.shared.fetchCollatedQuantity(
+      for: .activeEnergyBurned,
+      unit: .largeCalorie(),
+      options: .cumulativeSum,
+      dateRange: dateRange
+    )
+    async let basalEnergy = HealthStoreFetcher.shared.fetchCollatedQuantity(
+      for: .basalEnergyBurned,
+      unit: .largeCalorie(),
+      options: .cumulativeSum,
+      dateRange: dateRange
+    )
+    async let restingHR = HealthStoreFetcher.shared.fetchCollatedAverage(
+      quantityType: .restingHeartRate,
+      unit: .bpm(),
+      dateRange: dateRange
+    )
+    async let sleepData = HealthStoreFetcher.shared.fetchSleepAnalysis(dateRange: dateRange)
+
+    let (activeSamples, basalSamples, hrSamples, sleepAnalyses) = await (activeEnergy, basalEnergy, restingHR, sleepData)
+
+    // Calculate activity level (active/basal ratio) by phase
+    let follicularActivity = calculateAverageActivityLevel(
+      activeSamples: activeSamples,
+      basalSamples: basalSamples,
+      forDates: follicularDates,
+      calendar: calendar
+    )
+    let lutealActivity = calculateAverageActivityLevel(
+      activeSamples: activeSamples,
+      basalSamples: basalSamples,
+      forDates: lutealDates,
+      calendar: calendar
+    )
+    let overallActivity = calculateAverageActivityLevel(
+      activeSamples: activeSamples,
+      basalSamples: basalSamples,
+      forDates: nil,
+      calendar: calendar
+    )
+
+    // Calculate follicular activity increase vs baseline
+    let follicularActivityIncrease: Double?
+    if let follicular = follicularActivity, let overall = overallActivity, overall > 0 {
+      follicularActivityIncrease = ((follicular - overall) / overall) * 100
+    } else {
+      follicularActivityIncrease = nil
+    }
+
+    // Calculate resting HR by phase
+    let follicularHR = calculateAverageValue(samples: hrSamples, forDates: follicularDates, calendar: calendar)
+    let lutealHR = calculateAverageValue(samples: hrSamples, forDates: lutealDates, calendar: calendar)
+
+    let lutealRestingHRChange: Double?
+    if let follicular = follicularHR, let luteal = lutealHR {
+      lutealRestingHRChange = luteal - follicular
+    } else {
+      lutealRestingHRChange = nil
+    }
+
+    // Calculate sleep efficiency by phase
+    let follicularSleepEfficiency = calculateAverageSleepEfficiency(
+      analyses: sleepAnalyses,
+      forDates: follicularDates,
+      calendar: calendar
+    )
+    let lutealSleepEfficiency = calculateAverageSleepEfficiency(
+      analyses: sleepAnalyses,
+      forDates: lutealDates,
+      calendar: calendar
+    )
+
+    let lutealSleepEfficiencyChange: Double?
+    if let follicular = follicularSleepEfficiency, let luteal = lutealSleepEfficiency {
+      lutealSleepEfficiencyChange = luteal - follicular
+    } else {
+      lutealSleepEfficiencyChange = nil
+    }
+
+    return PhaseMetrics(
+      follicularActivityIncrease: follicularActivityIncrease,
+      lutealRestingHRChange: lutealRestingHRChange,
+      lutealSleepEfficiencyChange: lutealSleepEfficiencyChange
+    )
+  }
+
+  func calculateAverageActivityLevel(
+    activeSamples: [DateQuantitySample],
+    basalSamples: [DateQuantitySample],
+    forDates targetDates: [Date]?,
+    calendar: Calendar
+  ) -> Double? {
+    // Group samples by day
+    let activeByDay = Dictionary(grouping: activeSamples) { calendar.startOfDay(for: $0.date) }
+    let basalByDay = Dictionary(grouping: basalSamples) { calendar.startOfDay(for: $0.date) }
+
+    var ratios: [Double] = []
+
+    let daysToCheck: [Date]
+    if let targetDates = targetDates {
+      daysToCheck = Array(Set(targetDates.map { calendar.startOfDay(for: $0) }))
+    } else {
+      daysToCheck = Array(Set(activeByDay.keys))
+    }
+
+    for day in daysToCheck {
+      let activeSamplesForDay = activeByDay[day] ?? []
+      let basalSamplesForDay = basalByDay[day] ?? []
+
+      let activeTotal = activeSamplesForDay.reduce(0.0) { $0 + $1.quantity.doubleValue(for: .largeCalorie()) }
+      let basalTotal = basalSamplesForDay.reduce(0.0) { $0 + $1.quantity.doubleValue(for: .largeCalorie()) }
+
+      if basalTotal > 0 {
+        ratios.append(activeTotal / basalTotal)
+      }
+    }
+
+    guard ratios.isNotEmpty else { return nil }
+    return ratios.reduce(0, +) / Double(ratios.count)
+  }
+
+  func calculateAverageValue(
+    samples: [DateQuantitySample],
+    forDates targetDates: [Date],
+    calendar: Calendar
+  ) -> Double? {
+    let targetDaySet = Set(targetDates.map { calendar.startOfDay(for: $0) })
+
+    let filteredSamples = samples.filter { sample in
+      targetDaySet.contains(calendar.startOfDay(for: sample.date))
+    }
+
+    guard filteredSamples.isNotEmpty else { return nil }
+
+    let sum = filteredSamples.reduce(0.0) { $0 + $1.quantity.doubleValue(for: .bpm()) }
+    return sum / Double(filteredSamples.count)
+  }
+
+  func calculateAverageSleepEfficiency(
+    analyses: [SleepAnalysis],
+    forDates targetDates: [Date],
+    calendar: Calendar
+  ) -> Double? {
+    let targetDaySet = Set(targetDates.map { calendar.startOfDay(for: $0) })
+
+    let filteredAnalyses = analyses.filter { analysis in
+      targetDaySet.contains(calendar.startOfDay(for: analysis.normalizedDate))
+    }
+
+    guard filteredAnalyses.isNotEmpty else { return nil }
+
+    // Sleep efficiency = time asleep / time in bed
+    var efficiencies: [Double] = []
+    for analysis in filteredAnalyses {
+      let timeInBed = analysis.endDate.timeIntervalSince(analysis.startDate) / 60 // minutes
+      let timeAsleep = analysis.overallMinutes - analysis.awakeSleepMinutes
+      if timeInBed > 0 {
+        efficiencies.append((timeAsleep / timeInBed) * 100)
+      }
+    }
+
+    guard efficiencies.isNotEmpty else { return nil }
+    return efficiencies.reduce(0, +) / Double(efficiencies.count)
   }
 }
 

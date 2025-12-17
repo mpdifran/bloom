@@ -62,8 +62,6 @@ private extension YearInBloomWalkingRunningDistanceCard {
              let workoutType = workoutTypesByDistance.first(where: { $0.activityName == name }) {
             HStack(spacing: 4) {
               Image(systemName: workoutType.activityType.systemImage)
-                .font(.caption2)
-                .frame(width: 18, alignment: .leading)
               Text(name)
                 .font(.caption)
                 .fontDesign(.rounded)
@@ -71,6 +69,9 @@ private extension YearInBloomWalkingRunningDistanceCard {
                 .fixedSize()
             }
             .foregroundStyle(.black)
+            .font(.subheadline)
+            .fontDesign(.rounded)
+            .bold()
           }
         }
       }

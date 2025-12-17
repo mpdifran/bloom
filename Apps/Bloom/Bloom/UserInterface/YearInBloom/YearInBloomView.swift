@@ -119,6 +119,10 @@ private extension YearInBloomView {
         if let sleepStats = viewModel.sleepStats {
           YearInBloomSleepStagesCard(stats: sleepStats)
         }
+
+        if let menstrualStats = viewModel.menstrualStats {
+          YearInBloomMenstrualCycleCard(stats: menstrualStats)
+        }
       }
       .padding()
     }
