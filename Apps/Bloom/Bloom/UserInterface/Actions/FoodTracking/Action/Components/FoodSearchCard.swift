@@ -53,30 +53,73 @@ struct FoodSearchCard: View {
   @State private var presentedSheet: AnyView?
 
   var body: some View {
-    if #available(iOS 26.0, *) {
-      GlassEffectContainer {
-        coreContentView
-          .glassEffect(in: RoundedRectangle(cornerRadius: 40))
-          .padding(.horizontal, 8)
-          .padding(.bottom, 8)
-      }
-    } else {
-      coreContentView
-        .background {
-          RoundedRectangle(cornerRadius: 40)
-            .fill(.background.secondary)
-            .ignoresSafeArea(edges: .bottom)
-            .overlay {
-              RoundedRectangle(cornerRadius: 40)
-                .stroke(.fill)
-                .ignoresSafeArea(edges: .bottom)
-            }
+    Group {
+      if #available(iOS 26.0, *) {
+        GlassEffectContainer {
+          glassContentView
         }
+      } else {
+        coreContentView
+          .background {
+            RoundedRectangle(cornerRadius: 40)
+              .fill(.background.secondary)
+              .ignoresSafeArea(edges: .bottom)
+              .overlay {
+                RoundedRectangle(cornerRadius: 40)
+                  .stroke(.fill)
+                  .ignoresSafeArea(edges: .bottom)
+              }
+          }
+      }
+    }
+    .sheet($presentedSheet)
+    .sensoryFeedback(.selection, trigger: isFocused)
+    .animation(.easeInOut, value: isFocused)
+    .animation(.easeInOut, value: searchQuery.isEmpty)
+    .onChange(of: searchQuery) { _, newValue in
+      onTextChange?(newValue)
     }
   }
 }
 
 private extension FoodSearchCard {
+
+  @available(iOS 26.0, *)
+  var glassContentView: some View {
+    VStack(spacing: 8) {
+      if !isFocused {
+        ScrollView(.horizontal) {
+          HStack {
+            switch toolbarMode {
+            case .logTools:
+              barcodeScanButton
+                .transition(.scale)
+              magicScanButton
+                .transition(.scale)
+              textFoodButton
+                .transition(.scale)
+            case .pickerTools:
+              barcodeScannerPickerButton
+                .transition(.scale)
+            case .noTools:
+              EmptyView()
+            }
+          }
+          .scrollTargetLayout()
+          .padding(.horizontal, 8)
+        }
+        .scrollTargetBehavior(.viewAligned)
+        .scrollIndicators(.hidden)
+      }
+
+      searchTextField
+        .glassEffect(in: Capsule())
+        .selectable()
+        .padding(.horizontal, 8)
+        .padding(.bottom)
+    }
+    .animation(.default, value: isFocused)
+  }
 
   var coreContentView: some View {
     VStack {
@@ -98,15 +141,13 @@ private extension FoodSearchCard {
         }
       }
       searchTextField
+        .cardContainer(
+          stroke: .fill,
+          lineWidth: 0.5,
+          includePadding: false
+        )
     }
     .padding()
-    .sheet($presentedSheet)
-    .sensoryFeedback(.selection, trigger: isFocused)
-    .animation(.easeInOut, value: isFocused)
-    .animation(.easeInOut, value: searchQuery.isEmpty)
-    .onChange(of: searchQuery) { _, newValue in
-      onTextChange?(newValue)
-    }
   }
 
   var barcodeScanButton: some View {
@@ -122,13 +163,13 @@ private extension FoodSearchCard {
   }
 
   var textFoodButton: some View {
-    FoodSearchActionButton(symbol: .micFill, title: "Voice Logger") {
+    FoodSearchActionButton(symbol: .microphoneFill, title: "Voice Logger") {
       showVoiceLogger()
     }
   }
 
   var barcodeScannerPickerButton: some View {
-    FoodSearchActionButton(symbol: .barcodeViewfinder, title: "Scan") {
+    FoodSearchActionButton(symbol: .barcodeViewfinder, title: "Barcode Scan") {
       showBarcodeScannerPicker()
     }
   }
@@ -144,6 +185,7 @@ private extension FoodSearchCard {
       Image(systemSymbol: .magnifyingglass)
         .foregroundStyle(.tint)
         .font(.title3)
+        .padding(.leading)
 
       TextField(
         "",
@@ -152,32 +194,57 @@ private extension FoodSearchCard {
       )
       .focused($isFocused)
       .scrollDismissesKeyboard(.interactively)
+      .padding(.vertical)
 
       if searchQuery.isNotEmpty {
         Button {
-          searchQuery = ""
-          onSearch("")
+          withAnimation {
+            searchQuery = ""
+            onSearch("")
+          }
         } label: {
-          Image(systemSymbol: .xmarkCircleFill)
-            .font(.title3)
-            .fontDesign(.rounded)
-            .bold()
-            .foregroundStyle(.white, .gray)
+          if #available(iOS 26.0, *) {
+            Image(systemSymbol: .xmarkCircleFill)
+              .font(.system(size: 22))
+              .fontDesign(.rounded)
+              .foregroundStyle(.white, .fill)
+          } else {
+            Image(systemSymbol: .xmarkCircleFill)
+              .font(.title3)
+              .fontDesign(.rounded)
+              .bold()
+              .foregroundStyle(.white, .gray)
+          }
         }
+        .frame(square: 50)
         .buttonStyle(.plain)
         .transition(.scale)
+        .padding(.trailing, 6)
       } else if isFocused {
         Button {
-          isFocused = false
+          withAnimation {
+            isFocused = false
+          }
         } label: {
-          Image(systemSymbol: .chevronDownCircleFill)
-            .font(.title3)
-            .fontDesign(.rounded)
-            .bold()
-            .foregroundStyle(.white, .gray)
+          if #available(iOS 26.0, *) {
+            Image(systemSymbol: .chevronDownCircleFill)
+              .font(.system(size: 22))
+              .fontDesign(.rounded)
+              .bold()
+              .foregroundStyle(.white, .fill)
+          } else {
+            Image(systemSymbol: .chevronDownCircleFill)
+              .font(.title3)
+              .fontDesign(.rounded)
+              .bold()
+              .foregroundStyle(.white, .gray)
+          }
+
         }
+        .frame(square: 50)
         .buttonStyle(.plain)
         .transition(.scale)
+        .padding(.trailing, 6)
       }
     }
     .submitLabel(.search)
@@ -186,15 +253,6 @@ private extension FoodSearchCard {
       performSearch()
     }
     .selectAllTextOnBeginEditing()
-    .cardContainer(
-      stroke: .fill,
-      lineWidth: 0.5
-    )
-//    .onChange(of: searchQuery) { oldValue, newValue in
-//      guard shouldAutocomplete else { return }
-//
-//      viewModel.debounceAutocomplete(for: searchQuery)
-//    }
   }
 }
 
