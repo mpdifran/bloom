@@ -81,7 +81,7 @@ private extension YearInBloomHeartHealthCard {
         .padding(.top, 4)
     }
     .overlay(alignment: .bottomTrailing) {
-      Text("MIN: \(Int(minRestingHR))")
+      Text("RHR: \(Int(minRestingHR))")
         .font(.caption2)
         .bold()
         .foregroundStyle(.white)

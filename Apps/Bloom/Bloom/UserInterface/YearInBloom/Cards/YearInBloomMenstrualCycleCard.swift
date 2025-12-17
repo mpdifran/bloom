@@ -20,7 +20,7 @@ struct YearInBloomMenstrualCycleCard: View {
       focusStatLabel: "Avg Cycle",
       includeDivider: false,
       foregroundFill: .white,
-      backgroundFill: .mutedPink.gradient
+      backgroundFill: .mutedPurple.gradient
     ) {
       LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
         cycleRangeCard
@@ -28,6 +28,7 @@ struct YearInBloomMenstrualCycleCard: View {
         heartRateCard
         sleepEfficiencyCard
       }
+      .foregroundStyle(.white)
     }
   }
 }
@@ -72,7 +73,7 @@ private extension YearInBloomMenstrualCycleCard {
 
   var activityCard: some View {
     VStack(alignment: .leading, spacing: 0) {
-      Label("Follicular Activity", systemSymbol: .figureCooldown)
+      Label("Follicular Activity", systemSymbol: .figureRun)
         .font(.caption)
         .foregroundStyle(.white.opacity(0.8))
 

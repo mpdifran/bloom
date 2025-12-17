@@ -26,8 +26,8 @@ struct YearInBloomExerciseEffectivenessCard: View {
       focusStatLabel: "Zone Minutes",
       foregroundFill: .black,
       backgroundFill: .mutedPink) {
-        zoneMinutesChart
         legendView
+        zoneMinutesChart
         workoutTypesSection
       }
   }

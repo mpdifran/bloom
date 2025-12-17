@@ -127,6 +127,10 @@ private extension YearInBloomView {
         if let heartHealthStats = viewModel.heartHealthStats {
           YearInBloomHeartHealthCard(stats: heartHealthStats)
         }
+
+        if let bodyWeightStats = viewModel.bodyWeightStats {
+          YearInBloomBodyWeightCard(stats: bodyWeightStats)
+        }
       }
       .padding()
     }

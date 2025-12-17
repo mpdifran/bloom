@@ -16,6 +16,7 @@ public final actor YearInBloomCalculator {
   @AsyncStreamable public var sleepStats: YearInBloomSleepStats?
   @AsyncStreamable public var menstrualStats: YearInBloomMenstrualStats?
   @AsyncStreamable public var heartHealthStats: YearInBloomHeartHealthStats?
+  @AsyncStreamable public var bodyWeightStats: YearInBloomBodyWeightStats?
   @AsyncStreamable public var isCalculating: Bool = false
 
   private init() { }
@@ -72,6 +73,16 @@ public extension YearInBloomCalculator {
     }
 
     heartHealthStats = stats
+  }
+
+  /// Compile body weight stats for the given year
+  func compileBodyWeight(for year: Int) async {
+    guard let stats = await calculateBodyWeightStats(for: year) else {
+      bodyWeightStats = nil
+      return
+    }
+
+    bodyWeightStats = stats
   }
 }
 
@@ -828,6 +839,88 @@ private extension YearInBloomCalculator {
       monthlyHeartRateData: monthlyHeartRateData,
       monthlyHRVData: monthlyHRVData,
       yearlyAverageRestingHR: yearlyAverageRestingHR,
+      generatedDate: .now
+    )
+  }
+
+  func calculateBodyWeightStats(for year: Int) async -> YearInBloomBodyWeightStats? {
+    let currentYear = Calendar.current.component(.year, from: .now)
+    let yearsFromNow = currentYear - year
+    let dateRange = DateRange.specificYear(yearsFromNow)
+    let calendar = Calendar.current
+
+    // Fetch body mass samples (in grams as base unit)
+    let weightSamples = await HealthStoreFetcher.shared.fetchCollatedAverage(
+      quantityType: .bodyMass,
+      unit: .gram(),
+      interval: DateComponents(day: 1),
+      dateRange: dateRange
+    )
+
+    // Fetch body fat samples
+    let bodyFatSamples = await HealthStoreFetcher.shared.fetchCollatedAverage(
+      quantityType: .bodyFatPercentage,
+      unit: .percent(),
+      interval: DateComponents(day: 1),
+      dateRange: dateRange
+    )
+
+    // Group by month
+    let weightByMonth = Dictionary(grouping: weightSamples) { sample in
+      calendar.component(.month, from: sample.date)
+    }
+    let bodyFatByMonth = Dictionary(grouping: bodyFatSamples) { sample in
+      calendar.component(.month, from: sample.date)
+    }
+
+    // Calculate monthly weight data
+    var monthlyWeightData = [MonthlyWeightData]()
+    var monthlyBodyFatData = [MonthlyBodyFatData]()
+
+    for month in 1...12 {
+      let date = calendar.date(from: DateComponents(year: year, month: month, day: 15))!
+
+      // Calculate weight stats for the month
+      let monthWeightSamples = weightByMonth[month] ?? []
+      let weightValues = monthWeightSamples.map { $0.quantity.doubleValue(for: .gram()) }
+
+      let minWeight: Double? = weightValues.min()
+      let maxWeight: Double? = weightValues.max()
+      let averageWeight: Double? = weightValues.isNotEmpty
+        ? weightValues.reduce(0, +) / Double(weightValues.count)
+        : nil
+
+      monthlyWeightData.append(MonthlyWeightData(
+        date: date,
+        minWeight: minWeight,
+        maxWeight: maxWeight,
+        averageWeight: averageWeight
+      ))
+
+      // Calculate body fat for the month
+      let monthBodyFatSamples = bodyFatByMonth[month] ?? []
+      let bodyFatValues = monthBodyFatSamples.map { $0.quantity.doubleValue(for: .percent()) }
+      let averageBodyFat: Double? = bodyFatValues.isNotEmpty
+        ? bodyFatValues.reduce(0, +) / Double(bodyFatValues.count)
+        : nil
+
+      monthlyBodyFatData.append(MonthlyBodyFatData(date: date, averageBodyFat: averageBodyFat))
+    }
+
+    // Determine year start and end weights
+    let monthsWithWeight = monthlyWeightData.filter { $0.averageWeight != nil }
+    let yearStartWeight = monthsWithWeight.first?.averageWeight
+    let yearEndWeight = monthsWithWeight.last?.averageWeight
+
+    // Only return stats if we have some weight data
+    guard weightSamples.isNotEmpty else { return nil }
+
+    return YearInBloomBodyWeightStats(
+      year: year,
+      monthlyWeightData: monthlyWeightData,
+      monthlyBodyFatData: monthlyBodyFatData,
+      yearStartWeight: yearStartWeight,
+      yearEndWeight: yearEndWeight,
       generatedDate: .now
     )
   }
