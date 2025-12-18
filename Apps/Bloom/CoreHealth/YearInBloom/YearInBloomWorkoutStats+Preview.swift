@@ -53,7 +53,8 @@ public extension YearInBloomWorkoutStats {
         totalDurationMinutes: 9500,
         totalCaloriesBurned: 85000,
         uniqueWorkoutTypes: 8,
-        totalZoneMinutes: totalZones
+        totalZoneMinutes: totalZones,
+        totalSteps: 2_450_000
       ),
       topWorkoutTypes: [
         WorkoutTypeStats(
@@ -62,7 +63,7 @@ public extension YearInBloomWorkoutStats {
           count: 52,
           totalDurationMinutes: 3120,
           totalCaloriesBurned: 31200,
-          percentage: 33,
+          percentage: 25,
           zoneMinutes: ZoneMinutesBreakdown(
             zone1Minutes: 200,
             zone2Minutes: 400,
@@ -78,7 +79,7 @@ public extension YearInBloomWorkoutStats {
           count: 35,
           totalDurationMinutes: 2625,
           totalCaloriesBurned: 21000,
-          percentage: 28,
+          percentage: 20,
           zoneMinutes: ZoneMinutesBreakdown(
             zone1Minutes: 150,
             zone2Minutes: 350,
@@ -94,7 +95,7 @@ public extension YearInBloomWorkoutStats {
           count: 20,
           totalDurationMinutes: 1800,
           totalCaloriesBurned: 12000,
-          percentage: 19,
+          percentage: 14,
           zoneMinutes: ZoneMinutesBreakdown(
             zone1Minutes: 100,
             zone2Minutes: 200,
@@ -110,7 +111,7 @@ public extension YearInBloomWorkoutStats {
           count: 15,
           totalDurationMinutes: 1200,
           totalCaloriesBurned: 9000,
-          percentage: 12,
+          percentage: 10,
           zoneMinutes: ZoneMinutesBreakdown(
             zone1Minutes: 80,
             zone2Minutes: 160,
@@ -124,8 +125,8 @@ public extension YearInBloomWorkoutStats {
           activityTypeRawValue: 50, // Yoga
           activityName: "Yoga",
           count: 40,
-          totalDurationMinutes: 2400,
-          totalCaloriesBurned: 16000,
+          totalDurationMinutes: 1600,
+          totalCaloriesBurned: 8000,
           percentage: 8,
           zoneMinutes: ZoneMinutesBreakdown(
             zone1Minutes: 100,
@@ -134,7 +135,98 @@ public extension YearInBloomWorkoutStats {
             zone4Minutes: 80,
             zone5Minutes: 20
           )
-          // No distance for Yoga
+        ),
+        WorkoutTypeStats(
+          activityTypeRawValue: 20, // Functional Strength Training
+          activityName: "Functional Strength Training",
+          count: 28,
+          totalDurationMinutes: 1400,
+          totalCaloriesBurned: 11200,
+          percentage: 7,
+          zoneMinutes: ZoneMinutesBreakdown(
+            zone1Minutes: 60,
+            zone2Minutes: 120,
+            zone3Minutes: 180,
+            zone4Minutes: 100,
+            zone5Minutes: 40
+          )
+        ),
+        WorkoutTypeStats(
+          activityTypeRawValue: 46, // Swimming
+          activityName: "Swimming",
+          count: 18,
+          totalDurationMinutes: 900,
+          totalCaloriesBurned: 7200,
+          percentage: 5,
+          zoneMinutes: ZoneMinutesBreakdown(
+            zone1Minutes: 50,
+            zone2Minutes: 100,
+            zone3Minutes: 120,
+            zone4Minutes: 80,
+            zone5Minutes: 25
+          ),
+          totalDistanceMeters: 36000 // 36 km
+        ),
+        WorkoutTypeStats(
+          activityTypeRawValue: 63, // High Intensity Interval Training
+          activityName: "High Intensity Interval Training",
+          count: 22,
+          totalDurationMinutes: 660,
+          totalCaloriesBurned: 6600,
+          percentage: 4,
+          zoneMinutes: ZoneMinutesBreakdown(
+            zone1Minutes: 20,
+            zone2Minutes: 40,
+            zone3Minutes: 100,
+            zone4Minutes: 150,
+            zone5Minutes: 80
+          )
+        ),
+        WorkoutTypeStats(
+          activityTypeRawValue: 35, // Rowing
+          activityName: "Rowing",
+          count: 12,
+          totalDurationMinutes: 480,
+          totalCaloriesBurned: 4800,
+          percentage: 3,
+          zoneMinutes: ZoneMinutesBreakdown(
+            zone1Minutes: 30,
+            zone2Minutes: 60,
+            zone3Minutes: 90,
+            zone4Minutes: 60,
+            zone5Minutes: 20
+          ),
+          totalDistanceMeters: 48000 // 48 km
+        ),
+        WorkoutTypeStats(
+          activityTypeRawValue: 58, // Pilates
+          activityName: "Pilates",
+          count: 16,
+          totalDurationMinutes: 480,
+          totalCaloriesBurned: 3200,
+          percentage: 2,
+          zoneMinutes: ZoneMinutesBreakdown(
+            zone1Minutes: 40,
+            zone2Minutes: 80,
+            zone3Minutes: 60,
+            zone4Minutes: 30,
+            zone5Minutes: 10
+          )
+        ),
+        WorkoutTypeStats(
+          activityTypeRawValue: 16, // Elliptical
+          activityName: "Elliptical",
+          count: 10,
+          totalDurationMinutes: 400,
+          totalCaloriesBurned: 3200,
+          percentage: 2,
+          zoneMinutes: ZoneMinutesBreakdown(
+            zone1Minutes: 25,
+            zone2Minutes: 50,
+            zone3Minutes: 75,
+            zone4Minutes: 50,
+            zone5Minutes: 15
+          )
         )
       ],
       longestStreak: StreakInfo(

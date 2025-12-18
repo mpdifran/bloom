@@ -12,15 +12,15 @@ public extension YearInBloomBodyWeightStats {
     let calendar = Calendar.current
 
     // Generate weight data with a general downward trend (weight loss)
-    // Starting around 185 lbs (83,915 grams) and ending around 175 lbs (79,379 grams)
-    let baseWeight: Double = 83_915  // ~185 lbs in grams
+    // Starting around 185 lbs and ending around 175 lbs
+    let baseWeight: Double = 185.0  // in pounds
     let monthlyWeightData = (1...12).map { month in
       let date = calendar.date(from: DateComponents(year: 2024, month: month, day: 15))!
       // Gradual weight loss with some variation
-      let trendOffset = Double(month - 1) * -378  // ~10 lbs loss over year
+      let trendOffset = Double(month - 1) * -0.83  // ~10 lbs loss over year
       let baseForMonth = baseWeight + trendOffset
-      let minWeight = baseForMonth + Double.random(in: -907...0)      // ~2 lbs below
-      let maxWeight = baseForMonth + Double.random(in: 0...1361)      // ~3 lbs above
+      let minWeight = baseForMonth + Double.random(in: -2.0...0)      // 2 lbs below
+      let maxWeight = baseForMonth + Double.random(in: 0...3.0)       // 3 lbs above
       let averageWeight = (minWeight + maxWeight) / 2
 
       return MonthlyWeightData(

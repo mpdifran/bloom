@@ -103,6 +103,14 @@ private extension YearInBloomCalculator {
     // Fetch zone minutes data for the year
     let heartRateReports = await HealthStoreFetcher.shared.fetchWorkoutHeartRateReports(dateRange: dateRange)
 
+    // Fetch total steps for the year
+    let totalSteps: Int?
+    if let stepsQuantity = await HealthStoreFetcher.shared.fetchTotalQuantity(for: .stepCount, dateRange: dateRange) {
+      totalSteps = Int(stepsQuantity.doubleValue(for: .count()))
+    } else {
+      totalSteps = nil
+    }
+
     // Group workouts and heart rate reports by month
     let calendar = Calendar.current
     let workoutsByMonth = Dictionary(grouping: workouts) { workout in
@@ -148,7 +156,7 @@ private extension YearInBloomCalculator {
     }
 
     // Calculate year totals
-    let yearTotals = calculateYearTotals(workouts: workouts, totalZoneMinutes: yearZoneMinutes)
+    let yearTotals = calculateYearTotals(workouts: workouts, totalZoneMinutes: yearZoneMinutes, totalSteps: totalSteps)
 
     // Calculate top workout types across the year
     let topWorkoutTypes = calculateTopWorkoutTypes(workouts: workouts, heartRateReports: heartRateReports)
@@ -204,7 +212,7 @@ private extension YearInBloomCalculator {
     )
   }
 
-  func calculateYearTotals(workouts: [HKWorkout], totalZoneMinutes: ZoneMinutesBreakdown) -> YearTotals {
+  func calculateYearTotals(workouts: [HKWorkout], totalZoneMinutes: ZoneMinutesBreakdown, totalSteps: Int?) -> YearTotals {
     let totalDuration = workouts.reduce(0.0) { $0 + $1.duration / 60 }
     let totalCalories = workouts.reduce(0.0) { total, workout in
       let calories = workout.statistics(for: HKQuantityType(.activeEnergyBurned))?.sumQuantity()?.doubleValue(for: .largeCalorie()) ?? 0
@@ -217,7 +225,8 @@ private extension YearInBloomCalculator {
       totalDurationMinutes: totalDuration,
       totalCaloriesBurned: totalCalories,
       uniqueWorkoutTypes: uniqueTypes,
-      totalZoneMinutes: totalZoneMinutes
+      totalZoneMinutes: totalZoneMinutes,
+      totalSteps: totalSteps
     )
   }
 
@@ -502,6 +511,11 @@ private extension YearInBloomCalculator {
     let shortest = cycleDurations.min { $0.duration < $1.duration }
     let longest = cycleDurations.max { $0.duration < $1.duration }
 
+    // Calculate average period length
+    let periodLengths = cycles.compactMap { $0.menstruationDurationDays }
+    let averagePeriodLength: Double? = periodLengths.isEmpty ? nil :
+      Double(periodLengths.reduce(0, +)) / Double(periodLengths.count)
+
     // Calculate phase-based metrics
     let phaseMetrics = await calculatePhaseMetrics(cycles: sortedCycles, year: year)
 
@@ -509,11 +523,13 @@ private extension YearInBloomCalculator {
       year: year,
       totalCycles: cycles.count,
       averageCycleDuration: averageDuration,
+      averagePeriodLength: averagePeriodLength,
       shortestCycle: shortest.map { CycleExtreme(duration: $0.duration, startDate: $0.startDate) },
       longestCycle: longest.map { CycleExtreme(duration: $0.duration, startDate: $0.startDate) },
       follicularActivityIncrease: phaseMetrics.follicularActivityIncrease,
       lutealRestingHRChange: phaseMetrics.lutealRestingHRChange,
       lutealSleepEfficiencyChange: phaseMetrics.lutealSleepEfficiencyChange,
+      monthlyPhaseActivityData: phaseMetrics.monthlyPhaseActivity,
       generatedDate: .now
     )
   }
@@ -522,6 +538,7 @@ private extension YearInBloomCalculator {
     let follicularActivityIncrease: Double?
     let lutealRestingHRChange: Double?
     let lutealSleepEfficiencyChange: Double?
+    let monthlyPhaseActivity: [MonthlyPhaseActivityData]
   }
 
   func calculatePhaseMetrics(cycles: [MenstrualCycle], year: Int) async -> PhaseMetrics {
@@ -660,11 +677,94 @@ private extension YearInBloomCalculator {
       lutealSleepEfficiencyChange = nil
     }
 
+    // Calculate monthly phase activity
+    let monthlyPhaseActivity = calculateMonthlyPhaseActivity(
+      activeSamples: activeSamples,
+      basalSamples: basalSamples,
+      follicularDates: follicularDates,
+      year: year,
+      calendar: calendar
+    )
+
     return PhaseMetrics(
       follicularActivityIncrease: follicularActivityIncrease,
       lutealRestingHRChange: lutealRestingHRChange,
-      lutealSleepEfficiencyChange: lutealSleepEfficiencyChange
+      lutealSleepEfficiencyChange: lutealSleepEfficiencyChange,
+      monthlyPhaseActivity: monthlyPhaseActivity
     )
+  }
+
+  func calculateMonthlyPhaseActivity(
+    activeSamples: [DateQuantitySample],
+    basalSamples: [DateQuantitySample],
+    follicularDates: [Date],
+    year: Int,
+    calendar: Calendar
+  ) -> [MonthlyPhaseActivityData] {
+    // Group follicular dates by month
+    let follicularByMonth = Dictionary(grouping: follicularDates) { date in
+      calendar.component(.month, from: date)
+    }
+
+    // Group all active/basal samples by day
+    let activeByDay = Dictionary(grouping: activeSamples) { calendar.startOfDay(for: $0.date) }
+    let basalByDay = Dictionary(grouping: basalSamples) { calendar.startOfDay(for: $0.date) }
+
+    // Get all days with activity data grouped by month
+    let allDays = Set(activeByDay.keys)
+    let allDaysByMonth = Dictionary(grouping: allDays) { date in
+      calendar.component(.month, from: date)
+    }
+
+    var monthlyData = [MonthlyPhaseActivityData]()
+
+    for month in 1...12 {
+      let date = calendar.date(from: DateComponents(year: year, month: month, day: 15))!
+
+      // Get follicular days for this month
+      let follicularDaysThisMonth = Set((follicularByMonth[month] ?? []).map { calendar.startOfDay(for: $0) })
+
+      // Get all days this month
+      let allDaysThisMonth = allDaysByMonth[month] ?? []
+
+      // Calculate follicular activity for this month
+      var follicularRatios: [Double] = []
+      var otherRatios: [Double] = []
+
+      for day in allDaysThisMonth {
+        let activeSamplesForDay = activeByDay[day] ?? []
+        let basalSamplesForDay = basalByDay[day] ?? []
+
+        let activeTotal = activeSamplesForDay.reduce(0.0) { $0 + $1.quantity.doubleValue(for: .largeCalorie()) }
+        let basalTotal = basalSamplesForDay.reduce(0.0) { $0 + $1.quantity.doubleValue(for: .largeCalorie()) }
+
+        guard basalTotal > 0 else { continue }
+
+        let ratio = activeTotal / basalTotal
+
+        if follicularDaysThisMonth.contains(day) {
+          follicularRatios.append(ratio)
+        } else {
+          otherRatios.append(ratio)
+        }
+      }
+
+      let follicularActivity: Double? = follicularRatios.isNotEmpty
+        ? follicularRatios.reduce(0, +) / Double(follicularRatios.count)
+        : nil
+
+      let otherActivity: Double? = otherRatios.isNotEmpty
+        ? otherRatios.reduce(0, +) / Double(otherRatios.count)
+        : nil
+
+      monthlyData.append(MonthlyPhaseActivityData(
+        date: date,
+        follicularActivityLevel: follicularActivity,
+        otherActivityLevel: otherActivity
+      ))
+    }
+
+    return monthlyData
   }
 
   func calculateAverageActivityLevel(
@@ -762,6 +862,15 @@ private extension YearInBloomCalculator {
       dateRange: dateRange
     )
 
+    // Fetch min heart rate data (daily minimums)
+    let minHRSamples = await HealthStoreFetcher.shared.fetchCollatedQuantity(
+      for: .heartRate,
+      unit: .bpm(),
+      interval: DateComponents(day: 1),
+      options: .discreteMin,
+      dateRange: dateRange
+    )
+
     // Fetch workout heart rate reports for max HR
     let workoutReports = await HealthStoreFetcher.shared.fetchWorkoutHeartRateReports(dateRange: dateRange)
 
@@ -775,6 +884,9 @@ private extension YearInBloomCalculator {
 
     // Group data by month
     let restingHRByMonth = Dictionary(grouping: restingHRSamples) { sample in
+      calendar.component(.month, from: sample.date)
+    }
+    let minHRByMonth = Dictionary(grouping: minHRSamples) { sample in
       calendar.component(.month, from: sample.date)
     }
     let workoutReportsByMonth = Dictionary(grouping: workoutReports) { report in
@@ -801,6 +913,16 @@ private extension YearInBloomCalculator {
         averageRestingHR = nil
       }
 
+      // Calculate average min HR for the month (average of daily minimums)
+      let monthMinHRSamples = minHRByMonth[month] ?? []
+      let averageMinHR: Double?
+      if monthMinHRSamples.isNotEmpty {
+        let sum = monthMinHRSamples.reduce(0.0) { $0 + $1.quantity.doubleValue(for: .bpm()) }
+        averageMinHR = sum / Double(monthMinHRSamples.count)
+      } else {
+        averageMinHR = nil
+      }
+
       // Calculate max HR from workout reports for the month
       let monthWorkoutReports = workoutReportsByMonth[month] ?? []
       let maxHRValues = monthWorkoutReports.compactMap(\.maxHeartRate)
@@ -809,6 +931,7 @@ private extension YearInBloomCalculator {
       monthlyHeartRateData.append(MonthlyHeartRateData(
         date: date,
         averageRestingHR: averageRestingHR,
+        averageMinHR: averageMinHR,
         averageMaxHR: averageMaxHR
       ))
 
@@ -849,10 +972,10 @@ private extension YearInBloomCalculator {
     let dateRange = DateRange.specificYear(yearsFromNow)
     let calendar = Calendar.current
 
-    // Fetch body mass samples (in grams as base unit)
+    // Fetch body mass samples (in pounds as base unit)
     let weightSamples = await HealthStoreFetcher.shared.fetchCollatedAverage(
       quantityType: .bodyMass,
-      unit: .gram(),
+      unit: .pound(),
       interval: DateComponents(day: 1),
       dateRange: dateRange
     )
@@ -882,7 +1005,7 @@ private extension YearInBloomCalculator {
 
       // Calculate weight stats for the month
       let monthWeightSamples = weightByMonth[month] ?? []
-      let weightValues = monthWeightSamples.map { $0.quantity.doubleValue(for: .gram()) }
+      let weightValues = monthWeightSamples.map { $0.quantity.doubleValue(for: .pound()) }
 
       let minWeight: Double? = weightValues.min()
       let maxWeight: Double? = weightValues.max()

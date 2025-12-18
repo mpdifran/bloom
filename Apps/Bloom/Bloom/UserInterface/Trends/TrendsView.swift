@@ -40,10 +40,7 @@ struct TrendsView: View {
       BloomScrollView {
         ForEach(availableYears, id: \.self) { year in
           Button {
-            presentedSheet = YearInBloomView(
-              year: year,
-              gradientColors: gradientColors(for: year)
-            ).asAny
+            presentedSheet = YearInBloomStoriesView(year: year).asAny
           } label: {
             HStack {
               Text("\(year) Year in Bloom")

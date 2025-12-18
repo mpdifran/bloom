@@ -120,16 +120,16 @@ private extension YearInBloomBodyWeightCard {
     guard let startWeight = stats.yearStartWeight,
           let endWeight = stats.yearEndWeight else { return "—" }
 
-    let changeInGrams = endWeight - startWeight
-    let quantity = HKQuantity(unit: .gram(), doubleValue: abs(changeInGrams))
-    let valueInPreferredUnit = quantity.doubleValue(for: preferredUnit)
+    let changeInPounds = endWeight - startWeight
+    let quantity = HKQuantity(unit: .pound(), doubleValue: abs(changeInPounds))
+    let formatted = quantity.displayString(for: .pound())
 
-    if changeInGrams < 0 {
-      return String(format: "-%.1f %@", valueInPreferredUnit, unitString)
-    } else if changeInGrams > 0 {
-      return String(format: "+%.1f %@", valueInPreferredUnit, unitString)
+    if changeInPounds < 0 {
+      return "-\(formatted)"
+    } else if changeInPounds > 0 {
+      return "+\(formatted)"
     } else {
-      return "0 \(unitString)"
+      return formatted
     }
   }
 
@@ -137,10 +137,9 @@ private extension YearInBloomBodyWeightCard {
     "Weight Change"
   }
 
-  func formattedWeight(_ grams: Double) -> String {
-    let quantity = HKQuantity(unit: .gram(), doubleValue: grams)
-    let value = quantity.doubleValue(for: preferredUnit)
-    return String(format: "%.0f", value)
+  func formattedWeight(_ pounds: Double) -> String {
+    HKQuantity(unit: .pound(), doubleValue: pounds)
+      .displayString(for: .pound(), showUnits: false)
   }
 
   var yearStart: Date {
@@ -172,15 +171,15 @@ private extension YearInBloomBodyWeightCard {
   }
 
   var maxWeightValue: Double {
-    stats.monthlyWeightData.compactMap(\.averageWeight).max() ?? 80_000
+    stats.monthlyWeightData.compactMap(\.averageWeight).max() ?? 175
   }
 
   var minWeightValue: Double {
-    stats.monthlyWeightData.compactMap(\.averageWeight).min() ?? 60_000
+    stats.monthlyWeightData.compactMap(\.averageWeight).min() ?? 130
   }
 
   var weightPadding: Double {
-    2_000
+    5
   }
 
   func findNearestWeightMonth(to date: Date) -> MonthlyWeightData? {

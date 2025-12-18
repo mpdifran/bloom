@@ -112,6 +112,7 @@ private extension YearInBloomView {
   func contentView(stats: YearInBloomWorkoutStats) -> some View {
     ScrollView {
       VStack(spacing: 20) {
+        YearInBloomWorkoutTypesCard(stats: stats)
         YearInBloomExerciseEffectivenessCard(stats: stats)
         YearInBloomWalkingRunningDistanceCard(stats: stats)
         YearInBloomCardioFitnessCard(stats: stats)

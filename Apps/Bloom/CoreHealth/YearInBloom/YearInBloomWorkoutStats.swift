@@ -94,19 +94,22 @@ public struct YearTotals: Sendable, Codable, Hashable {
   public let totalCaloriesBurned: Double
   public let uniqueWorkoutTypes: Int
   public let totalZoneMinutes: ZoneMinutesBreakdown?
+  public let totalSteps: Int?
 
   public init(
     totalWorkouts: Int,
     totalDurationMinutes: Double,
     totalCaloriesBurned: Double,
     uniqueWorkoutTypes: Int,
-    totalZoneMinutes: ZoneMinutesBreakdown? = nil
+    totalZoneMinutes: ZoneMinutesBreakdown? = nil,
+    totalSteps: Int? = nil
   ) {
     self.totalWorkouts = totalWorkouts
     self.totalDurationMinutes = totalDurationMinutes
     self.totalCaloriesBurned = totalCaloriesBurned
     self.uniqueWorkoutTypes = uniqueWorkoutTypes
     self.totalZoneMinutes = totalZoneMinutes
+    self.totalSteps = totalSteps
   }
 
   public var totalDurationHours: Double {
@@ -368,7 +371,7 @@ public extension YearInBloomWorkoutStats {
 
 // MARK: - Zone Minutes Chart Data
 
-public struct MonthlyZoneMinutesData: Identifiable {
+public struct MonthlyZoneMinutesData: Identifiable, Sendable, Equatable {
   public var id: Date { date }  // Use date as stable ID to prevent infinite re-renders
   public let date: Date
   public let zone1: Double

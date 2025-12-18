@@ -37,11 +37,13 @@ public struct MonthlyHeartRateData: Identifiable, Sendable, Codable, Hashable {
   public var id: Date { date }
   public let date: Date
   public let averageRestingHR: Double?
+  public let averageMinHR: Double?
   public let averageMaxHR: Double?
 
-  public init(date: Date, averageRestingHR: Double?, averageMaxHR: Double?) {
+  public init(date: Date, averageRestingHR: Double?, averageMinHR: Double?, averageMaxHR: Double?) {
     self.date = date
     self.averageRestingHR = averageRestingHR
+    self.averageMinHR = averageMinHR
     self.averageMaxHR = averageMaxHR
   }
 }
