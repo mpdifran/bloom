@@ -7,33 +7,178 @@
 
 import SwiftUI
 import CoreHealth
+import BloomUI
 import SFSafeSymbols
 
-struct WorkoutsStoryPage: View, StoryPage {
+struct WorkoutsStoryPage: View {
   let stats: YearInBloomWorkoutStats
 
-  var focusSentence: Text {
-    Text("You exercised for ")
-      .foregroundStyle(.secondary) +
-    Text(formattedMinutes)
-      .foregroundStyle(.green) +
-    Text(" this year")
-      .foregroundStyle(.secondary)
+  var body: some View {
+    ZStack {
+      WorkoutBubblesView(
+        workoutTypes: stats.topWorkoutTypes,
+        onBubbleTap: { _ in }
+      )
+      .frame(maxHeight: .infinity)
+
+      VStack(spacing: 0) {
+        LinearGradient(
+          colors: [.black, .clear, .clear, .clear],
+          startPoint: .bottom,
+          endPoint: .top
+        )
+        .padding(.top)
+        Rectangle()
+          .fill(.black)
+      }
+      .ignoresSafeArea()
+
+      VStack(spacing: 80) {
+        Spacer()
+
+        VStack {
+          Image(systemSymbol: .figureRun)
+            .foregroundStyle(.tint)
+            .font(.system(size: 50))
+            .contentTransition(.symbolEffect)
+            .padding(.bottom)
+
+          focusSentence
+            .font(.title)
+            .fontWeight(.bold)
+            .fontDesign(.rounded)
+            .multilineTextAlignment(.center)
+            .fixedSize(horizontal: false, vertical: true)
+        }
+
+        statsGrid
+      }
+      .padding(.horizontal)
+      .zStackAlignment(.bottom)
+    }
+    .tint(.green)
+    .toolbar {
+      ToolbarItem(placement: .principal) {
+        titleView
+      }
+    }
+    .environment(\.colorScheme, .dark)
   }
 
-  var mainContent: some View {
-    VStack(spacing: 20) {
-      LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
-        statCard(label: "Workouts", value: "\(stats.yearTotals.totalWorkouts)", icon: .flameFill)
-        statCard(label: "Calories", value: formattedCalories, icon: .boltFill)
-        statCard(label: "Types", value: "\(stats.yearTotals.uniqueWorkoutTypes)", icon: .figureRun)
-        statCard(label: "Best Streak", value: "\(stats.longestStreak.longestStreakDays) days", icon: .calendarBadgeClock)
-      }
-      .padding(.horizontal, 24)
+  private var focusSentence: Text {
+    Text("You exercised for ") +
+    Text(formattedMinutes)
+      .foregroundStyle(.tint) +
+    Text(" and burned ") +
+    Text(formattedCalories + " cals")
+      .foregroundStyle(.tint) +
+    Text(" this year!")
+  }
+}
+
+// MARK: - Title
+
+private extension WorkoutsStoryPage {
+
+  var titleView: some View {
+    Text("Workouts")
+      .font(.title3)
+      .fontDesign(.rounded)
+      .bold()
+  }
+}
+
+// MARK: - Stats Grid
+
+private extension WorkoutsStoryPage {
+
+  var statsGrid: some View {
+    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
+      workoutsCard
+      avgDurationCard
+      typesCard
+      streakCard
     }
   }
 
-  private var formattedMinutes: String {
+  var workoutsCard: some View {
+    HStack {
+      Image(systemSymbol: .figureHighintensityIntervaltraining)
+        .foregroundStyle(.tint)
+        .font(.title2)
+      VStack(alignment: .leading, spacing: 0) {
+        Text("\(stats.yearTotals.totalWorkouts)")
+          .font(.title3)
+          .bold()
+        Text("Workouts")
+          .font(.caption)
+          .foregroundStyle(.secondary)
+      }
+      Spacer()
+    }
+    .cardContainer(fill: .background.secondary)
+  }
+
+  var avgDurationCard: some View {
+    HStack {
+      Image(systemSymbol: .clockFill)
+        .foregroundStyle(.tint)
+        .font(.title2)
+      VStack(alignment: .leading, spacing: 0) {
+        Text(formattedAvgDuration)
+          .font(.title3)
+          .bold()
+        Text("Avg Duration")
+          .font(.caption)
+          .foregroundStyle(.secondary)
+      }
+      Spacer()
+    }
+    .cardContainer(fill: .background.secondary)
+  }
+
+  var typesCard: some View {
+    HStack {
+      Image(systemSymbol: .figureTennis)
+        .foregroundStyle(.tint)
+        .font(.title2)
+      VStack(alignment: .leading, spacing: 0) {
+        Text("\(stats.yearTotals.uniqueWorkoutTypes)")
+          .font(.title3)
+          .bold()
+        Text("Types")
+          .font(.caption)
+          .foregroundStyle(.secondary)
+      }
+      Spacer()
+    }
+    .cardContainer(fill: .background.secondary)
+  }
+
+  var streakCard: some View {
+    HStack {
+      Image(systemSymbol: .flameFill)
+        .foregroundStyle(.tint)
+        .font(.title2)
+      VStack(alignment: .leading, spacing: 0) {
+        Text("\(stats.longestStreak.longestStreakDays) days")
+          .font(.title3)
+          .bold()
+        Text("Best Streak")
+          .font(.caption)
+          .foregroundStyle(.secondary)
+      }
+      Spacer()
+    }
+    .cardContainer(fill: .background.secondary)
+  }
+}
+
+// MARK: - Helpers
+
+private extension WorkoutsStoryPage {
+
+  var formattedMinutes: String {
     let hours = Int(stats.yearTotals.totalDurationMinutes / 60)
     if hours > 0 {
       return "\(hours.formatted()) hours"
@@ -41,28 +186,18 @@ struct WorkoutsStoryPage: View, StoryPage {
     return "\(Int(stats.yearTotals.totalDurationMinutes).formatted()) minutes"
   }
 
-  private var formattedCalories: String {
+  var formattedCalories: String {
     Int(stats.yearTotals.totalCaloriesBurned).formatted()
   }
 
-  private func statCard(label: String, value: String, icon: SFSymbol) -> some View {
-    VStack(alignment: .leading, spacing: 8) {
-      Image(systemSymbol: icon)
-        .font(.title2)
-        .foregroundStyle(.secondary)
-
-      Text(value)
-        .font(.title2)
-        .bold()
-        .fontDesign(.rounded)
-
-      Text(label)
-        .font(.caption)
-        .foregroundStyle(.secondary)
+  var formattedAvgDuration: String {
+    let avgMinutes = stats.yearTotals.totalDurationMinutes / Double(stats.yearTotals.totalWorkouts)
+    let hours = Int(avgMinutes / 60)
+    let minutes = Int(avgMinutes.truncatingRemainder(dividingBy: 60))
+    if hours > 0 {
+      return "\(hours)h \(minutes)m"
     }
-    .frame(maxWidth: .infinity, alignment: .leading)
-    .padding()
-    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
+    return "\(Int(avgMinutes)) min"
   }
 }
 
