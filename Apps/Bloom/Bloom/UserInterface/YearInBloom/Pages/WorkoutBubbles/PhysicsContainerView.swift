@@ -20,10 +20,28 @@ final class PhysicsContainerView: UIView {
   private var pendingBubbles: [BubbleView] = []
   private var dropTimer: Timer?
   private var isSetup = false
+  private var pendingWorkoutTypes: [WorkoutTypeStats]?
 
   var onBubbleTap: ((WorkoutTypeStats) -> Void)?
 
+  override func layoutSubviews() {
+    super.layoutSubviews()
+
+    // Try setup if we have pending data and bounds are now valid
+    if !isSetup, let workoutTypes = pendingWorkoutTypes, bounds.width > 0, bounds.height > 0 {
+      performSetup(workoutTypes: workoutTypes)
+    }
+  }
+
   func setup(workoutTypes: [WorkoutTypeStats]) {
+    // Store for later if bounds not ready yet
+    pendingWorkoutTypes = workoutTypes
+
+    guard !isSetup, bounds.width > 0, bounds.height > 0 else { return }
+    performSetup(workoutTypes: workoutTypes)
+  }
+
+  private func performSetup(workoutTypes: [WorkoutTypeStats]) {
     guard !isSetup, bounds.width > 0, bounds.height > 0 else { return }
     isSetup = true
 
@@ -155,6 +173,7 @@ final class PhysicsContainerView: UIView {
 
   func reset() {
     isSetup = false
+    pendingWorkoutTypes = nil
     dropTimer?.invalidate()
     dropTimer = nil
     animator?.removeAllBehaviors()
