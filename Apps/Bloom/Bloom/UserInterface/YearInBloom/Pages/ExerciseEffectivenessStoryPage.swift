@@ -194,27 +194,30 @@ private extension ExerciseEffectivenessStoryPage {
 
   var statsGrid: some View {
     LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
-      workoutsCard
+      favouriteZoneCard
       starMonthsCard
     }
   }
 
-  var workoutsCard: some View {
-    HStack {
-      Image(systemSymbol: .figureRun)
-        .foregroundStyle(.green)
-        .font(.title2)
-      VStack(alignment: .leading, spacing: 0) {
-        Text("\(stats.yearTotals.totalWorkouts)")
-          .font(.title3)
-          .bold()
-        Text("Workouts")
-          .font(.caption)
-          .foregroundStyle(.secondary)
+  @ViewBuilder
+  var favouriteZoneCard: some View {
+    if let favourite = favouriteZone {
+      HStack {
+        Image(systemName: symbolNameForZone(favourite.zone))
+          .foregroundStyle(.white, colorForZone(favourite.zone))
+          .font(.title2)
+        VStack(alignment: .leading, spacing: 0) {
+          Text("Zone \(favourite.zone)")
+            .font(.title3)
+            .bold()
+          Text("Favourite Zone")
+            .font(.caption)
+            .foregroundStyle(.secondary)
+        }
+        Spacer()
       }
-      Spacer()
+      .cardContainer(fill: .background.secondary)
     }
-    .cardContainer(fill: .background.secondary)
   }
 
   var starMonthsCard: some View {
@@ -288,6 +291,40 @@ private extension ExerciseEffectivenessStoryPage {
 // MARK: - Helpers
 
 private extension ExerciseEffectivenessStoryPage {
+
+  var favouriteZone: (zone: Int, minutes: Double)? {
+    guard let zones = stats.yearTotals.totalZoneMinutes else { return nil }
+    let zoneMinutes = [
+      (1, zones.zone1Minutes),
+      (2, zones.zone2Minutes),
+      (3, zones.zone3Minutes),
+      (4, zones.zone4Minutes),
+      (5, zones.zone5Minutes)
+    ]
+    return zoneMinutes.max(by: { $0.1 < $1.1 })
+  }
+
+  func colorForZone(_ zone: Int) -> Color {
+    switch zone {
+    case 1: .heartRateZone1
+    case 2: .heartRateZone2
+    case 3: .heartRateZone3
+    case 4: .heartRateZone4
+    case 5: .heartRateZone5
+    default: .gray
+    }
+  }
+
+  func symbolNameForZone(_ zone: Int) -> String {
+    switch zone {
+    case 1: "1.circle.fill"
+    case 2: "2.circle.fill"
+    case 3: "3.circle.fill"
+    case 4: "4.circle.fill"
+    case 5: "5.circle.fill"
+    default: "circle"
+    }
+  }
 
   var formattedZoneMinutes: String {
     let zoneMinutes = Int(stats.yearTotals.totalZoneMinutes?.scaledZoneMinutes ?? 0)
