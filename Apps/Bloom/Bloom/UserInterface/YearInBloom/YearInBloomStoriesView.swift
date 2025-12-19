@@ -169,8 +169,8 @@ private extension YearInBloomStoriesView {
     if viewModel.sleepStats != nil { pages.append(.sleep) }
     if viewModel.menstrualStats != nil { pages.append(.menstrualCycle) }
     if viewModel.heartHealthStats != nil { pages.append(.heartHealth) }
-    if viewModel.bodyWeightStats != nil { pages.append(.bodyWeight) }
     if viewModel.nutritionStats != nil { pages.append(.nutrition) }
+    if viewModel.bodyWeightStats != nil { pages.append(.bodyWeight) }
 
     return pages
   }
@@ -204,13 +204,13 @@ private extension YearInBloomStoriesView {
         if let heartHealthStats = viewModel.heartHealthStats {
           HeartHealthStoryPage(stats: heartHealthStats)
         }
-      case .bodyWeight:
-        if let bodyWeightStats = viewModel.bodyWeightStats {
-          BodyWeightStoryPage(stats: bodyWeightStats)
-        }
       case .nutrition:
         if let nutritionStats = viewModel.nutritionStats {
           MacroDistributionStoryPage(stats: nutritionStats)
+        }
+      case .bodyWeight:
+        if let bodyWeightStats = viewModel.bodyWeightStats {
+          BodyWeightStoryPage(stats: bodyWeightStats)
         }
       }
     }
@@ -227,8 +227,8 @@ private enum StoryPageType: Hashable {
   case sleep
   case menstrualCycle
   case heartHealth
-  case bodyWeight
   case nutrition
+  case bodyWeight
 }
 
 // MARK: - Share Image Generation
@@ -244,8 +244,8 @@ private extension YearInBloomStoriesView {
     case .sleep: return "Sleep"
     case .menstrualCycle: return "Menstrual Cycle"
     case .heartHealth: return "Heart Health"
-    case .bodyWeight: return "Body Weight"
     case .nutrition: return "Nutrition"
+    case .bodyWeight: return "Body Weight"
     }
   }
 
@@ -350,13 +350,13 @@ private extension YearInBloomStoriesView {
           if let heartHealthStats = viewModel.heartHealthStats {
             HeartHealthStoryPage(stats: heartHealthStats)
           }
-        case .bodyWeight:
-          if let bodyWeightStats = viewModel.bodyWeightStats {
-            BodyWeightStoryPage(stats: bodyWeightStats)
-          }
         case .nutrition:
           if let nutritionStats = viewModel.nutritionStats {
             MacroDistributionStoryPage(stats: nutritionStats)
+          }
+        case .bodyWeight:
+          if let bodyWeightStats = viewModel.bodyWeightStats {
+            BodyWeightStoryPage(stats: bodyWeightStats)
           }
         }
       }
