@@ -27,7 +27,7 @@ struct TodayView: View {
       sort: \Habit.startDate,
       order: .reverse
     )
-    
+
     _reminders = Query(
       sort: \Reminder.modifiedDate,
       order: .reverse
@@ -138,6 +138,11 @@ struct TodayView: View {
           .buttonStyle(.plain)
         }
       }
+      .safeAreaInset(edge: .bottom) {
+        if isYearInBloomVisible {
+          yearInBloomSection
+        }
+      }
       .sheet($presentedSheet)
       .navigationDestination($presentedNavPush)
       .fullScreenCover($presentedFullScreen)
@@ -199,6 +204,56 @@ private extension TodayView {
     case .night:
       return Image(.nightScenery)
     }
+  }
+
+  var isYearInBloomVisible: Bool {
+    let calendar = Calendar.current
+    let now = Date()
+    let month = calendar.component(.month, from: now)
+    let day = calendar.component(.day, from: now)
+
+    // Visible Dec 15 - Dec 31 OR Jan 1 - Jan 10
+    return (month == 12 && day >= 15) || (month == 1 && day <= 10)
+  }
+
+  var yearInBloomYear: Int {
+    let calendar = Calendar.current
+    let now = Date()
+    let month = calendar.component(.month, from: now)
+    let year = calendar.component(.year, from: now)
+
+    // In January, show previous year's YIB
+    return month == 1 ? year - 1 : year
+  }
+
+  @ViewBuilder
+  var yearInBloomSection: some View {
+    HStack {
+      Image(.YIB_2025)
+        .resizable()
+        .scaledToFill()
+        .frame(width: 50, height: 36)
+        .clipShape(RoundedRectangle(cornerRadius: 18))
+        .clipped()
+
+
+      Text("\(yearInBloomYear, format: .number.grouping(.never)) Year in Bloom")
+        .bold()
+        .fontDesign(.rounded)
+
+      Spacer()
+
+      DisclosureIndicator()
+    }
+    .padding(.vertical, 8)
+    .padding(.leading, 8)
+    .padding(.trailing)
+    .cardContainer(fill: .regularMaterial, includePadding: false)
+    .onTapGesture {
+      presentedSheet = YearInBloomStoriesView(year: yearInBloomYear).asAny
+    }
+    .padding(.horizontal)
+    .padding(.vertical, 8)
   }
 
   @ViewBuilder
@@ -559,7 +614,7 @@ private extension TodayView {
 // MARK: - Reminder Helpers
 
 extension TodayView {
-  
+
   /// Filtered reminder occurrences that should show on today's view
   var filteredTodaysOccurrences: [ReminderOccurrenceDisplay] {
     let reminderDTOs = reminders.map { $0.asDTO() }
@@ -569,19 +624,19 @@ extension TodayView {
       }
       .flatMap { $0.todaysOccurrenceDisplays() }
   }
-  
+
   var sortedOccurrences: [ReminderOccurrenceDisplay] {
     return filteredTodaysOccurrences.sorted { occurrence1, occurrence2 in
       let isOverdue1 = isOccurrenceOverdue(occurrence1)
       let isOverdue2 = isOccurrenceOverdue(occurrence2)
       let isCompleted1 = occurrence1.isCompleted
       let isCompleted2 = occurrence2.isCompleted
-      
+
       // Both are completed - sort by completion time (most recent first)
       if isCompleted1 && isCompleted2 {
         let completion1 = occurrence1.completionDate
         let completion2 = occurrence2.completionDate
-        
+
         // If we have completion dates, sort by most recent first (descending)
         if let date1 = completion1, let date2 = completion2 {
           return date1 > date2 // Most recent first
@@ -589,35 +644,35 @@ extension TodayView {
         // Fallback to scheduled time (most recent first)
         return occurrence1.scheduledTime > occurrence2.scheduledTime
       }
-      
+
       // One is completed, one is not - uncompleted items come first
       if isCompleted1 != isCompleted2 {
         return !isCompleted1
       }
-      
+
       // Both uncompleted - sort by urgency
-      
+
       // Overdue items first
       if isOverdue1 != isOverdue2 {
         return isOverdue1
       }
-      
+
       // Both not overdue or both overdue - sort by scheduled time
       return occurrence1.scheduledTime < occurrence2.scheduledTime
     }
   }
-  
+
   func isReminderCompleted(_ reminder: ReminderDTO) -> Bool {
     return remindersManager.isReminderCompletedToday(reminder)
   }
-  
+
   func isOccurrenceOverdue(_ occurrence: ReminderOccurrenceDisplay) -> Bool {
     return occurrence.scheduledTime < Date() && !occurrence.isCompleted
   }
-  
+
   func handleReminderTap(_ reminder: ReminderDTO) {
     let isCurrentlyCompleted = isReminderCompleted(reminder)
-    
+
     Task {
       do {
         if isCurrentlyCompleted {
@@ -632,7 +687,7 @@ extension TodayView {
       }
     }
   }
-  
+
   func handleOccurrenceTap(_ occurrence: ReminderOccurrenceDisplay) {
     Task {
       do {
@@ -654,21 +709,21 @@ extension TodayView {
       }
     }
   }
-  
+
   func handleEditReminder(_ reminderDTO: ReminderDTO) {
     // Find the actual Reminder model from the DTO ID
     if let reminder = reminders.first(where: { $0.id == reminderDTO.id }) {
       presentedSheet = CreateEditReminderView(reminder: reminder).asAny
     }
   }
-  
+
   func handleEditHabit(_ habit: Habit) {
     presentedSheet = EditUserAddedHabitView(habit: habit) { updatedHabit in
       // The EditUserAddedHabitView handles the update
       // If updatedHabit is nil, the habit was deleted from within the edit view
     }.asAny
   }
-  
+
   func handleDeleteHabit(_ habit: Habit) {
     confirmationDialogDetails = ConfirmationDialogDetails(
       title: "Delete Goal",
@@ -684,15 +739,15 @@ extension TodayView {
       ]
     )
   }
-  
+
   func handleAskBudAction(title: String, content: String, source: String) {
     TelemetryDeck.signal("Ask Bud Attempted", parameters: ["source": source])
-    
+
     EntitledAction(presentedSheet: $presentedSheet) {
       let context = ChatContext(title: title, context: content)
       tabController.chatContexts = [context]
       tabController.isShowingChat = true
-      
+
       TelemetryDeck.signal("Ask Bud", parameters: ["source": source])
     }
   }

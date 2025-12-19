@@ -16,6 +16,7 @@ final class YearInBloomViewModel {
   var menstrualStats: YearInBloomMenstrualStats?
   var heartHealthStats: YearInBloomHeartHealthStats?
   var bodyWeightStats: YearInBloomBodyWeightStats?
+  var nutritionStats: YearInBloomNutritionStats?
   var isLoading = false
   var error: Error?
 
@@ -34,11 +35,13 @@ final class YearInBloomViewModel {
     await YearInBloomCalculator.shared.compileMenstrual(for: year)
     await YearInBloomCalculator.shared.compileHeartHealth(for: year)
     await YearInBloomCalculator.shared.compileBodyWeight(for: year)
+    await YearInBloomCalculator.shared.compileNutrition(for: year)
     stats = await YearInBloomCalculator.shared.workoutStats
     sleepStats = await YearInBloomCalculator.shared.sleepStats
     menstrualStats = await YearInBloomCalculator.shared.menstrualStats
     heartHealthStats = await YearInBloomCalculator.shared.heartHealthStats
     bodyWeightStats = await YearInBloomCalculator.shared.bodyWeightStats
+    nutritionStats = await YearInBloomCalculator.shared.nutritionStats
 
     isLoading = false
   }
@@ -52,11 +55,13 @@ final class YearInBloomViewModel {
     await YearInBloomCalculator.shared.compileMenstrual(for: year)
     await YearInBloomCalculator.shared.compileHeartHealth(for: year)
     await YearInBloomCalculator.shared.compileBodyWeight(for: year)
+    await YearInBloomCalculator.shared.compileNutrition(for: year)
     stats = await YearInBloomCalculator.shared.workoutStats
     sleepStats = await YearInBloomCalculator.shared.sleepStats
     menstrualStats = await YearInBloomCalculator.shared.menstrualStats
     heartHealthStats = await YearInBloomCalculator.shared.heartHealthStats
     bodyWeightStats = await YearInBloomCalculator.shared.bodyWeightStats
+    nutritionStats = await YearInBloomCalculator.shared.nutritionStats
 
     isLoading = false
   }

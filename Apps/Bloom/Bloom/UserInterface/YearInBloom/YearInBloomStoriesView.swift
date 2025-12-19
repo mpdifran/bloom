@@ -35,54 +35,57 @@ struct YearInBloomStoriesView: View {
     NavigationStack {
       Group {
         if viewModel.isLoading {
-          loadingView
-        } else if viewModel.stats != nil {
-          storiesContent
+          YearInBloomLoadingView(year: year)
         } else {
-          noDataView
+          storiesContent
+        }
+      }
+      .safeAreaInset(edge: .bottom) {
+        if availablePages.isNotEmpty {
+          if #available(iOS 26.0, *) {
+            Button {
+              // TODO: Share image
+            } label: {
+              Label("Share", systemSymbol: .squareAndArrowUp)
+                .bold()
+                .foregroundStyle(.text)
+                .padding()
+            }
+            .glassEffect()
+            .horizontalAlignment(.trailing)
+            .padding()
+          } else {
+            Button {
+              // TODO: Share image
+            } label: {
+              Label("Share", systemSymbol: .squareAndArrowUp)
+            }
+            .buttonStyle(.primary)
+            .horizontalAlignment(.trailing)
+            .padding()
+          }
         }
       }
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
           DismissButton()
         }
-//        ToolbarItemGroup(placement: .bottomBar) {
-//          Spacer()
-//          Button {
-//            // TODO: Share image
-//          } label: {
-//            Label("Share", systemSymbol: .squareAndArrowUp)
-//              .foregroundStyle(.text)
+
+//        if availablePages.isNotEmpty {
+//          ToolbarItemGroup(placement: .bottomBar) {
+//            Spacer()
+//            Button {
+//              // TODO: Share image
+//            } label: {
+//              Label("Share", systemSymbol: .squareAndArrowUp)
+//                .foregroundStyle(.text)
+//            }
+//            .buttonStyle(.plain)
 //          }
-//          .buttonStyle(.plain)
 //        }
       }
       .removeScrollEdgeEffect(shouldHide: true)
       .navigationBarTitleDisplayMode(.inline)
-    }
-    .safeAreaInset(edge: .bottom) {
-      if #available(iOS 26.0, *) {
-        Button {
-          // TODO: Share image
-        } label: {
-          Label("Share", systemSymbol: .squareAndArrowUp)
-            .bold()
-            .foregroundStyle(.text)
-            .padding()
-        }
-        .glassEffect()
-        .horizontalAlignment(.trailing)
-        .padding()
-      } else {
-        Button {
-          // TODO: Share image
-        } label: {
-          Label("Share", systemSymbol: .squareAndArrowUp)
-        }
-        .buttonStyle(.primary)
-        .horizontalAlignment(.trailing)
-        .padding()
-      }
     }
     .overlay {
       StoryProgressBar(
@@ -115,7 +118,6 @@ struct YearInBloomStoriesView: View {
 private extension YearInBloomStoriesView {
 
   var storiesContent: some View {
-
     currentPageView
       .id(currentPage)
       .transition(.opacity)
@@ -158,6 +160,7 @@ private extension YearInBloomStoriesView {
     if viewModel.menstrualStats != nil { pages.append(.menstrualCycle) }
     if viewModel.heartHealthStats != nil { pages.append(.heartHealth) }
     if viewModel.bodyWeightStats != nil { pages.append(.bodyWeight) }
+    if viewModel.nutritionStats != nil { pages.append(.nutrition) }
 
     return pages
   }
@@ -195,6 +198,10 @@ private extension YearInBloomStoriesView {
         if let bodyWeightStats = viewModel.bodyWeightStats {
           BodyWeightStoryPage(stats: bodyWeightStats)
         }
+      case .nutrition:
+        if let nutritionStats = viewModel.nutritionStats {
+          MacroDistributionStoryPage(stats: nutritionStats)
+        }
       }
     }
   }
@@ -211,6 +218,7 @@ private enum StoryPageType {
   case menstrualCycle
   case heartHealth
   case bodyWeight
+  case nutrition
 }
 
 // MARK: - Timer Logic
@@ -246,53 +254,6 @@ private extension YearInBloomStoriesView {
         currentPage -= 1
         progress = 0
       }
-    }
-  }
-}
-
-// MARK: - Loading View
-
-private extension YearInBloomStoriesView {
-
-  var loadingView: some View {
-    VStack(spacing: 20) {
-      Spacer()
-
-      CircularSpinnerView()
-        .foregroundStyle(.tint)
-
-      Text("Calculating your Year in Bloom...")
-        .font(.headline)
-        .fontDesign(.rounded)
-        .foregroundStyle(.secondary)
-
-      Text(viewModel.formattedYear)
-        .font(.largeTitle)
-        .bold()
-        .fontDesign(.rounded)
-
-      Spacer()
-    }
-    .frame(maxWidth: .infinity, maxHeight: .infinity)
-  }
-}
-
-// MARK: - No Data View
-
-private extension YearInBloomStoriesView {
-
-  var noDataView: some View {
-    ContentUnavailableView {
-      Label("No Workout Data", systemSymbol: .figureRun)
-    } description: {
-      Text("We couldn't find any workout data for \(viewModel.formattedYear). Start tracking your workouts to see your Year In Bloom!")
-    } actions: {
-      Button("Try Again") {
-        Task {
-          await viewModel.forceRefresh()
-        }
-      }
-      .buttonStyle(.bordered)
     }
   }
 }

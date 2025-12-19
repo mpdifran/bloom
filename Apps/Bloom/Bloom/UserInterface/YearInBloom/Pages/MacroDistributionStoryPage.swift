@@ -40,7 +40,7 @@ struct MacroDistributionStoryPage: View {
 
       statCardsView
     }
-    .ignoresSafeArea(edges: [.horizontal])
+    .ignoresSafeArea(edges: [.horizontal, .top])
     .toolbar {
       ToolbarItem(placement: .principal) {
         Text("Nutrition")
@@ -111,7 +111,7 @@ private extension MacroDistributionStoryPage {
     .chartXScale(domain: yearStart...yearEnd)
     .chartYScale(domain: 0...100)
     .chartLegend(.hidden)
-    .frame(height: 240)
+    .frame(height: 360)
   }
 }
 
