@@ -224,7 +224,7 @@ private extension SleepStoryPage {
             Text("\(lowest.score)")
               .font(.title2)
               .bold()
-            Text("Lowest")
+            Text("Lowest Score")
               .font(.caption)
               .foregroundStyle(.secondary)
           }
@@ -244,7 +244,7 @@ private extension SleepStoryPage {
             Text("\(highest.score)")
               .font(.title2)
               .bold()
-            Text("Highest")
+            Text("Highest Score")
               .font(.caption)
               .foregroundStyle(highest.isPerfect ? .white.opacity(0.7) : .secondary)
           }

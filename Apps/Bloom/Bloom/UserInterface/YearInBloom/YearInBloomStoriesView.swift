@@ -10,6 +10,7 @@ import SFSafeSymbols
 import CoreHealth
 import AppUI
 import BloomUI
+import TelemetryDeck
 
 struct YearInBloomStoriesView: View {
   let year: Int
@@ -78,6 +79,9 @@ struct YearInBloomStoriesView: View {
     .animation(.default, value: viewModel.isLoading)
     .task {
       await viewModel.loadStats()
+    }
+    .onAppear {
+      TelemetryDeck.signal("View Year In Bloom")
     }
   }
 }

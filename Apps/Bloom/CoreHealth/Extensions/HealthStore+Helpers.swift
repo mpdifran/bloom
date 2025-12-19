@@ -294,15 +294,28 @@ public extension HKHealthStore {
         }
 
         var quantities = [DateQuantitySample]()
-        results.enumerateStatistics(from: adjustedStartDate, to: adjustedEndDate) { (statistics, stop) in
-          if let sum = statistics.sumQuantity() {
+        results.enumerateStatistics(from: adjustedStartDate, to: adjustedEndDate) { statistics, _ in
+          // Use the correct accessor based on options
+          let quantity: HKQuantity?
+          if options.contains(.discreteMin) {
+            quantity = statistics.minimumQuantity()
+          } else if options.contains(.discreteMax) {
+            quantity = statistics.maximumQuantity()
+          } else if options.contains(.discreteAverage) {
+            quantity = statistics.averageQuantity()
+          } else {
+            quantity = statistics.sumQuantity()
+          }
+
+          if let quantity {
             quantities.append(
               DateQuantitySample(
                 date: statistics.startDate,
-                quantity: sum
+                quantity: quantity
               )
             )
-          } else {
+          } else if options.contains(.cumulativeSum) {
+            // For cumulative sum, append 0 if no data (preserves old behavior)
             quantities.append(
               DateQuantitySample(
                 date: statistics.startDate,
@@ -310,6 +323,7 @@ public extension HKHealthStore {
               )
             )
           }
+          // For discrete options (min/max/average), skip days with no data
         }
         //                if !quantities.contains(where: { Calendar.current.isDateInToday($0.date) }) && dateRange.containsTodayDate() {
         //                    quantities.append(

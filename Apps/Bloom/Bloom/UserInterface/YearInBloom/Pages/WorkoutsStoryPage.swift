@@ -21,40 +21,46 @@ struct WorkoutsStoryPage: View {
       )
       .frame(maxHeight: .infinity)
 
+      Rectangle()
+        .fill(.black)
+        .frame(height: 100)
+        .zStackAlignment(.bottom)
+        .ignoresSafeArea()
+
       VStack(spacing: 0) {
-        LinearGradient(
-          colors: [.black, .clear, .clear, .clear],
-          startPoint: .bottom,
-          endPoint: .top
-        )
-        .padding(.top)
-        Rectangle()
-          .fill(.black)
-      }
-      .ignoresSafeArea()
+        LinearGradient(colors: [.black, .clear], startPoint: .bottom, endPoint: .top)
+          .frame(height: 150)
+        VStack(spacing: 40) {
+          VStack {
+            Image(systemSymbol: .figureRun)
+              .foregroundStyle(.tint)
+              .font(.system(size: 50))
+              .contentTransition(.symbolEffect)
+              .padding(.vertical)
 
-      VStack(spacing: 80) {
-        Spacer()
+            focusSentence
+              .font(.title)
+              .fontWeight(.bold)
+              .fontDesign(.rounded)
+              .multilineTextAlignment(.center)
+              .fixedSize(horizontal: false, vertical: true)
+          }
 
-        VStack {
-          Image(systemSymbol: .figureRun)
-            .foregroundStyle(.tint)
-            .font(.system(size: 50))
-            .contentTransition(.symbolEffect)
-            .padding(.bottom)
-
-          focusSentence
-            .font(.title)
-            .fontWeight(.bold)
-            .fontDesign(.rounded)
-            .multilineTextAlignment(.center)
-            .fixedSize(horizontal: false, vertical: true)
+          statsGrid
         }
-
-        statsGrid
+        .padding(.horizontal)
+        .background {
+          Rectangle()
+            .fill(.black)
+            .ignoresSafeArea()
+        }
       }
-      .padding(.horizontal)
       .zStackAlignment(.bottom)
+    }
+    .background {
+      Rectangle()
+        .fill(.black)
+        .ignoresSafeArea()
     }
     .tint(.green)
     .toolbar {

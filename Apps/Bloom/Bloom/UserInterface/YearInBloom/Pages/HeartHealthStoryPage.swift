@@ -11,6 +11,30 @@ import CoreHealth
 import BloomUI
 import SFSafeSymbols
 
+// MARK: - HRV Trend
+
+enum HRVTrend {
+  case improving
+  case stable
+  case declining
+
+  var symbol: SFSymbol {
+    switch self {
+    case .improving: .chevronUpCircleFill
+    case .stable: .minusCircleFill
+    case .declining: .chevronDownCircleFill
+    }
+  }
+
+  var label: String {
+    switch self {
+    case .improving: "Improving"
+    case .stable: "Stable"
+    case .declining: "Declining"
+    }
+  }
+}
+
 struct HeartHealthStoryPage: View {
   let stats: YearInBloomHeartHealthStats
 
@@ -22,8 +46,6 @@ struct HeartHealthStoryPage: View {
   var body: some View {
     VStack {
       heartRateChart
-
-      heartRateStatView
 
       Spacer()
 
@@ -38,19 +60,15 @@ struct HeartHealthStoryPage: View {
         .fontWeight(.bold)
         .fontDesign(.rounded)
         .multilineTextAlignment(.center)
+        .padding(.horizontal)
         .fixedSize(horizontal: false, vertical: true)
 
       Spacer()
 
-      Text("Heart Rate Variability")
-        .font(.caption)
-        .foregroundStyle(.secondary)
-        .horizontalAlignment(.leading)
-        .padding(.horizontal, 24)
-
-      hrvChart
+      heartRateStatView
     }
     .ignoresSafeArea(edges: [.horizontal])
+    .tint(.mutedRed)
     .toolbar {
       ToolbarItem(placement: .principal) {
         titleView
@@ -88,10 +106,7 @@ struct HeartHealthStoryPage: View {
           .foregroundStyle(.mutedRed) +
         Text(" for your age!")
     } else {
-      return Text("There's ") +
-        Text("room to improve")
-          .foregroundStyle(.mutedRed) +
-        Text(".")
+      return Text("There's room to improve next year.")
     }
   }
 }
@@ -108,7 +123,8 @@ private extension HeartHealthStoryPage {
   }
 
   var heartRateStatView: some View {
-    HStack(spacing: 12) {
+    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
+      // Min HR
       HStack {
         Image(systemSymbol: .arrowDownHeartFill)
           .foregroundStyle(.white, .mutedRed)
@@ -117,7 +133,7 @@ private extension HeartHealthStoryPage {
           Text("\(Int(minMinHR)) bpm")
             .font(.title2)
             .bold()
-          Text("Min")
+          Text("Min HR")
             .font(.caption)
             .foregroundStyle(.secondary)
         }
@@ -125,6 +141,7 @@ private extension HeartHealthStoryPage {
       }
       .cardContainer(fill: .background.secondary)
 
+      // Max HR
       HStack {
         Image(systemSymbol: .arrowUpHeartFill)
           .foregroundStyle(.white, .mutedRed)
@@ -133,13 +150,51 @@ private extension HeartHealthStoryPage {
           Text("\(Int(maxMaxHR)) bpm")
             .font(.title2)
             .bold()
-          Text("Max")
+          Text("Max HR")
             .font(.caption)
             .foregroundStyle(.secondary)
         }
         Spacer()
       }
       .cardContainer(fill: .background.secondary)
+
+      // Average HRV
+      if let avgHRV = yearlyAverageHRV {
+        HStack {
+          Image(systemSymbol: .waveformPathEcg)
+            .foregroundStyle(.mutedRed)
+            .font(.title2)
+          VStack(alignment: .leading, spacing: 0) {
+            Text("\(Int(avgHRV)) ms")
+              .font(.title2)
+              .bold()
+            Text("Avg HRV")
+              .font(.caption)
+              .foregroundStyle(.secondary)
+          }
+          Spacer()
+        }
+        .cardContainer(fill: .background.secondary)
+      }
+
+      // HRV Trend
+      if let trend = hrvTrend {
+        HStack {
+          Image(systemSymbol: trend.symbol)
+            .foregroundStyle(.white, .mutedRed)
+            .font(.title2)
+          VStack(alignment: .leading, spacing: 0) {
+            Text(trend.label)
+              .font(.title2)
+              .bold()
+            Text("HRV Trend")
+              .font(.caption)
+              .foregroundStyle(.secondary)
+          }
+          Spacer()
+        }
+        .cardContainer(fill: .background.secondary)
+      }
     }
     .fontDesign(.rounded)
     .padding(.horizontal)
@@ -164,7 +219,7 @@ private extension HeartHealthStoryPage {
     .chartYScale(domain: 20...200)
     .chartLegend(.hidden)
     .chartXSelection(value: $rawSelectedDate)
-    .frame(height: 160)
+    .frame(height: 240)
     .sensoryFeedback(.selection, trigger: selectedMonth)
     .chartOverlay { proxy in
       GeometryReader { geometry in
@@ -354,6 +409,27 @@ private extension HeartHealthStoryPage {
     return (values.max() ?? 80) + 5
   }
 
+  var yearlyAverageHRV: Double? {
+    let values = monthlyHRVWithValues.compactMap(\.averageHRV)
+    guard !values.isEmpty else { return nil }
+    return values.reduce(0, +) / Double(values.count)
+  }
+
+  var hrvTrend: HRVTrend? {
+    let sortedData = monthlyHRVWithValues.sorted { $0.date < $1.date }
+    let firstHalf = sortedData.prefix(6).compactMap(\.averageHRV)
+    let secondHalf = sortedData.suffix(6).compactMap(\.averageHRV)
+    guard !firstHalf.isEmpty, !secondHalf.isEmpty else { return nil }
+
+    let firstAvg = firstHalf.reduce(0, +) / Double(firstHalf.count)
+    let secondAvg = secondHalf.reduce(0, +) / Double(secondHalf.count)
+    let change = secondAvg - firstAvg
+
+    if change > 3 { return .improving }
+    else if change < -3 { return .declining }
+    else { return .stable }
+  }
+
   func findNearestHeartRateMonth(to date: Date) -> MonthlyHeartRateData? {
     let calendar = Calendar.current
     let targetMonth = calendar.component(.month, from: date)
@@ -379,6 +455,8 @@ private extension HeartHealthStoryPage {
 
 #Preview {
   PreviewEnvironment {
-    HeartHealthStoryPage(stats: .preview)
+    NavigationStack {
+      HeartHealthStoryPage(stats: .preview)
+    }
   }
 }
