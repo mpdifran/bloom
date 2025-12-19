@@ -79,7 +79,8 @@ struct CardioFitnessStoryPage: View {
       return Text("Your cardio fitness is ") +
         Text(level.name)
           .foregroundStyle(level.color) +
-        Text(formattedVO2Max)
+        Text(formattedVO2Max) +
+      Text(".")
     }
     return Text("Track more cardio workouts to see your fitness level.")
       .foregroundStyle(.secondary)

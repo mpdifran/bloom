@@ -52,12 +52,12 @@ struct SleepStoryPage: View {
         .ignoresSafeArea()
     }
     .ignoresSafeArea(edges: [.horizontal, .bottom])
-    .environment(\.colorScheme, .dark)
     .toolbar {
       ToolbarItem(placement: .principal) {
         titleView
       }
     }
+    .environment(\.colorScheme, .dark)
   }
 
   private var focusSentence: Text {

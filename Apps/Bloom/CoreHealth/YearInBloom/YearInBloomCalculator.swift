@@ -17,6 +17,7 @@ public final actor YearInBloomCalculator {
   @AsyncStreamable public var menstrualStats: YearInBloomMenstrualStats?
   @AsyncStreamable public var heartHealthStats: YearInBloomHeartHealthStats?
   @AsyncStreamable public var bodyWeightStats: YearInBloomBodyWeightStats?
+  @AsyncStreamable public var nutritionStats: YearInBloomNutritionStats?
   @AsyncStreamable public var isCalculating: Bool = false
 
   private init() { }
@@ -83,6 +84,16 @@ public extension YearInBloomCalculator {
     }
 
     bodyWeightStats = stats
+  }
+
+  /// Compile nutrition stats for the given year
+  func compileNutrition(for year: Int) async {
+    guard let stats = await calculateNutritionStats(for: year) else {
+      nutritionStats = nil
+      return
+    }
+
+    nutritionStats = stats
   }
 }
 
@@ -1044,6 +1055,131 @@ private extension YearInBloomCalculator {
       monthlyBodyFatData: monthlyBodyFatData,
       yearStartWeight: yearStartWeight,
       yearEndWeight: yearEndWeight,
+      generatedDate: .now
+    )
+  }
+
+  // MARK: - Nutrition Stats Calculation
+
+  func calculateNutritionStats(for year: Int) async -> YearInBloomNutritionStats? {
+    let currentYear = Calendar.current.component(.year, from: .now)
+    let yearsFromNow = currentYear - year
+    let dateRange = DateRange.specificYear(yearsFromNow)
+    let calendar = Calendar.current
+
+    // Fetch macro data for the year (daily values)
+    async let proteinSamples = HealthStoreFetcher.shared.fetchCollatedQuantity(
+      for: .dietaryProtein,
+      unit: .gram(),
+      options: .cumulativeSum,
+      dateRange: dateRange
+    )
+    async let carbsSamples = HealthStoreFetcher.shared.fetchCollatedQuantity(
+      for: .dietaryCarbohydrates,
+      unit: .gram(),
+      options: .cumulativeSum,
+      dateRange: dateRange
+    )
+    async let fatSamples = HealthStoreFetcher.shared.fetchCollatedQuantity(
+      for: .dietaryFatTotal,
+      unit: .gram(),
+      options: .cumulativeSum,
+      dateRange: dateRange
+    )
+    async let energySamples = HealthStoreFetcher.shared.fetchCollatedQuantity(
+      for: .dietaryEnergyConsumed,
+      unit: .largeCalorie(),
+      options: .cumulativeSum,
+      dateRange: dateRange
+    )
+
+    let (protein, carbs, fat, energy) = await (proteinSamples, carbsSamples, fatSamples, energySamples)
+
+    // Need at least some data to proceed
+    guard protein.isNotEmpty || carbs.isNotEmpty || fat.isNotEmpty else { return nil }
+
+    // Group samples by day
+    let proteinByDay = Dictionary(grouping: protein) { calendar.startOfDay(for: $0.date) }
+    let carbsByDay = Dictionary(grouping: carbs) { calendar.startOfDay(for: $0.date) }
+    let fatByDay = Dictionary(grouping: fat) { calendar.startOfDay(for: $0.date) }
+    let energyByDay = Dictionary(grouping: energy) { calendar.startOfDay(for: $0.date) }
+
+    // Get all unique days with any macro data
+    let allDays = Set(proteinByDay.keys)
+      .union(carbsByDay.keys)
+      .union(fatByDay.keys)
+
+    // Group days by month
+    let daysByMonth = Dictionary(grouping: allDays) { calendar.component(.month, from: $0) }
+
+    // Calculate monthly stats
+    var monthlyMacroStats = [MonthlyMacroStats]()
+
+    for month in 1...12 {
+      let monthDays = daysByMonth[month] ?? []
+
+      if monthDays.isEmpty {
+        monthlyMacroStats.append(MonthlyMacroStats(
+          month: month,
+          daysLogged: 0,
+          averageProteinGrams: 0,
+          averageCarbsGrams: 0,
+          averageFatGrams: 0,
+          averageCalories: 0
+        ))
+        continue
+      }
+
+      var totalProtein = 0.0
+      var totalCarbs = 0.0
+      var totalFat = 0.0
+      var totalEnergy = 0.0
+
+      for day in monthDays {
+        let dayProtein = proteinByDay[day]?.reduce(0.0) { $0 + $1.quantity.doubleValue(for: .gram()) } ?? 0
+        let dayCarbs = carbsByDay[day]?.reduce(0.0) { $0 + $1.quantity.doubleValue(for: .gram()) } ?? 0
+        let dayFat = fatByDay[day]?.reduce(0.0) { $0 + $1.quantity.doubleValue(for: .gram()) } ?? 0
+        let dayEnergy = energyByDay[day]?.reduce(0.0) { $0 + $1.quantity.doubleValue(for: .largeCalorie()) } ?? 0
+
+        totalProtein += dayProtein
+        totalCarbs += dayCarbs
+        totalFat += dayFat
+        totalEnergy += dayEnergy
+      }
+
+      let daysCount = Double(monthDays.count)
+      monthlyMacroStats.append(MonthlyMacroStats(
+        month: month,
+        daysLogged: monthDays.count,
+        averageProteinGrams: totalProtein / daysCount,
+        averageCarbsGrams: totalCarbs / daysCount,
+        averageFatGrams: totalFat / daysCount,
+        averageCalories: totalEnergy / daysCount
+      ))
+    }
+
+    // Calculate year totals
+    let monthsWithData = monthlyMacroStats.filter { $0.daysLogged > 0 }
+    guard monthsWithData.isNotEmpty else { return nil }
+
+    let totalDaysLogged = monthsWithData.reduce(0) { $0 + $1.daysLogged }
+    let weightedProtein = monthsWithData.reduce(0.0) { $0 + $1.averageProteinGrams * Double($1.daysLogged) }
+    let weightedCarbs = monthsWithData.reduce(0.0) { $0 + $1.averageCarbsGrams * Double($1.daysLogged) }
+    let weightedFat = monthsWithData.reduce(0.0) { $0 + $1.averageFatGrams * Double($1.daysLogged) }
+    let weightedCalories = monthsWithData.reduce(0.0) { $0 + $1.averageCalories * Double($1.daysLogged) }
+
+    let yearTotals = NutritionYearTotals(
+      totalDaysLogged: totalDaysLogged,
+      averageProteinGrams: weightedProtein / Double(totalDaysLogged),
+      averageCarbsGrams: weightedCarbs / Double(totalDaysLogged),
+      averageFatGrams: weightedFat / Double(totalDaysLogged),
+      averageCalories: weightedCalories / Double(totalDaysLogged)
+    )
+
+    return YearInBloomNutritionStats(
+      year: year,
+      monthlyMacroStats: monthlyMacroStats,
+      yearTotals: yearTotals,
       generatedDate: .now
     )
   }

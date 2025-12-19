@@ -46,19 +46,43 @@ struct YearInBloomStoriesView: View {
         ToolbarItem(placement: .cancellationAction) {
           DismissButton()
         }
-        ToolbarItemGroup(placement: .bottomBar) {
-          Spacer()
-          Button {
-            // TODO: Share image
-          } label: {
-            Label("Share", systemSymbol: .squareAndArrowUp)
-              .foregroundStyle(.text)
-          }
-          .buttonStyle(.plain)
-        }
+//        ToolbarItemGroup(placement: .bottomBar) {
+//          Spacer()
+//          Button {
+//            // TODO: Share image
+//          } label: {
+//            Label("Share", systemSymbol: .squareAndArrowUp)
+//              .foregroundStyle(.text)
+//          }
+//          .buttonStyle(.plain)
+//        }
       }
       .removeScrollEdgeEffect(shouldHide: true)
       .navigationBarTitleDisplayMode(.inline)
+    }
+    .safeAreaInset(edge: .bottom) {
+      if #available(iOS 26.0, *) {
+        Button {
+          // TODO: Share image
+        } label: {
+          Label("Share", systemSymbol: .squareAndArrowUp)
+            .bold()
+            .foregroundStyle(.text)
+            .padding()
+        }
+        .glassEffect()
+        .horizontalAlignment(.trailing)
+        .padding()
+      } else {
+        Button {
+          // TODO: Share image
+        } label: {
+          Label("Share", systemSymbol: .squareAndArrowUp)
+        }
+        .buttonStyle(.primary)
+        .horizontalAlignment(.trailing)
+        .padding()
+      }
     }
     .overlay {
       StoryProgressBar(
