@@ -20,6 +20,7 @@ struct WorkoutsStoryPage: View {
         onBubbleTap: { _ in }
       )
       .frame(maxHeight: .infinity)
+      .padding(.bottom, 300)
 
       Rectangle()
         .fill(.black)

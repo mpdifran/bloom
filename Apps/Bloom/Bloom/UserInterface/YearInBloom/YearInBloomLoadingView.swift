@@ -13,25 +13,29 @@ struct YearInBloomLoadingView: View {
   let year: Int
 
   var body: some View {
-    VStack(spacing: 20) {
+    VStack(spacing: 40) {
       Spacer()
 
       BudImage(.budThinking, dimension: 200)
 
-      CircularSpinnerView()
-        .foregroundStyle(.tint)
+      VStack(spacing: 16) {
+        CircularSpinnerView()
+          .foregroundStyle(.tint)
 
-      Text("Crunching the numbers...")
-        .font(.headline)
-        .fontDesign(.rounded)
-        .foregroundStyle(.secondary)
+        Text("Crunching the numbers...")
+          .font(.headline)
+          .fontDesign(.rounded)
+          .foregroundStyle(.secondary)
+      }
 
-      Text("Year In Bloom")
-        .font(.largeTitle)
-        .bold()
-        .fontDesign(.rounded)
+      VStack {
+        Text("Year In Bloom")
+          .font(.largeTitle)
+          .bold()
+          .fontDesign(.rounded)
 
-      yearDigitsView
+        yearDigitsView
+      }
 
       Spacer()
     }
