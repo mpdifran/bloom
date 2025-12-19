@@ -110,6 +110,12 @@ struct RootView: View {
     .onOpenURL { url in
       handleURL(url)
     }
+    .onChange(of: tabController.pendingYearInBloomNavigation) { _, year in
+      if let year {
+        presentedSheet = YearInBloomStoriesView(year: year).asAny
+        tabController.pendingYearInBloomNavigation = nil
+      }
+    }
     .tint(themeController.theme.color)
     .environment(themeController)
     .environment(experimentManager)
@@ -292,6 +298,20 @@ private extension RootView {
         tabController.activeTab = .nutrition
         Delay(600) {
           tabController.pendingSavedMealNavigation = mealId
+        }
+      } else if path == "/year-in-bloom" {
+        let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        if let yearString = components?.queryItems?.first(where: { $0.name == "year" })?.value,
+           let year = Int(yearString) {
+          // Only show if it's at least Dec 15th of that year
+          let now = Date()
+          let calendar = Calendar.current
+          if let dec15 = calendar.date(from: DateComponents(year: year, month: 12, day: 15)),
+             now >= dec15 {
+            Delay(600) {
+              tabController.pendingYearInBloomNavigation = year
+            }
+          }
         }
       } else {
         wasHandled = false

@@ -35,21 +35,14 @@ final class BubbleView: UIView {
     layer.cornerRadius = radius
     backgroundColor = .systemGreen
 
-    // Icon
+    // Icon - SF Symbols must use .center contentMode
     let config = UIImage.SymbolConfiguration(pointSize: radius * 0.6, weight: .semibold)
     let image = UIImage(systemName: workoutStats.activityType.systemImage, withConfiguration: config)
     iconImageView.image = image
     iconImageView.tintColor = .black
     iconImageView.contentMode = .center
-    iconImageView.translatesAutoresizingMaskIntoConstraints = false
+    iconImageView.frame = bounds  // Set frame directly - Auto Layout doesn't resolve in time for snapshot
     addSubview(iconImageView)
-
-    NSLayoutConstraint.activate([
-      iconImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
-      iconImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
-      iconImageView.widthAnchor.constraint(equalToConstant: radius),
-      iconImageView.heightAnchor.constraint(equalToConstant: radius)
-    ])
 
     // Tap gesture
     let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
@@ -64,4 +57,60 @@ final class BubbleView: UIView {
   override var collisionBoundsType: UIDynamicItemCollisionBoundsType {
     .ellipse
   }
+}
+
+#Preview {
+  PreviewEnvironment {
+    BloomScrollView {
+      BubbleViewPreview(
+        workoutStats: WorkoutTypeStats(
+          activityTypeRawValue: 37,
+          activityName: "Running",
+          count: 50,
+          totalDurationMinutes: 1500,
+          totalCaloriesBurned: 15000,
+          percentage: 0.4
+        ),
+        radius: 50
+      )
+      .frame(width: 100, height: 100)
+
+      BubbleViewPreview(
+        workoutStats: WorkoutTypeStats(
+          activityTypeRawValue: 37,
+          activityName: "Running",
+          count: 50,
+          totalDurationMinutes: 1500,
+          totalCaloriesBurned: 15000,
+          percentage: 0.4
+        ),
+        radius: 25
+      )
+      .frame(width: 50, height: 50)
+
+      BubbleViewPreview(
+        workoutStats: WorkoutTypeStats(
+          activityTypeRawValue: 37,
+          activityName: "Running",
+          count: 50,
+          totalDurationMinutes: 1500,
+          totalCaloriesBurned: 15000,
+          percentage: 0.4
+        ),
+        radius: 10
+      )
+      .frame(width: 20, height: 20)
+    }
+  }
+}
+
+private struct BubbleViewPreview: UIViewRepresentable {
+  let workoutStats: WorkoutTypeStats
+  let radius: CGFloat
+
+  func makeUIView(context: Context) -> BubbleView {
+    BubbleView(workoutStats: workoutStats, radius: radius)
+  }
+
+  func updateUIView(_ uiView: BubbleView, context: Context) {}
 }

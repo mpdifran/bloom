@@ -120,7 +120,7 @@ final class PhysicsContainerView: UIView {
       let minX = radius
       let maxX = max(radius, bounds.width - radius)
       let x = CGFloat.random(in: minX...maxX)
-      let y = -radius - CGFloat.random(in: 0...100)
+      let y = -radius - radius - 100 - CGFloat.random(in: 0...100)
       bubble.center = CGPoint(x: x, y: y)
 
       bubble.onTap = { [weak self] in
@@ -184,5 +184,117 @@ final class PhysicsContainerView: UIView {
     bubbleViews.forEach { $0.removeFromSuperview() }
     bubbleViews.removeAll()
     pendingBubbles.removeAll()
+  }
+}
+
+// MARK: - Snapshot Support
+
+extension PhysicsContainerView {
+
+  /// Creates an offscreen physics view with accelerated physics, waits for settle, then returns snapshot
+  static func createSnapshot(
+    workoutTypes: [WorkoutTypeStats],
+    size: CGSize,
+    completion: @escaping (UIImage?) -> Void
+  ) {
+    let container = PhysicsContainerView(frame: CGRect(origin: .zero, size: size))
+    container.backgroundColor = .black
+    container.setupForSnapshot(workoutTypes: workoutTypes)
+
+    // Wait for physics to settle with accelerated settings
+    DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+      let image = container.captureSnapshot()
+      container.reset()
+      completion(image)
+    }
+  }
+
+  private func setupForSnapshot(workoutTypes: [WorkoutTypeStats]) {
+    guard bounds.width > 0, bounds.height > 0 else { return }
+    isSetup = true
+    clipsToBounds = true
+
+    // Create animator
+    let newAnimator = UIDynamicAnimator(referenceView: self)
+    animator = newAnimator
+
+    // Accelerated gravity for fast settling
+    let gravityBehavior = UIGravityBehavior()
+    gravityBehavior.gravityDirection = CGVector(dx: 0, dy: 4.0)
+    newAnimator.addBehavior(gravityBehavior)
+    gravity = gravityBehavior
+
+    // Collision with bounds
+    let collisionBehavior = UICollisionBehavior()
+    collisionBehavior.collisionMode = .everything
+    collisionBehavior.addBoundary(
+      withIdentifier: "left" as NSCopying,
+      from: CGPoint(x: 0, y: 0),
+      to: CGPoint(x: 0, y: bounds.height)
+    )
+    collisionBehavior.addBoundary(
+      withIdentifier: "bottom" as NSCopying,
+      from: CGPoint(x: 0, y: bounds.height),
+      to: CGPoint(x: bounds.width, y: bounds.height)
+    )
+    collisionBehavior.addBoundary(
+      withIdentifier: "right" as NSCopying,
+      from: CGPoint(x: bounds.width, y: bounds.height),
+      to: CGPoint(x: bounds.width, y: 0)
+    )
+    newAnimator.addBehavior(collisionBehavior)
+    collision = collisionBehavior
+
+    // Item properties tuned for fast settling
+    let itemBehaviorInstance = UIDynamicItemBehavior()
+    itemBehaviorInstance.elasticity = 0.2   // Low bounce
+    itemBehaviorInstance.resistance = 1.0   // High resistance
+    itemBehaviorInstance.friction = 0.8     // High friction
+    itemBehaviorInstance.allowsRotation = false
+    newAnimator.addBehavior(itemBehaviorInstance)
+    itemBehavior = itemBehaviorInstance
+
+    // Calculate bubble sizes
+    let maxAvgDuration = workoutTypes.map { $0.totalDurationMinutes / Double($0.count) }.max() ?? 1.0
+
+    // Calculate how many bubbles to fill space
+    let averageRadius = (PhysicsConstants.minRadius + PhysicsConstants.maxRadius) / 2
+    let estimatedArea = bounds.width * bounds.height
+    let bubbleArea = .pi * averageRadius * averageRadius
+    let targetBubbleCount = max(workoutTypes.count, Int(estimatedArea / bubbleArea * 2.5))
+
+    // Create extended workout types array
+    var extendedWorkoutTypes: [WorkoutTypeStats] = []
+    while extendedWorkoutTypes.count < targetBubbleCount {
+      extendedWorkoutTypes.append(contentsOf: workoutTypes)
+    }
+    extendedWorkoutTypes = Array(extendedWorkoutTypes.prefix(targetBubbleCount)).shuffled()
+
+    // Create and add all bubbles at once (no stagger)
+    for stats in extendedWorkoutTypes {
+      let avgDuration = stats.totalDurationMinutes / Double(stats.count)
+      let radius = calculateRadius(value: avgDuration, maxValue: maxAvgDuration)
+      let bubble = BubbleView(workoutStats: stats, radius: radius)
+
+      // Position above visible area with random X
+      let minX = radius
+      let maxX = max(radius, bounds.width - radius)
+      let x = CGFloat.random(in: minX...maxX)
+      let y = -radius - CGFloat.random(in: 0...200)
+      bubble.center = CGPoint(x: x, y: y)
+
+      addSubview(bubble)
+      gravityBehavior.addItem(bubble)
+      collisionBehavior.addItem(bubble)
+      itemBehaviorInstance.addItem(bubble)
+      bubbleViews.append(bubble)
+    }
+  }
+
+  func captureSnapshot() -> UIImage? {
+    let renderer = UIGraphicsImageRenderer(bounds: bounds)
+    return renderer.image { context in
+      layer.render(in: context.cgContext)
+    }
   }
 }

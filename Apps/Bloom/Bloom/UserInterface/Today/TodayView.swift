@@ -138,11 +138,6 @@ struct TodayView: View {
           .buttonStyle(.plain)
         }
       }
-      .safeAreaInset(edge: .bottom) {
-        if isYearInBloomVisible {
-          yearInBloomSection
-        }
-      }
       .sheet($presentedSheet)
       .navigationDestination($presentedNavPush)
       .fullScreenCover($presentedFullScreen)
@@ -232,14 +227,21 @@ private extension TodayView {
       Image(.YIB_2025)
         .resizable()
         .scaledToFill()
-        .frame(width: 50, height: 36)
+        .frame(width: 90, height: 60)
         .clipShape(RoundedRectangle(cornerRadius: 18))
         .clipped()
 
-
-      Text("\(yearInBloomYear, format: .number.grouping(.never)) Year in Bloom")
-        .bold()
-        .fontDesign(.rounded)
+      VStack(alignment: .leading) {
+        Text("Year In Bloom")
+          .fontWeight(.black)
+          .font(.title3)
+          .fontDesign(.rounded)
+          .multilineTextAlignment(.leading)
+          .fixedSize(horizontal: false, vertical: true)
+        Text("See how you did in \(yearInBloomYear, format: .number.grouping(.never))!")
+          .font(.caption)
+          .foregroundStyle(.secondary)
+      }
 
       Spacer()
 
@@ -248,12 +250,11 @@ private extension TodayView {
     .padding(.vertical, 8)
     .padding(.leading, 8)
     .padding(.trailing)
-    .cardContainer(fill: .regularMaterial, includePadding: false)
+    .cardContainer(includePadding: false)
     .onTapGesture {
       presentedSheet = YearInBloomStoriesView(year: yearInBloomYear).asAny
     }
     .padding(.horizontal)
-    .padding(.vertical, 8)
   }
 
   @ViewBuilder
@@ -271,6 +272,11 @@ private extension TodayView {
       )
       .padding(.horizontal)
       .padding(.bottom)
+
+      if isYearInBloomVisible {
+        yearInBloomSection
+          .padding(.bottom, 8)
+      }
 
       // Dynamic sections based on time mode and settings
       let configuration = todaySettings.configuration(for: currentTimeMode)
@@ -298,6 +304,11 @@ private extension TodayView {
       )
       .padding(.horizontal)
       .padding(.bottom)
+
+      if isYearInBloomVisible {
+        yearInBloomSection
+          .padding(.bottom)
+      }
 
       // Show sections based on settings but only those available without Bloom Plus
       let configuration = todaySettings.configuration(for: currentTimeMode)

@@ -64,7 +64,7 @@ struct SleepStoryPage: View {
     Text("You averaged ") +
     Text(formattedSleepDuration)
       .foregroundStyle(.coreSleep) +
-    Text(" of sleep per night")
+    Text(" of sleep per night.")
   }
 }
 

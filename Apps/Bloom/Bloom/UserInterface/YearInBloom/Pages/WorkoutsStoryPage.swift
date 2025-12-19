@@ -68,6 +68,7 @@ struct WorkoutsStoryPage: View {
         titleView
       }
     }
+    .ignoresSafeArea(edges: .top)
     .environment(\.colorScheme, .dark)
   }
 

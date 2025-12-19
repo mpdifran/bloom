@@ -18,8 +18,6 @@ struct MacroDistributionStoryPage: View {
     VStack {
       macroDistributionChart
 
-      legendView
-
       Spacer()
 
       Image(systemSymbol: .forkKnife)

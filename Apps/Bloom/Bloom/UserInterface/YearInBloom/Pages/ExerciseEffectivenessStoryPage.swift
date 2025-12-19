@@ -51,7 +51,8 @@ struct ExerciseEffectivenessStoryPage: View {
         titleView
       }
     }
-    .padding()
+    .padding(.horizontal)
+    .padding(.top)
     .tint(.mutedOrange)
   }
 

@@ -16,11 +16,15 @@ struct YearInBloomStoriesView: View {
   let year: Int
 
   @Environment(\.dismiss) private var dismiss
+  @Environment(\.colorScheme) private var colorScheme
+  @Environment(ThemeController.self) private var themeController
 
   @State private var viewModel: YearInBloomViewModel
   @State private var currentPage = 0
   @State private var progress: CGFloat = 0
   @State private var isPaused = false
+  @State private var shareImageURLs: [StoryPageType: URL] = [:]
+  @State private var isSharePresented = false
 
   private let pageDuration: TimeInterval = 10.0
   private let tickInterval: TimeInterval = 0.1
@@ -44,7 +48,11 @@ struct YearInBloomStoriesView: View {
         if availablePages.isNotEmpty {
           if #available(iOS 26.0, *) {
             Button {
-              // TODO: Share image
+              TelemetryDeck.signal(
+                "Share Year In Bloom",
+                parameters: ["page": metricName(for: availablePages[currentPage])]
+              )
+              isSharePresented = true
             } label: {
               Label("Share", systemSymbol: .squareAndArrowUp)
                 .bold()
@@ -56,7 +64,11 @@ struct YearInBloomStoriesView: View {
             .padding()
           } else {
             Button {
-              // TODO: Share image
+              TelemetryDeck.signal(
+                "Share Year In Bloom",
+                parameters: ["page": metricName(for: availablePages[currentPage])]
+              )
+              isSharePresented = true
             } label: {
               Label("Share", systemSymbol: .squareAndArrowUp)
             }
@@ -66,23 +78,16 @@ struct YearInBloomStoriesView: View {
           }
         }
       }
+      .sheet(isPresented: $isSharePresented) {
+        if currentPage < availablePages.count,
+           let url = shareImageURLs[availablePages[currentPage]] {
+          ShareSheet(items: [url])
+        }
+      }
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
           DismissButton()
         }
-
-//        if availablePages.isNotEmpty {
-//          ToolbarItemGroup(placement: .bottomBar) {
-//            Spacer()
-//            Button {
-//              // TODO: Share image
-//            } label: {
-//              Label("Share", systemSymbol: .squareAndArrowUp)
-//                .foregroundStyle(.text)
-//            }
-//            .buttonStyle(.plain)
-//          }
-//        }
       }
       .removeScrollEdgeEffect(shouldHide: true)
       .navigationBarTitleDisplayMode(.inline)
@@ -109,6 +114,11 @@ struct YearInBloomStoriesView: View {
     }
     .onAppear {
       TelemetryDeck.signal("View Year In Bloom")
+    }
+    .onChange(of: viewModel.isLoading) { _, isLoading in
+      if !isLoading {
+        precomputeShareImages()
+      }
     }
   }
 }
@@ -209,7 +219,7 @@ private extension YearInBloomStoriesView {
 
 // MARK: - Story Page Type
 
-private enum StoryPageType {
+private enum StoryPageType: Hashable {
   case workouts
   case exerciseEffectiveness
   case distance
@@ -219,6 +229,141 @@ private enum StoryPageType {
   case heartHealth
   case bodyWeight
   case nutrition
+}
+
+// MARK: - Share Image Generation
+
+private extension YearInBloomStoriesView {
+
+  func metricName(for pageType: StoryPageType) -> String {
+    switch pageType {
+    case .workouts: return "Workouts"
+    case .exerciseEffectiveness: return "Exercise Effectiveness"
+    case .distance: return "Distance"
+    case .cardioFitness: return "Cardio Fitness"
+    case .sleep: return "Sleep"
+    case .menstrualCycle: return "Menstrual Cycle"
+    case .heartHealth: return "Heart Health"
+    case .bodyWeight: return "Body Weight"
+    case .nutrition: return "Nutrition"
+    }
+  }
+
+  func saveImageToTempFile(_ image: UIImage, for pageType: StoryPageType) -> URL? {
+    guard let jpegData = image.jpegData(compressionQuality: 0.85) else { return nil }
+    let filename = "\(year) - \(metricName(for: pageType)).jpg"
+    let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(filename)
+    do {
+      try jpegData.write(to: tempURL)
+      return tempURL
+    } catch {
+      return nil
+    }
+  }
+
+  func precomputeShareImages() {
+    Task { @MainActor in
+      for pageType in availablePages {
+        if pageType == .workouts, let stats = viewModel.stats {
+          // Special handling: snapshot physics view then compose
+          await captureWorkoutsShareImage(stats: stats)
+        } else {
+          // Normal ImageRenderer for other pages
+          let view = shareableView(for: pageType)
+          let renderer = ImageRenderer(content: view)
+          renderer.scale = 2.0
+          if let image = renderer.uiImage,
+             let url = saveImageToTempFile(image, for: pageType) {
+            shareImageURLs[pageType] = url
+          }
+        }
+      }
+    }
+  }
+
+  func captureWorkoutsShareImage(stats: YearInBloomWorkoutStats) async {
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
+    let bubblesHeight = screenHeight * 0.55
+
+    await withCheckedContinuation { (continuation: CheckedContinuation<Void, Never>) in
+      PhysicsContainerView.createSnapshot(
+        workoutTypes: stats.topWorkoutTypes,
+        size: CGSize(width: screenWidth, height: bubblesHeight)
+      ) { [self] bubblesImage in
+        guard let bubblesImage else {
+          continuation.resume()
+          return
+        }
+
+        // Compose full share image
+        let composedView = WorkoutsShareCompositeView(
+          bubblesImage: bubblesImage,
+          stats: stats,
+          appIcon: themeController.theme.appIcon
+        )
+        .frame(width: screenWidth, height: screenHeight)
+
+        let renderer = ImageRenderer(content: composedView)
+        renderer.scale = 2.0
+
+        if let image = renderer.uiImage,
+           let url = saveImageToTempFile(image, for: .workouts) {
+          shareImageURLs[.workouts] = url
+        }
+
+        continuation.resume()
+      }
+    }
+  }
+
+  @ViewBuilder
+  func shareableView(for pageType: StoryPageType) -> some View {
+    YearInBloomShareView(appIcon: themeController.theme.appIcon) {
+      Group {
+        switch pageType {
+        case .workouts:
+          if let stats = viewModel.stats {
+            WorkoutsStoryPage(stats: stats)
+          }
+        case .exerciseEffectiveness:
+          if let stats = viewModel.stats {
+            ExerciseEffectivenessStoryPage(stats: stats)
+          }
+        case .distance:
+          if let stats = viewModel.stats {
+            DistanceStoryPage(stats: stats)
+          }
+        case .cardioFitness:
+          if let stats = viewModel.stats {
+            CardioFitnessStoryPage(stats: stats)
+          }
+        case .sleep:
+          if let sleepStats = viewModel.sleepStats {
+            SleepStoryPage(stats: sleepStats)
+          }
+        case .menstrualCycle:
+          if let menstrualStats = viewModel.menstrualStats {
+            MenstrualCycleStoryPage(stats: menstrualStats)
+          }
+        case .heartHealth:
+          if let heartHealthStats = viewModel.heartHealthStats {
+            HeartHealthStoryPage(stats: heartHealthStats)
+          }
+        case .bodyWeight:
+          if let bodyWeightStats = viewModel.bodyWeightStats {
+            BodyWeightStoryPage(stats: bodyWeightStats)
+          }
+        case .nutrition:
+          if let nutritionStats = viewModel.nutritionStats {
+            MacroDistributionStoryPage(stats: nutritionStats)
+          }
+        }
+      }
+    }
+    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+    .environment(\.colorScheme, colorScheme)
+  }
 }
 
 // MARK: - Timer Logic

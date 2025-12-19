@@ -75,6 +75,7 @@ final class TabController {
   var pendingFoodItemLogNavigation: String?
   var pendingFoodItemNavigation: String?
   var pendingSavedMealNavigation: String?
+  var pendingYearInBloomNavigation: Int?
 
   private var notificationCenterDelegate: NotificationCenterDelegate!
 

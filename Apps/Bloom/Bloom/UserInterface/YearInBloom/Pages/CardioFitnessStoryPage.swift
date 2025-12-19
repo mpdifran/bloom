@@ -45,7 +45,7 @@ struct CardioFitnessStoryPage: View {
       Spacer()
 
       Image(systemSymbol: .boltHeartFill)
-        .foregroundStyle(yearlyAverageColor)
+        .foregroundStyle(.white, yearlyAverageColor)
         .font(.system(size: 50))
         .contentTransition(.symbolEffect)
         .padding(.bottom)
@@ -80,7 +80,7 @@ struct CardioFitnessStoryPage: View {
         Text(level.name)
           .foregroundStyle(level.color) +
         Text(formattedVO2Max) +
-      Text(".")
+      Text(" mL/kg/min.")
     }
     return Text("Track more cardio workouts to see your fitness level.")
       .foregroundStyle(.secondary)
