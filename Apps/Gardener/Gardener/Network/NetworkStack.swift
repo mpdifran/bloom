@@ -341,14 +341,66 @@ extension NetworkStack {
       method: .post,
       body: request
     )
-    
+
     let (data, response) = try await URLSession.shared.data(for: urlRequest)
-    
+
     try await Self.checkStatusCode(data: data, response: response)
-    
+
     return try JSONDecoder.bloomModel.decode(MarkItemsDistinctResponse.self, from: data)
   }
-  
+
+  // MARK: - Food Item Issue Reports
+
+  func getIssueReports(
+    forFoodItemID foodItemID: FoodItemIdentifier
+  ) async throws -> [AdminFoodItemIssueReport] {
+    let urlRequest = await createAuthenticatedRequest(
+      path: "v1/admin/food/issue-reports",
+      method: .get,
+      queryItems: [.init(name: "food_item_record_id", value: foodItemID.value)]
+    )
+
+    let (data, response) = try await URLSession.shared.data(for: urlRequest)
+
+    try await Self.checkStatusCode(data: data, response: response)
+
+    let responseBody = try JSONDecoder.bloomModel.decode(AdminFoodItemIssueReportsResponse.self, from: data)
+    return responseBody.issueReports
+  }
+
+  func applyIssueReport(
+    reportID: String,
+    foodItemID: FoodItemIdentifier,
+    fieldsToApply: [String]
+  ) async throws {
+    let request = AdminApplyIssueReportRequest(
+      issueReportID: reportID,
+      foodItemRecordID: foodItemID,
+      fieldsToApply: fieldsToApply
+    )
+
+    let urlRequest = try await createAuthenticatedRequest(
+      path: "v1/admin/food/issue-reports/apply",
+      method: .post,
+      body: request
+    )
+
+    let (data, response) = try await URLSession.shared.data(for: urlRequest)
+
+    try await Self.checkStatusCode(data: data, response: response)
+  }
+
+  func deleteIssueReport(reportID: String) async throws {
+    let urlRequest = await createAuthenticatedRequest(
+      path: "v1/admin/food/issue-reports/\(reportID)",
+      method: .delete
+    )
+
+    let (data, response) = try await URLSession.shared.data(for: urlRequest)
+
+    try await Self.checkStatusCode(data: data, response: response)
+  }
+
   // MARK: - Storage Management
 
   func getStorageStats() async throws -> GetStorageStatsResponse {

@@ -113,21 +113,27 @@ extension FoodDatabaseService {
   func getUnverifiedFoodItemRecords(
     limit: Int
   ) async throws -> [AdminFoodItemRecord] {
-    guard let sqlDatabase = db as? SQLDatabase else {
-      throw Abort(.internalServerError, reason: "Database is not SQLDatabase compatible.")
+    // Use Fluent query with eager loading for issue reports
+    let results = try await FoodItemRecord.query(on: db)
+      .filter(\.$state == .unverified)
+      .filter(\.$packagingImage != nil)
+      .filter(\.$nutritionLabelImage != nil)
+      .with(\.$issueReports)
+      .sort(\.$logCount, .descending)
+      .limit(limit)
+      .all()
+
+    // Sort by issue report count (descending), then by logCount
+    let sortedResults = results.sorted { lhs, rhs in
+      let lhsCount = lhs.issueReports.count
+      let rhsCount = rhs.issueReports.count
+      if lhsCount != rhsCount {
+        return lhsCount > rhsCount
+      }
+      return (lhs.logCount ?? 0) > (rhs.logCount ?? 0)
     }
 
-    let results = try await sqlDatabase.raw("""
-          SELECT *
-          FROM food_item_records
-          WHERE state = 'unverified'
-          AND packaging_image IS NOT NULL
-          AND nutrition_label_image IS NOT NULL
-          ORDER BY log_count DESC NULLS LAST
-          LIMIT \(bind: limit)
-      """).all(decodingFluent: FoodItemRecord.self)
-
-    return try await createAdminRecords(from: results)
+    return try await createAdminRecords(from: sortedResults)
   }
 
   func adminSearchFoods(query: String) async throws -> [AdminFoodItemRecord] {
@@ -165,6 +171,141 @@ extension FoodDatabaseService {
     foodItem.downvoteCount = downvoteCount
 
     try await foodItem.save(on: db)
+  }
+
+  // MARK: - Issue Reports
+
+  func getIssueReportsForFoodItem(
+    foodID: FoodItemIdentifier
+  ) async throws -> [AdminFoodItemIssueReport] {
+    let reports = try await FoodItemIssueReport.query(on: db)
+      .filter(\.$foodItemRecord.$id == foodID.value)
+      .with(\.$user)
+      .sort(\.$createdAt, .descending)
+      .all()
+
+    var adminReports: [AdminFoodItemIssueReport] = []
+    for report in reports {
+      if let adminReport = try await report.asAdminFoodItemIssueReport(imageStorage: imageStorage) {
+        adminReports.append(adminReport)
+      }
+    }
+    return adminReports
+  }
+
+  struct ApplyIssueReportResult {
+    let foodItemName: String?
+    let user: User?
+  }
+
+  func applyIssueReport(
+    reportID: String,
+    fieldsToApply: [String]
+  ) async throws -> ApplyIssueReportResult {
+    // Fetch the report with user
+    guard let report = try await FoodItemIssueReport.query(on: db)
+      .filter(\.$id == reportID)
+      .with(\.$user)
+      .with(\.$foodItemRecord)
+      .first() else {
+      throw Abort(.notFound, reason: "Issue report not found")
+    }
+
+    let foodItem = report.foodItemRecord
+
+    // Apply selected fields
+    for field in fieldsToApply {
+      switch field {
+      case "name":
+        if let value = report.name { foodItem.name = value }
+      case "brandName":
+        if let value = report.brandName { foodItem.brandName = value }
+      case "flavour":
+        if let value = report.flavour { foodItem.flavour = value }
+      case "ingredients":
+        if let value = report.ingredients { foodItem.ingredients = value }
+      case "calories":
+        if let value = report.calories { foodItem.calories = value }
+      case "protein":
+        if let value = report.protein { foodItem.protein = value }
+      case "carbohydrates":
+        if let value = report.carbohydrates { foodItem.carbohydrates = value }
+      case "fat":
+        if let value = report.fat { foodItem.fat = value }
+      case "saturatedFat":
+        if let value = report.saturatedFat { foodItem.saturatedFat = value }
+      case "transFat":
+        if let value = report.transFat { foodItem.transFat = value }
+      case "polyunsaturatedFat":
+        if let value = report.polyunsaturatedFat { foodItem.polyunsaturatedFat = value }
+      case "monounsaturatedFat":
+        if let value = report.monounsaturatedFat { foodItem.monounsaturatedFat = value }
+      case "fiber":
+        if let value = report.fiber { foodItem.fiber = value }
+      case "sugar":
+        if let value = report.sugar { foodItem.sugar = value }
+      case "cholesterol":
+        if let value = report.cholesterol { foodItem.cholesterol = value }
+      case "sodium":
+        if let value = report.sodium { foodItem.sodium = value }
+      case "calcium":
+        if let value = report.calcium { foodItem.calcium = value }
+      case "iron":
+        if let value = report.iron { foodItem.iron = value }
+      case "potassium":
+        if let value = report.potassium { foodItem.potassium = value }
+      case "magnesium":
+        if let value = report.magnesium { foodItem.magnesium = value }
+      case "zinc":
+        if let value = report.zinc { foodItem.zinc = value }
+      case "vitaminA":
+        if let value = report.vitaminA { foodItem.vitaminA = value }
+      case "vitaminB6":
+        if let value = report.vitaminB6 { foodItem.vitaminB6 = value }
+      case "vitaminB12":
+        if let value = report.vitaminB12 { foodItem.vitaminB12 = value }
+      case "vitaminC":
+        if let value = report.vitaminC { foodItem.vitaminC = value }
+      case "vitaminD":
+        if let value = report.vitaminD { foodItem.vitaminD = value }
+      case "vitaminE":
+        if let value = report.vitaminE { foodItem.vitaminE = value }
+      case "servingName":
+        if let value = report.servingName { foodItem.servingName = value }
+      case "servingValue":
+        if let value = report.servingValue { foodItem.servingValue = value }
+      case "servingUnit":
+        if let value = report.servingUnit { foodItem.servingUnit = value }
+      case "nutritionLabelImage":
+        if let value = report.nutritionLabelImage { foodItem.nutritionLabelImage = value }
+      case "packagingImage":
+        if let value = report.packagingImage { foodItem.packagingImage = value }
+      default:
+        break
+      }
+    }
+
+    // Save the updated food item
+    try await foodItem.save(on: db)
+
+    // Get user for notification before deleting report
+    let user = try? report.$user.wrappedValue
+    let foodItemName = foodItem.name
+
+    // Delete the report
+    try await report.delete(on: db)
+
+    return ApplyIssueReportResult(foodItemName: foodItemName, user: user)
+  }
+
+  func deleteIssueReport(reportID: String) async throws {
+    guard let report = try await FoodItemIssueReport.query(on: db)
+      .filter(\.$id == reportID)
+      .first() else {
+      throw Abort(.notFound, reason: "Issue report not found")
+    }
+
+    try await report.delete(on: db)
   }
 
   func incrementLogCount(foodIDs: [FoodItemIdentifier]) async throws {
@@ -723,7 +864,7 @@ extension FoodDatabaseService {
 }
 
 private extension FoodDatabaseService {
-  
+
   /// Map foodItemRecords to adminFoodItemRecords and sign images from S3.
   func createAdminRecords(
     from foodItemRecords: [FoodItemRecord]
@@ -765,6 +906,11 @@ private extension FoodDatabaseService {
         }
 
         adminFoodRecord.packagingImage = imageURL
+      }
+
+      // Include issue report count from eager-loaded relationship if available
+      if let reports = try? item.$issueReports.value {
+        adminFoodRecord.issueReportCount = reports.count
       }
 
       records.append(adminFoodRecord)

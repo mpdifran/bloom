@@ -69,3 +69,5 @@ extension SalesResponse: @retroactive Content { }
 extension AdminSalesListResponse: @retroactive Content { }
 extension AdminSaleResponse: @retroactive Content { }
 extension AdminUploadSaleImageResponse: @retroactive Content { }
+extension AdminFoodItemIssueReportsResponse: @retroactive Content { }
+extension AdminApplyIssueReportRequest: @retroactive Content { }

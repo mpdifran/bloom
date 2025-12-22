@@ -36,8 +36,10 @@ extension AdminFoodController: RouteCollection {
             $0.post("run-detection", use: runDuplicateDetection)
           }
 
-          $0.group("open-food-facts") {
-            $0.post("bulk-upload", use: openFoodFactsBulkUpload)
+          $0.group("issue-reports") {
+            $0.get(use: getIssueReports)
+            $0.post("apply", use: applyIssueReport)
+            $0.delete(":id", use: deleteIssueReport)
           }
         }
       }
@@ -484,17 +486,50 @@ private extension AdminFoodController {
       itemsWithDuplicates: itemsWithDuplicates
     )
   }
-}
 
-private extension AdminFoodController {
+  // MARK: - Issue Reports
 
   @Sendable
-  func openFoodFactsBulkUpload(_ request: Request) async throws -> AdminOpenFoodFactsBulkUploadResponse {
-    let requestBody = try request.content.decode(AdminOpenFoodFactsBulkUploadRequest.self)
+  func getIssueReports(_ request: Request) async throws -> AdminFoodItemIssueReportsResponse {
+    guard let foodItemRecordID = request.query[String.self, at: "food_item_record_id"] else {
+      throw Abort(.badRequest, reason: "Missing food_item_record_id query parameter")
+    }
 
-    let count = try await request.openFoodFactsService.bulkUpload(items: requestBody.items)
+    let foodID = FoodItemIdentifier(foodItemRecordID)
+    let reports = try await request.foodDatabaseService.getIssueReportsForFoodItem(foodID: foodID)
 
-    return AdminOpenFoodFactsBulkUploadResponse(insertedCount: count)
+    return AdminFoodItemIssueReportsResponse(issueReports: reports)
+  }
+
+  @Sendable
+  func applyIssueReport(_ request: Request) async throws -> HTTPStatus {
+    let requestBody = try request.content.decode(AdminApplyIssueReportRequest.self)
+
+    let result = try await request.foodDatabaseService.applyIssueReport(
+      reportID: requestBody.issueReportID,
+      fieldsToApply: requestBody.fieldsToApply
+    )
+
+    // Send push notification if user exists
+    if let user = result.user, let deviceToken = user.apnsDeviceToken {
+      try? await request.notificationService.sendIssueReportAcceptedNotification(
+        to: user,
+        deviceToken: deviceToken,
+        foodItemName: result.foodItemName
+      )
+    }
+
+    return .ok
+  }
+
+  @Sendable
+  func deleteIssueReport(_ request: Request) async throws -> HTTPStatus {
+    guard let reportID = request.parameters.get("id") else {
+      throw Abort(.badRequest, reason: "Missing id parameter")
+    }
+
+    try await request.foodDatabaseService.deleteIssueReport(reportID: reportID)
+    return .ok
   }
 }
 

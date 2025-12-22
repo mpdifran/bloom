@@ -1,26 +1,28 @@
 //
-//  AdminFoodItemRecord.swift
-//  bloom-model
+//  AdminFoodItemIssueReport.swift
+//  AdminBloomModel
 //
-//  Created by Zach Radford on 2024-12-01.
+//  Created by Claude on 2025-12-22.
 //
 
 import BloomModel
 import Foundation
 
-public struct AdminFoodItemRecord: Codable, Identifiable, Sendable, Hashable {
-  /// ID is the only field required to initialize, this is how we identify in the DB for updates.
-  public let id: FoodItemIdentifier
+public struct AdminFoodItemIssueReport: Codable, Sendable, Identifiable, Hashable {
+  public let id: String
+  public let foodItemRecordID: FoodItemIdentifier
+
+  // User info
+  public let userName: String?
+  public let userID: String?
+
+  // Suggested changes (all optional - nil means no change suggested)
   public var name: String?
-  public var state: State
   public var brandName: String?
   public var flavour: String?
-  public var category: Category?
-  public var barcode: String?
   public var nutritionLabelImage: URL?
   public var packagingImage: URL?
   public var ingredients: String?
-  public var country: String?
   public var calories: Double?
   public var protein: Double?
   public var carbohydrates: Double?
@@ -47,31 +49,21 @@ public struct AdminFoodItemRecord: Codable, Identifiable, Sendable, Hashable {
   public var servingName: String?
   public var servingValue: Double?
   public var servingUnit: String?
-  public var downvoteCount: Int?
-  public var source: String?
   public var notes: String?
-  public var logCount: Int?
-  public var issueReportCount: Int?
-  /// Read-only.
-  public var createdAt: Date?
-  /// Read-only.
-  public var updatedAt: Date?
 
-  public init(id: FoodItemIdentifier, state: State = .unverified) {
-    self.id = id
-    self.state = state
-  }
+  public let createdAt: Date?
 
   public init(
-    id: FoodItemIdentifier,
+    id: String,
+    foodItemRecordID: FoodItemIdentifier,
+    userName: String?,
+    userID: String?,
     name: String?,
-    state: State,
     brandName: String?,
     flavour: String?,
-    category: Category?,
-    barcode: String?,
+    nutritionLabelImage: URL?,
+    packagingImage: URL?,
     ingredients: String?,
-    country: String?,
     calories: Double?,
     protein: Double?,
     carbohydrates: Double?,
@@ -98,23 +90,19 @@ public struct AdminFoodItemRecord: Codable, Identifiable, Sendable, Hashable {
     servingName: String?,
     servingValue: Double?,
     servingUnit: String?,
-    downvoteCount: Int?,
-    source: String?,
     notes: String?,
-    logCount: Int?,
-    issueReportCount: Int? = nil,
-    createdAt: Date?,
-    updatedAt: Date?
+    createdAt: Date?
   ) {
     self.id = id
+    self.foodItemRecordID = foodItemRecordID
+    self.userName = userName
+    self.userID = userID
     self.name = name
-    self.state = state
     self.brandName = brandName
     self.flavour = flavour
-    self.category = category
-    self.barcode = barcode
+    self.nutritionLabelImage = nutritionLabelImage
+    self.packagingImage = packagingImage
     self.ingredients = ingredients
-    self.country = country
     self.calories = calories
     self.protein = protein
     self.carbohydrates = carbohydrates
@@ -141,45 +129,7 @@ public struct AdminFoodItemRecord: Codable, Identifiable, Sendable, Hashable {
     self.servingName = servingName
     self.servingValue = servingValue
     self.servingUnit = servingUnit
-    self.downvoteCount = downvoteCount
-    self.source = source
     self.notes = notes
-    self.logCount = logCount
-    self.issueReportCount = issueReportCount
     self.createdAt = createdAt
-    self.updatedAt = updatedAt
-  }
-}
-
-public extension AdminFoodItemRecord {
-  enum State: String, Codable, Sendable, CaseIterable, Identifiable {
-    public var id: Self { self }
-
-    case needsAIProcessing
-    case unverified
-    case needsMoreInfo
-    case verified
-
-    public var name: String {
-      switch self {
-      case .needsAIProcessing:
-        "Needs AI Processing"
-      case .unverified:
-        "Unverified"
-      case .needsMoreInfo:
-        "Needs More Info"
-      case .verified:
-        "Verified"
-      }
-    }
-  }
-}
-
-public extension AdminFoodItemRecord {
-  enum Category: String, Codable, Sendable, CaseIterable {
-    case generic
-    case fastfood
-    case restaurant
-    case branded
   }
 }

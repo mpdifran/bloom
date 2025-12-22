@@ -138,6 +138,54 @@ struct NotificationService {
       logger.info("Sent test notification to user \(user.id?.value ?? "") with APNS ID: \(apnsUniqueID)")
     }
   }
+
+  func sendIssueReportAcceptedNotification(
+    to user: User,
+    deviceToken: String,
+    foodItemName: String?
+  ) async throws {
+    let expirationTime = Int(Date().addingTimeInterval(86400).timeIntervalSince1970)
+    let expiration = APNSNotificationExpiration.timeIntervalSince1970InSeconds(expirationTime)
+    let priority = APNSPriority.immediately
+    let topic = application.bloomAppBundleID
+
+    let foodName = foodItemName ?? "a food item"
+    let alert = APNSAlertNotificationContent(
+      title: .raw("Thanks for your help!"),
+      body: .raw("Your suggestions for \(foodName) look great, thanks for helping improve Bloom!")
+    )
+
+    struct IssueReportAcceptedPayload: Codable {
+      let type: String
+    }
+
+    let payload = IssueReportAcceptedPayload(type: "issue_report_accepted")
+
+    let alertNotification = APNSAlertNotification(
+      alert: alert,
+      expiration: expiration,
+      priority: priority,
+      topic: topic,
+      payload: payload
+    )
+
+    let result = try await application.apns.client.send(
+      APNSRequest(
+        message: alertNotification,
+        deviceToken: deviceToken,
+        pushType: .alert,
+        expiration: expiration,
+        priority: priority,
+        apnsID: nil,
+        topic: topic,
+        collapseID: nil
+      )
+    )
+
+    if let apnsUniqueID = result.apnsUniqueID {
+      logger.info("Sent issue report accepted notification to user \(user.id?.value ?? ""): \(apnsUniqueID)")
+    }
+  }
 }
 
 extension Request {

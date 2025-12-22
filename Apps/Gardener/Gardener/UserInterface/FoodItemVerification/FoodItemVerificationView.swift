@@ -24,7 +24,8 @@ struct FoodItemVerificationView: View {
           id: item.id.value,
           name: item.name,
           brandName: item.brandName,
-          state: item.state
+          state: item.state,
+          issueReportCount: item.issueReportCount ?? 0
         )
         .tag(item)
       }
@@ -59,6 +60,7 @@ private struct FoodItemCell: View {
   let name: String?
   let brandName: String?
   let state: AdminFoodItemRecord.State
+  let issueReportCount: Int
 
   var body: some View {
     HStack {
@@ -76,6 +78,20 @@ private struct FoodItemCell: View {
       }
 
       Spacer()
+
+      if issueReportCount > 0 {
+        HStack(spacing: 4) {
+          Image(systemName: "exclamationmark.bubble.fill")
+            .foregroundStyle(.yellow)
+          Text("\(issueReportCount)")
+            .font(.caption)
+            .fontWeight(.semibold)
+        }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 4)
+        .background(Color.yellow.opacity(0.2))
+        .clipShape(Capsule())
+      }
 
       Group {
         switch state {

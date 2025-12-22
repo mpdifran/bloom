@@ -29,6 +29,7 @@ struct FoodItemDetailView: View {
   @State private var carbsUnit: NutritionUnit = .grams
   @State private var mineralsUnit: NutritionUnit = .milligrams
   @State private var vitaminsUnit: NutritionUnit = .micrograms
+  @State private var showingIssueReports = false
 
   @Environment(\.openURL) private var openURL
 
@@ -43,7 +44,12 @@ struct FoodItemDetailView: View {
           accuracyResultView
         }
 
-      formView
+      VStack(spacing: 0) {
+        if viewModel.hasIssueReports {
+          issueReportsWarningCell
+        }
+        formView
+      }
     }
     .shelf {
       verifyShelfContent
@@ -51,6 +57,33 @@ struct FoodItemDetailView: View {
     .alert(alertDetails: $alertDetails)
     .alert(error: $viewModel.error)
     .confirmationDialog($confirmationDialogDetails)
+    .sheet(isPresented: $showingIssueReports) {
+      FoodItemIssueReportsView(
+        viewModel: viewModel,
+        onDismiss: { showingIssueReports = false }
+      )
+    }
+  }
+
+  var issueReportsWarningCell: some View {
+    Button {
+      showingIssueReports = true
+    } label: {
+      HStack {
+        Image(systemName: "exclamationmark.triangle.fill")
+          .foregroundStyle(.black)
+        Text("\(viewModel.issueReportCount) user report\(viewModel.issueReportCount == 1 ? "" : "s") submitted")
+          .foregroundStyle(.black)
+        Spacer()
+        Image(systemName: "chevron.right")
+          .foregroundStyle(.black.opacity(0.5))
+      }
+      .padding()
+      .background(Color.yellow)
+      .clipShape(RoundedRectangle(cornerRadius: 8))
+    }
+    .buttonStyle(.plain)
+    .padding()
   }
 }
 

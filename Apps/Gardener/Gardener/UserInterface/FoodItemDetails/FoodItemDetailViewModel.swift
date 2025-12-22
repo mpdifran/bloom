@@ -29,6 +29,13 @@ open class FoodItemDetailViewModel: ObservableObject {
   @Published var nutritionLabelRotation: Double = 0
   @Published var selectedNutritionLabel: NSImage?
 
+  // Issue Reports
+  @Published var issueReports: [AdminFoodItemIssueReport] = []
+  @Published var isLoadingIssueReports = false
+
+  var hasIssueReports: Bool { !issueReports.isEmpty }
+  var issueReportCount: Int { issueReports.count }
+
   init(foodItem: AdminFoodItemRecord, foodStore: BaseFoodStore) {
     self.foodItem = foodItem
     self.initialFoodItem = foodItem
@@ -37,6 +44,35 @@ open class FoodItemDetailViewModel: ObservableObject {
     packagingImage = foodItem.packagingImage
     nutritionLabel = foodItem.nutritionLabelImage
     accuracyReportViewModel = .init(foodItemRecord: foodItem, shouldFetchReport: true)
+
+    // Load issue reports on init
+    Task {
+      await loadIssueReports()
+    }
+  }
+
+  func loadIssueReports() async {
+    isLoadingIssueReports = true
+    do {
+      issueReports = try await NetworkStack.shared.getIssueReports(forFoodItemID: foodItem.id)
+    } catch {
+      self.error = error
+    }
+    isLoadingIssueReports = false
+  }
+
+  func applyIssueReport(_ report: AdminFoodItemIssueReport, fieldsToApply: [String]) async throws {
+    try await NetworkStack.shared.applyIssueReport(
+      reportID: report.id,
+      foodItemID: foodItem.id,
+      fieldsToApply: fieldsToApply
+    )
+    await loadIssueReports()
+  }
+
+  func discardIssueReport(_ report: AdminFoodItemIssueReport) async throws {
+    try await NetworkStack.shared.deleteIssueReport(reportID: report.id)
+    await loadIssueReports()
   }
   
   open func save() async {
