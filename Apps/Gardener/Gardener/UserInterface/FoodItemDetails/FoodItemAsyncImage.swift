@@ -61,6 +61,7 @@ struct FoodItemAsyncImage: View {
             }
             .buttonStyle(.borderedProminent)
           }
+          .horizontallyCentered()
         @unknown default:
           Text("Unknown error occurred")
         }

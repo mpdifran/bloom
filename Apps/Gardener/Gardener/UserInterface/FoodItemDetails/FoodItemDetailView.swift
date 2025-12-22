@@ -58,7 +58,7 @@ struct FoodItemDetailView: View {
         onDismiss: { showingIssueReports = false }
       )
     }
-    .task {
+    .task(id: viewModel.foodItem.id.value) {
       await viewModel.loadIssueReports()
     }
   }
@@ -287,9 +287,9 @@ private extension FoodItemDetailView {
         servingSection
         macroSection
         fatSection
-        otherNutrientsSection
         carbsSection
         proteinSection
+        otherNutrientsSection
         mineralSection
         vitaminSection
         miscSection
@@ -514,6 +514,9 @@ private extension FoodItemDetailView {
 
   var timestampSection: some View {
     Section("Timestamps") {
+      LabeledContent("Log Count") {
+        Text("\(viewModel.foodItem.logCount ?? 0)")
+      }
       LabeledContent("Created At") {
         if let createdAt = viewModel.foodItem.createdAt {
           Text(createdAt.formatted(date: .abbreviated, time: .shortened))

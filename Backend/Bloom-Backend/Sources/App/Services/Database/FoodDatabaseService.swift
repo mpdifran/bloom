@@ -113,18 +113,39 @@ extension FoodDatabaseService {
   func getUnverifiedFoodItemRecords(
     limit: Int
   ) async throws -> [AdminFoodItemRecord] {
-    // Use Fluent query with eager loading for issue reports
-    let results = try await FoodItemRecord.query(on: db)
+    // Get unique food item IDs that have issue reports
+    let reportsQuery = try await FoodItemIssueReport.query(on: db)
+      .unique()
+      .all()
+    let reportItemIds = Set(reportsQuery.map { $0.$foodItemRecord.id })
+
+    // Fetch items with issue reports (any state) - these take priority
+    let itemsWithIssueReports: [FoodItemRecord]
+    if !reportItemIds.isEmpty {
+      itemsWithIssueReports = try await FoodItemRecord.query(on: db)
+        .filter(\.$id ~~ Array(reportItemIds))
+        .with(\.$issueReports)
+        .all()
+    } else {
+      itemsWithIssueReports = []
+    }
+
+    // Fetch unverified items (original behavior), excluding items with issue reports
+    let unverifiedItems = try await FoodItemRecord.query(on: db)
       .filter(\.$state == .unverified)
       .filter(\.$packagingImage != nil)
       .filter(\.$nutritionLabelImage != nil)
+      .filter(\.$id !~ Array(reportItemIds))
       .with(\.$issueReports)
       .sort(\.$logCount, .descending)
       .limit(limit)
       .all()
 
+    // Combine: items with reports first, then unverified items
+    let allItems = itemsWithIssueReports + unverifiedItems
+
     // Sort by issue report count (descending), then by logCount
-    let sortedResults = results.sorted { lhs, rhs in
+    let sortedResults = allItems.sorted { lhs, rhs in
       let lhsCount = lhs.issueReports.count
       let rhsCount = rhs.issueReports.count
       if lhsCount != rhsCount {
@@ -133,7 +154,10 @@ extension FoodDatabaseService {
       return (lhs.logCount ?? 0) > (rhs.logCount ?? 0)
     }
 
-    return try await createAdminRecords(from: sortedResults)
+    // Apply limit after sorting
+    let limitedResults = Array(sortedResults.prefix(limit))
+
+    return try await createAdminRecords(from: limitedResults)
   }
 
   func adminSearchFoods(query: String) async throws -> [AdminFoodItemRecord] {

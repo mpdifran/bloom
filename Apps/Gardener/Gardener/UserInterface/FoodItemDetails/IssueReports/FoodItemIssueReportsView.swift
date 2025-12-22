@@ -58,6 +58,7 @@ struct FoodItemIssueReportsView: View {
               systemImage: "checkmark.circle",
               description: Text("This report matches the current food item data.")
             )
+            .horizontallyCentered()
           }
         }
       }
