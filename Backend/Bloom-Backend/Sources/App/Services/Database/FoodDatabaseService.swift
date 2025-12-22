@@ -194,6 +194,7 @@ extension FoodDatabaseService {
   }
 
   struct ApplyIssueReportResult {
+    let foodItemRecord: AdminFoodItemRecord
     let foodItemName: String?
     let user: User?
   }
@@ -295,7 +296,13 @@ extension FoodDatabaseService {
     // Delete the report
     try await report.delete(on: db)
 
-    return ApplyIssueReportResult(foodItemName: foodItemName, user: user)
+    // Convert to AdminFoodItemRecord with signed image URLs
+    let adminRecords = try await createAdminRecords(from: [foodItem])
+    guard let adminRecord = adminRecords.first else {
+      throw Abort(.internalServerError, reason: "Failed to create admin record")
+    }
+
+    return ApplyIssueReportResult(foodItemRecord: adminRecord, foodItemName: foodItemName, user: user)
   }
 
   func deleteIssueReport(reportID: String) async throws {

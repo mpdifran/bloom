@@ -44,11 +44,6 @@ open class FoodItemDetailViewModel: ObservableObject {
     packagingImage = foodItem.packagingImage
     nutritionLabel = foodItem.nutritionLabelImage
     accuracyReportViewModel = .init(foodItemRecord: foodItem, shouldFetchReport: true)
-
-    // Load issue reports on init
-    Task {
-      await loadIssueReports()
-    }
   }
 
   func loadIssueReports() async {
@@ -62,11 +57,18 @@ open class FoodItemDetailViewModel: ObservableObject {
   }
 
   func applyIssueReport(_ report: AdminFoodItemIssueReport, fieldsToApply: [String]) async throws {
-    try await NetworkStack.shared.applyIssueReport(
+    let updatedFoodItem = try await NetworkStack.shared.applyIssueReport(
       reportID: report.id,
       foodItemID: foodItem.id,
       fieldsToApply: fieldsToApply
     )
+
+    // Update the food item with the response
+    foodItem = updatedFoodItem
+    packagingImage = updatedFoodItem.packagingImage
+    nutritionLabel = updatedFoodItem.nutritionLabelImage
+    resetInitialFoodItem(to: updatedFoodItem)
+
     await loadIssueReports()
   }
 

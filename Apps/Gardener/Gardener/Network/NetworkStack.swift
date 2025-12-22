@@ -372,7 +372,7 @@ extension NetworkStack {
     reportID: String,
     foodItemID: FoodItemIdentifier,
     fieldsToApply: [String]
-  ) async throws {
+  ) async throws -> AdminFoodItemRecord {
     let request = AdminApplyIssueReportRequest(
       issueReportID: reportID,
       foodItemRecordID: foodItemID,
@@ -388,6 +388,9 @@ extension NetworkStack {
     let (data, response) = try await URLSession.shared.data(for: urlRequest)
 
     try await Self.checkStatusCode(data: data, response: response)
+
+    let responseBody = try JSONDecoder.bloomModel.decode(AdminApplyIssueReportResponse.self, from: data)
+    return responseBody.foodItemRecord
   }
 
   func deleteIssueReport(reportID: String) async throws {

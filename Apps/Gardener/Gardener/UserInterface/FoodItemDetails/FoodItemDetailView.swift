@@ -58,28 +58,31 @@ struct FoodItemDetailView: View {
         onDismiss: { showingIssueReports = false }
       )
     }
+    .task {
+      await viewModel.loadIssueReports()
+    }
   }
 
-  var issueReportsWarningCell: some View {
-    Button {
-      showingIssueReports = true
-    } label: {
-      HStack {
-        Image(systemName: "exclamationmark.triangle.fill")
-          .foregroundStyle(.black)
-        Text("\(viewModel.issueReportCount) user report\(viewModel.issueReportCount == 1 ? "" : "s") submitted")
-          .foregroundStyle(.black)
-        Spacer()
-        Image(systemName: "chevron.right")
-          .foregroundStyle(.black.opacity(0.5))
+  var issueReportsSection: some View {
+    Section {
+      Button {
+        showingIssueReports = true
+      } label: {
+        HStack {
+          Image(systemName: "exclamationmark.triangle.fill")
+            .foregroundStyle(.black)
+          Text("\(viewModel.issueReportCount) user report\(viewModel.issueReportCount == 1 ? "" : "s") submitted")
+            .foregroundStyle(.black)
+          Spacer()
+          Image(systemName: "chevron.right")
+            .foregroundStyle(.black.opacity(0.5))
+        }
+        .padding()
+        .background(Color.yellow)
+        .clipShape(RoundedRectangle(cornerRadius: 8))
       }
-      .padding()
-      .background(Color.yellow)
-      .clipShape(RoundedRectangle(cornerRadius: 8))
+      .buttonStyle(.plain)
     }
-    .buttonStyle(.plain)
-    .padding(.horizontal, 20)
-    .padding(.top, 20)
   }
 }
 
@@ -276,10 +279,10 @@ private extension FoodItemDetailView {
 
   var formView: some View {
     ScrollView {
-      if viewModel.hasIssueReports {
-        issueReportsWarningCell
-      }
       Form {
+        if viewModel.hasIssueReports {
+          issueReportsSection
+        }
         infoSection
         servingSection
         macroSection

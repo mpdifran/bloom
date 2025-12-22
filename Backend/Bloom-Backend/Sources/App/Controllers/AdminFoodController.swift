@@ -502,7 +502,7 @@ private extension AdminFoodController {
   }
 
   @Sendable
-  func applyIssueReport(_ request: Request) async throws -> HTTPStatus {
+  func applyIssueReport(_ request: Request) async throws -> AdminApplyIssueReportResponse {
     let requestBody = try request.content.decode(AdminApplyIssueReportRequest.self)
 
     let result = try await request.foodDatabaseService.applyIssueReport(
@@ -519,7 +519,7 @@ private extension AdminFoodController {
       )
     }
 
-    return .ok
+    return AdminApplyIssueReportResponse(foodItemRecord: result.foodItemRecord)
   }
 
   @Sendable
