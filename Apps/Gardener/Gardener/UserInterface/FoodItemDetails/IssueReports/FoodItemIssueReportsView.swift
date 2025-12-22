@@ -48,8 +48,16 @@ struct FoodItemIssueReportsView: View {
               .clipShape(RoundedRectangle(cornerRadius: 8))
           }
 
-          ScrollView {
-            comparisonSection(report)
+          if reportHasAnyChanges(report) {
+            ScrollView {
+              comparisonSection(report)
+            }
+          } else {
+            ContentUnavailableView(
+              "No Changes",
+              systemImage: "checkmark.circle",
+              description: Text("This report matches the current food item data.")
+            )
           }
         }
       }
@@ -161,7 +169,7 @@ struct FoodItemIssueReportsView: View {
         Text("Basic Information")
           .font(.headline)
 
-        if let suggestedName = report.name, suggestedName != viewModel.foodItem.name {
+        if let suggestedName = report.name, !suggestedName.isEmpty, suggestedName != viewModel.foodItem.name {
           IssueReportComparisonRow(
             label: "Name",
             currentValue: viewModel.foodItem.name ?? "—",
@@ -170,7 +178,7 @@ struct FoodItemIssueReportsView: View {
           )
         }
 
-        if let suggestedBrand = report.brandName, suggestedBrand != viewModel.foodItem.brandName {
+        if let suggestedBrand = report.brandName, !suggestedBrand.isEmpty, suggestedBrand != viewModel.foodItem.brandName {
           IssueReportComparisonRow(
             label: "Brand Name",
             currentValue: viewModel.foodItem.brandName ?? "—",
@@ -179,7 +187,7 @@ struct FoodItemIssueReportsView: View {
           )
         }
 
-        if let suggestedFlavour = report.flavour, suggestedFlavour != viewModel.foodItem.flavour {
+        if let suggestedFlavour = report.flavour, !suggestedFlavour.isEmpty, suggestedFlavour != viewModel.foodItem.flavour {
           IssueReportComparisonRow(
             label: "Flavour",
             currentValue: viewModel.foodItem.flavour ?? "—",
@@ -196,7 +204,7 @@ struct FoodItemIssueReportsView: View {
         Text("Serving Information")
           .font(.headline)
 
-        if let suggestedServingName = report.servingName, suggestedServingName != viewModel.foodItem.servingName {
+        if let suggestedServingName = report.servingName, !suggestedServingName.isEmpty, suggestedServingName != viewModel.foodItem.servingName {
           IssueReportComparisonRow(
             label: "Serving Name",
             currentValue: viewModel.foodItem.servingName ?? "—",
@@ -214,7 +222,7 @@ struct FoodItemIssueReportsView: View {
           )
         }
 
-        if let suggestedServingUnit = report.servingUnit, suggestedServingUnit != viewModel.foodItem.servingUnit {
+        if let suggestedServingUnit = report.servingUnit, !suggestedServingUnit.isEmpty, suggestedServingUnit != viewModel.foodItem.servingUnit {
           IssueReportComparisonRow(
             label: "Serving Unit",
             currentValue: viewModel.foodItem.servingUnit ?? "—",
@@ -321,7 +329,7 @@ struct FoodItemIssueReportsView: View {
       }
 
       // Ingredients
-      if let suggestedIngredients = report.ingredients, suggestedIngredients != viewModel.foodItem.ingredients {
+      if let suggestedIngredients = report.ingredients, !suggestedIngredients.isEmpty, suggestedIngredients != viewModel.foodItem.ingredients {
         Text("Ingredients")
           .font(.headline)
 
@@ -423,15 +431,44 @@ struct FoodItemIssueReportsView: View {
     }
   }
 
+  private func reportHasAnyChanges(_ report: AdminFoodItemIssueReport) -> Bool {
+    // Check all field categories
+    let allFieldGroups = [
+      ["name", "brandName", "flavour"],
+      ["servingName", "servingValue", "servingUnit"],
+      ["calories", "protein", "carbohydrates", "fat"],
+      ["saturatedFat", "transFat", "polyunsaturatedFat", "monounsaturatedFat"],
+      ["fiber", "sugar"],
+      ["cholesterol", "sodium", "calcium", "iron", "potassium", "magnesium", "zinc"],
+      ["vitaminA", "vitaminB6", "vitaminB12", "vitaminC", "vitaminD", "vitaminE"]
+    ]
+
+    for fields in allFieldGroups {
+      if hasChanges(in: report, for: fields) { return true }
+    }
+
+    // Check ingredients (with empty string handling)
+    if let ingredients = report.ingredients, !ingredients.isEmpty, ingredients != viewModel.foodItem.ingredients {
+      return true
+    }
+
+    // Check images
+    if report.nutritionLabelImage != nil || report.packagingImage != nil {
+      return true
+    }
+
+    return false
+  }
+
   private func hasChanges(in report: AdminFoodItemIssueReport, for fields: [String]) -> Bool {
     for field in fields {
       switch field {
-      case "name": if report.name != nil && report.name != viewModel.foodItem.name { return true }
-      case "brandName": if report.brandName != nil && report.brandName != viewModel.foodItem.brandName { return true }
-      case "flavour": if report.flavour != nil && report.flavour != viewModel.foodItem.flavour { return true }
-      case "servingName": if report.servingName != nil && report.servingName != viewModel.foodItem.servingName { return true }
+      case "name": if let v = report.name, !v.isEmpty, v != viewModel.foodItem.name { return true }
+      case "brandName": if let v = report.brandName, !v.isEmpty, v != viewModel.foodItem.brandName { return true }
+      case "flavour": if let v = report.flavour, !v.isEmpty, v != viewModel.foodItem.flavour { return true }
+      case "servingName": if let v = report.servingName, !v.isEmpty, v != viewModel.foodItem.servingName { return true }
       case "servingValue": if report.servingValue != nil && report.servingValue != viewModel.foodItem.servingValue { return true }
-      case "servingUnit": if report.servingUnit != nil && report.servingUnit != viewModel.foodItem.servingUnit { return true }
+      case "servingUnit": if let v = report.servingUnit, !v.isEmpty, v != viewModel.foodItem.servingUnit { return true }
       default:
         let suggestedValue = nutritionValue(from: report, field: field)
         let currentValue = nutritionValue(from: viewModel.foodItem, field: field)

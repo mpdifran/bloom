@@ -217,13 +217,13 @@ extension FoodDatabaseService {
     for field in fieldsToApply {
       switch field {
       case "name":
-        if let value = report.name { foodItem.name = value }
+        if let value = report.name, !value.isEmpty { foodItem.name = value }
       case "brandName":
-        if let value = report.brandName { foodItem.brandName = value }
+        if let value = report.brandName, !value.isEmpty { foodItem.brandName = value }
       case "flavour":
-        if let value = report.flavour { foodItem.flavour = value }
+        if let value = report.flavour, !value.isEmpty { foodItem.flavour = value }
       case "ingredients":
-        if let value = report.ingredients { foodItem.ingredients = value }
+        if let value = report.ingredients, !value.isEmpty { foodItem.ingredients = value }
       case "calories":
         if let value = report.calories { foodItem.calories = value }
       case "protein":
@@ -271,11 +271,11 @@ extension FoodDatabaseService {
       case "vitaminE":
         if let value = report.vitaminE { foodItem.vitaminE = value }
       case "servingName":
-        if let value = report.servingName { foodItem.servingName = value }
+        if let value = report.servingName, !value.isEmpty { foodItem.servingName = value }
       case "servingValue":
         if let value = report.servingValue { foodItem.servingValue = value }
       case "servingUnit":
-        if let value = report.servingUnit { foodItem.servingUnit = value }
+        if let value = report.servingUnit, !value.isEmpty { foodItem.servingUnit = value }
       case "nutritionLabelImage":
         if let value = report.nutritionLabelImage { foodItem.nutritionLabelImage = value }
       case "packagingImage":

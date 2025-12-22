@@ -44,12 +44,7 @@ struct FoodItemDetailView: View {
           accuracyResultView
         }
 
-      VStack(spacing: 0) {
-        if viewModel.hasIssueReports {
-          issueReportsWarningCell
-        }
-        formView
-      }
+      formView
     }
     .shelf {
       verifyShelfContent
@@ -83,7 +78,8 @@ struct FoodItemDetailView: View {
       .clipShape(RoundedRectangle(cornerRadius: 8))
     }
     .buttonStyle(.plain)
-    .padding()
+    .padding(.horizontal, 20)
+    .padding(.top, 20)
   }
 }
 
@@ -280,6 +276,9 @@ private extension FoodItemDetailView {
 
   var formView: some View {
     ScrollView {
+      if viewModel.hasIssueReports {
+        issueReportsWarningCell
+      }
       Form {
         infoSection
         servingSection
