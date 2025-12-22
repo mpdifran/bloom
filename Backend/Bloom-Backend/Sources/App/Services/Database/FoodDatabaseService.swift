@@ -290,7 +290,7 @@ extension FoodDatabaseService {
     try await foodItem.save(on: db)
 
     // Get user for notification before deleting report
-    let user = try? report.$user.wrappedValue
+    let user = report.$user.wrappedValue
     let foodItemName = foodItem.name
 
     // Delete the report
@@ -916,7 +916,7 @@ private extension FoodDatabaseService {
       }
 
       // Include issue report count from eager-loaded relationship if available
-      if let reports = try? item.$issueReports.value {
+      if let reports = item.$issueReports.value {
         adminFoodRecord.issueReportCount = reports.count
       }
 
