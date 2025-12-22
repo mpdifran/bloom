@@ -54,7 +54,7 @@ struct OnboardingCalendarWeatherView: View {
         didContinueToggle.toggle()
         onContinue()
       } label: {
-        Text(continueButtonTitle)
+        Text("Continue")
           .horizontallyCentered()
       }
       .buttonStyle(.primary)
@@ -70,13 +70,6 @@ struct OnboardingCalendarWeatherView: View {
 }
 
 private extension OnboardingCalendarWeatherView {
-
-  var continueButtonTitle: String {
-    if calendarManager.authStatus == .notDetermined && locationViewModel.auth == .notDetermined {
-      return "Skip"
-    }
-    return "Continue"
-  }
 
   func advanceIndex() async {
     await Delay(500)
