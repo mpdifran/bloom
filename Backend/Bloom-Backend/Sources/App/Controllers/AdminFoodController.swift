@@ -511,12 +511,23 @@ private extension AdminFoodController {
     )
 
     // Send push notification if user exists
-    if let user = result.user, let deviceToken = user.apnsDeviceToken {
-      try? await request.notificationService.sendIssueReportAcceptedNotification(
-        to: user,
-        deviceToken: deviceToken,
-        foodItemName: result.foodItemName
-      )
+    if let user = result.user {
+      if let deviceToken = user.apnsDeviceToken {
+        do {
+          try await request.notificationService.sendIssueReportAcceptedNotification(
+            to: user,
+            deviceToken: deviceToken,
+            foodItemName: result.foodItemName
+          )
+          request.logger.info("Sent issue report accepted notification to user \(user.id?.value ?? "unknown")")
+        } catch {
+          request.logger.error("Failed to send issue report notification: \(error)")
+        }
+      } else {
+        request.logger.info("User \(user.id?.value ?? "unknown") has no APNS device token, skipping notification")
+      }
+    } else {
+      request.logger.info("No user associated with issue report, skipping notification")
     }
 
     return AdminApplyIssueReportResponse(foodItemRecord: result.foodItemRecord)
