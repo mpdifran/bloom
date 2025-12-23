@@ -3,7 +3,7 @@
     "details": [
       {
         "appID": "GUJ47GUV2Q.com.lotus-labs.bloom",
-        "paths": [ "/action/*", "/vital/*", "/today", "/paywall", "/nutrition", "/nutrition/*", "/year-in-bloom" ]
+        "paths": [ "/action/*", "/vital/*", "/today", "/paywall", "/nutrition", "/nutrition/*", "/year-in-bloom", "/goals/*" ]
       }
     ]
   }

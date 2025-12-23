@@ -273,6 +273,9 @@ private extension RootView {
       }
     case "/nutrition":
       tabController.activeTab = .nutrition
+    case "/launch":
+      // Just open the app, no specific action needed
+      break
     default:
       // Handle goal deep links: /goals/{goalId}
       if path.hasPrefix("/goals/") {
