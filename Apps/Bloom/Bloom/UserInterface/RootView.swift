@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 import AppUI
 import TelemetryDeck
 import DataContainer
@@ -143,6 +144,9 @@ private extension RootView {
       tabController.isShowingChat = false
       await Delay(600)
     }
+
+    // Verify app is still in foreground before presenting
+    guard UIApplication.shared.applicationState == .active else { return }
 
     switch sheetKind {
     case .privacyUnknownSheet(let missingConsentTypes):
