@@ -225,6 +225,7 @@ private extension OnboardingHealthKitTreatmentView {
       healthData: true,
       healthDataConsentScreenVersion: "OnboardingHealthKitView.v1"
     )
+    ConsentManager.shared.markConsentAsChecked()
   }
 
   func showHealthKitPermissionView() async {

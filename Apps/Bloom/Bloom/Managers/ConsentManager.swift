@@ -163,7 +163,8 @@ extension ConsentManager {
       if response.healthDataConsent == nil {
         consentTypes.append(.healthData)
       }
-      if hasUnknownFeatures || hasUnknownCategories || hasUnknownCategories2 {
+      if (hasUnknownFeatures || hasUnknownCategories || hasUnknownCategories2)
+          && EntitlementController.shared.hasBloomPro == true {
         consentTypes.append(.aiFeatures)
       }
       return consentTypes
