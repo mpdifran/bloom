@@ -99,8 +99,10 @@ struct RootView: View {
         )
       }
     }
-    .onForegroundTask {
-      await checkModalSheetToPresent()
+    .onForeground {
+      Task {
+        await checkModalSheetToPresent()
+      }
     }
     .onForegroundTask {
       await MagicScanStatusChecker.shared.checkPendingItems(modelContext: modelContext)
