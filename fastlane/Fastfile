@@ -17,7 +17,6 @@ default_platform(:ios)
 platform :ios do
   lane :matchiOS do
     match(type: "development", platform: "ios")
-    match(type: "appstore", platform: "ios")
   end
 
   lane :setupMatch do
@@ -27,12 +26,16 @@ platform :ios do
   lane :registerDevices do
     match(force_for_new_devices: true)
   end
+
+    lane :nukeMatchiOS do
+    match(type: "development", platform: "ios", nuke: true)
+    match(type: "appstore", platform: "ios", nuke: true)
+  end
 end
 
 platform :mac do
   lane :matchMacOS do
     match(type: "development", platform: "macos")
-    match(type: "appstore", platform: "macos")
   end
 
   lane :setupMatch do
