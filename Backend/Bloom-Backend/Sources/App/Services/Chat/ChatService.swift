@@ -35,7 +35,7 @@ final class ChatService: Sendable {
     self.logger = logger
   }
 
-  private let modelID = ModelID.OSeries.o4Mini
+  private let modelID = ModelID.GPT5.gpt5Mini
 
   private let encoder = JSONEncoder.bloomModel
   private let decoder = JSONDecoder.bloomModel

@@ -35,7 +35,7 @@ extension OpenAIService {
 
   func generateConversationTitle(userMessage: String) async -> String? {
     do {
-      let model = ModelID.OSeries.o4Mini
+      let model = ModelID.GPT5.gpt5Mini
 
       let messages: [Chat.Message] = [
         Chat.Message(
@@ -137,7 +137,7 @@ extension OpenAIService {
     foodDescription: String?
   ) async -> OpenAIEstimateCaloriesResponse? {
     do {
-      let model = ModelID.GPT4.gpt_4o_mini
+      let model = ModelID.GPT5.gpt5Mini
 
       var messages: [Chat.Message] = [
         Chat.Message(
@@ -212,7 +212,7 @@ extension OpenAIService {
 
   func estimateCalories(textDescription: String) async -> OpenAIEstimateCaloriesResponse? {
     do {
-      let model = ModelID.GPT4.gpt_4o_mini
+      let model = ModelID.GPT5.gpt5Mini
 
       let messages: [Chat.Message] = [
         Chat.Message(
@@ -489,7 +489,7 @@ extension OpenAIService {
     image: Data?,
     contextText: String?
   ) async throws -> [MagicScanStatusResponse.Serving] {
-    let model = ModelID.GPT4.gpt_4o_mini
+    let model = ModelID.GPT5.gpt5Mini
 
     var messages: [Chat.Message] = []
 
@@ -571,8 +571,8 @@ extension OpenAIService {
     image: Data?,
     contextText: String?
   ) async throws -> [MagicScanStatusResponse.Serving] {
-    // Use GPT-4o for better vision capabilities
-    let model = ModelID.GPT4.gpt_4o
+    // Use GPT-5 for better vision capabilities
+    let model = ModelID.GPT5.gpt5
 
     var messages: [Chat.Message] = []
 

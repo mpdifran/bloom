@@ -19,7 +19,7 @@ final class HealthReportService: Sendable {
     self.todayInsightsHistory = todayInsightsHistory
   }
 
-  private let modelID = ModelID.OSeries.o4Mini
+  private let modelID = ModelID.GPT5.gpt5Mini
 
   private let encoder = JSONEncoder.bloomModel
   private let decoder = JSONDecoder.bloomModel

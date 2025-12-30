@@ -1,0 +1,619 @@
+//
+//  YouStatsCalculator.swift
+//  Bloom
+//
+//  Created by Mark DiFranco on 2025-12-29.
+//
+
+import Foundation
+import CoreHealth
+import BloomFoundation
+import HealthKit
+
+final actor YouStatsCalculator {
+  static let shared = YouStatsCalculator()
+
+  @AsyncStreamable var bedtimeChartData: BedtimeChartData?
+  @AsyncStreamable var averageSleepDuration: TimeInterval?
+  @AsyncStreamable var averageSleepScore: Double?
+  @AsyncStreamable var sleepStageDataPoints: [SleepStageDataPoint]?
+  @AsyncStreamable var averageSleepHeartRate: Double?
+  @AsyncStreamable var sleepHeartRateChartData: [SleepHeartRateDataPoint]?
+  @AsyncStreamable var sleepRespiratoryRateTrend: RespiratoryRateTrend?
+  @AsyncStreamable var sleepRespiratoryRateChartData: [RespiratoryRateDataPoint]?
+  @AsyncStreamable var wristTempData: WristTempData?
+  @AsyncStreamable var weeklyStepsChartData: WeeklyStepsChartData?
+  @AsyncStreamable var maxHeartRateChartData: MaxHeartRateChartData?
+  @AsyncStreamable var vo2MaxTrendData: VO2MaxTrendData?
+  @AsyncStreamable var heartRateRecoveryData: HeartRateRecoveryData?
+  @AsyncStreamable var bodyWeightChartData: BodyWeightChartData?
+
+  private let healthStoreFetcher = HealthStoreFetcher.shared
+
+  private init() { }
+
+  func refreshStats() async {
+    let sleepAnalyses = await healthStoreFetcher.fetchSleepAnalysis(
+      dateRange: .trailingDaysFromNow(7)
+    )
+    bedtimeChartData = calculateBedtimeChartData(from: sleepAnalyses)
+    averageSleepDuration = calculateAverageSleepDuration(from: sleepAnalyses)
+    averageSleepScore = calculateAverageSleepScore(from: sleepAnalyses)
+    sleepStageDataPoints = calculateSleepStageDataPoints(from: sleepAnalyses)
+    averageSleepHeartRate = calculateAverageSleepHeartRate(from: sleepAnalyses)
+    sleepHeartRateChartData = calculateSleepHeartRateChartData(from: sleepAnalyses)
+
+    let respiratoryData = calculateRespiratoryRateData(from: sleepAnalyses)
+    sleepRespiratoryRateChartData = respiratoryData
+    sleepRespiratoryRateTrend = calculateRespiratoryRateTrend(from: respiratoryData)
+
+    wristTempData = calculateWristTempData(from: sleepAnalyses)
+
+    weeklyStepsChartData = await calculateWeeklyStepsChartData()
+    maxHeartRateChartData = await calculateMaxHeartRateChartData()
+    vo2MaxTrendData = await calculateVO2MaxTrendData()
+    heartRateRecoveryData = await calculateHeartRateRecoveryData()
+    bodyWeightChartData = await calculateBodyWeightChartData()
+  }
+
+  func refreshSteps() async {
+    weeklyStepsChartData = await calculateWeeklyStepsChartData()
+  }
+}
+
+private extension YouStatsCalculator {
+
+  func calculateAverageSleepDuration(from sleepAnalyses: [SleepAnalysis]) -> TimeInterval? {
+    guard sleepAnalyses.isNotEmpty else { return nil }
+    let totalMinutes = sleepAnalyses.map(\.overallMinutes).reduce(0, +)
+    let averageMinutes = totalMinutes / Double(sleepAnalyses.count)
+    return averageMinutes * 60 // Convert to seconds (TimeInterval)
+  }
+
+  func calculateAverageSleepScore(from sleepAnalyses: [SleepAnalysis]) -> Double? {
+    guard sleepAnalyses.isNotEmpty else { return nil }
+    let totalScore = sleepAnalyses.map(\.overallScoreDouble).reduce(0, +)
+    return totalScore / Double(sleepAnalyses.count)
+  }
+
+  func calculateSleepStageDataPoints(from sleepAnalyses: [SleepAnalysis]) -> [SleepStageDataPoint]? {
+    guard sleepAnalyses.isNotEmpty else { return nil }
+
+    let calendar = Calendar.current
+    let now = Date()
+
+    // Create data points for each of the last 7 days that have sleep data
+    let dataPoints = (0..<7).reversed().flatMap { daysAgo -> [SleepStageDataPoint] in
+      guard let targetDate = calendar.date(byAdding: .day, value: -daysAgo, to: now) else { return [] }
+
+      // Find sleep analysis for this day (matching by end date)
+      guard let analysis = sleepAnalyses.first(where: {
+        calendar.isDate($0.endDate, inSameDayAs: targetDate)
+      }) else { return [] }
+
+      let dateForChart = calendar.startOfDay(for: targetDate)
+      return [
+        SleepStageDataPoint(date: dateForChart, stage: .deep, minutes: analysis.deepSleepMinutes),
+        SleepStageDataPoint(date: dateForChart, stage: .core, minutes: analysis.coreSleepMinutes),
+        SleepStageDataPoint(date: dateForChart, stage: .rem, minutes: analysis.remSleepMinutes),
+        SleepStageDataPoint(date: dateForChart, stage: .awake, minutes: analysis.awakeSleepMinutes)
+      ]
+    }
+
+    return dataPoints.isEmpty ? nil : dataPoints
+  }
+
+  func calculateBedtimeChartData(from sleepAnalyses: [SleepAnalysis]) -> BedtimeChartData? {
+    let calendar = Calendar.current
+    let now = Date()
+
+    let dataPoints: [BedtimeDataPoint] = (0..<7).reversed().compactMap { daysAgo -> BedtimeDataPoint? in
+      guard let targetDate = calendar.date(byAdding: .day, value: -daysAgo, to: now) else { return nil }
+
+      let analysis = sleepAnalyses.first { analysis in
+        calendar.isDate(analysis.endDate, inSameDayAs: targetDate)
+      }
+
+      guard let analysis else { return nil }
+
+      let minutesFromMidnight = getMinutesFromMidnight(analysis.startDate)
+      // Negate so earlier bedtimes appear at top of chart
+      return BedtimeDataPoint(
+        date: calendar.startOfDay(for: targetDate),
+        minutesFromMidnight: -minutesFromMidnight
+      )
+    }
+
+    guard dataPoints.count >= 2 else { return nil }
+
+    let trend = calculateBedtimeTrend(from: dataPoints)
+
+    return BedtimeChartData(dataPoints: dataPoints, trend: trend)
+  }
+
+  func calculateBedtimeTrend(from dataPoints: [BedtimeDataPoint]) -> BedtimeTrend {
+    guard dataPoints.count >= 3 else { return .consistent }
+
+    let minutes = dataPoints.map(\.minutesFromMidnight)
+    let average = minutes.reduce(0, +) / Double(minutes.count)
+
+    let standardDeviation = sqrt(
+      minutes.map { pow($0 - average, 2) }.reduce(0, +) / Double(minutes.count)
+    )
+
+    // Check for trending by comparing first half to second half
+    let midpoint = minutes.count / 2
+    let firstHalfAvg = minutes.prefix(midpoint).reduce(0, +) / Double(midpoint)
+    let secondHalfAvg = minutes.suffix(midpoint).reduce(0, +) / Double(midpoint)
+    let trendDifference = secondHalfAvg - firstHalfAvg
+
+    // If standard deviation is low and no significant trend, it's consistent
+    if standardDeviation < 30 && abs(trendDifference) < 20 {
+      return .consistent
+    }
+
+    // If there's a significant trend (>20 min difference between halves)
+    if trendDifference > 20 {
+      return .trendingLater
+    } else if trendDifference < -20 {
+      return .trendingEarlier
+    }
+
+    // High variance but no clear trend means inconsistent
+    return .inconsistent
+  }
+
+  /// Converts a date to minutes from midnight, handling bedtimes that cross midnight
+  /// Times before noon are treated as "after midnight" (add 24 hours worth of minutes)
+  func getMinutesFromMidnight(_ date: Date) -> Double {
+    let calendar = Calendar.current
+    let components = calendar.dateComponents([.hour, .minute], from: date)
+    let hours = Double(components.hour ?? 0)
+    let minutes = Double(components.minute ?? 0)
+
+    var totalMinutes = hours * 60 + minutes
+
+    // If time is before noon, treat it as after midnight (e.g., 1 AM = 25 * 60 = 1500 minutes)
+    if totalMinutes < 12 * 60 {
+      totalMinutes += 24 * 60
+    }
+
+    return totalMinutes
+  }
+
+  func calculateAverageSleepHeartRate(from sleepAnalyses: [SleepAnalysis]) -> Double? {
+    let heartRates = sleepAnalyses.compactMap(\.averageHeartRate)
+    guard heartRates.isNotEmpty else { return nil }
+    return heartRates.reduce(0, +) / Double(heartRates.count)
+  }
+
+  func calculateSleepHeartRateChartData(from sleepAnalyses: [SleepAnalysis]) -> [SleepHeartRateDataPoint]? {
+    let calendar = Calendar.current
+    let now = Date()
+
+    let dataPoints = (0..<7).reversed().compactMap { daysAgo -> SleepHeartRateDataPoint? in
+      guard let targetDate = calendar.date(byAdding: .day, value: -daysAgo, to: now) else { return nil }
+
+      guard let analysis = sleepAnalyses.first(where: {
+        calendar.isDate($0.endDate, inSameDayAs: targetDate)
+      }),
+      let heartRate = analysis.averageHeartRate else { return nil }
+
+      return SleepHeartRateDataPoint(
+        date: calendar.startOfDay(for: targetDate),
+        heartRate: heartRate
+      )
+    }
+
+    return dataPoints.isEmpty ? nil : dataPoints
+  }
+
+  func calculateRespiratoryRateData(from sleepAnalyses: [SleepAnalysis]) -> [RespiratoryRateDataPoint]? {
+    let calendar = Calendar.current
+    let now = Date()
+
+    let dataPoints = (0..<7).reversed().compactMap { daysAgo -> RespiratoryRateDataPoint? in
+      guard let targetDate = calendar.date(byAdding: .day, value: -daysAgo, to: now) else { return nil }
+      guard let analysis = sleepAnalyses.first(where: {
+        calendar.isDate($0.endDate, inSameDayAs: targetDate)
+      }) else { return nil }
+
+      let rates = analysis.respiratoryRate.map(\.averageRespiratoryRate)
+      guard rates.isNotEmpty else { return nil }
+      let avgRate = rates.reduce(0, +) / Double(rates.count)
+
+      return RespiratoryRateDataPoint(
+        date: calendar.startOfDay(for: targetDate),
+        rate: avgRate
+      )
+    }
+
+    return dataPoints.isEmpty ? nil : dataPoints
+  }
+
+  func calculateRespiratoryRateTrend(from dataPoints: [RespiratoryRateDataPoint]?) -> RespiratoryRateTrend? {
+    guard let dataPoints, dataPoints.count >= 2 else { return nil }
+
+    let sorted = dataPoints.sorted { $0.date > $1.date }
+    let current = sorted[0].rate
+    let previousRates = sorted.dropFirst().map(\.rate)
+    let previousAvg = previousRates.reduce(0, +) / Double(previousRates.count)
+
+    guard previousAvg != 0 else { return .consistent }
+    let percentChange = ((current - previousAvg) / previousAvg) * 100
+
+    if abs(percentChange) < 5 {
+      return .consistent
+    } else if percentChange > 0 {
+      return .increasing
+    } else {
+      return .decreasing
+    }
+  }
+
+  func calculateWristTempData(from sleepAnalyses: [SleepAnalysis]) -> WristTempData? {
+    let temps = sleepAnalyses.compactMap { $0.wristTemperature?.averageWristTemperature }
+    guard temps.count >= 2 else { return nil }
+
+    let weeklyAvg = temps.reduce(0, +) / Double(temps.count)
+
+    let sorted = sleepAnalyses
+      .filter { $0.wristTemperature != nil }
+      .sorted { $0.endDate > $1.endDate }
+
+    guard let mostRecent = sorted.first?.wristTemperature?.averageWristTemperature else { return nil }
+
+    return WristTempData(weeklyAverage: weeklyAvg, latestTemp: mostRecent)
+  }
+
+  func calculateWeeklyStepsChartData() async -> WeeklyStepsChartData? {
+    var calendar = Calendar.current
+    calendar.firstWeekday = 1  // Sunday
+
+    let now = Date()
+    let todayWeekday = calendar.component(.weekday, from: now)  // 1 = Sunday
+
+    // Find the start of this week (Sunday)
+    guard let thisWeekStart = calendar.date(
+      byAdding: .day,
+      value: -(todayWeekday - 1),
+      to: calendar.startOfDay(for: now)
+    ) else { return nil }
+
+    // Find the start of last week (Sunday)
+    guard let lastWeekStart = calendar.date(byAdding: .day, value: -7, to: thisWeekStart) else { return nil }
+
+    // Fetch steps for this week (from Sunday to today) in 4-hour windows
+    let thisWeekRange = DateRange(thisWeekStart, now)
+    let thisWeekSteps = await healthStoreFetcher.fetchCollatedQuantity(
+      for: .stepCount,
+      unit: .count(),
+      interval: DateComponents(hour: 4),
+      dateRange: thisWeekRange
+    )
+
+    // Fetch steps for last week (full week) in 4-hour windows
+    guard let lastWeekEnd = calendar.date(byAdding: .day, value: 7, to: lastWeekStart) else { return nil }
+    let lastWeekRange = DateRange(lastWeekStart, lastWeekEnd)
+    let lastWeekSteps = await healthStoreFetcher.fetchCollatedQuantity(
+      for: .stepCount,
+      unit: .count(),
+      interval: DateComponents(hour: 4),
+      dateRange: lastWeekRange
+    )
+
+    // Build cumulative data points for this week
+    var thisWeekDataPoints = [StepsDataPoint]()
+    var cumulativeSteps = 0
+    for (index, sample) in thisWeekSteps.enumerated() {
+      let steps = Int(sample.quantity.doubleValue(for: .count()))
+      cumulativeSteps += steps
+
+      thisWeekDataPoints.append(StepsDataPoint(
+        date: sample.date,
+        cumulativeSteps: cumulativeSteps,
+        index: index,
+        series: "This Week"
+      ))
+    }
+
+    // Build cumulative data points for last week
+    var lastWeekDataPoints = [StepsDataPoint]()
+    var lastWeekCumulativeSteps = 0
+    for (index, sample) in lastWeekSteps.enumerated() {
+      let steps = Int(sample.quantity.doubleValue(for: .count()))
+      lastWeekCumulativeSteps += steps
+
+      lastWeekDataPoints.append(StepsDataPoint(
+        date: sample.date,
+        cumulativeSteps: lastWeekCumulativeSteps,
+        index: index,
+        series: "Last Week"
+      ))
+    }
+
+    guard thisWeekDataPoints.isNotEmpty else { return nil }
+
+    // Calculate percentage change (compare to same point in week)
+    let totalStepsThisWeek = cumulativeSteps
+    let currentIndex = thisWeekDataPoints.count - 1
+
+    // Get last week's cumulative total at the same point in the week
+    let totalStepsLastWeekSamePoint = lastWeekDataPoints
+      .first { $0.index == currentIndex }?
+      .cumulativeSteps ?? 0
+
+    let percentageChange: Double?
+    if totalStepsLastWeekSamePoint > 0 {
+      percentageChange = (Double(totalStepsThisWeek) - Double(totalStepsLastWeekSamePoint)) / Double(totalStepsLastWeekSamePoint) * 100
+    } else {
+      percentageChange = nil
+    }
+
+    return WeeklyStepsChartData(
+      thisWeekDataPoints: thisWeekDataPoints,
+      lastWeekDataPoints: lastWeekDataPoints,
+      totalStepsThisWeek: totalStepsThisWeek,
+      percentageChangeFromLastWeek: percentageChange
+    )
+  }
+
+  func calculateMaxHeartRateChartData() async -> MaxHeartRateChartData? {
+    let calendar = Calendar.current
+    let now = Date()
+
+    // Get the last 7 days
+    guard let startDate = calendar.date(byAdding: .day, value: -6, to: calendar.startOfDay(for: now)) else {
+      return nil
+    }
+
+    let dateRange = DateRange(startDate, now)
+
+    // Fetch daily max heart rates using discreteMax
+    let maxHRSamples = await healthStoreFetcher.fetchCollatedQuantity(
+      for: .heartRate,
+      unit: .bpm(),
+      interval: DateComponents(day: 1),
+      options: .discreteMax,
+      dateRange: dateRange
+    )
+
+    guard maxHRSamples.isNotEmpty else { return nil }
+
+    // Build data points
+    var dataPoints = [MaxHeartRateDataPoint]()
+    for dayOffset in 0..<7 {
+      guard let dayDate = calendar.date(byAdding: .day, value: dayOffset, to: startDate) else { continue }
+
+      if let sample = maxHRSamples.first(where: { calendar.isDate($0.date, inSameDayAs: dayDate) }) {
+        let maxHR = sample.quantity.doubleValue(for: .bpm())
+        dataPoints.append(MaxHeartRateDataPoint(
+          date: calendar.startOfDay(for: dayDate),
+          maxHeartRate: maxHR,
+          dayIndex: dayOffset
+        ))
+      }
+    }
+
+    guard dataPoints.isNotEmpty else { return nil }
+
+    // Calculate average
+    let avgMaxHR = Int(dataPoints.map(\.maxHeartRate).reduce(0, +) / Double(dataPoints.count))
+
+    return MaxHeartRateChartData(
+      dataPoints: dataPoints,
+      averageMaxHR: avgMaxHR
+    )
+  }
+
+  func calculateVO2MaxTrendData() async -> VO2MaxTrendData? {
+    let dateRange = DateRange.trailingMonthsFromNow(3)
+
+    // Fetch all VO2 Max samples from the last 3 months
+    let sampleType = HKQuantityType(.vo2Max)
+    guard let samples = try? await healthStoreFetcher.fetchSamples(
+      for: sampleType,
+      dateRange: dateRange
+    ) as? [HKQuantitySample],
+    samples.isNotEmpty else { return nil }
+
+    // Sort by date descending and take up to 3 most recent
+    let sortedSamples = samples.sorted { $0.endDate > $1.endDate }
+    let recentSamples = Array(sortedSamples.prefix(3))
+
+    // Latest value
+    guard let latestSample = recentSamples.first else { return nil }
+    let latestValue = latestSample.quantity.doubleValue(for: .vo2Max())
+
+    // Determine trend (compare first and last of the selected samples)
+    let trend: VO2MaxTrendDirection
+    if recentSamples.count >= 2 {
+      let oldestValue = recentSamples.last!.quantity.doubleValue(for: .vo2Max())
+      let difference = latestValue - oldestValue
+
+      if difference > 0.5 {
+        trend = .improving
+      } else if difference < -0.5 {
+        trend = .declining
+      } else {
+        trend = .constant
+      }
+    } else {
+      trend = .constant  // Only one data point
+    }
+
+    return VO2MaxTrendData(latestValue: latestValue, trend: trend)
+  }
+
+  func calculateHeartRateRecoveryData() async -> HeartRateRecoveryData? {
+    var calendar = Calendar.current
+    calendar.firstWeekday = 1  // Sunday
+
+    let now = Date()
+    let todayWeekday = calendar.component(.weekday, from: now)
+
+    // Find start of this week (Sunday)
+    guard let thisWeekStart = calendar.date(
+      byAdding: .day,
+      value: -(todayWeekday - 1),
+      to: calendar.startOfDay(for: now)
+    ) else { return nil }
+
+    // Find start of last week
+    guard let lastWeekStart = calendar.date(byAdding: .day, value: -7, to: thisWeekStart) else { return nil }
+
+    // Fetch this week's average
+    let thisWeekRange = DateRange(thisWeekStart, now)
+    let thisWeekAvg = await healthStoreFetcher.fetchDailyAverage(
+      for: .heartRateRecoveryOneMinute,
+      unit: .bpm(),
+      dateRange: thisWeekRange
+    )
+
+    // Fetch last week's average
+    let lastWeekRange = DateRange(lastWeekStart, thisWeekStart)
+    let lastWeekAvg = await healthStoreFetcher.fetchDailyAverage(
+      for: .heartRateRecoveryOneMinute,
+      unit: .bpm(),
+      dateRange: lastWeekRange
+    )
+
+    guard thisWeekAvg != nil || lastWeekAvg != nil else { return nil }
+
+    return HeartRateRecoveryData(
+      thisWeekAverage: thisWeekAvg?.doubleValue(for: .bpm()),
+      lastWeekAverage: lastWeekAvg?.doubleValue(for: .bpm())
+    )
+  }
+
+  func calculateBodyWeightChartData() async -> BodyWeightChartData? {
+    let dateRange = DateRange.trailingDaysFromNow(30)
+
+    // Fetch body mass samples
+    let sampleType = HKQuantityType(.bodyMass)
+    guard let samples = try? await healthStoreFetcher.fetchSamples(
+      for: sampleType,
+      dateRange: dateRange
+    ) as? [HKQuantitySample],
+    samples.isNotEmpty else { return nil }
+
+    // Get user's preferred weight unit
+    let weightUnit = await HealthUnitPreferences.shared.weightUnit
+
+    // Sort by date ascending for chart
+    let sortedSamples = samples.sorted { $0.endDate < $1.endDate }
+
+    // Build data points
+    let dataPoints = sortedSamples.map { sample in
+      BodyWeightDataPoint(
+        date: sample.endDate,
+        weight: sample.quantity.doubleValue(for: weightUnit)
+      )
+    }
+
+    // Get latest value and date
+    let latestSample = sortedSamples.last
+    let latestWeight = latestSample?.quantity
+    let latestDate = latestSample?.endDate
+
+    return BodyWeightChartData(
+      dataPoints: dataPoints,
+      latestWeight: latestWeight,
+      latestDate: latestDate
+    )
+  }
+}
+
+struct WristTempData: Sendable {
+  let weeklyAverage: Double  // in Fahrenheit
+  let latestTemp: Double     // in Fahrenheit
+}
+
+struct SleepHeartRateDataPoint: Identifiable, Sendable {
+  var id: Date { date }
+  let date: Date
+  let heartRate: Double
+}
+
+struct RespiratoryRateDataPoint: Identifiable, Sendable {
+  var id: Date { date }
+  let date: Date
+  let rate: Double
+}
+
+enum RespiratoryRateTrend: Sendable {
+  case consistent
+  case increasing
+  case decreasing
+
+  var displayText: String {
+    switch self {
+    case .consistent: "Consistent"
+    case .increasing: "Increasing"
+    case .decreasing: "Decreasing"
+    }
+  }
+}
+
+struct WeeklyStepsChartData: Sendable {
+  let thisWeekDataPoints: [StepsDataPoint]
+  let lastWeekDataPoints: [StepsDataPoint]
+  let totalStepsThisWeek: Int
+  let percentageChangeFromLastWeek: Double?
+}
+
+struct StepsDataPoint: Identifiable, Sendable {
+  var id: String { "\(series)-\(index)" }
+  let date: Date
+  let cumulativeSteps: Int
+  let index: Int  // Position in the series (0-based)
+  let series: String  // "This Week" or "Last Week"
+}
+
+struct MaxHeartRateChartData: Sendable {
+  let dataPoints: [MaxHeartRateDataPoint]
+  let averageMaxHR: Int
+}
+
+struct MaxHeartRateDataPoint: Identifiable, Sendable {
+  var id: Date { date }
+  let date: Date
+  let maxHeartRate: Double
+  let dayIndex: Int  // 0-6 for the 7 days
+}
+
+struct VO2MaxTrendData: Sendable {
+  let latestValue: Double
+  let trend: VO2MaxTrendDirection
+}
+
+enum VO2MaxTrendDirection: Sendable {
+  case improving
+  case constant
+  case declining
+
+  var displayText: String {
+    switch self {
+    case .improving: "Improving"
+    case .constant: "Constant"
+    case .declining: "Declining"
+    }
+  }
+}
+
+struct HeartRateRecoveryData: Sendable {
+  let thisWeekAverage: Double?
+  let lastWeekAverage: Double?
+}
+
+struct BodyWeightChartData: Sendable {
+  let dataPoints: [BodyWeightDataPoint]
+  let latestWeight: HKQuantity?
+  let latestDate: Date?
+}
+
+struct BodyWeightDataPoint: Identifiable, Sendable {
+  var id: Date { date }
+  let date: Date
+  let weight: Double
+}

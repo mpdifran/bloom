@@ -74,6 +74,9 @@ struct BloomApp: App {
           await VitalsCalculator.shared.refreshVitals()
         }
         .onForegroundTask {
+          await YouStatsCalculator.shared.refreshStats()
+        }
+        .onForegroundTask {
           await TodayInsightsManager.shared.refreshContentIfNeeded()
         }
         .onForegroundTask {
@@ -111,6 +114,9 @@ struct BloomApp: App {
         }
         .task {
           await TrainingLoadObserver.shared.observeTrainingLoad()
+        }
+        .task {
+          await StepsObserver.shared.startObserving()
         }
         .task {
           await NotificationCategoryManager.shared.registerNotificationCategories()

@@ -17,6 +17,8 @@ struct HeightEditorTextField: View {
   @State private var heightFeet: Int
   @State private var heightInches: Int
 
+  @FocusState private var isTextFieldFocused: Bool
+
   init() {
     let (feet, inches) = HealthManager.shared.heightCM.toFeetInches()
     self._heightFeet = State(initialValue: feet)
@@ -104,8 +106,14 @@ private extension HeightEditorTextField {
     .keyboardType(.decimalPad)
     .frame(width: 70)
     .textFieldStyle(.roundedBorder)
+    .focused($isTextFieldFocused)
     .onSubmit {
       recalculateHeightCMFromCM()
+    }
+    .onChange(of: isTextFieldFocused) { _, newValue in
+      if !newValue {
+        recalculateHeightCMFromCM()
+      }
     }
   }
 }

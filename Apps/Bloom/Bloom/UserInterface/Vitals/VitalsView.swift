@@ -13,9 +13,10 @@ import BloomUI
 
 struct VitalsView: View {
 
-  private let viewModel = VitalsViewModel.shared
+  @State private var viewModel = YouStatsViewModel.shared
   @State private var biologicalAgeViewModel = BiologicalAgeViewModel.shared
   @StateObject private var entitlementController = EntitlementController.shared
+  @YouSettingsStorage("YouView.settings") private var youSettings = YouSettings()
 
   @State private var path = NavigationPath()
   @State private var presentedNavigationDestination: AnyView?
@@ -37,27 +38,9 @@ struct VitalsView: View {
           bioAgeMeter
         }
 
-        if viewModel.vitals.isNotEmpty {
-          SectionTitleView("Vitals")
-            .padding(.horizontal)
-
-          ForEach(viewModel.vitals) { vital in
-            NavigationLink(value: vital.id) {
-              MonthlyVitalCardCell(vital: vital)
-            }
-            .buttonStyle(.plain)
-          }
-        }
-
-        if viewModel.noDataVitals.isNotEmpty {
-          SectionTitleView("No Data")
-            .padding(.horizontal)
-          ForEach(viewModel.noDataVitals) { vital in
-            NavigationLink(value: vital.id) {
-              MonthlyVitalCardCell(vital: vital)
-            }
-            .buttonStyle(.plain)
-          }
+        // Stat sections in user-defined order
+        ForEach(youSettings.sectionOrder, id: \.self) { section in
+          sectionView(for: section)
         }
 
         MedicalDisclaimerFooterView()
@@ -80,7 +63,6 @@ struct VitalsView: View {
       }
       .navigationDestination($presentedNavigationDestination)
       .sheet($presentedSheet)
-      .animation(.default, value: viewModel.vitals)
       .animation(.default, value: aiFeatureSettings.biologicalAgeEnabled)
       .toolbar {
         SettingsProfileViewToolbarButton()
@@ -104,6 +86,81 @@ struct VitalsView: View {
     .tabItem {
       Label("You", systemSymbol: .figure)
     }
+  }
+
+  @ViewBuilder
+  private func sectionView(for section: VitalModel.Kind) -> some View {
+    switch section {
+    case .sleepQuality:
+      SleepQualitySection(
+        presentedNavigationDestination: $presentedNavigationDestination,
+        summary: viewModel.sleepVitalsSummary,
+        bedtimeData: viewModel.bedtimeChartData,
+        averageSleepDuration: viewModel.averageSleepDuration,
+        averageSleepScore: viewModel.averageSleepScore,
+        sleepStageDataPoints: viewModel.sleepStageDataPoints,
+        averageSleepHeartRate: viewModel.averageSleepHeartRate,
+        sleepHeartRateChartData: viewModel.sleepHeartRateChartData,
+        sleepRespiratoryRateTrend: viewModel.sleepRespiratoryRateTrend,
+        sleepRespiratoryRateChartData: viewModel.sleepRespiratoryRateChartData,
+        wristTempData: viewModel.wristTempData
+      )
+    case .activityLevel:
+      ActivityLevelSection(
+        presentedNavigationDestination: $presentedNavigationDestination,
+        summary: viewModel.activityLevelSummary,
+        weeklyStepsChartData: viewModel.weeklyStepsChartData
+      )
+    case .heartHealth:
+      HeartHealthSection(
+        presentedNavigationDestination: $presentedNavigationDestination,
+        summary: viewModel.heartHealthSummary,
+        maxHeartRateChartData: viewModel.maxHeartRateChartData,
+        vo2MaxTrendData: viewModel.vo2MaxTrendData,
+        heartRateRecoveryData: viewModel.heartRateRecoveryData
+      )
+    case .bodyComposition:
+      BodyCompositionSection(
+        presentedNavigationDestination: $presentedNavigationDestination,
+        summary: viewModel.bodyCompositionSummary,
+        bodyWeightChartData: viewModel.bodyWeightChartData
+      )
+    case .stressLevels:
+      StressLevelsSection(
+        presentedNavigationDestination: $presentedNavigationDestination,
+        summary: viewModel.stressSummary
+      )
+    case .nutrition:
+      NutritionSection(
+        presentedNavigationDestination: $presentedNavigationDestination,
+        summary: viewModel.nutritionSummary
+      )
+    case .exerciseEffectiveness:
+      ExerciseEffectivenessSection(
+        presentedNavigationDestination: $presentedNavigationDestination,
+        summary: viewModel.exerciseEffectivenessSummary
+      )
+    case .cycleTracking:
+      if shouldShowCycleTracking {
+        CycleTrackingSection(
+          presentedNavigationDestination: $presentedNavigationDestination,
+          summary: viewModel.menstrualSummary
+        )
+      }
+    case .bowelMovements:
+      BowelMovementsSection(
+        presentedNavigationDestination: $presentedNavigationDestination,
+        summary: viewModel.bowelMovementSummary
+      )
+    case .cardioFitness:
+      EmptyView() // Deprecated
+    @unknown default:
+      EmptyView()
+    }
+  }
+
+  private var shouldShowCycleTracking: Bool {
+    HealthManager.shared.sex() == .female
   }
 }
 
