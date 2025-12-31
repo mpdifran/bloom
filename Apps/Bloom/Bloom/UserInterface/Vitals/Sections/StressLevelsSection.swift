@@ -13,6 +13,8 @@ import DataContainer
 struct StressLevelsSection: View {
   @Binding var presentedNavigationDestination: AnyView?
   let summary: StressMonthlySummary?
+  let hrvChartData: HRVChartData?
+  let bloodPressureData: BloodPressureCardData?
 
   var body: some View {
     StatSection(symbol: SFSymbol(rawValue: VitalModel.Kind.stressLevels.systemImage), title: "Stress Levels", subtitle: "Last 7 Days") {
@@ -30,39 +32,14 @@ struct StressLevelsSection: View {
 
 private extension StressLevelsSection {
 
-  @ViewBuilder
   var hrvCard: some View {
-    if let hrv = summary?.details.averageHeartRateVariability {
-      BigNumberCard(
-        title: "HRV",
-        value: "\(Int(hrv))",
-        unit: "ms",
-        symbol: .waveformPathEcg,
-        color: .teal
-      )
+    HRVStatCard(data: hrvChartData)
       .onTapGesture { navigateToDetails() }
-    } else {
-      NoDataCard(title: "HRV", symbol: .waveformPathEcg)
-        .onTapGesture { navigateToDetails() }
-    }
   }
 
-  @ViewBuilder
   var bloodPressureCard: some View {
-    if let systolic = summary?.details.averageSystolic,
-       let diastolic = summary?.details.averageDiastolic {
-      BigNumberCard(
-        title: "Blood Pressure",
-        value: "\(Int(systolic))/\(Int(diastolic))",
-        unit: "mmHg",
-        symbol: .heartFill,
-        color: .red
-      )
+    BloodPressureStatCard(data: bloodPressureData)
       .onTapGesture { navigateToDetails() }
-    } else {
-      NoDataCard(title: "Blood Pressure", symbol: .heartFill)
-        .onTapGesture { navigateToDetails() }
-    }
   }
 }
 
@@ -71,7 +48,9 @@ private extension StressLevelsSection {
     BloomScrollView {
       StressLevelsSection(
         presentedNavigationDestination: .constant(nil),
-        summary: nil
+        summary: nil,
+        hrvChartData: nil,
+        bloodPressureData: nil
       )
     }
   }

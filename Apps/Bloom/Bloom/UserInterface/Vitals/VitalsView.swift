@@ -128,7 +128,9 @@ struct VitalsView: View {
     case .stressLevels:
       StressLevelsSection(
         presentedNavigationDestination: $presentedNavigationDestination,
-        summary: viewModel.stressSummary
+        summary: viewModel.stressSummary,
+        hrvChartData: viewModel.hrvChartData,
+        bloodPressureData: viewModel.bloodPressureData
       )
     case .nutrition:
       NutritionSection(

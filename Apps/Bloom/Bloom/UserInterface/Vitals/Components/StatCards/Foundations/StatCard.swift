@@ -8,24 +8,26 @@
 import SwiftUI
 import SFSafeSymbols
 
-extension StatCard {
-  enum ValueStyle {
-    case leadingStandard
-    case largeTinted(String?)
-  }
-  enum Trend {
-    case trendingUp
-    case constant
-    case trendingDown
-  }
+
+enum StatCardValueStyle {
+  case leadingStandard
+  case largeTinted(String?)
+}
+enum StatCardTrend {
+  case trendingUp
+  case constant
+  case trendingDown
+  case ok
+  case warning
+  case critical
 }
 
 struct StatCard<Content>: View where Content: View {
   let symbol: SFSymbol
   let title: String
   let value: String?
-  let valueStyle: ValueStyle
-  let trend: Trend?
+  let valueStyle: StatCardValueStyle
+  let trend: StatCardTrend?
   let aspectRatio: CGFloat
   let layerContent: Bool
   let includePadding: Bool
@@ -35,8 +37,8 @@ struct StatCard<Content>: View where Content: View {
     symbol: SFSymbol,
     title: String,
     value: String? = nil,
-    valueStyle: ValueStyle = .leadingStandard,
-    trend: Trend? = nil,
+    valueStyle: StatCardValueStyle = .leadingStandard,
+    trend: StatCardTrend? = nil,
     aspectRatio: CGFloat = 1,
     layerContent: Bool = false,
     includePadding: Bool = true,
@@ -70,14 +72,16 @@ struct StatCard<Content>: View where Content: View {
 private extension StatCard {
 
   var stackedContent: some View {
-    VStack(spacing: 8) {
+    VStack(spacing: 0) {
       headerContent
+        .padding(.bottom, 8)
 
       contentBuilder()
 
       Spacer(minLength: 0)
 
       valueContent
+        .padding(.top, 8)
     }
   }
 
@@ -126,7 +130,7 @@ private extension StatCard {
 
             Spacer(minLength: 0)
 
-            VStack(alignment: .trailing) {
+            VStack(alignment: .trailing, spacing: 0) {
               Text(value)
                 .font(.largeTitle)
                 .bold()
@@ -178,6 +182,12 @@ private extension StatCard {
           Image(systemSymbol: .minusCircleFill)
         case .trendingDown:
           Image(systemSymbol: .chevronDownCircleFill)
+        case .ok:
+          Image(systemSymbol: .checkmarkCircleFill)
+        case .warning:
+          Image(systemSymbol: .exclamationmarkTriangleFill)
+        case .critical:
+          Image(systemSymbol: .exclamationmarkOctagonFill)
         }
       }
       .foregroundStyle(.tint, .tint.tertiary)
@@ -193,8 +203,8 @@ extension StatCard where Content == EmptyView {
     symbol: SFSymbol,
     title: String,
     value: String? = nil,
-    valueStyle: ValueStyle = .leadingStandard,
-    trend: Trend? = nil,
+    valueStyle: StatCardValueStyle = .leadingStandard,
+    trend: StatCardTrend? = nil,
     aspectRatio: CGFloat = 1,
     layerContent: Bool = false,
     includePadding: Bool = true
@@ -268,12 +278,15 @@ extension StatCard where Content == EmptyView {
           trend: .trendingDown
         )
         StatCard(
-          symbol: .lungs,
-          title: "VO₂ Max",
-          value: "42.5",
-          valueStyle: .leadingStandard,
-          trend: .constant
-        )
+          symbol: .heartFill,
+          title: "HRV",
+          value: "43 ms",
+          valueStyle: .largeTinted("vs Baseline"),
+          trend: .trendingUp
+        ) {
+          Rectangle()
+            .fill(.green)
+        }
       }
     }
   }

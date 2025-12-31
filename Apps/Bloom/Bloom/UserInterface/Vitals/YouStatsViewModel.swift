@@ -37,6 +37,8 @@ final class YouStatsViewModel: Sendable {
   var vo2MaxTrendData: VO2MaxTrendData?
   var heartRateRecoveryData: HeartRateRecoveryData?
   var bodyWeightChartData: BodyWeightChartData?
+  var hrvChartData: HRVChartData?
+  var bloodPressureData: BloodPressureCardData?
 
   private var tasks = [Task<Void, Never>]()
 
@@ -210,6 +212,20 @@ private extension YouStatsViewModel {
       for await bodyWeightChartData in await YouStatsCalculator.shared.$bodyWeightChartData {
         await MainActor.run {
           self.bodyWeightChartData = bodyWeightChartData
+        }
+      }
+    })
+    tasks.append(Task.detached {
+      for await hrvChartData in await YouStatsCalculator.shared.$hrvChartData {
+        await MainActor.run {
+          self.hrvChartData = hrvChartData
+        }
+      }
+    })
+    tasks.append(Task.detached {
+      for await bloodPressureData in await YouStatsCalculator.shared.$bloodPressureData {
+        await MainActor.run {
+          self.bloodPressureData = bloodPressureData
         }
       }
     })

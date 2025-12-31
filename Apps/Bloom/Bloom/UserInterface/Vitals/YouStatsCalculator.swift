@@ -27,6 +27,8 @@ final actor YouStatsCalculator {
   @AsyncStreamable var vo2MaxTrendData: VO2MaxTrendData?
   @AsyncStreamable var heartRateRecoveryData: HeartRateRecoveryData?
   @AsyncStreamable var bodyWeightChartData: BodyWeightChartData?
+  @AsyncStreamable var hrvChartData: HRVChartData?
+  @AsyncStreamable var bloodPressureData: BloodPressureCardData?
 
   private let healthStoreFetcher = HealthStoreFetcher.shared
 
@@ -54,6 +56,8 @@ final actor YouStatsCalculator {
     vo2MaxTrendData = await calculateVO2MaxTrendData()
     heartRateRecoveryData = await calculateHeartRateRecoveryData()
     bodyWeightChartData = await calculateBodyWeightChartData()
+    hrvChartData = await calculateHRVChartData()
+    bloodPressureData = await calculateBloodPressureCardData()
   }
 
   func refreshSteps() async {
@@ -522,6 +526,83 @@ private extension YouStatsCalculator {
       latestDate: latestDate
     )
   }
+
+  func calculateHRVChartData() async -> HRVChartData? {
+    let calendar = Calendar.current
+    let now = Date()
+
+    // Fetch 30 days of HRV samples
+    let dateRange = DateRange.trailingDaysFromNow(30)
+    let sampleType = HKQuantityType(.heartRateVariabilitySDNN)
+
+    guard let samples = try? await healthStoreFetcher.fetchSamples(
+      for: sampleType,
+      dateRange: dateRange
+    ) as? [HKQuantitySample],
+    samples.isNotEmpty else { return nil }
+
+    // Split into 7-day and 30-day sets
+    guard let sevenDaysAgo = calendar.date(byAdding: .day, value: -7, to: now) else { return nil }
+    let sevenDaySamples = samples.filter { $0.endDate >= sevenDaysAgo }
+    let thirtyDaySamples = samples
+
+    // Calculate averages
+    let sevenDayValues = sevenDaySamples.map { $0.quantity.doubleValue(for: .secondUnit(with: .milli)) }
+    let thirtyDayValues = thirtyDaySamples.map { $0.quantity.doubleValue(for: .secondUnit(with: .milli)) }
+
+    guard sevenDayValues.isNotEmpty, thirtyDayValues.isNotEmpty else { return nil }
+
+    let sevenDayAverage = sevenDayValues.reduce(0, +) / Double(sevenDayValues.count)
+    let thirtyDayAverage = thirtyDayValues.reduce(0, +) / Double(thirtyDayValues.count)
+
+    // Group 7-day samples by 3-hour windows and average
+    // Windows: 0-3, 3-6, 6-9, 9-12, 12-15, 15-18, 18-21, 21-24
+    // Midpoints: 1.5, 4.5, 7.5, 10.5, 13.5, 16.5, 19.5, 22.5
+    let windows = [0, 3, 6, 9, 12, 15, 18, 21]
+    let dataPoints: [HRVTimeOfDayDataPoint] = windows.compactMap { windowStart in
+      let windowSamples = sevenDaySamples.filter { sample in
+        let hour = calendar.component(.hour, from: sample.endDate)
+        return hour >= windowStart && hour < windowStart + 3
+      }
+
+      guard windowSamples.isNotEmpty else { return nil }
+
+      let values = windowSamples.map { $0.quantity.doubleValue(for: .secondUnit(with: .milli)) }
+      let avg = values.reduce(0, +) / Double(values.count)
+
+      // Use midpoint of window for chart position
+      return HRVTimeOfDayDataPoint(hourWindow: Double(windowStart) + 1.5, averageHRV: avg)
+    }
+
+    guard dataPoints.isNotEmpty else { return nil }
+
+    return HRVChartData(
+      sevenDayAverage: sevenDayAverage,
+      thirtyDayAverage: thirtyDayAverage,
+      timeOfDayDataPoints: dataPoints
+    )
+  }
+
+  func calculateBloodPressureCardData() async -> BloodPressureCardData? {
+    guard let latestSystolicSample = await healthStoreFetcher.fetchLatestSample(for: .bloodPressureSystolic),
+          let latestDiastolicSample = await healthStoreFetcher.fetchLatestSample(for: .bloodPressureDiastolic)
+    else { return nil }
+
+    let latestSystolic = latestSystolicSample.quantity.doubleValue(for: .millimeterOfMercury())
+    let latestDiastolic = latestDiastolicSample.quantity.doubleValue(for: .millimeterOfMercury())
+
+    let category = HealthGoalProvider.shared.bloodPressureCategory(
+      systolic: latestSystolic,
+      diastolic: latestDiastolic
+    )
+
+    return BloodPressureCardData(
+      latestSystolic: latestSystolic,
+      latestDiastolic: latestDiastolic,
+      latestDate: latestSystolicSample.endDate,
+      category: category
+    )
+  }
 }
 
 struct WristTempData: Sendable {
@@ -616,4 +697,47 @@ struct BodyWeightDataPoint: Identifiable, Sendable {
   var id: Date { date }
   let date: Date
   let weight: Double
+}
+
+struct HRVTimeOfDayDataPoint: Identifiable, Sendable {
+  var id: Double { hourWindow }
+  let hourWindow: Double  // Midpoint of 3-hour window: 1.5, 4.5, 7.5, 10.5, 13.5, 16.5, 19.5, 22.5
+  let averageHRV: Double
+}
+
+struct HRVChartData: Sendable {
+  enum Trend: Sendable {
+    case higher
+    case lower
+    case consistent
+  }
+
+  let sevenDayAverage: Double
+  let thirtyDayAverage: Double
+  let timeOfDayDataPoints: [HRVTimeOfDayDataPoint]
+
+  var trend: Trend {
+    let diff = sevenDayAverage - thirtyDayAverage
+    let percentThreshold = thirtyDayAverage * 0.05  // 5%
+    let absoluteThreshold: Double = 3  // 3ms
+    // Must meet BOTH thresholds to show trending
+    if diff >= percentThreshold && diff >= absoluteThreshold { return .higher }
+    if diff <= -percentThreshold && diff <= -absoluteThreshold { return .lower }
+    return .consistent
+  }
+
+  var trendText: String {
+    switch trend {
+    case .higher: "Increasing"
+    case .lower: "Decreasing"
+    case .consistent: "Consistent"
+    }
+  }
+}
+
+struct BloodPressureCardData: Sendable {
+  let latestSystolic: Double
+  let latestDiastolic: Double
+  let latestDate: Date
+  let category: BloodPressureCategory
 }

@@ -33,7 +33,7 @@ private extension VO2MaxStatCard {
     trendData?.trend.displayText
   }
 
-  var statCardTrend: StatCard<EmptyView>.Trend? {
+  var statCardTrend: StatCardTrend? {
     guard let trend = trendData?.trend else { return nil }
     switch trend {
     case .improving: return .trendingUp
