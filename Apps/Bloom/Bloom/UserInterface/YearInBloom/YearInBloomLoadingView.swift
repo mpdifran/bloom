@@ -12,6 +12,9 @@ import AppUI
 struct YearInBloomLoadingView: View {
   let year: Int
 
+  @State private var isShowingOtherExplanation = true
+  @State private var timer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
+
   var body: some View {
     VStack(spacing: 40) {
       Spacer()
@@ -22,10 +25,11 @@ struct YearInBloomLoadingView: View {
         CircularSpinnerView()
           .foregroundStyle(.tint)
 
-        Text("Crunching the numbers...")
+        Text(isShowingOtherExplanation ? "All calculations are done on your device" : "Crunching the numbers...")
           .font(.headline)
           .fontDesign(.rounded)
           .foregroundStyle(.secondary)
+          .contentTransition(.numericText())
       }
 
       VStack {
@@ -40,7 +44,12 @@ struct YearInBloomLoadingView: View {
       Spacer()
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .padding()
     .groupedBackground()
+    .animation(.smooth(duration: 1), value: isShowingOtherExplanation)
+    .onReceive(timer) { _ in
+      isShowingOtherExplanation.toggle()
+    }
   }
 
   private var yearDigitsView: some View {

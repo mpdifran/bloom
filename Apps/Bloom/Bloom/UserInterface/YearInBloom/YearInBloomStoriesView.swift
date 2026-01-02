@@ -25,6 +25,7 @@ struct YearInBloomStoriesView: View {
   @State private var isPaused = false
   @State private var shareImageURLs: [StoryPageType: URL] = [:]
   @State private var isSharePresented = false
+  @State private var forwardTapTrigger = false
 
   private let pageDuration: TimeInterval = 10.0
   private let tickInterval: TimeInterval = 0.1
@@ -120,6 +121,9 @@ struct YearInBloomStoriesView: View {
         precomputeShareImages()
       }
     }
+    .onChange(of: isSharePresented) { _, isPresented in
+      isPaused = isPresented
+    }
   }
 }
 
@@ -152,13 +156,20 @@ private extension YearInBloomStoriesView {
       // Right tap area - go forward
       Color.clear
         .contentShape(Rectangle())
-        .onTapGesture { goToNextPage() }
+        .onTapGesture {
+          forwardTapTrigger.toggle()
+          goToNextPage()
+        }
     }
     .simultaneousGesture(
       DragGesture(minimumDistance: 0)
         .onChanged { _ in isPaused = true }
         .onEnded { _ in isPaused = false }
     )
+    .sensoryFeedback(.selection, trigger: isPaused) { _, newValue in
+      newValue == true
+    }
+    .sensoryFeedback(.impact, trigger: forwardTapTrigger)
   }
 
   var availablePages: [StoryPageType] {
