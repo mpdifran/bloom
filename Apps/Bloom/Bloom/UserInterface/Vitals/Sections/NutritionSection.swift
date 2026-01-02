@@ -55,33 +55,6 @@ private extension NutritionSection {
       .onTapGesture { navigateToDetails() }
   }
 
-  @ViewBuilder
-  var netEnergyCard: some View {
-    if let netEnergyStatus = summary?.details.netEnergyStatus {
-      switch netEnergyStatus {
-      case .deficit:
-        StatusIndicatorCard(
-          title: "Net Energy",
-          status: "Deficit",
-          level: .high,
-          symbol: .flameFill
-        )
-        .onTapGesture { navigateToDetails() }
-      case .surplus:
-        StatusIndicatorCard(
-          title: "Net Energy",
-          status: "Surplus",
-          level: .medium,
-          symbol: .flameFill
-        )
-        .onTapGesture { navigateToDetails() }
-      }
-    } else {
-      NoDataCard(title: "Net Energy", symbol: .flameFill)
-        .onTapGesture { navigateToDetails() }
-    }
-  }
-
   var fiberCard: some View {
     FiberStatCard(data: fiberChartData)
       .onTapGesture { navigateToDetails() }

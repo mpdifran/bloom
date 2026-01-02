@@ -56,19 +56,6 @@ private extension BowelMovementsSection {
   }
 }
 
-private extension BowelMovementMonthlySummary.RegularityLevel {
-
-  var statusLevel: StatusIndicatorCard.Level {
-    switch self {
-    case .excellent: .optimal
-    case .good: .high
-    case .moderate: .medium
-    case .poor, .veryPoor, .unknown: .low
-    @unknown default: .low
-    }
-  }
-}
-
 private extension BowelMovementMonthlySummary.Rating {
 
   var displayColor: Color {
