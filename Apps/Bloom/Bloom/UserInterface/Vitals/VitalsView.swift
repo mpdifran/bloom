@@ -135,7 +135,9 @@ struct VitalsView: View {
     case .nutrition:
       NutritionSection(
         presentedNavigationDestination: $presentedNavigationDestination,
-        summary: viewModel.nutritionSummary
+        summary: viewModel.nutritionSummary,
+        fiberChartData: viewModel.fiberChartData,
+        sugarChartData: viewModel.sugarChartData
       )
     case .exerciseEffectiveness:
       ExerciseEffectivenessSection(

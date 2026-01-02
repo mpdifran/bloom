@@ -39,6 +39,8 @@ final class YouStatsViewModel: Sendable {
   var bodyWeightChartData: BodyWeightChartData?
   var hrvChartData: HRVChartData?
   var bloodPressureData: BloodPressureCardData?
+  var fiberChartData: FiberChartData?
+  var sugarChartData: SugarChartData?
 
   private var tasks = [Task<Void, Never>]()
 
@@ -226,6 +228,20 @@ private extension YouStatsViewModel {
       for await bloodPressureData in await YouStatsCalculator.shared.$bloodPressureData {
         await MainActor.run {
           self.bloodPressureData = bloodPressureData
+        }
+      }
+    })
+    tasks.append(Task.detached {
+      for await fiberChartData in await YouStatsCalculator.shared.$fiberChartData {
+        await MainActor.run {
+          self.fiberChartData = fiberChartData
+        }
+      }
+    })
+    tasks.append(Task.detached {
+      for await sugarChartData in await YouStatsCalculator.shared.$sugarChartData {
+        await MainActor.run {
+          self.sugarChartData = sugarChartData
         }
       }
     })

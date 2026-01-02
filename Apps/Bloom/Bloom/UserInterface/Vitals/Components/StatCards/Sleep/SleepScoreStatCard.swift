@@ -17,6 +17,7 @@ struct SleepScoreStatCard: View {
       includePadding: false
     ) {
       sleepGauge
+        .padding(.bottom, 8)
     }
     .tint(score == nil ? AnyShapeStyle(.gray) : AnyShapeStyle(.awakeSleep))
   }

@@ -18,6 +18,7 @@ struct BodyFatStatCard: View {
       includePadding: false
     ) {
       gaugeContent
+        .padding(.bottom, 8)
     }
     .tint(hasData ? .mutedBlue : .gray)
   }

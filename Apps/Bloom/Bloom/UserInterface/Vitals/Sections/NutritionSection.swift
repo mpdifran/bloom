@@ -14,18 +14,12 @@ import DataContainer
 struct NutritionSection: View {
   @Binding var presentedNavigationDestination: AnyView?
   let summary: NutritionMonthlySummary?
+  let fiberChartData: FiberChartData?
+  let sugarChartData: SugarChartData?
 
   var body: some View {
     StatSection(symbol: SFSymbol(rawValue: VitalModel.Kind.nutrition.systemImage), title: "Nutrition", subtitle: "Last 7 Days") {
-      HStack {
-        proteinCard
-        carbsCard
-      }
-
-      HStack {
-        fatCard
-        netEnergyCard
-      }
+      macrosCard
 
       HStack {
         fiberCard
@@ -56,58 +50,9 @@ private extension NutritionSection {
     )
   }
 
-  @ViewBuilder
-  var proteinCard: some View {
-    if let macros, macros.total > 0 {
-      let percent = macros.proteinPercent
-      GaugeCard(
-        title: "Protein",
-        value: "\(Int(percent * 100))%",
-        progress: percent,
-        symbol: .forkKnife,
-        color: .red
-      )
+  var macrosCard: some View {
+    MacrosStatCard(macros: macros)
       .onTapGesture { navigateToDetails() }
-    } else {
-      NoDataCard(title: "Protein", symbol: .forkKnife)
-        .onTapGesture { navigateToDetails() }
-    }
-  }
-
-  @ViewBuilder
-  var carbsCard: some View {
-    if let macros, macros.total > 0 {
-      let percent = macros.carbsPercent
-      GaugeCard(
-        title: "Carbs",
-        value: "\(Int(percent * 100))%",
-        progress: percent,
-        symbol: .leafFill,
-        color: .yellow
-      )
-      .onTapGesture { navigateToDetails() }
-    } else {
-      NoDataCard(title: "Carbs", symbol: .leafFill)
-        .onTapGesture { navigateToDetails() }
-    }
-  }
-
-  @ViewBuilder
-  var fatCard: some View {
-    if let macros, macros.total > 0 {
-      let percent = macros.fatPercent
-      GaugeCard(
-        title: "Fat",
-        value: "\(Int(percent * 100))%",
-        progress: percent,
-        symbol: .dropFill,
-        color: .blue
-      )
-      .onTapGesture { navigateToDetails() }
-    } else {
-      NoDataCard(title: "Fat", symbol: .dropFill)
-        .onTapGesture { navigateToDetails() }
-    }
   }
 
   @ViewBuilder
@@ -137,42 +82,14 @@ private extension NutritionSection {
     }
   }
 
-  @ViewBuilder
   var fiberCard: some View {
-    if let fiber = summary?.details.averageFiber {
-      let fiberGrams = fiber.doubleValue(for: .gram())
-      let goal: Double = 25 // Default fiber goal
-      let progress = fiberGrams / goal
-      LinearProgressCard(
-        title: "Fiber",
-        value: "\(Int(fiberGrams))g / \(Int(goal))g",
-        progress: progress,
-        symbol: .leafFill,
-        color: .green
-      )
+    FiberStatCard(data: fiberChartData)
       .onTapGesture { navigateToDetails() }
-    } else {
-      NoDataCard(title: "Fiber", symbol: .leafFill)
-        .onTapGesture { navigateToDetails() }
-    }
   }
 
-  @ViewBuilder
   var sugarCard: some View {
-    if let sugar = summary?.details.averageSugar {
-      let sugarGrams = sugar.doubleValue(for: .gram())
-      BigNumberCard(
-        title: "Sugar",
-        value: "\(Int(sugarGrams))",
-        unit: "g",
-        symbol: .cubeBox,
-        color: .pink
-      )
+    SugarStatCard(data: sugarChartData)
       .onTapGesture { navigateToDetails() }
-    } else {
-      NoDataCard(title: "Sugar", symbol: .cubeBox)
-        .onTapGesture { navigateToDetails() }
-    }
   }
 }
 
@@ -181,7 +98,9 @@ private extension NutritionSection {
     BloomScrollView {
       NutritionSection(
         presentedNavigationDestination: .constant(nil),
-        summary: nil
+        summary: nil,
+        fiberChartData: nil,
+        sugarChartData: nil
       )
     }
   }

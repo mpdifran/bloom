@@ -29,6 +29,8 @@ final actor YouStatsCalculator {
   @AsyncStreamable var bodyWeightChartData: BodyWeightChartData?
   @AsyncStreamable var hrvChartData: HRVChartData?
   @AsyncStreamable var bloodPressureData: BloodPressureCardData?
+  @AsyncStreamable var fiberChartData: FiberChartData?
+  @AsyncStreamable var sugarChartData: SugarChartData?
 
   private let healthStoreFetcher = HealthStoreFetcher.shared
 
@@ -58,6 +60,8 @@ final actor YouStatsCalculator {
     bodyWeightChartData = await calculateBodyWeightChartData()
     hrvChartData = await calculateHRVChartData()
     bloodPressureData = await calculateBloodPressureCardData()
+    fiberChartData = await calculateFiberChartData()
+    sugarChartData = await calculateSugarChartData()
   }
 
   func refreshSteps() async {
@@ -603,6 +607,54 @@ private extension YouStatsCalculator {
       category: category
     )
   }
+
+  func calculateFiberChartData() async -> FiberChartData? {
+    let dateRange = DateRange.trailingDaysFromNow(7)
+
+    let fiberSamples = await healthStoreFetcher.fetchCollatedQuantity(
+      for: .dietaryFiber,
+      unit: .gram(),
+      interval: DateComponents(day: 1),
+      dateRange: dateRange
+    )
+
+    guard fiberSamples.isNotEmpty else { return nil }
+
+    let dailyValues = fiberSamples.map { $0.quantity.doubleValue(for: .gram()) }
+    let total = dailyValues.reduce(0, +)
+    let average = total / Double(dailyValues.count)
+    let goal = HealthGoalProvider.shared.recommendedMinDailyIntakeForFiber().doubleValue(for: .gram())
+
+    return FiberChartData(
+      dailyValues: dailyValues,
+      averageGrams: average,
+      goal: goal
+    )
+  }
+
+  func calculateSugarChartData() async -> SugarChartData? {
+    let dateRange = DateRange.trailingDaysFromNow(7)
+
+    let sugarSamples = await healthStoreFetcher.fetchCollatedQuantity(
+      for: .dietarySugar,
+      unit: .gram(),
+      interval: DateComponents(day: 1),
+      dateRange: dateRange
+    )
+
+    guard sugarSamples.isNotEmpty else { return nil }
+
+    let dailyValues = sugarSamples.map { $0.quantity.doubleValue(for: .gram()) }
+    let total = dailyValues.reduce(0, +)
+    let average = total / Double(dailyValues.count)
+    let goal = HealthGoalProvider.shared.recommendedMaxDailyIntakeForSugar().doubleValue(for: .gram())
+
+    return SugarChartData(
+      dailyValues: dailyValues,
+      averageGrams: average,
+      goal: goal
+    )
+  }
 }
 
 struct WristTempData: Sendable {
@@ -740,4 +792,20 @@ struct BloodPressureCardData: Sendable {
   let latestDiastolic: Double
   let latestDate: Date
   let category: BloodPressureCategory
+}
+
+struct FiberChartData: Sendable {
+  let dailyValues: [Double]
+  let averageGrams: Double
+  let goal: Double
+
+  var isSufficient: Bool { averageGrams >= goal }
+}
+
+struct SugarChartData: Sendable {
+  let dailyValues: [Double]
+  let averageGrams: Double
+  let goal: Double
+
+  var isExceeded: Bool { averageGrams > goal }
 }

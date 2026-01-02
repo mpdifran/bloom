@@ -196,7 +196,7 @@ public extension NutritionMonthlySummary {
     case balanced = "Balanced"
   }
 
-  struct Macros {
+  struct Macros: Sendable {
     public let protein: HKQuantity
     public let carbohydrates: HKQuantity
     public let fat: HKQuantity
