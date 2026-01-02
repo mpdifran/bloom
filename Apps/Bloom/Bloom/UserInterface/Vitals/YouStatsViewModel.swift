@@ -41,6 +41,11 @@ final class YouStatsViewModel: Sendable {
   var bloodPressureData: BloodPressureCardData?
   var fiberChartData: FiberChartData?
   var sugarChartData: SugarChartData?
+  var zoneMinutesData: ZoneMinutesData?
+  var zoneDistributionData: ZoneDistributionData?
+  var recentWorkoutsData: RecentWorkoutsData?
+  var activeEnergyChartData: ActiveEnergyChartData?
+  var sleepDurationChartData: SleepDurationChartData?
 
   private var tasks = [Task<Void, Never>]()
 
@@ -242,6 +247,41 @@ private extension YouStatsViewModel {
       for await sugarChartData in await YouStatsCalculator.shared.$sugarChartData {
         await MainActor.run {
           self.sugarChartData = sugarChartData
+        }
+      }
+    })
+    tasks.append(Task.detached {
+      for await zoneMinutesData in await YouStatsCalculator.shared.$zoneMinutesData {
+        await MainActor.run {
+          self.zoneMinutesData = zoneMinutesData
+        }
+      }
+    })
+    tasks.append(Task.detached {
+      for await zoneDistributionData in await YouStatsCalculator.shared.$zoneDistributionData {
+        await MainActor.run {
+          self.zoneDistributionData = zoneDistributionData
+        }
+      }
+    })
+    tasks.append(Task.detached {
+      for await recentWorkoutsData in await YouStatsCalculator.shared.$recentWorkoutsData {
+        await MainActor.run {
+          self.recentWorkoutsData = recentWorkoutsData
+        }
+      }
+    })
+    tasks.append(Task.detached {
+      for await activeEnergyChartData in await YouStatsCalculator.shared.$activeEnergyChartData {
+        await MainActor.run {
+          self.activeEnergyChartData = activeEnergyChartData
+        }
+      }
+    })
+    tasks.append(Task.detached {
+      for await sleepDurationChartData in await YouStatsCalculator.shared.$sleepDurationChartData {
+        await MainActor.run {
+          self.sleepDurationChartData = sleepDurationChartData
         }
       }
     })

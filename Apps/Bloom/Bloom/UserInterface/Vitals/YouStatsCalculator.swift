@@ -31,6 +31,11 @@ final actor YouStatsCalculator {
   @AsyncStreamable var bloodPressureData: BloodPressureCardData?
   @AsyncStreamable var fiberChartData: FiberChartData?
   @AsyncStreamable var sugarChartData: SugarChartData?
+  @AsyncStreamable var zoneMinutesData: ZoneMinutesData?
+  @AsyncStreamable var zoneDistributionData: ZoneDistributionData?
+  @AsyncStreamable var recentWorkoutsData: RecentWorkoutsData?
+  @AsyncStreamable var activeEnergyChartData: ActiveEnergyChartData?
+  @AsyncStreamable var sleepDurationChartData: SleepDurationChartData?
 
   private let healthStoreFetcher = HealthStoreFetcher.shared
 
@@ -42,6 +47,7 @@ final actor YouStatsCalculator {
     )
     bedtimeChartData = calculateBedtimeChartData(from: sleepAnalyses)
     averageSleepDuration = calculateAverageSleepDuration(from: sleepAnalyses)
+    sleepDurationChartData = calculateSleepDurationChartData(from: sleepAnalyses)
     averageSleepScore = calculateAverageSleepScore(from: sleepAnalyses)
     sleepStageDataPoints = calculateSleepStageDataPoints(from: sleepAnalyses)
     averageSleepHeartRate = calculateAverageSleepHeartRate(from: sleepAnalyses)
@@ -62,6 +68,10 @@ final actor YouStatsCalculator {
     bloodPressureData = await calculateBloodPressureCardData()
     fiberChartData = await calculateFiberChartData()
     sugarChartData = await calculateSugarChartData()
+    zoneMinutesData = await calculateZoneMinutesData()
+    zoneDistributionData = await calculateZoneDistributionData()
+    recentWorkoutsData = await calculateRecentWorkoutsData()
+    activeEnergyChartData = await calculateActiveEnergyChartData()
   }
 
   func refreshSteps() async {
@@ -161,10 +171,11 @@ private extension YouStatsCalculator {
     }
 
     // If there's a significant trend (>20 min difference between halves)
+    // Note: values are negated, so more negative = later bedtime
     if trendDifference > 20 {
-      return .trendingLater
+      return .trendingEarlier  // Second half less negative = earlier bedtime
     } else if trendDifference < -20 {
-      return .trendingEarlier
+      return .trendingLater    // Second half more negative = later bedtime
     }
 
     // High variance but no clear trend means inconsistent
@@ -655,6 +666,129 @@ private extension YouStatsCalculator {
       goal: goal
     )
   }
+
+  func calculateZoneMinutesData() async -> ZoneMinutesData? {
+    guard let heartRateZones = await healthStoreFetcher.heartRateZones() else { return nil }
+
+    let details = await healthStoreFetcher.fetchExerciseEffectivenessDetails(
+      heartRateZones: heartRateZones,
+      dateRange: .trailingDaysFromNow(7)
+    )
+
+    guard !details.workoutReports.isEmpty else { return nil }
+
+    let calendar = Calendar.current
+    let now = Date()
+
+    // Group workout zone minutes by day
+    var dailyZoneMinutes = [Date: Double]()
+    for report in details.workoutReports {
+      let dayStart = calendar.startOfDay(for: report.workout.endDate)
+      let zoneMinutes = report.heartZoneDistribution.scaledDurationSum.doubleValue(for: .minute())
+      dailyZoneMinutes[dayStart, default: 0] += zoneMinutes
+    }
+
+    // Build array for last 7 days (in order)
+    let dailyValues: [Double] = (0..<7).reversed().compactMap { daysAgo in
+      guard let date = calendar.date(byAdding: .day, value: -daysAgo, to: calendar.startOfDay(for: now)) else { return 0 }
+      return dailyZoneMinutes[date] ?? 0
+    }
+
+    let total = dailyValues.reduce(0, +)
+
+    return ZoneMinutesData(dailyValues: dailyValues, weeklyTotal: total)
+  }
+
+  func calculateZoneDistributionData() async -> ZoneDistributionData? {
+    guard let heartRateZones = await healthStoreFetcher.heartRateZones() else { return nil }
+
+    let details = await healthStoreFetcher.fetchExerciseEffectivenessDetails(
+      heartRateZones: heartRateZones,
+      dateRange: .trailingDaysFromNow(7)
+    )
+
+    guard !details.workoutReports.isEmpty else { return nil }
+
+    let dist = details.overallHeartZoneDistribution
+    return ZoneDistributionData(
+      zone1Percent: dist.zone1Percent,
+      zone2Percent: dist.zone2Percent,
+      zone3Percent: dist.zone3Percent,
+      zone4Percent: dist.zone4Percent,
+      zone5Percent: dist.zone5Percent,
+      workoutCount: details.workoutReports.count
+    )
+  }
+
+  func calculateRecentWorkoutsData() async -> RecentWorkoutsData? {
+    guard let heartRateZones = await healthStoreFetcher.heartRateZones() else { return nil }
+
+    let details = await healthStoreFetcher.fetchExerciseEffectivenessDetails(
+      heartRateZones: heartRateZones,
+      dateRange: .trailingDaysFromNow(7)
+    )
+
+    guard !details.workoutReports.isEmpty else { return nil }
+
+    // workoutReports are sorted by date (most recent first from HealthKit)
+    return RecentWorkoutsData(workouts: details.workoutReports)
+  }
+
+  func calculateActiveEnergyChartData() async -> ActiveEnergyChartData? {
+    let calendar = Calendar.current
+    let now = Date()
+
+    guard let startDate = calendar.date(byAdding: .day, value: -6, to: calendar.startOfDay(for: now)) else {
+      return nil
+    }
+
+    let dateRange = DateRange(startDate, now)
+
+    let energySamples = await healthStoreFetcher.fetchCollatedQuantity(
+      for: .activeEnergyBurned,
+      unit: .kilocalorie(),
+      interval: DateComponents(day: 1),
+      dateRange: dateRange
+    )
+
+    guard energySamples.isNotEmpty else { return nil }
+
+    // Build array for last 7 days (in order)
+    let dailyValues: [Double] = (0..<7).map { dayOffset in
+      guard let dayDate = calendar.date(byAdding: .day, value: dayOffset, to: startDate) else { return 0 }
+      if let sample = energySamples.first(where: { calendar.isDate($0.date, inSameDayAs: dayDate) }) {
+        return sample.quantity.doubleValue(for: .kilocalorie())
+      }
+      return 0
+    }
+
+    let nonZeroValues = dailyValues.filter { $0 > 0 }
+    let average = nonZeroValues.isEmpty ? 0 : nonZeroValues.reduce(0, +) / Double(nonZeroValues.count)
+
+    return ActiveEnergyChartData(dailyValues: dailyValues, average: average)
+  }
+
+  func calculateSleepDurationChartData(from sleepAnalyses: [SleepAnalysis]) -> SleepDurationChartData? {
+    guard sleepAnalyses.isNotEmpty else { return nil }
+
+    let calendar = Calendar.current
+    let now = Date()
+
+    // Build array for last 7 days (in order)
+    let dailyValues: [TimeInterval] = (0..<7).reversed().map { daysAgo in
+      guard let targetDate = calendar.date(byAdding: .day, value: -daysAgo, to: now) else { return 0 }
+
+      if let analysis = sleepAnalyses.first(where: { calendar.isDate($0.endDate, inSameDayAs: targetDate) }) {
+        return analysis.overallMinutes * 60  // Convert to seconds
+      }
+      return 0
+    }
+
+    let nonZeroValues = dailyValues.filter { $0 > 0 }
+    let average = nonZeroValues.isEmpty ? 0 : nonZeroValues.reduce(0, +) / Double(nonZeroValues.count)
+
+    return SleepDurationChartData(dailyValues: dailyValues, average: average)
+  }
 }
 
 struct WristTempData: Sendable {
@@ -808,4 +942,37 @@ struct SugarChartData: Sendable {
   let goal: Double
 
   var isExceeded: Bool { averageGrams > goal }
+}
+
+struct ZoneMinutesData: Sendable {
+  let dailyValues: [Double]
+  let weeklyTotal: Double
+  let goal: Double = 150
+
+  var meetsGoal: Bool { weeklyTotal >= goal }
+}
+
+struct ZoneDistributionData: Sendable {
+  let zone1Percent: Double
+  let zone2Percent: Double
+  let zone3Percent: Double
+  let zone4Percent: Double
+  let zone5Percent: Double
+  let workoutCount: Int
+}
+
+struct RecentWorkoutsData: Sendable {
+  let workouts: [WorkoutHeartRateReport]
+  var hasMore: Bool { workouts.count > 3 }
+  var displayWorkouts: [WorkoutHeartRateReport] { Array(workouts.prefix(3)) }
+}
+
+struct ActiveEnergyChartData: Sendable {
+  let dailyValues: [Double]  // 7 days of active energy in kcal
+  let average: Double
+}
+
+struct SleepDurationChartData: Sendable {
+  let dailyValues: [TimeInterval]  // 7 days of sleep duration in seconds
+  let average: TimeInterval
 }

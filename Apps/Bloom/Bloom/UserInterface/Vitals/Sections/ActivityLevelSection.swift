@@ -14,11 +14,12 @@ struct ActivityLevelSection: View {
   @Binding var presentedNavigationDestination: AnyView?
   let summary: ActivityLevelSummary?
   let weeklyStepsChartData: WeeklyStepsChartData?
+  let activeEnergyChartData: ActiveEnergyChartData?
 
   var body: some View {
     StatSection(symbol: SFSymbol(rawValue: VitalModel.Kind.activityLevel.systemImage), title: "Activity Level", subtitle: "Last 7 Days") {
       HStack {
-        ActiveEnergyStatCard(activeEnergy: summary?.details.averageActiveEnergyBurned)
+        ActiveEnergyStatCard(data: activeEnergyChartData)
           .onTapGesture { navigateToDetails() }
         ActivityLevelStatCard(level: summary?.details.activityLevel)
           .onTapGesture { navigateToDetails() }
@@ -40,7 +41,8 @@ struct ActivityLevelSection: View {
       ActivityLevelSection(
         presentedNavigationDestination: .constant(nil),
         summary: nil,
-        weeklyStepsChartData: nil
+        weeklyStepsChartData: nil,
+        activeEnergyChartData: nil
       )
     }
   }

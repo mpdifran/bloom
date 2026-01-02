@@ -21,7 +21,10 @@ struct BowelMovementsSection: View {
         regularityCard
       }
 
-      timeOfDayCard
+      HStack {
+        stoolTypeCard
+        timeOfDayCard
+      }
     }
   }
 
@@ -32,60 +35,24 @@ struct BowelMovementsSection: View {
 
 private extension BowelMovementsSection {
 
-  @ViewBuilder
   var overallScoreCard: some View {
-    if let summary, let rating = summary.rating {
-      GaugeCard(
-        title: "Overall Score",
-        value: rating.name,
-        progress: summary.score,
-        symbol: .chartBarFill,
-        color: rating.displayColor
-      )
+    BowelMovementsScoreStatCard(summary: summary)
       .onTapGesture { navigateToDetails() }
-    } else {
-      NoDataCard(title: "Overall Score", symbol: .chartBarFill)
-        .onTapGesture { navigateToDetails() }
-    }
   }
 
-  @ViewBuilder
   var regularityCard: some View {
-    if let summary {
-      let regularity = summary.regularityLevel(for: summary.coefficientOfVariation)
-      StatusIndicatorCard(
-        title: "Regularity",
-        status: regularity.rawValue,
-        level: regularity.statusLevel,
-        symbol: .clockFill
-      )
+    BowelMovementsRegularityStatCard(summary: summary)
       .onTapGesture { navigateToDetails() }
-    } else {
-      NoDataCard(title: "Regularity", symbol: .clockFill)
-        .onTapGesture { navigateToDetails() }
-    }
   }
 
-  @ViewBuilder
-  var timeOfDayCard: some View {
-    if let summary, !summary.bowelMovements.isEmpty {
-      let avgHour = summary.bowelMovements
-        .map { Calendar.current.component(.hour, from: $0.date) }
-        .reduce(0, +) / summary.bowelMovements.count
-      let period = avgHour < 12 ? "AM" : "PM"
-      let displayHour = avgHour == 0 ? 12 : (avgHour > 12 ? avgHour - 12 : avgHour)
-      BigNumberCard(
-        title: "Avg Time",
-        value: "\(displayHour):00",
-        unit: period,
-        symbol: .sunMaxFill,
-        color: .orange
-      )
+  var stoolTypeCard: some View {
+    BowelMovementsStoolTypeStatCard(summary: summary)
       .onTapGesture { navigateToDetails() }
-    } else {
-      NoDataCard(title: "Avg Time", symbol: .sunMaxFill)
-        .onTapGesture { navigateToDetails() }
-    }
+  }
+
+  var timeOfDayCard: some View {
+    BowelMovementsTimeOfDayStatCard(summary: summary)
+      .onTapGesture { navigateToDetails() }
   }
 }
 

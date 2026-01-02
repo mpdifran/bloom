@@ -15,7 +15,7 @@ struct SleepQualitySection: View {
   @Binding var presentedNavigationDestination: AnyView?
   let summary: SleepVitalsMonthlySummary?
   let bedtimeData: BedtimeChartData?
-  let averageSleepDuration: TimeInterval?
+  let sleepDurationChartData: SleepDurationChartData?
   let averageSleepScore: Double?
   let sleepStageDataPoints: [SleepStageDataPoint]?
   let averageSleepHeartRate: Double?
@@ -29,7 +29,7 @@ struct SleepQualitySection: View {
       HStack {
         SleepBedtimeStatCard(data: bedtimeData)
           .onTapGesture { navigateToDetails() }
-        SleepDurationStatCard(duration: averageSleepDuration)
+        SleepDurationStatCard(data: sleepDurationChartData)
           .onTapGesture { navigateToDetails() }
       }
 
@@ -64,7 +64,7 @@ struct SleepQualitySection: View {
         presentedNavigationDestination: .constant(nil),
         summary: nil,
         bedtimeData: nil,
-        averageSleepDuration: nil,
+        sleepDurationChartData: nil,
         averageSleepScore: nil,
         sleepStageDataPoints: nil,
         averageSleepHeartRate: nil,

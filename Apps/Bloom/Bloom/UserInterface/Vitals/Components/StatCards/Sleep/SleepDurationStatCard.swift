@@ -8,24 +8,60 @@
 import SwiftUI
 
 struct SleepDurationStatCard: View {
-  let duration: TimeInterval?
+  let data: SleepDurationChartData?
 
   private var formattedDuration: String? {
-    guard let duration else { return nil }
-    let totalMinutes = Int(duration / 60)
+    guard let data else { return nil }
+    let totalMinutes = Int(data.average / 60)
     let hours = totalMinutes / 60
     let minutes = totalMinutes % 60
     return "\(hours)h \(minutes)m"
   }
 
   var body: some View {
-    StatCard(
-      symbol: .clockFill,
-      title: "Duration",
-      value: formattedDuration ?? "No Data",
-      valueStyle: .largeTinted("7 day avg")
-    )
-    .tint(formattedDuration == nil ? AnyShapeStyle(.gray) : AnyShapeStyle(.coreSleep))
+    if let data {
+      StatCard(
+        symbol: .clockFill,
+        title: "Duration",
+        value: formattedDuration ?? "No Data",
+        valueStyle: .largeTinted("7 day avg")
+      ) {
+        barChart
+      }
+      .tint(.coreSleep)
+    } else {
+      StatCard(
+        symbol: .clockFill,
+        title: "Duration",
+        value: "No Data",
+        valueStyle: .largeTinted(nil)
+      )
+      .tint(.gray)
+    }
+  }
+}
+
+private extension SleepDurationStatCard {
+
+  @ViewBuilder
+  var barChart: some View {
+    if let data, data.dailyValues.isNotEmpty {
+      let maxValue = data.dailyValues.max() ?? 1
+
+      GeometryReader { geometry in
+        HStack(alignment: .bottom, spacing: 2) {
+          ForEach(0..<7, id: \.self) { index in
+            let value = data.dailyValues[safe: index] ?? 0
+            let height = maxValue > 0 ? (value / maxValue) * geometry.size.height : 0
+
+            RoundedRectangle(cornerRadius: 2)
+              .fill(Color.coreSleep)
+              .frame(height: max(height, value > 0 ? 4 : 2))
+              .opacity(value > 0 ? 1 : 0.3)
+          }
+        }
+      }
+    }
   }
 }
 
@@ -33,8 +69,21 @@ struct SleepDurationStatCard: View {
   PreviewEnvironment {
     BloomScrollView {
       HStack {
-        SleepDurationStatCard(duration: 25_380)
-        SleepDurationStatCard(duration: nil)
+        SleepDurationStatCard(data: SleepDurationChartData(
+          dailyValues: [25380, 27000, 23400, 28800, 26100, 24300, 27900],
+          average: 26126
+        ))
+        SleepDurationStatCard(data: nil)
+      }
+      HStack {
+        SleepDurationStatCard(data: SleepDurationChartData(
+          dailyValues: [0, 27000, 23400, 0, 26100, 24300, 0],
+          average: 25200
+        ))
+        SleepDurationStatCard(data: SleepDurationChartData(
+          dailyValues: [28800, 28800, 28800, 28800, 28800, 28800, 28800],
+          average: 28800
+        ))
       }
     }
   }

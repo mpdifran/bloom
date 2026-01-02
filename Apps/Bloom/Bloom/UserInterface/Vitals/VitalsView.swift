@@ -96,7 +96,7 @@ struct VitalsView: View {
         presentedNavigationDestination: $presentedNavigationDestination,
         summary: viewModel.sleepVitalsSummary,
         bedtimeData: viewModel.bedtimeChartData,
-        averageSleepDuration: viewModel.averageSleepDuration,
+        sleepDurationChartData: viewModel.sleepDurationChartData,
         averageSleepScore: viewModel.averageSleepScore,
         sleepStageDataPoints: viewModel.sleepStageDataPoints,
         averageSleepHeartRate: viewModel.averageSleepHeartRate,
@@ -109,7 +109,8 @@ struct VitalsView: View {
       ActivityLevelSection(
         presentedNavigationDestination: $presentedNavigationDestination,
         summary: viewModel.activityLevelSummary,
-        weeklyStepsChartData: viewModel.weeklyStepsChartData
+        weeklyStepsChartData: viewModel.weeklyStepsChartData,
+        activeEnergyChartData: viewModel.activeEnergyChartData
       )
     case .heartHealth:
       HeartHealthSection(
@@ -142,7 +143,10 @@ struct VitalsView: View {
     case .exerciseEffectiveness:
       ExerciseEffectivenessSection(
         presentedNavigationDestination: $presentedNavigationDestination,
-        summary: viewModel.exerciseEffectivenessSummary
+        summary: viewModel.exerciseEffectivenessSummary,
+        zoneMinutesData: viewModel.zoneMinutesData,
+        zoneDistributionData: viewModel.zoneDistributionData,
+        recentWorkoutsData: viewModel.recentWorkoutsData
       )
     case .cycleTracking:
       if shouldShowCycleTracking {

@@ -43,7 +43,7 @@ public extension BowelMovementMonthlySummary {
       }
     }
 
-    var color: Color {
+    public var color: Color {
       switch self {
       case .poor:
           .vitalSevere
@@ -302,7 +302,7 @@ public extension BowelMovementMonthlySummary {
     case veryPoor = "Very Poor"
     case unknown = "Unknown"
     
-    var color: Color {
+    public var color: Color {
       switch self {
       case .excellent:
         return .vitalGreat
