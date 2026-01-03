@@ -29,14 +29,7 @@ struct VitalsView: View {
   var body: some View {
     NavigationStack(path: $path) {
       BloomScrollView {
-        // Only show biological age section if user doesn't have Pro (to show upsell)
-        // or if they have Pro and the feature is enabled
-        if entitlementController.hasBloomPro != true || aiFeatureSettings.biologicalAgeEnabled {
-          SectionTitleView("Biological Age")
-            .padding(.horizontal)
-
-          bioAgeMeter
-        }
+        bioAgeMeter
 
         // Stat sections in user-defined order
         ForEach(youSettings.sectionOrder, id: \.self) { section in
@@ -179,35 +172,10 @@ private extension VitalsView {
     if entitlementController.hasBloomPro == true {
       // Only show biological age meter if the feature is enabled
       if aiFeatureSettings.biologicalAgeEnabled {
-        VStack(spacing: 0) {
-          BiologicalAgeMeter(
-            biologicalAge: biologicalAgeViewModel.currentBiologicalAge
-          )
-          .frame(square: 200)
-
-          Divider()
-
-          Button {
+        YouHeaderView()
+          .onTapGesture {
             presentedNavigationDestination = BiologicalAgeDetailsView().asAny
-          } label: {
-            HStack {
-              Text("View Details")
-                .bold()
-                .fontDesign(.rounded)
-
-              Spacer()
-
-              DisclosureIndicator()
-            }
-            .frame(height: 50)
-            .selectable()
           }
-          .buttonStyle(.plain)
-        }
-        .horizontallyCentered()
-        .padding(.horizontal)
-        .padding(.top)
-        .cardContainer(includePadding: false)
       }
     } else {
       BioAgeMeterGetBloomPlusCell {

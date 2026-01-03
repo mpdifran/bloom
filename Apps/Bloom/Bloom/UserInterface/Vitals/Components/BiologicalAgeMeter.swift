@@ -9,9 +9,17 @@ import SwiftUI
 import CoreHealth
 import SFSafeSymbols
 
+extension BiologicalAgeMeter {
+  enum CenterContentKind {
+    case bioAge
+    case profileImage
+  }
+}
+
 struct BiologicalAgeMeter: View {
   let chronologicalAge: Int
   let biologicalAge: Double?
+  let centerContentKind: CenterContentKind
 
   // Arc configuration
   private let startAngle = 0.125 // 7:00 position
@@ -19,13 +27,18 @@ struct BiologicalAgeMeter: View {
   private let centerAngle = 0.5  // 12:00 position (neutral)
   private let maxAgeDifference = 10.0 // Maximum years difference to display
 
-  init(chronologicalAge: Int? = nil, biologicalAge: Double?) {
+  init(
+    chronologicalAge: Int? = nil,
+    biologicalAge: Double?,
+    centerContentKind: CenterContentKind = .bioAge
+  ) {
     self.chronologicalAge = chronologicalAge ?? {
       let birthYear = HealthDefaults.shared.getBirthYear()
       guard birthYear > 0 else { return 0 }
       return Calendar.current.component(.year, from: .now) - birthYear
     }()
     self.biologicalAge = biologicalAge
+    self.centerContentKind = centerContentKind
   }
 
   var body: some View {
@@ -69,14 +82,19 @@ struct BiologicalAgeMeter: View {
         .rotationEffect(indicatorAngle)
 
         // Center content
-        VStack(spacing: size * 0.02) {
-          Text(bioAgeDescription)
-            .font(.system(size: size * 0.22, weight: .heavy, design: .rounded))
-            .contentTransition(.numericText(value: biologicalAge ?? 0))
+        switch centerContentKind {
+        case .bioAge:
+          VStack(spacing: size * 0.02) {
+            Text(bioAgeDescription)
+              .font(.system(size: size * 0.22, weight: .heavy, design: .rounded))
+              .contentTransition(.numericText(value: biologicalAge ?? 0))
 
-          Text(ageDifference.format(using: .oneDecimalPlace))
-            .font(.system(size: size * 0.07, weight: .heavy, design: .rounded))
-            .foregroundColor(progressColor)
+            Text(ageDifference.format(using: .oneDecimalPlace))
+              .font(.system(size: size * 0.07, weight: .heavy, design: .rounded))
+              .foregroundColor(progressColor)
+          }
+        case .profileImage:
+          UserProfilePhotoView(dimension: size * 0.5)
         }
       }
       .frame(width: geometry.size.width, height: geometry.size.height)
@@ -133,7 +151,7 @@ private extension BiologicalAgeMeter {
 
   PreviewEnvironment {
     BloomScrollView {
-      BiologicalAgeMeter(chronologicalAge: 40, biologicalAge: bioAge)
+      BiologicalAgeMeter(chronologicalAge: 40, biologicalAge: bioAge, centerContentKind: .profileImage)
         .frame(square: dimension)
 
       BiologicalAgeMeter(chronologicalAge: 45, biologicalAge: bioAge)
@@ -145,7 +163,7 @@ private extension BiologicalAgeMeter {
       BiologicalAgeMeter(chronologicalAge: 30, biologicalAge: bioAge)
         .frame(square: dimension)
 
-      BiologicalAgeMeter(chronologicalAge: 60, biologicalAge: bioAge)
+      BiologicalAgeMeter(chronologicalAge: 60, biologicalAge: bioAge, centerContentKind: .profileImage)
         .frame(square: dimension)
 
       BiologicalAgeMeter(chronologicalAge: 42, biologicalAge: nil)
