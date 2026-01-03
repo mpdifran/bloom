@@ -26,6 +26,7 @@ struct YearInBloomStoriesView: View {
   @State private var shareImageURLs: [StoryPageType: URL] = [:]
   @State private var isSharePresented = false
   @State private var forwardTapTrigger = false
+  @State private var backwardTapTrigger = false
 
   private let pageDuration: TimeInterval = 10.0
   private let tickInterval: TimeInterval = 0.1
@@ -151,7 +152,10 @@ private extension YearInBloomStoriesView {
       // Left tap area - go back
       Color.clear
         .contentShape(Rectangle())
-        .onTapGesture { goToPreviousPage() }
+        .onTapGesture {
+          backwardTapTrigger.toggle()
+          goToPreviousPage()
+        }
 
       // Right tap area - go forward
       Color.clear
@@ -166,10 +170,8 @@ private extension YearInBloomStoriesView {
         .onChanged { _ in isPaused = true }
         .onEnded { _ in isPaused = false }
     )
-    .sensoryFeedback(.selection, trigger: isPaused) { _, newValue in
-      newValue == true
-    }
     .sensoryFeedback(.impact, trigger: forwardTapTrigger)
+    .sensoryFeedback(.selection, trigger: backwardTapTrigger)
   }
 
   var availablePages: [StoryPageType] {
