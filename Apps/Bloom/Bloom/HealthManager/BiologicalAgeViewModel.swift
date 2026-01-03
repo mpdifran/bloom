@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 import CoreHealth
 import DataContainer
 import BloomModel
@@ -52,6 +53,9 @@ final class BiologicalAgeViewModel {
   var isCalculatingAge = false
   var lastCalculationError: Error? = nil
 
+  private var entitlementCancellable: AnyCancellable?
+  private var hadBloomPro = false
+
   private init() {
     self.hasPendingCalculation = UserDefaults.group.bool(forKey: .hasPendingBiologicalAgeCalculation)
 
@@ -63,6 +67,27 @@ final class BiologicalAgeViewModel {
        let response = try? JSONDecoder().decode(BiologicalAgeResponse.self, from: data) {
       self.lastResponse = response
     }
+
+    observeEntitlementChanges()
+  }
+
+  private func observeEntitlementChanges() {
+    entitlementCancellable = EntitlementController.shared.$hasBloomPro
+      .dropFirst()
+      .removeDuplicates()
+      .sink { [weak self] newValue in
+        guard let self else { return }
+
+        let wasBloomPro = hadBloomPro
+        let isBloomPro = newValue == true
+        hadBloomPro = isBloomPro
+
+        if !wasBloomPro && isBloomPro {
+          Task {
+            await self.forceCalculateBiologicalAge()
+          }
+        }
+      }
   }
 }
 
