@@ -14,6 +14,7 @@ import SFSafeSymbols
 struct YouSettingsView: View {
 
   @State private var navigationPushView: AnyView?
+  @State private var draggedSection: VitalModel.Kind?
   @YouSettingsStorage("YouView.settings") private var youSettings = YouSettings()
 
   @ObservedObject private var aiFeatureSettings = AIFeatureSettings.shared
@@ -22,9 +23,8 @@ struct YouSettingsView: View {
   var body: some View {
     NavigationStack {
       BloomScrollView(showsChatBar: false) {
-        sectionOrderSection
-
         featureSection
+        sectionOrderSection
       }
       .navigationTitle("Preferences")
       .navigationBarTitleDisplayMode(.inline)
@@ -48,7 +48,7 @@ private extension YouSettingsView {
 
   var sectionOrderSection: some View {
     VStack(spacing: 0) {
-      HStack {
+      HStack(alignment: .bottom) {
         SectionTitleView("Section Order")
 
         Spacer()
@@ -63,35 +63,29 @@ private extension YouSettingsView {
             .fontWeight(.semibold)
         }
       }
-      .padding(.horizontal)
+      .padding()
 
-      VStack(spacing: 0) {
-        ForEach(Array(youSettings.sectionOrder.enumerated()), id: \.element) { index, section in
+      VStack(spacing: 8) {
+        ForEach(youSettings.sectionOrder, id: \.self) { section in
           if shouldShowSection(section) {
-            SectionOrderRow(
-              section: section,
-              canMoveUp: index > 0,
-              canMoveDown: index < youSettings.sectionOrder.count - 1,
-              onMoveUp: {
-                withAnimation {
-                  youSettings.sectionOrder.swapAt(index, index - 1)
-                }
-              },
-              onMoveDown: {
-                withAnimation {
-                  youSettings.sectionOrder.swapAt(index, index + 1)
-                }
+            SectionOrderRow(section: section)
+              .scaleEffect(draggedSection == section ? 1.02 : 1.0)
+              .onDrag {
+                self.draggedSection = section
+                return NSItemProvider(object: section.rawValue as NSString)
               }
-            )
-
-            if index < youSettings.sectionOrder.count - 1 && shouldShowSection(youSettings.sectionOrder[index + 1]) {
-              Divider()
-                .padding(.leading, 52)
-            }
+              .onDrop(
+                of: [.text],
+                delegate: SectionDropDelegate(
+                  section: section,
+                  youSettings: $youSettings,
+                  draggedSection: $draggedSection
+                )
+              )
           }
         }
       }
-      .cardContainer()
+      .animation(.easeInOut(duration: 0.2), value: draggedSection)
     }
   }
 
@@ -127,49 +121,51 @@ private extension YouSettingsView {
 
 private struct SectionOrderRow: View {
   let section: VitalModel.Kind
-  let canMoveUp: Bool
-  let canMoveDown: Bool
-  let onMoveUp: () -> Void
-  let onMoveDown: () -> Void
 
   var body: some View {
-    HStack(spacing: 12) {
+    HStack {
+      Image(systemSymbol: .line3Horizontal)
+        .font(.caption)
+        .foregroundStyle(.tertiary)
+
       Image(systemName: section.systemImage)
         .font(.body)
-        .foregroundStyle(.tint)
+        .foregroundStyle(.secondary)
         .frame(width: 24)
 
       Text(section.name)
-        .font(.body)
+        .bold()
+        .fontDesign(.rounded)
 
       Spacer()
-
-      HStack(spacing: 4) {
-        Button {
-          onMoveUp()
-        } label: {
-          Image(systemSymbol: .chevronUp)
-            .font(.caption)
-            .fontWeight(.semibold)
-            .foregroundStyle(canMoveUp ? .primary : .tertiary)
-        }
-        .disabled(!canMoveUp)
-
-        Button {
-          onMoveDown()
-        } label: {
-          Image(systemSymbol: .chevronDown)
-            .font(.caption)
-            .fontWeight(.semibold)
-            .foregroundStyle(canMoveDown ? .primary : .tertiary)
-        }
-        .disabled(!canMoveDown)
-      }
-      .buttonStyle(.plain)
     }
-    .padding(.vertical, 12)
-    .padding(.horizontal)
-    .contentShape(Rectangle())
+    .cardContainer()
+  }
+}
+
+// MARK: - Section Drop Delegate
+
+private struct SectionDropDelegate: DropDelegate {
+  let section: VitalModel.Kind
+  @Binding var youSettings: YouSettings
+  @Binding var draggedSection: VitalModel.Kind?
+
+  func dropEntered(info: DropInfo) {
+    guard let draggedSection = draggedSection else { return }
+
+    if draggedSection != section {
+      let from = youSettings.sectionOrder.firstIndex(of: draggedSection)!
+      let to = youSettings.sectionOrder.firstIndex(of: section)!
+
+      withAnimation(.default) {
+        youSettings.sectionOrder.move(fromOffsets: IndexSet(integer: from), toOffset: to > from ? to + 1 : to)
+      }
+    }
+  }
+
+  func performDrop(info: DropInfo) -> Bool {
+    draggedSection = nil
+    return true
   }
 }
 
