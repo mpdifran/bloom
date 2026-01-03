@@ -1,5 +1,5 @@
 //
-//  VitalsView.swift
+//  YouView.swift
 //  Supplements
 //
 //  Created by Mark DiFranco on 2024-07-21.
@@ -11,7 +11,7 @@ import DataContainer
 import CoreHealth
 import BloomUI
 
-struct VitalsView: View {
+struct YouView: View {
 
   @State private var viewModel = YouStatsViewModel.shared
   @State private var biologicalAgeViewModel = BiologicalAgeViewModel.shared
@@ -165,32 +165,21 @@ struct VitalsView: View {
   }
 }
 
-private extension VitalsView {
+private extension YouView {
 
   @ViewBuilder
   var bioAgeMeter: some View {
-    if entitlementController.hasBloomPro == true {
-      // Only show biological age meter if the feature is enabled
-      if aiFeatureSettings.biologicalAgeEnabled {
-        YouHeaderView()
-          .onTapGesture {
-            presentedNavigationDestination = BiologicalAgeDetailsView().asAny
-          }
+    YouHeaderView()
+      .onTapGesture {
+        presentedNavigationDestination = BiologicalAgeDetailsView().asAny
       }
-    } else {
-      BioAgeMeterGetBloomPlusCell {
-        EntitledAction(presentedSheet: $presentedSheet, focus: .biologicalAge) {
-          // Do nothing
-        }
-      }
-    }
   }
 }
 
 #Preview {
   PreviewEnvironment {
     TabView {
-      VitalsView()
+      YouView()
     }
   }
 }

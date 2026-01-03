@@ -346,7 +346,7 @@ private extension RootView {
         .tag(Tab.today)
       NutritionView()
         .tag(Tab.nutrition)
-      VitalsView()
+      YouView()
         .tag(Tab.vitals)
       if showTrendsTab {
         TrendsView()
@@ -378,7 +378,7 @@ private extension RootView {
       case .nutrition:
         NutritionView()
       case .vitals:
-        VitalsView()
+        YouView()
       case .trends:
         TrendsView()
       case .workouts:

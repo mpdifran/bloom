@@ -17,13 +17,17 @@ struct YouSettingsView: View {
   @State private var draggedSection: VitalModel.Kind?
   @YouSettingsStorage("YouView.settings") private var youSettings = YouSettings()
 
+  @StateObject private var entitlementController = EntitlementController.shared
+
   @ObservedObject private var aiFeatureSettings = AIFeatureSettings.shared
   @ObservedObject private var aiDataSharingSettings = AIDataSharingSettings.shared
 
   var body: some View {
     NavigationStack {
       BloomScrollView(showsChatBar: false) {
-        featureSection
+        if entitlementController.hasBloomPro == true {
+          featureSection
+        }
         sectionOrderSection
       }
       .navigationTitle("Preferences")

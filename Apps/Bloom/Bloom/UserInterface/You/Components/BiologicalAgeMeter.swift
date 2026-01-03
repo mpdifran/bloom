@@ -92,6 +92,12 @@ struct BiologicalAgeMeter: View {
             Text(ageDifference.format(using: .oneDecimalPlace))
               .font(.system(size: size * 0.07, weight: .heavy, design: .rounded))
               .foregroundColor(progressColor)
+              .padding(4)
+              .padding(.horizontal, 8)
+              .background {
+                RoundedRectangle(cornerRadius: 8)
+                  .fill(.fill)
+              }
           }
         case .profileImage:
           UserProfilePhotoView(dimension: size * 0.5)
