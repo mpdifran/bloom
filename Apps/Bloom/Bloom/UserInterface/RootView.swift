@@ -107,7 +107,6 @@ struct RootView: View {
     }
     .onForegroundTask {
       await MagicScanStatusChecker.shared.checkPendingItems(modelContext: modelContext)
-      await BiologicalAgeStatusChecker.shared.checkPendingCalculation()
       await ConsentManager.shared.syncPendingConsentIfNeeded()
     }
     .onOpenURL { url in

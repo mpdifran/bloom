@@ -23,9 +23,6 @@ final class PngToJpegMigration {
   @Storage(key: "pngToJpeg_lastCompletedFoodLogTimestamp", defaultValue: 0.0)
   private var lastCompletedFoodLogTimestamp: TimeInterval
 
-  @Storage(key: "pngToJpeg_lastCompletedMealTimestamp", defaultValue: 0.0)
-  private var lastCompletedMealTimestamp: TimeInterval
-
   @Storage(key: "pngToJpeg_lastCompletedChatMessageTimestamp", defaultValue: 0.0)
   private var lastCompletedChatMessageTimestamp: TimeInterval
 
@@ -36,17 +33,6 @@ final class PngToJpegMigration {
     set {
       Task { @MainActor in
         lastCompletedFoodLogTimestamp = newValue?.timeIntervalSince1970 ?? 0.0
-      }
-    }
-  }
-
-  private var lastCompletedMealDate: Date? {
-    get {
-      lastCompletedMealTimestamp == 0.0 ? nil : Date(timeIntervalSince1970: lastCompletedMealTimestamp)
-    }
-    set {
-      Task { @MainActor in
-        lastCompletedMealTimestamp = newValue?.timeIntervalSince1970 ?? 0.0
       }
     }
   }
@@ -82,7 +68,6 @@ final class PngToJpegMigration {
     print("PngToJpegMigration: Resetting migration flag and cursors")
     migrationCompleted = false
     lastCompletedFoodLogTimestamp = 0.0
-    lastCompletedMealTimestamp = 0.0
     lastCompletedChatMessageTimestamp = 0.0
   }
 
@@ -196,10 +181,8 @@ final class PngToJpegMigration {
   }
 
   private func processMealRecords(modelContext: ModelContext) async throws -> (hasMore: Bool, imagesConverted: Int) {
-    let startDate = lastCompletedMealDate ?? Date(timeIntervalSince1970: 0)
-    print("PngToJpegMigration: Meal - fetching from date: \(startDate)")
-
-    // Note: MealRecords don't have date property, so we'll use creation order via name
+    // MealRecords are saved meal templates (not individual food logs), so there are typically
+    // only a handful. We process all of them in one pass since there's no date field for cursors.
     let descriptor = FetchDescriptor<MealRecord>(
       predicate: #Predicate { meal in
         meal.imageData != nil
@@ -207,11 +190,10 @@ final class PngToJpegMigration {
       sortBy: [SortDescriptor(\.name)]
     )
 
-    var fetchDescriptor = descriptor
-    fetchDescriptor.fetchLimit = batchSize
-
-    let meals = try modelContext.fetch(fetchDescriptor)
+    let meals = try modelContext.fetch(descriptor)
     var imagesConverted = 0
+
+    print("PngToJpegMigration: Meal - processing \(meals.count) saved meals")
 
     for meal in meals {
       // Yield control periodically to prevent blocking
@@ -248,8 +230,9 @@ final class PngToJpegMigration {
       try modelContext.save()
     }
 
-    // Return true if there might be more meals to process
-    return (meals.count == batchSize, imagesConverted)
+    // All saved meals processed in one pass - no more work remains
+    print("PngToJpegMigration: Meal - complete. ImagesConverted: \(imagesConverted)")
+    return (false, imagesConverted)
   }
 
   private func processChatMessages(modelContext: ModelContext) async throws -> (hasMore: Bool, imagesConverted: Int) {

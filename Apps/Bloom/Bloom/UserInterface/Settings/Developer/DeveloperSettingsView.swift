@@ -266,6 +266,13 @@ extension DeveloperSettingsView {
           .onTapGesture {
             presentedSheet = DebugFoodItemLogListView().asAny
           }
+
+        Divider()
+
+        SettingsCell("View Biological Age Records", iconType: .disclosure) { }
+          .onTapGesture {
+            presentedSheet = DebugBiologicalAgeRecordsView().asAny
+          }
       }
     }
   }
@@ -434,40 +441,6 @@ extension DeveloperSettingsView {
           .selectable()
         }
         .frame(height: 60)
-
-        Divider()
-
-        AsyncButton {
-          do {
-            let calculator = BiologicalAgeHealthContextCalculator()
-            let healthData = try await calculator.collectBiologicalAgeData()
-
-            let jsonString = try JSONEncoder.aiContext.encodeToString(healthData) ?? "Failed to encode"
-
-            UIPasteboard.general.string = jsonString
-
-            await MainActor.run {
-              alertDetails = AlertDetails(
-                title: "Copied to Clipboard",
-                message: "Biological age health context has been copied to your clipboard."
-              )
-            }
-          } catch {
-            await MainActor.run {
-              self.error = error
-            }
-          }
-        } label: {
-          LabeledContent("Copy Biological Age Health Context") {
-            Image(systemSymbol: .heartTextSquare)
-          }
-          .multilineTextAlignment(.leading)
-          .bold()
-          .fontDesign(.rounded)
-          .foregroundStyle(.tint)
-          .selectable()
-          .frame(height: 60)
-        }
 
         Divider()
 

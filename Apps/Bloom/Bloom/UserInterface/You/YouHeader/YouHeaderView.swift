@@ -25,25 +25,26 @@ struct YouHeaderView: View {
           .bold()
           .fontDesign(.rounded)
         if let bioAge = biologicalAgeViewModel.currentBiologicalAge {
-          Text("Bio Age: \(Int(bioAge))")
-            .font(.title3)
-            .bold()
-            .fontDesign(.rounded)
+          NavigationLink {
+            BiologicalAgeDetailsView()
+          } label: {
+            Text("Bio Age: \(Int(bioAge)) \(Image(systemSymbol: .chevronForward))")
+              .font(.title3)
+              .bold()
+              .fontDesign(.rounded)
+          }
+          .buttonStyle(.plain)
+
+          if let lastCalculated = biologicalAgeViewModel.biologicalAgeResult?.lastCalculated {
+            Text("Calculated \(lastCalculated, format: .relative(presentation: .named))")
+              .font(.caption)
+              .foregroundStyle(.secondary)
+          }
         } else {
           Text("Age: \(healthManager.age())")
         }
 
-        if entitlementController.hasBloomPro == true {
-          if let summary = biologicalAgeViewModel.lastCalculatedResponse?.summary {
-            Text(summary)
-              .font(.subheadline)
-              .foregroundStyle(.secondary)
-              .lineLimit(3)
-            Text("Learn More")
-              .font(.subheadline)
-              .foregroundStyle(.tint)
-          }
-        } else {
+        if entitlementController.hasBloomPro != true {
           Button {
             EntitledAction(presentedSheet: $presentedSheet, focus: .biologicalAge) {
               // Do nothing

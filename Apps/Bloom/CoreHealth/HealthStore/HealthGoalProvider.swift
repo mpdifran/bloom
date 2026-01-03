@@ -834,3 +834,319 @@ public extension HealthGoalProvider {
     }
   }
 }
+
+// MARK: - Biological Age Mappings
+
+public extension HealthGoalProvider {
+
+  /// Data point for linear interpolation mapping
+  struct AgeDataPoint: Sendable {
+    public let value: Double
+    public let age: Double
+
+    public init(value: Double, age: Double) {
+      self.value = value
+      self.age = age
+    }
+  }
+
+  /// Data point for age delta mapping (trend/activity metrics)
+  struct AgeDeltaDataPoint: Sendable {
+    public let value: Double
+    public let ageDelta: Double
+
+    public init(value: Double, ageDelta: Double) {
+      self.value = value
+      self.ageDelta = ageDelta
+    }
+  }
+
+  // MARK: VO2 Max
+
+  /// VO2 Max to equivalent age mapping (higher VO2 = younger)
+  func vo2MaxAgeDataPoints() -> [AgeDataPoint] {
+    if isFemale {
+      return [
+        AgeDataPoint(value: 38.0, age: 25),
+        AgeDataPoint(value: 30.0, age: 35),
+        AgeDataPoint(value: 27.0, age: 45),
+        AgeDataPoint(value: 23.0, age: 55),
+        AgeDataPoint(value: 20.0, age: 65)
+      ]
+    } else {
+      return [
+        AgeDataPoint(value: 48.0, age: 25),
+        AgeDataPoint(value: 43.0, age: 35),
+        AgeDataPoint(value: 38.0, age: 45),
+        AgeDataPoint(value: 33.0, age: 55),
+        AgeDataPoint(value: 28.0, age: 65)
+      ]
+    }
+  }
+
+  // MARK: Resting Heart Rate
+
+  /// RHR to equivalent age mapping (lower RHR = younger)
+  func restingHeartRateAgeDataPoints() -> [AgeDataPoint] {
+    if isFemale {
+      return [
+        AgeDataPoint(value: 70, age: 18),
+        AgeDataPoint(value: 75, age: 25),
+        AgeDataPoint(value: 80, age: 35),
+        AgeDataPoint(value: 85, age: 45),
+        AgeDataPoint(value: 90, age: 55),
+        AgeDataPoint(value: 95, age: 65)
+      ]
+    } else {
+      return [
+        AgeDataPoint(value: 60, age: 18),
+        AgeDataPoint(value: 70, age: 25),
+        AgeDataPoint(value: 75, age: 35),
+        AgeDataPoint(value: 80, age: 45),
+        AgeDataPoint(value: 85, age: 55),
+        AgeDataPoint(value: 90, age: 65)
+      ]
+    }
+  }
+
+  // MARK: Heart Rate Recovery
+
+  /// HRR (1-min bpm drop) to equivalent age mapping (higher HRR = younger)
+  func heartRateRecoveryAgeDataPoints() -> [AgeDataPoint] {
+    [
+      AgeDataPoint(value: 30, age: 20),
+      AgeDataPoint(value: 25, age: 30),
+      AgeDataPoint(value: 20, age: 40),
+      AgeDataPoint(value: 15, age: 50),
+      AgeDataPoint(value: 10, age: 60),
+      AgeDataPoint(value: 5, age: 65)
+    ]
+  }
+
+  // MARK: HRV Trend
+
+  /// HRV percent change (7-day vs 30-day) to age delta mapping
+  func hrvTrendAgeDeltaDataPoints() -> [AgeDeltaDataPoint] {
+    [
+      AgeDeltaDataPoint(value: 10, ageDelta: -5),
+      AgeDeltaDataPoint(value: 5, ageDelta: -2.5),
+      AgeDeltaDataPoint(value: 0, ageDelta: 0),
+      AgeDeltaDataPoint(value: -5, ageDelta: 2.5),
+      AgeDeltaDataPoint(value: -10, ageDelta: 5)
+    ]
+  }
+
+  // MARK: Zone Minutes
+
+  /// Weekly zone minutes to age delta mapping (more = younger)
+  func zoneMinutesAgeDeltaDataPoints() -> [AgeDeltaDataPoint] {
+    [
+      AgeDeltaDataPoint(value: 300, ageDelta: -10),
+      AgeDeltaDataPoint(value: 225, ageDelta: -7.5),
+      AgeDeltaDataPoint(value: 150, ageDelta: -5),
+      AgeDeltaDataPoint(value: 75, ageDelta: 0),
+      AgeDeltaDataPoint(value: 0, ageDelta: 5)
+    ]
+  }
+
+  // MARK: Activity Level
+
+  /// Activity ratio to age delta mapping (higher = younger)
+  func activityLevelAgeDeltaDataPoints() -> [AgeDeltaDataPoint] {
+    [
+      AgeDeltaDataPoint(value: 1.725, ageDelta: -5),
+      AgeDeltaDataPoint(value: 1.55, ageDelta: -2.5),
+      AgeDeltaDataPoint(value: 1.375, ageDelta: 0),
+      AgeDeltaDataPoint(value: 1.2, ageDelta: 2.5),
+      AgeDeltaDataPoint(value: 1.0, ageDelta: 5)
+    ]
+  }
+
+  // MARK: Walking Speed
+
+  /// Walking speed (m/s) to equivalent age mapping (faster = younger)
+  func walkingSpeedAgeDataPoints() -> [AgeDataPoint] {
+    [
+      AgeDataPoint(value: 1.4, age: 20),
+      AgeDataPoint(value: 1.3, age: 30),
+      AgeDataPoint(value: 1.2, age: 45),
+      AgeDataPoint(value: 1.0, age: 60),
+      AgeDataPoint(value: 0.8, age: 65)
+    ]
+  }
+
+  // MARK: Stair Climb Speed
+
+  /// Stair climb speed (flights/min) to equivalent age mapping (faster = younger)
+  func stairClimbSpeedAgeDataPoints() -> [AgeDataPoint] {
+    [
+      AgeDataPoint(value: 1.5, age: 20),
+      AgeDataPoint(value: 1.2, age: 35),
+      AgeDataPoint(value: 1.0, age: 50),
+      AgeDataPoint(value: 0.8, age: 60),
+      AgeDataPoint(value: 0.6, age: 65)
+    ]
+  }
+
+  // MARK: Sleep Score
+
+  /// Sleep score (0-100) to age delta mapping (higher = younger)
+  func sleepScoreAgeDeltaDataPoints() -> [AgeDeltaDataPoint] {
+    [
+      AgeDeltaDataPoint(value: 90, ageDelta: -5),
+      AgeDeltaDataPoint(value: 80, ageDelta: -2.5),
+      AgeDeltaDataPoint(value: 70, ageDelta: 0),
+      AgeDeltaDataPoint(value: 60, ageDelta: 2.5),
+      AgeDeltaDataPoint(value: 50, ageDelta: 5)
+    ]
+  }
+
+  // MARK: Sleep Duration Variability
+
+  /// Sleep duration std dev (hours) to age delta mapping (lower = younger)
+  func sleepDurationVariabilityAgeDeltaDataPoints() -> [AgeDeltaDataPoint] {
+    [
+      AgeDeltaDataPoint(value: 0.5, ageDelta: -2.5),
+      AgeDeltaDataPoint(value: 1.0, ageDelta: 0),
+      AgeDeltaDataPoint(value: 1.5, ageDelta: 2.5),
+      AgeDeltaDataPoint(value: 2.0, ageDelta: 5)
+    ]
+  }
+
+  // MARK: Bedtime Consistency
+
+  /// Bedtime std dev (minutes) to age delta mapping (lower = younger)
+  func bedtimeConsistencyAgeDeltaDataPoints() -> [AgeDeltaDataPoint] {
+    [
+      AgeDeltaDataPoint(value: 15, ageDelta: -2.5),
+      AgeDeltaDataPoint(value: 30, ageDelta: 0),
+      AgeDeltaDataPoint(value: 45, ageDelta: 2.5),
+      AgeDeltaDataPoint(value: 60, ageDelta: 5)
+    ]
+  }
+
+  // MARK: Sleep Heart Rate
+
+  /// Sleep heart rate to equivalent age mapping (lower = younger)
+  /// Derived from RHR × 0.9
+  func sleepHeartRateAgeDataPoints() -> [AgeDataPoint] {
+    if isFemale {
+      return [
+        AgeDataPoint(value: 63, age: 18),
+        AgeDataPoint(value: 68, age: 25),
+        AgeDataPoint(value: 72, age: 35),
+        AgeDataPoint(value: 77, age: 45),
+        AgeDataPoint(value: 81, age: 55),
+        AgeDataPoint(value: 86, age: 65)
+      ]
+    } else {
+      return [
+        AgeDataPoint(value: 54, age: 18),
+        AgeDataPoint(value: 63, age: 25),
+        AgeDataPoint(value: 68, age: 35),
+        AgeDataPoint(value: 72, age: 45),
+        AgeDataPoint(value: 77, age: 55),
+        AgeDataPoint(value: 81, age: 65)
+      ]
+    }
+  }
+
+  // MARK: Sleep Respiratory Rate
+
+  /// Sleep respiratory rate (breaths/min) to equivalent age mapping (lower = younger)
+  func sleepRespiratoryRateAgeDataPoints() -> [AgeDataPoint] {
+    [
+      AgeDataPoint(value: 12, age: 20),
+      AgeDataPoint(value: 14, age: 35),
+      AgeDataPoint(value: 16, age: 50),
+      AgeDataPoint(value: 18, age: 60),
+      AgeDataPoint(value: 20, age: 65)
+    ]
+  }
+
+  // MARK: Body Fat Percentage
+
+  /// Body fat % to age delta mapping (optimal range = younger)
+  func bodyFatPercentageAgeDeltaDataPoints() -> [AgeDeltaDataPoint] {
+    if isFemale {
+      return [
+        AgeDeltaDataPoint(value: 0.17, ageDelta: -5),
+        AgeDeltaDataPoint(value: 0.21, ageDelta: -2.5),
+        AgeDeltaDataPoint(value: 0.25, ageDelta: 0),
+        AgeDeltaDataPoint(value: 0.32, ageDelta: 2.5),
+        AgeDeltaDataPoint(value: 0.42, ageDelta: 5)
+      ]
+    } else {
+      return [
+        AgeDeltaDataPoint(value: 0.10, ageDelta: -5),
+        AgeDeltaDataPoint(value: 0.14, ageDelta: -2.5),
+        AgeDeltaDataPoint(value: 0.18, ageDelta: 0),
+        AgeDeltaDataPoint(value: 0.25, ageDelta: 2.5),
+        AgeDeltaDataPoint(value: 0.35, ageDelta: 5)
+      ]
+    }
+  }
+
+  // MARK: Blood Pressure
+
+  /// Blood pressure category to age delta mapping
+  func bloodPressureAgeDelta(for category: BloodPressureCategory) -> Double {
+    switch category {
+    case .normal:
+      return 0
+    case .low:
+      return 2.5
+    case .elevated:
+      return 2.5
+    case .hypertensionStage1:
+      return 5
+    case .hypertensionStage2:
+      return 7.5
+    case .hypertensiveCrisis:
+      return 10
+    }
+  }
+
+  // MARK: Macro Balance
+
+  /// Count of macros in range to age delta mapping
+  func macroBalanceAgeDelta(macrosInRange: Int) -> Double {
+    switch macrosInRange {
+    case 3:
+      return -2.5
+    case 2:
+      return 0
+    case 1:
+      return 2.5
+    default:
+      return 5
+    }
+  }
+
+  // MARK: Sugar Intake
+
+  /// Sugar intake (% of limit) to age delta mapping
+  func sugarIntakeAgeDeltaDataPoints() -> [AgeDeltaDataPoint] {
+    [
+      AgeDeltaDataPoint(value: 50, ageDelta: -2.5),
+      AgeDeltaDataPoint(value: 100, ageDelta: 0),
+      AgeDeltaDataPoint(value: 150, ageDelta: 2.5),
+      AgeDeltaDataPoint(value: 200, ageDelta: 5)
+    ]
+  }
+
+  // MARK: Bowel Regularity
+
+  /// Bowel movement score to age delta mapping
+  func bowelRegularityAgeDelta(score: Double) -> Double {
+    if score >= 0.9 {
+      return -2.5  // Excellent
+    } else if score >= 0.6 {
+      return 0     // Good
+    } else if score >= 0.4 {
+      return 2.5   // Fair
+    } else {
+      return 5     // Poor
+    }
+  }
+}

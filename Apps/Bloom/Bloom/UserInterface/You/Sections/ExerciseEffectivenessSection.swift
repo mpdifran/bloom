@@ -19,7 +19,7 @@ struct ExerciseEffectivenessSection: View {
   let recentWorkoutsData: RecentWorkoutsData?
 
   var body: some View {
-    StatSection(symbol: SFSymbol(rawValue: VitalModel.Kind.exerciseEffectiveness.systemImage), title: "Exercise Effectiveness", subtitle: "Last 30 Days") {
+    StatSection(symbol: SFSymbol(rawValue: VitalModel.Kind.exerciseEffectiveness.systemImage), title: "Exercise Effectiveness", subtitle: "Last 7 Days") {
       HStack {
         zoneMinutesCard
         zoneDistributionCard

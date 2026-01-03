@@ -9,16 +9,18 @@ import SwiftUI
 import SFSafeSymbols
 import TelemetryDeck
 import CoreHealth
-import BloomModel
+import Charts
+import DataContainer
 
 struct BiologicalAgeDetailsView: View {
 
   @State private var biologicalAgeViewModel = BiologicalAgeViewModel.shared
+  @State private var biologicalAgeRecords: [BiologicalAgeRecordDTO] = []
 
   var body: some View {
     Group {
-      if let response = biologicalAgeViewModel.lastCalculatedResponse {
-        contentView(response: response)
+      if let result = biologicalAgeViewModel.biologicalAgeResult {
+        contentView(result: result)
       } else {
         emptyView
       }
@@ -29,49 +31,206 @@ struct BiologicalAgeDetailsView: View {
     .onAppear {
       TelemetryDeck.viewScreen("Biological Age Details")
     }
+    .task {
+      let modelActor = BiologicalAgeRecordModelActor.standard()
+      biologicalAgeRecords = (try? await modelActor.fetchAllRecords()) ?? []
+    }
   }
 }
 
 private extension BiologicalAgeDetailsView {
 
-  func contentView(response: BiologicalAgeResponse) -> some View {
+  func contentView(result: BiologicalAgeResult) -> some View {
     BloomScrollView {
       // Biological Age Meter
-      BiologicalAgeMeter(biologicalAge: response.biologicalAge)
+      BiologicalAgeMeter(biologicalAge: result.biologicalAge)
         .frame(square: 250)
         .horizontallyCentered()
         .padding(.bottom)
 
-      // Summary Card
-      TodayCardCell(
-        symbol: .starFill,
-        title: "Summary",
-        content: response.summary,
-        color: .mutedBlue
-      )
+      // Age Summary
+      ageSummaryCard(result: result)
 
-      // Positive Factors Card
-      if response.positiveFactors.isNotEmpty {
-        SectionTitleView("Positive Factors")
+      // Positive Factors (metrics making you younger)
+      if let contributions = result.metricContributions {
+        let positiveFactors = contributions
+          .filter { $0.weightedDelta < -0.1 }
+          .sorted { $0.weightedDelta < $1.weightedDelta }  // Most negative (biggest impact) first
 
-        ForEach(response.positiveFactors) { factor in
-          FactorCell(symbol: .checkmarkCircleFill, factor: factor)
-            .tint(.mutedGreen)
+        if positiveFactors.isNotEmpty {
+          SectionTitleView("Positive Factors")
+            .padding(.horizontal)
+
+          ForEach(positiveFactors) { contribution in
+            MetricContributionCell(contribution: contribution, isPositive: true)
+          }
         }
-      }
 
-      // Negative Factors Card
-      if response.negativeFactors.isNotEmpty {
-        SectionTitleView("Negative Factors")
+        // Negative Factors (metrics making you older)
+        let negativeFactors = contributions
+          .filter { $0.weightedDelta > 0.1 }
+          .sorted { $0.weightedDelta > $1.weightedDelta }  // Most positive (biggest impact) first
 
-        ForEach(response.negativeFactors) { factor in
-          FactorCell(symbol: .exclamationmarkTriangleFill, factor: factor)
-            .tint(.mutedYellow)
+        if negativeFactors.isNotEmpty {
+          SectionTitleView("Areas for Improvement")
+            .padding(.horizontal)
+
+          ForEach(negativeFactors) { contribution in
+            MetricContributionCell(contribution: contribution, isPositive: false)
+          }
+        }
+
+        // Minimal Effect Factors (abs(weightedDelta) <= 0.1)
+        let minimalEffectFactors = contributions
+          .filter { abs($0.weightedDelta) <= 0.1 }
+          .sorted { abs($0.weightedDelta) > abs($1.weightedDelta) }
+
+        if minimalEffectFactors.isNotEmpty {
+          SectionTitleView("No Effect")
+            .padding(.horizontal)
+
+          ForEach(minimalEffectFactors) { contribution in
+            MetricContributionCell(contribution: contribution, isPositive: nil)
+          }
         }
       }
 
       MedicalDisclaimerFooterView()
     }
+  }
+
+  func ageSummaryCard(result: BiologicalAgeResult) -> some View {
+    VStack(spacing: 12) {
+      // History Chart (only show if 2+ data points)
+      if biologicalAgeRecords.count >= 2 {
+        historyChart(actualAge: result.actualAge)
+      }
+
+      HStack {
+        VStack(alignment: .leading) {
+          HStack {
+            Circle()
+              .fill(.text)
+              .frame(width: 8, height: 8)
+            Text("Actual Age")
+              .font(.subheadline)
+              .foregroundStyle(.secondary)
+          }
+          Text("\(Int(result.actualAge))")
+            .font(.largeTitle)
+            .bold()
+            .fontDesign(.rounded)
+        }
+
+        Spacer()
+
+        VStack(alignment: .trailing) {
+          HStack {
+            Circle()
+              .fill(.mutedGreen)
+              .frame(width: 8, height: 8)
+            Text("Biological Age")
+              .font(.subheadline)
+              .foregroundStyle(.secondary)
+          }
+          Text(result.biologicalAge.format(using: .oneDecimalPlace))
+            .font(.largeTitle)
+            .bold()
+            .fontDesign(.rounded)
+        }
+      }
+
+      Divider()
+
+      HStack {
+        Text(result.isYounger ? "You're younger than your age!" : "Room for improvement")
+
+        Spacer()
+
+        let delta = result.ageDelta
+        Text(delta >= 0 ? "+\(delta.format(using: .oneDecimalPlace)) years" : "-\(delta.format(using: .oneDecimalPlace)) years")
+          .bold()
+      }
+      .font(.headline)
+      .foregroundStyle(result.isYounger ? .mutedGreen : .mutedPink)
+    }
+    .cardContainer()
+  }
+
+  func historyChart(actualAge: Double) -> some View {
+    VStack(alignment: .leading) {
+      Chart {
+        ForEach(biologicalAgeRecords) { record in
+          // Actual age line
+          LineMark(
+            x: .value("Date", record.date, unit: .day),
+            y: .value("Age", record.actualAge),
+            series: .value("Type", "Actual")
+          )
+          .interpolationMethod(.catmullRom)
+          .foregroundStyle(.text)
+          .lineStyle(StrokeStyle(lineWidth: 2))
+
+          PointMark(
+            x: .value("Date", record.date, unit: .day),
+            y: .value("Age", record.biologicalAge)
+          )
+          .foregroundStyle(.text)
+          .symbolSize(40)
+
+          // Bio age line
+          LineMark(
+            x: .value("Date", record.date, unit: .day),
+            y: .value("Age", record.biologicalAge),
+            series: .value("Type", "Bio")
+          )
+          .interpolationMethod(.catmullRom)
+          .foregroundStyle(.mutedGreen)
+          .lineStyle(StrokeStyle(lineWidth: 2))
+
+          PointMark(
+            x: .value("Date", record.date, unit: .day),
+            y: .value("Age", record.biologicalAge)
+          )
+          .foregroundStyle(.mutedGreen)
+          .symbolSize(40)
+        }
+      }
+      .chartYScale(domain: chartYMin...chartYMax)
+      .frame(height: 120)
+      .chartXAxis {
+        AxisMarks(values: .stride(by: .weekOfYear)) { _ in
+          AxisGridLine()
+          AxisTick()
+          AxisValueLabel()
+        }
+      }
+      .chartYAxis {
+        AxisMarks(position: .trailing, values: .automatic) { value in
+          AxisGridLine()
+          AxisTick()
+          if let doubleValue = value.as(Double.self) {
+            AxisValueLabel("\(Int(doubleValue))")
+          } else {
+            AxisValueLabel()
+          }
+        }
+      }
+    }
+  }
+
+  private var chartYMin: Double {
+    let minBioAge = biologicalAgeRecords.map(\.biologicalAge).min() ?? 0
+    let minActualAge = biologicalAgeRecords.map(\.actualAge).min() ?? 0
+    let minValue = min(minBioAge, minActualAge)
+    return max(0, minValue - 5)
+  }
+
+  private var chartYMax: Double {
+    let maxBioAge = biologicalAgeRecords.map(\.biologicalAge).max() ?? 100
+    let maxActualAge = biologicalAgeRecords.map(\.actualAge).max() ?? 100
+    let maxValue = max(maxBioAge, maxActualAge)
+    return maxValue + 5
   }
 
   var emptyView: some View {
@@ -96,29 +255,61 @@ private extension BiologicalAgeDetailsView {
       .cardContainer()
     }
   }
-
-  func formatFactors(_ factors: [String]) -> String {
-    factors.map { "• \($0)" }.joined(separator: "\n")
-  }
 }
 
-struct FactorCell: View {
+struct MetricContributionCell: View {
 
-  let symbol: SFSymbol
-  let factor: String
+  let contribution: MetricContribution
+  let isPositive: Bool?
+
+  private var symbol: SFSymbol {
+    if let isPositive {
+      return isPositive ? .minusCircleFill : .plusCircleFill
+    }
+    return .checkmarkCircleFill
+  }
+
+  private var tintColor: Color {
+    if let isPositive {
+      return isPositive ? .mutedGreen : .mutedPink
+    }
+    return .mutedBlue
+  }
+
+  private var contributionText: String {
+    let delta = contribution.weightedDelta
+    if delta >= 0 {
+      return "+\(delta.format(using: .oneDecimalPlace)) years"
+    } else {
+      return "\(delta.format(using: .oneDecimalPlace)) years"
+    }
+  }
 
   var body: some View {
     HStack {
       Image(systemSymbol: symbol)
         .font(.title2)
-        .foregroundStyle(.tint)
+        .foregroundStyle(tintColor)
 
-      Text(factor)
-        .bold()
-        .fontDesign(.rounded)
-        .multilineTextAlignment(.leading)
+      VStack(alignment: .leading, spacing: 2) {
+        Text(contribution.metric.rawValue)
+          .bold()
+          .fontDesign(.rounded)
+
+        Text(contribution.metric.category.rawValue)
+          .font(.caption)
+          .foregroundStyle(.secondary)
+      }
 
       Spacer(minLength: 0)
+
+      if isPositive != nil {
+        Text(contributionText)
+          .font(.subheadline)
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(tintColor)
+      }
     }
     .fixedSize(horizontal: false, vertical: true)
     .cardContainer()
