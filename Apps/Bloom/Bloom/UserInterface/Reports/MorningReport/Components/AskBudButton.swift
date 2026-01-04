@@ -19,7 +19,7 @@ struct AskBudButton: View {
           .resizable()
           .frame(square: 30)
 
-        Text("Ask Bud")
+        Text("Chat with Bud")
           .font(.body)
           .foregroundStyle(.tint)
           .fontWeight(.heavy)

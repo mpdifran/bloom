@@ -344,7 +344,7 @@ private extension TodayView {
         TodaysAdviceTodayCell(advice: advice)
           .padding(.horizontal)
           .contextMenu {
-            Button("Ask Bud", systemSymbol: .ellipsisMessage) {
+            Button("Chat with Bud", systemSymbol: .ellipsisMessage) {
               handleAskBudAction(
                 title: "Today's Advice",
                 content: advice,
@@ -383,7 +383,7 @@ private extension TodayView {
         TonightsSleepTodayCell(recommendations: recommendations)
           .padding(.horizontal)
           .contextMenu {
-            Button("Ask Bud", systemSymbol: .ellipsisMessage) {
+            Button("Chat with Bud", systemSymbol: .ellipsisMessage) {
               handleAskBudAction(
                 title: "Tonight's Sleep",
                 content: recommendations,
@@ -409,7 +409,7 @@ private extension TodayView {
           presentedNavPush = MenstruationDetailView().asAny
         }
         .contextMenu {
-          Button("Ask Bud", systemSymbol: .ellipsisMessage) {
+          Button("Chat with Bud", systemSymbol: .ellipsisMessage) {
             handleAskBudAction(
               title: "Cycle Phase Tip",
               content: tip,
@@ -435,7 +435,7 @@ private extension TodayView {
           presentedNavPush = MenstruationDetailView().asAny
         }
         .contextMenu {
-          Button("Ask Bud", systemSymbol: .ellipsisMessage) {
+          Button("Chat with Bud", systemSymbol: .ellipsisMessage) {
             handleAskBudAction(
               title: "Period Forecast",
               content: forecast,

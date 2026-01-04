@@ -74,7 +74,7 @@ struct InsightCard: View {
     .cardContainer(fill: cardFill)
     .if(allowContextMenu) {
       $0.contextMenu {
-        Button("Ask Bud", systemSymbol: .ellipsisMessage) {
+        Button("Chat with Bud", systemSymbol: .ellipsisMessage) {
           handleAskBudAction()
         }
       }

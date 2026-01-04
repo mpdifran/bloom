@@ -51,7 +51,8 @@ extension ChatVitalConverter {
       menstrualHealth: generateMenstrualHealth(from: startDate, enabledCategories: enabledCategories),
       nutrition: generateNutritionHealth(from: startDate, enabledCategories: enabledCategories),
       sleep: generateSleep(from: startDate, enabledCategories: enabledCategories),
-      stress: generateStress(from: startDate, enabledCategories: enabledCategories)
+      stress: generateStress(from: startDate, enabledCategories: enabledCategories),
+      biologicalAge: generateBiologicalAge(enabledCategories: enabledCategories)
     )
 
     return healthData.isEmpty ? nil : healthData
@@ -621,6 +622,114 @@ extension ChatVitalConverter {
       heartRateVariability: hrvSamples,
       bloodPressureSamples: bloodPressureSamples
     )
+  }
+}
+
+// MARK: - Biological Age
+
+extension ChatVitalConverter {
+
+  @MainActor
+  func generateBiologicalAge(enabledCategories: Set<AIHealthCategory>) async -> HealthVitalData.BioAgeSummary? {
+    guard let result = BiologicalAgeViewModel.shared.biologicalAgeResult,
+          let contributions = result.metricContributions else { return nil }
+
+    // Filter contributions based on enabled privacy categories
+    let filteredContributions = contributions.filter { contribution in
+      enabledCategories.contains(privacyCategory(for: contribution.metric))
+    }
+
+    guard filteredContributions.isNotEmpty else { return nil }
+
+    let bioAgeContributions = filteredContributions.map { contribution in
+      HealthVitalData.BioAgeContribution(
+        metric: contribution.metric.rawValue,
+        category: contribution.metric.category.rawValue,
+        value: formatMetricValue(contribution),
+        ageDelta: formatAgeDelta(contribution.weightedDelta),
+        impact: determineImpact(contribution.weightedDelta)
+      )
+    }
+
+    return HealthVitalData.BioAgeSummary(
+      biologicalAge: result.biologicalAge,
+      actualAge: result.actualAge,
+      ageDelta: result.ageDelta,
+      confidence: result.confidence.displayName,
+      lastCalculated: DateFormatter.dateTimeMediumWithTimeZone.string(from: result.lastCalculated),
+      relevantContributions: bioAgeContributions
+    )
+  }
+
+  private nonisolated func privacyCategory(for metric: BiologicalAgeMetric) -> AIHealthCategory {
+    switch metric {
+    case .vo2Max, .restingHeartRate, .heartRateRecovery, .heartRateReserve, .bodyFatPercentage:
+      return .bodyMetrics
+    case .hrvTrend, .bloodPressure:
+      return .mentalWellness
+    case .zoneMinutes, .activityLevel, .walkingSpeed, .stairClimbSpeed:
+      return .physicalActivity
+    case .sleepScore, .sleepDurationVariability, .bedtimeConsistency, .sleepHeartRate, .sleepRespiratoryRate:
+      return .sleep
+    case .macroBalance, .sugarIntake:
+      return .nutrition
+    case .bowelRegularity:
+      return .digestiveHealth
+    }
+  }
+
+  private nonisolated func formatMetricValue(_ contribution: MetricContribution) -> String {
+    let value = contribution.rawValue
+    let formatter = NumberFormatter.oneDecimalPlace
+
+    switch contribution.metric {
+    case .vo2Max:
+      return "\(formatter.string(for: value) ?? "") ml/kg/min"
+    case .restingHeartRate, .heartRateRecovery, .heartRateReserve, .sleepHeartRate:
+      return "\(formatter.string(for: value) ?? "") bpm"
+    case .hrvTrend:
+      return "\(formatter.string(for: value) ?? "")%"
+    case .zoneMinutes:
+      return "\(NumberFormatter.noDecimalPlaces.string(for: value) ?? "") min"
+    case .activityLevel:
+      return "\(formatter.string(for: value) ?? "")x"
+    case .walkingSpeed, .stairClimbSpeed:
+      return "\(formatter.string(for: value) ?? "") m/s"
+    case .sleepScore:
+      return "\(NumberFormatter.noDecimalPlaces.string(for: value) ?? "")/100"
+    case .sleepDurationVariability:
+      return "\(formatter.string(for: value) ?? "") hrs"
+    case .bedtimeConsistency:
+      return "\(NumberFormatter.noDecimalPlaces.string(for: value) ?? "") min"
+    case .sleepRespiratoryRate:
+      return "\(formatter.string(for: value) ?? "") breaths/min"
+    case .bodyFatPercentage:
+      return "\(formatter.string(for: value) ?? "")%"
+    case .bloodPressure:
+      return "\(NumberFormatter.noDecimalPlaces.string(for: value) ?? "") mmHg"
+    case .macroBalance:
+      return "\(NumberFormatter.noDecimalPlaces.string(for: value) ?? "")/3 in range"
+    case .sugarIntake:
+      return "\(NumberFormatter.noDecimalPlaces.string(for: value) ?? "")% of limit"
+    case .bowelRegularity:
+      return "\(formatter.string(for: value) ?? "") score"
+    }
+  }
+
+  private nonisolated func formatAgeDelta(_ delta: Double) -> String {
+    let formatter = NumberFormatter.oneDecimalPlace
+    let sign = delta >= 0 ? "+" : ""
+    return "\(sign)\(formatter.string(for: delta) ?? "0") years"
+  }
+
+  private nonisolated func determineImpact(_ weightedDelta: Double) -> String {
+    if weightedDelta < -0.1 {
+      return "positive"
+    } else if weightedDelta > 0.1 {
+      return "negative"
+    } else {
+      return "neutral"
+    }
   }
 }
 

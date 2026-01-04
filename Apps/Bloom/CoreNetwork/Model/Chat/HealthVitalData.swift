@@ -24,6 +24,7 @@ public struct HealthVitalData: SendableNetworkModel {
   public let nutrition: Nutrition?
   public let sleep: Sleep?
   public let stress: Stress?
+  public let biologicalAge: BioAgeSummary?
 
   public init(
     activityLevel: ActivityLevel?,
@@ -34,7 +35,8 @@ public struct HealthVitalData: SendableNetworkModel {
     menstrualHealth: MenstrualHealth?,
     nutrition: Nutrition?,
     sleep: Sleep?,
-    stress: Stress?
+    stress: Stress?,
+    biologicalAge: BioAgeSummary? = nil
   ) {
     self.activityLevel = activityLevel
     self.bodyComposition = bodyComposition
@@ -45,6 +47,7 @@ public struct HealthVitalData: SendableNetworkModel {
     self.nutrition = nutrition
     self.sleep = sleep
     self.stress = stress
+    self.biologicalAge = biologicalAge
   }
 }
 
@@ -57,7 +60,8 @@ extension HealthVitalData {
     heartHealth == nil &&
     menstrualHealth == nil &&
     sleep == nil &&
-    stress == nil
+    stress == nil &&
+    biologicalAge == nil
   }
 }
 
@@ -857,6 +861,53 @@ extension HealthVitalData {
       self.confidence = confidence
       self.lastCalculated = lastCalculated
       self.relevantContributions = relevantContributions
+    }
+  }
+
+  public struct BioAgeDailyDiff: SendableNetworkModel {
+    public let previousBioAge: Double
+    public let currentBioAge: Double
+    public let overallChange: String
+    public let changedMetrics: [MetricChange]
+
+    public init(
+      previousBioAge: Double,
+      currentBioAge: Double,
+      overallChange: String,
+      changedMetrics: [MetricChange]
+    ) {
+      self.previousBioAge = previousBioAge
+      self.currentBioAge = currentBioAge
+      self.overallChange = overallChange
+      self.changedMetrics = changedMetrics
+    }
+  }
+
+  public struct MetricChange: SendableNetworkModel {
+    public let metric: String
+    public let category: String
+    public let previousValue: String
+    public let currentValue: String
+    public let previousWeightedDelta: String
+    public let currentWeightedDelta: String
+    public let improvement: String
+
+    public init(
+      metric: String,
+      category: String,
+      previousValue: String,
+      currentValue: String,
+      previousWeightedDelta: String,
+      currentWeightedDelta: String,
+      improvement: String
+    ) {
+      self.metric = metric
+      self.category = category
+      self.previousValue = previousValue
+      self.currentValue = currentValue
+      self.previousWeightedDelta = previousWeightedDelta
+      self.currentWeightedDelta = currentWeightedDelta
+      self.improvement = improvement
     }
   }
 }

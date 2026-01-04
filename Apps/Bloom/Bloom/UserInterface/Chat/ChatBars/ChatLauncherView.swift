@@ -78,7 +78,7 @@ private extension ChatLauncherView {
         .frame(width: 34)
         .foregroundStyle(.secondary)
       
-      Text("Ask Bud")
+      Text("Chat with Bud")
         .foregroundStyle(.secondary)
       
       Spacer()

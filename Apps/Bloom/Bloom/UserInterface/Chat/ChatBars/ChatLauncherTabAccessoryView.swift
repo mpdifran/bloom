@@ -20,7 +20,7 @@ struct ChatLauncherTabAccessoryView: View {
         .frame(square: 34)
         .foregroundStyle(.secondary)
 
-      Text("Ask Bud")
+      Text("Chat with Bud")
         .foregroundStyle(.secondary)
 
       Spacer(minLength: 0)

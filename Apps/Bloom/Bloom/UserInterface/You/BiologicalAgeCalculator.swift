@@ -159,127 +159,127 @@ final actor BiologicalAgeCalculator {
 
 // MARK: - Main Calculation
 
-private extension BiologicalAgeCalculator {
+extension BiologicalAgeCalculator {
 
-  struct CalculationResult {
-    let rawBiologicalAge: Double
-    let metricContributions: [MetricContribution]
+  public struct CalculationResult: Sendable {
+    public let rawBiologicalAge: Double
+    public let metricContributions: [MetricContribution]
   }
 
-  func calculateBiologicalAge(actualAge: Double) async -> CalculationResult {
+  public func calculateBiologicalAge(actualAge: Double, referenceDate: Date = .now) async -> CalculationResult {
     var totalWeightedDelta: Double = 0
     var contributions = [MetricContribution]()
 
     // 1. VO2 Max (18%)
-    if let vo2MaxContribution = await calculateVO2MaxContribution(actualAge: actualAge) {
+    if let vo2MaxContribution = await calculateVO2MaxContribution(actualAge: actualAge, referenceDate: referenceDate) {
       totalWeightedDelta += vo2MaxContribution.weightedDelta
       contributions.append(vo2MaxContribution)
     }
 
     // 2. Resting Heart Rate (6%)
-    if let rhrContribution = await calculateRestingHeartRateContribution(actualAge: actualAge) {
+    if let rhrContribution = await calculateRestingHeartRateContribution(actualAge: actualAge, referenceDate: referenceDate) {
       totalWeightedDelta += rhrContribution.weightedDelta
       contributions.append(rhrContribution)
     }
 
     // 3. Heart Rate Recovery (6%)
-    if let hrrContribution = await calculateHeartRateRecoveryContribution(actualAge: actualAge) {
+    if let hrrContribution = await calculateHeartRateRecoveryContribution(actualAge: actualAge, referenceDate: referenceDate) {
       totalWeightedDelta += hrrContribution.weightedDelta
       contributions.append(hrrContribution)
     }
 
     // 4. HRV Trend (6%)
-    if let hrvContribution = await calculateHRVTrendContribution() {
+    if let hrvContribution = await calculateHRVTrendContribution(referenceDate: referenceDate) {
       totalWeightedDelta += hrvContribution.weightedDelta
       contributions.append(hrvContribution)
     }
 
     // 5. Heart Rate Reserve (4%)
-    if let hrrContribution = await calculateHeartRateReserveContribution(actualAge: actualAge) {
+    if let hrrContribution = await calculateHeartRateReserveContribution(actualAge: actualAge, referenceDate: referenceDate) {
       totalWeightedDelta += hrrContribution.weightedDelta
       contributions.append(hrrContribution)
     }
 
     // 6. Zone Minutes (8%)
-    if let zoneMinutesContribution = await calculateZoneMinutesContribution() {
+    if let zoneMinutesContribution = await calculateZoneMinutesContribution(referenceDate: referenceDate) {
       totalWeightedDelta += zoneMinutesContribution.weightedDelta
       contributions.append(zoneMinutesContribution)
     }
 
     // 7. Activity Level (6%)
-    if let activityContribution = await calculateActivityLevelContribution() {
+    if let activityContribution = await calculateActivityLevelContribution(referenceDate: referenceDate) {
       totalWeightedDelta += activityContribution.weightedDelta
       contributions.append(activityContribution)
     }
 
     // 8. Walking Speed (3%)
-    if let walkingContribution = await calculateWalkingSpeedContribution(actualAge: actualAge) {
+    if let walkingContribution = await calculateWalkingSpeedContribution(actualAge: actualAge, referenceDate: referenceDate) {
       totalWeightedDelta += walkingContribution.weightedDelta
       contributions.append(walkingContribution)
     }
 
     // 9. Stair Climb Speed (3%)
-    if let stairContribution = await calculateStairClimbSpeedContribution(actualAge: actualAge) {
+    if let stairContribution = await calculateStairClimbSpeedContribution(actualAge: actualAge, referenceDate: referenceDate) {
       totalWeightedDelta += stairContribution.weightedDelta
       contributions.append(stairContribution)
     }
 
     // 10. Sleep Score (8%)
-    if let sleepScoreContribution = await calculateSleepScoreContribution() {
+    if let sleepScoreContribution = await calculateSleepScoreContribution(referenceDate: referenceDate) {
       totalWeightedDelta += sleepScoreContribution.weightedDelta
       contributions.append(sleepScoreContribution)
     }
 
     // 11. Sleep Duration Variability (4%)
-    if let durationVarContribution = await calculateSleepDurationVariabilityContribution() {
+    if let durationVarContribution = await calculateSleepDurationVariabilityContribution(referenceDate: referenceDate) {
       totalWeightedDelta += durationVarContribution.weightedDelta
       contributions.append(durationVarContribution)
     }
 
     // 12. Bedtime Consistency (3%)
-    if let bedtimeContribution = await calculateBedtimeConsistencyContribution() {
+    if let bedtimeContribution = await calculateBedtimeConsistencyContribution(referenceDate: referenceDate) {
       totalWeightedDelta += bedtimeContribution.weightedDelta
       contributions.append(bedtimeContribution)
     }
 
     // 13. Sleep Heart Rate (3%)
-    if let sleepHRContribution = await calculateSleepHeartRateContribution(actualAge: actualAge) {
+    if let sleepHRContribution = await calculateSleepHeartRateContribution(actualAge: actualAge, referenceDate: referenceDate) {
       totalWeightedDelta += sleepHRContribution.weightedDelta
       contributions.append(sleepHRContribution)
     }
 
     // 14. Sleep Respiratory Rate (2%)
-    if let respRateContribution = await calculateSleepRespiratoryRateContribution(actualAge: actualAge) {
+    if let respRateContribution = await calculateSleepRespiratoryRateContribution(actualAge: actualAge, referenceDate: referenceDate) {
       totalWeightedDelta += respRateContribution.weightedDelta
       contributions.append(respRateContribution)
     }
 
     // 15. Body Fat Percentage (7%)
-    if let bodyFatContribution = await calculateBodyFatPercentageContribution() {
+    if let bodyFatContribution = await calculateBodyFatPercentageContribution(referenceDate: referenceDate) {
       totalWeightedDelta += bodyFatContribution.weightedDelta
       contributions.append(bodyFatContribution)
     }
 
     // 16. Blood Pressure (8%)
-    if let bpContribution = await calculateBloodPressureContribution() {
+    if let bpContribution = await calculateBloodPressureContribution(referenceDate: referenceDate) {
       totalWeightedDelta += bpContribution.weightedDelta
       contributions.append(bpContribution)
     }
 
     // 17. Macro Balance (2%)
-    if let macroContribution = await calculateMacroBalanceContribution() {
+    if let macroContribution = await calculateMacroBalanceContribution(referenceDate: referenceDate) {
       totalWeightedDelta += macroContribution.weightedDelta
       contributions.append(macroContribution)
     }
 
     // 18. Sugar Intake (2%)
-    if let sugarContribution = await calculateSugarIntakeContribution() {
+    if let sugarContribution = await calculateSugarIntakeContribution(referenceDate: referenceDate) {
       totalWeightedDelta += sugarContribution.weightedDelta
       contributions.append(sugarContribution)
     }
 
     // 19. Bowel Regularity (1%)
-    if let bowelContribution = await calculateBowelRegularityContribution() {
+    if let bowelContribution = await calculateBowelRegularityContribution(referenceDate: referenceDate) {
       totalWeightedDelta += bowelContribution.weightedDelta
       contributions.append(bowelContribution)
     }
@@ -391,11 +391,11 @@ private extension BiologicalAgeCalculator {
 private extension BiologicalAgeCalculator {
 
   // 1. VO2 Max (18%)
-  func calculateVO2MaxContribution(actualAge: Double) async -> MetricContribution? {
+  func calculateVO2MaxContribution(actualAge: Double, referenceDate: Date) async -> MetricContribution? {
     let sampleType = HKQuantityType(.vo2Max)
     guard let sample = try? await healthStoreFetcher.fetchSamples(
       for: sampleType,
-      dateRange: .trailingMonthsFromNow(3)
+      dateRange: .trailingMonths(from: referenceDate, numberOfMonths: 3)
     ).first as? HKQuantitySample else { return nil }
 
     let vo2Max = sample.quantity.doubleValue(for: .vo2Max())
@@ -415,11 +415,11 @@ private extension BiologicalAgeCalculator {
   }
 
   // 2. Resting Heart Rate (6%)
-  func calculateRestingHeartRateContribution(actualAge: Double) async -> MetricContribution? {
+  func calculateRestingHeartRateContribution(actualAge: Double, referenceDate: Date) async -> MetricContribution? {
     guard let avgRHR = await healthStoreFetcher.fetchDailyAverage(
       for: .restingHeartRate,
       unit: .bpm(),
-      dateRange: .trailingDaysFromNow(7)
+      dateRange: .trailingDays(from: referenceDate, numberOfDays: 7)
     )?.doubleValue(for: .bpm()) else { return nil }
 
     let dataPoints = healthGoalProvider.restingHeartRateAgeDataPoints()
@@ -438,11 +438,11 @@ private extension BiologicalAgeCalculator {
   }
 
   // 3. Heart Rate Recovery (6%)
-  func calculateHeartRateRecoveryContribution(actualAge: Double) async -> MetricContribution? {
+  func calculateHeartRateRecoveryContribution(actualAge: Double, referenceDate: Date) async -> MetricContribution? {
     let sampleType = HKQuantityType(.heartRateRecoveryOneMinute)
     guard let sample = try? await healthStoreFetcher.fetchSamples(
       for: sampleType,
-      dateRange: .trailingDaysFromNow(30)
+      dateRange: .trailingDays(from: referenceDate, numberOfDays: 30)
     ).first as? HKQuantitySample else { return nil }
 
     let hrr = sample.quantity.doubleValue(for: .bpm())
@@ -462,19 +462,19 @@ private extension BiologicalAgeCalculator {
   }
 
   // 4. HRV Trend (6%)
-  func calculateHRVTrendContribution() async -> MetricContribution? {
+  func calculateHRVTrendContribution(referenceDate: Date) async -> MetricContribution? {
     let sampleType = HKQuantityType(.heartRateVariabilitySDNN)
     let unit = HKUnit.secondUnit(with: .milli)
 
     guard let sevenDaySamples = try? await healthStoreFetcher.fetchSamples(
       for: sampleType,
-      dateRange: .trailingDaysFromNow(7)
+      dateRange: .trailingDays(from: referenceDate, numberOfDays: 7)
     ) as? [HKQuantitySample],
     sevenDaySamples.isNotEmpty else { return nil }
 
     guard let thirtyDaySamples = try? await healthStoreFetcher.fetchSamples(
       for: sampleType,
-      dateRange: .trailingDaysFromNow(30)
+      dateRange: .trailingDays(from: referenceDate, numberOfDays: 30)
     ) as? [HKQuantitySample],
     thirtyDaySamples.isNotEmpty else { return nil }
 
@@ -499,21 +499,21 @@ private extension BiologicalAgeCalculator {
   }
 
   // 5. Heart Rate Reserve (4%)
-  func calculateHeartRateReserveContribution(actualAge: Double) async -> MetricContribution? {
+  func calculateHeartRateReserveContribution(actualAge: Double, referenceDate: Date) async -> MetricContribution? {
     // Get max HR from last 7 days
     let maxHRSamples = await healthStoreFetcher.fetchCollatedQuantity(
       for: .heartRate,
       unit: .bpm(),
       interval: DateComponents(day: 1),
       options: .discreteMax,
-      dateRange: .trailingDaysFromNow(7)
+      dateRange: .trailingDays(from: referenceDate, numberOfDays: 7)
     )
 
     // Get average resting HR from last 7 days
     guard let avgRHR = await healthStoreFetcher.fetchDailyAverage(
       for: .restingHeartRate,
       unit: .bpm(),
-      dateRange: .trailingDaysFromNow(7)
+      dateRange: .trailingDays(from: referenceDate, numberOfDays: 7)
     )?.doubleValue(for: .bpm()) else { return nil }
 
     guard maxHRSamples.isNotEmpty else { return nil }
@@ -545,12 +545,12 @@ private extension BiologicalAgeCalculator {
 private extension BiologicalAgeCalculator {
 
   // 6. Zone Minutes (8%)
-  func calculateZoneMinutesContribution() async -> MetricContribution? {
+  func calculateZoneMinutesContribution(referenceDate: Date) async -> MetricContribution? {
     guard let heartRateZones = await healthStoreFetcher.heartRateZones() else { return nil }
 
     let details = await healthStoreFetcher.fetchExerciseEffectivenessDetails(
       heartRateZones: heartRateZones,
-      dateRange: .trailingDaysFromNow(7)
+      dateRange: .trailingDays(from: referenceDate, numberOfDays: 7)
     )
 
     guard !details.workoutReports.isEmpty else { return nil }
@@ -574,20 +574,20 @@ private extension BiologicalAgeCalculator {
   }
 
   // 7. Activity Level (6%)
-  func calculateActivityLevelContribution() async -> MetricContribution? {
+  func calculateActivityLevelContribution(referenceDate: Date) async -> MetricContribution? {
     // Fetch active and basal energy for 7 days
     let activeEnergy = await healthStoreFetcher.fetchCollatedQuantity(
       for: .activeEnergyBurned,
       unit: .kilocalorie(),
       interval: DateComponents(day: 1),
-      dateRange: .trailingDaysFromNow(7)
+      dateRange: .trailingDays(from: referenceDate, numberOfDays: 7)
     )
 
     let basalEnergy = await healthStoreFetcher.fetchCollatedQuantity(
       for: .basalEnergyBurned,
       unit: .kilocalorie(),
       interval: DateComponents(day: 1),
-      dateRange: .trailingDaysFromNow(7)
+      dateRange: .trailingDays(from: referenceDate, numberOfDays: 7)
     )
 
     guard activeEnergy.isNotEmpty, basalEnergy.isNotEmpty else { return nil }
@@ -613,11 +613,11 @@ private extension BiologicalAgeCalculator {
   }
 
   // 8. Walking Speed (3%)
-  func calculateWalkingSpeedContribution(actualAge: Double) async -> MetricContribution? {
+  func calculateWalkingSpeedContribution(actualAge: Double, referenceDate: Date) async -> MetricContribution? {
     guard let avgWalkingSpeed = await healthStoreFetcher.fetchDailyAverage(
       for: .walkingSpeed,
       unit: .meter().unitDivided(by: .second()),
-      dateRange: .trailingDaysFromNow(7)
+      dateRange: .trailingDays(from: referenceDate, numberOfDays: 7)
     )?.doubleValue(for: .meter().unitDivided(by: .second())) else { return nil }
 
     let dataPoints = healthGoalProvider.walkingSpeedAgeDataPoints()
@@ -636,12 +636,12 @@ private extension BiologicalAgeCalculator {
   }
 
   // 9. Stair Climb Speed (3%)
-  func calculateStairClimbSpeedContribution(actualAge: Double) async -> MetricContribution? {
+  func calculateStairClimbSpeedContribution(actualAge: Double, referenceDate: Date) async -> MetricContribution? {
     let unit = HKUnit.meter().unitDivided(by: .second())
     guard let avgStairSpeed = await healthStoreFetcher.fetchDailyAverage(
       for: .stairAscentSpeed,
       unit: unit,
-      dateRange: .trailingDaysFromNow(7)
+      dateRange: .trailingDays(from: referenceDate, numberOfDays: 7)
     )?.doubleValue(for: unit) else { return nil }
 
     let dataPoints = healthGoalProvider.stairClimbSpeedAgeDataPoints()
@@ -665,9 +665,9 @@ private extension BiologicalAgeCalculator {
 private extension BiologicalAgeCalculator {
 
   // 10. Sleep Score (8%)
-  func calculateSleepScoreContribution() async -> MetricContribution? {
+  func calculateSleepScoreContribution(referenceDate: Date) async -> MetricContribution? {
     let sleepAnalyses = await healthStoreFetcher.fetchSleepAnalysis(
-      dateRange: .trailingDaysFromNow(7)
+      dateRange: .trailingDays(from: referenceDate, numberOfDays: 7)
     )
 
     guard sleepAnalyses.isNotEmpty else { return nil }
@@ -688,9 +688,9 @@ private extension BiologicalAgeCalculator {
   }
 
   // 11. Sleep Duration Variability (4%)
-  func calculateSleepDurationVariabilityContribution() async -> MetricContribution? {
+  func calculateSleepDurationVariabilityContribution(referenceDate: Date) async -> MetricContribution? {
     let sleepAnalyses = await healthStoreFetcher.fetchSleepAnalysis(
-      dateRange: .trailingDaysFromNow(7)
+      dateRange: .trailingDays(from: referenceDate, numberOfDays: 7)
     )
 
     guard sleepAnalyses.count >= 3 else { return nil }
@@ -716,9 +716,9 @@ private extension BiologicalAgeCalculator {
   }
 
   // 12. Bedtime Consistency (3%)
-  func calculateBedtimeConsistencyContribution() async -> MetricContribution? {
+  func calculateBedtimeConsistencyContribution(referenceDate: Date) async -> MetricContribution? {
     let sleepAnalyses = await healthStoreFetcher.fetchSleepAnalysis(
-      dateRange: .trailingDaysFromNow(7)
+      dateRange: .trailingDays(from: referenceDate, numberOfDays: 7)
     )
 
     guard sleepAnalyses.count >= 3 else { return nil }
@@ -754,9 +754,9 @@ private extension BiologicalAgeCalculator {
   }
 
   // 13. Sleep Heart Rate (3%)
-  func calculateSleepHeartRateContribution(actualAge: Double) async -> MetricContribution? {
+  func calculateSleepHeartRateContribution(actualAge: Double, referenceDate: Date) async -> MetricContribution? {
     let sleepAnalyses = await healthStoreFetcher.fetchSleepAnalysis(
-      dateRange: .trailingDaysFromNow(7)
+      dateRange: .trailingDays(from: referenceDate, numberOfDays: 7)
     )
 
     let heartRates = sleepAnalyses.compactMap(\.averageHeartRate)
@@ -779,9 +779,9 @@ private extension BiologicalAgeCalculator {
   }
 
   // 14. Sleep Respiratory Rate (2%)
-  func calculateSleepRespiratoryRateContribution(actualAge: Double) async -> MetricContribution? {
+  func calculateSleepRespiratoryRateContribution(actualAge: Double, referenceDate: Date) async -> MetricContribution? {
     let sleepAnalyses = await healthStoreFetcher.fetchSleepAnalysis(
-      dateRange: .trailingDaysFromNow(7)
+      dateRange: .trailingDays(from: referenceDate, numberOfDays: 7)
     )
 
     let respiratoryRates: [Double] = sleepAnalyses.flatMap { analysis in
@@ -812,8 +812,13 @@ private extension BiologicalAgeCalculator {
 private extension BiologicalAgeCalculator {
 
   // 15. Body Fat Percentage (7%)
-  func calculateBodyFatPercentageContribution() async -> MetricContribution? {
-    guard let sample = await healthStoreFetcher.fetchLatestSample(for: .bodyFatPercentage) else { return nil }
+  func calculateBodyFatPercentageContribution(referenceDate: Date) async -> MetricContribution? {
+    // Body fat is measured infrequently, look back 90 days from reference date
+    let sample = await healthStoreFetcher.fetchMostRecentSample(
+      for: .bodyFatPercentage,
+      dateRange: .trailingDays(from: referenceDate, numberOfDays: 90)
+    )
+    guard let sample else { return nil }
 
     let bodyFatPercent = sample.quantity.doubleValue(for: .percent())
     let dataPoints = healthGoalProvider.bodyFatPercentageAgeDeltaDataPoints()
@@ -831,9 +836,11 @@ private extension BiologicalAgeCalculator {
   }
 
   // 16. Blood Pressure (8%)
-  func calculateBloodPressureContribution() async -> MetricContribution? {
-    guard let systolicSample = await healthStoreFetcher.fetchLatestSample(for: .bloodPressureSystolic),
-          let diastolicSample = await healthStoreFetcher.fetchLatestSample(for: .bloodPressureDiastolic)
+  func calculateBloodPressureContribution(referenceDate: Date) async -> MetricContribution? {
+    // Blood pressure is measured infrequently, look back 30 days from reference date
+    let dateRange = DateRange.trailingDays(from: referenceDate, numberOfDays: 30)
+    guard let systolicSample = await healthStoreFetcher.fetchMostRecentSample(for: .bloodPressureSystolic, dateRange: dateRange),
+          let diastolicSample = await healthStoreFetcher.fetchMostRecentSample(for: .bloodPressureDiastolic, dateRange: dateRange)
     else { return nil }
 
     let systolic = systolicSample.quantity.doubleValue(for: .millimeterOfMercury())
@@ -859,8 +866,8 @@ private extension BiologicalAgeCalculator {
 private extension BiologicalAgeCalculator {
 
   // 17. Macro Balance (2%)
-  func calculateMacroBalanceContribution() async -> MetricContribution? {
-    let dateRange = DateRange.trailingDaysFromNow(7)
+  func calculateMacroBalanceContribution(referenceDate: Date) async -> MetricContribution? {
+    let dateRange = DateRange.trailingDays(from: referenceDate, numberOfDays: 7)
 
     // Fetch total calories and macros
     let energySamples = await healthStoreFetcher.fetchCollatedQuantity(
@@ -929,12 +936,12 @@ private extension BiologicalAgeCalculator {
   }
 
   // 18. Sugar Intake (2%)
-  func calculateSugarIntakeContribution() async -> MetricContribution? {
+  func calculateSugarIntakeContribution(referenceDate: Date) async -> MetricContribution? {
     let sugarSamples = await healthStoreFetcher.fetchCollatedQuantity(
       for: .dietarySugar,
       unit: .gram(),
       interval: DateComponents(day: 1),
-      dateRange: .trailingDaysFromNow(7)
+      dateRange: .trailingDays(from: referenceDate, numberOfDays: 7)
     )
 
     guard sugarSamples.isNotEmpty else { return nil }
@@ -960,9 +967,9 @@ private extension BiologicalAgeCalculator {
   }
 
   // 19. Bowel Regularity (1%)
-  func calculateBowelRegularityContribution() async -> MetricContribution? {
+  func calculateBowelRegularityContribution(referenceDate: Date) async -> MetricContribution? {
     let modelActor = BowelMovementModelActor.standard()
-    guard let bowelMovements = try? await modelActor.fetchBowelMovements(dateRange: .trailingDaysFromNow(7)),
+    guard let bowelMovements = try? await modelActor.fetchBowelMovements(dateRange: .trailingDays(from: referenceDate, numberOfDays: 7)),
           bowelMovements.isNotEmpty else { return nil }
 
     // Use existing scoring logic
