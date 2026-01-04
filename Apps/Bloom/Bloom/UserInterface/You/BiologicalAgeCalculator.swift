@@ -13,7 +13,8 @@ import DataContainer
 import SwiftUI
 
 /// Calculates biological age based on 19 health metrics
-/// Runs every 6 calendar days with 70% previous + 30% new blending
+/// Runs every 4 hours with 70% previous day + 30% new blending
+/// Stores one data point per calendar day (upserts same-day records)
 final actor BiologicalAgeCalculator {
   static let shared = BiologicalAgeCalculator()
 
@@ -74,7 +75,7 @@ final actor BiologicalAgeCalculator {
   }
 
   /// Refresh biological age calculation
-  /// Only recalculates if 7 calendar days have passed since last calculation
+  /// Only recalculates if 4 hours have passed since last calculation
   func refreshBiologicalAge(forceRecalculate: Bool = false) async {
     // Set the refresh request flags
     refreshRequested = true
@@ -102,15 +103,13 @@ final actor BiologicalAgeCalculator {
       return
     }
 
-    // Check if we should recalculate (every 7 calendar days)
+    // Check if we should recalculate (every 4 hours)
     let shouldRecalculate: Bool
     if forceRecalculate || biologicalAge == nil {
       shouldRecalculate = true
     } else {
-      let lastCalcDay = Calendar.current.startOfDay(for: biologicalAge!.lastCalculated)
-      let today = Calendar.current.startOfDay(for: Date())
-      let daysSince = Calendar.current.dateComponents([.day], from: lastCalcDay, to: today).day ?? 0
-      shouldRecalculate = daysSince >= 7
+      let hoursSince = Date().timeIntervalSince(biologicalAge!.lastCalculated) / 3600
+      shouldRecalculate = hoursSince >= 4
     }
 
     // If we don't need to recalculate, the biologicalAge is already set from loadLatestResult
@@ -121,10 +120,10 @@ final actor BiologicalAgeCalculator {
     // Calculate new biological age
     let result = await calculateBiologicalAge(actualAge: Double(userAge))
 
-    // Blend with previous calculation (70% previous + 30% new)
+    // Blend with previous day's value (70% previous day + 30% new)
     let blendedAge: Double
-    if let previousAge = biologicalAge?.biologicalAge {
-      blendedAge = (previousAge * 0.7) + (result.rawBiologicalAge * 0.3)
+    if let previousDayRecord = try? await modelActor.fetchPreviousDayRecord() {
+      blendedAge = (previousDayRecord.biologicalAge * 0.7) + (result.rawBiologicalAge * 0.3)
     } else {
       blendedAge = result.rawBiologicalAge
     }
@@ -132,8 +131,8 @@ final actor BiologicalAgeCalculator {
     // Clamp to ±12 years from actual age
     let clampedAge = max(Double(userAge) - 12, min(Double(userAge) + 12, blendedAge))
 
-    // Save to SwiftData
-    try? await modelActor.save(
+    // Save to SwiftData (upserts same calendar day)
+    try? await modelActor.upsert(
       biologicalAge: clampedAge,
       actualAge: Double(userAge),
       date: Date()

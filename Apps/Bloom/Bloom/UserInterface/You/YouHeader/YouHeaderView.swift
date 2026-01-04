@@ -12,6 +12,8 @@ struct YouHeaderView: View {
   @ObservedObject private var healthManager = HealthManager.shared
   @State private var biologicalAgeViewModel = BiologicalAgeViewModel.shared
 
+  let nowDate = Date()
+
   var body: some View {
     HStack {
       profileGaugeView
@@ -32,14 +34,15 @@ struct YouHeaderView: View {
           }
           .buttonStyle(.plain)
 
-          if let result = biologicalAgeViewModel.biologicalAgeResult {
+          if biologicalAgeViewModel.isCalculatingAge {
+            Text("Calculating...")
+              .font(.caption)
+              .foregroundStyle(.secondary)
+          } else if let result = biologicalAgeViewModel.biologicalAgeResult {
             Text("Calculated \(result.lastCalculated, format: .relative(presentation: .named))")
               .font(.caption)
               .foregroundStyle(.secondary)
-
-            Text(result.confidence.displayName)
-              .font(.caption)
-              .foregroundStyle(result.confidence.color)
+              .contentTransition(.numericText())
           }
         } else {
           Text("Age: \(healthManager.age())")

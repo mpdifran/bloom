@@ -188,13 +188,6 @@ private extension BiologicalAgeDetailsView {
           .foregroundStyle(.text)
           .lineStyle(StrokeStyle(lineWidth: 2))
 
-          PointMark(
-            x: .value("Date", record.date, unit: .day),
-            y: .value("Age", record.biologicalAge)
-          )
-          .foregroundStyle(.text)
-          .symbolSize(40)
-
           // Bio age line
           LineMark(
             x: .value("Date", record.date, unit: .day),
@@ -204,10 +197,22 @@ private extension BiologicalAgeDetailsView {
           .interpolationMethod(.catmullRom)
           .foregroundStyle(.mutedGreen)
           .lineStyle(StrokeStyle(lineWidth: 2))
+        }
 
+        // Single end-point for biological age (border effect like steps graph)
+        if let lastRecord = biologicalAgeRecords.last {
+          // Outer border
           PointMark(
-            x: .value("Date", record.date, unit: .day),
-            y: .value("Age", record.biologicalAge)
+            x: .value("Date", lastRecord.date, unit: .day),
+            y: .value("Age", lastRecord.biologicalAge)
+          )
+          .foregroundStyle(Color(.systemBackground))
+          .symbolSize(100)
+
+          // Inner fill
+          PointMark(
+            x: .value("Date", lastRecord.date, unit: .day),
+            y: .value("Age", lastRecord.biologicalAge)
           )
           .foregroundStyle(.mutedGreen)
           .symbolSize(40)
