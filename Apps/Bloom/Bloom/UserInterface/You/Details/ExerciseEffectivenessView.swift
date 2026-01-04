@@ -26,7 +26,7 @@ struct ExerciseEffectivenessView: View {
       ToolbarItem(placement: .principal) {
         VitalSummaryDetailTitleView(
           title: "Exercise Effectiveness",
-          subtitle: "Last 7 Days"
+          subtitle: "Last 30 Days"
         )
       }
     }

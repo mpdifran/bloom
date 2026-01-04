@@ -234,11 +234,11 @@ private extension DayReviewCalculator {
 
   func formatWeightedDelta(_ delta: Double) -> String {
     let sign = delta >= 0 ? "+" : ""
-    return "\(sign)\(delta.formatted(using: .oneDecimalPlace)) years"
+    return "\(sign)\(delta.format(using: .oneDecimalPlace)) years"
   }
 
   func formatImprovement(_ improvement: Double) -> String {
     let sign = improvement >= 0 ? "+" : ""
-    return "\(sign)\(improvement.formatted(using: .oneDecimalPlace)) years"
+    return "\(sign)\(improvement.format(using: .oneDecimalPlace)) years"
   }
 }

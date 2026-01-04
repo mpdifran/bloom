@@ -19,7 +19,7 @@ struct YouHeaderView: View {
       profileGaugeView
 
       VStack(alignment: .leading) {
-        Text(healthManager.name.isEmpty ? "User" : healthManager.name)
+        Text(healthManager.name.isEmpty ? "You" : healthManager.name)
           .font(.largeTitle)
           .bold()
           .fontDesign(.rounded)
@@ -33,6 +33,10 @@ struct YouHeaderView: View {
               .fontDesign(.rounded)
           }
           .buttonStyle(.plain)
+
+          if let result = biologicalAgeViewModel.biologicalAgeResult {
+            BioAgeConfidenceCardMini(result: result)
+          }
 
           if biologicalAgeViewModel.isCalculatingAge {
             Text("Calculating...")

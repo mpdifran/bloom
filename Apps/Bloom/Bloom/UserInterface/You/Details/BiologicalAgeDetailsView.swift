@@ -52,7 +52,7 @@ private extension BiologicalAgeDetailsView {
       ageSummaryCard(result: result)
 
       // Confidence Section
-      confidenceCard(result: result)
+      BioAgeConfidenceCard(result: result)
 
       // Positive Factors (metrics making you younger)
       if let contributions = result.metricContributions {
@@ -94,6 +94,19 @@ private extension BiologicalAgeDetailsView {
 
           ForEach(minimalEffectFactors) { contribution in
             MetricContributionCell(contribution: contribution, isPositive: nil)
+          }
+        }
+
+        // Missing Metrics (no data available)
+        let availableMetrics = Set(contributions.map(\.metric))
+        let missingMetrics = BiologicalAgeMetric.allCases.filter { !availableMetrics.contains($0) }
+
+        if missingMetrics.isNotEmpty {
+          SectionTitleView("No Data")
+            .padding(.horizontal)
+
+          ForEach(missingMetrics, id: \.self) { metric in
+            MissingMetricCell(metric: metric)
           }
         }
       }
@@ -144,34 +157,6 @@ private extension BiologicalAgeDetailsView {
       }
     }
     .cardContainer()
-  }
-
-  func confidenceCard(result: BiologicalAgeResult) -> some View {
-    HStack {
-      Image(systemSymbol: .checkmarkSealFill)
-        .font(.title2)
-
-      VStack(alignment: .leading, spacing: 2) {
-        Text(result.confidence.displayName)
-          .font(.title3)
-          .fontDesign(.rounded)
-
-        let metricsCount = result.metricContributions?.count ?? 0
-        Text("\(metricsCount) of 19 metrics considered")
-          .font(.subheadline)
-          .bold()
-          .foregroundStyle(.secondary)
-      }
-
-      Spacer(minLength: 0)
-
-      Text("\(result.availableWeightPercentage.format(using: .noDecimalPlaces))%")
-        .font(.title)
-        .fontWeight(.heavy)
-        .fontDesign(.rounded)
-    }
-    .foregroundStyle(.white)
-    .cardContainer(fill: result.confidence.color)
   }
 
   func historyChart(actualAge: Double) -> some View {
@@ -311,7 +296,7 @@ struct MetricContributionCell: View {
     HStack {
       Image(systemSymbol: symbol)
         .font(.title2)
-        .foregroundStyle(.white, tintColor)
+        .foregroundStyle(tintColor, tintColor.tertiary)
 
       VStack(alignment: .leading, spacing: 2) {
         Text(contribution.metric.rawValue)
@@ -332,6 +317,33 @@ struct MetricContributionCell: View {
           .fontDesign(.rounded)
           .foregroundStyle(tintColor)
       }
+    }
+    .fixedSize(horizontal: false, vertical: true)
+    .cardContainer()
+  }
+}
+
+struct MissingMetricCell: View {
+
+  let metric: BiologicalAgeMetric
+
+  var body: some View {
+    HStack {
+      Image(systemSymbol: .questionmarkCircleFill)
+        .font(.title2)
+        .foregroundStyle(.secondary, .quaternary)
+
+      VStack(alignment: .leading, spacing: 2) {
+        Text(metric.rawValue)
+          .bold()
+          .fontDesign(.rounded)
+
+        Text(metric.category.rawValue)
+          .font(.caption)
+          .foregroundStyle(.secondary)
+      }
+
+      Spacer(minLength: 0)
     }
     .fixedSize(horizontal: false, vertical: true)
     .cardContainer()
