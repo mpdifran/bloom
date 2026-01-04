@@ -217,7 +217,15 @@ private extension ChatHealthQueryPerformer {
       averageVitaminD: await formattedAverage(for: .dietaryVitaminD, unit: .gramUnit(with: .micro), dateRange: dateRange),
       averageVitaminE: await formattedAverage(for: .dietaryVitaminE, unit: .gramUnit(with: .milli), dateRange: dateRange)
     )
-    return convertToString(value: averages)
+
+    let bioAgeSummary = await fetchBioAgeSummary(for: [.macroBalance, .sugarIntake])
+
+    let nutrition = HealthVitalData.Nutrition(
+      nutritionAverages: averages,
+      foodLogs: [],
+      bioAgeSummary: bioAgeSummary
+    )
+    return convertToString(value: nutrition)
   }
 
   func fetchGoals(query: SocketMessage.Query) async -> String {
@@ -268,9 +276,12 @@ private extension ChatHealthQueryPerformer {
       HealthVitalData.Sample(date: sample.date, quantity: sample.quantity.chatQuantity(for: unit, numberFormatter: .noDecimalPlaces))
     }
 
+    let bioAgeSummary = await fetchBioAgeSummary(for: [.zoneMinutes, .activityLevel])
+
     let activityLevel = HealthVitalData.ActivityLevel(
       basalEnergyBurned: basalSamples,
-      activeEnergyBurned: activeSamples
+      activeEnergyBurned: activeSamples,
+      bioAgeSummary: bioAgeSummary
     )
 
     return convertToString(value: activityLevel)
@@ -308,9 +319,12 @@ private extension ChatHealthQueryPerformer {
       )
     }
 
+    let bioAgeSummary = await fetchBioAgeSummary(for: [.bodyFatPercentage])
+
     let bodyComposition = HealthVitalData.BodyComposition(
       bodyFatPercentage: bodyFatSamples,
-      bodyMass: bodyMassSamples
+      bodyMass: bodyMassSamples,
+      bioAgeSummary: bioAgeSummary
     )
 
     return convertToString(value: bodyComposition)
@@ -328,11 +342,13 @@ private extension ChatHealthQueryPerformer {
         )
       }
 
-      guard samples.isNotEmpty else { 
+      guard samples.isNotEmpty else {
         return convertToString(value: HealthVitalData.BowelMovements(samples: []))
       }
 
-      let bowelMovements = HealthVitalData.BowelMovements(samples: samples)
+      let bioAgeSummary = await fetchBioAgeSummary(for: [.bowelRegularity])
+
+      let bowelMovements = HealthVitalData.BowelMovements(samples: samples, bioAgeSummary: bioAgeSummary)
 
       return convertToString(value: bowelMovements)
     } catch {
@@ -379,10 +395,15 @@ private extension ChatHealthQueryPerformer {
       HealthVitalData.Sample(date: $0.date, quantity: $0.quantity.chatQuantity(for: .bpm(), unitOverride: "bpm", numberFormatter: .noDecimalPlaces))
     }
 
+    let bioAgeSummary = await fetchBioAgeSummary(for: [
+      .vo2Max, .restingHeartRate, .heartRateRecovery, .hrvTrend, .heartRateReserve
+    ])
+
     let heartHealth = HealthVitalData.HeartHealth(
       vo2Max: vo2MaxSamples,
       restingHeartRate: rhrSamples,
-      heartRateRecoveryOneMinute: heartRateRecoverySamples
+      heartRateRecoveryOneMinute: heartRateRecoverySamples,
+      bioAgeSummary: bioAgeSummary
     )
 
     return convertToString(value: heartHealth)
@@ -471,7 +492,11 @@ private extension ChatHealthQueryPerformer {
       )
     }
 
-    let sleep = HealthVitalData.Sleep(sleepDetails: sleepDays)
+    let bioAgeSummary = await fetchBioAgeSummary(for: [
+      .sleepScore, .sleepDurationVariability, .bedtimeConsistency, .sleepHeartRate, .sleepRespiratoryRate
+    ])
+
+    let sleep = HealthVitalData.Sleep(sleepDetails: sleepDays, bioAgeSummary: bioAgeSummary)
 
     return convertToString(value: sleep)
   }
@@ -523,9 +548,12 @@ private extension ChatHealthQueryPerformer {
       return convertToString(value: HealthVitalData.Stress(heartRateVariability: [], bloodPressureSamples: []))
     }
 
+    let bioAgeSummary = await fetchBioAgeSummary(for: [.bloodPressure, .hrvTrend])
+
     let stress = HealthVitalData.Stress(
       heartRateVariability: hrvSamples,
-      bloodPressureSamples: bloodPressureSamples
+      bloodPressureSamples: bloodPressureSamples,
+      bioAgeSummary: bioAgeSummary
     )
 
     return convertToString(value: stress)
@@ -536,8 +564,8 @@ private extension ChatHealthQueryPerformer {
 
     let workouts = await HealthStoreFetcher.shared.fetchWorkouts(dateRange: dateRange)
 
-    guard workouts.isNotEmpty else { 
-      return convertToString(value: [HealthVitalData.Workout]())
+    guard workouts.isNotEmpty else {
+      return convertToString(value: HealthVitalData.Workouts(workouts: []))
     }
 
     var workoutData = [HealthVitalData.Workout]()
@@ -579,7 +607,11 @@ private extension ChatHealthQueryPerformer {
       workoutData.append(data)
     }
 
-    return convertToString(value: workoutData)
+    let bioAgeSummary = await fetchBioAgeSummary(for: [
+      .zoneMinutes, .activityLevel, .walkingSpeed, .stairClimbSpeed
+    ])
+
+    return convertToString(value: HealthVitalData.Workouts(workouts: workoutData, bioAgeSummary: bioAgeSummary))
   }
 
   func fetchTargetHeartRateZoneMinutes(query: SocketMessage.Query) async -> String {
@@ -736,5 +768,93 @@ private extension ChatHealthQueryPerformer {
   private func monthName(for month: Int) -> String? {
     guard month >= 1 && month <= 12 else { return nil }
     return Calendar.current.monthSymbols[month - 1]
+  }
+}
+
+// MARK: - Biological Age Helpers
+
+private extension ChatHealthQueryPerformer {
+
+  @MainActor
+  func fetchBioAgeSummary(for metrics: [BiologicalAgeMetric]) async -> HealthVitalData.BioAgeSummary? {
+    guard let result = BiologicalAgeViewModel.shared.biologicalAgeResult,
+          let contributions = result.metricContributions else { return nil }
+
+    let relevantContributions = contributions
+      .filter { metrics.contains($0.metric) }
+      .map { contribution in
+        HealthVitalData.BioAgeContribution(
+          metric: contribution.metric.rawValue,
+          category: contribution.metric.category.rawValue,
+          value: formatMetricValue(contribution),
+          ageDelta: formatAgeDelta(contribution.weightedDelta),
+          impact: determineImpact(contribution.weightedDelta)
+        )
+      }
+
+    guard relevantContributions.isNotEmpty else { return nil }
+
+    return HealthVitalData.BioAgeSummary(
+      biologicalAge: result.biologicalAge,
+      actualAge: result.actualAge,
+      ageDelta: result.ageDelta,
+      confidence: result.confidence.displayName,
+      lastCalculated: DateFormatter.dateTimeMediumWithTimeZone.string(from: result.lastCalculated),
+      relevantContributions: relevantContributions
+    )
+  }
+
+  func formatMetricValue(_ contribution: MetricContribution) -> String {
+    let value = contribution.rawValue
+    let formatter = NumberFormatter.oneDecimalPlace
+
+    switch contribution.metric {
+    case .vo2Max:
+      return "\(formatter.string(for: value) ?? "") ml/kg/min"
+    case .restingHeartRate, .heartRateRecovery, .heartRateReserve, .sleepHeartRate:
+      return "\(formatter.string(for: value) ?? "") bpm"
+    case .hrvTrend:
+      return "\(formatter.string(for: value) ?? "")%"
+    case .zoneMinutes:
+      return "\(NumberFormatter.noDecimalPlaces.string(for: value) ?? "") min"
+    case .activityLevel:
+      return "\(formatter.string(for: value) ?? "")x"
+    case .walkingSpeed, .stairClimbSpeed:
+      return "\(formatter.string(for: value) ?? "") m/s"
+    case .sleepScore:
+      return "\(NumberFormatter.noDecimalPlaces.string(for: value) ?? "")/100"
+    case .sleepDurationVariability:
+      return "\(formatter.string(for: value) ?? "") hrs"
+    case .bedtimeConsistency:
+      return "\(NumberFormatter.noDecimalPlaces.string(for: value) ?? "") min"
+    case .sleepRespiratoryRate:
+      return "\(formatter.string(for: value) ?? "") breaths/min"
+    case .bodyFatPercentage:
+      return "\(formatter.string(for: value) ?? "")%"
+    case .bloodPressure:
+      return "\(NumberFormatter.noDecimalPlaces.string(for: value) ?? "") mmHg"
+    case .macroBalance:
+      return "\(NumberFormatter.noDecimalPlaces.string(for: value) ?? "")/3 in range"
+    case .sugarIntake:
+      return "\(NumberFormatter.noDecimalPlaces.string(for: value) ?? "")% of limit"
+    case .bowelRegularity:
+      return "\(formatter.string(for: value) ?? "") score"
+    }
+  }
+
+  func formatAgeDelta(_ delta: Double) -> String {
+    let formatter = NumberFormatter.oneDecimalPlace
+    let sign = delta >= 0 ? "+" : ""
+    return "\(sign)\(formatter.string(for: delta) ?? "0") years"
+  }
+
+  func determineImpact(_ weightedDelta: Double) -> String {
+    if weightedDelta < -0.1 {
+      return "positive"
+    } else if weightedDelta > 0.1 {
+      return "negative"
+    } else {
+      return "neutral"
+    }
   }
 }

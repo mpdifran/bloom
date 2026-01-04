@@ -614,10 +614,16 @@ extension HealthVitalData {
   public struct ActivityLevel: SendableNetworkModel {
     public let basalEnergyBurned: [Sample]
     public let activeEnergyBurned: [Sample]
+    public let bioAgeSummary: BioAgeSummary?
 
-    public init(basalEnergyBurned: [Sample], activeEnergyBurned: [Sample]) {
+    public init(
+      basalEnergyBurned: [Sample],
+      activeEnergyBurned: [Sample],
+      bioAgeSummary: BioAgeSummary? = nil
+    ) {
       self.basalEnergyBurned = basalEnergyBurned
       self.activeEnergyBurned = activeEnergyBurned
+      self.bioAgeSummary = bioAgeSummary
     }
   }
 }
@@ -628,10 +634,16 @@ extension HealthVitalData {
   public struct BodyComposition: SendableNetworkModel {
     public let bodyFatPercentage: [Sample]
     public let bodyMass: [Sample]
+    public let bioAgeSummary: BioAgeSummary?
 
-    public init(bodyFatPercentage: [Sample], bodyMass: [Sample]) {
+    public init(
+      bodyFatPercentage: [Sample],
+      bodyMass: [Sample],
+      bioAgeSummary: BioAgeSummary? = nil
+    ) {
       self.bodyFatPercentage = bodyFatPercentage
       self.bodyMass = bodyMass
+      self.bioAgeSummary = bioAgeSummary
     }
   }
 }
@@ -641,9 +653,11 @@ extension HealthVitalData {
 extension HealthVitalData {
   public struct BowelMovements: SendableNetworkModel {
     public let samples: [BowelMovementSample]
+    public let bioAgeSummary: BioAgeSummary?
 
-    public init(samples: [BowelMovementSample]) {
+    public init(samples: [BowelMovementSample], bioAgeSummary: BioAgeSummary? = nil) {
       self.samples = samples
+      self.bioAgeSummary = bioAgeSummary
     }
   }
 }
@@ -669,11 +683,18 @@ extension HealthVitalData {
     public let vo2Max: [Sample]
     public let restingHeartRate: [Sample]
     public let heartRateRecoveryOneMinute: [Sample]
+    public let bioAgeSummary: BioAgeSummary?
 
-    public init(vo2Max: [Sample], restingHeartRate: [Sample], heartRateRecoveryOneMinute: [Sample]) {
+    public init(
+      vo2Max: [Sample],
+      restingHeartRate: [Sample],
+      heartRateRecoveryOneMinute: [Sample],
+      bioAgeSummary: BioAgeSummary? = nil
+    ) {
       self.vo2Max = vo2Max
       self.restingHeartRate = restingHeartRate
       self.heartRateRecoveryOneMinute = heartRateRecoveryOneMinute
+      self.bioAgeSummary = bioAgeSummary
     }
   }
 }
@@ -696,10 +717,16 @@ extension HealthVitalData {
   public struct Nutrition: SendableNetworkModel {
     public let nutritionAverages: HealthVitalData.NutritionAverages
     public let foodLogs: [FoodLogDay]
+    public let bioAgeSummary: BioAgeSummary?
 
-    public init(nutritionAverages: HealthVitalData.NutritionAverages, foodLogs: [FoodLogDay]) {
+    public init(
+      nutritionAverages: HealthVitalData.NutritionAverages,
+      foodLogs: [FoodLogDay],
+      bioAgeSummary: BioAgeSummary? = nil
+    ) {
       self.nutritionAverages = nutritionAverages
       self.foodLogs = foodLogs
+      self.bioAgeSummary = bioAgeSummary
     }
   }
 }
@@ -709,9 +736,11 @@ extension HealthVitalData {
 extension HealthVitalData {
   public struct Sleep: SendableNetworkModel {
     public let sleepDetails: [SleepDay]
+    public let bioAgeSummary: BioAgeSummary?
 
-    public init(sleepDetails: [SleepDay]) {
+    public init(sleepDetails: [SleepDay], bioAgeSummary: BioAgeSummary? = nil) {
       self.sleepDetails = sleepDetails
+      self.bioAgeSummary = bioAgeSummary
     }
   }
 }
@@ -722,10 +751,16 @@ extension HealthVitalData {
   public struct Stress: SendableNetworkModel {
     public let heartRateVariability: [Sample]
     public let bloodPressureSamples: [BloodPressureSample]
+    public let bioAgeSummary: BioAgeSummary?
 
-    public init(heartRateVariability: [Sample], bloodPressureSamples: [BloodPressureSample]) {
+    public init(
+      heartRateVariability: [Sample],
+      bloodPressureSamples: [BloodPressureSample],
+      bioAgeSummary: BioAgeSummary? = nil
+    ) {
       self.heartRateVariability = heartRateVariability
       self.bloodPressureSamples = bloodPressureSamples
+      self.bioAgeSummary = bioAgeSummary
     }
   }
 }
@@ -767,6 +802,61 @@ extension HealthVitalData {
       self.averageHeartRate = averageHeartRate
       self.elevationAscended = elevationAscended
       self.elevationDescended = elevationDescended
+    }
+  }
+
+  public struct Workouts: SendableNetworkModel {
+    public let workouts: [Workout]
+    public let bioAgeSummary: BioAgeSummary?
+
+    public init(workouts: [Workout], bioAgeSummary: BioAgeSummary? = nil) {
+      self.workouts = workouts
+      self.bioAgeSummary = bioAgeSummary
+    }
+  }
+}
+
+// MARK: - Biological Age
+
+extension HealthVitalData {
+  public struct BioAgeContribution: SendableNetworkModel {
+    public let metric: String
+    public let category: String
+    public let value: String
+    public let ageDelta: String
+    public let impact: String
+
+    public init(metric: String, category: String, value: String, ageDelta: String, impact: String) {
+      self.metric = metric
+      self.category = category
+      self.value = value
+      self.ageDelta = ageDelta
+      self.impact = impact
+    }
+  }
+
+  public struct BioAgeSummary: SendableNetworkModel {
+    public let biologicalAge: Double
+    public let actualAge: Double
+    public let ageDelta: Double
+    public let confidence: String
+    public let lastCalculated: String
+    public let relevantContributions: [BioAgeContribution]
+
+    public init(
+      biologicalAge: Double,
+      actualAge: Double,
+      ageDelta: Double,
+      confidence: String,
+      lastCalculated: String,
+      relevantContributions: [BioAgeContribution]
+    ) {
+      self.biologicalAge = biologicalAge
+      self.actualAge = actualAge
+      self.ageDelta = ageDelta
+      self.confidence = confidence
+      self.lastCalculated = lastCalculated
+      self.relevantContributions = relevantContributions
     }
   }
 }
