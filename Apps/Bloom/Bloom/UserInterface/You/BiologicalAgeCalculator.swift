@@ -11,6 +11,7 @@ import BloomFoundation
 import HealthKit
 import DataContainer
 import SwiftUI
+import TelemetryDeck
 
 /// Calculates biological age based on 19 health metrics
 /// Runs every 4 hours with 70% previous day + 30% new blending
@@ -146,6 +147,14 @@ final actor BiologicalAgeCalculator {
       actualAge: Double(userAge),
       lastCalculated: Date(),
       metricContributions: result.metricContributions
+    )
+
+    let ageDiff = clampedAge - Double(userAge)
+    TelemetryDeck.signal(
+      "Bio Age Calculated",
+      parameters: [
+        "ageDiff": ageDiff.format(using: .oneDecimalPlace)
+      ]
     )
   }
 
