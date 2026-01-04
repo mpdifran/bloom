@@ -14,7 +14,7 @@ import DataContainer
 struct HeartHealthSection: View {
   @Binding var presentedNavigationDestination: AnyView?
   let summary: HeartHealthMonthlySummary?
-  let maxHeartRateChartData: MaxHeartRateChartData?
+  let heartRateReserveChartData: HeartRateReserveChartData?
   let vo2MaxTrendData: VO2MaxTrendData?
   let heartRateRecoveryData: HeartRateRecoveryData?
 
@@ -26,7 +26,7 @@ struct HeartHealthSection: View {
       }
 
       HStack {
-        maxHeartRateCard
+        heartRateReserveCard
         heartRateRecoveryCard
       }
     }
@@ -46,8 +46,8 @@ private extension HeartHealthSection {
     .onTapGesture { navigateToDetails() }
   }
 
-  var maxHeartRateCard: some View {
-    MaxHeartRateStatCard(chartData: maxHeartRateChartData)
+  var heartRateReserveCard: some View {
+    HeartRateReserveStatCard(chartData: heartRateReserveChartData)
       .onTapGesture { navigateToDetails() }
   }
 
@@ -68,7 +68,7 @@ private extension HeartHealthSection {
       HeartHealthSection(
         presentedNavigationDestination: .constant(nil),
         summary: nil,
-        maxHeartRateChartData: nil,
+        heartRateReserveChartData: nil,
         vo2MaxTrendData: nil,
         heartRateRecoveryData: nil
       )

@@ -108,7 +108,7 @@ struct YouView: View {
       HeartHealthSection(
         presentedNavigationDestination: $presentedNavigationDestination,
         summary: viewModel.heartHealthSummary,
-        maxHeartRateChartData: viewModel.maxHeartRateChartData,
+        heartRateReserveChartData: viewModel.heartRateReserveChartData,
         vo2MaxTrendData: viewModel.vo2MaxTrendData,
         heartRateRecoveryData: viewModel.heartRateRecoveryData
       )

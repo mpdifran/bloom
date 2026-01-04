@@ -909,6 +909,32 @@ public extension HealthGoalProvider {
     }
   }
 
+  // MARK: Heart Rate Reserve
+
+  /// Heart Rate Reserve (MaxHR - RHR) to equivalent age mapping (higher HRR = younger)
+  /// Derived from: MaxHR = 200 at age 20, 155 at age 65 (linear), combined with RHR age mappings
+  func heartRateReserveAgeDataPoints() -> [AgeDataPoint] {
+    if isFemale {
+      return [
+        AgeDataPoint(value: 128, age: 20),
+        AgeDataPoint(value: 120, age: 25),
+        AgeDataPoint(value: 105, age: 35),
+        AgeDataPoint(value: 90, age: 45),
+        AgeDataPoint(value: 75, age: 55),
+        AgeDataPoint(value: 60, age: 65)
+      ]
+    } else {
+      return [
+        AgeDataPoint(value: 138, age: 20),
+        AgeDataPoint(value: 125, age: 25),
+        AgeDataPoint(value: 110, age: 35),
+        AgeDataPoint(value: 95, age: 45),
+        AgeDataPoint(value: 80, age: 55),
+        AgeDataPoint(value: 65, age: 65)
+      ]
+    }
+  }
+
   // MARK: Heart Rate Recovery
 
   /// HRR (1-min bpm drop) to equivalent age mapping (higher HRR = younger)

@@ -33,7 +33,7 @@ final class YouStatsViewModel: Sendable {
   var sleepRespiratoryRateChartData: [RespiratoryRateDataPoint]?
   var wristTempData: WristTempData?
   var weeklyStepsChartData: WeeklyStepsChartData?
-  var maxHeartRateChartData: MaxHeartRateChartData?
+  var heartRateReserveChartData: HeartRateReserveChartData?
   var vo2MaxTrendData: VO2MaxTrendData?
   var heartRateRecoveryData: HeartRateRecoveryData?
   var bodyWeightChartData: BodyWeightChartData?
@@ -195,9 +195,9 @@ private extension YouStatsViewModel {
       }
     })
     tasks.append(Task.detached {
-      for await maxHeartRateChartData in await YouStatsCalculator.shared.$maxHeartRateChartData {
+      for await heartRateReserveChartData in await YouStatsCalculator.shared.$heartRateReserveChartData {
         await MainActor.run {
-          self.maxHeartRateChartData = maxHeartRateChartData
+          self.heartRateReserveChartData = heartRateReserveChartData
         }
       }
     })

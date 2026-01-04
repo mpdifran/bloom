@@ -195,10 +195,10 @@ private extension BiologicalAgeCalculator {
       contributions.append(hrvContribution)
     }
 
-    // 5. Max Heart Rate (4%)
-    if let maxHRContribution = await calculateMaxHeartRateContribution(actualAge: actualAge) {
-      totalWeightedDelta += maxHRContribution.weightedDelta
-      contributions.append(maxHRContribution)
+    // 5. Heart Rate Reserve (4%)
+    if let hrrContribution = await calculateHeartRateReserveContribution(actualAge: actualAge) {
+      totalWeightedDelta += hrrContribution.weightedDelta
+      contributions.append(hrrContribution)
     }
 
     // 6. Zone Minutes (8%)
@@ -499,8 +499,9 @@ private extension BiologicalAgeCalculator {
     )
   }
 
-  // 5. Max Heart Rate (4%)
-  func calculateMaxHeartRateContribution(actualAge: Double) async -> MetricContribution? {
+  // 5. Heart Rate Reserve (4%)
+  func calculateHeartRateReserveContribution(actualAge: Double) async -> MetricContribution? {
+    // Get max HR from last 7 days
     let maxHRSamples = await healthStoreFetcher.fetchCollatedQuantity(
       for: .heartRate,
       unit: .bpm(),
@@ -509,19 +510,29 @@ private extension BiologicalAgeCalculator {
       dateRange: .trailingDaysFromNow(7)
     )
 
+    // Get average resting HR from last 7 days
+    guard let avgRHR = await healthStoreFetcher.fetchDailyAverage(
+      for: .restingHeartRate,
+      unit: .bpm(),
+      dateRange: .trailingDaysFromNow(7)
+    )?.doubleValue(for: .bpm()) else { return nil }
+
     guard maxHRSamples.isNotEmpty else { return nil }
 
     let highestMaxHR = maxHRSamples.map { $0.quantity.doubleValue(for: .bpm()) }.max() ?? 0
     guard highestMaxHR > 0 else { return nil }
 
-    // Formula: equivalent_age = (208 - maxHR) / 0.7
-    let equivalentAge = max(20, min(65, (208 - highestMaxHR) / 0.7))
+    let hrr = highestMaxHR - avgRHR
+    guard hrr > 0 else { return nil }
+
+    let dataPoints = healthGoalProvider.heartRateReserveAgeDataPoints()
+    let equivalentAge = interpolateEquivalentAge(value: hrr, dataPoints: dataPoints, isHigherBetter: true)
     let ageDelta = equivalentAge - actualAge
     let weight = 0.04
 
     return MetricContribution(
-      metric: .maxHeartRate,
-      rawValue: highestMaxHR,
+      metric: .heartRateReserve,
+      rawValue: hrr,
       equivalentAge: equivalentAge,
       ageDelta: ageDelta,
       weight: weight,
@@ -1052,7 +1063,7 @@ public enum BiologicalAgeMetric: String, Sendable, CaseIterable, Codable {
   case restingHeartRate = "Resting Heart Rate"
   case heartRateRecovery = "Heart Rate Recovery"
   case hrvTrend = "HRV Trend"
-  case maxHeartRate = "Max Heart Rate"
+  case heartRateReserve = "Heart Rate Reserve"
   case zoneMinutes = "Zone Minutes"
   case activityLevel = "Activity Level"
   case walkingSpeed = "Walking Speed"
@@ -1074,7 +1085,7 @@ public enum BiologicalAgeMetric: String, Sendable, CaseIterable, Codable {
     case .restingHeartRate: 0.06
     case .heartRateRecovery: 0.06
     case .hrvTrend: 0.06
-    case .maxHeartRate: 0.04
+    case .heartRateReserve: 0.04
     case .zoneMinutes: 0.08
     case .activityLevel: 0.06
     case .walkingSpeed: 0.03
@@ -1094,7 +1105,7 @@ public enum BiologicalAgeMetric: String, Sendable, CaseIterable, Codable {
 
   public var category: BiologicalAgeCategory {
     switch self {
-    case .vo2Max, .restingHeartRate, .heartRateRecovery, .hrvTrend, .maxHeartRate:
+    case .vo2Max, .restingHeartRate, .heartRateRecovery, .hrvTrend, .heartRateReserve:
       return .cardiorespiratory
     case .zoneMinutes, .activityLevel, .walkingSpeed, .stairClimbSpeed:
       return .activity

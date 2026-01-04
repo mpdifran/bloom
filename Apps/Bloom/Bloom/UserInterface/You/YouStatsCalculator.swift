@@ -23,7 +23,7 @@ final actor YouStatsCalculator {
   @AsyncStreamable var sleepRespiratoryRateChartData: [RespiratoryRateDataPoint]?
   @AsyncStreamable var wristTempData: WristTempData?
   @AsyncStreamable var weeklyStepsChartData: WeeklyStepsChartData?
-  @AsyncStreamable var maxHeartRateChartData: MaxHeartRateChartData?
+  @AsyncStreamable var heartRateReserveChartData: HeartRateReserveChartData?
   @AsyncStreamable var vo2MaxTrendData: VO2MaxTrendData?
   @AsyncStreamable var heartRateRecoveryData: HeartRateRecoveryData?
   @AsyncStreamable var bodyWeightChartData: BodyWeightChartData?
@@ -60,7 +60,7 @@ final actor YouStatsCalculator {
     wristTempData = calculateWristTempData(from: sleepAnalyses)
 
     weeklyStepsChartData = await calculateWeeklyStepsChartData()
-    maxHeartRateChartData = await calculateMaxHeartRateChartData()
+    heartRateReserveChartData = await calculateHeartRateReserveChartData()
     vo2MaxTrendData = await calculateVO2MaxTrendData()
     heartRateRecoveryData = await calculateHeartRateRecoveryData()
     bodyWeightChartData = await calculateBodyWeightChartData()
@@ -377,12 +377,12 @@ private extension YouStatsCalculator {
     )
   }
 
-  func calculateMaxHeartRateChartData() async -> MaxHeartRateChartData? {
+  func calculateHeartRateReserveChartData() async -> HeartRateReserveChartData? {
     let calendar = Calendar.current
     let now = Date()
 
-    // Get the last 7 days
-    guard let startDate = calendar.date(byAdding: .day, value: -6, to: calendar.startOfDay(for: now)) else {
+    // Need 14 days of data to calculate rolling 7-day values for each of the last 7 days
+    guard let startDate = calendar.date(byAdding: .day, value: -13, to: calendar.startOfDay(for: now)) else {
       return nil
     }
 
@@ -397,31 +397,66 @@ private extension YouStatsCalculator {
       dateRange: dateRange
     )
 
-    guard maxHRSamples.isNotEmpty else { return nil }
+    // Fetch daily average resting heart rates
+    let restingHRSamples = await healthStoreFetcher.fetchCollatedQuantity(
+      for: .restingHeartRate,
+      unit: .bpm(),
+      interval: DateComponents(day: 1),
+      options: .discreteAverage,
+      dateRange: dateRange
+    )
 
-    // Build data points
-    var dataPoints = [MaxHeartRateDataPoint]()
-    for dayOffset in 0..<7 {
-      guard let dayDate = calendar.date(byAdding: .day, value: dayOffset, to: startDate) else { continue }
+    guard maxHRSamples.isNotEmpty, restingHRSamples.isNotEmpty else { return nil }
 
-      if let sample = maxHRSamples.first(where: { calendar.isDate($0.date, inSameDayAs: dayDate) }) {
-        let maxHR = sample.quantity.doubleValue(for: .bpm())
-        dataPoints.append(MaxHeartRateDataPoint(
-          date: calendar.startOfDay(for: dayDate),
-          maxHeartRate: maxHR,
-          dayIndex: dayOffset
-        ))
+    // Build data points with rolling 7-day calculations
+    var dataPoints = [HeartRateReserveDataPoint]()
+
+    // For each of the last 7 days (dayIndex 0 = 6 days ago, dayIndex 6 = today)
+    for dayIndex in 0..<7 {
+      // Calculate the target day (6 days ago to today)
+      guard let targetDay = calendar.date(byAdding: .day, value: dayIndex - 6, to: calendar.startOfDay(for: now)) else {
+        continue
       }
+
+      // Calculate rolling 7-day window ending on targetDay
+      guard let windowStart = calendar.date(byAdding: .day, value: -6, to: targetDay) else { continue }
+
+      // Get max HR samples in the 7-day window
+      let windowMaxHRSamples = maxHRSamples.filter { sample in
+        sample.date >= windowStart && sample.date <= targetDay
+      }
+
+      // Get resting HR samples in the 7-day window
+      let windowRestingHRSamples = restingHRSamples.filter { sample in
+        sample.date >= windowStart && sample.date <= targetDay
+      }
+
+      // Calculate rolling 7-day max (highest max HR in the window)
+      guard let rollingMaxHR = windowMaxHRSamples
+        .map({ $0.quantity.doubleValue(for: .bpm()) })
+        .max() else { continue }
+
+      // Calculate rolling 7-day average resting HR
+      let restingHRValues = windowRestingHRSamples.map { $0.quantity.doubleValue(for: .bpm()) }
+      guard restingHRValues.isNotEmpty else { continue }
+      let rollingAvgRestingHR = restingHRValues.reduce(0, +) / Double(restingHRValues.count)
+
+      dataPoints.append(HeartRateReserveDataPoint(
+        date: calendar.startOfDay(for: targetDay),
+        maxHeartRate: rollingMaxHR,
+        restingHeartRate: rollingAvgRestingHR,
+        dayIndex: dayIndex
+      ))
     }
 
     guard dataPoints.isNotEmpty else { return nil }
 
-    // Calculate average
-    let avgMaxHR = Int(dataPoints.map(\.maxHeartRate).reduce(0, +) / Double(dataPoints.count))
+    // Get current HRR from the latest data point
+    let currentHRR = Int(dataPoints.last?.heartRateReserve ?? 0)
 
-    return MaxHeartRateChartData(
+    return HeartRateReserveChartData(
       dataPoints: dataPoints,
-      averageMaxHR: avgMaxHR
+      currentHRR: currentHRR
     )
   }
 
@@ -837,16 +872,19 @@ struct StepsDataPoint: Identifiable, Sendable {
   let series: String  // "This Week" or "Last Week"
 }
 
-struct MaxHeartRateChartData: Sendable {
-  let dataPoints: [MaxHeartRateDataPoint]
-  let averageMaxHR: Int
+struct HeartRateReserveChartData: Sendable {
+  let dataPoints: [HeartRateReserveDataPoint]
+  let currentHRR: Int  // Latest day's HRR value
 }
 
-struct MaxHeartRateDataPoint: Identifiable, Sendable {
+struct HeartRateReserveDataPoint: Identifiable, Sendable {
   var id: Date { date }
   let date: Date
-  let maxHeartRate: Double
-  let dayIndex: Int  // 0-6 for the 7 days
+  let maxHeartRate: Double       // Rolling 7-day max
+  let restingHeartRate: Double   // Rolling 7-day avg resting
+  let dayIndex: Int              // 0-6 for the 7 days
+
+  var heartRateReserve: Double { maxHeartRate - restingHeartRate }
 }
 
 struct VO2MaxTrendData: Sendable {
