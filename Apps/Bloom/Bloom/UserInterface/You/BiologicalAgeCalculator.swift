@@ -150,12 +150,7 @@ final actor BiologicalAgeCalculator {
     )
 
     let ageDiff = clampedAge - Double(userAge)
-    TelemetryDeck.signal(
-      "Bio Age Calculated",
-      parameters: [
-        "ageDiff": ageDiff.format(using: .oneDecimalPlace)
-      ]
-    )
+    TelemetryDeck.signal("Bio Age Calculated", floatValue: ageDiff)
   }
 
   private func getUserAge() -> Int {
