@@ -9,11 +9,8 @@ import SwiftUI
 import CoreHealth
 
 struct YouHeaderView: View {
-  @StateObject private var entitlementController = EntitlementController.shared
   @ObservedObject private var healthManager = HealthManager.shared
   @State private var biologicalAgeViewModel = BiologicalAgeViewModel.shared
-
-  @State private var presentedSheet: AnyView?
 
   var body: some View {
     HStack {
@@ -35,30 +32,22 @@ struct YouHeaderView: View {
           }
           .buttonStyle(.plain)
 
-          if let lastCalculated = biologicalAgeViewModel.biologicalAgeResult?.lastCalculated {
-            Text("Calculated \(lastCalculated, format: .relative(presentation: .named))")
+          if let result = biologicalAgeViewModel.biologicalAgeResult {
+            Text("Calculated \(result.lastCalculated, format: .relative(presentation: .named))")
               .font(.caption)
               .foregroundStyle(.secondary)
+
+            Text(result.confidence.displayName)
+              .font(.caption)
+              .foregroundStyle(result.confidence.color)
           }
         } else {
           Text("Age: \(healthManager.age())")
-        }
-
-        if entitlementController.hasBloomPro != true {
-          Button {
-            EntitledAction(presentedSheet: $presentedSheet, focus: .biologicalAge) {
-              // Do nothing
-            }
-          } label: {
-            Text("Calculate Your Bio Age")
-          }
-          .buttonStyle(.secondary)
         }
       }
 
       Spacer(minLength: 0)
     }
-    .sheet($presentedSheet)
   }
 }
 

@@ -6,42 +6,26 @@
 //
 
 import SwiftUI
-import BloomUI
 import CoreHealth
 import DataContainer
 import SFSafeSymbols
 
 struct YouSettingsView: View {
 
-  @State private var navigationPushView: AnyView?
   @State private var draggedSection: VitalModel.Kind?
   @YouSettingsStorage("YouView.settings") private var youSettings = YouSettings()
-
-  @StateObject private var entitlementController = EntitlementController.shared
-
-  @ObservedObject private var aiFeatureSettings = AIFeatureSettings.shared
-  @ObservedObject private var aiDataSharingSettings = AIDataSharingSettings.shared
 
   var body: some View {
     NavigationStack {
       BloomScrollView(showsChatBar: false) {
-        if entitlementController.hasBloomPro == true {
-          featureSection
-        }
         sectionOrderSection
       }
       .navigationTitle("Preferences")
       .navigationBarTitleDisplayMode(.inline)
-      .navigationDestination($navigationPushView)
       .presentationDragIndicator(.visible)
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
           DismissButton()
-        }
-      }
-      .onChange(of: aiFeatureSettings.biologicalAgeEnabled) { _, _ in
-        Task {
-          await ConsentManager.shared.syncGranularConsentSilently()
         }
       }
     }
@@ -90,22 +74,6 @@ private extension YouSettingsView {
         }
       }
       .animation(.easeInOut(duration: 0.2), value: draggedSection)
-    }
-  }
-
-  var featureSection: some View {
-    VStack {
-      SectionTitleView("Biological Age")
-        .padding(.horizontal)
-
-      BiologicalAgePrivacyAIFeatureOptInCell(extraContext: "Bud will use the Personal Data Categories enabled below to calculate your biological age.")
-        .cardContainer()
-
-      AIDataShareCell()
-        .cardContainer()
-        .onTapGesture {
-          navigationPushView = AIDataSharingView().asAny
-        }
     }
   }
 

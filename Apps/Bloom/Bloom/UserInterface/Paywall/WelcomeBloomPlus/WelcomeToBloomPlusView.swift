@@ -105,9 +105,6 @@ private extension WelcomeToBloomPlusView {
 
     ChatPrivacyAIFeatureOptInCell(extraContext: "Bud uses the Personal Data you turn on to answer your health and wellness questions.")
       .cardContainer()
-
-    BiologicalAgePrivacyAIFeatureOptInCell(extraContext: "Bud uses the Personal Data you turn on to calculate your biological age.")
-      .cardContainer()
   }
 
   @ViewBuilder

@@ -180,9 +180,6 @@ private extension SettingsView {
       ChatPrivacyAIFeatureOptInCell()
         .cardContainer()
 
-      BiologicalAgePrivacyAIFeatureOptInCell()
-        .cardContainer()
-
       AIDataShareCell()
         .cardContainer()
         .onTapGesture {

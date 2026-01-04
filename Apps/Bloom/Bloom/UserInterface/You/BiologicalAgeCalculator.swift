@@ -10,6 +10,7 @@ import CoreHealth
 import BloomFoundation
 import HealthKit
 import DataContainer
+import SwiftUI
 
 /// Calculates biological age based on 19 health metrics
 /// Runs every 6 calendar days with 70% previous + 30% new blending
@@ -974,6 +975,39 @@ private extension BiologicalAgeCalculator {
 
 // MARK: - Supporting Types
 
+public enum BiologicalAgeConfidence: String, Sendable, Codable {
+  case high
+  case moderate
+  case low
+
+  public var displayName: String {
+    switch self {
+    case .high: "High Confidence"
+    case .moderate: "Moderate Confidence"
+    case .low: "Low Confidence"
+    }
+  }
+
+  public var description: String {
+    switch self {
+    case .high:
+      "Your biological age is calculated using most of your available health metrics."
+    case .moderate:
+      "Your biological age is based on a moderate amount of health data. Adding more metrics will improve accuracy."
+    case .low:
+      "Limited health data is available. Track more health metrics to get a more accurate biological age."
+    }
+  }
+
+  public var color: Color {
+    switch self {
+    case .high: .mutedGreen
+    case .moderate: .mutedYellow
+    case .low: .secondary
+    }
+  }
+}
+
 public struct BiologicalAgeResult: Sendable {
   public let biologicalAge: Double
   public let actualAge: Double
@@ -986,6 +1020,20 @@ public struct BiologicalAgeResult: Sendable {
 
   public var isYounger: Bool {
     biologicalAge < actualAge
+  }
+
+  /// The percentage of available health metrics by weight (0-100)
+  public var availableWeightPercentage: Double {
+    let totalWeight = metricContributions?.reduce(0.0) { $0 + $1.weight } ?? 0
+    return totalWeight * 100
+  }
+
+  /// The confidence level based on available metric weight coverage
+  public var confidence: BiologicalAgeConfidence {
+    let percentage = availableWeightPercentage
+    if percentage > 80 { return .high }
+    if percentage > 50 { return .moderate }
+    return .low
   }
 }
 

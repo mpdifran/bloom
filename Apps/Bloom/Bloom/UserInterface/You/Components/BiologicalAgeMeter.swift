@@ -89,18 +89,15 @@ struct BiologicalAgeMeter: View {
               .font(.system(size: size * 0.22, weight: .heavy, design: .rounded))
               .contentTransition(.numericText(value: biologicalAge ?? 0))
 
-            Text(ageDifferenceText)
-              .font(.system(size: size * 0.07, weight: .heavy, design: .rounded))
-              .foregroundColor(progressColor)
-              .padding(4)
-              .padding(.horizontal, 8)
-              .background {
-                RoundedRectangle(cornerRadius: 8)
-                  .fill(.fill)
-              }
+            ageDifferenceBadge(size: size)
           }
         case .profileImage:
           UserProfilePhotoView(dimension: size * 0.5)
+            .overlay {
+              ageDifferenceBadge(size: size)
+                .zStackAlignment(.bottom)
+                .offset(y: size * 0.05)
+            }
         }
       }
       .frame(width: geometry.size.width, height: geometry.size.height)
@@ -111,6 +108,19 @@ struct BiologicalAgeMeter: View {
 }
 
 private extension BiologicalAgeMeter {
+
+  func ageDifferenceBadge(size: CGFloat) -> some View {
+    Text(ageDifferenceText)
+      .font(.system(size: size * 0.07, weight: .black, design: .rounded))
+      .foregroundColor(.white)
+      .contentTransition(.numericText(value: ageDifference))
+      .padding(size * 0.02)
+      .padding(.horizontal, size * 0.04)
+      .background {
+        Capsule()
+          .fill(ageDifferenceBackgroundColor)
+      }
+  }
 
   var bioAgeDescription: String {
     if let biologicalAge {
@@ -150,6 +160,16 @@ private extension BiologicalAgeMeter {
   private var progressColor: Color {
     if abs(ageDifference) < 0.5 {
       return .clear
+    } else if ageDifference < 0 {
+      return .mutedGreen
+    } else {
+      return .mutedPink
+    }
+  }
+
+  private var ageDifferenceBackgroundColor: Color {
+    if abs(ageDifference) < 0.5 {
+      return .mutedYellow
     } else if ageDifference < 0 {
       return .mutedGreen
     } else {

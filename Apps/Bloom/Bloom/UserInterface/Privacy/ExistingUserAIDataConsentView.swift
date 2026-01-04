@@ -101,9 +101,6 @@ private extension ExistingUserAIDataConsentView {
     ChatPrivacyAIFeatureOptInCell(extraContext: "Bud can reference the Personal Data Categories enabled below in chats.")
       .cardContainer()
 
-    BiologicalAgePrivacyAIFeatureOptInCell(extraContext: "Bud will use the enabled Personal Data Categories to calculate your biological age.")
-      .cardContainer()
-
 //    DisclosureGroup(isExpanded: $isAISectionExpanded) {
 //      TodayInsightsPrivacyAIFeatureOptInCell(extraContext: "Bud will use the Personal Data Categories enabled below.")
 //        .padding(.vertical)
@@ -304,13 +301,11 @@ private extension ExistingUserAIDataConsentView {
     Binding(
       get: {
         aiFeatureSettings.todayInsightsEnabled &&
-        aiFeatureSettings.chatEnabled &&
-        aiFeatureSettings.biologicalAgeEnabled
+        aiFeatureSettings.chatEnabled
       },
       set: { newValue in
         aiFeatureSettings.todayInsightsEnabled = newValue
         aiFeatureSettings.chatEnabled = newValue
-        aiFeatureSettings.biologicalAgeEnabled = newValue
       }
     )
   }

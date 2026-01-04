@@ -56,7 +56,6 @@ struct YouView: View {
       }
       .navigationDestination($presentedNavigationDestination)
       .sheet($presentedSheet)
-      .animation(.default, value: aiFeatureSettings.biologicalAgeEnabled)
       .toolbar {
         SettingsProfileViewToolbarButton()
         ToolbarItem(placement: .cancellationAction) {

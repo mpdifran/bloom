@@ -15,7 +15,6 @@ extension BloomPlusPaywall {
   enum Focus {
     case standard
     case todayInsights
-    case biologicalAge
   }
 }
 
@@ -70,8 +69,6 @@ struct BloomPlusPaywall: View {
             standardContent
           case .todayInsights:
             todayInsightFocusedContent
-          case .biologicalAge:
-            biologicalAgeFocusedContent
           }
         }
         .background {
@@ -187,39 +184,6 @@ private extension BloomPlusPaywall {
       .padding()
     }
   }
-
-  var biologicalAgeFocusedContent: some View {
-    VStack {
-      VStack(spacing: 30) {
-        BloomPlusTryBloomHeaderView(canTryForFree: selectedPackage?.hasFreeIntroductoryOffer == true)
-          .padding(.top)
-          .horizontallyCentered()
-          .padding(.horizontal)
-
-        BloomPlusBioAgeMeterView()
-          .padding(.horizontal)
-
-        if let package = selectedPackage, package.hasFreeIntroductoryOffer {
-          BloomPlusFreeTrialTimelineView(package: package)
-            .padding(.horizontal)
-        }
-
-        BloomPlusTodayCardShowcaseCell()
-        BloomPlusFeaturesListView()
-      }
-
-      VStack(spacing: 30) {
-        BloomPlusUserReviewListView()
-        BloomPlusFAQView()
-        BloomPlusLegalSectionView(restorePurchases: {
-          ThrowingUserTask(error: $error) {
-            try await viewModel.restorePurchases()
-          }
-        })
-      }
-      .padding()
-    }
-  }
 }
 
 private extension BloomPlusPaywall {
@@ -303,11 +267,5 @@ private extension BloomPlusPaywall {
 #Preview("Today Insight Focused") {
   PreviewEnvironment {
     BloomPlusPaywall(focus: .todayInsights)
-  }
-}
-
-#Preview("Biological Age Focused") {
-  PreviewEnvironment {
-    BloomPlusPaywall(focus: .biologicalAge)
   }
 }

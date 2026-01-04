@@ -51,6 +51,9 @@ private extension BiologicalAgeDetailsView {
       // Age Summary
       ageSummaryCard(result: result)
 
+      // Confidence Section
+      confidenceCard(result: result)
+
       // Positive Factors (metrics making you younger)
       if let contributions = result.metricContributions {
         let positiveFactors = contributions
@@ -139,22 +142,36 @@ private extension BiologicalAgeDetailsView {
             .fontDesign(.rounded)
         }
       }
-
-      Divider()
-
-      HStack {
-        Text(result.isYounger ? "You're younger than your age!" : "Room for improvement")
-
-        Spacer()
-
-        let delta = result.ageDelta
-        Text(delta >= 0 ? "+\(delta.format(using: .oneDecimalPlace)) years" : "-\(delta.format(using: .oneDecimalPlace)) years")
-          .bold()
-      }
-      .font(.headline)
-      .foregroundStyle(result.isYounger ? .mutedGreen : .mutedPink)
     }
     .cardContainer()
+  }
+
+  func confidenceCard(result: BiologicalAgeResult) -> some View {
+    HStack {
+      Image(systemSymbol: .checkmarkSealFill)
+        .font(.title2)
+
+      VStack(alignment: .leading, spacing: 2) {
+        Text(result.confidence.displayName)
+          .font(.title3)
+          .fontDesign(.rounded)
+
+        let metricsCount = result.metricContributions?.count ?? 0
+        Text("\(metricsCount) of 19 metrics considered")
+          .font(.subheadline)
+          .bold()
+          .foregroundStyle(.secondary)
+      }
+
+      Spacer(minLength: 0)
+
+      Text("\(result.availableWeightPercentage.format(using: .noDecimalPlaces))%")
+        .font(.title)
+        .fontWeight(.heavy)
+        .fontDesign(.rounded)
+    }
+    .foregroundStyle(.white)
+    .cardContainer(fill: result.confidence.color)
   }
 
   func historyChart(actualAge: Double) -> some View {
@@ -235,10 +252,10 @@ private extension BiologicalAgeDetailsView {
 
   var emptyView: some View {
     BloomScrollView {
-      VStack(spacing: 20) {
-        Image(systemSymbol: .heartTextSquare)
-          .font(.system(size: 60))
-          .foregroundColor(.secondary.opacity(0.5))
+      VStack(spacing: 10) {
+        BiologicalAgeMeter(biologicalAge: nil)
+          .frame(width: 130)
+          .saturation(0)
 
         Text("No Biological Age Data")
           .font(.title2)
@@ -264,9 +281,9 @@ struct MetricContributionCell: View {
 
   private var symbol: SFSymbol {
     if let isPositive {
-      return isPositive ? .minusCircleFill : .plusCircleFill
+      return isPositive ? .arrowDownCircleFill : .arrowUpCircleFill
     }
-    return .checkmarkCircleFill
+    return .minusCircleFill
   }
 
   private var tintColor: Color {
@@ -289,7 +306,7 @@ struct MetricContributionCell: View {
     HStack {
       Image(systemSymbol: symbol)
         .font(.title2)
-        .foregroundStyle(tintColor)
+        .foregroundStyle(.white, tintColor)
 
       VStack(alignment: .leading, spacing: 2) {
         Text(contribution.metric.rawValue)
@@ -305,8 +322,8 @@ struct MetricContributionCell: View {
 
       if isPositive != nil {
         Text(contributionText)
-          .font(.subheadline)
-          .bold()
+          .font(.headline)
+          .fontWeight(.heavy)
           .fontDesign(.rounded)
           .foregroundStyle(tintColor)
       }

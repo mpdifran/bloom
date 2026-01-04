@@ -65,7 +65,7 @@ extension ConsentManager {
       healthDataConsent: true,
       chatWithBudConsent: aiFeatures.chatEnabled,
       todayInsightsConsent: aiFeatures.todayInsightsEnabled,
-      biologicalAgeConsent: aiFeatures.biologicalAgeEnabled,
+      biologicalAgeConsent: nil,
       physicalActivityConsent: aiDataSharing.enabledCategories.contains(.physicalActivity),
       bodyMetricsConsent: aiDataSharing.enabledCategories.contains(.bodyMetrics),
       mentalWellnessConsent: aiDataSharing.enabledCategories.contains(.mentalWellness),
@@ -93,7 +93,7 @@ extension ConsentManager {
       healthDataConsent: true,
       chatWithBudConsent: aiFeatures.chatEnabled,
       todayInsightsConsent: aiFeatures.todayInsightsEnabled,
-      biologicalAgeConsent: aiFeatures.biologicalAgeEnabled,
+      biologicalAgeConsent: nil,
       physicalActivityConsent: aiDataSharing.enabledCategories.contains(.physicalActivity),
       bodyMetricsConsent: aiDataSharing.enabledCategories.contains(.bodyMetrics),
       mentalWellnessConsent: aiDataSharing.enabledCategories.contains(.mentalWellness),
@@ -143,8 +143,7 @@ extension ConsentManager {
 
       // Check if any feature consent fields are nil (unknown)
       let hasUnknownFeatures = response.chatWithBudConsent == nil ||
-                               response.todayInsightsConsent == nil ||
-                               response.biologicalAgeConsent == nil
+                               response.todayInsightsConsent == nil
       // Check if any health data category consent fields are nil (unknown)
       let hasUnknownCategories = response.physicalActivityConsent == nil ||
                                   response.bodyMetricsConsent == nil ||

@@ -6,11 +6,9 @@
 //
 
 import Foundation
-import Combine
 import CoreHealth
 import BloomFoundation
 import TelemetryDeck
-import BloomUI
 
 @MainActor @Observable
 final class BiologicalAgeViewModel {
@@ -19,12 +17,9 @@ final class BiologicalAgeViewModel {
   private(set) var biologicalAgeResult: BiologicalAgeResult?
   var isCalculatingAge = false
 
-  private var entitlementCancellable: AnyCancellable?
-  private var hadBloomPro = false
   private var observationTask: Task<Void, Never>?
 
   private init() {
-    observeEntitlementChanges()
     startObservingBiologicalAge()
     loadLatestResult()
   }
@@ -33,25 +28,6 @@ final class BiologicalAgeViewModel {
     Task {
       await BiologicalAgeCalculator.shared.loadLatestResult()
     }
-  }
-
-  private func observeEntitlementChanges() {
-    entitlementCancellable = EntitlementController.shared.$hasBloomPro
-      .dropFirst()
-      .removeDuplicates()
-      .sink { [weak self] newValue in
-        guard let self else { return }
-
-        let wasBloomPro = hadBloomPro
-        let isBloomPro = newValue == true
-        hadBloomPro = isBloomPro
-
-        if !wasBloomPro && isBloomPro {
-          Task {
-            await self.calculateBiologicalAgeIfNeeded()
-          }
-        }
-      }
   }
 
   private func startObservingBiologicalAge() {
@@ -73,8 +49,6 @@ extension BiologicalAgeViewModel {
 
   func calculateBiologicalAgeIfNeeded() async {
     guard !isCalculatingAge else { return }
-    guard EntitlementController.shared.hasBloomPro == true else { return }
-    guard AIFeatureSettings.shared.biologicalAgeEnabled else { return }
 
     isCalculatingAge = true
     defer { isCalculatingAge = false }
@@ -93,8 +67,6 @@ extension BiologicalAgeViewModel {
 
   func forceCalculateBiologicalAge() async {
     guard !isCalculatingAge else { return }
-    guard EntitlementController.shared.hasBloomPro == true else { return }
-    guard AIFeatureSettings.shared.biologicalAgeEnabled else { return }
 
     isCalculatingAge = true
     defer { isCalculatingAge = false }

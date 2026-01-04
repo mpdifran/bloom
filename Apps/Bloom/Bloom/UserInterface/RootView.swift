@@ -186,8 +186,6 @@ private extension RootView {
       switch focusParam {
       case "todayInsights":
         focus = .todayInsights
-      case "biologicalAge":
-        focus = .biologicalAge
       default:
         focus = .standard
       }
