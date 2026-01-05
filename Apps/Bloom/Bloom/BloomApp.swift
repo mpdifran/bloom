@@ -79,8 +79,10 @@ struct BloomApp: App {
         .onForegroundTask {
           await TodayInsightsManager.shared.refreshContentIfNeeded()
         }
-        .onForegroundTask {
-          await BiologicalAgeViewModel.shared.calculateBiologicalAgeIfNeeded()
+        .onForeground {
+          Task {
+            await BiologicalAgeViewModel.shared.calculateBiologicalAgeIfNeeded()
+          }
         }
         .onForegroundTask {
           await RemindersManager.shared.rescheduleAllReminders()

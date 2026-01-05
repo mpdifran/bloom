@@ -310,13 +310,17 @@ struct MetricContributionCell: View {
 
       Spacer(minLength: 0)
 
-      if isPositive != nil {
-        Text(contributionText)
-          .font(.headline)
-          .fontWeight(.heavy)
-          .fontDesign(.rounded)
-          .foregroundStyle(tintColor)
+      Group {
+        if isPositive != nil {
+          Text(contributionText)
+        } else {
+          Text("0 years")
+        }
       }
+      .font(.headline)
+      .fontWeight(.heavy)
+      .fontDesign(.rounded)
+      .foregroundStyle(tintColor)
     }
     .fixedSize(horizontal: false, vertical: true)
     .cardContainer()
@@ -331,7 +335,7 @@ struct MissingMetricCell: View {
     HStack {
       Image(systemSymbol: .questionmarkCircleFill)
         .font(.title2)
-        .foregroundStyle(.secondary, .quaternary)
+        .foregroundStyle(.tint, .tint.tertiary)
 
       VStack(alignment: .leading, spacing: 2) {
         Text(metric.rawValue)
@@ -344,9 +348,16 @@ struct MissingMetricCell: View {
       }
 
       Spacer(minLength: 0)
+
+      Text("--")
+        .font(.headline)
+        .fontWeight(.heavy)
+        .fontDesign(.rounded)
+        .foregroundStyle(.tint)
     }
     .fixedSize(horizontal: false, vertical: true)
     .cardContainer()
+    .tint(.gray)
   }
 }
 
@@ -354,6 +365,14 @@ struct MissingMetricCell: View {
   PreviewEnvironment {
     NavigationStack {
       BiologicalAgeDetailsView()
+    }
+  }
+}
+
+#Preview("Missing Cell") {
+  PreviewEnvironment {
+    BloomScrollView {
+      MissingMetricCell(metric: .activityLevel)
     }
   }
 }
