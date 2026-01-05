@@ -100,36 +100,6 @@ private extension ExistingUserAIDataConsentView {
 
     ChatPrivacyAIFeatureOptInCell(extraContext: "Bud can reference the Personal Data Categories enabled below in chats.")
       .cardContainer()
-
-//    DisclosureGroup(isExpanded: $isAISectionExpanded) {
-//      TodayInsightsPrivacyAIFeatureOptInCell(extraContext: "Bud will use the Personal Data Categories enabled below.")
-//        .padding(.vertical)
-//
-//      Divider()
-//
-//      ChatPrivacyAIFeatureOptInCell(extraContext: "Bud can reference the Personal Data Categories enabled below in chats.")
-//        .padding(.vertical)
-//
-//      Divider()
-//
-//      BiologicalAgePrivacyAIFeatureOptInCell(extraContext: "Bud will use the enabled Personal Data Categories to calculate your biological age.")
-//        .padding(.vertical)
-//    } label: {
-//      DisclosureOverallToggleView(
-//        icon: .starFill,
-//        title: "Bloom Plus Features",
-//        subtitle: "Enable AI powered features like Today Inisghts, Chat with Bud, and Biological Age, which use the data categories below.",
-//        isExpanded: isAISectionExpanded,
-//        isEnabled: isAISectionEnabledBinding
-//      )
-//      .tint(.mutedYellow)
-//    }
-//    .disclosureGroupStyle(
-//      PrivacySectionDisclosureGroupStyle(
-//        expandButtonTitle: "Choose Features Individually",
-//        isExpanded: $isAISectionExpanded
-//      )
-//    )
   }
 
   @ViewBuilder
