@@ -17,6 +17,8 @@ struct BiologicalAgeDetailsView: View {
   @State private var biologicalAgeViewModel = BiologicalAgeViewModel.shared
   @State private var biologicalAgeRecords: [BiologicalAgeRecordDTO] = []
 
+  private let birthYear = HealthDefaults.shared.getBirthYear()
+
   var body: some View {
     Group {
       if let result = biologicalAgeViewModel.biologicalAgeResult {
@@ -48,11 +50,13 @@ private extension BiologicalAgeDetailsView {
         .horizontallyCentered()
         .padding(.bottom)
 
-      // Age Summary
-      ageSummaryCard(result: result)
-
       // Confidence Section
       BioAgeConfidenceCard(result: result)
+
+      // Chart
+      if biologicalAgeRecords.count >= 2 {
+        historyChart(actualAge: result.actualAge)
+      }
 
       // Positive Factors (metrics making you younger)
       if let contributions = result.metricContributions {
@@ -115,63 +119,23 @@ private extension BiologicalAgeDetailsView {
     }
   }
 
-  func ageSummaryCard(result: BiologicalAgeResult) -> some View {
-    VStack(spacing: 12) {
-      // History Chart (only show if 2+ data points)
-      if biologicalAgeRecords.count >= 2 {
-        historyChart(actualAge: result.actualAge)
-      }
-
-      HStack {
-        VStack(alignment: .leading) {
-          HStack {
-            Circle()
-              .fill(.text)
-              .frame(width: 8, height: 8)
-            Text("Actual Age")
-              .font(.subheadline)
-              .foregroundStyle(.secondary)
-          }
-          Text("\(Int(result.actualAge))")
-            .font(.largeTitle)
-            .bold()
-            .fontDesign(.rounded)
-        }
-
-        Spacer()
-
-        VStack(alignment: .trailing) {
-          HStack {
-            Circle()
-              .fill(.mutedGreen)
-              .frame(width: 8, height: 8)
-            Text("Biological Age")
-              .font(.subheadline)
-              .foregroundStyle(.secondary)
-          }
-          Text(result.biologicalAge.format(using: .oneDecimalPlace))
-            .font(.largeTitle)
-            .bold()
-            .fontDesign(.rounded)
-        }
-      }
-    }
-    .cardContainer()
-  }
-
   func historyChart(actualAge: Double) -> some View {
     VStack(alignment: .leading) {
+      Text("Bio Age History")
+        .font(.headline)
+        .bold()
+        .fontDesign(.rounded)
       Chart {
         ForEach(biologicalAgeRecords) { record in
           // Actual age line
           LineMark(
             x: .value("Date", record.date, unit: .day),
-            y: .value("Age", record.actualAge),
+            y: .value("Age", fractionalAge(for: record.date)),
             series: .value("Type", "Actual")
           )
           .interpolationMethod(.catmullRom)
           .foregroundStyle(.text)
-          .lineStyle(StrokeStyle(lineWidth: 2))
+          .lineStyle(StrokeStyle(lineWidth: 6, lineCap: .round))
 
           // Bio age line
           LineMark(
@@ -181,7 +145,7 @@ private extension BiologicalAgeDetailsView {
           )
           .interpolationMethod(.catmullRom)
           .foregroundStyle(.mutedGreen)
-          .lineStyle(StrokeStyle(lineWidth: 2))
+          .lineStyle(StrokeStyle(lineWidth: 6, lineCap: .round))
         }
 
         // Single end-point for biological age (border effect like steps graph)
@@ -204,7 +168,7 @@ private extension BiologicalAgeDetailsView {
         }
       }
       .chartYScale(domain: chartYMin...chartYMax)
-      .frame(height: 120)
+      .frame(height: 150)
       .chartXAxis {
         AxisMarks(values: .stride(by: .weekOfYear)) { _ in
           AxisGridLine()
@@ -213,7 +177,7 @@ private extension BiologicalAgeDetailsView {
         }
       }
       .chartYAxis {
-        AxisMarks(position: .trailing, values: .automatic) { value in
+        AxisMarks(position: .trailing, values: .stride(by: 5)) { value in
           AxisGridLine()
           AxisTick()
           if let doubleValue = value.as(Double.self) {
@@ -223,21 +187,58 @@ private extension BiologicalAgeDetailsView {
           }
         }
       }
+
+      HStack(spacing: 16) {
+        HStack {
+          Circle()
+            .fill(.text)
+            .frame(width: 8, height: 8)
+          Text("Actual Age")
+            .font(.subheadline)
+            .foregroundStyle(.secondary)
+        }
+
+        HStack {
+          Circle()
+            .fill(.mutedGreen)
+            .frame(width: 8, height: 8)
+          Text("Biological Age")
+            .font(.subheadline)
+            .foregroundStyle(.secondary)
+        }
+      }
     }
+    .cardContainer()
   }
 
   private var chartYMin: Double {
     let minBioAge = biologicalAgeRecords.map(\.biologicalAge).min() ?? 0
-    let minActualAge = biologicalAgeRecords.map(\.actualAge).min() ?? 0
+    let minActualAge = biologicalAgeRecords.map { fractionalAge(for: $0.date) }.min() ?? 0
     let minValue = min(minBioAge, minActualAge)
     return max(0, minValue - 5)
   }
 
   private var chartYMax: Double {
     let maxBioAge = biologicalAgeRecords.map(\.biologicalAge).max() ?? 100
-    let maxActualAge = biologicalAgeRecords.map(\.actualAge).max() ?? 100
+    let maxActualAge = biologicalAgeRecords.map { fractionalAge(for: $0.date) }.max() ?? 100
     let maxValue = max(maxBioAge, maxActualAge)
     return maxValue + 5
+  }
+
+  /// Calculates fractional age for a given date based on birth year
+  /// This creates a smooth slope throughout the year instead of stepping on Jan 1
+  private func fractionalAge(for date: Date) -> Double {
+    guard birthYear > 0 else { return 0 }
+
+    let calendar = Calendar.current
+    let year = calendar.component(.year, from: date)
+    let dayOfYear = calendar.ordinality(of: .day, in: .year, for: date) ?? 1
+    let daysInYear = calendar.range(of: .day, in: .year, for: date)?.count ?? 365
+
+    let wholeYears = Double(year - birthYear)
+    let fractionalPart = Double(dayOfYear - 1) / Double(daysInYear)
+
+    return wholeYears + fractionalPart
   }
 
   var emptyView: some View {
@@ -264,115 +265,10 @@ private extension BiologicalAgeDetailsView {
   }
 }
 
-struct MetricContributionCell: View {
-
-  let contribution: MetricContribution
-  let isPositive: Bool?
-
-  private var symbol: SFSymbol {
-    if let isPositive {
-      return isPositive ? .arrowDownCircleFill : .arrowUpCircleFill
-    }
-    return .minusCircleFill
-  }
-
-  private var tintColor: Color {
-    if let isPositive {
-      return isPositive ? .mutedGreen : .mutedPink
-    }
-    return .mutedBlue
-  }
-
-  private var contributionText: String {
-    let delta = contribution.weightedDelta
-    if delta >= 0 {
-      return "+\(delta.format(using: .oneDecimalPlace)) years"
-    } else {
-      return "\(delta.format(using: .oneDecimalPlace)) years"
-    }
-  }
-
-  var body: some View {
-    HStack {
-      Image(systemSymbol: symbol)
-        .font(.title2)
-        .foregroundStyle(tintColor, tintColor.tertiary)
-
-      VStack(alignment: .leading, spacing: 2) {
-        Text(contribution.metric.rawValue)
-          .bold()
-          .fontDesign(.rounded)
-
-        Text(contribution.metric.category.rawValue)
-          .font(.caption)
-          .foregroundStyle(.secondary)
-      }
-
-      Spacer(minLength: 0)
-
-      Group {
-        if isPositive != nil {
-          Text(contributionText)
-        } else {
-          Text("0 years")
-        }
-      }
-      .font(.headline)
-      .fontWeight(.heavy)
-      .fontDesign(.rounded)
-      .foregroundStyle(tintColor)
-    }
-    .fixedSize(horizontal: false, vertical: true)
-    .cardContainer()
-  }
-}
-
-struct MissingMetricCell: View {
-
-  let metric: BiologicalAgeMetric
-
-  var body: some View {
-    HStack {
-      Image(systemSymbol: .questionmarkCircleFill)
-        .font(.title2)
-        .foregroundStyle(.tint, .tint.tertiary)
-
-      VStack(alignment: .leading, spacing: 2) {
-        Text(metric.rawValue)
-          .bold()
-          .fontDesign(.rounded)
-
-        Text(metric.category.rawValue)
-          .font(.caption)
-          .foregroundStyle(.secondary)
-      }
-
-      Spacer(minLength: 0)
-
-      Text("--")
-        .font(.headline)
-        .fontWeight(.heavy)
-        .fontDesign(.rounded)
-        .foregroundStyle(.tint)
-    }
-    .fixedSize(horizontal: false, vertical: true)
-    .cardContainer()
-    .tint(.gray)
-  }
-}
-
 #Preview {
   PreviewEnvironment {
     NavigationStack {
       BiologicalAgeDetailsView()
-    }
-  }
-}
-
-#Preview("Missing Cell") {
-  PreviewEnvironment {
-    BloomScrollView {
-      MissingMetricCell(metric: .activityLevel)
     }
   }
 }
