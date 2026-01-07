@@ -22,6 +22,7 @@ struct RecentWorkoutCell: View {
           Image(systemSymbol: SFSymbol(rawValue: report.workout.workoutActivityType.systemImage))
             .foregroundStyle(.black)
             .font(.system(size: 20))
+            .fontWeight(.heavy)
         }
 
       VStack(alignment: .leading, spacing: 4) {
