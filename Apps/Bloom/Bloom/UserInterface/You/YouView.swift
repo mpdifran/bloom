@@ -102,7 +102,9 @@ struct YouView: View {
         presentedNavigationDestination: $presentedNavigationDestination,
         summary: viewModel.activityLevelSummary,
         weeklyStepsChartData: viewModel.weeklyStepsChartData,
-        activeEnergyChartData: viewModel.activeEnergyChartData
+        activeEnergyChartData: viewModel.activeEnergyChartData,
+        walkingSpeedChartData: viewModel.walkingSpeedChartData,
+        stairClimbSpeedChartData: viewModel.stairClimbSpeedChartData
       )
     case .heartHealth:
       HeartHealthSection(

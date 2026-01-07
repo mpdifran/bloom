@@ -36,6 +36,8 @@ final actor YouStatsCalculator {
   @AsyncStreamable var recentWorkoutsData: RecentWorkoutsData?
   @AsyncStreamable var activeEnergyChartData: ActiveEnergyChartData?
   @AsyncStreamable var sleepDurationChartData: SleepDurationChartData?
+  @AsyncStreamable var walkingSpeedChartData: WalkingSpeedChartData?
+  @AsyncStreamable var stairClimbSpeedChartData: StairClimbSpeedChartData?
 
   private let healthStoreFetcher = HealthStoreFetcher.shared
 
@@ -72,6 +74,8 @@ final actor YouStatsCalculator {
     zoneDistributionData = await calculateZoneDistributionData()
     recentWorkoutsData = await calculateRecentWorkoutsData()
     activeEnergyChartData = await calculateActiveEnergyChartData()
+    walkingSpeedChartData = await calculateWalkingSpeedChartData()
+    stairClimbSpeedChartData = await calculateStairClimbSpeedChartData()
   }
 
   func refreshSteps() async {
@@ -824,6 +828,80 @@ private extension YouStatsCalculator {
 
     return SleepDurationChartData(dailyValues: dailyValues, average: average)
   }
+
+  func calculateWalkingSpeedChartData() async -> WalkingSpeedChartData? {
+    let calendar = Calendar.current
+    let now = Date()
+
+    guard let startDate = calendar.date(byAdding: .day, value: -6, to: calendar.startOfDay(for: now)) else {
+      return nil
+    }
+
+    let dateRange = DateRange(startDate, now)
+
+    let speedSamples = await healthStoreFetcher.fetchCollatedQuantity(
+      for: .walkingSpeed,
+      unit: .meter().unitDivided(by: .second()),
+      interval: DateComponents(day: 1),
+      options: .discreteAverage,
+      dateRange: dateRange
+    )
+
+    guard speedSamples.isNotEmpty else { return nil }
+
+    // Build data points for last 7 days
+    let dataPoints: [SpeedDataPoint] = (0..<7).compactMap { dayOffset in
+      guard let dayDate = calendar.date(byAdding: .day, value: dayOffset, to: startDate) else { return nil }
+      if let sample = speedSamples.first(where: { calendar.isDate($0.date, inSameDayAs: dayDate) }) {
+        return SpeedDataPoint(date: dayDate, value: sample.quantity.doubleValue(for: .meter().unitDivided(by: .second())))
+      }
+      return nil
+    }
+
+    guard dataPoints.isNotEmpty else { return nil }
+
+    let values = dataPoints.map(\.value)
+    let average = values.reduce(0, +) / Double(values.count)
+
+    return WalkingSpeedChartData(dataPoints: dataPoints, averageSpeed: average)
+  }
+
+  func calculateStairClimbSpeedChartData() async -> StairClimbSpeedChartData? {
+    let calendar = Calendar.current
+    let now = Date()
+
+    guard let startDate = calendar.date(byAdding: .day, value: -6, to: calendar.startOfDay(for: now)) else {
+      return nil
+    }
+
+    let dateRange = DateRange(startDate, now)
+
+    let speedSamples = await healthStoreFetcher.fetchCollatedQuantity(
+      for: .stairAscentSpeed,
+      unit: .meter().unitDivided(by: .second()),
+      interval: DateComponents(day: 1),
+      options: .discreteAverage,
+      dateRange: dateRange
+    )
+
+    guard speedSamples.isNotEmpty else { return nil }
+
+    // Build data points for last 7 days
+    let dataPoints: [SpeedDataPoint] = (0..<7).compactMap { dayOffset in
+      guard let dayDate = calendar.date(byAdding: .day, value: dayOffset, to: startDate) else { return nil }
+      if let sample = speedSamples.first(where: { calendar.isDate($0.date, inSameDayAs: dayDate) }) {
+        return SpeedDataPoint(date: dayDate, value: sample.quantity.doubleValue(for: .meter().unitDivided(by: .second())))
+      }
+      return nil
+    }
+
+    guard dataPoints.isNotEmpty else { return nil }
+
+    let values = dataPoints.map(\.value)
+    let average = values.reduce(0, +) / Double(values.count)
+
+    return StairClimbSpeedChartData(dataPoints: dataPoints, averageSpeed: average)
+  }
 }
 
 struct WristTempData: Sendable {
@@ -1013,4 +1091,20 @@ struct ActiveEnergyChartData: Sendable {
 struct SleepDurationChartData: Sendable {
   let dailyValues: [TimeInterval]  // 7 days of sleep duration in seconds
   let average: TimeInterval
+}
+
+struct WalkingSpeedChartData: Sendable {
+  let dataPoints: [SpeedDataPoint]
+  let averageSpeed: Double  // m/s
+}
+
+struct StairClimbSpeedChartData: Sendable {
+  let dataPoints: [SpeedDataPoint]
+  let averageSpeed: Double  // m/s
+}
+
+struct SpeedDataPoint: Identifiable, Sendable {
+  var id: Date { date }
+  let date: Date
+  let value: Double
 }

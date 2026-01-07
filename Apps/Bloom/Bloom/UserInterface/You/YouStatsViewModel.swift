@@ -46,6 +46,8 @@ final class YouStatsViewModel: Sendable {
   var recentWorkoutsData: RecentWorkoutsData?
   var activeEnergyChartData: ActiveEnergyChartData?
   var sleepDurationChartData: SleepDurationChartData?
+  var walkingSpeedChartData: WalkingSpeedChartData?
+  var stairClimbSpeedChartData: StairClimbSpeedChartData?
 
   private var tasks = [Task<Void, Never>]()
 
@@ -282,6 +284,20 @@ private extension YouStatsViewModel {
       for await sleepDurationChartData in await YouStatsCalculator.shared.$sleepDurationChartData {
         await MainActor.run {
           self.sleepDurationChartData = sleepDurationChartData
+        }
+      }
+    })
+    tasks.append(Task.detached {
+      for await walkingSpeedChartData in await YouStatsCalculator.shared.$walkingSpeedChartData {
+        await MainActor.run {
+          self.walkingSpeedChartData = walkingSpeedChartData
+        }
+      }
+    })
+    tasks.append(Task.detached {
+      for await stairClimbSpeedChartData in await YouStatsCalculator.shared.$stairClimbSpeedChartData {
+        await MainActor.run {
+          self.stairClimbSpeedChartData = stairClimbSpeedChartData
         }
       }
     })
