@@ -18,15 +18,18 @@ struct TargetHeartRateZonesDistributionView: View {
   let distribution: WorkoutHeartRateReport.WorkoutHeartZoneDistribution
   let heartRateZones: HeartRateZones
   let displayGoal: Bool
+  let goal: Double?
 
   init(
     distribution: WorkoutHeartRateReport.WorkoutHeartZoneDistribution,
     heartRateZones: HeartRateZones,
-    displayGoal: Bool = true
+    displayGoal: Bool = true,
+    goal: Double? = nil
   ) {
     self.distribution = distribution
     self.heartRateZones = heartRateZones
     self.displayGoal = displayGoal
+    self.goal = goal
   }
 
   var body: some View {
@@ -98,7 +101,7 @@ struct TargetHeartRateZonesDistributionView: View {
             .bold()
             .fontDesign(.rounded)
           if displayGoal {
-            Text("/ \(Double.minZoneMinutes.format()) min")
+            Text("/ \((goal ?? Double.minZoneMinutes).format()) min")
               .foregroundStyle(.secondary)
               .font(.caption)
               .bold()
