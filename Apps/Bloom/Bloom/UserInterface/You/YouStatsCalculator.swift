@@ -1206,11 +1206,38 @@ extension YouStatsCalculator {
   }
 
   func calculateHeartRateReserveForPeriod(_ period: StatTimePeriod) async -> HeartRateReserveDetailData? {
+    let calendar = Calendar.current
     let dateRange = period.dateRange
     let interval = period.aggregatesByWeek ? DateComponents(weekOfYear: 1) : DateComponents(day: 1)
 
-    // Fetch max heart rates
+    // Extend date range to include 6 extra days before start for rolling 7-day calculations
+    guard let extendedStart = calendar.date(byAdding: .day, value: -6, to: dateRange.start) else {
+      return nil
+    }
+    let extendedDateRange = DateRange(extendedStart, dateRange.end)
+
+    // Fetch daily max heart rates for the extended range
     let maxHRSamples = await healthStoreFetcher.fetchCollatedQuantity(
+      for: .heartRate,
+      unit: .bpm(),
+      interval: DateComponents(day: 1),
+      options: .discreteMax,
+      dateRange: extendedDateRange
+    )
+
+    // Fetch daily average resting heart rates for the extended range
+    let restingHRSamples = await healthStoreFetcher.fetchCollatedQuantity(
+      for: .restingHeartRate,
+      unit: .bpm(),
+      interval: DateComponents(day: 1),
+      options: .discreteAverage,
+      dateRange: extendedDateRange
+    )
+
+    guard maxHRSamples.isNotEmpty, restingHRSamples.isNotEmpty else { return nil }
+
+    // Fetch the display-interval samples to determine data point dates
+    let displaySamples = await healthStoreFetcher.fetchCollatedQuantity(
       for: .heartRate,
       unit: .bpm(),
       interval: interval,
@@ -1218,33 +1245,41 @@ extension YouStatsCalculator {
       dateRange: dateRange
     )
 
-    // Fetch average resting heart rates
-    let restingHRSamples = await healthStoreFetcher.fetchCollatedQuantity(
-      for: .restingHeartRate,
-      unit: .bpm(),
-      interval: interval,
-      options: .discreteAverage,
-      dateRange: dateRange
-    )
+    guard displaySamples.isNotEmpty else { return nil }
 
-    guard maxHRSamples.isNotEmpty, restingHRSamples.isNotEmpty else { return nil }
-
-    // Build data points by matching dates
+    // Build data points with rolling 7-day calculations
     var dataPoints = [HeartRateReserveDetailDataPoint]()
 
-    for (index, maxSample) in maxHRSamples.enumerated() {
-      // Find matching resting HR sample for the same date
-      let restingSample = restingHRSamples.first { sample in
-        Calendar.current.isDate(sample.date, inSameDayAs: maxSample.date)
+    for (index, displaySample) in displaySamples.enumerated() {
+      let targetDate = displaySample.date
+
+      // Calculate rolling 7-day window ending on targetDate
+      guard let windowStart = calendar.date(byAdding: .day, value: -6, to: targetDate) else { continue }
+
+      // Get max HR samples in the 7-day window
+      let windowMaxHRSamples = maxHRSamples.filter { sample in
+        sample.date >= windowStart && sample.date <= targetDate
       }
 
-      let maxHR = maxSample.quantity.doubleValue(for: .bpm())
-      let restingHR = restingSample?.quantity.doubleValue(for: .bpm()) ?? 60
+      // Get resting HR samples in the 7-day window
+      let windowRestingHRSamples = restingHRSamples.filter { sample in
+        sample.date >= windowStart && sample.date <= targetDate
+      }
+
+      // Calculate rolling 7-day max (highest max HR in the window)
+      guard let rollingMaxHR = windowMaxHRSamples
+        .map({ $0.quantity.doubleValue(for: .bpm()) })
+        .max() else { continue }
+
+      // Calculate rolling 7-day average resting HR
+      let restingHRValues = windowRestingHRSamples.map { $0.quantity.doubleValue(for: .bpm()) }
+      guard restingHRValues.isNotEmpty else { continue }
+      let rollingAvgRestingHR = restingHRValues.reduce(0, +) / Double(restingHRValues.count)
 
       dataPoints.append(HeartRateReserveDetailDataPoint(
-        date: maxSample.date,
-        maxHeartRate: maxHR,
-        restingHeartRate: restingHR,
+        date: targetDate,
+        maxHeartRate: rollingMaxHR,
+        restingHeartRate: rollingAvgRestingHR,
         index: index
       ))
     }
@@ -1257,7 +1292,7 @@ extension YouStatsCalculator {
     return HeartRateReserveDetailData(
       dataPoints: dataPoints,
       averageHRR: averageHRR,
-      expectedDataPointCount: maxHRSamples.count
+      expectedDataPointCount: displaySamples.count
     )
   }
 }
