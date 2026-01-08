@@ -12,16 +12,15 @@ import CoreHealth
 
 struct ActivityLevelDetailsView: View {
 
+  @State private var selectedPeriod: StatTimePeriod = .sevenDays
   @State private var selectedActivityLevelIndex = 0
+  @State private var activityLevelDetails: ActivityLevelSummary.Details?
+  @State private var aggregatedEnergyRatios: [DateValueSample] = []
   @State private var workoutSummations = [WorkoutSummation]()
-
-  private let viewModel = VitalsViewModel.shared
-
-  private let feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
 
   var body: some View {
     Group {
-      if viewModel.activityLevelSummary?.details.hasNoData == false {
+      if activityLevelDetails?.hasNoData == false {
         contentView
       } else {
         emptyView
@@ -31,24 +30,26 @@ struct ActivityLevelDetailsView: View {
       ToolbarItem(placement: .principal) {
         VitalSummaryDetailTitleView(
           title: "Activity Level",
-          subtitle: "Last 30 Days"
+          subtitle: selectedPeriod.displayName
         )
       }
     }
     .navigationTitle("Activity Level")
     .navigationBarTitleDisplayMode(.inline)
     .animation(.default, value: selectedActivityLevelIndex)
-    .task {
-      let samples = await HealthStoreFetcher.shared.fetchWorkoutSummations(dateRange: .trailingMonthsFromNow(1))
-      await MainActor.run {
-        self.workoutSummations = samples
+    .task(id: selectedPeriod) {
+      let dateRange = selectedPeriod.dateRange
+
+      activityLevelDetails = await HealthStoreFetcher.shared.fetchActivityLevelSummaryDetails(dateRange: dateRange)
+      workoutSummations = await HealthStoreFetcher.shared.fetchWorkoutSummations(dateRange: dateRange)
+      aggregatedEnergyRatios = aggregateEnergyRatios()
+    }
+    .onChange(of: activityLevelDetails) {
+      if let index = ActivityLevelSummary.ActivityLevel.allCases.firstIndex(where: { $0 == activityLevelDetails?.activityLevel }) {
+        selectedActivityLevelIndex = index
       }
     }
     .onAppear {
-      feedbackGenerator.prepare()
-      if let index = ActivityLevelSummary.ActivityLevel.allCases.firstIndex(where: { $0 == viewModel.activityLevelSummary?.details.activityLevel }) {
-        selectedActivityLevelIndex = index
-      }
       TelemetryDeck.viewScreen("Activity Level Vital Details")
     }
   }
@@ -58,6 +59,8 @@ private extension ActivityLevelDetailsView {
 
   var contentView: some View {
     BloomScrollView(spacing: 20) {
+      StatTimePeriodPicker(selectedPeriod: $selectedPeriod)
+
       activityLevelRatioChart
       ratioDistributionView
       dayOfWeekDistributionView
@@ -75,18 +78,18 @@ private extension ActivityLevelDetailsView {
 
   @ViewBuilder
   var activityLevelRatioChart: some View {
-    if let activityLevelSummary = viewModel.activityLevelSummary {
+    if let activityLevelDetails {
       VStack(alignment: .leading) {
         VStack {
           VitalDetailChartTitleView(
             title: "Energy Ratio",
-            value: activityLevelSummary.details.activityLevel?.name ?? "Unknown"
+            value: activityLevelDetails.activityLevel?.name ?? "Unknown"
           )
 
           Chart {
-            ForEach(activityLevelSummary.details.energyRatioSamples) { ratio in
+            ForEach(aggregatedEnergyRatios) { ratio in
               BarMark(
-                x: .value("Date", ratio.date),
+                x: .value("Date", ratio.date, unit: selectedPeriod.aggregatesByWeek ? .weekOfYear : .day),
                 yStart: .value("", 1),
                 yEnd: .value("Ratio", ratio.value)
               )
@@ -127,9 +130,32 @@ private extension ActivityLevelDetailsView {
   }
 
   var chartMax: Double {
-    guard let maxValue = viewModel.activityLevelSummary?.details.energyRatioSamples.max(keyPath: \.value) else { return 2 }
+    guard let maxValue = aggregatedEnergyRatios.max(keyPath: \.value) else { return 2 }
 
     return max(maxValue * 1.1, 2)
+  }
+
+  func aggregateEnergyRatios() -> [DateValueSample] {
+    guard let samples = activityLevelDetails?.energyRatioSamples else { return [] }
+
+    if selectedPeriod.aggregatesByWeek {
+      let calendar = Calendar.current
+      var weeklyData = [Date: [Double]]()
+
+      for sample in samples {
+        let weekStart = calendar.dateInterval(of: .weekOfYear, for: sample.date)?.start ?? sample.date
+        weeklyData[weekStart, default: []].append(sample.value)
+      }
+
+      return weeklyData.map { weekStart, values in
+        DateValueSample(
+          date: weekStart,
+          value: values.reduce(0, +) / Double(values.count)
+        )
+      }.sorted { $0.date < $1.date }
+    } else {
+      return samples
+    }
   }
 
   func color(for ratio: Double) -> Color {
@@ -148,7 +174,6 @@ private extension ActivityLevelDetailsView {
   var levelPicker: some View {
     Button {
       selectedActivityLevelIndex = (selectedActivityLevelIndex + 1) % ActivityLevelSummary.ActivityLevel.allCases.count
-      feedbackGenerator.impactOccurred()
     } label: {
       HStack {
         Text("Level")
@@ -160,19 +185,20 @@ private extension ActivityLevelDetailsView {
     }
     .buttonStyle(.zone)
     .tint(selectedLevel.color)
+    .sensoryFeedback(.selection, trigger: selectedActivityLevelIndex)
   }
 
   var ratioDistributionView: some View {
     VStack {
       VitalDetailChartTitleView(title: "By Level", value: "")
-      ActivityLevelDistributionView(ratioDistribution: viewModel.activityLevelSummary?.details.activityLevelRatioDistribution ?? [:])
+      ActivityLevelDistributionView(ratioDistribution: activityLevelDetails?.activityLevelRatioDistribution ?? [:])
     }
     .cardContainer()
   }
 
   @ViewBuilder
   var dayOfWeekDistributionView: some View {
-    if let distribution = viewModel.activityLevelSummary?.details.dayOfWeekActivityLevelRatioDistribution() {
+    if let distribution = activityLevelDetails?.dayOfWeekActivityLevelRatioDistribution() {
       VStack {
         VitalDetailChartTitleView(title: "Avg By Day of Week", value: "")
 
