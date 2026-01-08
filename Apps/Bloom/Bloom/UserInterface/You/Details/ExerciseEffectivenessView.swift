@@ -53,6 +53,7 @@ struct ExerciseEffectivenessView: View {
     .navigationTitle("Exercise Effectiveness")
     .navigationBarTitleDisplayMode(.inline)
     .animation(.default, value: isLoading)
+    .animation(.default, value: zoneMinutesData.map(\.id))
     .onAppear {
       TelemetryDeck.viewScreen("Exercise Effectiveness Vital Details")
     }

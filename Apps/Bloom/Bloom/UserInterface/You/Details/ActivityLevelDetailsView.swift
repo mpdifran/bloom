@@ -37,6 +37,8 @@ struct ActivityLevelDetailsView: View {
     .navigationTitle("Activity Level")
     .navigationBarTitleDisplayMode(.inline)
     .animation(.default, value: selectedActivityLevelIndex)
+    .animation(.default, value: aggregatedEnergyRatios.map(\.id))
+    .animation(.default, value: workoutSummations.map(\.id))
     .task(id: selectedPeriod) {
       let dateRange = selectedPeriod.dateRange
 

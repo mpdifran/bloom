@@ -33,8 +33,12 @@ struct HeartHealthSection: View {
     }
   }
 
-  private func navigateToDetails() {
+  private func navigateToHeartHealthDetails() {
     presentedNavigationDestination = HeartHealthDetailsView().asAny
+  }
+
+  private func navigateToVO2MaxDetails() {
+    presentedNavigationDestination = VO2MaxDetailsView().asAny
   }
 }
 
@@ -45,22 +49,22 @@ private extension HeartHealthSection {
       restingHeartRate: summary?.details.averageRestingHeartRate?.doubleValue(for: .bpm()),
       chartData: restingHeartRateChartData
     )
-    .onTapGesture { navigateToDetails() }
+    .onTapGesture { navigateToHeartHealthDetails() }
   }
 
   var heartRateReserveCard: some View {
     HeartRateReserveStatCard(chartData: heartRateReserveChartData)
-      .onTapGesture { navigateToDetails() }
+      .onTapGesture { navigateToHeartHealthDetails() }
   }
 
   var vo2MaxCard: some View {
     VO2MaxStatCard(trendData: vo2MaxTrendData)
-      .onTapGesture { navigateToDetails() }
+      .onTapGesture { navigateToVO2MaxDetails() }
   }
 
   var heartRateRecoveryCard: some View {
     HeartRateRecoveryStatCard(data: heartRateRecoveryData)
-      .onTapGesture { navigateToDetails() }
+      .onTapGesture { navigateToHeartHealthDetails() }
   }
 }
 

@@ -61,4 +61,6 @@ extension URL {
   static let bristolStoolScale = URL(string: "https://www.tandfonline.com/doi/abs/10.3109/00365529709011203")!
   static let stoolHabits = URL(string: "https://pubmed.ncbi.nlm.nih.gov/20205503/")!
   static let aceFitnessCalculators = URL(string: "https://www.acefitness.org/resources/everyone/tools-calculators/")!
+  static let walkingSpeed = URL(string: "https://www.researchgate.net/publication/344166318_Walkability_Index_for_Elderly_Health_A_Proposal")!
+  static let stairClimbSpeed = URL(string: "https://www.researchgate.net/publication/247771808_Functional_Predictors_of_Stair-Climbing_Speed_in_Older_Adults")!
 }

@@ -993,25 +993,42 @@ public extension HealthGoalProvider {
   /// Walking speed (m/s) to equivalent age mapping (faster = younger)
   func walkingSpeedAgeDataPoints() -> [AgeDataPoint] {
     [
-      AgeDataPoint(value: 1.4, age: 20),
-      AgeDataPoint(value: 1.3, age: 30),
-      AgeDataPoint(value: 1.2, age: 45),
-      AgeDataPoint(value: 1.0, age: 60),
-      AgeDataPoint(value: 0.8, age: 65)
+      AgeDataPoint(value: 1.45, age: 20),
+      AgeDataPoint(value: 1.34, age: 30),
+      AgeDataPoint(value: 1.26, age: 45),
+      AgeDataPoint(value: 1.2, age: 60),
+      AgeDataPoint(value: 0.9, age: 65)
     ]
   }
 
   // MARK: Stair Climb Speed
 
-  /// Stair climb speed (flights/min) to equivalent age mapping (faster = younger)
+  /// Stair climb speed (m/s) to equivalent age mapping (faster = younger)
+  /// Values represent vertical ascent speed as measured by Apple Health
   func stairClimbSpeedAgeDataPoints() -> [AgeDataPoint] {
     [
-      AgeDataPoint(value: 1.5, age: 20),
-      AgeDataPoint(value: 1.2, age: 35),
-      AgeDataPoint(value: 1.0, age: 50),
-      AgeDataPoint(value: 0.8, age: 60),
-      AgeDataPoint(value: 0.6, age: 65)
+      AgeDataPoint(value: 0.5, age: 20),
+      AgeDataPoint(value: 0.45, age: 35),
+      AgeDataPoint(value: 0.35, age: 50),
+      AgeDataPoint(value: 0.3, age: 60),
+      AgeDataPoint(value: 0.25, age: 65)
     ]
+  }
+
+  /// Walking speed age reference points with explicit HKQuantity units (m/s)
+  func walkingSpeedAgeQuantities() -> [(quantity: HKQuantity, age: Double)] {
+    let unit = HKUnit.meter().unitDivided(by: .second())
+    return walkingSpeedAgeDataPoints().map {
+      (HKQuantity(unit: unit, doubleValue: $0.value), $0.age)
+    }
+  }
+
+  /// Stair climb speed age reference points with explicit HKQuantity units (m/s)
+  func stairClimbSpeedAgeQuantities() -> [(quantity: HKQuantity, age: Double)] {
+    let unit = HKUnit.meter().unitDivided(by: .second())
+    return stairClimbSpeedAgeDataPoints().map {
+      (HKQuantity(unit: unit, doubleValue: $0.value), $0.age)
+    }
   }
 
   // MARK: Sleep Score

@@ -941,6 +941,327 @@ private extension YouStatsCalculator {
   }
 }
 
+// MARK: - Mobility Details Methods
+
+extension YouStatsCalculator {
+
+  func calculateStepsComparisonChartData(for period: StatTimePeriod) async -> StepsComparisonChartData? {
+    let calendar = Calendar.current
+    let now = Date()
+
+    let (currentRange, previousRange, interval) = stepsDateRanges(for: period, calendar: calendar, now: now)
+
+    guard let currentRange, let previousRange else { return nil }
+
+    // Fetch current period steps
+    let currentSteps = await healthStoreFetcher.fetchCollatedQuantity(
+      for: .stepCount,
+      unit: .count(),
+      interval: interval,
+      dateRange: currentRange
+    )
+
+    // Fetch previous period steps
+    let previousSteps = await healthStoreFetcher.fetchCollatedQuantity(
+      for: .stepCount,
+      unit: .count(),
+      interval: interval,
+      dateRange: previousRange
+    )
+
+    // Build cumulative data points for current period
+    var currentDataPoints = [StepsDataPoint]()
+    var cumulativeSteps = 0
+    for (index, sample) in currentSteps.enumerated() {
+      let steps = Int(sample.quantity.doubleValue(for: .count()))
+      cumulativeSteps += steps
+      currentDataPoints.append(StepsDataPoint(
+        date: sample.date,
+        cumulativeSteps: cumulativeSteps,
+        index: index,
+        series: "Current"
+      ))
+    }
+
+    // Build cumulative data points for previous period
+    var previousDataPoints = [StepsDataPoint]()
+    var previousCumulativeSteps = 0
+    for (index, sample) in previousSteps.enumerated() {
+      let steps = Int(sample.quantity.doubleValue(for: .count()))
+      previousCumulativeSteps += steps
+      previousDataPoints.append(StepsDataPoint(
+        date: sample.date,
+        cumulativeSteps: previousCumulativeSteps,
+        index: index,
+        series: "Previous"
+      ))
+    }
+
+    guard currentDataPoints.isNotEmpty else { return nil }
+
+    // Calculate percentage change
+    let totalStepsCurrent = cumulativeSteps
+    let currentIndex = currentDataPoints.count - 1
+    let totalStepsPreviousSamePoint = previousDataPoints
+      .first { $0.index == currentIndex }?
+      .cumulativeSteps ?? 0
+
+    let percentageChange: Double?
+    if totalStepsPreviousSamePoint > 0 {
+      percentageChange = (Double(totalStepsCurrent) - Double(totalStepsPreviousSamePoint)) / Double(totalStepsPreviousSamePoint) * 100
+    } else {
+      percentageChange = nil
+    }
+
+    // Use the previous period's count as the expected full period length
+    let expectedCount = max(previousDataPoints.count, currentDataPoints.count)
+
+    return StepsComparisonChartData(
+      currentPeriodDataPoints: currentDataPoints,
+      previousPeriodDataPoints: previousDataPoints,
+      totalStepsCurrent: totalStepsCurrent,
+      totalStepsPrevious: previousCumulativeSteps,
+      percentageChange: percentageChange,
+      expectedDataPointCount: expectedCount
+    )
+  }
+
+  private func stepsDateRanges(
+    for period: StatTimePeriod,
+    calendar: Calendar,
+    now: Date
+  ) -> (current: DateRange?, previous: DateRange?, interval: DateComponents) {
+    switch period {
+    case .oneDay:
+      let todayStart = calendar.startOfDay(for: now)
+      guard let yesterdayStart = calendar.date(byAdding: .day, value: -1, to: todayStart) else {
+        return (nil, nil, DateComponents(hour: 1))
+      }
+      return (
+        DateRange(todayStart, now),
+        DateRange(yesterdayStart, todayStart),
+        DateComponents(hour: 1)
+      )
+
+    case .sevenDays:
+      var cal = calendar
+      cal.firstWeekday = 1
+      let todayWeekday = cal.component(.weekday, from: now)
+      guard let thisWeekStart = cal.date(byAdding: .day, value: -(todayWeekday - 1), to: cal.startOfDay(for: now)),
+            let lastWeekStart = cal.date(byAdding: .day, value: -7, to: thisWeekStart) else {
+        return (nil, nil, DateComponents(hour: 4))
+      }
+      return (
+        DateRange(thisWeekStart, now),
+        DateRange(lastWeekStart, thisWeekStart),
+        DateComponents(hour: 4)
+      )
+
+    case .oneMonth:
+      guard let monthStart = calendar.date(from: calendar.dateComponents([.year, .month], from: now)),
+            let previousMonthStart = calendar.date(byAdding: .month, value: -1, to: monthStart) else {
+        return (nil, nil, DateComponents(day: 1))
+      }
+      return (
+        DateRange(monthStart, now),
+        DateRange(previousMonthStart, monthStart),
+        DateComponents(day: 1)
+      )
+
+    case .threeMonths:
+      // Calendar-aligned quarters: Q1=Jan, Q2=Apr, Q3=Jul, Q4=Oct
+      let month = calendar.component(.month, from: now)
+      let year = calendar.component(.year, from: now)
+      let quarterStartMonth = ((month - 1) / 3) * 3 + 1 // 1, 4, 7, or 10
+      guard let quarterStart = calendar.date(from: DateComponents(year: year, month: quarterStartMonth, day: 1)) else {
+        return (nil, nil, DateComponents(weekOfYear: 1))
+      }
+      // Previous quarter
+      let prevQuarterMonth = quarterStartMonth == 1 ? 10 : quarterStartMonth - 3
+      let prevQuarterYear = quarterStartMonth == 1 ? year - 1 : year
+      guard let prevQuarterStart = calendar.date(from: DateComponents(year: prevQuarterYear, month: prevQuarterMonth, day: 1)) else {
+        return (nil, nil, DateComponents(weekOfYear: 1))
+      }
+      return (
+        DateRange(quarterStart, now),
+        DateRange(prevQuarterStart, quarterStart),
+        DateComponents(weekOfYear: 1)
+      )
+
+    case .sixMonths:
+      // Calendar-aligned half-years: Jan 1 or Jul 1
+      let month = calendar.component(.month, from: now)
+      let year = calendar.component(.year, from: now)
+      let halfYearStartMonth = month <= 6 ? 1 : 7
+      guard let halfYearStart = calendar.date(from: DateComponents(year: year, month: halfYearStartMonth, day: 1)) else {
+        return (nil, nil, DateComponents(weekOfYear: 1))
+      }
+      // Previous half-year
+      let prevHalfYearMonth = halfYearStartMonth == 1 ? 7 : 1
+      let prevHalfYearYear = halfYearStartMonth == 1 ? year - 1 : year
+      guard let prevHalfYearStart = calendar.date(from: DateComponents(year: prevHalfYearYear, month: prevHalfYearMonth, day: 1)) else {
+        return (nil, nil, DateComponents(weekOfYear: 1))
+      }
+      return (
+        DateRange(halfYearStart, now),
+        DateRange(prevHalfYearStart, halfYearStart),
+        DateComponents(weekOfYear: 1)
+      )
+
+    case .oneYear:
+      // Calendar-aligned year: Jan 1
+      let year = calendar.component(.year, from: now)
+      guard let yearStart = calendar.date(from: DateComponents(year: year, month: 1, day: 1)),
+            let prevYearStart = calendar.date(from: DateComponents(year: year - 1, month: 1, day: 1)) else {
+        return (nil, nil, DateComponents(month: 1))
+      }
+      return (
+        DateRange(yearStart, now),
+        DateRange(prevYearStart, yearStart),
+        DateComponents(month: 1)
+      )
+    }
+  }
+
+  func calculateWalkingSpeedForPeriod(_ period: StatTimePeriod) async -> [SpeedDataPoint]? {
+    let dateRange = period.dateRange
+    let interval = period.aggregatesByWeek ? DateComponents(weekOfYear: 1) : DateComponents(day: 1)
+
+    let speedSamples = await healthStoreFetcher.fetchCollatedQuantity(
+      for: .walkingSpeed,
+      unit: .meter().unitDivided(by: .second()),
+      interval: interval,
+      options: .discreteAverage,
+      dateRange: dateRange
+    )
+
+    guard speedSamples.isNotEmpty else { return nil }
+
+    return speedSamples.map { sample in
+      SpeedDataPoint(
+        date: sample.date,
+        value: sample.quantity.doubleValue(for: .meter().unitDivided(by: .second()))
+      )
+    }
+  }
+
+  func calculateStairClimbSpeedForPeriod(_ period: StatTimePeriod) async -> [SpeedDataPoint]? {
+    let dateRange = period.dateRange
+    let interval = period.aggregatesByWeek ? DateComponents(weekOfYear: 1) : DateComponents(day: 1)
+
+    let speedSamples = await healthStoreFetcher.fetchCollatedQuantity(
+      for: .stairAscentSpeed,
+      unit: .meter().unitDivided(by: .second()),
+      interval: interval,
+      options: .discreteAverage,
+      dateRange: dateRange
+    )
+
+    guard speedSamples.isNotEmpty else { return nil }
+
+    return speedSamples.map { sample in
+      SpeedDataPoint(
+        date: sample.date,
+        value: sample.quantity.doubleValue(for: .meter().unitDivided(by: .second()))
+      )
+    }
+  }
+}
+
+// MARK: - Heart Health Details Methods
+
+extension YouStatsCalculator {
+
+  func calculateHeartRateRecoveryForPeriod(_ period: StatTimePeriod) async -> HeartRateRecoveryDetailData? {
+    let currentRange = period.dateRange
+    let previousRange = period.previousPeriodDateRange
+
+    // Fetch heart rate recovery samples for current period
+    let currentSamples = await healthStoreFetcher.fetchCollatedAverage(
+      quantityType: .heartRateRecoveryOneMinute,
+      unit: .bpm(),
+      dateRange: currentRange
+    )
+
+    // Fetch heart rate recovery samples for previous period
+    let previousSamples = await healthStoreFetcher.fetchCollatedAverage(
+      quantityType: .heartRateRecoveryOneMinute,
+      unit: .bpm(),
+      dateRange: previousRange
+    )
+
+    // Calculate averages
+    let currentValues = currentSamples.map { $0.quantity.doubleValue(for: .bpm()) }
+    let previousValues = previousSamples.map { $0.quantity.doubleValue(for: .bpm()) }
+
+    let currentAverage = currentValues.isEmpty ? nil : currentValues.reduce(0, +) / Double(currentValues.count)
+    let previousAverage = previousValues.isEmpty ? nil : previousValues.reduce(0, +) / Double(previousValues.count)
+
+    guard currentAverage != nil || previousAverage != nil else { return nil }
+
+    return HeartRateRecoveryDetailData(
+      currentPeriodAverage: currentAverage,
+      previousPeriodAverage: previousAverage
+    )
+  }
+
+  func calculateHeartRateReserveForPeriod(_ period: StatTimePeriod) async -> HeartRateReserveDetailData? {
+    let dateRange = period.dateRange
+    let interval = period.aggregatesByWeek ? DateComponents(weekOfYear: 1) : DateComponents(day: 1)
+
+    // Fetch max heart rates
+    let maxHRSamples = await healthStoreFetcher.fetchCollatedQuantity(
+      for: .heartRate,
+      unit: .bpm(),
+      interval: interval,
+      options: .discreteMax,
+      dateRange: dateRange
+    )
+
+    // Fetch average resting heart rates
+    let restingHRSamples = await healthStoreFetcher.fetchCollatedQuantity(
+      for: .restingHeartRate,
+      unit: .bpm(),
+      interval: interval,
+      options: .discreteAverage,
+      dateRange: dateRange
+    )
+
+    guard maxHRSamples.isNotEmpty, restingHRSamples.isNotEmpty else { return nil }
+
+    // Build data points by matching dates
+    var dataPoints = [HeartRateReserveDetailDataPoint]()
+
+    for (index, maxSample) in maxHRSamples.enumerated() {
+      // Find matching resting HR sample for the same date
+      let restingSample = restingHRSamples.first { sample in
+        Calendar.current.isDate(sample.date, inSameDayAs: maxSample.date)
+      }
+
+      let maxHR = maxSample.quantity.doubleValue(for: .bpm())
+      let restingHR = restingSample?.quantity.doubleValue(for: .bpm()) ?? 60
+
+      dataPoints.append(HeartRateReserveDetailDataPoint(
+        date: maxSample.date,
+        maxHeartRate: maxHR,
+        restingHeartRate: restingHR,
+        index: index
+      ))
+    }
+
+    guard dataPoints.isNotEmpty else { return nil }
+
+    // Calculate average HRR
+    let averageHRR = Int(dataPoints.map(\.heartRateReserve).reduce(0, +) / Double(dataPoints.count))
+
+    return HeartRateReserveDetailData(
+      dataPoints: dataPoints,
+      averageHRR: averageHRR,
+      expectedDataPointCount: maxHRSamples.count
+    )
+  }
+}
+
 struct WristTempData: Sendable {
   let weeklyAverage: Double  // in Fahrenheit
   let latestTemp: Double     // in Fahrenheit
@@ -985,6 +1306,15 @@ struct WeeklyStepsChartData: Sendable {
   let percentageChangeFromLastWeek: Double?
 }
 
+struct StepsComparisonChartData: Sendable {
+  let currentPeriodDataPoints: [StepsDataPoint]
+  let previousPeriodDataPoints: [StepsDataPoint]
+  let totalStepsCurrent: Int
+  let totalStepsPrevious: Int
+  let percentageChange: Double?
+  let expectedDataPointCount: Int
+}
+
 struct StepsDataPoint: Identifiable, Sendable {
   var id: String { "\(series)-\(index)" }
   let date: Date
@@ -1004,6 +1334,22 @@ struct HeartRateReserveDataPoint: Identifiable, Sendable {
   let maxHeartRate: Double       // Rolling 7-day max
   let restingHeartRate: Double   // Rolling 7-day avg resting
   let dayIndex: Int              // 0-6 for the 7 days
+
+  var heartRateReserve: Double { maxHeartRate - restingHeartRate }
+}
+
+struct HeartRateReserveDetailData: Sendable {
+  let dataPoints: [HeartRateReserveDetailDataPoint]
+  let averageHRR: Int
+  let expectedDataPointCount: Int
+}
+
+struct HeartRateReserveDetailDataPoint: Identifiable, Sendable {
+  var id: String { "\(date)-\(index)" }
+  let date: Date
+  let maxHeartRate: Double
+  let restingHeartRate: Double
+  let index: Int
 
   var heartRateReserve: Double { maxHeartRate - restingHeartRate }
 }
@@ -1030,6 +1376,11 @@ enum VO2MaxTrendDirection: Sendable {
 struct HeartRateRecoveryData: Sendable {
   let thisWeekAverage: Double?
   let lastWeekAverage: Double?
+}
+
+struct HeartRateRecoveryDetailData: Sendable {
+  let currentPeriodAverage: Double?
+  let previousPeriodAverage: Double?
 }
 
 struct BodyWeightChartData: Sendable {

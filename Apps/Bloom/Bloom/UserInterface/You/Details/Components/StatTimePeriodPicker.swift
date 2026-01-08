@@ -9,10 +9,18 @@ import SwiftUI
 
 struct StatTimePeriodPicker: View {
   @Binding var selectedPeriod: StatTimePeriod
+  var includeOneDay: Bool = false
+
+  private var periods: [StatTimePeriod] {
+    if includeOneDay {
+      return StatTimePeriod.allCases
+    }
+    return StatTimePeriod.allCases.filter { $0 != .oneDay }
+  }
 
   var body: some View {
     Picker("Time Period", selection: $selectedPeriod) {
-      ForEach(StatTimePeriod.allCases) { period in
+      ForEach(periods) { period in
         Text(period.rawValue).tag(period)
       }
     }

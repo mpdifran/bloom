@@ -22,25 +22,29 @@ struct ActivityLevelSection: View {
     StatSection(symbol: SFSymbol(rawValue: VitalModel.Kind.activityLevel.systemImage), title: "Activity Level", subtitle: "Last 7 Days") {
       HStack {
         ActiveEnergyStatCard(data: activeEnergyChartData)
-          .onTapGesture { navigateToDetails() }
+          .onTapGesture { navigateToActivityLevelDetails() }
         ActivityLevelStatCard(level: summary?.details.activityLevel)
-          .onTapGesture { navigateToDetails() }
+          .onTapGesture { navigateToActivityLevelDetails() }
       }
 
       StepsStatCard(chartData: weeklyStepsChartData)
-        .onTapGesture { navigateToDetails() }
+        .onTapGesture { navigateToMobilityDetails() }
 
       HStack {
         WalkingSpeedStatCard(chartData: walkingSpeedChartData)
-          .onTapGesture { navigateToDetails() }
+          .onTapGesture { navigateToMobilityDetails() }
         StairClimbSpeedStatCard(chartData: stairClimbSpeedChartData)
-          .onTapGesture { navigateToDetails() }
+          .onTapGesture { navigateToMobilityDetails() }
       }
     }
   }
 
-  private func navigateToDetails() {
+  private func navigateToActivityLevelDetails() {
     presentedNavigationDestination = ActivityLevelDetailsView().asAny
+  }
+
+  private func navigateToMobilityDetails() {
+    presentedNavigationDestination = MobilityDetailsView().asAny
   }
 }
 
