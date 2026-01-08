@@ -17,6 +17,7 @@ struct HeartHealthSection: View {
   let heartRateReserveChartData: HeartRateReserveChartData?
   let vo2MaxTrendData: VO2MaxTrendData?
   let heartRateRecoveryData: HeartRateRecoveryData?
+  let restingHeartRateChartData: [RestingHeartRateDataPoint]?
 
   var body: some View {
     StatSection(symbol: SFSymbol(rawValue: VitalModel.Kind.heartHealth.systemImage), title: "Heart Health", subtitle: "Last 7 Days") {
@@ -41,7 +42,8 @@ private extension HeartHealthSection {
 
   var restingHeartRateCard: some View {
     RestingHeartRateStatCard(
-      restingHeartRate: summary?.details.averageRestingHeartRate?.doubleValue(for: .bpm())
+      restingHeartRate: summary?.details.averageRestingHeartRate?.doubleValue(for: .bpm()),
+      chartData: restingHeartRateChartData
     )
     .onTapGesture { navigateToDetails() }
   }
@@ -70,7 +72,8 @@ private extension HeartHealthSection {
         summary: nil,
         heartRateReserveChartData: nil,
         vo2MaxTrendData: nil,
-        heartRateRecoveryData: nil
+        heartRateRecoveryData: nil,
+        restingHeartRateChartData: nil
       )
     }
   }

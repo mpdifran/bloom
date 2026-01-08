@@ -112,7 +112,8 @@ struct YouView: View {
         summary: viewModel.heartHealthSummary,
         heartRateReserveChartData: viewModel.heartRateReserveChartData,
         vo2MaxTrendData: viewModel.vo2MaxTrendData,
-        heartRateRecoveryData: viewModel.heartRateRecoveryData
+        heartRateRecoveryData: viewModel.heartRateRecoveryData,
+        restingHeartRateChartData: viewModel.restingHeartRateChartData
       )
     case .bodyComposition:
       BodyCompositionSection(

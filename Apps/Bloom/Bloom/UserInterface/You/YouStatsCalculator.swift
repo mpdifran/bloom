@@ -38,6 +38,7 @@ final actor YouStatsCalculator {
   @AsyncStreamable var sleepDurationChartData: SleepDurationChartData?
   @AsyncStreamable var walkingSpeedChartData: WalkingSpeedChartData?
   @AsyncStreamable var stairClimbSpeedChartData: StairClimbSpeedChartData?
+  @AsyncStreamable var restingHeartRateChartData: [RestingHeartRateDataPoint]?
 
   private let healthStoreFetcher = HealthStoreFetcher.shared
 
@@ -76,6 +77,7 @@ final actor YouStatsCalculator {
     activeEnergyChartData = await calculateActiveEnergyChartData()
     walkingSpeedChartData = await calculateWalkingSpeedChartData()
     stairClimbSpeedChartData = await calculateStairClimbSpeedChartData()
+    restingHeartRateChartData = await calculateRestingHeartRateChartData()
   }
 
   func refreshSteps() async {
@@ -902,6 +904,41 @@ private extension YouStatsCalculator {
 
     return StairClimbSpeedChartData(dataPoints: dataPoints, averageSpeed: average)
   }
+
+  func calculateRestingHeartRateChartData() async -> [RestingHeartRateDataPoint]? {
+    let calendar = Calendar.current
+    let now = Date()
+
+    guard let startDate = calendar.date(byAdding: .day, value: -6, to: calendar.startOfDay(for: now)) else {
+      return nil
+    }
+
+    let dateRange = DateRange(startDate, now)
+
+    let restingHRSamples = await healthStoreFetcher.fetchCollatedQuantity(
+      for: .restingHeartRate,
+      unit: .bpm(),
+      interval: DateComponents(day: 1),
+      options: .discreteAverage,
+      dateRange: dateRange
+    )
+
+    guard restingHRSamples.isNotEmpty else { return nil }
+
+    // Build data points for last 7 days
+    let dataPoints: [RestingHeartRateDataPoint] = (0..<7).compactMap { dayOffset in
+      guard let dayDate = calendar.date(byAdding: .day, value: dayOffset, to: startDate) else { return nil }
+      if let sample = restingHRSamples.first(where: { calendar.isDate($0.date, inSameDayAs: dayDate) }) {
+        return RestingHeartRateDataPoint(
+          date: dayDate,
+          heartRate: sample.quantity.doubleValue(for: .bpm())
+        )
+      }
+      return nil
+    }
+
+    return dataPoints.isEmpty ? nil : dataPoints
+  }
 }
 
 struct WristTempData: Sendable {
@@ -910,6 +947,12 @@ struct WristTempData: Sendable {
 }
 
 struct SleepHeartRateDataPoint: Identifiable, Sendable {
+  var id: Date { date }
+  let date: Date
+  let heartRate: Double
+}
+
+struct RestingHeartRateDataPoint: Identifiable, Sendable {
   var id: Date { date }
   let date: Date
   let heartRate: Double
