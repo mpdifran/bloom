@@ -34,7 +34,7 @@ struct SleepQualitySection: View {
       }
 
       SleepStagesStatCard(sleepStageDataPoints: sleepStageDataPoints)
-        .onTapGesture { navigateToDetails() }
+        .onTapGesture { navigateToSleepStagesDetails() }
 
       HStack {
         SleepScoreStatCard(score: averageSleepScore)
@@ -58,6 +58,10 @@ struct SleepQualitySection: View {
 
   private func navigateToBedtimeDetails() {
     presentedNavigationDestination = BedtimeSleepDurationDetailsView().asAny
+  }
+
+  private func navigateToSleepStagesDetails() {
+    presentedNavigationDestination = SleepStagesDetailsView().asAny
   }
 }
 

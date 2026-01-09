@@ -1966,3 +1966,55 @@ extension YouStatsCalculator {
     return ((currentAvg - previousAvg) / previousAvg) * 100
   }
 }
+
+// MARK: - Sleep Stages Details Methods
+
+extension YouStatsCalculator {
+
+  func calculateSleepStageDataPointsForPeriod(_ period: StatTimePeriod) async -> [SleepStageDataPoint]? {
+    let dateRange = period.dateRange
+    let sleepAnalyses = await healthStoreFetcher.fetchSleepAnalysis(dateRange: dateRange)
+
+    guard sleepAnalyses.isNotEmpty else { return nil }
+
+    let calendar = Calendar.current
+
+    if period.aggregatesByWeek {
+      // Group by week and average
+      var weeklyData = [Date: [SleepAnalysis]]()
+      for analysis in sleepAnalyses {
+        let weekStart = calendar.dateInterval(of: .weekOfYear, for: analysis.endDate)?.start ?? analysis.endDate
+        weeklyData[weekStart, default: []].append(analysis)
+      }
+
+      var dataPoints = [SleepStageDataPoint]()
+      for (weekStart, analyses) in weeklyData.sorted(by: { $0.key < $1.key }) {
+        let avgDeep = analyses.map(\.deepSleepMinutes).reduce(0, +) / Double(analyses.count)
+        let avgCore = analyses.map(\.coreSleepMinutes).reduce(0, +) / Double(analyses.count)
+        let avgRem = analyses.map(\.remSleepMinutes).reduce(0, +) / Double(analyses.count)
+        let avgAwake = analyses.map(\.awakeSleepMinutes).reduce(0, +) / Double(analyses.count)
+
+        dataPoints.append(SleepStageDataPoint(date: weekStart, stage: .deep, minutes: avgDeep))
+        dataPoints.append(SleepStageDataPoint(date: weekStart, stage: .core, minutes: avgCore))
+        dataPoints.append(SleepStageDataPoint(date: weekStart, stage: .rem, minutes: avgRem))
+        dataPoints.append(SleepStageDataPoint(date: weekStart, stage: .awake, minutes: avgAwake))
+      }
+
+      return dataPoints.isEmpty ? nil : dataPoints
+    } else {
+      // One set of data points per day
+      var dataPoints = [SleepStageDataPoint]()
+
+      for analysis in sleepAnalyses {
+        let dateForChart = calendar.startOfDay(for: analysis.endDate)
+
+        dataPoints.append(SleepStageDataPoint(date: dateForChart, stage: .deep, minutes: analysis.deepSleepMinutes))
+        dataPoints.append(SleepStageDataPoint(date: dateForChart, stage: .core, minutes: analysis.coreSleepMinutes))
+        dataPoints.append(SleepStageDataPoint(date: dateForChart, stage: .rem, minutes: analysis.remSleepMinutes))
+        dataPoints.append(SleepStageDataPoint(date: dateForChart, stage: .awake, minutes: analysis.awakeSleepMinutes))
+      }
+
+      return dataPoints.isEmpty ? nil : dataPoints.sorted { $0.date < $1.date }
+    }
+  }
+}
