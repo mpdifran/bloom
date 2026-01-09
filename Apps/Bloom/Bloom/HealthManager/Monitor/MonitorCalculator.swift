@@ -375,3 +375,52 @@ actor MonitorCalculator {
     return totalMinutes
   }
 }
+
+// MARK: - Detection Engine Integration
+
+extension MonitorCalculator {
+
+  /// Calculates metrics for the date and then runs the detection engine.
+  /// This is the main entry point for the Monitor feature.
+  /// - Parameter date: The date to calculate for (defaults to today)
+  /// - Returns: Array of MonitorResult for each monitor type
+  func calculateMetricsAndDetect(for date: Date = Date()) async throws -> [MonitorResult] {
+    // Phase 1: Fetch metrics and persist
+    try await calculateMetricsForDate(date)
+
+    // Phase 2: Run detection engine
+    return try await DetectionEngine.shared.calculateAllStates(for: date)
+  }
+
+  /// Returns the current monitor states without recalculating metrics.
+  /// Use this when you just need to display states and don't need fresh HealthKit data.
+  func getCurrentStates() async throws -> [MonitorResult] {
+    try await DetectionEngine.shared.calculateAllStates()
+  }
+
+  /// Returns cached monitor states without any calculation.
+  /// Returns empty if no states have been calculated yet.
+  func getCachedStates() async -> [MonitorResult] {
+    await DetectionEngine.shared.getAllCachedResults()
+  }
+
+  /// Returns the overall status across all monitors.
+  func getOverallStatus() async throws -> MonitorStateValue {
+    try await DetectionEngine.shared.overallStatus()
+  }
+
+  /// Returns monitors that need attention (Watch or Off state).
+  func getMonitorsNeedingAttention() async throws -> [MonitorResult] {
+    try await DetectionEngine.shared.monitorsNeedingAttention()
+  }
+
+  /// Backfills metrics and loads historical detection results.
+  /// Call this on first launch or when significant historical data is needed.
+  func backfillMetricsAndDetection(days: Int) async throws {
+    // First backfill the metrics (Phase 1)
+    try await backfillMetrics(days: days)
+
+    // Then load historical detection results (Phase 2)
+    try await DetectionEngine.shared.loadHistoricalResults(days: min(days, 7))
+  }
+}
