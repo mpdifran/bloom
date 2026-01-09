@@ -22,7 +22,6 @@ struct DeveloperSettingsView: View {
   @AppStorage(.FeatureFlag.bypassPaywall) private var bypassPaywall = false
   @AppStorage(.FeatureFlag.mockMagicScanner) private var mockMagicScanner = false
   @AppStorage(.FeatureFlag.reEngagementTestMode) private var reEngagementTestMode = false
-  @AppStorage(.FeatureFlag.showTrendsTab) private var showTrendsTab = false
   @AppStorage("OnboardingRootViewTreatment.currentStep") private var onboardingCurrentStep = 0
   @AppStorage("OnboardingRootViewTreatment.wasYesInWarmingStep") private var onboardingWasYesInWarmingStep = false
   @AppStorage("OnboardingRootViewTreatment.personalizationFocus") private var onboardingPersonalizationFocus: String?
@@ -238,12 +237,6 @@ extension DeveloperSettingsView {
 
         SettingsCell("Mock Magic Scanner") {
           Toggle("", isOn: $mockMagicScanner)
-        }
-
-        Divider()
-
-        SettingsCell("Show Trends Tab") {
-          Toggle("", isOn: $showTrendsTab)
         }
       }
     }
