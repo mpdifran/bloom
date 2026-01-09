@@ -82,8 +82,9 @@ actor MonitorCalculator {
 
   private func fetchRestingHeartRate(for date: Date) async -> DailyMetricSampleInput? {
     let dateRange = DateRange.duringDay(date)
-    let samples = await healthStoreFetcher.fetchCollatedQuantity(
-      for: .restingHeartRate,
+    // Resting heart rate is a discrete type, so use fetchCollatedAverage
+    let samples = await healthStoreFetcher.fetchCollatedAverage(
+      quantityType: .restingHeartRate,
       unit: .bpm(),
       dateRange: dateRange
     )

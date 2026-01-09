@@ -724,6 +724,38 @@ extension DeveloperSettingsView {
           .selectable()
           .frame(height: 60)
         }
+
+        Divider()
+
+        AsyncButton {
+          do {
+            let results = try await MonitorCalculator.shared.calculateMetricsAndDetect()
+
+            let summary = results.map { result in
+              "\(result.monitorType.displayName): \(result.state.displayName) (\(result.findings.count) findings, \(Int(result.confidence * 100))% confidence)"
+            }.joined(separator: "\n")
+
+            await MainActor.run {
+              alertDetails = AlertDetails(
+                title: "Monitor Detection Results",
+                message: summary.isEmpty ? "No results available" : summary
+              )
+            }
+          } catch {
+            await MainActor.run {
+              self.error = error
+            }
+          }
+        } label: {
+          LabeledContent("Test Monitor Detection") {
+            Image(systemSymbol: .heartTextSquare)
+          }
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
+          .selectable()
+          .frame(height: 60)
+        }
       }
     }
   }
