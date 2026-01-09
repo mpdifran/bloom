@@ -11,8 +11,17 @@ import CoreHealth
 struct SleepDayView: View {
 
   let showsChatBar: Bool
+  let initialDate: Date?
 
   @State private var date = Date.now
+
+  init(showsChatBar: Bool, initialDate: Date? = nil) {
+    self.showsChatBar = showsChatBar
+    self.initialDate = initialDate
+    if let initialDate {
+      _date = State(initialValue: initialDate)
+    }
+  }
   @State private var sleepAnalysis: SleepAnalysis?
 
   @State private var showDatePicker = false
@@ -68,7 +77,8 @@ struct SleepDayView: View {
       await fetchNewSleepAnalysis()
     }
     .onAppear {
-      if !Calendar.current.isDateInToday(lastAppearDate) {
+      // Only reset to today if no initial date was provided and it's a new day
+      if initialDate == nil && !Calendar.current.isDateInToday(lastAppearDate) {
         date = Date()
       }
       lastAppearDate = Date()

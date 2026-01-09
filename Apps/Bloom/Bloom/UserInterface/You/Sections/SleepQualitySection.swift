@@ -38,7 +38,7 @@ struct SleepQualitySection: View {
 
       HStack {
         SleepScoreStatCard(score: averageSleepScore)
-          .onTapGesture { navigateToDetails() }
+          .onTapGesture { navigateToSleepScoreDetails() }
         SleepHeartRateStatCard(heartRate: averageSleepHeartRate, chartData: sleepHeartRateChartData)
           .onTapGesture { navigateToDetails() }
       }
@@ -62,6 +62,10 @@ struct SleepQualitySection: View {
 
   private func navigateToSleepStagesDetails() {
     presentedNavigationDestination = SleepStagesDetailsView().asAny
+  }
+
+  private func navigateToSleepScoreDetails() {
+    presentedNavigationDestination = SleepScoreHistoryView().asAny
   }
 }
 
