@@ -186,7 +186,8 @@ public extension DateRange {
     guard let startDate = Calendar.current.date(byAdding: .day, value: -numberOfDays, to: endDate) else {
       return DateRange(endDate, endDate)
     }
-    return DateRange(startDate, endDate)
+    let normalizedStart = Calendar.current.startOfDay(for: startDate)
+    return DateRange(normalizedStart, endDate)
   }
 
   static func trailingDaysFromStartOfToday(_ numberOfDays: Int) -> DateRange {
@@ -235,7 +236,8 @@ public extension DateRange {
     guard let startDate = Calendar.current.date(byAdding: .weekOfYear, value: -numberOfWeeks, to: endDate) else {
       return DateRange(endDate, endDate)
     }
-    return DateRange(startDate, endDate)
+    let normalizedStart = Calendar.current.startOfDay(for: startDate)
+    return DateRange(normalizedStart, endDate)
   }
 
   static func trailingWeeksFromEndOfToday(_ numberOfWeeks: Int) -> DateRange {
@@ -263,8 +265,8 @@ public extension DateRange {
     guard let startDate = Calendar.current.date(byAdding: .month, value: -numberOfMonths, to: endDate) else {
       return DateRange(endDate, endDate)
     }
-
-    return DateRange(startDate, endDate)
+    let normalizedStart = Calendar.current.startOfDay(for: startDate)
+    return DateRange(normalizedStart, endDate)
   }
 
   static func trailingMonthsFromEndOfToday(_ numberOfMonths: Int) -> DateRange {
@@ -328,8 +330,8 @@ public extension DateRange {
     guard let startDate = Calendar.current.date(byAdding: .year, value: -numberOfYears, to: endDate) else {
       return DateRange(endDate, endDate)
     }
-
-    return DateRange(startDate, endDate)
+    let normalizedStart = Calendar.current.startOfDay(for: startDate)
+    return DateRange(normalizedStart, endDate)
   }
   
   static func specificYear(_ yearsFromNow: Int) -> DateRange {

@@ -638,13 +638,13 @@ private extension MobilityDetailsView {
   func colorForAge(_ age: Int) -> Color {
     switch age {
     case ...35:
-      return .green
+      return .mutedGreen
     case 36...50:
-      return .yellow
+      return .mutedYellow
     case 51...60:
-      return .orange
+      return .mutedOrange
     default:
-      return .red
+      return .mutedRed
     }
   }
 }

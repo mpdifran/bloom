@@ -25,8 +25,12 @@ struct StressLevelsSection: View {
     }
   }
 
-  private func navigateToDetails() {
-    presentedNavigationDestination = StressDetailsView().asAny
+  private func navigateToHRVDetails() {
+    presentedNavigationDestination = HRVDetailsView().asAny
+  }
+
+  private func navigateToBloodPressureDetails() {
+    presentedNavigationDestination = BloodPressureDetailsView().asAny
   }
 }
 
@@ -34,12 +38,12 @@ private extension StressLevelsSection {
 
   var hrvCard: some View {
     HRVStatCard(data: hrvChartData)
-      .onTapGesture { navigateToDetails() }
+      .onTapGesture { navigateToHRVDetails() }
   }
 
   var bloodPressureCard: some View {
     BloodPressureStatCard(data: bloodPressureData)
-      .onTapGesture { navigateToDetails() }
+      .onTapGesture { navigateToBloodPressureDetails() }
   }
 }
 

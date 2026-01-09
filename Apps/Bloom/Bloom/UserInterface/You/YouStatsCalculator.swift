@@ -941,6 +941,132 @@ private extension YouStatsCalculator {
   }
 }
 
+// MARK: - Blood Pressure Details Methods
+
+extension YouStatsCalculator {
+
+  func calculateBloodPressureForPeriod(_ period: StatTimePeriod) async -> BloodPressureDetailData? {
+    let dateRange = period.dateRange
+    let interval = period.aggregatesByWeek ? DateComponents(weekOfYear: 1) : DateComponents(day: 1)
+    let unit = HKUnit.millimeterOfMercury()
+
+    // Fetch systolic and diastolic samples
+    async let systolicSamples = healthStoreFetcher.fetchCollatedAverage(
+      quantityType: .bloodPressureSystolic,
+      unit: unit,
+      interval: interval,
+      dateRange: dateRange
+    )
+
+    async let diastolicSamples = healthStoreFetcher.fetchCollatedAverage(
+      quantityType: .bloodPressureDiastolic,
+      unit: unit,
+      interval: interval,
+      dateRange: dateRange
+    )
+
+    let (systolic, diastolic) = await (systolicSamples, diastolicSamples)
+
+    guard systolic.isNotEmpty || diastolic.isNotEmpty else { return nil }
+
+    // Match systolic and diastolic samples by date to create readings
+    var readings = [BloodPressureReading]()
+    let calendar = Calendar.current
+
+    for systolicSample in systolic {
+      // Find matching diastolic sample for the same date
+      if let matchingDiastolic = diastolic.first(where: { sample in
+        calendar.isDate(sample.date, inSameDayAs: systolicSample.date)
+      }) {
+        readings.append(BloodPressureReading(
+          date: systolicSample.date,
+          systolic: systolicSample.quantity.doubleValue(for: unit),
+          diastolic: matchingDiastolic.quantity.doubleValue(for: unit)
+        ))
+      }
+    }
+
+    guard readings.isNotEmpty else { return nil }
+
+    // Calculate averages
+    let avgSystolic = readings.map(\.systolic).reduce(0, +) / Double(readings.count)
+    let avgDiastolic = readings.map(\.diastolic).reduce(0, +) / Double(readings.count)
+
+    // Determine category based on averages
+    let category = HealthGoalProvider.shared.bloodPressureCategory(
+      systolic: avgSystolic,
+      diastolic: avgDiastolic
+    )
+
+    return BloodPressureDetailData(
+      readings: readings.sorted { $0.date < $1.date },
+      averageSystolic: avgSystolic,
+      averageDiastolic: avgDiastolic,
+      category: category
+    )
+  }
+
+  func calculateBloodPressureForPreviousPeriod(_ period: StatTimePeriod) async -> BloodPressureDetailData? {
+    let currentRange = period.dateRange
+    let previousRange = DateRange.previousPeriod(from: currentRange, days: currentRange.numberOfDaysInclusive)
+    let interval = period.aggregatesByWeek ? DateComponents(weekOfYear: 1) : DateComponents(day: 1)
+    let unit = HKUnit.millimeterOfMercury()
+
+    // Fetch systolic and diastolic samples for previous period
+    async let systolicSamples = healthStoreFetcher.fetchCollatedAverage(
+      quantityType: .bloodPressureSystolic,
+      unit: unit,
+      interval: interval,
+      dateRange: previousRange
+    )
+
+    async let diastolicSamples = healthStoreFetcher.fetchCollatedAverage(
+      quantityType: .bloodPressureDiastolic,
+      unit: unit,
+      interval: interval,
+      dateRange: previousRange
+    )
+
+    let (systolic, diastolic) = await (systolicSamples, diastolicSamples)
+
+    guard systolic.isNotEmpty || diastolic.isNotEmpty else { return nil }
+
+    // Match systolic and diastolic samples by date to create readings
+    var readings = [BloodPressureReading]()
+    let calendar = Calendar.current
+
+    for systolicSample in systolic {
+      if let matchingDiastolic = diastolic.first(where: { sample in
+        calendar.isDate(sample.date, inSameDayAs: systolicSample.date)
+      }) {
+        readings.append(BloodPressureReading(
+          date: systolicSample.date,
+          systolic: systolicSample.quantity.doubleValue(for: unit),
+          diastolic: matchingDiastolic.quantity.doubleValue(for: unit)
+        ))
+      }
+    }
+
+    guard readings.isNotEmpty else { return nil }
+
+    // Calculate averages
+    let avgSystolic = readings.map(\.systolic).reduce(0, +) / Double(readings.count)
+    let avgDiastolic = readings.map(\.diastolic).reduce(0, +) / Double(readings.count)
+
+    let category = HealthGoalProvider.shared.bloodPressureCategory(
+      systolic: avgSystolic,
+      diastolic: avgDiastolic
+    )
+
+    return BloodPressureDetailData(
+      readings: readings.sorted { $0.date < $1.date },
+      averageSystolic: avgSystolic,
+      averageDiastolic: avgDiastolic,
+      category: category
+    )
+  }
+}
+
 // MARK: - Mobility Details Methods
 
 extension YouStatsCalculator {
@@ -1295,6 +1421,105 @@ extension YouStatsCalculator {
       expectedDataPointCount: displaySamples.count
     )
   }
+
+  func calculateHRVForPeriod(_ period: StatTimePeriod) async -> HRVDetailData? {
+    let calendar = Calendar.current
+    let now = Date()
+    let dateRange = period.dateRange
+    let sampleType = HKQuantityType(.heartRateVariabilitySDNN)
+    let unit = HKUnit.secondUnit(with: .milli)
+
+    // For 1D, fetch raw samples; for other periods, fetch aggregated data
+    let dataPoints: [DateQuantitySample]
+
+    if period == .oneDay {
+      // Fetch raw HRV samples for today
+      guard let samples = try? await healthStoreFetcher.fetchSamples(
+        for: sampleType,
+        dateRange: dateRange
+      ) as? [HKQuantitySample],
+      samples.isNotEmpty else { return nil }
+
+      dataPoints = samples.map { sample in
+        DateQuantitySample(date: sample.endDate, quantity: sample.quantity)
+      }
+    } else {
+      // Fetch aggregated data by day or week
+      let interval = period.aggregatesByWeek ? DateComponents(weekOfYear: 1) : DateComponents(day: 1)
+      dataPoints = await healthStoreFetcher.fetchCollatedAverage(
+        quantityType: .heartRateVariabilitySDNN,
+        unit: unit,
+        interval: interval,
+        dateRange: dateRange
+      )
+    }
+
+    guard dataPoints.isNotEmpty else { return nil }
+
+    // Calculate period average
+    let values = dataPoints.map { $0.quantity.doubleValue(for: unit) }
+    let periodAverage = values.reduce(0, +) / Double(values.count)
+
+    // Calculate 7-day and 30-day averages for trend comparison
+    let thirtyDayRange = DateRange.trailingDaysFromNow(30)
+    guard let sevenDaysAgo = calendar.date(byAdding: .day, value: -7, to: now) else {
+      return HRVDetailData(
+        dataPoints: dataPoints,
+        periodAverage: periodAverage,
+        sevenDayAverage: nil,
+        thirtyDayAverage: nil,
+        timeOfDayDataPoints: nil
+      )
+    }
+
+    guard let allSamples = try? await healthStoreFetcher.fetchSamples(
+      for: sampleType,
+      dateRange: thirtyDayRange
+    ) as? [HKQuantitySample],
+    allSamples.isNotEmpty else {
+      return HRVDetailData(
+        dataPoints: dataPoints,
+        periodAverage: periodAverage,
+        sevenDayAverage: nil,
+        thirtyDayAverage: nil,
+        timeOfDayDataPoints: nil
+      )
+    }
+
+    let sevenDaySamples = allSamples.filter { $0.endDate >= sevenDaysAgo }
+    let sevenDayValues = sevenDaySamples.map { $0.quantity.doubleValue(for: unit) }
+    let thirtyDayValues = allSamples.map { $0.quantity.doubleValue(for: unit) }
+
+    let sevenDayAverage = sevenDayValues.isEmpty ? nil : sevenDayValues.reduce(0, +) / Double(sevenDayValues.count)
+    let thirtyDayAverage = thirtyDayValues.isEmpty ? nil : thirtyDayValues.reduce(0, +) / Double(thirtyDayValues.count)
+
+    // Calculate time-of-day breakdown (average by hour window across all days in period)
+    var timeOfDayDataPoints: [HRVTimeOfDayDataPoint]?
+    if let rawSamples = try? await healthStoreFetcher.fetchSamples(
+      for: sampleType,
+      dateRange: dateRange
+    ) as? [HKQuantitySample], rawSamples.isNotEmpty {
+      let windows = [0, 3, 6, 9, 12, 15, 18, 21]
+      timeOfDayDataPoints = windows.compactMap { windowStart in
+        let windowSamples = rawSamples.filter { sample in
+          let hour = calendar.component(.hour, from: sample.endDate)
+          return hour >= windowStart && hour < windowStart + 3
+        }
+        guard windowSamples.isNotEmpty else { return nil }
+        let windowValues = windowSamples.map { $0.quantity.doubleValue(for: unit) }
+        let avg = windowValues.reduce(0, +) / Double(windowValues.count)
+        return HRVTimeOfDayDataPoint(hourWindow: Double(windowStart) + 1.5, averageHRV: avg)
+      }
+    }
+
+    return HRVDetailData(
+      dataPoints: dataPoints,
+      periodAverage: periodAverage,
+      sevenDayAverage: sevenDayAverage,
+      thirtyDayAverage: thirtyDayAverage,
+      timeOfDayDataPoints: timeOfDayDataPoints
+    )
+  }
 }
 
 struct WristTempData: Sendable {
@@ -1436,6 +1661,34 @@ struct HRVTimeOfDayDataPoint: Identifiable, Sendable {
   let averageHRV: Double
 }
 
+struct HRVDetailData: Sendable {
+  let dataPoints: [DateQuantitySample]
+  let periodAverage: Double
+  let sevenDayAverage: Double?
+  let thirtyDayAverage: Double?
+  let timeOfDayDataPoints: [HRVTimeOfDayDataPoint]?
+
+  var trend: HRVChartData.Trend? {
+    guard let seven = sevenDayAverage, let thirty = thirtyDayAverage else { return nil }
+    let diff = seven - thirty
+    let percentThreshold = thirty * 0.05
+    let absoluteThreshold: Double = 3
+    if diff >= percentThreshold && diff >= absoluteThreshold { return .higher }
+    if diff <= -percentThreshold && diff <= -absoluteThreshold { return .lower }
+    return .consistent
+  }
+
+  var trendText: String? {
+    trend.map {
+      switch $0 {
+      case .higher: "Increasing"
+      case .lower: "Decreasing"
+      case .consistent: "Consistent"
+      }
+    }
+  }
+}
+
 struct HRVChartData: Sendable {
   enum Trend: Sendable {
     case higher
@@ -1470,6 +1723,20 @@ struct BloodPressureCardData: Sendable {
   let latestSystolic: Double
   let latestDiastolic: Double
   let latestDate: Date
+  let category: BloodPressureCategory
+}
+
+struct BloodPressureReading: Identifiable, Sendable {
+  var id: Date { date }
+  let date: Date
+  let systolic: Double
+  let diastolic: Double
+}
+
+struct BloodPressureDetailData: Sendable {
+  let readings: [BloodPressureReading]
+  let averageSystolic: Double
+  let averageDiastolic: Double
   let category: BloodPressureCategory
 }
 
