@@ -6,6 +6,7 @@
 	<array>
 		<string>proactive-tip</string>
 		<string>update-reminder-notifications</string>
+		<string>monitor-daily-aggregation</string>
 	</array>
 	<key>BLOOM_APP_GROUP_ID</key>
 	<string>$(BLOOM_APP_GROUP_ID)</string>
@@ -35,6 +36,7 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
+		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
 	<key>bugsnag</key>

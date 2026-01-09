@@ -26,3 +26,4 @@ public typealias UserFact = SchemaV19.UserFact
 public typealias MorningHealthReport = SchemaV22.MorningHealthReport
 public typealias MorningHealthInsight = SchemaV22.MorningHealthInsight
 public typealias BiologicalAgeRecord = SchemaV30.BiologicalAgeRecord
+public typealias DailyMetricSample = SchemaV31.DailyMetricSample
