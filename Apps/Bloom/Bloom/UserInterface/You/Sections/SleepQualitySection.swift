@@ -28,9 +28,9 @@ struct SleepQualitySection: View {
     StatSection(symbol: SFSymbol(rawValue: VitalModel.Kind.sleepQuality.systemImage), title: "Sleep Quality", subtitle: "Last 7 Days") {
       HStack {
         SleepBedtimeStatCard(data: bedtimeData)
-          .onTapGesture { navigateToDetails() }
+          .onTapGesture { navigateToBedtimeDetails() }
         SleepDurationStatCard(data: sleepDurationChartData)
-          .onTapGesture { navigateToDetails() }
+          .onTapGesture { navigateToBedtimeDetails() }
       }
 
       SleepStagesStatCard(sleepStageDataPoints: sleepStageDataPoints)
@@ -54,6 +54,10 @@ struct SleepQualitySection: View {
 
   private func navigateToDetails() {
     presentedNavigationDestination = SleepDetailsView().asAny
+  }
+
+  private func navigateToBedtimeDetails() {
+    presentedNavigationDestination = BedtimeSleepDurationDetailsView().asAny
   }
 }
 

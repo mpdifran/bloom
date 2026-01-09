@@ -1804,3 +1804,165 @@ struct SpeedDataPoint: Identifiable, Sendable {
   let date: Date
   let value: Double
 }
+
+// MARK: - Bedtime & Sleep Duration Details Methods
+
+extension YouStatsCalculator {
+
+  func calculateBedtimeSleepDurationForPeriod(_ period: StatTimePeriod) async -> BedtimeSleepDurationSummary? {
+    let dateRange = period.dateRange
+    let sleepAnalyses = await healthStoreFetcher.fetchSleepAnalysis(dateRange: dateRange)
+
+    guard sleepAnalyses.isNotEmpty else { return nil }
+
+    // Build data points (aggregate by day or week based on period)
+    let dataPoints = buildBedtimeSleepDurationDataPoints(from: sleepAnalyses, period: period)
+
+    guard dataPoints.isNotEmpty else { return nil }
+
+    // Calculate statistics
+    let avgBedtime = dataPoints.map(\.bedtimeMinutesFromNoon).reduce(0, +) / Double(dataPoints.count)
+    let avgWakeTime = dataPoints.map(\.wakeTimeMinutesFromNoon).reduce(0, +) / Double(dataPoints.count)
+    let avgDuration = dataPoints.map(\.durationMinutes).reduce(0, +) / Double(dataPoints.count)
+
+    let bedtimeStdDev = calculateStandardDeviation(dataPoints.map(\.bedtimeMinutesFromNoon))
+    let wakeTimeStdDev = calculateStandardDeviation(dataPoints.map(\.wakeTimeMinutesFromNoon))
+
+    let trend = calculateBedtimeTrendFromDataPoints(dataPoints)
+
+    // Fetch previous period for comparison
+    let previousRange = period.previousPeriodDateRange
+    let previousAnalyses = await healthStoreFetcher.fetchSleepAnalysis(dateRange: previousRange)
+    let durationChange = calculateDurationPercentChange(current: sleepAnalyses, previous: previousAnalyses)
+    let previousAvgDuration: Double? = previousAnalyses.isNotEmpty
+      ? previousAnalyses.map(\.overallMinutes).reduce(0, +) / Double(previousAnalyses.count)
+      : nil
+
+    return BedtimeSleepDurationSummary(
+      dataPoints: dataPoints,
+      averageBedtimeMinutesFromNoon: avgBedtime,
+      averageWakeTimeMinutesFromNoon: avgWakeTime,
+      averageDurationMinutes: avgDuration,
+      bedtimeStandardDeviationMinutes: bedtimeStdDev,
+      wakeTimeStandardDeviationMinutes: wakeTimeStdDev,
+      bedtimeTrend: trend,
+      previousPeriodAverageDurationMinutes: previousAvgDuration,
+      durationChangeFromPreviousPeriod: durationChange
+    )
+  }
+
+  private func buildBedtimeSleepDurationDataPoints(
+    from sleepAnalyses: [SleepAnalysis],
+    period: StatTimePeriod
+  ) -> [BedtimeSleepDurationDataPoint] {
+    let calendar = Calendar.current
+
+    if period.aggregatesByWeek {
+      // Group by week and average
+      var weeklyData = [Date: [SleepAnalysis]]()
+      for analysis in sleepAnalyses {
+        let weekStart = calendar.dateInterval(of: .weekOfYear, for: analysis.endDate)?.start ?? analysis.endDate
+        weeklyData[weekStart, default: []].append(analysis)
+      }
+
+      return weeklyData.compactMap { weekStart, analyses -> BedtimeSleepDurationDataPoint? in
+        guard analyses.isNotEmpty else { return nil }
+
+        let bedtimes = analyses.map { getMinutesFromNoon($0.startDate) }
+        let wakeTimes = analyses.map { getMinutesFromNoon($0.endDate) }
+        let durations = analyses.map(\.overallMinutes)
+
+        return BedtimeSleepDurationDataPoint(
+          date: weekStart,
+          bedtimeMinutesFromNoon: bedtimes.reduce(0, +) / Double(bedtimes.count),
+          wakeTimeMinutesFromNoon: wakeTimes.reduce(0, +) / Double(wakeTimes.count),
+          durationMinutes: durations.reduce(0, +) / Double(durations.count)
+        )
+      }.sorted { $0.date < $1.date }
+    } else {
+      // One data point per day
+      return sleepAnalyses.map { analysis in
+        BedtimeSleepDurationDataPoint(
+          date: calendar.startOfDay(for: analysis.endDate),
+          bedtimeMinutesFromNoon: getMinutesFromNoon(analysis.startDate),
+          wakeTimeMinutesFromNoon: getMinutesFromNoon(analysis.endDate),
+          durationMinutes: analysis.overallMinutes
+        )
+      }.sorted { $0.date < $1.date }
+    }
+  }
+
+  /// Converts a date to minutes from noon
+  /// 12:00 PM = 0, 11:00 PM = 660, 12:00 AM = 720, 7:00 AM = 1140
+  private func getMinutesFromNoon(_ date: Date) -> Double {
+    let calendar = Calendar.current
+    let components = calendar.dateComponents([.hour, .minute], from: date)
+    let hours = Double(components.hour ?? 0)
+    let minutes = Double(components.minute ?? 0)
+
+    var totalMinutes = hours * 60 + minutes
+
+    // Convert to minutes from noon
+    // If before noon, add 24 hours (treat as next day morning)
+    if totalMinutes < 720 { // Before noon
+      totalMinutes += 720  // Minutes from previous noon
+    } else {
+      totalMinutes -= 720  // Minutes from current noon
+    }
+
+    return totalMinutes
+  }
+
+  private func calculateStandardDeviation(_ values: [Double]) -> Double {
+    guard values.count > 1 else { return 0 }
+    let mean = values.reduce(0, +) / Double(values.count)
+    let squaredDiffs = values.map { pow($0 - mean, 2) }
+    let variance = squaredDiffs.reduce(0, +) / Double(values.count)
+    return sqrt(variance)
+  }
+
+  private func calculateBedtimeTrendFromDataPoints(_ dataPoints: [BedtimeSleepDurationDataPoint]) -> BedtimeTrend {
+    guard dataPoints.count >= 3 else { return .consistent }
+
+    let bedtimes = dataPoints.map(\.bedtimeMinutesFromNoon)
+    let average = bedtimes.reduce(0, +) / Double(bedtimes.count)
+
+    let standardDeviation = calculateStandardDeviation(bedtimes)
+
+    // Check for trending by comparing first half to second half
+    let midpoint = bedtimes.count / 2
+    let firstHalfAvg = bedtimes.prefix(midpoint).reduce(0, +) / Double(midpoint)
+    let secondHalfAvg = bedtimes.suffix(midpoint).reduce(0, +) / Double(midpoint)
+    let trendDifference = secondHalfAvg - firstHalfAvg
+
+    // If standard deviation is low and no significant trend, it's consistent
+    if standardDeviation < 30 && abs(trendDifference) < 20 {
+      return .consistent
+    }
+
+    // If there's a significant trend (>20 min difference between halves)
+    // Higher values = later bedtime (more minutes from noon)
+    if trendDifference > 20 {
+      return .trendingLater
+    } else if trendDifference < -20 {
+      return .trendingEarlier
+    }
+
+    // High variance but no clear trend means inconsistent
+    return .inconsistent
+  }
+
+  private func calculateDurationPercentChange(
+    current: [SleepAnalysis],
+    previous: [SleepAnalysis]
+  ) -> Double? {
+    guard current.isNotEmpty, previous.isNotEmpty else { return nil }
+
+    let currentAvg = current.map(\.overallMinutes).reduce(0, +) / Double(current.count)
+    let previousAvg = previous.map(\.overallMinutes).reduce(0, +) / Double(previous.count)
+
+    guard previousAvg > 0 else { return nil }
+
+    return ((currentAvg - previousAvg) / previousAvg) * 100
+  }
+}
