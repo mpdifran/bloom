@@ -339,7 +339,7 @@ private extension SleepMetricsDetailsView {
 
         Chart(temperatureDataPoints) { dataPoint in
           AreaMark(
-            x: .value("Date", dataPoint.date, unit: selectedPeriod.aggregatesByWeek ? .weekOfYear : .day),
+            x: .value("Date", dataPoint.date),
             y: .value("Temp", dataPoint.localizedTemperature)
           )
           .foregroundStyle(
@@ -352,7 +352,7 @@ private extension SleepMetricsDetailsView {
           .interpolationMethod(.catmullRom)
 
           LineMark(
-            x: .value("Date", dataPoint.date, unit: selectedPeriod.aggregatesByWeek ? .weekOfYear : .day),
+            x: .value("Date", dataPoint.date),
             y: .value("Temp", dataPoint.localizedTemperature)
           )
           .foregroundStyle(Color.mutedPurple)
@@ -441,7 +441,7 @@ private extension SleepMetricsDetailsView {
 
         Chart(respiratoryDataPoints) { dataPoint in
           AreaMark(
-            x: .value("Date", dataPoint.date, unit: selectedPeriod.aggregatesByWeek ? .weekOfYear : .day),
+            x: .value("Date", dataPoint.date),
             y: .value("Rate", dataPoint.rate)
           )
           .foregroundStyle(
@@ -454,7 +454,7 @@ private extension SleepMetricsDetailsView {
           .interpolationMethod(.catmullRom)
 
           LineMark(
-            x: .value("Date", dataPoint.date, unit: selectedPeriod.aggregatesByWeek ? .weekOfYear : .day),
+            x: .value("Date", dataPoint.date),
             y: .value("Rate", dataPoint.rate)
           )
           .foregroundStyle(Color.mutedLightBlue)
