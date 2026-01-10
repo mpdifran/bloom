@@ -11,55 +11,56 @@ import Charts
 import TelemetryDeck
 import HealthKit
 import CoreHealth
+import BloomFoundation
 
 struct NutritionDetailsView: View {
 
-  private let viewModel = VitalsViewModel.shared
-
-  @State private var dailyEnergy = [DateQuantitySample]()
+  @State private var selectedPeriod: StatTimePeriod = .sevenDays
+  @State private var nutritionDetails: NutritionMonthlySummary.Details?
   @State private var dailyFiber = [DateQuantitySample]()
   @State private var dailySugar = [DateQuantitySample]()
   @State private var dailyCholesterol = [DateQuantitySample]()
 
   @State private var presentedSheet: AnyView?
-  @State private var hasNoData = false
   @State private var hasVitaminData = false
   @State private var hasMineralData = false
 
+  var hasNoData: Bool {
+    nutritionDetails == nil
+  }
+
   var body: some View {
-    Group {
+    BloomScrollView(spacing: 20) {
+      StatTimePeriodPicker(selectedPeriod: $selectedPeriod)
+
       if hasNoData {
         emptyView
       } else {
-        BloomScrollView(spacing: 20) {
-          netEnergyChart
-            .cardContainer()
-          macrosChart
-            .cardContainer(includePadding: false)
-          vitaminsChart
-            .cardContainer()
-          mineralsChart
-            .cardContainer()
-          cholesterolChart
-            .cardContainer()
-          fiberChart
-            .cardContainer()
-          sugarChart
-            .cardContainer()
+        macrosChart
+          .cardContainer(includePadding: false)
+        vitaminsChart
+          .cardContainer()
+        mineralsChart
+          .cardContainer()
+        cholesterolChart
+          .cardContainer()
+        fiberChart
+          .cardContainer()
+        sugarChart
+          .cardContainer()
 
-          HealthCitationLinkView(
-            url: .dietaryGuidelinesForAmericans,
-            title: "Recommended ranges based on the USDA's Dietary Guidelines for Americans."
-          )
-          .padding(.horizontal)
-        }
+        HealthCitationLinkView(
+          url: .dietaryGuidelinesForAmericans,
+          title: "Recommended ranges based on the USDA's Dietary Guidelines for Americans."
+        )
+        .padding(.horizontal)
       }
     }
     .toolbar {
       ToolbarItem(placement: .principal) {
         VitalSummaryDetailTitleView(
           title: "Nutrition",
-          subtitle: "Last 30 Days"
+          subtitle: selectedPeriod.displayName
         )
       }
     }
@@ -67,51 +68,104 @@ struct NutritionDetailsView: View {
     .navigationBarTitleDisplayMode(.inline)
     .groupedBackground()
     .sheet($presentedSheet)
-    .task {
-      let hasNoData = await viewModel.nutritionSummary?.hasNoData() ?? true
+    .animation(.default, value: selectedPeriod)
+    .task(id: selectedPeriod) {
+      let details = await HealthStoreFetcher.shared.fetchNutritionMonthlySummaryDetails(
+        dateRange: selectedPeriod.dateRange
+      )
       await MainActor.run {
-        self.hasNoData = hasNoData
+        self.nutritionDetails = details
+        self.hasVitaminData = details.averageVitaminA != nil ||
+          details.averageVitaminB6 != nil ||
+          details.averageVitaminB12 != nil ||
+          details.averageVitaminC != nil ||
+          details.averageVitaminD != nil ||
+          details.averageVitaminE != nil
+        self.hasMineralData = details.averageCalcium != nil ||
+          details.averageIron != nil ||
+          details.averageMagnesium != nil ||
+          details.averagePotassium != nil ||
+          details.averageSodium != nil ||
+          details.averageZinc != nil
       }
     }
-    .task {
-      let samples = await HealthStoreFetcher.shared.fetchNetEnergy(dateRange: .trailingDaysFromNow(30))
-      await MainActor.run {
-        self.dailyEnergy = samples
-      }
-    }
-    .task {
-      let samples = await HealthStoreFetcher.shared.fetchCollatedQuantity(
+    .task(id: selectedPeriod) {
+      let dailySamples = await HealthStoreFetcher.shared.fetchCollatedQuantity(
         for: .dietarySugar,
         unit: .gram(),
-        dateRange: .trailingMonthsFromNow(1)
+        interval: DateComponents(day: 1),
+        options: [.cumulativeSum],
+        dateRange: selectedPeriod.dateRange
       )
+
+      let samples: [DateQuantitySample]
+      if selectedPeriod.aggregatesByWeek {
+        let grouped = Dictionary(grouping: dailySamples) { sample in
+          Calendar.current.dateInterval(of: .weekOfYear, for: sample.date)?.start ?? sample.date
+        }
+        samples = grouped.map { (weekStart, weekSamples) in
+          let average = weekSamples.map { $0.quantity.doubleValue(for: .gram()) }.average(keyPath: \.self)
+          return DateQuantitySample(date: weekStart, quantity: HKQuantity(unit: .gram(), doubleValue: average))
+        }.sorted { $0.date < $1.date }
+      } else {
+        samples = dailySamples
+      }
+
       await MainActor.run {
         self.dailySugar = samples
       }
     }
-    .task {
-      let samples = await HealthStoreFetcher.shared.fetchCollatedQuantity(
+    .task(id: selectedPeriod) {
+      let dailySamples = await HealthStoreFetcher.shared.fetchCollatedQuantity(
         for: .dietaryFiber,
         unit: .gram(),
-        dateRange: .trailingMonthsFromNow(1)
+        interval: DateComponents(day: 1),
+        options: [.cumulativeSum],
+        dateRange: selectedPeriod.dateRange
       )
+
+      let samples: [DateQuantitySample]
+      if selectedPeriod.aggregatesByWeek {
+        let grouped = Dictionary(grouping: dailySamples) { sample in
+          Calendar.current.dateInterval(of: .weekOfYear, for: sample.date)?.start ?? sample.date
+        }
+        samples = grouped.map { (weekStart, weekSamples) in
+          let average = weekSamples.map { $0.quantity.doubleValue(for: .gram()) }.average(keyPath: \.self)
+          return DateQuantitySample(date: weekStart, quantity: HKQuantity(unit: .gram(), doubleValue: average))
+        }.sorted { $0.date < $1.date }
+      } else {
+        samples = dailySamples
+      }
+
       await MainActor.run {
         self.dailyFiber = samples
       }
     }
-    .task {
-      let samples = await HealthStoreFetcher.shared.fetchCollatedQuantity(
+    .task(id: selectedPeriod) {
+      let dailySamples = await HealthStoreFetcher.shared.fetchCollatedQuantity(
         for: .dietaryCholesterol,
         unit: .gramUnit(with: .milli),
-        dateRange: .trailingMonthsFromNow(1)
+        interval: DateComponents(day: 1),
+        options: [.cumulativeSum],
+        dateRange: selectedPeriod.dateRange
       )
+
+      let samples: [DateQuantitySample]
+      if selectedPeriod.aggregatesByWeek {
+        let grouped = Dictionary(grouping: dailySamples) { sample in
+          Calendar.current.dateInterval(of: .weekOfYear, for: sample.date)?.start ?? sample.date
+        }
+        samples = grouped.map { (weekStart, weekSamples) in
+          let average = weekSamples.map { $0.quantity.doubleValue(for: .gramUnit(with: .milli)) }.average(keyPath: \.self)
+          return DateQuantitySample(date: weekStart, quantity: HKQuantity(unit: .gramUnit(with: .milli), doubleValue: average))
+        }.sorted { $0.date < $1.date }
+      } else {
+        samples = dailySamples
+      }
+
       await MainActor.run {
         self.dailyCholesterol = samples
       }
-    }
-    .task {
-      self.hasVitaminData = await viewModel.nutritionSummary?.details.vitaminScore() != nil
-      self.hasMineralData = await viewModel.nutritionSummary?.details.mineralScore() != nil
     }
     .onAppear {
       TelemetryDeck.viewScreen("Nutrition Vital Details")
@@ -135,79 +189,8 @@ private extension NutritionDetailsView {
   }
 
   @ViewBuilder
-  var netEnergyChart: some View {
-    if let _ = viewModel.nutritionSummary?.details.netEnergy {
-      VStack(alignment: .leading, spacing: 16) {
-        VitalDetailChartTitleView(
-          title: "Net Energy Expendature",
-          valueLabel: "",
-          value: ""
-        )
-
-        Chart{
-          ForEach(dailyEnergy) { sample in
-            BarMark(
-              x: .value("Date", sample.date),
-              y: .value("Net Energy", sample.quantity.doubleValue(for: .largeCalorie()))
-            )
-            .foregroundStyle((sample.quantity.doubleValue(for: .largeCalorie()) < 500 && sample.quantity.doubleValue(for: .largeCalorie()) > -500) ? .green : .yellow)
-            .cornerRadius(3)
-          }
-
-          RectangleMark(
-            yStart: .value("Max", 500),
-            yEnd: .value("Min", -500)
-          )
-          .foregroundStyle(.green.opacity(0.3))
-
-          RuleMark(
-            y: .value("Max", 500)
-          )
-          .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-          .foregroundStyle(.green)
-
-          RuleMark(
-            y: .value("Min", -500)
-          )
-          .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-          .foregroundStyle(.green)
-        }
-        .frame(height: 260)
-
-        if let netEnergyStatus = viewModel.nutritionSummary?.details.netEnergyStatus {
-          HStack(alignment: .firstTextBaseline) {
-            switch netEnergyStatus {
-            case .deficit(let percent):
-              Text("\(percent.doubleValue(for: .percent()).format())%")
-                .font(.largeTitle)
-                .fontDesign(.rounded)
-              Text("Caloric Deficit")
-            case .surplus(let percent):
-              Text("\(percent.doubleValue(for: .percent()).format())%")
-                .font(.largeTitle)
-                .fontDesign(.rounded)
-              Text("Caloric Surplus")
-            }
-
-            Spacer(minLength: 0)
-          }
-          .bold()
-        }
-
-        if let netEnergyDescription = viewModel.nutritionSummary?.details.netEnergyDescription {
-          HStack {
-            Text(netEnergyDescription)
-              .fixedSize(horizontal: false, vertical: true)
-            Spacer(minLength: 0)
-          }
-        }
-      }
-    }
-  }
-
-  @ViewBuilder
   var macrosChart: some View {
-    if let details = viewModel.nutritionSummary?.details, let macros = details.macros {
+    if let details = nutritionDetails, let macros = details.macros {
       VStack(alignment: .leading) {
         VitalDetailChartTitleView(
           title: "Macros",
@@ -258,7 +241,7 @@ private extension NutritionDetailsView {
 
   @ViewBuilder
   var vitaminsChart: some View {
-    if let details = viewModel.nutritionSummary?.details, hasVitaminData {
+    if let details = nutritionDetails, hasVitaminData {
       VStack(alignment: .leading) {
         VitalDetailChartTitleView(
           title: "Vitamins",
@@ -340,7 +323,7 @@ private extension NutritionDetailsView {
 
   @ViewBuilder
   var mineralsChart: some View {
-    if let details = viewModel.nutritionSummary?.details, hasMineralData {
+    if let details = nutritionDetails, hasMineralData {
       VStack(alignment: .leading) {
         VitalDetailChartTitleView(
           title: "Minerals",
@@ -423,7 +406,7 @@ private extension NutritionDetailsView {
   @ViewBuilder
   var fiberChart: some View {
     if
-      let details = viewModel.nutritionSummary?.details,
+      let details = nutritionDetails,
       let averageFiber = details.averageFiber,
       averageFiber.doubleValue(for: .gram()) >= 1
     {
@@ -436,7 +419,7 @@ private extension NutritionDetailsView {
         Chart{
           ForEach(dailyFiber) { sample in
             BarMark(
-              x: .value("Date", sample.date),
+              x: .value("Date", sample.date, unit: selectedPeriod.aggregatesByWeek ? .weekOfYear : .day),
               y: .value("Daily Fiber", sample.quantity.doubleValue(for: .gram()))
             )
             .foregroundStyle(.fiber)
@@ -472,7 +455,7 @@ private extension NutritionDetailsView {
   @ViewBuilder
   var cholesterolChart: some View {
     if
-      let details = viewModel.nutritionSummary?.details,
+      let details = nutritionDetails,
       let averageCholesterol = details.averageCholesterol,
       averageCholesterol.doubleValue(for: .gramUnit(with: .milli)) >= 1
     {
@@ -485,7 +468,7 @@ private extension NutritionDetailsView {
         Chart{
           ForEach(dailyCholesterol) { sample in
             BarMark(
-              x: .value("Date", sample.date),
+              x: .value("Date", sample.date, unit: selectedPeriod.aggregatesByWeek ? .weekOfYear : .day),
               y: .value("Daily Cholesterol", sample.quantity.doubleValue(for: .gramUnit(with: .milli)))
             )
             .foregroundStyle(.cholesterol)
@@ -513,7 +496,7 @@ private extension NutritionDetailsView {
   @ViewBuilder
   var sugarChart: some View {
     if
-      let details = viewModel.nutritionSummary?.details,
+      let details = nutritionDetails,
       let averageSugar = details.averageSugar,
       averageSugar.doubleValue(for: .gram()) >= 1
     {
@@ -526,7 +509,7 @@ private extension NutritionDetailsView {
         Chart{
           ForEach(dailySugar) { sample in
             BarMark(
-              x: .value("Date", sample.date),
+              x: .value("Date", sample.date, unit: selectedPeriod.aggregatesByWeek ? .weekOfYear : .day),
               y: .value("Daily Sugar", sample.quantity.doubleValue(for: .gram()))
             )
             .foregroundStyle(.sugar)
