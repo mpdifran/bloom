@@ -40,20 +40,16 @@ struct SleepQualitySection: View {
         SleepScoreStatCard(score: averageSleepScore)
           .onTapGesture { navigateToSleepScoreDetails() }
         SleepHeartRateStatCard(heartRate: averageSleepHeartRate, chartData: sleepHeartRateChartData)
-          .onTapGesture { navigateToDetails() }
+          .onTapGesture { navigateToSleepMetricsDetails() }
       }
 
       HStack {
         SleepWristTempStatCard(data: wristTempData)
-          .onTapGesture { navigateToDetails() }
+          .onTapGesture { navigateToSleepMetricsDetails() }
         SleepRespiratoryRateStatCard(trend: sleepRespiratoryRateTrend, chartData: sleepRespiratoryRateChartData)
-          .onTapGesture { navigateToDetails() }
+          .onTapGesture { navigateToSleepMetricsDetails() }
       }
     }
-  }
-
-  private func navigateToDetails() {
-    presentedNavigationDestination = SleepDetailsView().asAny
   }
 
   private func navigateToBedtimeDetails() {
@@ -66,6 +62,10 @@ struct SleepQualitySection: View {
 
   private func navigateToSleepScoreDetails() {
     presentedNavigationDestination = SleepScoreHistoryView().asAny
+  }
+
+  private func navigateToSleepMetricsDetails() {
+    presentedNavigationDestination = SleepMetricsDetailsView().asAny
   }
 }
 
