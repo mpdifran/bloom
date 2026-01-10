@@ -11,9 +11,11 @@ import Charts
 import HealthKit
 import TelemetryDeck
 import CoreHealth
+import BloomFoundation
 
 struct BodyCompositionDetailsView: View {
 
+  @State private var selectedPeriod: StatTimePeriod = .oneMonth
   @State private var bodyMassSamples = [DateQuantitySample]()
   @State private var bodyFatPercentageSamples = [DateQuantitySample]()
 
@@ -21,6 +23,8 @@ struct BodyCompositionDetailsView: View {
 
   @State private var presentedSheet: AnyView?
   @State private var selectedRangeIndex = 0
+  @State private var rawSelectedDate: Date?
+  @State private var selectedWeight: DateQuantitySample?
 
   private let ranges: [BodyCompositionMonthlySummary.PercentageRange] = [
     .essentialFat,
@@ -32,9 +36,15 @@ struct BodyCompositionDetailsView: View {
 
   let feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
 
+  var hasData: Bool {
+    bodyMassSamples.isNotEmpty || bodyFatPercentageSamples.isNotEmpty
+  }
+
   var body: some View {
-    Group {
-      if viewModel.bodyCompositionSummary?.details.hasNoData == false {
+    BloomScrollView {
+      StatTimePeriodPicker(selectedPeriod: $selectedPeriod)
+
+      if hasData {
         contentView
       } else {
         emptyView
@@ -44,7 +54,7 @@ struct BodyCompositionDetailsView: View {
       ToolbarItem(placement: .principal) {
         VitalSummaryDetailTitleView(
           title: "Body Composition",
-          subtitle: "Last 30 Days"
+          subtitle: selectedPeriod.displayName
         )
       }
     }
@@ -52,23 +62,30 @@ struct BodyCompositionDetailsView: View {
     .navigationBarTitleDisplayMode(.inline)
     .sheet($presentedSheet)
     .animation(.default, value: range)
-    .task {
+    .animation(.default, value: selectedPeriod)
+    .task(id: selectedPeriod) {
+      let interval = selectedPeriod.aggregatesByWeek ? DateComponents(weekOfYear: 1) : DateComponents(day: 1)
+
       let samples = await HealthStoreFetcher.shared.fetchCollatedAverage(
         quantityType: .bodyFatPercentage,
         unit: .percent(),
-        dateRange: .trailingMonthsFromNow(1)
+        interval: interval,
+        dateRange: selectedPeriod.dateRange
       )
 
       await MainActor.run {
         self.bodyFatPercentageSamples = samples
       }
     }
-    .task {
-      let samples = (try? await HealthManager.shared.healthStore.fetchAverageStatistics(
-        quantityTypeID: .bodyMass,
+    .task(id: selectedPeriod) {
+      let interval = selectedPeriod.aggregatesByWeek ? DateComponents(weekOfYear: 1) : DateComponents(day: 1)
+
+      let samples = await HealthStoreFetcher.shared.fetchCollatedAverage(
+        quantityType: .bodyMass,
         unit: .pound(),
-        dateRange: .trailingMonthsFromNow(1)
-      )) ?? []
+        interval: interval,
+        dateRange: selectedPeriod.dateRange
+      )
 
       await MainActor.run {
         self.bodyMassSamples = samples
@@ -89,16 +106,15 @@ struct BodyCompositionDetailsView: View {
 
 private extension BodyCompositionDetailsView {
 
+  @ViewBuilder
   var contentView: some View {
-    BloomScrollView {
-      bodyMassChart
-      VStack {
-        bodyFatPercentageChart
-        bodyFatPercentageRangePicker
-      }
-      .cardContainer()
-      detailsSection
+    bodyMassChart
+    VStack {
+      bodyFatPercentageChart
+      bodyFatPercentageRangePicker
     }
+    .cardContainer()
+    detailsSection
   }
 
   var emptyView: some View {
@@ -133,46 +149,71 @@ private extension BodyCompositionDetailsView {
       VStack {
         VStack {
           VitalDetailChartTitleView(title: "Body Weight", value: "\(averageWeight.displayString(for: .pound(), formatter: .oneDecimalPlace))")
+            .padding(.horizontal)
+            .padding(.top)
 
-          Chart {
-            ForEach(bodyMassSamples) { sample in
-              LineMark(
-                x: .value("Date", sample.date, unit: .day),
-                y: .value("Body Weight", sample.quantity.localizedValue(for: .pound()))
+          Chart(bodyMassSamples) { sample in
+            AreaMark(
+              x: .value("Date", sample.date),
+              y: .value("Body Weight", sample.quantity.localizedValue(for: .pound()))
+            )
+            .interpolationMethod(.catmullRom)
+            .foregroundStyle(
+              LinearGradient(
+                colors: [Color.mutedIndigo.opacity(0.4), Color.mutedIndigo.opacity(0.05)],
+                startPoint: .top,
+                endPoint: .bottom
               )
-              .foregroundStyle(.tint)
+            )
 
-              PointMark(
-                x: .value("Date", sample.date, unit: .day),
-                y: .value("Body Weight", sample.quantity.localizedValue(for: .pound()))
-              )
-              .foregroundStyle(.tint)
-              .symbolSize(40)
-            }
+            LineMark(
+              x: .value("Date", sample.date),
+              y: .value("Body Weight", sample.quantity.localizedValue(for: .pound()))
+            )
+            .interpolationMethod(.catmullRom)
+            .foregroundStyle(Color.mutedIndigo)
+            .lineStyle(StrokeStyle(lineWidth: 3))
           }
-          .tint(.mutedIndigo)
-          .chartYScale(domain: bodyMassChartMin...bodyMassChartMax, range: .plotDimension)
+          .chartYScale(domain: bodyMassChartMin...bodyMassChartMax)
+          .chartXScale(domain: bodyMassChartXDomain)
           .frame(height: 200)
           .chartXAxis {
-            AxisMarks(values: .stride(by: .weekOfYear)) { _ in
+            AxisMarks(values: .automatic) { _ in
               AxisGridLine()
-              AxisTick()
-              AxisValueLabel()
+              AxisValueLabel(format: selectedPeriod.chartDateFormat)
             }
           }
           .chartYAxis {
             AxisMarks(position: .trailing, values: .automatic) { value in
               AxisGridLine()
-              AxisTick()
+                .foregroundStyle(.secondary.opacity(0.3))
               if let doubleValue = value.as(Double.self) {
-                AxisValueLabel("\(doubleValue.format()) \(HKUnit.pound().localizedUnit())")
-              } else {
-                AxisValueLabel()
+                AxisValueLabel {
+                  Text("\(doubleValue.format()) \(HKUnit.pound().localizedUnit())")
+                    .font(.caption2)
+                }
               }
             }
           }
+          .chartXSelection(value: $rawSelectedDate)
+          .sensoryFeedback(.selection, trigger: selectedWeight)
+          .chartOverlay { proxy in
+            GeometryReader { geometry in
+              if let selectedWeight, let xPosition = proxy.position(forX: selectedWeight.date) {
+                weightOverlay(for: selectedWeight)
+                  .position(x: min(max(xPosition, 60), geometry.size.width - 60), y: 20)
+              }
+            }
+          }
+          .onChange(of: rawSelectedDate) { _, newValue in
+            if let date = newValue {
+              selectedWeight = findNearestWeightSample(to: date)
+            } else {
+              selectedWeight = nil
+            }
+          }
         }
-        .cardContainer()
+        .cardContainer(includePadding: false)
 
         if let bodyMassTrendDescription = viewModel.bodyCompositionSummary?.bodyMassTrendDescription {
           DetailInfoCardView {
@@ -206,36 +247,61 @@ private extension BodyCompositionDetailsView {
     return HKQuantity(unit: .pound(), doubleValue: 250).localizedValue(for: .pound())
   }
 
+  var bodyMassChartXDomain: ClosedRange<Date> {
+    guard let minDate = bodyMassSamples.map(\.date).min(),
+          let maxDate = bodyMassSamples.map(\.date).max() else {
+      return Date()...Date()
+    }
+    return minDate...maxDate
+  }
+
+  func findNearestWeightSample(to date: Date) -> DateQuantitySample? {
+    bodyMassSamples.min(by: { abs($0.date.timeIntervalSince(date)) < abs($1.date.timeIntervalSince(date)) })
+  }
+
+  @ViewBuilder
+  func weightOverlay(for sample: DateQuantitySample) -> some View {
+    VStack(alignment: .leading, spacing: 2) {
+      Text(sample.date.formatted(date: .abbreviated, time: .omitted))
+        .font(.caption)
+        .bold()
+      Text(sample.quantity.displayString(for: .pound(), formatter: .oneDecimalPlace))
+        .font(.caption2)
+    }
+    .padding(8)
+    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 8))
+  }
+
   var bodyFatPercentageChart: some View {
     VStack(alignment: .leading) {
       VitalDetailChartTitleView(title: "Body Fat Percentage", value: "\(average.format())%")
 
       Chart {
+        if
+          let goals = viewModel.bodyCompositionSummary?.details.goalBodyFatPercentage,
+          let goal = range.rangeValues(from: goals)
+        {
+
+          RectangleMark(
+            yStart: .value("Min", goal.lowerBound),
+            yEnd: .value("Max", goal.upperBound)
+          )
+          .foregroundStyle(range.color.opacity(0.1))
+
+          RuleMark(
+            y: .value("Min", goal.lowerBound)
+          )
+          .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+          .foregroundStyle(range.color)
+
+          RuleMark(
+            y: .value("Max", goal.upperBound)
+          )
+          .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+          .foregroundStyle(range.color)
+        }
+
         ForEach(bodyFatPercentageSamples) { sample in
-          if
-            let goals = viewModel.bodyCompositionSummary?.details.goalBodyFatPercentage,
-            let goal = range.rangeValues(from: goals)
-          {
-
-            RectangleMark(
-              yStart: .value("Min", goal.lowerBound),
-              yEnd: .value("Max", goal.upperBound)
-            )
-            .foregroundStyle(range.color.opacity(0.1))
-
-            RuleMark(
-              y: .value("Min", goal.lowerBound)
-            )
-            .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-            .foregroundStyle(range.color)
-
-            RuleMark(
-              y: .value("Max", goal.upperBound)
-            )
-            .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-            .foregroundStyle(range.color)
-          }
-
           LineMark(
             x: .value("Date", sample.date, unit: .day),
             y: .value("Body Fat Percentage", sample.quantity.doubleValue(for: .percent()))
@@ -252,10 +318,9 @@ private extension BodyCompositionDetailsView {
       }
       .frame(height: 200)
       .chartXAxis {
-        AxisMarks(values: .stride(by: .weekOfYear)) { _ in
+        AxisMarks(values: .automatic) { _ in
           AxisGridLine()
-          AxisTick()
-          AxisValueLabel()
+          AxisValueLabel(format: selectedPeriod.chartDateFormat)
         }
       }
       .chartYAxis {
