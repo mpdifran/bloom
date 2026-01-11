@@ -46,10 +46,6 @@ extension HabitsViewModel {
     shouldUpdateSuggestedHabits = mondayMorning > lastHabitRefreshDate
   }
 
-  func generateProposedHabits(vitals: [VitalModel]) async -> NewHabitResult {
-    await GoalsFactory.shared.generateProposedHabits(vitals: vitals)
-  }
-
   func alternateTargetMetrics(for proposedHabit: ProposedGoal) async -> [TargetMetric] {
     let alternativeTargetMetrics = proposedHabit.targetMetric.related
 
