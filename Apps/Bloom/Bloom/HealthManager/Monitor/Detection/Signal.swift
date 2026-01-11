@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 /// Represents a single metric deviation that's notable enough to contribute to a monitor state.
-public struct Signal: Sendable, Equatable, Identifiable {
+public struct Signal: Sendable, Equatable, Identifiable, Codable {
 
   public let id: String
 

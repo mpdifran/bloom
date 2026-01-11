@@ -9,7 +9,7 @@ import Foundation
 
 /// A finding represents a user-facing explanation of what was detected by a monitor.
 /// Findings use non-medical, confidence-aware language.
-public struct Finding: Sendable, Equatable, Identifiable {
+public struct Finding: Sendable, Equatable, Identifiable, Codable {
 
   public let id: String
 

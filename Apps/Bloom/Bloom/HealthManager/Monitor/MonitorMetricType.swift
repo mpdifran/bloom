@@ -12,7 +12,7 @@ import SFSafeSymbols
 /// Defines the health metrics tracked by the Monitor feature.
 /// Each metric type maps to a HealthKit quantity type and specifies
 /// which baseline period to use for z-score calculations.
-public enum MonitorMetricType: String, CaseIterable, Sendable {
+public enum MonitorMetricType: String, CaseIterable, Sendable, Codable {
 
   // MARK: - Recovery & Sickness Monitor Metrics
 
@@ -211,7 +211,7 @@ public enum MonitorMetricType: String, CaseIterable, Sendable {
 }
 
 /// The three monitor types in the Monitor feature
-public enum MonitorType: String, CaseIterable, Sendable {
+public enum MonitorType: String, CaseIterable, Sendable, Codable {
   case recovery = "recovery"
   case stress = "stress"
   case sleep = "sleep"

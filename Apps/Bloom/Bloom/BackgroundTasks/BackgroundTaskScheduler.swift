@@ -138,7 +138,10 @@ extension BackgroundTaskScheduler {
 
       // Call backend API
       let urlRequest = try await URLRequest.Monitor.getSummary(body: request)
-      let summary: MonitorSummaryResponse = try await NetworkController.shared.fetch(urlRequest)
+      let summary: MonitorSummaryResponse = try await URLSession.shared.authenticatedBloomRequestWithResponse(
+        request: urlRequest,
+        responseType: MonitorSummaryResponse.self
+      )
 
       // Cache the summary
       await MonitorSummaryCache.shared.cache(summary)

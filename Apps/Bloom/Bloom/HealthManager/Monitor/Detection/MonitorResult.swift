@@ -8,7 +8,7 @@
 import Foundation
 
 /// The result of a monitor state calculation including findings for display.
-public struct MonitorResult: Sendable, Equatable, Identifiable {
+public struct MonitorResult: Sendable, Equatable, Identifiable, Codable {
 
   /// Unique identifier combining monitor type and date
   public var id: String {

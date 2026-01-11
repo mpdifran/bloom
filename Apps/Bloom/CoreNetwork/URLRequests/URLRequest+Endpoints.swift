@@ -177,7 +177,7 @@ public extension URLRequest {
 
 public extension URLRequest {
   enum Monitor {
-    static func getSummary(body: MonitorSummaryRequest) async throws -> URLRequest {
+    public static func getSummary(body: MonitorSummaryRequest) async throws -> URLRequest {
       try await URLRequest.post("v1/monitor/summary", body: body)
     }
   }
