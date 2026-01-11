@@ -72,3 +72,5 @@ extension AdminUploadSaleImageResponse: @retroactive Content { }
 extension AdminFoodItemIssueReportsResponse: @retroactive Content { }
 extension AdminApplyIssueReportRequest: @retroactive Content { }
 extension AdminApplyIssueReportResponse: @retroactive Content { }
+extension MonitorSummaryRequest: @retroactive Content { }
+extension MonitorSummaryResponse: @retroactive Content { }
