@@ -11,11 +11,13 @@ import Charts
 import TelemetryDeck
 import HealthKit
 import CoreHealth
+import BloomFoundation
+import DataContainer
 
 struct BowelMovementsDetailView: View {
 
-  private let viewModel = VitalsViewModel.shared
-
+  @State private var selectedPeriod: StatTimePeriod = .oneMonth
+  @State private var bowelMovements: [BowelMovementDTO] = []
   @State private var presentedSheet: AnyView?
   @State private var selectedBristolType = 0
   @State private var selectedRegularityFilter = 0
@@ -28,12 +30,21 @@ struct BowelMovementsDetailView: View {
 
   var body: some View {
     Group {
-      if viewModel.bowelMovementSummary?.hasNoData == false {
+      if bowelMovements.isNotEmpty {
         contentView
       } else {
         emptyView
       }
     }
+    .toolbar {
+      ToolbarItem(placement: .principal) {
+        VitalSummaryDetailTitleView(
+          title: "Bowel Movements",
+          subtitle: selectedPeriod.displayName
+        )
+      }
+    }
+    .animation(.default, value: selectedPeriod)
     .animation(.default, value: selectedBristolType)
     .animation(.default, value: selectedRegularityFilter)
     .navigationTitle("Bowel Movements")
@@ -43,22 +54,63 @@ struct BowelMovementsDetailView: View {
     .onAppear {
       TelemetryDeck.viewScreen("Bowel Movements Vital Details")
     }
-    .task {
-      let samples = await HealthStoreFetcher.shared.fetchCollatedQuantity(
+    .task(id: selectedPeriod) {
+      let modelActor = BowelMovementModelActor.standard()
+      let samples = (try? await modelActor.fetchBowelMovements(
+        dateRange: selectedPeriod.dateRange
+      )) ?? []
+      await MainActor.run {
+        self.bowelMovements = samples
+      }
+    }
+    .task(id: selectedPeriod) {
+      let dailySamples = await HealthStoreFetcher.shared.fetchCollatedQuantity(
         for: .dietaryFiber,
         unit: .gram(),
-        dateRange: .trailingMonthsFromNow(1)
+        interval: DateComponents(day: 1),
+        options: [.cumulativeSum],
+        dateRange: selectedPeriod.dateRange
       )
+
+      let samples: [DateQuantitySample]
+      if selectedPeriod.aggregatesByWeek {
+        let grouped = Dictionary(grouping: dailySamples) { sample in
+          Calendar.current.dateInterval(of: .weekOfYear, for: sample.date)?.start ?? sample.date
+        }
+        samples = grouped.map { (weekStart, weekSamples) in
+          let average = weekSamples.map { $0.quantity.doubleValue(for: .gram()) }.average(keyPath: \.self)
+          return DateQuantitySample(date: weekStart, quantity: HKQuantity(unit: .gram(), doubleValue: average))
+        }.sorted { $0.date < $1.date }
+      } else {
+        samples = dailySamples
+      }
+
       await MainActor.run {
         self.dailyFiber = samples
       }
     }
-    .task {
-      let samples = await HealthStoreFetcher.shared.fetchCollatedQuantity(
+    .task(id: selectedPeriod) {
+      let dailySamples = await HealthStoreFetcher.shared.fetchCollatedQuantity(
         for: .dietaryWater,
         unit: .literUnit(with: .milli),
-        dateRange: .trailingMonthsFromNow(1)
+        interval: DateComponents(day: 1),
+        options: [.cumulativeSum],
+        dateRange: selectedPeriod.dateRange
       )
+
+      let samples: [DateQuantitySample]
+      if selectedPeriod.aggregatesByWeek {
+        let grouped = Dictionary(grouping: dailySamples) { sample in
+          Calendar.current.dateInterval(of: .weekOfYear, for: sample.date)?.start ?? sample.date
+        }
+        samples = grouped.map { (weekStart, weekSamples) in
+          let average = weekSamples.map { $0.quantity.doubleValue(for: .literUnit(with: .milli)) }.average(keyPath: \.self)
+          return DateQuantitySample(date: weekStart, quantity: HKQuantity(unit: .literUnit(with: .milli), doubleValue: average))
+        }.sorted { $0.date < $1.date }
+      } else {
+        samples = dailySamples
+      }
+
       await MainActor.run {
         self.dailyWater = samples
         let averageLitres = samples.map({ $0.quantity.doubleValue(for: .liter()) }).average(keyPath: \.self)
@@ -70,12 +122,58 @@ struct BowelMovementsDetailView: View {
 
 private extension BowelMovementsDetailView {
 
+  enum IntervalBucket: Int, CaseIterable, Identifiable {
+    case veryFrequent = 0  // < 8 hours
+    case optimal = 1       // 8-24 hours
+    case good = 2          // 24-48 hours
+    case concerning = 3    // 48-72 hours
+    case tooInfrequent = 4 // > 72 hours
+
+    var id: Int { rawValue }
+
+    var label: String {
+      switch self {
+      case .veryFrequent: "< 8 Hours"
+      case .optimal: "8-24 Hours"
+      case .good: "24-48 Hours"
+      case .concerning: "48-72 Hours"
+      case .tooInfrequent: "> 72 Hours"
+      }
+    }
+
+    var color: Color {
+      switch self {
+      case .veryFrequent: .vitalSevere
+      case .optimal: .vitalGreat
+      case .good: .vitalGood
+      case .concerning: .vitalWarning
+      case .tooInfrequent: .vitalSevere
+      }
+    }
+
+    static func bucket(for hours: Double) -> IntervalBucket {
+      if hours < 8 {
+        return .veryFrequent
+      } else if hours <= 24 {
+        return .optimal
+      } else if hours <= 48 {
+        return .good
+      } else if hours <= 72 {
+        return .concerning
+      } else {
+        return .tooInfrequent
+      }
+    }
+  }
+
   var summary: BowelMovementMonthlySummary? {
-    viewModel.bowelMovementSummary
+    guard bowelMovements.isNotEmpty else { return nil }
+    return BowelMovementMonthlySummary(bowelMovements: bowelMovements)
   }
 
   var contentView: some View {
     BloomScrollView(spacing: 20) {
+      StatTimePeriodPicker(selectedPeriod: $selectedPeriod)
       stoolTypeChart
       regularityChart
       detailsCardForSelectedRegularityFilter
@@ -101,6 +199,10 @@ private extension BowelMovementsDetailView {
     }
   }
 
+  var showAggregatedStoolChart: Bool {
+    selectedPeriod != .sevenDays && selectedPeriod != .oneMonth
+  }
+
   @ViewBuilder
   var stoolTypeChart: some View {
     if let summary {
@@ -111,44 +213,11 @@ private extension BowelMovementsDetailView {
             value: ""
           )
 
-          Chart {
-            ForEach(summary.bowelMovements) { bowelMovement in
-              if bowelMovement.isValidBristolStoolType {
-                LineMark(
-                  x: .value("Date", bowelMovement.date),
-                  y: .value("Bristol Stool Type", "Type \(bowelMovement.bristolStoolType)")
-                )
-                .foregroundStyle(.fill)
-
-                PointMark(
-                  x: .value("Date", bowelMovement.date),
-                  y: .value("Bristol Stool Type", "Type \(bowelMovement.bristolStoolType)")
-                )
-                .foregroundStyle(chartForegroundColor(for: bowelMovement.bristolStoolType))
-              }
-            }
-
-            if selectedBristolType != 0 {
-              RectangleMark(y: .value("Bristol Stool Type", "Type \(selectedBristolType)"))
-                .foregroundStyle(color(for: selectedBristolType).opacity(0.3))
-            }
+          if showAggregatedStoolChart {
+            stoolTypeDistributionChart(summary: summary)
+          } else {
+            stoolTypeTimelineChart(summary: summary)
           }
-          .chartXAxis {
-            AxisMarks(values: .stride(by: .weekOfYear)) { _ in
-              AxisGridLine()
-              AxisTick()
-              AxisValueLabel()
-            }
-          }
-          .chartXScale(numDaysToNow: 30)
-          .chartYScale(domain: ["Type 1", "Type 2", "Type 3", "Type 4", "Type 5", "Type 6", "Type 7"])
-          .chartYAxis {
-            AxisMarks { _ in
-              AxisGridLine()
-              AxisValueLabel(offsetsMarks: false)
-            }
-          }
-          .frame(height: 350)
 
           typePicker
         }
@@ -157,6 +226,85 @@ private extension BowelMovementsDetailView {
         detailsCardForSelectedStoolType
       }
     }
+  }
+
+  func stoolTypeTimelineChart(summary: BowelMovementMonthlySummary) -> some View {
+    Chart {
+      ForEach(summary.bowelMovements) { bowelMovement in
+        if bowelMovement.isValidBristolStoolType {
+          LineMark(
+            x: .value("Date", bowelMovement.date),
+            y: .value("Bristol Stool Type", "Type \(bowelMovement.bristolStoolType)")
+          )
+          .foregroundStyle(.fill)
+
+          PointMark(
+            x: .value("Date", bowelMovement.date),
+            y: .value("Bristol Stool Type", "Type \(bowelMovement.bristolStoolType)")
+          )
+          .foregroundStyle(chartForegroundColor(for: bowelMovement.bristolStoolType))
+        }
+      }
+
+      if selectedBristolType != 0 {
+        RectangleMark(y: .value("Bristol Stool Type", "Type \(selectedBristolType)"))
+          .foregroundStyle(color(for: selectedBristolType).opacity(0.3))
+      }
+    }
+    .chartXAxis {
+      AxisMarks(values: .automatic) { _ in
+        AxisGridLine()
+        AxisValueLabel(format: selectedPeriod.chartDateFormat)
+      }
+    }
+    .chartYScale(domain: ["Type 1", "Type 2", "Type 3", "Type 4", "Type 5", "Type 6", "Type 7"])
+    .chartYAxis {
+      AxisMarks { _ in
+        AxisGridLine()
+        AxisValueLabel(offsetsMarks: false)
+      }
+    }
+    .frame(height: 350)
+  }
+
+  func stoolTypeDistributionChart(summary: BowelMovementMonthlySummary) -> some View {
+    Chart {
+      ForEach(1...7, id: \.self) { type in
+        let count = summary.stoolTypeDistribution[type]?.count ?? 0
+
+        BarMark(
+          x: .value("Count", count),
+          y: .value("Type", "Type \(type)")
+        )
+        .foregroundStyle(
+          selectedBristolType == 0 || selectedBristolType == type
+            ? color(for: type)
+            : color(for: type).opacity(0.3)
+        )
+        .cornerRadius(4)
+        .annotation(position: .trailing) {
+          if count > 0 {
+            Text("\(count)")
+              .font(.caption2)
+              .foregroundStyle(.secondary)
+          }
+        }
+      }
+    }
+    .chartYScale(domain: ["Type 1", "Type 2", "Type 3", "Type 4", "Type 5", "Type 6", "Type 7"])
+    .chartXAxis {
+      AxisMarks { _ in
+        AxisGridLine()
+        AxisValueLabel()
+      }
+    }
+    .chartYAxis {
+      AxisMarks { _ in
+        AxisGridLine()
+        AxisValueLabel(offsetsMarks: true)
+      }
+    }
+    .frame(height: 280)
   }
 
   var chartMinDate: Date {
@@ -408,11 +556,16 @@ private extension BowelMovementsDetailView {
 
 private extension BowelMovementsDetailView {
 
+  var averageFiber: HKQuantity? {
+    guard dailyFiber.isNotEmpty else { return nil }
+    let average = dailyFiber.map { $0.quantity.doubleValue(for: .gram()) }.average(keyPath: \.self)
+    return HKQuantity(unit: .gram(), doubleValue: average)
+  }
+
   @ViewBuilder
   var fiberChart: some View {
     if
-      let details = viewModel.nutritionSummary?.details,
-      let averageFiber = details.averageFiber,
+      let averageFiber,
       averageFiber.doubleValue(for: .gram()) >= 1
     {
       VStack(alignment: .leading) {
@@ -421,10 +574,10 @@ private extension BowelMovementsDetailView {
           value: averageFiber.displayString(for: .gram())
         )
 
-        Chart{
+        Chart {
           ForEach(dailyFiber) { sample in
             BarMark(
-              x: .value("Date", sample.date),
+              x: .value("Date", sample.date, unit: selectedPeriod.aggregatesByWeek ? .weekOfYear : .day),
               y: .value("Daily Fiber", sample.quantity.doubleValue(for: .gram()))
             )
             .foregroundStyle(.fiber)
@@ -460,42 +613,44 @@ private extension BowelMovementsDetailView {
 
   @ViewBuilder
   var waterChart: some View {
-    VStack(alignment: .leading) {
-      VitalDetailChartTitleView(
-        title: "Water",
-        value: averageWater?.displayString(for: .literUnit(with: .milli)) ?? ""
-      )
+    if dailyWater.isNotEmpty {
+      VStack(alignment: .leading) {
+        VitalDetailChartTitleView(
+          title: "Water",
+          value: averageWater?.displayString(for: .literUnit(with: .milli)) ?? ""
+        )
 
-      Chart{
-        ForEach(dailyWater) { sample in
-          BarMark(
-            x: .value("Date", sample.date),
-            y: .value("Water", sample.quantity.localizedValue(for: .literUnit(with: .milli)))
+        Chart {
+          ForEach(dailyWater) { sample in
+            BarMark(
+              x: .value("Date", sample.date, unit: selectedPeriod.aggregatesByWeek ? .weekOfYear : .day),
+              y: .value("Water", sample.quantity.localizedValue(for: .literUnit(with: .milli)))
+            )
+            .foregroundStyle(.mutedBlue)
+          }
+
+          RuleMark(
+            y: .value("Min Water", HKQuantity(unit: .literUnit(with: .milli), doubleValue: 2000).localizedValue(for: .literUnit(with: .milli)))
           )
+          .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
           .foregroundStyle(.mutedBlue)
-        }
 
-        RuleMark(
-          y: .value("Min Water", HKQuantity(unit: .literUnit(with: .milli), doubleValue: 2000).localizedValue(for: .literUnit(with: .milli)))
-        )
-        .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-        .foregroundStyle(.mutedBlue)
-
-        RectangleMark(
-          yStart: .value("Min Water", HKQuantity(unit: .literUnit(with: .milli), doubleValue: 2000).localizedValue(for: .literUnit(with: .milli))),
-          yEnd: .value("Min Water", HKQuantity(unit: .literUnit(with: .milli), doubleValue: 4000).localizedValue(for: .literUnit(with: .milli)))
-        )
-        .foregroundStyle(
-          LinearGradient(
-            colors: [.mutedBlue.opacity(0.3), .clear],
-            startPoint: .bottom,
-            endPoint: .top
+          RectangleMark(
+            yStart: .value("Min Water", HKQuantity(unit: .literUnit(with: .milli), doubleValue: 2000).localizedValue(for: .literUnit(with: .milli))),
+            yEnd: .value("Min Water", HKQuantity(unit: .literUnit(with: .milli), doubleValue: 4000).localizedValue(for: .literUnit(with: .milli)))
           )
-        )
+          .foregroundStyle(
+            LinearGradient(
+              colors: [.mutedBlue.opacity(0.3), .clear],
+              startPoint: .bottom,
+              endPoint: .top
+            )
+          )
+        }
+        .frame(height: 160)
       }
-      .frame(height: 160)
+      .cardContainer()
     }
-    .cardContainer()
   }
 
   var regularityChart: some View {
@@ -504,11 +659,15 @@ private extension BowelMovementsDetailView {
         title: "Regularity",
         value: summary?.regularityScore.format(using: .oneDecimalPlace) ?? ""
       )
-      
+
       if let summary = summary, summary.bowelMovements.count >= 3 {
-        VStack(alignment: .leading) {
-          intervalChart
-          regularityFilterPicker
+        if showAggregatedStoolChart {
+          intervalDistributionChart(summary: summary)
+        } else {
+          VStack(alignment: .leading) {
+            intervalChart
+            regularityFilterPicker
+          }
         }
       } else {
         ContentUnavailableView(
@@ -565,11 +724,57 @@ private extension BowelMovementsDetailView {
             .cornerRadius(4)
           }
         }
+        .chartXAxis {
+          AxisMarks(values: .automatic) { _ in
+            AxisGridLine()
+            AxisValueLabel(format: selectedPeriod.chartDateFormat)
+          }
+        }
         .chartYScale(domain: 0...chartYAxisMax(for: intervals))
-        .chartXScale(numDaysToNow: 30)
         .frame(height: 180)
       }
     }
+  }
+
+  func intervalDistributionChart(summary: BowelMovementMonthlySummary) -> some View {
+    let intervals = summary.intervalData()
+    let bucketCounts = Dictionary(grouping: intervals) { interval in
+      IntervalBucket.bucket(for: interval.intervalHours)
+    }.mapValues { $0.count }
+
+    return Chart {
+      ForEach(IntervalBucket.allCases) { bucket in
+        let count = bucketCounts[bucket] ?? 0
+
+        BarMark(
+          x: .value("Count", count),
+          y: .value("Interval", bucket.label)
+        )
+        .foregroundStyle(bucket.color)
+        .cornerRadius(4)
+        .annotation(position: .trailing) {
+          if count > 0 {
+            Text("\(count)")
+              .font(.caption2)
+              .foregroundStyle(.secondary)
+          }
+        }
+      }
+    }
+    .chartYScale(domain: IntervalBucket.allCases.map(\.label))
+    .chartXAxis {
+      AxisMarks { _ in
+        AxisGridLine()
+        AxisValueLabel()
+      }
+    }
+    .chartYAxis {
+      AxisMarks { _ in
+        AxisGridLine()
+        AxisValueLabel(offsetsMarks: true)
+      }
+    }
+    .frame(height: 200)
   }
 
   var showAllDataCell: some View {

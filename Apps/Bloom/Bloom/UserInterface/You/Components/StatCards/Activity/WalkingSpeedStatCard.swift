@@ -20,7 +20,7 @@ struct WalkingSpeedStatCard: View {
 
   var body: some View {
     StatCard(
-      symbol: .figureWalk,
+      symbol: .figureWalkMotion,
       title: "Walking Speed",
       value: hasData ? nil : "No Data",
       valueStyle: .largeTinted(nil),
