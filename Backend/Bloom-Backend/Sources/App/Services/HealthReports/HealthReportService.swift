@@ -159,4 +159,63 @@ extension HealthReportService {
 
     return biologicalAgeResponse
   }
+
+  func generateMonitorSummary(
+    monitorContext: String,
+    healthContext: String,
+    timezone: String,
+    userID: UserIdentifier
+  ) async throws -> MonitorSummaryResponse {
+
+    var inputItems = [OpenAIKit.Response.InputItem]()
+
+    inputItems.append(
+      .message(
+        .init(
+          role: .system,
+          content: [
+            .text(.init(text: "Here is the monitor detection data showing current health monitor states:\n\(monitorContext)"))
+          ]
+        )
+      )
+    )
+
+    inputItems.append(
+      .message(
+        .init(
+          role: .system,
+          content: [
+            .text(.init(text: "Here is the user's health baseline data for context:\n\(healthContext)"))
+          ]
+        )
+      )
+    )
+
+    inputItems.append(
+      .message(
+        .init(
+          role: .system,
+          content: [
+            .text(.init(text: "User's timezone: \(timezone)"))
+          ]
+        )
+      )
+    )
+
+    let response = try await openAIService.openAI.responses.createResponse(
+      input: inputItems,
+      model: modelID,
+      instructions: .Prompt.monitorSummary,
+      reasoning: .init(effort: .low, summary: .auto),
+      text: OpenAIKit.Text(format: Format(type: .jsonSchema(.monitorSummary))),
+      truncation: .auto,
+      user: userID.value
+    )
+
+    guard let monitorSummary = try response.parse(MonitorSummaryResponse.self) else {
+      throw Abort(.internalServerError, reason: "Failed to parse monitor summary response")
+    }
+
+    return monitorSummary
+  }
 }

@@ -1,0 +1,196 @@
+//
+//  RecoveryStateCalculator.swift
+//  Bloom
+//
+//  Created by Claude on 2026-01-09.
+//
+
+import Foundation
+import DataContainer
+
+/// Calculates state for the Recovery & Sickness Monitor.
+/// Detects early physiological signs that suggest the body is fighting something.
+actor RecoveryStateCalculator: MonitorStateCalculator {
+
+  let monitorType: MonitorType = .recovery
+
+  let requiredMetrics: [MonitorMetricType] = [.restingHeartRate, .heartRateVariability]
+  let optionalMetrics: [MonitorMetricType] = [.wristTemperature, .respiratoryRate]
+
+  func calculateState(
+    for date: Date,
+    samples: [DailyMetricSampleDTO],
+    previousResults: [MonitorResult]
+  ) async -> MonitorResult {
+    let calendar = Calendar.current
+
+    // Extract today's samples
+    let todaySamples = samples.filter { calendar.isDate($0.date, inSameDayAs: date) }
+    let presentMetrics = Set(todaySamples.map { $0.metricType })
+
+    // Check required metric availability
+    let hasRHR = presentMetrics.contains(MonitorMetricType.restingHeartRate.rawValue)
+    let hasHRV = presentMetrics.contains(MonitorMetricType.heartRateVariability.rawValue)
+
+    guard hasRHR && hasHRV else {
+      return .unavailable(
+        monitorType: .recovery,
+        reason: "We need both resting heart rate and HRV data to assess recovery.",
+        requiredMetrics: requiredMetrics
+      )
+    }
+
+    // Collect signals from each metric
+    var signals: [Signal] = []
+
+    // RHR: Higher = concerning (positive z-score is bad)
+    if let rhrSample = todaySamples.first(where: { $0.metricType == MonitorMetricType.restingHeartRate.rawValue }),
+       let zScore = rhrSample.zScore, zScore > 1.0 {
+      signals.append(Signal(
+        metricType: .restingHeartRate,
+        date: date,
+        zScore: zScore,
+        direction: .higher,
+        description: "Your resting heart rate is higher than usual"
+      ))
+    }
+
+    // HRV: Lower = concerning (negative z-score is bad)
+    if let hrvSample = todaySamples.first(where: { $0.metricType == MonitorMetricType.heartRateVariability.rawValue }),
+       let zScore = hrvSample.zScore, zScore < -1.0 {
+      signals.append(Signal(
+        metricType: .heartRateVariability,
+        date: date,
+        zScore: zScore,
+        direction: .lower,
+        description: "Your heart rate variability is lower than usual"
+      ))
+    }
+
+    // Wrist Temperature: Higher = concerning (optional)
+    if let tempSample = todaySamples.first(where: { $0.metricType == MonitorMetricType.wristTemperature.rawValue }),
+       let zScore = tempSample.zScore, zScore > 1.0 {
+      signals.append(Signal(
+        metricType: .wristTemperature,
+        date: date,
+        zScore: zScore,
+        direction: .higher,
+        description: "Elevated wrist temperature during sleep"
+      ))
+    }
+
+    // Respiratory Rate: Higher = concerning (optional)
+    if let respSample = todaySamples.first(where: { $0.metricType == MonitorMetricType.respiratoryRate.rawValue }),
+       let zScore = respSample.zScore, zScore > 1.0 {
+      signals.append(Signal(
+        metricType: .respiratoryRate,
+        date: date,
+        zScore: zScore,
+        direction: .higher,
+        description: "Your respiratory rate is higher than usual"
+      ))
+    }
+
+    // Determine raw state based on signals
+    let rawState = determineState(signals: signals)
+
+    // Calculate confidence based on optional data availability
+    let confidence = calculateConfidence(
+      requiredPresent: true,
+      optionalMetrics: optionalMetrics,
+      presentMetrics: presentMetrics
+    )
+
+    // Check persistence (2-day requirement)
+    let consecutiveDays = countConsecutiveDays(
+      state: rawState,
+      previousResults: previousResults,
+      currentDate: date
+    )
+
+    // Apply persistence rule - only report Watch/Off if 2+ days
+    let finalState: MonitorStateValue
+    if rawState == .good {
+      finalState = .good
+    } else if consecutiveDays >= 2 {
+      finalState = rawState
+    } else {
+      // Haven't hit 2-day threshold yet, show as good
+      finalState = .good
+    }
+
+    // Generate findings
+    let findings = generateFindings(signals: signals, state: finalState, confidence: confidence)
+
+    return MonitorResult(
+      monitorType: .recovery,
+      state: finalState,
+      confidence: confidence,
+      consecutiveDays: consecutiveDays,
+      signals: signals,
+      findings: findings
+    )
+  }
+
+  // MARK: - Private Methods
+
+  private func determineState(signals: [Signal]) -> MonitorStateValue {
+    // Alert: 2+ signals > 2.0 z-score
+    let highSeveritySignals = signals.filter { $0.severity == .high }
+    if highSeveritySignals.count >= 2 {
+      return .alert
+    }
+
+    // High-confidence pattern: RHR elevated + HRV depressed + (temp or resp elevated)
+    let hasElevatedRHR = signals.contains { $0.metricType == .restingHeartRate && $0.severity >= .elevated }
+    let hasDepressedHRV = signals.contains { $0.metricType == .heartRateVariability && $0.severity >= .elevated }
+    let hasElevatedTemp = signals.contains { $0.metricType == .wristTemperature && $0.severity >= .elevated }
+    let hasElevatedResp = signals.contains { $0.metricType == .respiratoryRate && $0.severity >= .elevated }
+
+    if hasElevatedRHR && hasDepressedHRV && (hasElevatedTemp || hasElevatedResp) {
+      return .alert
+    }
+
+    // Attention: 1+ signals at 1.0-2.0 z-score
+    let elevatedSignals = signals.filter { $0.severity >= .elevated }
+    if !elevatedSignals.isEmpty {
+      return .attention
+    }
+
+    return .good
+  }
+
+  private func generateFindings(signals: [Signal], state: MonitorStateValue, confidence: Double) -> [Finding] {
+    guard state != .good else { return [] }
+
+    var findings: [Finding] = []
+
+    // Group signals by severity for explanation
+    let elevatedSignals = signals.filter { $0.severity >= .elevated }
+
+    if elevatedSignals.count >= 2 {
+      // Multiple corroborating signals
+      let metrics = elevatedSignals.map { $0.metricType }
+      let descriptions = elevatedSignals.map { $0.description }.joined(separator: ". ")
+
+      findings.append(Finding(
+        title: state == .alert ? "Your body may be fighting something" : "Some recovery metrics are off",
+        explanation: "\(descriptions). This pattern has been present for multiple days. Consider taking it easy and getting extra rest.",
+        confidence: .high,
+        relatedMetrics: metrics
+      ))
+    } else if let signal = elevatedSignals.first {
+      // Single signal
+      let findingConfidence: FindingConfidence = confidence > 0.7 ? .medium : .low
+
+      findings.append(Finding(
+        title: signal.description,
+        explanation: "This has been the case for a couple of days. It could be normal variation, or a sign your body needs more rest.",
+        confidence: findingConfidence,
+        relatedMetrics: [signal.metricType]
+      ))
+    }
+
+    return findings
+  }
+}

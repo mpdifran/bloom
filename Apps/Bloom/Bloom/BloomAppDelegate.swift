@@ -19,9 +19,10 @@ class BloomAppDelegate: NSObject, UIApplicationDelegate {
     // Register background task handlers before app finishes launching
     registerBackgroundTasks()
     BackgroundTaskScheduler.shared.scheduleReminderNotificationUpdateTask()
+    BackgroundTaskScheduler.shared.scheduleMonitorAggregationTask()
     return true
   }
-  
+
   private func registerBackgroundTasks() {
     // Register reminder notification update task handler
     BGTaskScheduler.shared.register(
@@ -30,6 +31,17 @@ class BloomAppDelegate: NSObject, UIApplicationDelegate {
     ) { task in
       Task {
         await BackgroundTaskScheduler.shared.updateReminderNotifications()
+        task.setTaskCompleted(success: true)
+      }
+    }
+
+    // Register monitor aggregation task handler
+    BGTaskScheduler.shared.register(
+      forTaskWithIdentifier: "monitor-daily-aggregation",
+      using: nil
+    ) { task in
+      Task {
+        await BackgroundTaskScheduler.shared.runMonitorAggregation()
         task.setTaskCompleted(success: true)
       }
     }

@@ -81,6 +81,30 @@ final class NotificationCategoryManager {
 
     categories.insert(periodPredictionCategory)
 
+    // Monitor alert category with View and Snooze actions
+    let viewMonitorAction = UNNotificationAction(
+      identifier: .ActionID.viewMonitor,
+      title: "View Details",
+      options: [.foreground],
+      icon: UNNotificationActionIcon(systemImageName: "heart.text.square")
+    )
+
+    let snoozeMonitorAction = UNNotificationAction(
+      identifier: .ActionID.snoozeMonitor,
+      title: "Snooze 1 Day",
+      options: [],
+      icon: UNNotificationActionIcon(systemImageName: "moon.zzz")
+    )
+
+    let monitorAlertCategory = UNNotificationCategory(
+      identifier: .CategoryID.monitorAlert,
+      actions: [viewMonitorAction, snoozeMonitorAction],
+      intentIdentifiers: [],
+      options: []
+    )
+
+    categories.insert(monitorAlertCategory)
+
     return categories
   }
 }

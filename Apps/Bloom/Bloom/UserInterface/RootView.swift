@@ -18,7 +18,6 @@ import CoreHealth
 struct RootView: View {
 
   @AppStorage("hasShownOnboardingV3") var hasShownOnboarding: Bool = false
-  @AppStorage(.FeatureFlag.showTrendsTab) private var showTrendsTab = false
 
   @Bindable private var tabController = TabController()
   @Bindable private var themeController = ThemeController.shared
@@ -345,10 +344,8 @@ private extension RootView {
         .tag(Tab.nutrition)
       YouView()
         .tag(Tab.vitals)
-      if showTrendsTab {
-        TrendsView()
-          .tag(Tab.trends)
-      }
+      MonitorView()
+        .tag(Tab.monitor)
       WorkoutsTabView()
         .tag(Tab.workouts)
     }
@@ -376,8 +373,8 @@ private extension RootView {
         NutritionView()
       case .vitals:
         YouView()
-      case .trends:
-        TrendsView()
+      case .monitor:
+        MonitorView()
       case .workouts:
         WorkoutsTabView()
       }

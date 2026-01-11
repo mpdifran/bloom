@@ -16,6 +16,7 @@ import TelemetryDeck
 
 extension Notification.Name {
   static let showLogPeriodSheet = Notification.Name("showLogPeriodSheet")
+  static let navigateToMonitor = Notification.Name("navigateToMonitor")
 }
 
 @MainActor
@@ -80,6 +81,13 @@ extension NotificationCenterDelegate: UNUserNotificationCenterDelegate {
       await handleLeaveFeedbackAction()
     case .ActionID.logPeriod where categoryID == .CategoryID.periodPrediction:
       await handleLogPeriodAction()
+    case .ActionID.viewMonitor where categoryID == .CategoryID.monitorAlert:
+      await handleViewMonitorAction()
+    case .ActionID.snoozeMonitor where categoryID == .CategoryID.monitorAlert:
+      await handleSnoozeMonitorAction(response.notification)
+    case UNNotificationDefaultActionIdentifier where categoryID == .CategoryID.monitorAlert:
+      // User tapped the notification itself (not an action button)
+      await handleViewMonitorAction()
     default:
       break
     }
@@ -123,6 +131,26 @@ extension NotificationCenterDelegate: UNUserNotificationCenterDelegate {
       NotificationCenter.default.post(name: .showLogPeriodSheet, object: nil)
     }
     TelemetryDeck.signal("Log Period From Notification")
+  }
+
+  private func handleViewMonitorAction() async {
+    // Post notification to navigate to Monitor tab
+    await MainActor.run {
+      NotificationCenter.default.post(name: .navigateToMonitor, object: nil)
+    }
+    TelemetryDeck.signal("View Monitor From Notification")
+  }
+
+  private func handleSnoozeMonitorAction(_ notification: UNNotification) async {
+    guard let monitorTypeRaw = notification.request.content.userInfo["monitorType"] as? String,
+          let monitorType = MonitorType(rawValue: monitorTypeRaw) else {
+      print("NotificationCenterDelegate: Missing or invalid monitorType in notification userInfo")
+      return
+    }
+
+    // Snooze for 1 day
+    MonitorNotificationPreferences.shared.snooze(monitorType, for: 86400)
+    TelemetryDeck.signal("Snooze Monitor From Notification", parameters: ["monitorType": monitorTypeRaw])
   }
 
   private func isReminderCompleted(notification: UNNotification) async -> Bool {
