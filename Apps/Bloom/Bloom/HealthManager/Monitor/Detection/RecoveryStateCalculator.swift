@@ -135,10 +135,10 @@ actor RecoveryStateCalculator: MonitorStateCalculator {
   // MARK: - Private Methods
 
   private func determineState(signals: [Signal]) -> MonitorStateValue {
-    // Off: 2+ signals > 2.0 z-score
+    // Alert: 2+ signals > 2.0 z-score
     let highSeveritySignals = signals.filter { $0.severity == .high }
     if highSeveritySignals.count >= 2 {
-      return .off
+      return .alert
     }
 
     // High-confidence pattern: RHR elevated + HRV depressed + (temp or resp elevated)
@@ -148,13 +148,13 @@ actor RecoveryStateCalculator: MonitorStateCalculator {
     let hasElevatedResp = signals.contains { $0.metricType == .respiratoryRate && $0.severity >= .elevated }
 
     if hasElevatedRHR && hasDepressedHRV && (hasElevatedTemp || hasElevatedResp) {
-      return .off
+      return .alert
     }
 
-    // Watch: 1+ signals at 1.0-2.0 z-score
+    // Attention: 1+ signals at 1.0-2.0 z-score
     let elevatedSignals = signals.filter { $0.severity >= .elevated }
     if !elevatedSignals.isEmpty {
-      return .watch
+      return .attention
     }
 
     return .good
@@ -174,7 +174,7 @@ actor RecoveryStateCalculator: MonitorStateCalculator {
       let descriptions = elevatedSignals.map { $0.description }.joined(separator: ". ")
 
       findings.append(Finding(
-        title: state == .off ? "Your body may be fighting something" : "Some recovery metrics are off",
+        title: state == .alert ? "Your body may be fighting something" : "Some recovery metrics are off",
         explanation: "\(descriptions). This pattern has been present for multiple days. Consider taking it easy and getting extra rest.",
         confidence: .high,
         relatedMetrics: metrics

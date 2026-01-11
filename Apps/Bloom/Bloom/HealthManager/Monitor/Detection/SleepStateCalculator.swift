@@ -121,9 +121,9 @@ actor SleepStateCalculator: MonitorStateCalculator {
     )
 
     let finalState: MonitorStateValue
-    if rawState == .off && consecutiveDays < 3 {
-      finalState = .watch
-    } else if rawState == .watch && consecutiveDays < 2 {
+    if rawState == .alert && consecutiveDays < 3 {
+      finalState = .attention
+    } else if rawState == .attention && consecutiveDays < 2 {
       finalState = .good
     } else {
       finalState = rawState
@@ -163,7 +163,7 @@ actor SleepStateCalculator: MonitorStateCalculator {
   }
 
   private func determineState(signals: [Signal], variability: Double?) -> MonitorStateValue {
-    // Off: Duration very low OR efficiency < 0.75 OR variability > 90min
+    // Alert: Duration very low OR efficiency < 0.75 OR variability > 90min
     let hasVeryLowDuration = signals.contains {
       $0.metricType == .sleepDuration && $0.magnitude > 2.0
     }
@@ -172,10 +172,10 @@ actor SleepStateCalculator: MonitorStateCalculator {
     }
 
     if hasVeryLowDuration || hasLowEfficiency || (variability ?? 0) > 90 {
-      return .off
+      return .alert
     }
 
-    // Watch: Duration declining OR efficiency 0.75-0.85 OR variability 60-90min
+    // Attention: Duration declining OR efficiency 0.75-0.85 OR variability 60-90min
     let hasDecliningDuration = signals.contains {
       $0.metricType == .sleepDuration && $0.magnitude > 1.0
     }
@@ -184,7 +184,7 @@ actor SleepStateCalculator: MonitorStateCalculator {
     }
 
     if hasDecliningDuration || hasModerateEfficiency || (variability ?? 0) > 60 {
-      return .watch
+      return .attention
     }
 
     return .good
@@ -202,7 +202,7 @@ actor SleepStateCalculator: MonitorStateCalculator {
       findings.append(Finding(
         title: durationSignal.description,
         explanation: "Your sleep duration has been \(severity) below your usual for the past few days. Try to prioritize getting to bed earlier.",
-        confidence: state == .off ? .high : .medium,
+        confidence: state == .alert ? .high : .medium,
         relatedMetrics: [.sleepDuration]
       ))
     }

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 /// Represents a single metric deviation that's notable enough to contribute to a monitor state.
 public struct Signal: Sendable, Equatable, Identifiable {
@@ -84,5 +85,17 @@ public enum SignalSeverity: String, Sendable, Codable, Comparable {
       return false
     }
     return lhsIndex < rhsIndex
+  }
+
+  /// Color for this severity level
+  public var color: Color {
+    switch self {
+    case .normal:
+      return .green
+    case .elevated:
+      return .orange
+    case .high:
+      return .red
+    }
   }
 }

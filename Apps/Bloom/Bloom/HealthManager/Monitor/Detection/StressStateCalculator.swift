@@ -17,6 +17,32 @@ actor StressStateCalculator: MonitorStateCalculator {
   let requiredMetrics: [MonitorMetricType] = [.activeEnergy]
   let optionalMetrics: [MonitorMetricType] = [.heartRateVariability, .heartRateRecovery]
 
+  // MARK: - Activity History Classification
+
+  /// Classification of user's historical activity patterns
+  private enum ActivityHistoryClassification: Sendable {
+    /// User has never been consistently active
+    case beginner
+    /// User was active before but not recently
+    case returning
+    /// User is currently active, no encouragement needed
+    case active
+  }
+
+  /// Thresholds for activity classification
+  private enum ActivityThresholds {
+    /// Daily average below this is considered low activity (kcal)
+    static let lowActivityDailyAverage: Double = 150
+    /// Peak 4-week average above this indicates user was previously active (kcal)
+    static let peakActivityThreshold: Double = 300
+    /// How far back to look for historical patterns (days)
+    static let historicalLookbackDays: Int = 180
+    /// Minimum days needed for meaningful classification
+    static let minimumDaysForClassification: Int = 30
+    /// Window size for rolling peak average calculation
+    static let peakWindowDays: Int = 28
+  }
+
   func calculateState(
     for date: Date,
     samples: [DailyMetricSampleDTO],
@@ -30,12 +56,10 @@ actor StressStateCalculator: MonitorStateCalculator {
       .sorted { $0.date < $1.date }
 
     // Need at least 7 days of data for meaningful ratio
+    // When insufficient data, always show encourage state (never unavailable)
     guard energySamples.count >= 7 else {
-      return .unavailable(
-        monitorType: .stress,
-        reason: "We need at least 7 days of activity data to assess training load.",
-        requiredMetrics: requiredMetrics
-      )
+      let classification = classifyActivityHistory(samples: samples, date: date)
+      return createEncourageResult(classification: classification, date: date)
     }
 
     // Calculate Acute:Chronic Ratio
@@ -125,11 +149,11 @@ actor StressStateCalculator: MonitorStateCalculator {
       currentDate: date
     )
 
-    // Stress uses 3-day persistence for "Off" state
+    // Stress uses 3-day persistence for "Alert" state
     let finalState: MonitorStateValue
-    if rawState == .off && consecutiveDays < 3 {
-      finalState = .watch
-    } else if rawState == .watch && consecutiveDays < 2 {
+    if rawState == .alert && consecutiveDays < 3 {
+      finalState = .attention
+    } else if rawState == .attention && consecutiveDays < 2 {
       finalState = .good
     } else {
       finalState = rawState
@@ -177,20 +201,20 @@ actor StressStateCalculator: MonitorStateCalculator {
     acuteChronicRatio: Double,
     hrvDecline: Double?
   ) -> MonitorStateValue {
-    // Off: Ratio > 1.5 OR HRV > 15% decline
+    // Alert: Ratio > 1.5 OR HRV > 15% decline
     if acuteChronicRatio > 1.5 {
-      return .off
+      return .alert
     }
     if let decline = hrvDecline, decline > 0.15 {
-      return .off
+      return .alert
     }
 
-    // Watch: Ratio 1.3-1.5 OR < 0.8 OR HRV declining 5-15%
+    // Attention: Ratio 1.3-1.5 OR < 0.8 OR HRV declining 5-15%
     if acuteChronicRatio > 1.3 || acuteChronicRatio < 0.8 {
-      return .watch
+      return .attention
     }
     if let decline = hrvDecline, decline > 0.05 {
-      return .watch
+      return .attention
     }
 
     return .good
@@ -219,7 +243,7 @@ actor StressStateCalculator: MonitorStateCalculator {
       ratioDescription = ""
     }
 
-    if state == .off {
+    if state == .alert {
       var explanation = ratioDescription
       if let decline = hrvDecline, decline > 0.15 {
         let declinePercent = Int(decline * 100)
@@ -233,7 +257,7 @@ actor StressStateCalculator: MonitorStateCalculator {
         confidence: hrvDecline != nil ? .high : .medium,
         relatedMetrics: [.activeEnergy] + (hrvDecline != nil ? [.heartRateVariability] : [])
       ))
-    } else if state == .watch {
+    } else if state == .attention {
       var relatedMetrics: [MonitorMetricType] = []
       var explanation = ""
 
@@ -260,5 +284,116 @@ actor StressStateCalculator: MonitorStateCalculator {
     }
 
     return findings
+  }
+
+  // MARK: - Activity History Classification Methods
+
+  /// Classifies user's activity history to determine if they're a beginner or returning exerciser
+  private func classifyActivityHistory(
+    samples: [DailyMetricSampleDTO],
+    date: Date
+  ) -> ActivityHistoryClassification {
+    let calendar = Calendar.current
+
+    // Filter to active energy samples only
+    let energySamples = samples
+      .filter { $0.metricType == MonitorMetricType.activeEnergy.rawValue }
+      .sorted { $0.date < $1.date }
+
+    // Need minimum data for meaningful classification
+    // If not enough data, assume beginner
+    guard energySamples.count >= ActivityThresholds.minimumDaysForClassification else {
+      return .beginner
+    }
+
+    // Calculate recent 7-day average
+    guard let sevenDaysAgo = calendar.date(byAdding: .day, value: -7, to: date) else {
+      return .beginner
+    }
+    let recentSamples = energySamples.filter { $0.date >= sevenDaysAgo && $0.date < date }
+    let recentAverage = recentSamples.isEmpty ? 0 :
+      recentSamples.reduce(0.0) { $0 + $1.value } / Double(recentSamples.count)
+
+    // If recently active, no encouragement needed
+    if recentAverage >= ActivityThresholds.lowActivityDailyAverage {
+      return .active
+    }
+
+    // Recent activity is low - determine if beginner or returning
+    let peakAverage = findPeakRollingAverage(
+      samples: energySamples,
+      windowDays: ActivityThresholds.peakWindowDays,
+      beforeDate: date
+    )
+
+    if peakAverage >= ActivityThresholds.peakActivityThreshold {
+      return .returning
+    } else {
+      return .beginner
+    }
+  }
+
+  /// Finds the peak rolling average over the specified window in historical data
+  private func findPeakRollingAverage(
+    samples: [DailyMetricSampleDTO],
+    windowDays: Int,
+    beforeDate: Date
+  ) -> Double {
+    guard samples.count >= windowDays else {
+      return samples.isEmpty ? 0 : samples.reduce(0.0) { $0 + $1.value } / Double(samples.count)
+    }
+
+    var peakAverage: Double = 0
+
+    // Slide window through historical data
+    for i in windowDays..<samples.count {
+      let windowSamples = Array(samples[(i - windowDays)..<i])
+      let average = windowSamples.reduce(0.0) { $0 + $1.value } / Double(windowSamples.count)
+      peakAverage = max(peakAverage, average)
+    }
+
+    return peakAverage
+  }
+
+  /// Creates an encourage result with tailored messaging for beginner or returning users
+  private func createEncourageResult(
+    classification: ActivityHistoryClassification,
+    date: Date
+  ) -> MonitorResult {
+    let finding: Finding
+
+    switch classification {
+    case .beginner:
+      finding = Finding(
+        title: "Ready to start your fitness journey?",
+        explanation: "Starting a workout routine can feel overwhelming, but even small steps count. Try beginning with a 10-15 minute walk or a beginner-friendly workout. Your body will thank you!",
+        confidence: .medium,
+        relatedMetrics: [.activeEnergy]
+      )
+    case .returning:
+      finding = Finding(
+        title: "Time to get back in the game?",
+        explanation: "We noticed you've been less active recently. Life happens! When you're ready, start slow and gradually build back up. Your body remembers more than you think.",
+        confidence: .medium,
+        relatedMetrics: [.activeEnergy]
+      )
+    case .active:
+      // Should not happen, but handle gracefully
+      finding = Finding(
+        title: "Keep up the good work",
+        explanation: "Your activity levels are looking healthy.",
+        confidence: .low,
+        relatedMetrics: [.activeEnergy]
+      )
+    }
+
+    return MonitorResult(
+      monitorType: .stress,
+      state: .encourage,
+      confidence: 0.7,
+      consecutiveDays: 1,
+      signals: [],
+      findings: [finding]
+    )
   }
 }

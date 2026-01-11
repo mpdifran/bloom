@@ -17,6 +17,14 @@ public extension String {
     public static let periodPredictionImminent = "period-prediction-imminent"
     public static let periodPredictionLate = "period-prediction-late"
     public static let reEngagement = "re-engagement"
+
+    // Monitor notifications
+    public static let monitorRecoveryAttention = "monitor-recovery-attention"
+    public static let monitorRecoveryAlert = "monitor-recovery-alert"
+    public static let monitorStressAttention = "monitor-stress-attention"
+    public static let monitorStressAlert = "monitor-stress-alert"
+    public static let monitorSleepAttention = "monitor-sleep-attention"
+    public static let monitorSleepAlert = "monitor-sleep-alert"
   }
 
   enum CategoryID {
@@ -26,6 +34,7 @@ public extension String {
     public static let trialReminder = "trial-reminder"
     public static let periodPrediction = "period-prediction"
     public static let reEngagementOnboarding = "re-engagement-onboarding"
+    public static let monitorAlert = "monitor-alert"
   }
 
   enum ActionID {
@@ -33,5 +42,7 @@ public extension String {
     public static let reviewSubscription = "review-subscription"
     public static let leaveFeedback = "leave-feedback"
     public static let logPeriod = "log-period"
+    public static let viewMonitor = "view-monitor"
+    public static let snoozeMonitor = "snooze-monitor"
   }
 }

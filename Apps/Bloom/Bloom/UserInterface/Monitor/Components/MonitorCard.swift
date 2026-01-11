@@ -17,27 +17,23 @@ struct MonitorCard: View {
   @State private var isExpanded: Bool = false
 
   var body: some View {
-    VStack(alignment: .leading, spacing: 0) {
-      headerView
+    NavigationLink(value: result.monitorType) {
+      VStack(alignment: .leading, spacing: 0) {
+        headerView
 
-      if isExpanded && !result.findings.isEmpty {
-        Divider()
-          .padding(.vertical, 12)
+        if isExpanded && !result.findings.isEmpty {
+          Divider()
+            .padding(.vertical, 12)
 
-        findingsView
+          findingsView
+        }
       }
+      .cardContainer(fill: backgroundColor)
     }
-    .cardContainer(fill: backgroundColor)
+    .buttonStyle(.plain)
     .onAppear {
       // Auto-expand if there are concerning findings
       isExpanded = result.state.isConcerning && !result.findings.isEmpty
-    }
-    .onTapGesture {
-      if !result.findings.isEmpty {
-        withAnimation(.easeInOut(duration: 0.2)) {
-          isExpanded.toggle()
-        }
-      }
     }
   }
 
@@ -60,6 +56,11 @@ struct MonitorCard: View {
       Spacer()
 
       stateBadge
+
+      Image(systemSymbol: .chevronRight)
+        .font(.caption)
+        .fontWeight(.semibold)
+        .foregroundStyle(.tertiary)
     }
   }
 
@@ -107,12 +108,14 @@ struct MonitorCard: View {
     switch result.state {
     case .good:
       return .green
-    case .watch:
+    case .attention:
       return .orange
-    case .off:
+    case .alert:
       return .red
     case .unavailable:
       return .gray
+    case .encourage:
+      return .blue
     }
   }
 
@@ -124,12 +127,14 @@ struct MonitorCard: View {
     switch result.state {
     case .good:
       return .green.opacity(0.15)
-    case .watch:
+    case .attention:
       return .orange.opacity(0.15)
-    case .off:
+    case .alert:
       return .red.opacity(0.15)
     case .unavailable:
       return .gray.opacity(0.15)
+    case .encourage:
+      return .blue.opacity(0.15)
     }
   }
 
@@ -137,18 +142,24 @@ struct MonitorCard: View {
     switch result.state {
     case .good:
       return .green
-    case .watch:
+    case .attention:
       return .orange
-    case .off:
+    case .alert:
       return .red
     case .unavailable:
       return .gray
+    case .encourage:
+      return .blue
     }
   }
 
   private var subtitleText: String {
     if result.state == .unavailable {
       return "Insufficient data"
+    }
+
+    if result.state == .encourage {
+      return "Ready when you are"
     }
 
     let confidencePercent = Int(result.confidence * 100)
@@ -175,7 +186,7 @@ struct MonitorCard: View {
 
       MonitorCard(result: MonitorResult(
         monitorType: .stress,
-        state: .watch,
+        state: .attention,
         confidence: 0.72,
         consecutiveDays: 2,
         signals: [],
@@ -191,7 +202,7 @@ struct MonitorCard: View {
 
       MonitorCard(result: MonitorResult(
         monitorType: .sleep,
-        state: .off,
+        state: .alert,
         confidence: 0.90,
         consecutiveDays: 3,
         signals: [],

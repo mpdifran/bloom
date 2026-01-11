@@ -13,6 +13,7 @@ import TelemetryDeck
 struct MonitorView: View {
 
   @State private var viewModel = MonitorViewModel.shared
+  @State private var presentedSheet: AnyView?
 
   var body: some View {
     NavigationStack {
@@ -27,10 +28,30 @@ struct MonitorView: View {
       }
       .navigationTitle("Monitor")
       .toolbar {
+        ToolbarItem(placement: .cancellationAction) {
+          Button {
+            presentedSheet = MonitorSettingsView().asAny
+          } label: {
+            Image(systemSymbol: .sliderHorizontal3)
+              .bold()
+          }
+          .buttonStyle(.plain)
+        }
         ToolbarItem(placement: .primaryAction) {
           refreshButton
         }
       }
+      .navigationDestination(for: MonitorType.self) { monitorType in
+        switch monitorType {
+        case .recovery:
+          RecoveryDetailView()
+        case .stress:
+          StressDetailView()
+        case .sleep:
+          SleepDetailView()
+        }
+      }
+      .sheet($presentedSheet)
     }
     .tabItem {
       Label("Monitor", systemSymbol: .waveformPathEcg)
@@ -55,6 +76,11 @@ struct MonitorView: View {
   private var contentView: some View {
     BloomScrollView(spacing: 16) {
       statusHeader
+
+      // Show AI summary when monitors need attention
+      if let summary = viewModel.aiSummary, !viewModel.monitorsNeedingAttention.isEmpty {
+        MonitorSummaryView(summary: summary)
+      }
 
       ForEach(MonitorType.allCases, id: \.self) { monitorType in
         if let result = viewModel.result(for: monitorType) {
@@ -161,22 +187,26 @@ struct MonitorView: View {
   // MARK: - Status Helpers
 
   private var statusIcon: SFSymbol {
-    if viewModel.isAllGood {
-      return .checkmarkCircleFill
-    } else if viewModel.monitorsNeedingAttention.contains(where: { $0.state == .off }) {
+    if viewModel.monitorsNeedingAttention.contains(where: { $0.state == .alert }) {
       return .exclamationmarkTriangleFill
-    } else {
+    } else if viewModel.monitorsNeedingAttention.contains(where: { $0.state == .attention }) {
       return .exclamationmarkCircleFill
+    } else if !viewModel.monitorsWithEncouragement.isEmpty {
+      return .figureMixedCardio
+    } else {
+      return .checkmarkCircleFill
     }
   }
 
   private var statusColor: Color {
-    if viewModel.isAllGood {
-      return .green
-    } else if viewModel.monitorsNeedingAttention.contains(where: { $0.state == .off }) {
+    if viewModel.monitorsNeedingAttention.contains(where: { $0.state == .alert }) {
       return .red
-    } else {
+    } else if viewModel.monitorsNeedingAttention.contains(where: { $0.state == .attention }) {
       return .orange
+    } else if !viewModel.monitorsWithEncouragement.isEmpty {
+      return .blue
+    } else {
+      return .green
     }
   }
 }

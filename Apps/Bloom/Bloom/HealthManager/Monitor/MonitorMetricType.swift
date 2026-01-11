@@ -7,6 +7,7 @@
 
 import Foundation
 import HealthKit
+import SFSafeSymbols
 
 /// Defines the health metrics tracked by the Monitor feature.
 /// Each metric type maps to a HealthKit quantity type and specifies
@@ -175,6 +176,36 @@ public enum MonitorMetricType: String, CaseIterable, Sendable {
       return "Bedtime"
     case .wakeTime:
       return "Wake Time"
+    }
+  }
+
+  /// SF Symbol icon for this metric
+  public var icon: SFSymbol {
+    switch self {
+    case .restingHeartRate:
+      return .heartFill
+    case .heartRateVariability:
+      return .waveformPathEcg
+    case .wristTemperature:
+      return .thermometerMedium
+    case .respiratoryRate:
+      return .lungs
+    case .activeEnergy:
+      return .flameFill
+    case .heartRateRecovery:
+      return .arrowDownHeart
+    case .sleepDuration:
+      return .bedDoubleFill
+    case .deepSleep:
+      return .moonZzzFill
+    case .remSleep:
+      return .eyeFill
+    case .sleepEfficiency:
+      return .chartBarFill
+    case .bedtime:
+      return .moonFill
+    case .wakeTime:
+      return .sunriseFill
     }
   }
 }

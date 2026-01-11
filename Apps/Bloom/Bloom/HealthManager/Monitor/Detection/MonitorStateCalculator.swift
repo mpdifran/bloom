@@ -57,19 +57,21 @@ func countConsecutiveDays(
       break
     }
 
-    // Check if state matches (or is "worse" - Off matches Watch for continuity)
+    // Check if state matches (or is "worse" - Alert matches Attention for continuity)
     let matches: Bool
     switch state {
-    case .off:
-      // Off continues if previous was Off or Watch
-      matches = result.state == .off || result.state == .watch
-    case .watch:
-      // Watch continues if previous was Watch or Off
-      matches = result.state == .watch || result.state == .off
+    case .alert:
+      // Alert continues if previous was Alert or Attention
+      matches = result.state == .alert || result.state == .attention
+    case .attention:
+      // Attention continues if previous was Attention or Alert
+      matches = result.state == .attention || result.state == .alert
     case .good:
       matches = result.state == .good
     case .unavailable:
       matches = result.state == .unavailable
+    case .encourage:
+      matches = result.state == .encourage
     }
 
     if matches {

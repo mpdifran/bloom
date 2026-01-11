@@ -8,7 +8,12 @@
 import Foundation
 
 /// The result of a monitor state calculation including findings for display.
-public struct MonitorResult: Sendable, Equatable {
+public struct MonitorResult: Sendable, Equatable, Identifiable {
+
+  /// Unique identifier combining monitor type and date
+  public var id: String {
+    "\(monitorType.rawValue)-\(calculatedAt.timeIntervalSince1970)"
+  }
 
   /// Which monitor this result is for
   public let monitorType: MonitorType

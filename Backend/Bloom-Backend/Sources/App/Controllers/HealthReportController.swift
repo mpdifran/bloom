@@ -27,6 +27,9 @@ extension HealthReportController: RouteCollection {
           $0.post("request", use: requestBiologicalAge)
           $0.post("status", use: checkBiologicalAgeStatus)
         }
+        $0.group("monitor") {
+          $0.post("summary", use: generateMonitorSummary)
+        }
       }
     }
   }
@@ -164,6 +167,23 @@ private extension HealthReportController {
       status: status,
       result: result,
       errorMessage: job.errorMessage
+    )
+  }
+
+  @Sendable
+  func generateMonitorSummary(_ request: Request) async throws -> MonitorSummaryResponse {
+    let body = try request.content.decode(MonitorSummaryRequest.self)
+    let user = try request.auth.require(User.self)
+
+    guard let userID = user.id else {
+      throw Abort(.unauthorized)
+    }
+
+    return try await request.healthReportService.generateMonitorSummary(
+      monitorContext: body.monitorContext,
+      healthContext: body.healthContext,
+      timezone: body.timezone,
+      userID: userID
     )
   }
 }

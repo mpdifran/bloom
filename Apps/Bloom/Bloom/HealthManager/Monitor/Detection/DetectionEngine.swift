@@ -35,37 +35,55 @@ public actor DetectionEngine {
   /// - Returns: Array of MonitorResult for each monitor type
   public func calculateAllStates(for date: Date = Date()) async throws -> [MonitorResult] {
     let modelActor = DailyMetricSampleModelActor.standard()
-
-    // Fetch all relevant samples (last 30 days for baselines and history)
     let calendar = Calendar.current
-    guard let startDate = calendar.date(byAdding: .day, value: -30, to: date) else {
+
+    // Standard 30-day fetch for recovery and sleep monitors
+    guard let startDate30 = calendar.date(byAdding: .day, value: -30, to: date) else {
       return []
     }
 
-    let dateRange = DateRange(startDate, date)
+    // Extended 180-day fetch for stress monitor (to support encourage state classification)
+    guard let startDate180 = calendar.date(byAdding: .day, value: -180, to: date) else {
+      return []
+    }
+
+    let dateRange30 = DateRange(startDate30, date)
+    let dateRange180 = DateRange(startDate180, date)
     let allMetricTypes = MonitorMetricType.allCases.map { $0.rawValue }
 
-    let samples = try await modelActor.fetchSamples(
+    // Fetch standard samples for recovery and sleep
+    let samples30 = try await modelActor.fetchSamples(
       metricTypes: allMetricTypes,
-      dateRange: dateRange
+      dateRange: dateRange30
     )
+
+    // Fetch extended active energy samples for stress calculator
+    let extendedEnergySamples = try await modelActor.fetchSamples(
+      metricTypes: [MonitorMetricType.activeEnergy.rawValue],
+      dateRange: dateRange180
+    )
+
+    // Merge for stress: all 30-day samples except active energy, plus all 180-day active energy
+    let stressSamples = samples30.filter {
+      $0.metricType != MonitorMetricType.activeEnergy.rawValue
+    } + extendedEnergySamples
 
     // Calculate each monitor state in parallel
     async let recoveryResult = recoveryCalculator.calculateState(
       for: date,
-      samples: samples,
+      samples: samples30,
       previousResults: previousResults[.recovery] ?? []
     )
 
     async let stressResult = stressCalculator.calculateState(
       for: date,
-      samples: samples,
+      samples: stressSamples,
       previousResults: previousResults[.stress] ?? []
     )
 
     async let sleepResult = sleepCalculator.calculateState(
       for: date,
-      samples: samples,
+      samples: samples30,
       previousResults: previousResults[.sleep] ?? []
     )
 
@@ -145,9 +163,10 @@ public extension DetectionEngine {
     let results = try await calculateAllStates()
     let states = results.map { $0.state }
 
-    // Return most severe state
-    if states.contains(.off) { return .off }
-    if states.contains(.watch) { return .watch }
+    // Return most severe state first, then encourage, then good
+    if states.contains(.alert) { return .alert }
+    if states.contains(.attention) { return .attention }
+    if states.contains(.encourage) { return .encourage }
     if states.allSatisfy({ $0 == .unavailable }) { return .unavailable }
     return .good
   }
@@ -162,5 +181,26 @@ public extension DetectionEngine {
   func isAllGood() async throws -> Bool {
     let results = try await calculateAllStates()
     return results.allSatisfy { $0.state == .good }
+  }
+
+  /// Calculate historical states for a specific monitor over a date range.
+  /// - Parameters:
+  ///   - monitorType: The monitor type to calculate history for
+  ///   - days: Number of days to look back (including today)
+  /// - Returns: Array of MonitorResult sorted by date (oldest first)
+  func calculateHistoricalStates(for monitorType: MonitorType, days: Int) async throws -> [MonitorResult] {
+    let calendar = Calendar.current
+    let today = calendar.startOfDay(for: Date())
+
+    var results: [MonitorResult] = []
+
+    // Calculate for each day (oldest to newest)
+    for dayOffset in (0..<days).reversed() {
+      guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: today) else { continue }
+      let result = try await calculateState(for: monitorType, date: date)
+      results.append(result)
+    }
+
+    return results
   }
 }

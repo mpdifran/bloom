@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import BloomModel
 
 /// ViewModel for the Monitor tab that manages health monitor states.
 @Observable @MainActor
@@ -15,6 +16,9 @@ final class MonitorViewModel {
 
   /// Current monitor results for all three monitors
   var results: [MonitorResult] = []
+
+  /// Cached AI-generated summary (when monitors need attention)
+  var aiSummary: MonitorSummaryResponse?
 
   /// Whether data is currently being loaded
   var isLoading = false
@@ -51,6 +55,9 @@ final class MonitorViewModel {
       results = cached
       hasLoaded = true
     }
+
+    // Load cached AI summary
+    aiSummary = await MonitorSummaryCache.shared.getCachedSummary()
   }
 
   // MARK: - Computed Properties
@@ -66,6 +73,11 @@ final class MonitorViewModel {
     results.filter { $0.state.isConcerning }
   }
 
+  /// Monitors with encouragement state (positive nudge to exercise)
+  var monitorsWithEncouragement: [MonitorResult] {
+    results.filter { $0.state == .encourage }
+  }
+
   /// Get result for a specific monitor type
   func result(for monitorType: MonitorType) -> MonitorResult? {
     results.first { $0.monitorType == monitorType }
@@ -76,12 +88,18 @@ final class MonitorViewModel {
     guard hasLoaded else { return "Loading..." }
 
     let attentionCount = monitorsNeedingAttention.count
-    if attentionCount == 0 {
-      return "All systems healthy"
-    } else if attentionCount == 1 {
-      return "1 monitor needs attention"
+    let encourageCount = monitorsWithEncouragement.count
+
+    if attentionCount > 0 {
+      if attentionCount == 1 {
+        return "1 monitor needs attention"
+      } else {
+        return "\(attentionCount) monitors need attention"
+      }
+    } else if encourageCount > 0 {
+      return "Ready to get moving?"
     } else {
-      return "\(attentionCount) monitors need attention"
+      return "All systems healthy"
     }
   }
 }
