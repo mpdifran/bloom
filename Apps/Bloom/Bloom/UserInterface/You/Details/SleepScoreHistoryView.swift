@@ -119,25 +119,12 @@ private extension SleepScoreHistoryView {
         )
 
         Chart(chartDataPoints) { dataPoint in
-          LineMark(
+          BarMark(
             x: .value("Date", dataPoint.date, unit: selectedPeriod.aggregatesByWeek ? .weekOfYear : .day),
             y: .value("Score", dataPoint.score)
           )
-          .foregroundStyle(Color.awakeSleep)
-          .interpolationMethod(.catmullRom)
-
-          AreaMark(
-            x: .value("Date", dataPoint.date, unit: selectedPeriod.aggregatesByWeek ? .weekOfYear : .day),
-            y: .value("Score", dataPoint.score)
-          )
-          .foregroundStyle(
-            LinearGradient(
-              colors: [Color.awakeSleep.opacity(0.3), Color.awakeSleep.opacity(0.05)],
-              startPoint: .top,
-              endPoint: .bottom
-            )
-          )
-          .interpolationMethod(.catmullRom)
+          .foregroundStyle(color(for: dataPoint.score))
+          .cornerRadius(4)
         }
         .chartXAxis {
           AxisMarks(values: .automatic) { _ in
@@ -240,6 +227,10 @@ private extension SleepScoreHistoryView {
     let bedtime = analysis.startDate.formatted(date: .omitted, time: .shortened)
     let wakeTime = analysis.endDate.formatted(date: .omitted, time: .shortened)
     return "\(bedtime) → \(wakeTime)"
+  }
+
+  func color(for sleepScore: Int) -> Color {
+    SleepVitalsMonthlySummary.SleepQuality(sleepScore: Double(sleepScore)).color
   }
 }
 
