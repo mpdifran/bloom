@@ -288,19 +288,20 @@ actor ReminderScheduler {
       let startOfToday = calendar.startOfDay(for: Date())
       let endOfToday = calendar.date(byAdding: .day, value: 1, to: startOfToday) ?? Date()
       
-      // Query for completion records matching the specific reminder, occurrence, and today's date
+      // Simple predicate to avoid slow type-checking from optional chaining
       let descriptor = FetchDescriptor<ReminderCompletionRecord>(
         predicate: #Predicate<ReminderCompletionRecord> { completion in
-          completion.reminder?.id == reminderID &&
-          completion.occurrence?.id == occurrenceID &&
           completion.completedDate >= startOfToday &&
           completion.completedDate <= endOfToday
         }
       )
-      
-      // Check if any completion records exist for this specific occurrence today
-      let completionRecords = try context.fetch(descriptor)
-      return !completionRecords.isEmpty
+
+      // Fetch today's completions, then filter in-memory for the specific reminder/occurrence
+      let todayCompletions = try context.fetch(descriptor)
+      let matchingCompletion = todayCompletions.first { completion in
+        completion.reminder?.id == reminderID && completion.occurrence?.id == occurrenceID
+      }
+      return matchingCompletion != nil
       
     } catch {
       print("ReminderScheduler: Error checking reminder completion: \(error)")
