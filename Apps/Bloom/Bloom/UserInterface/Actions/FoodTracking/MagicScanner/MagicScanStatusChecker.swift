@@ -21,20 +21,27 @@ final class MagicScanStatusChecker {
 
   /// Checks the status of pending/processing Magic Scanner items
   func checkPendingItems(modelContext: ModelContext) async {
-    // Find all food item logs with pending or processing state
-    let descriptor = FetchDescriptor<FoodItemLog>(
-      predicate: #Predicate {
-        $0.processingStateRawValue == "pending" || $0.processingStateRawValue == "processing"
-      }
+    // Split into 2 simple queries to avoid slow type-checking from || in predicate
+    let pendingState = "pending"
+    let processingState = "processing"
+
+    let pendingDescriptor = FetchDescriptor<FoodItemLog>(
+      predicate: #Predicate { $0.processingStateRawValue == pendingState }
+    )
+    let processingDescriptor = FetchDescriptor<FoodItemLog>(
+      predicate: #Predicate { $0.processingStateRawValue == processingState }
     )
 
-    guard let pendingLogs = try? modelContext.fetch(descriptor),
-          !pendingLogs.isEmpty else {
+    let pendingLogs = (try? modelContext.fetch(pendingDescriptor)) ?? []
+    let processingLogs = (try? modelContext.fetch(processingDescriptor)) ?? []
+    let allPendingLogs = pendingLogs + processingLogs
+
+    guard !allPendingLogs.isEmpty else {
       return
     }
 
     // Collect processing identifiers
-    let processingIdentifiers = pendingLogs.compactMap { identifier in
+    let processingIdentifiers = allPendingLogs.compactMap { identifier in
       identifier.processingIdentifier.map { AIFoodProcessingIdentifier($0) }
     }
 

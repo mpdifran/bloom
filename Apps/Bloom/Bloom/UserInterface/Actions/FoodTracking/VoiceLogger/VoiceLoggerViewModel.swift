@@ -102,7 +102,12 @@ extension VoiceLoggerView.ViewModel {
       guard let channelData = buffer.floatChannelData?[0] else { return }
       let frames = UnsafeBufferPointer(start: channelData, count: Int(buffer.frameLength))
 
-      let rms = sqrt(frames.map { $0 * $0 }.reduce(0, +) / Float(frames.count))
+      // Explicit loop to avoid slow type inference from chained generics
+      var sumOfSquares: Float = 0
+      for frame in frames {
+        sumOfSquares += frame * frame
+      }
+      let rms = frames.count > 0 ? sqrt(sumOfSquares / Float(frames.count)) : 0
       let avgPower = 20 * log10(max(rms, 1e-10)) // Avoid log of zero
       let normalized = max(0, min(1, (avgPower + 50) / 50))
 
