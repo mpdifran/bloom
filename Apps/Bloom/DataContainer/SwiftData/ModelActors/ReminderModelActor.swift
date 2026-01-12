@@ -140,17 +140,20 @@ public extension ReminderModelActor {
     let calendar = Calendar.current
     let targetDay = calendar.startOfDay(for: completionDate)
     
+    // Simple predicate to avoid slow type-checking from conditional logic
     let descriptor = FetchDescriptor<ReminderCompletionRecord>(
       predicate: #Predicate<ReminderCompletionRecord> { record in
-        if let occurrenceID = occurrenceID {
-          return record.reminder?.id == reminderID && record.occurrence?.id == occurrenceID
-        } else {
-          return record.reminder?.id == reminderID
-        }
+        record.reminder?.id == reminderID
       }
     )
-    
-    let completionRecords = try context.fetch(descriptor)
+
+    var completionRecords = try context.fetch(descriptor)
+
+    // In-memory filter for occurrenceID (if specified)
+    if let occurrenceID = occurrenceID {
+      completionRecords = completionRecords.filter { $0.occurrence?.id == occurrenceID
+      }
+    }
     
     // Find completion records from the target date
     let recordsToDelete = completionRecords.filter { record in
