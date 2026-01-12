@@ -56,6 +56,18 @@ private extension PersonalizationSettingsView {
         .padding(.horizontal)
 
       SettingsSectionContainer {
+        SettingsCell("Birth Month (Optional)") {
+          Picker("", selection: $healthManager.birthMonth) {
+            Text("Not Set").tag(0)
+            ForEach(1...12, id: \.self) { month in
+              Text(Calendar.current.monthSymbols[month - 1]).tag(month)
+            }
+          }
+          .pickerStyle(.menu)
+        }
+
+        Divider()
+
         SettingsCell("Birth Year") {
           Picker("", selection: $healthManager.birthYear) {
             ForEach((1924...Calendar.current.component(.year, from: .now)).reversed(), id: \.self) { year in

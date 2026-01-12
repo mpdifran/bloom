@@ -151,6 +151,20 @@ private extension OnboardingUserDetailsView {
 
     if index >= 3 {
       VStack {
+        LabeledContent("Birth Month (Optional)") {
+          Picker("", selection: $healthManager.birthMonth) {
+            Text("Not Set").tag(0)
+            ForEach(1...12, id: \.self) { month in
+              Text(Calendar.current.monthSymbols[month - 1]).tag(month)
+            }
+          }
+          .pickerStyle(.menu)
+        }
+        .bold()
+        .frame(height: 40)
+
+        Divider()
+
         LabeledContent("Birth Year") {
           Picker("", selection: $healthManager.birthYear) {
             ForEach((1924...Calendar.current.component(.year, from: .now)).reversed(), id: \.self) { year in

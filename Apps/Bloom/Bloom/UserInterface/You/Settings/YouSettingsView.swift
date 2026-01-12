@@ -14,10 +14,12 @@ struct YouSettingsView: View {
 
   @State private var draggedSection: VitalModel.Kind?
   @YouSettingsStorage("YouView.settings") private var youSettings = YouSettings()
+  @ObservedObject private var healthManager = HealthManager.shared
 
   var body: some View {
     NavigationStack {
       BloomScrollView(showsChatBar: false) {
+        personalDetailsSection
         sectionOrderSection
       }
       .navigationTitle("Preferences")
@@ -33,6 +35,39 @@ struct YouSettingsView: View {
 }
 
 private extension YouSettingsView {
+
+  var personalDetailsSection: some View {
+    VStack(spacing: 0) {
+      SectionTitleView("Personal Details")
+        .padding()
+
+      VStack {
+        LabeledContent("Birth Month (Optional)") {
+          Picker("", selection: $healthManager.birthMonth) {
+            Text("Not Set").tag(0)
+            ForEach(1...12, id: \.self) { month in
+              Text(Calendar.current.monthSymbols[month - 1]).tag(month)
+            }
+          }
+          .pickerStyle(.menu)
+        }
+        .frame(height: 40)
+
+        Divider()
+
+        LabeledContent("Birth Year") {
+          Picker("", selection: $healthManager.birthYear) {
+            ForEach((1924...Calendar.current.component(.year, from: .now)).reversed(), id: \.self) { year in
+              Text(String(year)).tag(year)
+            }
+          }
+          .pickerStyle(.menu)
+        }
+        .frame(height: 40)
+      }
+      .cardContainer()
+    }
+  }
 
   var sectionOrderSection: some View {
     VStack(spacing: 0) {

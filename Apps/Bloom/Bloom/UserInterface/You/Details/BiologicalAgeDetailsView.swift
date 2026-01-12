@@ -17,6 +17,7 @@ struct BiologicalAgeDetailsView: View {
   @State private var biologicalAgeViewModel = BiologicalAgeViewModel.shared
   @State private var biologicalAgeRecords: [BiologicalAgeRecordDTO] = []
 
+  private let birthMonth = HealthDefaults.shared.getBirthMonth()
   private let birthYear = HealthDefaults.shared.getBirthYear()
 
   var body: some View {
@@ -225,20 +226,41 @@ private extension BiologicalAgeDetailsView {
     return maxValue + 5
   }
 
-  /// Calculates fractional age for a given date based on birth year
-  /// This creates a smooth slope throughout the year instead of stepping on Jan 1
+  /// Calculates fractional age for a given date based on birth year and optional birth month
+  /// When birth month is known, uses the 15th of the month as the birthday baseline
+  /// Otherwise creates a smooth slope throughout the year from Jan 1
   private func fractionalAge(for date: Date) -> Double {
     guard birthYear > 0 else { return 0 }
 
     let calendar = Calendar.current
     let year = calendar.component(.year, from: date)
-    let dayOfYear = calendar.ordinality(of: .day, in: .year, for: date) ?? 1
-    let daysInYear = calendar.range(of: .day, in: .year, for: date)?.count ?? 365
 
-    let wholeYears = Double(year - birthYear)
-    let fractionalPart = Double(dayOfYear - 1) / Double(daysInYear)
+    if birthMonth > 0 {
+      // When birth month is known, calculate fractional age using mid-month (15th) as birthday
+      var birthdayComponents = DateComponents()
+      birthdayComponents.year = year
+      birthdayComponents.month = birthMonth
+      birthdayComponents.day = 15
 
-    return wholeYears + fractionalPart
+      guard let birthdayThisYear = calendar.date(from: birthdayComponents) else {
+        return Double(year - birthYear)
+      }
+
+      let wholeYears = Double(year - birthYear)
+      let daysSinceBirthday = calendar.dateComponents([.day], from: birthdayThisYear, to: date).day ?? 0
+      let fractionalPart = Double(daysSinceBirthday) / 365.0
+
+      return wholeYears + fractionalPart
+    } else {
+      // When only birth year is known, use Jan 1 as baseline
+      let dayOfYear = calendar.ordinality(of: .day, in: .year, for: date) ?? 1
+      let daysInYear = calendar.range(of: .day, in: .year, for: date)?.count ?? 365
+
+      let wholeYears = Double(year - birthYear)
+      let fractionalPart = Double(dayOfYear - 1) / Double(daysInYear)
+
+      return wholeYears + fractionalPart
+    }
   }
 
   var emptyView: some View {

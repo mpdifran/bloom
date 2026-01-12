@@ -57,6 +57,7 @@ struct OnboardingHealthAgeSexView: View {
     }
     .groupedBackground()
     .animation(.default, value: index)
+    .animation(.default, value: healthManager.birthMonth)
     .animation(.default, value: healthManager.birthYear)
     .animation(.default, value: healthManager.heightCM)
     .animation(.default, value: healthManager.sexKind)
@@ -93,9 +94,14 @@ struct OnboardingHealthAgeSexView: View {
       }
     }
     .onAppear {
-      if let age = healthManager.healthStore.age() {
-        let currentYear = Calendar.current.component(.year, from: .now)
-        healthManager.birthYear = currentYear - age
+      if let birthday = healthManager.healthStore.birthday() {
+        let components = Calendar.current.dateComponents([.year, .month], from: birthday)
+        if let year = components.year {
+          healthManager.birthYear = year
+        }
+        if let month = components.month {
+          healthManager.birthMonth = month
+        }
       }
       if let sex = healthManager.healthStore.sex() {
         healthManager.sexKind = sex
@@ -194,6 +200,18 @@ private extension OnboardingHealthAgeSexView {
   var ageSexPicker: some View {
     VStack {
       VStack {
+        LabeledContent("Birth Month (Optional)") {
+          Picker("", selection: $healthManager.birthMonth) {
+            Text("Not Set").tag(0)
+            ForEach(1...12, id: \.self) { month in
+              Text(Calendar.current.monthSymbols[month - 1]).tag(month)
+            }
+          }
+          .pickerStyle(.menu)
+        }
+
+        Divider()
+
         LabeledContent("Birth Year") {
           Picker("", selection: $healthManager.birthYear) {
             ForEach((1924...Calendar.current.component(.year, from: .now)).reversed(), id: \.self) { year in

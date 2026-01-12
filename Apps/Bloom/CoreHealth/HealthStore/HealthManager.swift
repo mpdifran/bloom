@@ -135,6 +135,7 @@ public final class HealthManager: ObservableObject {
 
   @AppStorage(.HealthDefaults.name.key, store: .group) public var name: String = ""
   @AppStorage(.HealthDefaults.height.key, store: .group) public var heightCM: Double = 0
+  @AppStorage(.HealthDefaults.birthMonth.key, store: .group) public var birthMonth: Int = 0
   @AppStorage(.HealthDefaults.birthYear.key, store: .group) public var birthYear: Int = 0
 
   @Published public var sexKind: HKBiologicalSex = .notSet {
@@ -196,10 +197,15 @@ public extension HealthManager {
       sexKind = sex
     }
 
-    if let age = healthStore.age() {
-      let currentYear = Calendar.current.component(.year, from: .now)
-      birthYear = currentYear - age
-    } else {
+    if let birthday = healthStore.birthday() {
+      let components = Calendar.current.dateComponents([.year, .month], from: birthday)
+      if let year = components.year {
+        birthYear = year
+      }
+      if let month = components.month {
+        birthMonth = month
+      }
+    } else if birthYear == 0 {
       birthYear = Calendar.current.component(.year, from: .now)
     }
 
@@ -215,8 +221,23 @@ public extension HealthManager {
 
   func age() -> Int {
     guard birthYear > 0 else { return 0 }
-    let currentYear = Calendar.current.component(.year, from: .now)
-    return currentYear - birthYear
+    let now = Date.now
+    let calendar = Calendar.current
+    let currentYear = calendar.component(.year, from: now)
+    let currentMonth = calendar.component(.month, from: now)
+    let currentDay = calendar.component(.day, from: now)
+
+    var age = currentYear - birthYear
+
+    // If birth month is set, check if birthday has passed this year
+    // We assume the 15th of the month as the birthday when only month is known
+    if birthMonth > 0 {
+      if currentMonth < birthMonth || (currentMonth == birthMonth && currentDay < 15) {
+        age -= 1
+      }
+    }
+
+    return age
   }
 
   func sex() -> HKBiologicalSex {

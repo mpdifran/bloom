@@ -14,6 +14,7 @@ public extension String {
   enum HealthDefaults: String {
     case name = "HealthManager.name"
     case height = "HealthManager.height"
+    case birthMonth = "HealthManager.birthMonth"
     case birthYear = "HealthManager.birthYear"
     case focus = "HealthManager.healthGoal"
     case sexKind = "HealthManager.sexKind"
@@ -96,6 +97,10 @@ public extension HealthDefaults {
 }
 
 public extension HealthDefaults {
+  func getBirthMonth() -> Int {
+    getValue(for: .birthMonth) ?? 0
+  }
+
   func getBirthYear() -> Int {
     getValue(for: .birthYear) ?? 0
   }

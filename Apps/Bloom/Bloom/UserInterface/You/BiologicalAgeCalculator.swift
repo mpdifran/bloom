@@ -156,8 +156,24 @@ final actor BiologicalAgeCalculator {
   private func getUserAge() -> Int {
     let birthYear = healthDefaults.getBirthYear()
     guard birthYear > 0 else { return 0 }
-    let currentYear = Calendar.current.component(.year, from: .now)
-    return currentYear - birthYear
+    let birthMonth = healthDefaults.getBirthMonth()
+    let now = Date.now
+    let calendar = Calendar.current
+    let currentYear = calendar.component(.year, from: now)
+    let currentMonth = calendar.component(.month, from: now)
+    let currentDay = calendar.component(.day, from: now)
+
+    var age = currentYear - birthYear
+
+    // If birth month is set, check if birthday has passed this year
+    // We assume the 15th of the month as the birthday when only month is known
+    if birthMonth > 0 {
+      if currentMonth < birthMonth || (currentMonth == birthMonth && currentDay < 15) {
+        age -= 1
+      }
+    }
+
+    return age
   }
 }
 
