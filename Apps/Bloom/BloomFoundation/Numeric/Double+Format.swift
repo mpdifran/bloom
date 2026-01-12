@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import BloomFoundation
 
 public extension Double {
 
