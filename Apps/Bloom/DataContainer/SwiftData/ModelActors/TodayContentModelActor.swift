@@ -51,13 +51,17 @@ public extension TodayContentModelActor {
     try context.save()
   }
 
-  func deleteAllTodayContent() throws {
+  /// Deletes all TodayContent and TodayInsight records.
+  /// - Returns: The total count of deleted records.
+  func deleteAllTodayContent() throws -> Int {
     // Delete all TodayContent and TodayInsight records
     let contentDescriptor = FetchDescriptor<SchemaV25.TodayContent>()
     let insightDescriptor = FetchDescriptor<SchemaV25.TodayInsight>()
 
     let allContent = try context.fetch(contentDescriptor)
     let allInsights = try context.fetch(insightDescriptor)
+
+    let deletedCount = allContent.count + allInsights.count
 
     for content in allContent {
       context.delete(content)
@@ -68,6 +72,8 @@ public extension TodayContentModelActor {
     }
 
     try context.save()
+
+    return deletedCount
   }
 
   func saveContent(

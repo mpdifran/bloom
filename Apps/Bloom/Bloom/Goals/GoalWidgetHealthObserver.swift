@@ -58,9 +58,8 @@ public final actor GoalWidgetHealthObserver {
     // Stop observing removed types
     for sampleType in typesToRemove {
       observerHandles.removeValue(forKey: sampleType)
-      if let objectType = sampleType as? HKObjectType {
-        backgroundDeliveryHandles.removeValue(forKey: objectType)
-      }
+      let objectType = sampleType as HKObjectType
+      backgroundDeliveryHandles.removeValue(forKey: objectType)
     }
 
     // Start observing new types
@@ -75,13 +74,12 @@ public final actor GoalWidgetHealthObserver {
   /// Start observing a specific sample type
   private func startObserving(sampleType: HKSampleType) async {
     // Enable background delivery with hourly frequency (battery-friendly)
-    if let objectType = sampleType as? HKObjectType {
-      let backgroundHandle = await HealthStoreFetcher.shared.enableBackgroundDelivery(
-        objectType: objectType,
-        frequency: .hourly
-      )
-      backgroundDeliveryHandles[objectType] = backgroundHandle
-    }
+    let objectType = sampleType as HKObjectType
+    let backgroundHandle = await HealthStoreFetcher.shared.enableBackgroundDelivery(
+      objectType: objectType,
+      frequency: .hourly
+    )
+    backgroundDeliveryHandles[objectType] = backgroundHandle
 
     // Set up observer query
     let observerHandle = healthStore.observeChanges(

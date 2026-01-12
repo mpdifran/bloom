@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct DateCollatedWorkoutHeartRateReport: Identifiable, Hashable {
+public struct DateCollatedWorkoutHeartRateReport: Identifiable, Hashable, Sendable {
   public var id: Int { hashValue }
 
   public let date: Date

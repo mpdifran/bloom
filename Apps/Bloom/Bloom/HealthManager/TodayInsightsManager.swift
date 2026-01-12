@@ -236,12 +236,15 @@ final class TodayInsightsManager {
     // Perform cleanup of old SwiftData records
     do {
       let modelActor = TodayContentModelActor.standard()
-      try await modelActor.deleteAllTodayContent()
+      let deletedCount = try await modelActor.deleteAllTodayContent()
 
       // Mark cleanup as completed
       UserDefaults.group.set(true, forKey: cleanupKey)
 
-      TelemetryDeck.signal("Today Content SwiftData Cleanup Completed")
+      // Only log telemetry if records were actually deleted
+      if deletedCount > 0 {
+        TelemetryDeck.signal("Today Content SwiftData Cleanup Completed")
+      }
     } catch {
       TelemetryDeck.errorOccurred(
         id: "TodayInsightsManager.dataCleanup",

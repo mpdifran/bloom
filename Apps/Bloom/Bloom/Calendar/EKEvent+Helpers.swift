@@ -31,6 +31,7 @@ extension EKEvent {
   }
 }
 
+@MainActor
 extension EKEvent {
   static let preview = CalendarManager.shared.createEvent().with {
     let calendar = EKCalendar(for: .event, eventStore: CalendarManager.shared.eventStore)
