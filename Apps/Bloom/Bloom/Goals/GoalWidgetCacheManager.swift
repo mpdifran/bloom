@@ -21,7 +21,8 @@ public final class GoalWidgetCacheManager {
 
   /// Update the widget cache with all active goals
   /// Call this whenever goals are created, updated, or deleted
-  public func updateCache(modelContext: ModelContext) async {
+  public func updateCache() async {
+    let modelContext = ModelContext(ContainerHolder.shared.container)
     do {
       // Fetch all active goals
       let descriptor = FetchDescriptor<Habit>(

@@ -62,76 +62,6 @@ extension HabitsViewModel {
     return []
   }
 
-  func performSave(newGoals: NewHabitResult, isAI: Bool = false) throws {
-
-    // End all existing habits
-    for existingHabit in try modelContext.fetchActiveHabits() {
-      existingHabit.endDate = .now
-    }
-
-    var addedTargetMetrics = [TargetMetric]()
-
-    for focusVital in newGoals.focusVitals {
-      guard
-        let proposedGoal = focusVital.proposedGoals.first,
-        !addedTargetMetrics.contains(proposedGoal.targetMetric)
-      else { continue }
-
-      let habit = createHabit(from: proposedGoal, isSuggested: true)
-      modelContext.insert(habit)
-      addedTargetMetrics.append(proposedGoal.targetMetric)
-
-      TelemetryDeck.signal(
-        "Update Goal",
-        parameters: [
-          "userAdded": "false",
-          "vitalKind": focusVital.vitalKind.name,
-          "goalKind": proposedGoal.targetMetric.name,
-          "value": proposedGoal.value.format(using: .twoDecimalPlaces),
-          "suggestedValue": proposedGoal.suggestedValue.format(using: .twoDecimalPlaces),
-          "originalValue": proposedGoal.previousValue?.format(using: .twoDecimalPlaces) ?? "None",
-          "isAI": isAI ? "true" : "false"
-        ],
-        floatValue: proposedGoal.value
-      )
-    }
-
-    for proposedGoal in newGoals.proposedGoals {
-      guard !addedTargetMetrics.contains(proposedGoal.targetMetric) else { continue }
-
-      let habit = createHabit(from: proposedGoal, isSuggested: false)
-      modelContext.insert(habit)
-      addedTargetMetrics.append(proposedGoal.targetMetric)
-
-      TelemetryDeck.signal(
-        "Update Goal",
-        parameters: [
-          "userAdded": "true",
-          "goalKind": proposedGoal.targetMetric.name,
-          "value": proposedGoal.value.format(using: .twoDecimalPlaces),
-          "suggestedValue": proposedGoal.suggestedValue.format(using: .twoDecimalPlaces),
-          "originalValue": proposedGoal.previousValue?.format(using: .twoDecimalPlaces) ?? "None",
-          "isAI": isAI ? "true" : "false"
-        ],
-        floatValue: proposedGoal.value
-      )
-    }
-
-    try modelContext.save()
-
-    ToDoManager.shared.apply(proposedToDos: newGoals.proposedToDos)
-
-    lastHabitRefreshDate = .now
-
-    TelemetryDeck.signal("User Goal Count", floatValue: Double(addedTargetMetrics.count))
-
-    // Update widget cache and observer
-    Task {
-      await GoalWidgetCacheManager.shared.updateCache(modelContext: modelContext)
-      await GoalWidgetHealthObserver.shared.startObserving(modelContext: modelContext)
-    }
-  }
-
   func createHabit(from proposedGoal: ProposedGoal, isSuggested: Bool) -> Habit {
     Habit(
       targetMetric: proposedGoal.targetMetric,
@@ -161,8 +91,8 @@ extension HabitsViewModel {
 
     // Update widget cache and observer
     Task {
-      await GoalWidgetCacheManager.shared.updateCache(modelContext: modelContext)
-      await GoalWidgetHealthObserver.shared.startObserving(modelContext: modelContext)
+      await GoalWidgetCacheManager.shared.updateCache()
+      await GoalWidgetHealthObserver.shared.startObserving()
     }
   }
 
@@ -212,8 +142,8 @@ extension HabitsViewModel {
 
     // Update widget cache and observer
     Task {
-      await GoalWidgetCacheManager.shared.updateCache(modelContext: modelContext)
-      await GoalWidgetHealthObserver.shared.startObserving(modelContext: modelContext)
+      await GoalWidgetCacheManager.shared.updateCache()
+      await GoalWidgetHealthObserver.shared.startObserving()
     }
 
     return updatedHabit
@@ -232,8 +162,8 @@ extension HabitsViewModel {
 
     // Update widget cache and observer
     Task {
-      await GoalWidgetCacheManager.shared.updateCache(modelContext: modelContext)
-      await GoalWidgetHealthObserver.shared.startObserving(modelContext: modelContext)
+      await GoalWidgetCacheManager.shared.updateCache()
+      await GoalWidgetHealthObserver.shared.startObserving()
     }
   }
 }

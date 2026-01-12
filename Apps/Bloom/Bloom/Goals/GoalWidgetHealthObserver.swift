@@ -24,7 +24,8 @@ public final actor GoalWidgetHealthObserver {
   private init() { }
 
   /// Start observing health data for all active goals
-  public func startObserving(modelContext: ModelContext) async {
+  public func startObserving() async {
+    let modelContext = ModelContext(ContainerHolder.shared.container)
     // Fetch all active goals
     let habits: [Habit]
     do {
@@ -95,8 +96,7 @@ public final actor GoalWidgetHealthObserver {
   /// Handle health data changes by updating widget cache
   private func handleHealthDataChange() async {
     // Update the widget cache with latest health data
-    let modelContext = ModelContext(ContainerHolder.shared.container)
-    await GoalWidgetCacheManager.shared.updateCache(modelContext: modelContext)
+    await GoalWidgetCacheManager.shared.updateCache()
 
     // Refresh all goal widgets
     GoalWidgetCache.refreshWidgets()

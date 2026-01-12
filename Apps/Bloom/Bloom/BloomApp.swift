@@ -104,15 +104,13 @@ struct BloomApp: App {
           await ReEngagementScheduler.shared.scheduleNotificationIfNeeded()
         }
         .onForegroundTask {
-          let modelContext = ModelContext(ContainerHolder.shared.container)
-          await GoalWidgetCacheManager.shared.updateCache(modelContext: modelContext)
+          await GoalWidgetCacheManager.shared.updateCache()
         }
         .onForegroundTask {
           await SalesManager.shared.refreshSalesIfNeeded()
         }
         .task {
-          let modelContext = ModelContext(ContainerHolder.shared.container)
-          await GoalWidgetHealthObserver.shared.startObserving(modelContext: modelContext)
+          await GoalWidgetHealthObserver.shared.startObserving()
         }
         .task {
           await HealthSleepObserver.shared.observeSleep()

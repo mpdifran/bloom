@@ -229,6 +229,8 @@ final class ReminderTriggerObserver {
         let month = calendar.component(.month, from: date)
         let day = calendar.component(.day, from: date)
         return occurrence.monthOfYear == month && occurrence.dayOfYear == day
+      @unknown default:
+        return false
       }
     }
     
@@ -243,7 +245,6 @@ final class ReminderTriggerObserver {
   /// Verifies that relevant health data was actually logged today for the given trigger type
   private func hasRelevantDataLoggedToday(for triggerType: ReminderTriggerType) async -> Bool {
     let today = Date()
-    let calendar = Calendar.current
     let todayRange = DateRange.duringDay(today)
     
     do {

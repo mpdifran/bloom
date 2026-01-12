@@ -69,8 +69,8 @@ final class RemindersManager: ObservableObject {
     title: String,
     colorHex: String,
     triggerType: ReminderTriggerType? = nil,
-    occurrences: [ReminderOccurrence],
-    sideEffects: [ReminderSideEffect] = []
+    occurrences: [ReminderOccurrenceDTO],
+    sideEffects: [ReminderSideEffectDTO] = []
   ) async throws -> ReminderDTO {
     let reminder = try await modelActor.createReminder(
       title: title,
@@ -95,8 +95,8 @@ final class RemindersManager: ObservableObject {
     title: String,
     colorHex: String,
     triggerType: ReminderTriggerType? = nil,
-    occurrences: [ReminderOccurrence],
-    sideEffects: [ReminderSideEffect] = []
+    occurrences: [ReminderOccurrenceDTO],
+    sideEffects: [ReminderSideEffectDTO] = []
   ) async throws -> ReminderDTO? {
     guard let reminder = try await modelActor.updateReminder(
       withID: id,

@@ -178,7 +178,7 @@ private extension NewGoalCard {
 
       // Update widget cache
       Task {
-        await GoalWidgetCacheManager.shared.updateCache(modelContext: modelContext)
+        await GoalWidgetCacheManager.shared.updateCache()
       }
 
       dismiss()

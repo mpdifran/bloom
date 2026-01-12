@@ -51,16 +51,37 @@ public extension ReminderModelActor {
     title: String,
     colorHex: String,
     triggerType: ReminderTriggerType? = nil,
-    occurrences: [ReminderOccurrence],
-    sideEffects: [ReminderSideEffect] = []
+    occurrences: [ReminderOccurrenceDTO],
+    sideEffects: [ReminderSideEffectDTO] = []
   ) throws -> ReminderDTO {
+    // Create model instances from DTOs inside the actor
+    let occurrenceModels = occurrences.map { dto in
+      ReminderOccurrence(
+        cadenceType: dto.cadenceType,
+        timeOfDay: dto.timeOfDay,
+        daysOfWeek: dto.daysOfWeek,
+        dayOfMonth: dto.dayOfMonth,
+        monthOfYear: dto.monthOfYear,
+        dayOfYear: dto.dayOfYear
+      )
+    }
+
+    let sideEffectModels = sideEffects.compactMap { dto -> ReminderSideEffect? in
+      guard let type = dto.type else { return nil }
+      return ReminderSideEffect(
+        id: dto.id,
+        type: type,
+        configuration: dto.configuration
+      )
+    }
+
     let reminder = Reminder(
       title: title,
       colorHex: colorHex,
       triggerType: triggerType?.rawValue,
-      occurrences: occurrences
+      occurrences: occurrenceModels
     )
-    reminder.sideEffects = sideEffects
+    reminder.sideEffects = sideEffectModels
     context.insert(reminder)
     try context.save()
     return reminder.asDTO()
@@ -71,8 +92,8 @@ public extension ReminderModelActor {
     title: String,
     colorHex: String,
     triggerType: ReminderTriggerType? = nil,
-    occurrences: [ReminderOccurrence],
-    sideEffects: [ReminderSideEffect] = []
+    occurrences: [ReminderOccurrenceDTO],
+    sideEffects: [ReminderSideEffectDTO] = []
   ) throws -> ReminderDTO? {
     let descriptor = FetchDescriptor<Reminder>(
       predicate: #Predicate<Reminder> { reminder in
@@ -80,14 +101,35 @@ public extension ReminderModelActor {
       }
     )
     guard let reminder = try context.fetch(descriptor).first else { return nil }
-    
+
+    // Create model instances from DTOs inside the actor
+    let occurrenceModels = occurrences.map { dto in
+      ReminderOccurrence(
+        cadenceType: dto.cadenceType,
+        timeOfDay: dto.timeOfDay,
+        daysOfWeek: dto.daysOfWeek,
+        dayOfMonth: dto.dayOfMonth,
+        monthOfYear: dto.monthOfYear,
+        dayOfYear: dto.dayOfYear
+      )
+    }
+
+    let sideEffectModels = sideEffects.compactMap { dto -> ReminderSideEffect? in
+      guard let type = dto.type else { return nil }
+      return ReminderSideEffect(
+        id: dto.id,
+        type: type,
+        configuration: dto.configuration
+      )
+    }
+
     reminder.title = title
     reminder.colorHex = colorHex
     reminder.triggerType = triggerType?.rawValue
-    reminder.occurrences = occurrences
-    reminder.sideEffects = sideEffects
+    reminder.occurrences = occurrenceModels
+    reminder.sideEffects = sideEffectModels
     reminder.modifiedDate = Date()
-    
+
     try context.save()
     return reminder.asDTO()
   }

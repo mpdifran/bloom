@@ -244,13 +244,13 @@ private extension OnboardingGoalSetupView {
 
       // Update widget cache
       Task {
-        await GoalWidgetCacheManager.shared.updateCache(modelContext: modelContext)
+        await GoalWidgetCacheManager.shared.updateCache()
       }
     } catch {
       self.error = error
     }
   }
-  
+
   func removeGoal(_ habit: Habit) {
     habit.endDate = .now
 
@@ -260,7 +260,7 @@ private extension OnboardingGoalSetupView {
 
       // Update widget cache
       Task {
-        await GoalWidgetCacheManager.shared.updateCache(modelContext: modelContext)
+        await GoalWidgetCacheManager.shared.updateCache()
       }
     } catch {
       self.error = error

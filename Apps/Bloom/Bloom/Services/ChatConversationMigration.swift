@@ -49,7 +49,7 @@ final class ChatConversationMigration: @unchecked Sendable {
       try await conversationActor.fixUnassignedMessages()
 
       // Step 2: Delete empty conversations
-      let deletedCount = try await deleteEmptyConversations(conversationActor: conversationActor)
+      let _ = try await deleteEmptyConversations(conversationActor: conversationActor)
 
       // Mark as complete on main thread
       await MainActor.run {

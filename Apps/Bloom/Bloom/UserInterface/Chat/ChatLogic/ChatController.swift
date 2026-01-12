@@ -867,7 +867,8 @@ private extension ChatController {
         title: createReminder.title,
         colorHex: createReminder.color,
         occurrences: createReminder.occurrences.map { occurrence in
-          ReminderOccurrence(
+          ReminderOccurrenceDTO(
+            id: UUID().uuidString,
             cadenceType: occurrence.cadenceType.asReminderCadenceType,
             timeOfDay: TimeInterval(occurrence.hour * 3600 + occurrence.minute * 60),
             daysOfWeek: occurrence.daysOfWeek?.map { $0.asWeekdayInt },
@@ -885,7 +886,8 @@ private extension ChatController {
         title: createReminder.title,
         colorHex: createReminder.color,
         occurrences: createReminder.occurrences.map { occurrence in
-          ReminderOccurrence(
+          ReminderOccurrenceDTO(
+            id: UUID().uuidString,
             cadenceType: occurrence.cadenceType.asReminderCadenceType,
             timeOfDay: TimeInterval(occurrence.hour * 3600 + occurrence.minute * 60),
             daysOfWeek: occurrence.daysOfWeek?.map { $0.asWeekdayInt },

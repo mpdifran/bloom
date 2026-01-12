@@ -117,7 +117,7 @@ private extension FoodItemCell {
   }
 
   func quickLogFood() async throws {
-    try await nutritionViewModel.log(
+    let _ = try await nutritionViewModel.log(
       modelContext: modelContext,
       foodItem: foodItem,
       date: nutritionViewModel.date,

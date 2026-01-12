@@ -142,21 +142,29 @@ extension ConsentManager {
       let response = try await NetworkRequester.shared.getConsent()
 
       // Check if any feature consent fields are nil (unknown)
-      let hasUnknownFeatures = response.chatWithBudConsent == nil ||
-                               response.todayInsightsConsent == nil
+      // Individual checks to avoid slow type inference from chained ||
+      let unknownChat: Bool = response.chatWithBudConsent == nil
+      let unknownInsights: Bool = response.todayInsightsConsent == nil
+      let hasUnknownFeatures = unknownChat || unknownInsights
+
       // Check if any health data category consent fields are nil (unknown)
-      let hasUnknownCategories = response.physicalActivityConsent == nil ||
-                                  response.bodyMetricsConsent == nil ||
-                                  response.mentalWellnessConsent == nil ||
-                                  response.sleepConsent == nil ||
-                                  response.nutritionConsent == nil ||
-                                  response.digestiveHealthConsent == nil
-      let hasUnknownCategories2 = response.menstrualHealthConsent == nil ||
-                                  response.demographicsConsent == nil ||
-                                  response.goalsConsent == nil ||
-                                  response.locationConsent == nil ||
-                                  response.weatherConsent == nil ||
-                                  response.calendarEventsConsent == nil
+      let unknownPhysical: Bool = response.physicalActivityConsent == nil
+      let unknownBody: Bool = response.bodyMetricsConsent == nil
+      let unknownMental: Bool = response.mentalWellnessConsent == nil
+      let unknownSleep: Bool = response.sleepConsent == nil
+      let unknownNutrition: Bool = response.nutritionConsent == nil
+      let unknownDigestive: Bool = response.digestiveHealthConsent == nil
+      let unknownMenstrual: Bool = response.menstrualHealthConsent == nil
+      let unknownDemographics: Bool = response.demographicsConsent == nil
+      let unknownGoals: Bool = response.goalsConsent == nil
+      let unknownLocation: Bool = response.locationConsent == nil
+      let unknownWeather: Bool = response.weatherConsent == nil
+      let unknownCalendar: Bool = response.calendarEventsConsent == nil
+
+      let hasUnknownCategories = unknownPhysical || unknownBody || unknownMental ||
+                                  unknownSleep || unknownNutrition || unknownDigestive
+      let hasUnknownCategories2 = unknownMenstrual || unknownDemographics || unknownGoals ||
+                                   unknownLocation || unknownWeather || unknownCalendar
 
       var consentTypes = [ConsentType]()
       if response.healthDataConsent == nil {

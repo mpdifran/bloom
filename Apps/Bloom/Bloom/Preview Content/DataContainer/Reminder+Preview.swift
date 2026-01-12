@@ -11,6 +11,7 @@ extension Reminder {
   enum Preview { }
 }
 
+@MainActor
 extension Reminder.Preview {
   static let dailyVitamins = Reminder(
     title: "Take vitamins",

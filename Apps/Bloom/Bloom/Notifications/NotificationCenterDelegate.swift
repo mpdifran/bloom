@@ -35,16 +35,18 @@ final class NotificationCenterDelegate: NSObject {
 
 extension NotificationCenterDelegate: UNUserNotificationCenterDelegate {
 
-  func userNotificationCenter(
+  nonisolated func userNotificationCenter(
     _ center: UNUserNotificationCenter,
     didReceive response: UNNotificationResponse
   ) async {
     // Handle notification actions
     await handleNotificationAction(response)
-    onNotificationResponse(response)
+    await MainActor.run {
+      onNotificationResponse(response)
+    }
   }
 
-  func userNotificationCenter(
+  nonisolated func userNotificationCenter(
     _ center: UNUserNotificationCenter,
     willPresent notification: UNNotification
   ) async -> UNNotificationPresentationOptions {

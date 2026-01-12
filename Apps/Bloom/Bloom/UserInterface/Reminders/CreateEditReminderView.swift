@@ -261,8 +261,8 @@ private extension CreateEditReminderView {
             title: title,
             colorHex: colorHex,
             triggerType: triggerType,
-            occurrences: occurrences,
-            sideEffects: sideEffects
+            occurrences: occurrences.map { $0.asDTO() },
+            sideEffects: sideEffects.map { $0.asDTO() }
           )
         } else {
           // Create new reminder
@@ -270,8 +270,8 @@ private extension CreateEditReminderView {
             title: title,
             colorHex: colorHex,
             triggerType: triggerType,
-            occurrences: occurrences,
-            sideEffects: sideEffects
+            occurrences: occurrences.map { $0.asDTO() },
+            sideEffects: sideEffects.map { $0.asDTO() }
           )
         }
 

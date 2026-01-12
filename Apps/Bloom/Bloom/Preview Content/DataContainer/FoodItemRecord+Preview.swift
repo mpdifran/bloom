@@ -11,6 +11,7 @@ extension FoodItemRecord {
   enum Preview { }
 }
 
+@MainActor
 extension FoodItemRecord.Preview {
   static let ritzCrackers = FoodItemRecord(
     id: "1234",
