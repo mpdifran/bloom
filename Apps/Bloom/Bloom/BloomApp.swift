@@ -77,7 +77,7 @@ struct BloomApp: App {
           await YouStatsCalculator.shared.refreshStats()
         }
         .onForegroundTask {
-          try? await MonitorCalculator.shared.calculateMetricsForDate(Date())
+          try? await MonitorCalculator.shared.backfillMetrics(days: 7)
         }
         .onForegroundTask {
           await TodayInsightsManager.shared.refreshContentIfNeeded()

@@ -67,7 +67,7 @@ actor MonitorCalculator {
     try await modelActor.upsertBatch(samplesWithBaselines)
   }
 
-  /// Fetches metrics for the past N days (for backfilling)
+  /// Fetches metrics for the past N days from today (for backfilling recent data)
   func backfillMetrics(days: Int) async throws {
     let calendar = Calendar.current
     let today = calendar.startOfDay(for: Date())
@@ -75,6 +75,22 @@ actor MonitorCalculator {
     for dayOffset in 0..<days {
       guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: today) else { continue }
       try await calculateMetricsForDate(date)
+    }
+  }
+
+  /// Fetches metrics for a specific date range (for historical analysis)
+  /// - Parameters:
+  ///   - startDate: First date to backfill (inclusive)
+  ///   - endDate: Last date to backfill (inclusive)
+  func backfillMetrics(from startDate: Date, to endDate: Date) async throws {
+    let calendar = Calendar.current
+    var currentDate = calendar.startOfDay(for: startDate)
+    let normalizedEndDate = calendar.startOfDay(for: endDate)
+
+    while currentDate <= normalizedEndDate {
+      try await calculateMetricsForDate(currentDate)
+      guard let nextDate = calendar.date(byAdding: .day, value: 1, to: currentDate) else { break }
+      currentDate = nextDate
     }
   }
 
@@ -122,19 +138,22 @@ actor MonitorCalculator {
   }
 
   private func fetchWristTemperature(for date: Date) async -> DailyMetricSampleInput? {
-    // Wrist temperature is collected during sleep, so we fetch sleep analysis
     let dateRange = DateRange.duringDay(date)
-    let sleepAnalyses = await healthStoreFetcher.fetchSleepAnalysis(dateRange: dateRange)
+    let samples = await healthStoreFetcher.fetchCollatedAverage(
+      quantityType: .appleSleepingWristTemperature,
+      unit: .degreeFahrenheit(),
+      dateRange: dateRange
+    )
 
-    guard let sleepAnalysis = sleepAnalyses.first,
-          let wristTemp = sleepAnalysis.wristTemperature?.averageWristTemperature else {
-      return nil
-    }
+    guard let sample = samples.first else { return nil }
+
+    let quality = determineQuality(sampleCount: samples.count, expected: 1)
 
     return DailyMetricSampleInput(
       date: date,
       metricType: MonitorMetricType.wristTemperature.rawValue,
-      value: wristTemp
+      value: sample.quantity.doubleValue(for: .degreeFahrenheit()),
+      quality: quality
     )
   }
 

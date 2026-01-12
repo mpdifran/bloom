@@ -27,7 +27,7 @@ struct YouHeaderView: View {
           NavigationLink {
             BiologicalAgeDetailsView()
           } label: {
-            Text("Bio Age: \(Int(bioAge)) \(Image(systemSymbol: .chevronForward))")
+            Text("Bio Age: \(bioAge.format(using: .oneDecimalPlace)) \(Image(systemSymbol: .chevronForward))")
               .font(.title3)
               .bold()
               .fontDesign(.rounded)

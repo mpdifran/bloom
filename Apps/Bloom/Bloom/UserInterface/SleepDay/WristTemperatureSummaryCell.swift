@@ -23,7 +23,7 @@ struct WristTemperatureSummaryCell: View {
                 HStack {
                     Spacer()
 
-                    Text("\(wristTemperature.averageWristTemperature.format())°F")
+                    Text("\(wristTemperature.averageWristTemperature.format(using: .twoDecimalPlaces))°F")
                         .font(.system(size: 60))
                         .fontDesign(.rounded)
                         .bold()

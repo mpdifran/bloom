@@ -8,6 +8,7 @@
 import SwiftUI
 import SFSafeSymbols
 import TelemetryDeck
+import DataContainer
 
 /// Detail view for the Stress & Workout Load monitor.
 /// Shows state history, training load signals, and findings.
@@ -15,6 +16,7 @@ struct StressDetailView: View {
 
   @State private var selectedPeriod: StatTimePeriod = .sevenDays
   @State private var historicalResults: [MonitorResult] = []
+  @State private var rangeData: [MetricRangeData] = []
   @State private var isLoading = false
 
   /// The current (most recent) result
@@ -61,6 +63,10 @@ struct StressDetailView: View {
 
       stateHistorySection
 
+      if !rangeData.isEmpty {
+        metricRangesSection
+      }
+
       if let result = currentResult {
         if !result.signals.isEmpty {
           signalsSection(result: result)
@@ -91,6 +97,28 @@ struct StressDetailView: View {
   private var stateHistorySection: some View {
     MonitorStateChart(results: historicalResults, monitorType: .stress)
       .cardContainer()
+  }
+
+  // MARK: - Metric Ranges
+
+  private var metricRangesSection: some View {
+    VStack(alignment: .leading, spacing: 12) {
+      Text("7-Day Ranges")
+        .font(.headline)
+        .padding(.horizontal)
+
+      VStack(spacing: 16) {
+        ForEach(rangeData) { data in
+          if let metricType = MonitorMetricType(rawValue: data.metricType) {
+            MetricRangeRow(rangeData: data, metricType: metricType)
+            if data.id != rangeData.last?.id {
+              Divider()
+            }
+          }
+        }
+      }
+      .cardContainer()
+    }
   }
 
   // MARK: - Signals
@@ -182,7 +210,24 @@ struct StressDetailView: View {
       // Handle error silently, empty state will show
     }
 
+    // Load range data for stress metrics
+    await loadRangeData()
+
     isLoading = false
+  }
+
+  private func loadRangeData() async {
+    let metrics: [(type: String, displayName: String)] = MonitorType.stress.metrics.map {
+      ($0.rawValue, $0.displayName)
+    }
+
+    do {
+      let actor = DailyMetricSampleModelActor.standard()
+      rangeData = try await actor.fetchRangeData(metricTypes: metrics, for: Date())
+    } catch {
+      // Handle error silently
+      rangeData = []
+    }
   }
 }
 

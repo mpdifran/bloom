@@ -101,22 +101,35 @@ actor RecoveryStateCalculator: MonitorStateCalculator {
       presentMetrics: presentMetrics
     )
 
-    // Check persistence (2-day requirement)
-    let consecutiveDays = countConsecutiveDays(
-      state: rawState,
-      previousResults: previousResults,
-      currentDate: date
-    )
-
-    // Apply persistence rule - only report Watch/Off if 2+ days
+    // Determine final state with persistence bypass for strong signals
     let finalState: MonitorStateValue
-    if rawState == .good {
-      finalState = .good
-    } else if consecutiveDays >= 2 {
+    let consecutiveDays: Int
+
+    if shouldBypassPersistence(signals: signals, rawState: rawState) {
+      // Strong multi-signal cases bypass the 2-day persistence rule
+      // This prevents the catch-22 where Day 1 suppression blocks Day 2 detection
       finalState = rawState
-    } else {
-      // Haven't hit 2-day threshold yet, show as good
+      consecutiveDays = 1
+    } else if rawState == .good {
       finalState = .good
+      consecutiveDays = countConsecutiveDays(
+        state: rawState,
+        previousResults: previousResults,
+        currentDate: date
+      )
+    } else {
+      // Apply persistence rule for moderate signals
+      consecutiveDays = countConsecutiveDays(
+        state: rawState,
+        previousResults: previousResults,
+        currentDate: date
+      )
+      if consecutiveDays >= 2 {
+        finalState = rawState
+      } else {
+        // Haven't hit 2-day threshold yet, show as good
+        finalState = .good
+      }
     }
 
     // Generate findings
@@ -133,6 +146,31 @@ actor RecoveryStateCalculator: MonitorStateCalculator {
   }
 
   // MARK: - Private Methods
+
+  /// Determines if the persistence rule should be bypassed for strong signal cases.
+  /// This prevents the catch-22 where Day 1 signals get suppressed, preventing Day 2 from counting.
+  private func shouldBypassPersistence(signals: [Signal], rawState: MonitorStateValue) -> Bool {
+    guard rawState != .good else { return false }
+
+    let highSeveritySignals = signals.filter { $0.severity == .high }
+
+    // Bypass 1: 2+ high-severity signals (z-score > 2.0)
+    // Statistically significant - chance of random occurrence is very low
+    if highSeveritySignals.count >= 2 {
+      return true
+    }
+
+    // Bypass 2: Elevated wrist temp (strong sickness indicator) + any other elevated signal
+    // Wrist temperature elevation is a particularly strong indicator of illness
+    let hasHighTemp = signals.contains { $0.metricType == .wristTemperature && $0.severity == .high }
+    let hasOtherElevated = signals.contains { $0.metricType != .wristTemperature && $0.severity >= .elevated }
+
+    if hasHighTemp && hasOtherElevated {
+      return true
+    }
+
+    return false
+  }
 
   private func determineState(signals: [Signal]) -> MonitorStateValue {
     // Alert: 2+ signals > 2.0 z-score

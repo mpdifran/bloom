@@ -38,6 +38,54 @@ public extension DailyMetricSample {
   }
 }
 
+/// Data structure for displaying metric ranges in the UI.
+/// Contains the current value, 7-day range, and baseline for chart visualization.
+public struct MetricRangeData: Sendable, Equatable, Identifiable {
+  public var id: String { metricType }
+  public let metricType: String
+  public let displayName: String
+  public let currentValue: Double
+  public let min7Day: Double
+  public let max7Day: Double
+  public let baseline28Day: Double?
+  public let zScore: Double?
+
+  public init(
+    metricType: String,
+    displayName: String,
+    currentValue: Double,
+    min7Day: Double,
+    max7Day: Double,
+    baseline28Day: Double?,
+    zScore: Double?
+  ) {
+    self.metricType = metricType
+    self.displayName = displayName
+    self.currentValue = currentValue
+    self.min7Day = min7Day
+    self.max7Day = max7Day
+    self.baseline28Day = baseline28Day
+    self.zScore = zScore
+  }
+
+  /// The range span (max - min)
+  public var rangeSpan: Double {
+    max7Day - min7Day
+  }
+
+  /// Position of current value as 0-1 within the 7-day range
+  public var normalizedPosition: Double {
+    guard rangeSpan > 0 else { return 0.5 }
+    return (currentValue - min7Day) / rangeSpan
+  }
+
+  /// Position of baseline as 0-1 within the 7-day range
+  public var normalizedBaselinePosition: Double? {
+    guard let baseline = baseline28Day, rangeSpan > 0 else { return nil }
+    return (baseline - min7Day) / rangeSpan
+  }
+}
+
 /// Input struct for creating/updating DailyMetricSample records.
 /// Used when persisting new data before it has a PersistentIdentifier.
 public struct DailyMetricSampleInput: Sendable, Equatable {

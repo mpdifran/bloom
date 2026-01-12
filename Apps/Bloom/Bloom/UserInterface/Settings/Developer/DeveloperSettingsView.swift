@@ -749,6 +749,13 @@ extension DeveloperSettingsView {
           .selectable()
           .frame(height: 60)
         }
+
+        Divider()
+
+        SettingsCell("Monitor Historical Analysis", iconType: .disclosure) { }
+          .onTapGesture {
+            presentedSheet = NavigationStack { MonitorHistoricalAnalysisView() }.asAny
+          }
       }
     }
   }

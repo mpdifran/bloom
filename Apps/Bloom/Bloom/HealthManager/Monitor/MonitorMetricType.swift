@@ -208,6 +208,120 @@ public enum MonitorMetricType: String, CaseIterable, Sendable, Codable {
       return .sunriseFill
     }
   }
+
+  /// Abbreviated unit string for display
+  public var unitAbbreviation: String {
+    switch self {
+    case .restingHeartRate, .heartRateRecovery:
+      return "bpm"
+    case .heartRateVariability:
+      return "ms"
+    case .wristTemperature:
+      return UnitTemperature(forLocale: .current).symbol
+    case .respiratoryRate:
+      return "br/min"
+    case .activeEnergy:
+      return "kcal"
+    case .sleepDuration, .deepSleep, .remSleep:
+      return ""  // Formatted as hours:minutes
+    case .sleepEfficiency:
+      return "%"
+    case .bedtime, .wakeTime:
+      return ""  // Formatted as time
+    }
+  }
+
+  /// Format a value for display with appropriate unit
+  public func formatValue(_ value: Double) -> String {
+    switch self {
+    case .restingHeartRate, .heartRateRecovery:
+      return "\(Int(value)) bpm"
+    case .heartRateVariability:
+      return "\(Int(value)) ms"
+    case .wristTemperature:
+      let measurement = Measurement(value: value, unit: UnitTemperature.fahrenheit)
+      let localizedValue = measurement.localizedValue
+      let unit = UnitTemperature(forLocale: .current).symbol
+      return String(format: "%.1f%@", localizedValue, unit)
+    case .respiratoryRate:
+      return String(format: "%.1f br/min", value)
+    case .activeEnergy:
+      return "\(Int(value)) kcal"
+    case .sleepDuration, .deepSleep, .remSleep:
+      return formatMinutesAsHoursMinutes(value)
+    case .sleepEfficiency:
+      return "\(Int(value))%"
+    case .bedtime, .wakeTime:
+      return formatMinutesFromMidnightAsTime(value)
+    }
+  }
+
+  /// Format a value with abbreviated unit (for labels)
+  public func formatValueShort(_ value: Double) -> String {
+    switch self {
+    case .restingHeartRate, .heartRateRecovery:
+      return "\(Int(value))"
+    case .heartRateVariability:
+      return "\(Int(value))"
+    case .wristTemperature:
+      let measurement = Measurement(value: value, unit: UnitTemperature.fahrenheit)
+      return String(format: "%.1f", measurement.localizedValue)
+    case .respiratoryRate:
+      return String(format: "%.1f", value)
+    case .activeEnergy:
+      return "\(Int(value))"
+    case .sleepDuration, .deepSleep, .remSleep:
+      return formatMinutesAsHoursMinutesShort(value)
+    case .sleepEfficiency:
+      return "\(Int(value))"
+    case .bedtime, .wakeTime:
+      return formatMinutesFromMidnightAsTime(value)
+    }
+  }
+
+  private func formatMinutesAsHoursMinutes(_ minutes: Double) -> String {
+    let hours = Int(minutes) / 60
+    let mins = Int(minutes) % 60
+    if hours > 0 && mins > 0 {
+      return "\(hours)h \(mins)m"
+    } else if hours > 0 {
+      return "\(hours)h"
+    } else {
+      return "\(mins)m"
+    }
+  }
+
+  private func formatMinutesAsHoursMinutesShort(_ minutes: Double) -> String {
+    let hours = Int(minutes) / 60
+    let mins = Int(minutes) % 60
+    if hours > 0 {
+      return "\(hours):\(String(format: "%02d", mins))"
+    } else {
+      return "\(mins)m"
+    }
+  }
+
+  private func formatMinutesFromMidnightAsTime(_ minutes: Double) -> String {
+    var adjustedMinutes = Int(minutes)
+    // Handle negative values (before midnight) and values > 24h
+    while adjustedMinutes < 0 {
+      adjustedMinutes += 24 * 60
+    }
+    while adjustedMinutes >= 24 * 60 {
+      adjustedMinutes -= 24 * 60
+    }
+    let hour = adjustedMinutes / 60
+    let minute = adjustedMinutes % 60
+    let formatter = DateFormatter()
+    formatter.dateFormat = "h:mm a"
+    var components = DateComponents()
+    components.hour = hour
+    components.minute = minute
+    guard let date = Calendar.current.date(from: components) else {
+      return "--:--"
+    }
+    return formatter.string(from: date)
+  }
 }
 
 /// The three monitor types in the Monitor feature

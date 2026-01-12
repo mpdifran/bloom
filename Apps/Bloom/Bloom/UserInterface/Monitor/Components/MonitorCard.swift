@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SFSafeSymbols
+import DataContainer
 
 /// A card displaying the state of a single health monitor.
 /// Expands to show findings when in Watch or Off state.
@@ -15,17 +16,27 @@ struct MonitorCard: View {
   let result: MonitorResult
 
   @State private var isExpanded: Bool = false
+  @State private var rangeData: [MetricRangeData] = []
 
   var body: some View {
     NavigationLink(value: result.monitorType) {
       VStack(alignment: .leading, spacing: 0) {
         headerView
 
-        if isExpanded && !result.findings.isEmpty {
-          Divider()
-            .padding(.vertical, 12)
+        if isExpanded {
+          if !rangeData.isEmpty {
+            Divider()
+              .padding(.vertical, 12)
 
-          findingsView
+            metricsSection
+          }
+
+          if !result.findings.isEmpty {
+            Divider()
+              .padding(.vertical, 12)
+
+            findingsView
+          }
         }
       }
       .cardContainer(fill: backgroundColor)
@@ -34,6 +45,22 @@ struct MonitorCard: View {
     .onAppear {
       // Auto-expand if there are concerning findings
       isExpanded = result.state.isConcerning && !result.findings.isEmpty
+    }
+    .task {
+      await loadRangeData()
+    }
+  }
+
+  private func loadRangeData() async {
+    let metrics: [(type: String, displayName: String)] = result.monitorType.metrics.map {
+      ($0.rawValue, $0.displayName)
+    }
+
+    do {
+      let actor = DailyMetricSampleModelActor.standard()
+      rangeData = try await actor.fetchRangeData(metricTypes: metrics, for: Date())
+    } catch {
+      rangeData = []
     }
   }
 
@@ -79,6 +106,18 @@ struct MonitorCard: View {
       .padding(.horizontal, 10)
       .padding(.vertical, 5)
       .background(badgeBackgroundColor, in: Capsule())
+  }
+
+  // MARK: - Metrics
+
+  private var metricsSection: some View {
+    VStack(spacing: 8) {
+      ForEach(rangeData) { data in
+        if let metricType = MonitorMetricType(rawValue: data.metricType) {
+          MetricRangeRowCondensed(rangeData: data, metricType: metricType)
+        }
+      }
+    }
   }
 
   // MARK: - Findings

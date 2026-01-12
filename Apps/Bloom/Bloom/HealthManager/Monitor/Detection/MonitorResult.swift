@@ -36,6 +36,9 @@ public struct MonitorResult: Sendable, Equatable, Identifiable, Codable {
   /// Date this result was calculated
   public let calculatedAt: Date
 
+  /// For stress monitor only: whether this is training stress or burnout
+  public let stressSubtype: StressSubtype?
+
   /// Whether this state has met the persistence threshold (2+ days for Watch/Off)
   public var isPersistent: Bool {
     consecutiveDays >= 2
@@ -48,7 +51,8 @@ public struct MonitorResult: Sendable, Equatable, Identifiable, Codable {
     consecutiveDays: Int,
     signals: [Signal],
     findings: [Finding],
-    calculatedAt: Date = Date()
+    calculatedAt: Date = Date(),
+    stressSubtype: StressSubtype? = nil
   ) {
     self.monitorType = monitorType
     self.state = state
@@ -57,7 +61,18 @@ public struct MonitorResult: Sendable, Equatable, Identifiable, Codable {
     self.signals = signals
     self.findings = findings
     self.calculatedAt = calculatedAt
+    self.stressSubtype = stressSubtype
   }
+}
+
+/// Subtype classification for the Stress monitor
+public enum StressSubtype: String, Sendable, Codable, Equatable {
+  /// High training load causing physiological stress (overtraining)
+  case trainingStress = "Training Stress"
+  /// Normal/low training load with physiological stress signals (life stress, burnout)
+  case burnout = "Burnout"
+
+  public var displayName: String { rawValue }
 }
 
 // MARK: - Unavailable Result Factory

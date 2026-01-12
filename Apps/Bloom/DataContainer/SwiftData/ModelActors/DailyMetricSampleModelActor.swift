@@ -161,4 +161,58 @@ public extension DailyMetricSampleModelActor {
     }
     try context.save()
   }
+
+  /// Fetch range data for a specific metric type over the past 7 days.
+  /// Returns nil if no data is available for the metric.
+  func fetchRangeData(
+    metricType: String,
+    displayName: String,
+    for date: Date
+  ) throws -> MetricRangeData? {
+    let calendar = Calendar.current
+    let startDate = calendar.date(byAdding: .day, value: -6, to: calendar.startOfDay(for: date)) ?? date
+    let endDate = calendar.startOfDay(for: date)
+
+    let descriptor = FetchDescriptor<DailyMetricSample>(
+      predicate: #Predicate<DailyMetricSample> { sample in
+        sample.metricType == metricType && sample.date >= startDate && sample.date <= endDate
+      },
+      sortBy: [SortDescriptor(\DailyMetricSample.date, order: .reverse)]
+    )
+
+    let samples = try context.fetch(descriptor)
+    guard let latestSample = samples.first else { return nil }
+
+    let values = samples.map { $0.value }
+    let minValue = values.min() ?? latestSample.value
+    let maxValue = values.max() ?? latestSample.value
+
+    return MetricRangeData(
+      metricType: metricType,
+      displayName: displayName,
+      currentValue: latestSample.value,
+      min7Day: minValue,
+      max7Day: maxValue,
+      baseline28Day: latestSample.baseline28Day,
+      zScore: latestSample.zScore
+    )
+  }
+
+  /// Fetch range data for multiple metric types
+  func fetchRangeData(
+    metricTypes: [(type: String, displayName: String)],
+    for date: Date
+  ) throws -> [MetricRangeData] {
+    var results: [MetricRangeData] = []
+    for metric in metricTypes {
+      if let rangeData = try fetchRangeData(
+        metricType: metric.type,
+        displayName: metric.displayName,
+        for: date
+      ) {
+        results.append(rangeData)
+      }
+    }
+    return results
+  }
 }
