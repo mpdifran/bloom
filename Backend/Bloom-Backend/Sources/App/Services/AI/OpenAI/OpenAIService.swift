@@ -41,7 +41,25 @@ extension OpenAIService {
         Chat.Message(
           role: .system,
           content: [
-            .text("Generate a concise title for this conversation based on the message. This title will be shown to the user to describe the conversation. It should summarize what you're chatting about. Respond with only the title, no quotes or punctuation.")
+            .text("""
+              You are a title generator. Given a user's chat message, generate a short title (under 10 words) that summarizes the topic.
+
+              Rules:
+              - Output ONLY the title, nothing else
+              - Do NOT answer or respond to the message
+              - Do NOT include quotes, punctuation, or explanations
+              - Keep it under 10 words
+
+              Examples:
+              User: "What are some good exercises for back pain?"
+              Title: Back Pain Exercises
+
+              User: "Can you help me plan a healthy meal?"
+              Title: Healthy Meal Planning
+
+              User: "I've been feeling tired lately"
+              Title: Fatigue and Energy Levels
+              """)
           ]
         ),
         Chat.Message(
