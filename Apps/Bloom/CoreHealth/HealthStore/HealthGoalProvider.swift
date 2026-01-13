@@ -995,9 +995,10 @@ public extension HealthGoalProvider {
     [
       AgeDataPoint(value: 1.45, age: 20),
       AgeDataPoint(value: 1.34, age: 30),
-      AgeDataPoint(value: 1.26, age: 45),
-      AgeDataPoint(value: 1.2, age: 60),
-      AgeDataPoint(value: 0.9, age: 65)
+      AgeDataPoint(value: 1.26, age: 40),
+      AgeDataPoint(value: 1.22, age: 55),
+      AgeDataPoint(value: 1.15, age: 65),
+      AgeDataPoint(value: 0.95, age: 75)
     ]
   }
 

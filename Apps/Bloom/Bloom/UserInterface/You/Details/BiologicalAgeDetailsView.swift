@@ -135,7 +135,7 @@ private extension BiologicalAgeDetailsView {
             series: .value("Type", "Actual")
           )
           .interpolationMethod(.catmullRom)
-          .foregroundStyle(.text)
+          .foregroundStyle(.text.secondary)
           .lineStyle(StrokeStyle(lineWidth: 6, lineCap: .round))
 
           // Bio age line
@@ -192,7 +192,7 @@ private extension BiologicalAgeDetailsView {
       HStack(spacing: 16) {
         HStack {
           Circle()
-            .fill(.text)
+            .fill(.text.secondary)
             .frame(width: 8, height: 8)
           Text("Actual Age")
             .font(.subheadline)
