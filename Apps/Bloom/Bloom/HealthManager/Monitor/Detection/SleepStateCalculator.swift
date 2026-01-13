@@ -40,13 +40,16 @@ actor SleepStateCalculator: MonitorStateCalculator {
 
     // Sleep duration signals
     if let zScore = durationSample.zScore {
+      let baseline = durationSample.baseline7Day ?? durationSample.baseline28Day
+      let difference = baseline.map { durationSample.value - $0 }
       if zScore < -2.0 {
         signals.append(Signal(
           metricType: .sleepDuration,
           date: date,
           zScore: zScore,
           direction: .lower,
-          description: "Your sleep duration is very low"
+          description: "Your sleep duration is very low",
+          difference: difference
         ))
       } else if zScore < -1.0 {
         signals.append(Signal(
@@ -54,7 +57,8 @@ actor SleepStateCalculator: MonitorStateCalculator {
           date: date,
           zScore: zScore,
           direction: .lower,
-          description: "You've been getting less sleep than your usual"
+          description: "You've been getting less sleep than your usual",
+          difference: difference
         ))
       }
     }
@@ -62,13 +66,16 @@ actor SleepStateCalculator: MonitorStateCalculator {
     // Sleep efficiency signals (optional)
     if let efficiencySample = todaySamples.first(where: { $0.metricType == MonitorMetricType.sleepEfficiency.rawValue }) {
       let efficiency = efficiencySample.value / 100 // Convert from percentage
+      let baseline = efficiencySample.baseline7Day ?? efficiencySample.baseline28Day
+      let difference = baseline.map { efficiencySample.value - $0 } // Difference in percentage points
       if efficiency < 0.75 {
         signals.append(Signal(
           metricType: .sleepEfficiency,
           date: date,
           zScore: (0.85 - efficiency) * 10, // Approximate z-score
           direction: .lower,
-          description: "Sleep efficiency is low — you may be waking frequently"
+          description: "Sleep efficiency is low — you may be waking frequently",
+          difference: difference
         ))
       } else if efficiency < 0.85 {
         signals.append(Signal(
@@ -76,7 +83,8 @@ actor SleepStateCalculator: MonitorStateCalculator {
           date: date,
           zScore: (0.85 - efficiency) * 10,
           direction: .lower,
-          description: "Sleep efficiency is below optimal"
+          description: "Sleep efficiency is below optimal",
+          difference: difference
         ))
       }
     }
@@ -90,7 +98,8 @@ actor SleepStateCalculator: MonitorStateCalculator {
           date: date,
           zScore: variabilityMinutes / 30, // Approximate z-score
           direction: .variable,
-          description: "Your sleep schedule has been highly variable"
+          description: "Your sleep schedule has been highly variable",
+          difference: variabilityMinutes
         ))
       } else if variabilityMinutes > 60 {
         signals.append(Signal(
@@ -98,7 +107,8 @@ actor SleepStateCalculator: MonitorStateCalculator {
           date: date,
           zScore: variabilityMinutes / 30,
           direction: .variable,
-          description: "Your bedtime has been inconsistent"
+          description: "Your bedtime has been inconsistent",
+          difference: variabilityMinutes
         ))
       }
     }

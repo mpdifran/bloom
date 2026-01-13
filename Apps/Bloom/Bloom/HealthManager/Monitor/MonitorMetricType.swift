@@ -279,6 +279,46 @@ public enum MonitorMetricType: String, CaseIterable, Sendable, Codable {
     }
   }
 
+  /// Format a difference value with sign and unit (e.g., "+10 bpm", "-45 min")
+  public func formatDifference(_ value: Double) -> String {
+    let sign = value >= 0 ? "+" : ""
+    switch self {
+    case .restingHeartRate, .heartRateRecovery:
+      return "\(sign)\(Int(value)) bpm"
+    case .heartRateVariability:
+      return "\(sign)\(Int(value)) ms"
+    case .wristTemperature:
+      let measurement = Measurement(value: value, unit: UnitTemperature.fahrenheit)
+      let localizedValue = measurement.localizedValue
+      let unit = UnitTemperature(forLocale: .current).symbol
+      return String(format: "%@%.1f%@", sign, localizedValue, unit)
+    case .respiratoryRate:
+      return String(format: "%@%.1f br/min", sign, value)
+    case .activeEnergy:
+      return "\(sign)\(Int(value)) kcal"
+    case .sleepDuration, .deepSleep, .remSleep:
+      return formatDifferenceAsMinutes(value)
+    case .sleepEfficiency:
+      return "\(sign)\(Int(value))%"
+    case .bedtime, .wakeTime:
+      return formatDifferenceAsMinutes(value)
+    }
+  }
+
+  private func formatDifferenceAsMinutes(_ minutes: Double) -> String {
+    let sign = minutes >= 0 ? "+" : ""
+    let absMinutes = abs(Int(minutes))
+    let hours = absMinutes / 60
+    let mins = absMinutes % 60
+    if hours > 0 && mins > 0 {
+      return "\(sign)\(hours)h \(mins)m"
+    } else if hours > 0 {
+      return "\(sign)\(hours)h"
+    } else {
+      return "\(sign)\(Int(minutes))m"
+    }
+  }
+
   private func formatMinutesAsHoursMinutes(_ minutes: Double) -> String {
     let hours = Int(minutes) / 60
     let mins = Int(minutes) % 60

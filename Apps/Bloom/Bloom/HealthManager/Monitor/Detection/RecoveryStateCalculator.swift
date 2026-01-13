@@ -46,48 +46,60 @@ actor RecoveryStateCalculator: MonitorStateCalculator {
     // RHR: Higher = concerning (positive z-score is bad)
     if let rhrSample = todaySamples.first(where: { $0.metricType == MonitorMetricType.restingHeartRate.rawValue }),
        let zScore = rhrSample.zScore, zScore > 1.0 {
+      let baseline = rhrSample.baseline28Day ?? rhrSample.baseline7Day
+      let difference = baseline.map { rhrSample.value - $0 }
       signals.append(Signal(
         metricType: .restingHeartRate,
         date: date,
         zScore: zScore,
         direction: .higher,
-        description: "Your resting heart rate is higher than usual"
+        description: "Your resting heart rate is higher than usual",
+        difference: difference
       ))
     }
 
     // HRV: Lower = concerning (negative z-score is bad)
     if let hrvSample = todaySamples.first(where: { $0.metricType == MonitorMetricType.heartRateVariability.rawValue }),
        let zScore = hrvSample.zScore, zScore < -1.0 {
+      let baseline = hrvSample.baseline28Day ?? hrvSample.baseline7Day
+      let difference = baseline.map { hrvSample.value - $0 }
       signals.append(Signal(
         metricType: .heartRateVariability,
         date: date,
         zScore: zScore,
         direction: .lower,
-        description: "Your heart rate variability is lower than usual"
+        description: "Your heart rate variability is lower than usual",
+        difference: difference
       ))
     }
 
     // Wrist Temperature: Higher = concerning (optional)
     if let tempSample = todaySamples.first(where: { $0.metricType == MonitorMetricType.wristTemperature.rawValue }),
        let zScore = tempSample.zScore, zScore > 1.0 {
+      let baseline = tempSample.baseline28Day ?? tempSample.baseline7Day
+      let difference = baseline.map { tempSample.value - $0 }
       signals.append(Signal(
         metricType: .wristTemperature,
         date: date,
         zScore: zScore,
         direction: .higher,
-        description: "Elevated wrist temperature during sleep"
+        description: "Elevated wrist temperature during sleep",
+        difference: difference
       ))
     }
 
     // Respiratory Rate: Higher = concerning (optional)
     if let respSample = todaySamples.first(where: { $0.metricType == MonitorMetricType.respiratoryRate.rawValue }),
        let zScore = respSample.zScore, zScore > 1.0 {
+      let baseline = respSample.baseline28Day ?? respSample.baseline7Day
+      let difference = baseline.map { respSample.value - $0 }
       signals.append(Signal(
         metricType: .respiratoryRate,
         date: date,
         zScore: zScore,
         direction: .higher,
-        description: "Your respiratory rate is higher than usual"
+        description: "Your respiratory rate is higher than usual",
+        difference: difference
       ))
     }
 

@@ -28,6 +28,9 @@ public struct Signal: Sendable, Equatable, Identifiable, Codable {
   /// Human-readable description of what was detected
   public let description: String
 
+  /// The difference from baseline in the metric's native unit (e.g., +10 for RHR 10bpm above baseline)
+  public let difference: Double?
+
   /// Absolute magnitude of deviation for severity comparison
   public var magnitude: Double { abs(zScore) }
 
@@ -48,7 +51,8 @@ public struct Signal: Sendable, Equatable, Identifiable, Codable {
     date: Date,
     zScore: Double,
     direction: SignalDirection,
-    description: String
+    description: String,
+    difference: Double? = nil
   ) {
     self.id = "\(date.timeIntervalSince1970)_\(metricType.rawValue)"
     self.metricType = metricType
@@ -56,6 +60,7 @@ public struct Signal: Sendable, Equatable, Identifiable, Codable {
     self.zScore = zScore
     self.direction = direction
     self.description = description
+    self.difference = difference
   }
 }
 

@@ -348,12 +348,15 @@ actor StressStateCalculator: MonitorStateCalculator {
       $0.metricType == MonitorMetricType.deepSleep.rawValue
     }),
        let zScore = deepSleepSample.zScore, zScore < -1.0 {
+      let baseline = deepSleepSample.baseline7Day ?? deepSleepSample.baseline28Day
+      let difference = baseline.map { deepSleepSample.value - $0 }
       signals.append(Signal(
         metricType: .deepSleep,
         date: date,
         zScore: zScore,
         direction: .lower,
-        description: "Deep sleep is below your usual"
+        description: "Deep sleep is below your usual",
+        difference: difference
       ))
     }
 
@@ -362,12 +365,15 @@ actor StressStateCalculator: MonitorStateCalculator {
       $0.metricType == MonitorMetricType.restingHeartRate.rawValue
     }),
        let zScore = rhrSample.zScore, zScore > 1.0 {
+      let baseline = rhrSample.baseline28Day ?? rhrSample.baseline7Day
+      let difference = baseline.map { rhrSample.value - $0 }
       signals.append(Signal(
         metricType: .restingHeartRate,
         date: date,
         zScore: zScore,
         direction: .higher,
-        description: "Resting heart rate is elevated"
+        description: "Resting heart rate is elevated",
+        difference: difference
       ))
     }
 

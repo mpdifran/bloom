@@ -23,7 +23,7 @@ public enum MonitorStateValue: String, Sendable, Codable, CaseIterable {
 
   public var displayName: String {
     switch self {
-    case .good: return "Good"
+    case .good: return "Normal"
     case .attention: return "Attention"
     case .alert: return "Alert"
     case .unavailable: return "Unavailable"
