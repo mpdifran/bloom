@@ -45,7 +45,7 @@ private extension HeartRateReserveStatCard {
           )
           .foregroundStyle(
             LinearGradient(
-              colors: [Color.mutedRed.opacity(0.5), Color.mutedRed.opacity(0.1)],
+              colors: [Color.mutedRed.opacity(0.7), Color.mutedRed.opacity(0.3)],
               startPoint: .top,
               endPoint: .bottom
             )

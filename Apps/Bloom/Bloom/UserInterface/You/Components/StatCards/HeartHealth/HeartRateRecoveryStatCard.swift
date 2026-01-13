@@ -43,11 +43,12 @@ private extension HeartRateRecoveryStatCard {
           )
           .foregroundStyle(.gray)
           .cornerRadius(6)
-          .annotation(position: .top) {
+          .annotation(position: .overlay, alignment: .top) {
             Text("\(Int(lastWeek)) bpm")
               .font(.caption)
               .bold()
               .fontDesign(.rounded)
+              .foregroundStyle(.white)
           }
         }
 
@@ -58,17 +59,18 @@ private extension HeartRateRecoveryStatCard {
           )
           .foregroundStyle(.mutedRed)
           .cornerRadius(6)
-          .annotation(position: .top) {
+          .annotation(position: .overlay, alignment: .top) {
             Text("\(Int(thisWeek)) bpm")
               .font(.caption)
               .bold()
               .fontDesign(.rounded)
+              .foregroundStyle(.white)
           }
         }
       }
       .chartXAxis(.hidden)
       .chartYAxis(.hidden)
-      .chartYScale(domain: 0...(maxValue * 1.2))
+      .chartYScale(domain: 0...maxValue)
     }
   }
 
