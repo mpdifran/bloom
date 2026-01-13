@@ -119,7 +119,7 @@ final actor BiologicalAgeCalculator {
     let modelActor = BiologicalAgeRecordModelActor.standard()
 
     // Calculate new biological age
-    let result = await calculateBiologicalAge(actualAge: Double(userAge))
+    let result = await calculateBiologicalAge(actualAge: userAge)
 
     // Blend with previous day's value (70% previous day + 30% new)
     let blendedAge: Double
@@ -130,12 +130,12 @@ final actor BiologicalAgeCalculator {
     }
 
     // Clamp to ±12 years from actual age
-    let clampedAge = max(Double(userAge) - 12, min(Double(userAge) + 12, blendedAge))
+    let clampedAge = max(userAge - 12, min(userAge + 12, blendedAge))
 
     // Save to SwiftData (upserts same calendar day)
     try? await modelActor.upsert(
       biologicalAge: clampedAge,
-      actualAge: Double(userAge),
+      actualAge: userAge,
       date: Date()
     )
 
@@ -144,16 +144,16 @@ final actor BiologicalAgeCalculator {
 
     biologicalAge = BiologicalAgeResult(
       biologicalAge: clampedAge,
-      actualAge: Double(userAge),
+      actualAge: userAge,
       lastCalculated: Date(),
       metricContributions: result.metricContributions
     )
 
-    let ageDiff = clampedAge - Double(userAge)
+    let ageDiff = clampedAge - userAge
     TelemetryDeck.signal("Bio Age Calculated", floatValue: ageDiff)
   }
 
-  private func getUserAge() -> Int {
+  private func getUserAge() -> Double {
     let birthYear = healthDefaults.getBirthYear()
     guard birthYear > 0 else { return 0 }
     let birthMonth = healthDefaults.getBirthMonth()
@@ -163,17 +163,26 @@ final actor BiologicalAgeCalculator {
     let currentMonth = calendar.component(.month, from: now)
     let currentDay = calendar.component(.day, from: now)
 
-    var age = currentYear - birthYear
+    var years = Double(currentYear - birthYear)
 
-    // If birth month is set, check if birthday has passed this year
-    // We assume the 15th of the month as the birthday when only month is known
     if birthMonth > 0 {
-      if currentMonth < birthMonth || (currentMonth == birthMonth && currentDay < 15) {
-        age -= 1
+      // Calculate fractional age using mid-month (15th) as birthday
+      let monthsSinceBirthday: Int
+      if currentMonth > birthMonth || (currentMonth == birthMonth && currentDay >= 15) {
+        // Birthday has passed this year
+        monthsSinceBirthday = currentMonth - birthMonth + (currentDay >= 15 ? 0 : -1)
+      } else {
+        // Birthday hasn't passed yet
+        years -= 1
+        monthsSinceBirthday = 12 - birthMonth + currentMonth + (currentDay >= 15 ? 0 : -1)
       }
+      return years + (Double(max(0, monthsSinceBirthday)) / 12.0)
+    } else {
+      // No birth month - use day of year for fraction (Jan 1 baseline)
+      let dayOfYear = calendar.ordinality(of: .day, in: .year, for: now) ?? 1
+      let daysInYear = calendar.range(of: .day, in: .year, for: now)?.count ?? 365
+      return years + (Double(dayOfYear - 1) / Double(daysInYear))
     }
-
-    return age
   }
 }
 
