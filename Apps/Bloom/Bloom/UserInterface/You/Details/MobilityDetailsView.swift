@@ -150,8 +150,16 @@ private extension MobilityDetailsView {
         .interpolationMethod(.catmullRom)
       }
 
-      // Current point mark with border
+      // Current point mark with border and dashed line to y-axis
       if let currentPoint = stepsChartData?.currentPeriodDataPoints.last {
+        RuleMark(
+          xStart: .value("Start", currentPoint.index),
+          xEnd: .value("End", (stepsChartData?.expectedDataPointCount ?? 7) - 1),
+          y: .value("Steps", currentPoint.cumulativeSteps)
+        )
+        .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 4]))
+        .foregroundStyle(Color.secondary.opacity(0.5))
+
         PointMark(
           x: .value("Time", currentPoint.index),
           y: .value("Steps", currentPoint.cumulativeSteps)
@@ -168,17 +176,12 @@ private extension MobilityDetailsView {
       }
     }
     .chartXScale(domain: 0...(stepsChartData?.expectedDataPointCount ?? 7) - 1)
-    .chartXAxis {
-      AxisMarks(values: .automatic) { _ in
-        AxisGridLine()
-      }
-    }
+    .chartXAxis(.hidden)
     .chartYAxis {
-      AxisMarks(position: .leading) { value in
-        AxisGridLine()
+      AxisMarks(position: .trailing, values: stepsYAxisValues) { value in
         AxisValueLabel {
           if let steps = value.as(Int.self) {
-            Text(steps.formatted())
+            Text(steps.compactFormatted)
           }
         }
       }
@@ -189,6 +192,25 @@ private extension MobilityDetailsView {
   func formattedPercentChange(_ change: Double) -> String {
     let sign = change >= 0 ? "+" : ""
     return "\(sign)\(Int(change))% \(selectedPeriod.comparisonPeriodLabel)"
+  }
+
+  var stepsYAxisValues: [Int] {
+    guard let data = stepsChartData,
+          let currentSteps = data.currentPeriodDataPoints.last?.cumulativeSteps,
+          let previousSteps = data.previousPeriodDataPoints.last?.cumulativeSteps else {
+      return []
+    }
+
+    // Check if values are too close (within 15% of the larger value)
+    let maxValue = max(currentSteps, previousSteps)
+    let difference = abs(currentSteps - previousSteps)
+    let tooClose = Double(difference) / Double(maxValue) < 0.15
+
+    if tooClose {
+      return [currentSteps]
+    } else {
+      return [currentSteps, previousSteps]
+    }
   }
 
   // MARK: - Walking Speed Chart
@@ -645,6 +667,20 @@ private extension MobilityDetailsView {
       return .mutedOrange
     default:
       return .mutedRed
+    }
+  }
+}
+
+private extension Int {
+  var compactFormatted: String {
+    if self >= 1_000_000 {
+      let millions = Double(self) / 1_000_000
+      return "\(millions.format(using: .oneDecimalPlace))M"
+    } else if self >= 1_000 {
+      let thousands = Double(self) / 1_000
+      return "\(thousands.format(using: .oneDecimalPlace))K"
+    } else {
+      return "\(self)"
     }
   }
 }
