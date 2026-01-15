@@ -34,7 +34,7 @@ struct MetricRangeChart: View {
           .frame(height: chartHeight)
 
         // 7-day range bar
-        if rangeData.rangeSpan > 0 {
+        if let span = rangeData.rangeSpan, span > 0 {
           rangeBar(width: width)
         }
 
@@ -44,7 +44,9 @@ struct MetricRangeChart: View {
         }
 
         // Current value indicator
-        currentValueIndicator(width: width)
+        if let _ = rangeData.normalizedPosition {
+          currentValueIndicator(width: width)
+        }
       }
     }
     .frame(height: isCondensed ? 16 : 20)
@@ -79,18 +81,22 @@ private extension MetricRangeChart {
       .offset(x: xOffset - 1)
   }
 
+  @ViewBuilder
   func currentValueIndicator(width: CGFloat) -> some View {
     let startX = indicatorSize / 2
     let endX = width - indicatorSize / 2
     let barWidth = endX - startX
-    let clampedPosition = min(max(rangeData.normalizedPosition, 0), 1)
-    let xOffset = barWidth * clampedPosition
 
-    return Circle()
-      .fill(tintColor)
-      .frame(width: indicatorSize, height: indicatorSize)
-      .shadow(color: tintColor.opacity(0.3), radius: 2, x: 0, y: 1)
-      .offset(x: xOffset)
+    if let position = rangeData.normalizedPosition {
+      let clampedPosition = min(max(position, 0), 1)
+      let xOffset = barWidth * clampedPosition
+
+      Circle()
+        .fill(tintColor)
+        .frame(width: indicatorSize, height: indicatorSize)
+        .shadow(color: tintColor.opacity(0.3), radius: 2, x: 0, y: 1)
+        .offset(x: xOffset)
+    }
   }
 }
 

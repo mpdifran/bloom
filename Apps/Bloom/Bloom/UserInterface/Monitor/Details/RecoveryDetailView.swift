@@ -223,7 +223,7 @@ struct RecoveryDetailView: View {
 
     do {
       let actor = DailyMetricSampleModelActor.standard()
-      rangeData = try await actor.fetchRangeData(metricTypes: metrics, for: Date())
+      rangeData = try await actor.fetchAllRangeData(metricTypes: metrics, for: Date())
     } catch {
       // Handle error silently
       rangeData = []

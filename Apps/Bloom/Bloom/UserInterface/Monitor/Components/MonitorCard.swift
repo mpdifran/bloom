@@ -15,9 +15,9 @@ struct MonitorCard: View {
 
   let result: MonitorResult
 
-  @State private var rangeData: [MetricRangeData] = []
+  @State private var summaryBarData: MonitorSummaryBarData?
 
-  /// Whether the card should show expanded content (metrics and findings)
+  /// Whether the card should show expanded content (findings)
   private var isExpanded: Bool {
     result.state.isConcerning && !result.findings.isEmpty
   }
@@ -32,31 +32,27 @@ struct MonitorCard: View {
       VStack(alignment: .leading, spacing: 0) {
         headerView
 
+        if let summaryBarData {
+          MonitorSummaryBar(data: summaryBarData)
+            .padding(.top, 12)
+        }
+
         if result.state == .good && !elevatedSignals.isEmpty {
           signalSummarySection
         }
 
         if isExpanded {
-          if !rangeData.isEmpty {
-            Divider()
-              .padding(.vertical, 12)
+          Divider()
+            .padding(.vertical, 12)
 
-            metricsSection
-          }
-
-          if !result.findings.isEmpty {
-            Divider()
-              .padding(.vertical, 12)
-
-            findingsView
-          }
+          findingsView
         }
       }
       .cardContainer()
     }
     .buttonStyle(.plain)
     .task {
-      await loadRangeData()
+      await loadSummaryBarData()
     }
   }
 
@@ -64,16 +60,15 @@ struct MonitorCard: View {
 
 private extension MonitorCard {
 
-  func loadRangeData() async {
-    let metrics: [(type: String, displayName: String)] = result.monitorType.metrics.map {
-      ($0.rawValue, $0.displayName)
-    }
-
+  func loadSummaryBarData() async {
     do {
       let actor = DailyMetricSampleModelActor.standard()
-      rangeData = try await actor.fetchRangeData(metricTypes: metrics, for: Date())
+      summaryBarData = try await actor.fetchSummaryBarData(
+        metricTypes: result.monitorType.metrics.map { $0.rawValue },
+        for: Date()
+      )
     } catch {
-      rangeData = []
+      summaryBarData = nil
     }
   }
 
@@ -121,18 +116,6 @@ private extension MonitorCard {
 
       ForEach(elevatedSignals) { signal in
         SignalSummaryRow(signal: signal)
-      }
-    }
-  }
-
-  // MARK: - Metrics
-
-  var metricsSection: some View {
-    VStack(spacing: 8) {
-      ForEach(rangeData) { data in
-        if let metricType = MonitorMetricType(rawValue: data.metricType) {
-          MetricRangeRowCondensed(rangeData: data, metricType: metricType)
-        }
       }
     }
   }

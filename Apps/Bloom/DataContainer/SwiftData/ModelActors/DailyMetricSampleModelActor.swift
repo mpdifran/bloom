@@ -187,6 +187,11 @@ public extension DailyMetricSampleModelActor {
     let minValue = values.min() ?? latestSample.value
     let maxValue = values.max() ?? latestSample.value
 
+    // Calculate z-score range over 7 days
+    let zScores = samples.compactMap { $0.zScore }
+    let minZScore = zScores.min()
+    let maxZScore = zScores.max()
+
     return MetricRangeData(
       metricType: metricType,
       displayName: displayName,
@@ -194,7 +199,9 @@ public extension DailyMetricSampleModelActor {
       min7Day: minValue,
       max7Day: maxValue,
       baseline28Day: latestSample.baseline28Day,
-      zScore: latestSample.zScore
+      zScore: latestSample.zScore,
+      min7DayZScore: minZScore,
+      max7DayZScore: maxZScore
     )
   }
 
@@ -214,5 +221,81 @@ public extension DailyMetricSampleModelActor {
       }
     }
     return results
+  }
+
+  /// Fetch range data for all specified metrics, returning placeholders for missing data.
+  /// Unlike `fetchRangeData`, this always returns an entry for each metric type.
+  func fetchAllRangeData(
+    metricTypes: [(type: String, displayName: String)],
+    for date: Date
+  ) throws -> [MetricRangeData] {
+    metricTypes.map { metric in
+      if let data = try? fetchRangeData(
+        metricType: metric.type,
+        displayName: metric.displayName,
+        for: date
+      ) {
+        return data
+      } else {
+        return MetricRangeData(
+          metricType: metric.type,
+          displayName: metric.displayName,
+          currentValue: nil,
+          min7Day: nil,
+          max7Day: nil,
+          baseline28Day: nil,
+          zScore: nil,
+          min7DayZScore: nil,
+          max7DayZScore: nil
+        )
+      }
+    }
+  }
+
+  /// Fetch summary bar data for a set of metrics.
+  /// Returns min/max z-scores across all metrics over 7 days, plus current z-scores.
+  func fetchSummaryBarData(
+    metricTypes: [String],
+    for date: Date
+  ) throws -> MonitorSummaryBarData? {
+    let calendar = Calendar.current
+    let startDate = calendar.date(byAdding: .day, value: -6, to: calendar.startOfDay(for: date)) ?? date
+    let endDate = calendar.startOfDay(for: date)
+
+    let descriptor = FetchDescriptor<DailyMetricSample>(
+      predicate: #Predicate<DailyMetricSample> { sample in
+        sample.date >= startDate && sample.date <= endDate
+      },
+      sortBy: [SortDescriptor(\DailyMetricSample.date, order: .reverse)]
+    )
+
+    let allSamples = try context.fetch(descriptor)
+      .filter { metricTypes.contains($0.metricType) }
+
+    guard !allSamples.isEmpty else { return nil }
+
+    // Collect all z-scores (non-nil) for 7-day range
+    let allZScores = allSamples.compactMap { $0.zScore }
+    guard !allZScores.isEmpty else { return nil }
+
+    let minZScore = allZScores.min() ?? 0
+    let maxZScore = allZScores.max() ?? 0
+
+    // Get today's z-score for each metric
+    var metricZScores: [MetricZScorePoint] = []
+    for metricType in metricTypes {
+      if let todaySample = allSamples.first(where: {
+        $0.metricType == metricType && calendar.isDate($0.date, inSameDayAs: date)
+      }),
+         let zScore = todaySample.zScore {
+        metricZScores.append(MetricZScorePoint(metricType: metricType, zScore: zScore))
+      }
+    }
+
+    return MonitorSummaryBarData(
+      metricZScores: metricZScores,
+      min7DayZScore: minZScore,
+      max7DayZScore: maxZScore
+    )
   }
 }

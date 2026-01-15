@@ -22,17 +22,13 @@ actor RecoveryStateCalculator: MonitorStateCalculator {
     samples: [DailyMetricSampleDTO],
     previousResults: [MonitorResult]
   ) async -> MonitorResult {
-    let calendar = Calendar.current
+    // Check required metrics using lookback window (today + yesterday)
+    // Sleep-derived metrics like RHR and HRV may be attributed to either day
+    // depending on when the overnight sleep session started/ended
+    let rhrSample = mostRecentSample(for: .restingHeartRate, in: samples, targetDate: date)
+    let hrvSample = mostRecentSample(for: .heartRateVariability, in: samples, targetDate: date)
 
-    // Extract today's samples
-    let todaySamples = samples.filter { calendar.isDate($0.date, inSameDayAs: date) }
-    let presentMetrics = Set(todaySamples.map { $0.metricType })
-
-    // Check required metric availability
-    let hasRHR = presentMetrics.contains(MonitorMetricType.restingHeartRate.rawValue)
-    let hasHRV = presentMetrics.contains(MonitorMetricType.heartRateVariability.rawValue)
-
-    guard hasRHR && hasHRV else {
+    guard rhrSample != nil && hrvSample != nil else {
       return .unavailable(
         monitorType: .recovery,
         reason: "We need both resting heart rate and HRV data to assess recovery.",
@@ -40,12 +36,21 @@ actor RecoveryStateCalculator: MonitorStateCalculator {
       )
     }
 
+    // Get optional metrics using the same lookback window
+    let tempSample = mostRecentSample(for: .wristTemperature, in: samples, targetDate: date)
+    let respSample = mostRecentSample(for: .respiratoryRate, in: samples, targetDate: date)
+
+    // For confidence calculation, check which metrics are present in recent window
+    let presentMetrics = Set(
+      [rhrSample, hrvSample, tempSample, respSample]
+        .compactMap { $0?.metricType }
+    )
+
     // Collect signals from each metric
     var signals: [Signal] = []
 
     // RHR: Higher = concerning (positive z-score is bad)
-    if let rhrSample = todaySamples.first(where: { $0.metricType == MonitorMetricType.restingHeartRate.rawValue }),
-       let zScore = rhrSample.zScore, zScore > 1.0 {
+    if let rhrSample, let zScore = rhrSample.zScore, zScore > 1.0 {
       let baseline = rhrSample.baseline28Day ?? rhrSample.baseline7Day
       let difference = baseline.map { rhrSample.value - $0 }
       signals.append(Signal(
@@ -59,8 +64,7 @@ actor RecoveryStateCalculator: MonitorStateCalculator {
     }
 
     // HRV: Lower = concerning (negative z-score is bad)
-    if let hrvSample = todaySamples.first(where: { $0.metricType == MonitorMetricType.heartRateVariability.rawValue }),
-       let zScore = hrvSample.zScore, zScore < -1.0 {
+    if let hrvSample, let zScore = hrvSample.zScore, zScore < -1.0 {
       let baseline = hrvSample.baseline28Day ?? hrvSample.baseline7Day
       let difference = baseline.map { hrvSample.value - $0 }
       signals.append(Signal(
@@ -74,8 +78,7 @@ actor RecoveryStateCalculator: MonitorStateCalculator {
     }
 
     // Wrist Temperature: Higher = concerning (optional)
-    if let tempSample = todaySamples.first(where: { $0.metricType == MonitorMetricType.wristTemperature.rawValue }),
-       let zScore = tempSample.zScore, zScore > 1.0 {
+    if let tempSample, let zScore = tempSample.zScore, zScore > 1.0 {
       let baseline = tempSample.baseline28Day ?? tempSample.baseline7Day
       let difference = baseline.map { tempSample.value - $0 }
       signals.append(Signal(
@@ -89,8 +92,7 @@ actor RecoveryStateCalculator: MonitorStateCalculator {
     }
 
     // Respiratory Rate: Higher = concerning (optional)
-    if let respSample = todaySamples.first(where: { $0.metricType == MonitorMetricType.respiratoryRate.rawValue }),
-       let zScore = respSample.zScore, zScore > 1.0 {
+    if let respSample, let zScore = respSample.zScore, zScore > 1.0 {
       let baseline = respSample.baseline28Day ?? respSample.baseline7Day
       let difference = baseline.map { respSample.value - $0 }
       signals.append(Signal(

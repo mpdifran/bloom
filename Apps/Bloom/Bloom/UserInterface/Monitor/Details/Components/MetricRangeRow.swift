@@ -9,7 +9,7 @@ import SwiftUI
 import SFSafeSymbols
 import DataContainer
 
-/// A full metric row displaying icon, name, value, range chart, and labels.
+/// A full metric row displaying icon, name, value, and z-score range bar.
 /// Used in detail views to show comprehensive metric information.
 struct MetricRangeRow: View {
 
@@ -22,7 +22,7 @@ struct MetricRangeRow: View {
       HStack(spacing: 10) {
         Image(systemSymbol: metricType.icon)
           .font(.body)
-          .foregroundStyle(tintColor)
+          .foregroundStyle(.secondary)
           .frame(width: 24)
 
         Text(rangeData.displayName)
@@ -31,40 +31,51 @@ struct MetricRangeRow: View {
 
         Spacer()
 
-        Text(metricType.formatValue(rangeData.currentValue))
-          .font(.subheadline)
-          .fontWeight(.semibold)
-          .foregroundStyle(.primary)
+        if let value = rangeData.currentValue {
+          Text(metricType.formatValue(value))
+            .font(.subheadline)
+            .fontWeight(.semibold)
+            .foregroundStyle(.primary)
+        } else {
+          Text("No data")
+            .font(.subheadline)
+            .foregroundStyle(.tertiary)
+        }
       }
 
-      // Range chart
-      MetricRangeChart(
-        rangeData: rangeData,
-        isCondensed: false,
-        tintColor: tintColor
-      )
-
-      // Range labels
-      HStack {
-        Text(metricType.formatValueShort(rangeData.min7Day))
-          .font(.caption2)
-          .foregroundStyle(.secondary)
-
-        Spacer()
-
-        if let baseline = rangeData.baseline28Day {
-          Text("Avg: \(metricType.formatValueShort(baseline))")
-            .font(.caption2)
-            .foregroundStyle(.secondary)
-        }
-
-        Spacer()
-
-        Text(metricType.formatValueShort(rangeData.max7Day))
-          .font(.caption2)
-          .foregroundStyle(.secondary)
+      // Z-score range bar
+      if rangeData.hasData, let summaryData = MonitorSummaryBarData(from: rangeData) {
+        MonitorSummaryBar(
+          data: summaryData,
+          lowLabel: lowLabel,
+          normalLabel: normalLabel,
+          highLabel: highLabel
+        )
+      } else if rangeData.hasData {
+        // Fallback for missing z-score data but with value data
+        MetricRangeChart(
+          rangeData: rangeData,
+          isCondensed: false,
+          tintColor: tintColor
+        )
+      } else {
+        // Placeholder bar for metrics without data
+        Capsule()
+          .fill(Color(.systemGray5))
+          .frame(height: 20)
       }
     }
+  }
+
+  // Custom labels for time-based metrics
+  private var lowLabel: String {
+    metricType == .bedtime || metricType == .wakeTime ? "Early" : "Low"
+  }
+
+  private var normalLabel: String { "Typical" }
+
+  private var highLabel: String {
+    metricType == .bedtime || metricType == .wakeTime ? "Late" : "High"
   }
 
   private var tintColor: Color {
@@ -92,20 +103,35 @@ struct MetricRangeRowCondensed: View {
     HStack(spacing: 8) {
       Image(systemSymbol: metricType.icon)
         .font(.caption)
-        .foregroundStyle(tintColor)
+        .foregroundStyle(.secondary)
         .frame(width: 20)
 
-      MetricRangeChart(
-        rangeData: rangeData,
-        isCondensed: true,
-        tintColor: tintColor
-      )
+      if rangeData.hasData, let summaryData = MonitorSummaryBarData(from: rangeData) {
+        MonitorSummaryBar(data: summaryData, showsLabels: false)
+      } else if rangeData.hasData {
+        MetricRangeChart(
+          rangeData: rangeData,
+          isCondensed: true,
+          tintColor: tintColor
+        )
+      } else {
+        Capsule()
+          .fill(Color(.systemGray5))
+          .frame(height: 12)
+      }
 
-      Text(metricType.formatValueShort(rangeData.currentValue))
-        .font(.caption2)
-        .fontWeight(.medium)
-        .foregroundStyle(.secondary)
-        .frame(width: 40, alignment: .trailing)
+      if let value = rangeData.currentValue {
+        Text(metricType.formatValueShort(value))
+          .font(.caption2)
+          .fontWeight(.medium)
+          .foregroundStyle(.secondary)
+          .frame(width: 40, alignment: .trailing)
+      } else {
+        Text("--")
+          .font(.caption2)
+          .foregroundStyle(.tertiary)
+          .frame(width: 40, alignment: .trailing)
+      }
     }
   }
 
@@ -135,7 +161,9 @@ struct MetricRangeRowCondensed: View {
           min7Day: 55,
           max7Day: 68,
           baseline28Day: 60,
-          zScore: 0.5
+          zScore: 0.5,
+          min7DayZScore: -0.3,
+          max7DayZScore: 0.8
         ),
         metricType: .restingHeartRate
       )
@@ -150,7 +178,9 @@ struct MetricRangeRowCondensed: View {
           min7Day: 28,
           max7Day: 52,
           baseline28Day: 42,
-          zScore: -1.5
+          zScore: -1.5,
+          min7DayZScore: -1.8,
+          max7DayZScore: 0.2
         ),
         metricType: .heartRateVariability
       )
@@ -165,7 +195,9 @@ struct MetricRangeRowCondensed: View {
           min7Day: 380,
           max7Day: 480,
           baseline28Day: 440,
-          zScore: -0.3
+          zScore: -0.3,
+          min7DayZScore: -0.8,
+          max7DayZScore: 0.5
         ),
         metricType: .sleepDuration
       )
@@ -186,7 +218,9 @@ struct MetricRangeRowCondensed: View {
           min7Day: 55,
           max7Day: 68,
           baseline28Day: 60,
-          zScore: 0.5
+          zScore: 0.5,
+          min7DayZScore: -0.3,
+          max7DayZScore: 0.8
         ),
         metricType: .restingHeartRate
       )
@@ -199,7 +233,9 @@ struct MetricRangeRowCondensed: View {
           min7Day: 28,
           max7Day: 52,
           baseline28Day: 42,
-          zScore: -1.5
+          zScore: -1.5,
+          min7DayZScore: -1.8,
+          max7DayZScore: 0.2
         ),
         metricType: .heartRateVariability
       )
@@ -212,7 +248,9 @@ struct MetricRangeRowCondensed: View {
           min7Day: 320,
           max7Day: 650,
           baseline28Day: 450,
-          zScore: 2.1
+          zScore: 2.1,
+          min7DayZScore: 0.5,
+          max7DayZScore: 2.3
         ),
         metricType: .activeEnergy
       )

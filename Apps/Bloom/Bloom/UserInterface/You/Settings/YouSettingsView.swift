@@ -67,6 +67,16 @@ private extension YouSettingsView {
       }
       .cardContainer()
     }
+    .onChange(of: healthManager.birthMonth) { _, _ in
+      Task {
+        await BiologicalAgeViewModel.shared.forceCalculateBiologicalAge()
+      }
+    }
+    .onChange(of: healthManager.birthYear) { _, _ in
+      Task {
+        await BiologicalAgeViewModel.shared.forceCalculateBiologicalAge()
+      }
+    }
   }
 
   var sectionOrderSection: some View {

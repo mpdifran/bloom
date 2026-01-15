@@ -111,3 +111,47 @@ func calculateConfidence(
 
   return min(confidence, 1.0)
 }
+
+/// Finds the most recent sample for a specific metric type within a lookback window.
+/// This allows overnight metrics (RHR, HRV, sleep data) to be found even if attributed to yesterday.
+/// - Parameters:
+///   - metricType: The metric type to find
+///   - samples: All available samples
+///   - date: The target date
+///   - lookbackDays: How many days back to search (default 7 days)
+/// - Returns: The most recent sample within the window, or nil if none found
+func mostRecentSample(
+  for metricType: MonitorMetricType,
+  in samples: [DailyMetricSampleDTO],
+  targetDate date: Date,
+  lookbackDays: Int = 7
+) -> DailyMetricSampleDTO? {
+  let calendar = Calendar.current
+  guard let cutoffDate = calendar.date(byAdding: .day, value: -lookbackDays, to: date) else {
+    return nil
+  }
+
+  return samples
+    .filter {
+      $0.metricType == metricType.rawValue &&
+      $0.date >= calendar.startOfDay(for: cutoffDate) &&
+      $0.date <= calendar.endOfDay(for: date)
+    }
+    .max { $0.date < $1.date }
+}
+
+/// Checks if a required metric has data within the lookback window.
+/// - Parameters:
+///   - metricType: The metric type to check
+///   - samples: All available samples
+///   - date: The target date
+///   - lookbackDays: How many days back to search (default 7 days)
+/// - Returns: True if data exists within the window
+func hasRecentData(
+  for metricType: MonitorMetricType,
+  in samples: [DailyMetricSampleDTO],
+  targetDate date: Date,
+  lookbackDays: Int = 7
+) -> Bool {
+  mostRecentSample(for: metricType, in: samples, targetDate: date, lookbackDays: lookbackDays) != nil
+}

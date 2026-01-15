@@ -17,7 +17,7 @@ extension BiologicalAgeMeter {
 }
 
 struct BiologicalAgeMeter: View {
-  let chronologicalAge: Int
+  let chronologicalAge: Double
   let biologicalAge: Double?
   let centerContentKind: CenterContentKind
 
@@ -28,17 +28,42 @@ struct BiologicalAgeMeter: View {
   private let maxAgeDifference = 10.0 // Maximum years difference to display
 
   init(
-    chronologicalAge: Int? = nil,
+    chronologicalAge: Double? = nil,
     biologicalAge: Double?,
     centerContentKind: CenterContentKind = .bioAge
   ) {
-    self.chronologicalAge = chronologicalAge ?? {
-      let birthYear = HealthDefaults.shared.getBirthYear()
-      guard birthYear > 0 else { return 0 }
-      return Calendar.current.component(.year, from: .now) - birthYear
-    }()
+    self.chronologicalAge = chronologicalAge ?? Self.computeChronologicalAge()
     self.biologicalAge = biologicalAge
     self.centerContentKind = centerContentKind
+  }
+
+  private static func computeChronologicalAge() -> Double {
+    let birthYear = HealthDefaults.shared.getBirthYear()
+    guard birthYear > 0 else { return 0 }
+
+    let birthMonth = HealthDefaults.shared.getBirthMonth()
+    let calendar = Calendar.current
+    let now = Date.now
+    let currentYear = calendar.component(.year, from: now)
+    let currentMonth = calendar.component(.month, from: now)
+    let currentDay = calendar.component(.day, from: now)
+
+    var years = Double(currentYear - birthYear)
+
+    if birthMonth > 0 {
+      let monthsSinceBirthday: Int
+      if currentMonth > birthMonth || (currentMonth == birthMonth && currentDay >= 15) {
+        monthsSinceBirthday = currentMonth - birthMonth + (currentDay >= 15 ? 0 : -1)
+      } else {
+        years -= 1
+        monthsSinceBirthday = 12 - birthMonth + currentMonth + (currentDay >= 15 ? 0 : -1)
+      }
+      return years + (Double(max(0, monthsSinceBirthday)) / 12.0)
+    } else {
+      let dayOfYear = calendar.ordinality(of: .day, in: .year, for: now) ?? 1
+      let daysInYear = calendar.range(of: .day, in: .year, for: now)?.count ?? 365
+      return years + (Double(dayOfYear - 1) / Double(daysInYear))
+    }
   }
 
   var body: some View {
@@ -131,7 +156,7 @@ private extension BiologicalAgeMeter {
 
   var ageDifference: Double {
     guard let biologicalAge else { return 0 }
-    return biologicalAge - Double(chronologicalAge)
+    return biologicalAge - chronologicalAge
   }
 
   var ageDifferenceText: String {
@@ -185,22 +210,22 @@ private extension BiologicalAgeMeter {
 
   PreviewEnvironment {
     BloomScrollView {
-      BiologicalAgeMeter(chronologicalAge: 40, biologicalAge: bioAge, centerContentKind: .profileImage)
+      BiologicalAgeMeter(chronologicalAge: 40.0, biologicalAge: bioAge, centerContentKind: .profileImage)
         .frame(square: dimension)
 
-      BiologicalAgeMeter(chronologicalAge: 45, biologicalAge: bioAge)
+      BiologicalAgeMeter(chronologicalAge: 45.0, biologicalAge: bioAge)
         .frame(square: dimension)
 
-      BiologicalAgeMeter(chronologicalAge: 42, biologicalAge: bioAge)
+      BiologicalAgeMeter(chronologicalAge: 42.0, biologicalAge: bioAge)
         .frame(square: dimension)
 
-      BiologicalAgeMeter(chronologicalAge: 30, biologicalAge: bioAge)
+      BiologicalAgeMeter(chronologicalAge: 30.0, biologicalAge: bioAge)
         .frame(square: dimension)
 
-      BiologicalAgeMeter(chronologicalAge: 60, biologicalAge: bioAge, centerContentKind: .profileImage)
+      BiologicalAgeMeter(chronologicalAge: 60.0, biologicalAge: bioAge, centerContentKind: .profileImage)
         .frame(square: dimension)
 
-      BiologicalAgeMeter(chronologicalAge: 42, biologicalAge: nil)
+      BiologicalAgeMeter(chronologicalAge: 42.0, biologicalAge: nil)
         .frame(square: dimension)
     }
   }

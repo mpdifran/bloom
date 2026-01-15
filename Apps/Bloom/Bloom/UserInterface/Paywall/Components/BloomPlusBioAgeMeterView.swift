@@ -49,16 +49,40 @@ struct BloomPlusBioAgeMeterView: View {
 
 private extension BloomPlusBioAgeMeterView {
 
-  var userAge: Int {
+  var userAge: Double {
     let birthYear = HealthDefaults.shared.getBirthYear()
     guard birthYear > 0 else { return 30 }
-    let age = Calendar.current.component(.year, from: .now) - birthYear
-    return age > 5 ? age : 30
+
+    let birthMonth = HealthDefaults.shared.getBirthMonth()
+    let calendar = Calendar.current
+    let now = Date.now
+    let currentYear = calendar.component(.year, from: now)
+    let currentMonth = calendar.component(.month, from: now)
+    let currentDay = calendar.component(.day, from: now)
+
+    var years = Double(currentYear - birthYear)
+
+    if birthMonth > 0 {
+      let monthsSinceBirthday: Int
+      if currentMonth > birthMonth || (currentMonth == birthMonth && currentDay >= 15) {
+        monthsSinceBirthday = currentMonth - birthMonth + (currentDay >= 15 ? 0 : -1)
+      } else {
+        years -= 1
+        monthsSinceBirthday = 12 - birthMonth + currentMonth + (currentDay >= 15 ? 0 : -1)
+      }
+      years += Double(max(0, monthsSinceBirthday)) / 12.0
+    } else {
+      let dayOfYear = calendar.ordinality(of: .day, in: .year, for: now) ?? 1
+      let daysInYear = calendar.range(of: .day, in: .year, for: now)?.count ?? 365
+      years += Double(dayOfYear - 1) / Double(daysInYear)
+    }
+
+    return years > 5 ? years : 30
   }
 
   func randomBiologicalAge() -> Double {
     let randomOffset = Double.random(in: -5...5)
-    return Double(userAge) + randomOffset
+    return userAge + randomOffset
   }
 }
 

@@ -197,8 +197,12 @@ actor StressStateCalculator: MonitorStateCalculator {
       burnoutSignals: burnoutSignals
     )
 
-    // Calculate confidence
-    let presentMetrics = Set(samples.filter { calendar.isDate($0.date, inSameDayAs: date) }.map { $0.metricType })
+    // Calculate confidence based on available optional metrics in recent window
+    let presentMetrics = Set(
+      optionalMetrics.compactMap { metric in
+        mostRecentSample(for: metric, in: samples, targetDate: date)?.metricType
+      }
+    )
     let confidence = calculateConfidence(
       requiredPresent: true,
       optionalMetrics: optionalMetrics,
@@ -322,13 +326,15 @@ actor StressStateCalculator: MonitorStateCalculator {
     date: Date
   ) -> [Signal] {
     var signals: [Signal] = []
-    let calendar = Calendar.current
-    let todaySamples = samples.filter { calendar.isDate($0.date, inSameDayAs: date) }
+
+    // Use lookback window (today + yesterday) for sleep-derived metrics
+    // These may be attributed to yesterday depending on when sleep session started
+    let efficiencySample = mostRecentSample(for: .sleepEfficiency, in: samples, targetDate: date)
+    let deepSleepSample = mostRecentSample(for: .deepSleep, in: samples, targetDate: date)
+    let rhrSample = mostRecentSample(for: .restingHeartRate, in: samples, targetDate: date)
 
     // Sleep Efficiency Signal (< 80% is concerning for burnout)
-    if let efficiencySample = todaySamples.first(where: {
-      $0.metricType == MonitorMetricType.sleepEfficiency.rawValue
-    }) {
+    if let efficiencySample {
       let efficiency = efficiencySample.value / 100
       if efficiency < 0.80 {
         // Convert to approximate z-score (85% is typical baseline)
@@ -344,10 +350,7 @@ actor StressStateCalculator: MonitorStateCalculator {
     }
 
     // Deep Sleep Signal (using z-score from baseline)
-    if let deepSleepSample = todaySamples.first(where: {
-      $0.metricType == MonitorMetricType.deepSleep.rawValue
-    }),
-       let zScore = deepSleepSample.zScore, zScore < -1.0 {
+    if let deepSleepSample, let zScore = deepSleepSample.zScore, zScore < -1.0 {
       let baseline = deepSleepSample.baseline7Day ?? deepSleepSample.baseline28Day
       let difference = baseline.map { deepSleepSample.value - $0 }
       signals.append(Signal(
@@ -361,10 +364,7 @@ actor StressStateCalculator: MonitorStateCalculator {
     }
 
     // Elevated RHR Signal (using z-score from baseline)
-    if let rhrSample = todaySamples.first(where: {
-      $0.metricType == MonitorMetricType.restingHeartRate.rawValue
-    }),
-       let zScore = rhrSample.zScore, zScore > 1.0 {
+    if let rhrSample, let zScore = rhrSample.zScore, zScore > 1.0 {
       let baseline = rhrSample.baseline28Day ?? rhrSample.baseline7Day
       let difference = baseline.map { rhrSample.value - $0 }
       signals.append(Signal(
@@ -373,6 +373,21 @@ actor StressStateCalculator: MonitorStateCalculator {
         zScore: zScore,
         direction: .higher,
         description: "Resting heart rate is elevated",
+        difference: difference
+      ))
+    }
+
+    // Heart Rate Recovery Signal (low recovery indicates overtraining/poor fitness)
+    if let hrrSample = mostRecentSample(for: .heartRateRecovery, in: samples, targetDate: date),
+       let zScore = hrrSample.zScore, zScore < -1.0 {
+      let baseline = hrrSample.baseline28Day ?? hrrSample.baseline7Day
+      let difference = baseline.map { hrrSample.value - $0 }
+      signals.append(Signal(
+        metricType: .heartRateRecovery,
+        date: date,
+        zScore: zScore,
+        direction: .lower,
+        description: "Heart rate recovery is below your usual",
         difference: difference
       ))
     }
@@ -555,6 +570,8 @@ actor StressStateCalculator: MonitorStateCalculator {
         signalDescriptions.append("deep sleep is below your usual")
       case .restingHeartRate:
         signalDescriptions.append("resting heart rate is elevated")
+      case .heartRateRecovery:
+        signalDescriptions.append("heart rate recovery is reduced")
       default:
         break
       }

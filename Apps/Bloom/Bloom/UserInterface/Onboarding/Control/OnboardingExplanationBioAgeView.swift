@@ -80,7 +80,7 @@ private extension OnboardingExplanationBioAgeView {
 
       if index >= 1 {
         BiologicalAgeMeter(
-          chronologicalAge: 30,
+          chronologicalAge: 30.0,
           biologicalAge: Double(30 + ageOffset)
         )
         .frame(square: 130)
