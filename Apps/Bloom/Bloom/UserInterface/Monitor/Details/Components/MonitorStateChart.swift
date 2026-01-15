@@ -7,54 +7,266 @@
 
 import SwiftUI
 import Charts
+import DataContainer
+import CoreHealth
 
-/// A chart displaying monitor state history over time.
+/// A chart displaying monitor signal z-score ranges over time.
+/// Shows vertical bars from min to max z-score for each day, with gradient coloring.
 struct MonitorStateChart: View {
 
-  let results: [MonitorResult]
   let monitorType: MonitorType
+  let days: Int
+
+  @State private var dayRanges: [DayZScoreRange] = []
+
+  // Z-score boundaries (same as MonitorSummaryBar)
+  private let lowThreshold: Double = -1.0
+  private let highThreshold: Double = 1.0
+  private let displayRange: Double = 3.0
 
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {
-      Text("State History")
+      Text("Signal History")
         .font(.headline)
 
-      if results.isEmpty {
+      if dayRanges.isEmpty {
         emptyChart
       } else {
-        chart
+        chartWithBackground
       }
-
-      legend
     }
+    .task(id: days) {
+      await loadData()
+    }
+  }
+
+  // MARK: - Data Loading
+
+  private func loadData() async {
+    if monitorType == .stress {
+      await loadStressData()
+    } else {
+      do {
+        let actor = DailyMetricSampleModelActor.standard()
+        let metricTypes = monitorType.metrics.map { $0.rawValue }
+        dayRanges = try await actor.fetchDailyZScoreRanges(metricTypes: metricTypes, days: days)
+      } catch {
+        dayRanges = []
+      }
+    }
+  }
+
+  private func loadStressData() async {
+    guard let summary = await HealthStoreFetcher.shared.fetchTrainingLoadSummary() else {
+      dayRanges = []
+      return
+    }
+
+    let calendar = Calendar.current
+    var ranges: [DayZScoreRange] = []
+
+    let trendCount = min(summary.sevenDayTrend.count, summary.twentyEightDayTrend.count)
+    let startIndex = max(0, trendCount - days)
+
+    for index in startIndex..<trendCount {
+      let sevenDayPoint = summary.sevenDayTrend[index]
+      let twentyEightDayValue = summary.twentyEightDayTrend[index].value
+
+      guard twentyEightDayValue > 0 else { continue }
+
+      let percentDiff = ((sevenDayPoint.value - twentyEightDayValue) / twentyEightDayValue) * 100
+      let zScore = percentDiff / 10.0
+
+      ranges.append(DayZScoreRange(
+        date: calendar.startOfDay(for: sevenDayPoint.date),
+        minZScore: zScore,
+        maxZScore: zScore
+      ))
+    }
+
+    dayRanges = ranges.sorted { $0.date < $1.date }
   }
 
   // MARK: - Chart
 
+  private var chartWithBackground: some View {
+    chart
+      .chartBackground { proxy in
+        GeometryReader { geometry in
+          zoneBackground(proxy: proxy, geometry: geometry)
+        }
+      }
+  }
+
   private var chart: some View {
     Chart {
-      ForEach(results) { result in
+      ForEach(dayRanges) { range in
+        let clampedMin = max(-displayRange, min(displayRange, range.minZScore))
+        let clampedMax = max(-displayRange, min(displayRange, range.maxZScore))
         BarMark(
-          x: .value("Date", result.calculatedAt, unit: .day),
-          y: .value("State", 1)
+          x: .value("Date", range.date, unit: .day),
+          yStart: .value("Min", clampedMin),
+          yEnd: .value("Max", clampedMax),
+          width: barWidth
         )
-        .foregroundStyle(result.state.color)
-        .cornerRadius(4)
+        .foregroundStyle(gradientForRange(min: range.minZScore, max: range.maxZScore))
+        .clipShape(Capsule())
       }
     }
-    .chartYAxis(.hidden)
+    .chartYScale(domain: -displayRange...displayRange)
+    .chartYAxis {
+      // Grid lines at zone boundaries
+      AxisMarks(values: [lowThreshold, highThreshold]) { _ in
+        AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5, dash: [4, 4]))
+          .foregroundStyle(Color(.systemGray4))
+      }
+      // Labels at zone centers
+      AxisMarks(values: [-2, 0, 2]) { value in
+        if let doubleValue = value.as(Double.self) {
+          AxisValueLabel {
+            Text(labelForValue(doubleValue))
+              .font(.caption2)
+              .foregroundStyle(.secondary)
+          }
+        }
+      }
+    }
     .chartXAxis {
-      AxisMarks(values: .stride(by: .day, count: xAxisStride)) { value in
+      AxisMarks(values: .stride(by: .day, count: xAxisStride)) { _ in
         AxisValueLabel(format: .dateTime.weekday(.abbreviated))
         AxisGridLine()
       }
     }
-    .frame(height: 60)
+    .frame(height: 120)
+  }
+
+  private func labelForValue(_ value: Double) -> String {
+    if value == -2 {
+      return "Low"
+    } else if value == 0 {
+      return "Typical"
+    } else if value == 2 {
+      return "High"
+    }
+    return ""
   }
 
   private var xAxisStride: Int {
     // Show fewer labels for longer periods
-    results.count > 14 ? 7 : 1
+    days > 14 ? 7 : 1
+  }
+
+  private var barWidth: MarkDimension {
+    days <= 7 ? .fixed(10) : .automatic
+  }
+
+  // MARK: - Zone Background
+
+  private func zoneBackground(proxy: ChartProxy, geometry: GeometryProxy) -> some View {
+    let plotArea = geometry[proxy.plotFrame!]
+
+    // Calculate y positions for zone boundaries
+    let yLow = proxy.position(forY: lowThreshold) ?? 0
+    let yHigh = proxy.position(forY: highThreshold) ?? 0
+    let yTop = proxy.position(forY: displayRange) ?? 0
+    let yBottom = proxy.position(forY: -displayRange) ?? plotArea.height
+
+    return ZStack {
+      // High zone (top)
+      Rectangle()
+        .fill(Color(.systemGray5).opacity(0.5))
+        .frame(width: plotArea.width, height: yHigh - yTop)
+        .position(x: plotArea.midX, y: yTop + (yHigh - yTop) / 2)
+
+      // Typical zone (middle)
+      Rectangle()
+        .fill(Color(.systemGray6).opacity(0.5))
+        .frame(width: plotArea.width, height: yLow - yHigh)
+        .position(x: plotArea.midX, y: yHigh + (yLow - yHigh) / 2)
+
+      // Low zone (bottom)
+      Rectangle()
+        .fill(Color(.systemGray5).opacity(0.5))
+        .frame(width: plotArea.width, height: yBottom - yLow)
+        .position(x: plotArea.midX, y: yLow + (yBottom - yLow) / 2)
+    }
+  }
+
+  // MARK: - Gradient
+
+  /// Creates a vertical gradient for the bar based on which zones it crosses
+  private func gradientForRange(min: Double, max: Double) -> LinearGradient {
+    let normalizedMin = normalizedPosition(for: min)
+    let normalizedMax = normalizedPosition(for: max)
+    let barSpan = normalizedMax - normalizedMin
+
+    guard barSpan > 0.001 else {
+      // Single point - return solid color based on zone
+      return LinearGradient(
+        colors: [colorForZScore(min)],
+        startPoint: .bottom,
+        endPoint: .top
+      )
+    }
+
+    // Zone boundaries in normalized (0-1) space
+    let lowBoundary = normalizedPosition(for: lowThreshold)   // ~0.333
+    let highBoundary = normalizedPosition(for: highThreshold) // ~0.667
+
+    // Convert global position to bar-local space (0-1 within the bar)
+    func toLocalSpace(_ globalPos: Double) -> Double {
+      Swift.max(0, Swift.min(1, (globalPos - normalizedMin) / barSpan))
+    }
+
+    // Gradient transition width (how much space for color blending)
+    let transitionWidth = 0.30
+
+    var stops: [Gradient.Stop] = []
+
+    // Start color based on starting zone (bottom of bar)
+    let startColor = colorForZScore(min)
+    stops.append(Gradient.Stop(color: startColor, location: 0))
+
+    // Add smooth transition at low boundary if bar crosses it
+    if normalizedMin < lowBoundary && normalizedMax > lowBoundary {
+      let localPos = toLocalSpace(lowBoundary)
+      let transitionStart = Swift.max(0, localPos - transitionWidth / 2)
+      let transitionEnd = Swift.min(1, localPos + transitionWidth / 2)
+      stops.append(Gradient.Stop(color: .monitorLow, location: transitionStart))
+      stops.append(Gradient.Stop(color: .monitorTypical, location: transitionEnd))
+    }
+
+    // Add smooth transition at high boundary if bar crosses it
+    if normalizedMin < highBoundary && normalizedMax > highBoundary {
+      let localPos = toLocalSpace(highBoundary)
+      let transitionStart = Swift.max(0, localPos - transitionWidth / 2)
+      let transitionEnd = Swift.min(1, localPos + transitionWidth / 2)
+      stops.append(Gradient.Stop(color: .monitorTypical, location: transitionStart))
+      stops.append(Gradient.Stop(color: .monitorHigh, location: transitionEnd))
+    }
+
+    // End color based on ending zone (top of bar)
+    let endColor = colorForZScore(max)
+    stops.append(Gradient.Stop(color: endColor, location: 1))
+
+    return LinearGradient(stops: stops, startPoint: .bottom, endPoint: .top)
+  }
+
+  /// Returns the color for a given z-score based on which zone it falls in
+  private func colorForZScore(_ zScore: Double) -> Color {
+    if zScore < lowThreshold {
+      return .monitorLow
+    } else if zScore < highThreshold {
+      return .monitorTypical
+    } else {
+      return .monitorHigh
+    }
+  }
+
+  /// Convert z-score to normalized position (0-1) within display range
+  private func normalizedPosition(for zScore: Double) -> Double {
+    let clamped = Swift.min(Swift.max(zScore, -displayRange), displayRange)
+    return (clamped + displayRange) / (displayRange * 2)
   }
 
   // MARK: - Empty State
@@ -62,36 +274,12 @@ struct MonitorStateChart: View {
   private var emptyChart: some View {
     RoundedRectangle(cornerRadius: 8)
       .fill(Color(.systemGray6))
-      .frame(height: 60)
+      .frame(height: 120)
       .overlay {
-        Text("No history available")
+        Text("No signal history available")
           .font(.subheadline)
           .foregroundStyle(.secondary)
       }
-  }
-
-  // MARK: - Legend
-
-  private var legend: some View {
-    HStack(spacing: 16) {
-      legendItem(state: .good)
-      legendItem(state: .attention)
-      legendItem(state: .alert)
-      if monitorType == .stress {
-        legendItem(state: .encourage)
-      }
-    }
-    .font(.caption)
-  }
-
-  private func legendItem(state: MonitorStateValue) -> some View {
-    HStack(spacing: 4) {
-      Circle()
-        .fill(state.color)
-        .frame(width: 8, height: 8)
-      Text(state.displayName)
-        .foregroundStyle(.secondary)
-    }
   }
 }
 
@@ -100,75 +288,11 @@ struct MonitorStateChart: View {
 #Preview {
   PreviewEnvironment {
     VStack(spacing: 32) {
-      MonitorStateChart(
-        results: [
-          MonitorResult(
-            monitorType: .recovery,
-            state: .good,
-            confidence: 0.8,
-            consecutiveDays: 1,
-            signals: [],
-            findings: [],
-            calculatedAt: Calendar.current.date(byAdding: .day, value: -6, to: Date())!
-          ),
-          MonitorResult(
-            monitorType: .recovery,
-            state: .good,
-            confidence: 0.8,
-            consecutiveDays: 2,
-            signals: [],
-            findings: [],
-            calculatedAt: Calendar.current.date(byAdding: .day, value: -5, to: Date())!
-          ),
-          MonitorResult(
-            monitorType: .recovery,
-            state: .attention,
-            confidence: 0.8,
-            consecutiveDays: 1,
-            signals: [],
-            findings: [],
-            calculatedAt: Calendar.current.date(byAdding: .day, value: -4, to: Date())!
-          ),
-          MonitorResult(
-            monitorType: .recovery,
-            state: .attention,
-            confidence: 0.8,
-            consecutiveDays: 2,
-            signals: [],
-            findings: [],
-            calculatedAt: Calendar.current.date(byAdding: .day, value: -3, to: Date())!
-          ),
-          MonitorResult(
-            monitorType: .recovery,
-            state: .alert,
-            confidence: 0.9,
-            consecutiveDays: 1,
-            signals: [],
-            findings: [],
-            calculatedAt: Calendar.current.date(byAdding: .day, value: -2, to: Date())!
-          ),
-          MonitorResult(
-            monitorType: .recovery,
-            state: .attention,
-            confidence: 0.8,
-            consecutiveDays: 1,
-            signals: [],
-            findings: [],
-            calculatedAt: Calendar.current.date(byAdding: .day, value: -1, to: Date())!
-          ),
-          MonitorResult(
-            monitorType: .recovery,
-            state: .good,
-            confidence: 0.85,
-            consecutiveDays: 1,
-            signals: [],
-            findings: [],
-            calculatedAt: Date()
-          )
-        ],
-        monitorType: .recovery
-      )
-      .cardContainer()
+      MonitorStateChart(monitorType: .recovery, days: 7)
+        .cardContainer()
+
+      MonitorStateChart(monitorType: .stress, days: 30)
+        .cardContainer()
     }
     .padding()
   }

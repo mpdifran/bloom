@@ -94,7 +94,7 @@ struct StressDetailView: View {
   // MARK: - State History
 
   private var stateHistorySection: some View {
-    MonitorStateChart(results: historicalResults, monitorType: .stress)
+    MonitorStateChart(monitorType: .stress, days: selectedPeriod == .sevenDays ? 7 : 30)
       .cardContainer()
   }
 

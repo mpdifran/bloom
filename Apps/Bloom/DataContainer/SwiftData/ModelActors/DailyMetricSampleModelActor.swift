@@ -303,4 +303,42 @@ public extension DailyMetricSampleModelActor {
       max7DayZScore: maxZScore
     )
   }
+
+  /// Fetches daily z-score ranges for chart display.
+  /// Returns one entry per day with min/max z-scores across all specified metrics.
+  func fetchDailyZScoreRanges(
+    metricTypes: [String],
+    days: Int
+  ) throws -> [DayZScoreRange] {
+    let calendar = Calendar.current
+    let endDate = calendar.startOfDay(for: Date())
+    guard let startDate = calendar.date(byAdding: .day, value: -(days - 1), to: endDate) else {
+      return []
+    }
+
+    let descriptor = FetchDescriptor<DailyMetricSample>(
+      predicate: #Predicate<DailyMetricSample> { sample in
+        sample.date >= startDate && sample.date <= endDate
+      },
+      sortBy: [SortDescriptor(\DailyMetricSample.date)]
+    )
+
+    let allSamples = try context.fetch(descriptor)
+      .filter { metricTypes.contains($0.metricType) }
+
+    // Group by calendar day
+    var samplesByDay: [Date: [DailyMetricSample]] = [:]
+    for sample in allSamples {
+      let dayStart = calendar.startOfDay(for: sample.date)
+      samplesByDay[dayStart, default: []].append(sample)
+    }
+
+    // Create ranges for each day
+    return samplesByDay.compactMap { day, samples in
+      let zScores = samples.compactMap { $0.zScore }
+      guard let minZ = zScores.min(), let maxZ = zScores.max() else { return nil }
+      return DayZScoreRange(date: day, minZScore: minZ, maxZScore: maxZ)
+    }
+    .sorted { $0.date < $1.date }
+  }
 }

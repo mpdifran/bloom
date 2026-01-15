@@ -96,7 +96,7 @@ struct SleepDetailView: View {
   // MARK: - State History
 
   private var stateHistorySection: some View {
-    MonitorStateChart(results: historicalResults, monitorType: .sleep)
+    MonitorStateChart(monitorType: .sleep, days: selectedPeriod == .sevenDays ? 7 : 30)
       .cardContainer()
   }
 

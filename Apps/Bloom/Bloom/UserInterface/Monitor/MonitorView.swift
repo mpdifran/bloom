@@ -13,6 +13,7 @@ import TelemetryDeck
 struct MonitorView: View {
 
   @State private var viewModel = MonitorViewModel.shared
+  @State private var presentedNavigationDestination: AnyView?
   @State private var presentedSheet: AnyView?
 
   var body: some View {
@@ -41,16 +42,7 @@ struct MonitorView: View {
           refreshButton
         }
       }
-      .navigationDestination(for: MonitorType.self) { monitorType in
-        switch monitorType {
-        case .recovery:
-          RecoveryDetailView()
-        case .stress:
-          StressDetailView()
-        case .sleep:
-          SleepDetailView()
-        }
-      }
+      .navigationDestination($presentedNavigationDestination)
       .sheet($presentedSheet)
     }
     .tabItem {
@@ -85,6 +77,9 @@ struct MonitorView: View {
       ForEach(MonitorType.allCases, id: \.self) { monitorType in
         if let result = viewModel.result(for: monitorType) {
           MonitorCard(result: result)
+            .onTapGesture {
+              navigateToDetails(for: monitorType)
+            }
         }
       }
 
@@ -182,6 +177,19 @@ struct MonitorView: View {
       }
     }
     .disabled(viewModel.isLoading)
+  }
+
+  // MARK: - Navigation
+
+  private func navigateToDetails(for monitorType: MonitorType) {
+    switch monitorType {
+    case .recovery:
+      presentedNavigationDestination = RecoveryDetailView().asAny
+    case .stress:
+      presentedNavigationDestination = StressDetailView().asAny
+    case .sleep:
+      presentedNavigationDestination = SleepDetailView().asAny
+    }
   }
 
   // MARK: - Status Helpers

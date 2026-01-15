@@ -96,7 +96,7 @@ struct RecoveryDetailView: View {
   // MARK: - State History
 
   private var stateHistorySection: some View {
-    MonitorStateChart(results: historicalResults, monitorType: .recovery)
+    MonitorStateChart(monitorType: .recovery, days: selectedPeriod == .sevenDays ? 7 : 30)
       .cardContainer()
   }
 

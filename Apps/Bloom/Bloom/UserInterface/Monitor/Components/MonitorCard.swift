@@ -8,6 +8,7 @@
 import SwiftUI
 import SFSafeSymbols
 import DataContainer
+import CoreHealth
 
 /// A card displaying the state of a single health monitor.
 /// Expands to show findings when in Watch or Off state.
@@ -28,29 +29,26 @@ struct MonitorCard: View {
   }
 
   var body: some View {
-    NavigationLink(value: result.monitorType) {
-      VStack(alignment: .leading, spacing: 0) {
-        headerView
+    VStack(alignment: .leading, spacing: 0) {
+      headerView
 
-        if let summaryBarData {
-          MonitorSummaryBar(data: summaryBarData)
-            .padding(.top, 12)
-        }
-
-        if result.state == .good && !elevatedSignals.isEmpty {
-          signalSummarySection
-        }
-
-        if isExpanded {
-          Divider()
-            .padding(.vertical, 12)
-
-          findingsView
-        }
+      if let summaryBarData {
+        MonitorSummaryBar(data: summaryBarData)
+          .padding(.top, 12)
       }
-      .cardContainer()
+
+      if result.state == .good && !elevatedSignals.isEmpty {
+        signalSummarySection
+      }
+
+      if isExpanded {
+        Divider()
+          .padding(.vertical, 12)
+
+        findingsView
+      }
     }
-    .buttonStyle(.plain)
+    .cardContainer()
     .task {
       await loadSummaryBarData()
     }
@@ -63,19 +61,90 @@ private extension MonitorCard {
   func loadSummaryBarData() async {
     do {
       let actor = DailyMetricSampleModelActor.standard()
-      summaryBarData = try await actor.fetchSummaryBarData(
-        metricTypes: result.monitorType.metrics.map { $0.rawValue },
-        for: Date()
-      )
+
+      // For stress monitor, include training load data
+      if result.monitorType == .stress {
+        summaryBarData = try await loadStressSummaryBarData(actor: actor)
+      } else {
+        summaryBarData = try await actor.fetchSummaryBarData(
+          metricTypes: result.monitorType.metrics.map { $0.rawValue },
+          for: Date()
+        )
+      }
     } catch {
       summaryBarData = nil
     }
   }
 
+  /// Loads summary bar data for the stress monitor, including training load z-scores.
+  func loadStressSummaryBarData(actor: DailyMetricSampleModelActor) async throws -> MonitorSummaryBarData? {
+    // Fetch training load summary
+    let trainingLoadSummary = await HealthStoreFetcher.shared.fetchTrainingLoadSummary()
+
+    // Fetch any heart rate recovery data
+    let hrrData = try await actor.fetchSummaryBarData(
+      metricTypes: [MonitorMetricType.heartRateRecovery.rawValue],
+      for: Date()
+    )
+
+    // If no training load data, fall back to HRR-only data
+    guard let summary = trainingLoadSummary else {
+      return hrrData
+    }
+
+    // Convert training load to z-score (10% = 1 z-score)
+    let trainingLoadZScore = summary.percentageDifference / 10.0
+    let (minZScore, maxZScore) = calculateTrainingLoadZScoreRange(summary: summary)
+
+    // Combine with HRR data if available
+    var metricZScores = [MetricZScorePoint(metricType: "trainingLoad", zScore: trainingLoadZScore)]
+
+    if let hrrData {
+      metricZScores.append(contentsOf: hrrData.metricZScores)
+      // Expand range to include HRR data
+      return MonitorSummaryBarData(
+        metricZScores: metricZScores,
+        min7DayZScore: min(minZScore, hrrData.min7DayZScore),
+        max7DayZScore: max(maxZScore, hrrData.max7DayZScore)
+      )
+    }
+
+    return MonitorSummaryBarData(
+      metricZScores: metricZScores,
+      min7DayZScore: minZScore,
+      max7DayZScore: maxZScore
+    )
+  }
+
+  /// Calculates the min/max z-scores from training load trend data for the past 7 days.
+  func calculateTrainingLoadZScoreRange(summary: TrainingLoadSummary) -> (min: Double, max: Double) {
+    var zScores: [Double] = []
+    let trendCount = summary.sevenDayTrend.count
+    let startIndex = max(0, trendCount - 7)
+
+    for index in startIndex..<trendCount {
+      guard index < summary.twentyEightDayTrend.count else { continue }
+      let sevenDayPoint = summary.sevenDayTrend[index]
+      let twentyEightDayValue = summary.twentyEightDayTrend[index].value
+
+      guard twentyEightDayValue > 0 else { continue }
+
+      let percentDiff = ((sevenDayPoint.value - twentyEightDayValue) / twentyEightDayValue) * 100
+      zScores.append(percentDiff / 10.0)
+    }
+
+    guard !zScores.isEmpty else {
+      let currentZScore = summary.percentageDifference / 10.0
+      return (currentZScore, currentZScore)
+    }
+
+    return (zScores.min() ?? 0, zScores.max() ?? 0)
+  }
+
   // MARK: - Header
 
   var headerView: some View {
-    HStack(spacing: 12) {
+    HStack(alignment: .top, spacing: 12) {
       VStack(alignment: .leading, spacing: 2) {
         Text(result.monitorType.displayName)
           .font(.headline)
@@ -88,23 +157,8 @@ private extension MonitorCard {
 
       Spacer()
 
-      stateBadge
-
-      Image(systemSymbol: .chevronRight)
-        .font(.caption)
-        .fontWeight(.semibold)
-        .foregroundStyle(.tertiary)
+      MonitorStateBadge(state: result.state)
     }
-  }
-
-  var stateBadge: some View {
-    Text(result.state.displayName)
-      .font(.caption)
-      .fontWeight(.medium)
-      .foregroundStyle(badgeTextColor)
-      .padding(.horizontal, 10)
-      .padding(.vertical, 5)
-      .background(badgeBackgroundColor, in: Capsule())
   }
 
   // MARK: - Signal Summary
@@ -131,25 +185,6 @@ private extension MonitorCard {
   }
 
   // MARK: - Styling
-
-  var badgeBackgroundColor: some ShapeStyle {
-    badgeTextColor.tertiary
-  }
-
-  var badgeTextColor: Color {
-    switch result.state {
-    case .good:
-      return .mutedGreen
-    case .attention:
-      return .mutedOrange
-    case .alert:
-      return .mutedRed
-    case .unavailable:
-      return .gray
-    case .encourage:
-      return .mutedBlue
-    }
-  }
 
   var subtitleText: String {
     if result.state == .unavailable {

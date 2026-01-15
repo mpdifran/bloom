@@ -14,52 +14,14 @@ struct MonitorFindingCell: View {
 
   var body: some View {
     VStack(alignment: .leading, spacing: 6) {
-      HStack {
-        Text(finding.title)
-          .font(.subheadline)
-          .fontWeight(.medium)
-
-        Spacer()
-
-        confidenceBadge
-      }
+      Text(finding.title)
+        .font(.subheadline)
+        .fontWeight(.medium)
 
       Text(finding.explanation)
         .font(.caption)
         .foregroundStyle(.secondary)
         .fixedSize(horizontal: false, vertical: true)
-    }
-  }
-
-  private var confidenceBadge: some View {
-    Text(confidenceText)
-      .font(.caption2)
-      .fontWeight(.medium)
-      .foregroundStyle(confidenceColor)
-      .padding(.horizontal, 6)
-      .padding(.vertical, 2)
-      .background(confidenceColor.opacity(0.15), in: Capsule())
-  }
-
-  private var confidenceText: String {
-    switch finding.confidence {
-    case .high:
-      return "High"
-    case .medium:
-      return "Medium"
-    case .low:
-      return "Low"
-    }
-  }
-
-  private var confidenceColor: Color {
-    switch finding.confidence {
-    case .high:
-      return .red
-    case .medium:
-      return .orange
-    case .low:
-      return .gray
     }
   }
 }

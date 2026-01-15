@@ -132,6 +132,20 @@ public struct MetricZScorePoint: Sendable, Equatable, Identifiable {
   }
 }
 
+/// Z-score range for a single day, used by MonitorStateChart.
+public struct DayZScoreRange: Sendable, Equatable, Identifiable {
+  public var id: Date { date }
+  public let date: Date
+  public let minZScore: Double
+  public let maxZScore: Double
+
+  public init(date: Date, minZScore: Double, maxZScore: Double) {
+    self.date = date
+    self.minZScore = minZScore
+    self.maxZScore = maxZScore
+  }
+}
+
 public extension MonitorSummaryBarData {
   /// Creates summary bar data from a single metric's range data.
   /// Returns nil if z-score data is not available.
