@@ -130,7 +130,7 @@ public enum MonitorMetricType: String, CaseIterable, Sendable, Codable {
   /// Whether this metric is required for its monitor to function
   public var isRequired: Bool {
     switch self {
-    case .restingHeartRate, .heartRateVariability, .activeEnergy, .sleepDuration:
+    case .restingHeartRate, .heartRateVariability, .sleepDuration:
       return true
     default:
       return false
@@ -138,14 +138,17 @@ public enum MonitorMetricType: String, CaseIterable, Sendable, Codable {
   }
 
   /// The monitor this metric belongs to
-  public var monitor: MonitorType {
+  public var monitor: MonitorType? {
     switch self {
     case .restingHeartRate, .heartRateVariability, .wristTemperature, .respiratoryRate:
       return .recovery
-    case .activeEnergy, .heartRateRecovery:
+    case .heartRateRecovery:
       return .stress
     case .sleepDuration, .deepSleep, .remSleep, .sleepEfficiency, .bedtime, .wakeTime:
       return .sleep
+    case .activeEnergy:
+      // Training load is computed from workouts via TrainingLoadSummary, not active energy samples
+      return nil
     }
   }
 
@@ -383,7 +386,7 @@ public enum MonitorType: String, CaseIterable, Sendable, Codable {
 
   /// The metrics used by this monitor
   public var metrics: [MonitorMetricType] {
-    MonitorMetricType.allCases.filter { $0.monitor == self }
+    MonitorMetricType.allCases.filter { $0.monitor == .some(self) }
   }
 
   /// The required metrics for this monitor to function

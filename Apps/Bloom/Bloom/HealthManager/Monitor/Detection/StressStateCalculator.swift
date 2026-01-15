@@ -7,6 +7,7 @@
 
 import Foundation
 import DataContainer
+import CoreHealth
 
 /// Calculates state for the Stress & Workout Load Monitor.
 /// Tracks training load balance and detects overtraining.
@@ -14,7 +15,7 @@ actor StressStateCalculator: MonitorStateCalculator {
 
   let monitorType: MonitorType = .stress
 
-  let requiredMetrics: [MonitorMetricType] = [.activeEnergy]
+  let requiredMetrics: [MonitorMetricType] = []
   let optionalMetrics: [MonitorMetricType] = [
     .heartRateVariability,
     .heartRateRecovery,
@@ -79,61 +80,59 @@ actor StressStateCalculator: MonitorStateCalculator {
     samples: [DailyMetricSampleDTO],
     previousResults: [MonitorResult]
   ) async -> MonitorResult {
-    let calendar = Calendar.current
+    // Fetch TrainingLoadSummary which uses actual workout data (Apple's Workout Effort Scores)
+    let trainingLoadSummary = await HealthStoreFetcher.shared.fetchTrainingLoadSummary()
 
-    // Get active energy samples for ratio calculation
-    let energySamples = samples
-      .filter { $0.metricType == MonitorMetricType.activeEnergy.rawValue }
-      .sorted { $0.date < $1.date }
-
-    // Need at least 7 days of data for meaningful ratio
-    // When insufficient data, always show encourage state (never unavailable)
-    guard energySamples.count >= 7 else {
+    // If no training load data, show encourage state
+    guard let trainingLoadSummary else {
       let classification = classifyActivityHistory(samples: samples, date: date)
       return createEncourageResult(classification: classification, date: date)
     }
 
-    // Calculate Acute:Chronic Ratio
-    let sevenDaysAgo = calendar.date(byAdding: .day, value: -7, to: date)!
-    let twentyEightDaysAgo = calendar.date(byAdding: .day, value: -28, to: date)!
-
-    let acuteSamples = energySamples.filter { $0.date >= sevenDaysAgo && $0.date < date }
-    let chronicSamples = energySamples.filter { $0.date >= twentyEightDaysAgo && $0.date < date }
-
-    let acuteLoad = acuteSamples.reduce(0.0) { $0 + $1.value }
-    let chronicDailyAvg = chronicSamples.isEmpty ? 0 : chronicSamples.reduce(0.0) { $0 + $1.value } / Double(chronicSamples.count)
-    let chronicWeeklyEquivalent = chronicDailyAvg * 7
-
-    let acuteChronicRatio: Double = chronicWeeklyEquivalent > 0 ? acuteLoad / chronicWeeklyEquivalent : 1.0
+    // Convert percentageDifference to equivalent Acute:Chronic ratio for compatibility
+    // percentageDifference = (7day - 28day) / 28day * 100
+    // ratio = 1 + (percentageDifference / 100)
+    let acuteChronicRatio = 1.0 + (trainingLoadSummary.percentageDifference / 100.0)
 
     // Collect signals
     var signals: [Signal] = []
 
-    // Ratio signals
-    if acuteChronicRatio > 1.5 {
+    // Training load signals based on TrainingLoadStatus
+    switch trainingLoadSummary.status {
+    case .wellAbove:
       signals.append(Signal(
         metricType: .activeEnergy,
         date: date,
-        zScore: (acuteChronicRatio - 1.0) * 2, // Approximate z-score
+        zScore: trainingLoadSummary.percentageDifference / 10, // Normalize to z-score-like value
         direction: .higher,
         description: "Your training load has spiked significantly"
       ))
-    } else if acuteChronicRatio > 1.3 {
+    case .above:
       signals.append(Signal(
         metricType: .activeEnergy,
         date: date,
-        zScore: (acuteChronicRatio - 1.0) * 2,
+        zScore: trainingLoadSummary.percentageDifference / 10,
         direction: .higher,
-        description: "Your training load is above optimal range"
+        description: "Your training load is above your baseline"
       ))
-    } else if acuteChronicRatio < 0.8 {
+    case .wellBelow:
       signals.append(Signal(
         metricType: .activeEnergy,
         date: date,
-        zScore: (0.8 - acuteChronicRatio) * 2,
+        zScore: abs(trainingLoadSummary.percentageDifference) / 10,
+        direction: .lower,
+        description: "Your training load is well below your usual"
+      ))
+    case .below:
+      signals.append(Signal(
+        metricType: .activeEnergy,
+        date: date,
+        zScore: abs(trainingLoadSummary.percentageDifference) / 10,
         direction: .lower,
         description: "Your training load is below your usual"
       ))
+    case .steady:
+      break // No signal for steady state
     }
 
     // HRV multi-day trend analysis

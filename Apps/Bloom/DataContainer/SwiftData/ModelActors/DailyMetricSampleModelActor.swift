@@ -162,15 +162,16 @@ public extension DailyMetricSampleModelActor {
     try context.save()
   }
 
-  /// Fetch range data for a specific metric type over the past 7 days.
+  /// Fetch range data for a specific metric type over the specified number of days.
   /// Returns nil if no data is available for the metric.
   func fetchRangeData(
     metricType: String,
     displayName: String,
-    for date: Date
+    for date: Date,
+    days: Int = 7
   ) throws -> MetricRangeData? {
     let calendar = Calendar.current
-    let startDate = calendar.date(byAdding: .day, value: -6, to: calendar.startOfDay(for: date)) ?? date
+    let startDate = calendar.date(byAdding: .day, value: -(days - 1), to: calendar.startOfDay(for: date)) ?? date
     let endDate = calendar.startOfDay(for: date)
 
     let descriptor = FetchDescriptor<DailyMetricSample>(
@@ -208,14 +209,16 @@ public extension DailyMetricSampleModelActor {
   /// Fetch range data for multiple metric types
   func fetchRangeData(
     metricTypes: [(type: String, displayName: String)],
-    for date: Date
+    for date: Date,
+    days: Int = 7
   ) throws -> [MetricRangeData] {
     var results: [MetricRangeData] = []
     for metric in metricTypes {
       if let rangeData = try fetchRangeData(
         metricType: metric.type,
         displayName: metric.displayName,
-        for: date
+        for: date,
+        days: days
       ) {
         results.append(rangeData)
       }
@@ -227,13 +230,15 @@ public extension DailyMetricSampleModelActor {
   /// Unlike `fetchRangeData`, this always returns an entry for each metric type.
   func fetchAllRangeData(
     metricTypes: [(type: String, displayName: String)],
-    for date: Date
+    for date: Date,
+    days: Int = 7
   ) throws -> [MetricRangeData] {
     metricTypes.map { metric in
       if let data = try? fetchRangeData(
         metricType: metric.type,
         displayName: metric.displayName,
-        for: date
+        for: date,
+        days: days
       ) {
         return data
       } else {

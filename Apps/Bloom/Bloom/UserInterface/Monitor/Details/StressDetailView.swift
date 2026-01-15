@@ -15,9 +15,19 @@ import DataContainer
 struct StressDetailView: View {
 
   @State private var selectedPeriod: StatTimePeriod = .sevenDays
-  @State private var historicalResults: [MonitorResult] = []
-  @State private var rangeData: [MetricRangeData] = []
+  @State private var historicalResults7Day: [MonitorResult] = []
+  @State private var historicalResults30Day: [MonitorResult] = []
+  @State private var rangeData7Day: [MetricRangeData] = []
+  @State private var rangeData30Day: [MetricRangeData] = []
   @State private var isLoading = false
+
+  private var historicalResults: [MonitorResult] {
+    selectedPeriod == .sevenDays ? historicalResults7Day : historicalResults30Day
+  }
+
+  private var rangeData: [MetricRangeData] {
+    selectedPeriod == .sevenDays ? rangeData7Day : rangeData30Day
+  }
 
   /// The current (most recent) result
   private var currentResult: MonitorResult? {
@@ -26,9 +36,9 @@ struct StressDetailView: View {
 
   var body: some View {
     Group {
-      if isLoading && historicalResults.isEmpty {
+      if isLoading && historicalResults7Day.isEmpty {
         loadingView
-      } else if historicalResults.isEmpty {
+      } else if historicalResults7Day.isEmpty {
         emptyView
       } else {
         contentView
@@ -36,19 +46,23 @@ struct StressDetailView: View {
     }
     .toolbar {
       ToolbarItem(placement: .principal) {
-        VStack(spacing: 2) {
-          Text("Stress & Workout Load")
-            .font(.headline)
-          Text(selectedPeriod == .sevenDays ? "Last 7 Days" : "Last 30 Days")
-            .font(.caption)
-            .foregroundStyle(.secondary)
-        }
+        Text("Stress & Workout Load")
+          .font(.headline)
       }
+      ToolbarItem(placement: .topBarTrailing) {
+        Picker("Time Period", selection: $selectedPeriod.animation(.easeInOut(duration: 0.2))) {
+          Text("7D").tag(StatTimePeriod.sevenDays)
+          Text("30D").tag(StatTimePeriod.oneMonth)
+        }
+        .pickerStyle(.segmented)
+        .fixedSize()
+      }
+      .hiddenSharedBackground()
     }
     .navigationTitle("Stress")
     .navigationBarTitleDisplayMode(.inline)
-    .task(id: selectedPeriod) {
-      await loadData()
+    .task {
+      await loadAllData()
     }
     .onAppear {
       TelemetryDeck.signal("View Stress Monitor Details")
@@ -59,13 +73,9 @@ struct StressDetailView: View {
 
   private var contentView: some View {
     BloomScrollView(spacing: 20) {
-      periodPicker
-
       stateHistorySection
 
-      if !rangeData.isEmpty {
-        metricRangesSection
-      }
+      metricRangesSection
 
       if let result = currentResult {
         if !result.signals.isEmpty {
@@ -81,17 +91,6 @@ struct StressDetailView: View {
     }
   }
 
-  // MARK: - Period Picker
-
-  private var periodPicker: some View {
-    Picker("Time Period", selection: $selectedPeriod) {
-      Text("7 Days").tag(StatTimePeriod.sevenDays)
-      Text("30 Days").tag(StatTimePeriod.oneMonth)
-    }
-    .pickerStyle(.segmented)
-    .padding(.horizontal)
-  }
-
   // MARK: - State History
 
   private var stateHistorySection: some View {
@@ -103,11 +102,19 @@ struct StressDetailView: View {
 
   private var metricRangesSection: some View {
     VStack(alignment: .leading, spacing: 12) {
-      Text("7-Day Ranges")
+      Text(selectedPeriod == .sevenDays ? "7-Day Ranges" : "30-Day Ranges")
         .font(.headline)
         .padding(.horizontal)
 
       VStack(spacing: 16) {
+        // Training Load (from workouts)
+        TrainingLoadRangeRow(selectedPeriod: selectedPeriod)
+
+        if !rangeData.isEmpty {
+          Divider()
+        }
+
+        // Other metrics (Heart Rate Recovery, etc.)
         ForEach(rangeData) { data in
           if let metricType = MonitorMetricType(rawValue: data.metricType) {
             MetricRangeRow(rangeData: data, metricType: metricType)
@@ -163,7 +170,7 @@ struct StressDetailView: View {
         .font(.subheadline)
         .fontWeight(.medium)
 
-      Text("This monitor tracks your training load balance using the acute:chronic workload ratio. It compares your recent 7-day activity to your 28-day average to help you avoid overtraining or detraining. HRV trends are also considered when available.")
+      Text("This monitor tracks your training load using Apple's Workout Effort Scores. It compares your recent 7-day training load to your 28-day average to help you avoid overtraining or detraining. HRV trends and recovery metrics are also considered when available.")
         .font(.caption)
         .foregroundStyle(.secondary)
     }
@@ -196,38 +203,60 @@ struct StressDetailView: View {
 
   // MARK: - Data Loading
 
-  private func loadData() async {
+  private func loadAllData() async {
     isLoading = true
 
-    let days = selectedPeriod == .sevenDays ? 7 : 30
-
-    do {
-      historicalResults = try await DetectionEngine.shared.calculateHistoricalStates(
-        for: .stress,
-        days: days
-      )
-    } catch {
-      // Handle error silently, empty state will show
-    }
-
-    // Load range data for stress metrics
-    await loadRangeData()
-
-    isLoading = false
-  }
-
-  private func loadRangeData() async {
     let metrics: [(type: String, displayName: String)] = MonitorType.stress.metrics.map {
       ($0.rawValue, $0.displayName)
     }
 
-    do {
-      let actor = DailyMetricSampleModelActor.standard()
-      rangeData = try await actor.fetchAllRangeData(metricTypes: metrics, for: Date())
-    } catch {
-      // Handle error silently
-      rangeData = []
+    // Load both periods in parallel, collecting results
+    let results = await withTaskGroup(
+      of: (Int, [MonitorResult], [MetricRangeData]).self
+    ) { group -> [(Int, [MonitorResult], [MetricRangeData])] in
+      // Load 7-day data
+      group.addTask {
+        do {
+          let results = try await DetectionEngine.shared.calculateHistoricalStates(for: .stress, days: 7)
+          let actor = DailyMetricSampleModelActor.standard()
+          let range = try await actor.fetchAllRangeData(metricTypes: metrics, for: Date(), days: 7)
+          return (7, results, range)
+        } catch {
+          return (7, [], [])
+        }
+      }
+
+      // Load 30-day data
+      group.addTask {
+        do {
+          let results = try await DetectionEngine.shared.calculateHistoricalStates(for: .stress, days: 30)
+          let actor = DailyMetricSampleModelActor.standard()
+          let range = try await actor.fetchAllRangeData(metricTypes: metrics, for: Date(), days: 30)
+          return (30, results, range)
+        } catch {
+          return (30, [], [])
+        }
+      }
+
+      var collected: [(Int, [MonitorResult], [MetricRangeData])] = []
+      for await result in group {
+        collected.append(result)
+      }
+      return collected
     }
+
+    // Update state only after both complete
+    for (days, historicalResults, rangeData) in results {
+      if days == 7 {
+        historicalResults7Day = historicalResults
+        rangeData7Day = rangeData
+      } else {
+        historicalResults30Day = historicalResults
+        rangeData30Day = rangeData
+      }
+    }
+
+    isLoading = false
   }
 }
 
