@@ -1002,7 +1002,7 @@ private extension BiologicalAgeCalculator {
           bowelMovements.isNotEmpty else { return nil }
 
     // Use existing scoring logic
-    let summary = BowelMovementMonthlySummary(bowelMovements: bowelMovements)
+    let summary = BowelMovementSummary(bowelMovements: bowelMovements)
     let score = summary.score
 
     let ageDelta = healthGoalProvider.bowelRegularityAgeDelta(score: score)

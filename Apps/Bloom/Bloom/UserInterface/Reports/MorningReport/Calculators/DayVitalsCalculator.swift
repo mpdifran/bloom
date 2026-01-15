@@ -674,7 +674,7 @@ private extension DayVitalsCalculator {
     do {
       let yesterdayMovements = try await bowelMovementModelActor.fetchBowelMovements(dateRange: dateRange)
 
-      // Calculate regularity score based on BowelMovementMonthlySummary logic
+      // Calculate regularity score based on BowelMovementSummary logic
       let monthlyMovements = try await bowelMovementModelActor.fetchBowelMovements(
         dateRange: DateRange.trailingDays(from: date, numberOfDays: 30)
       )
@@ -713,7 +713,7 @@ private extension DayVitalsCalculator {
         avgDailyMovements = nil
       }
 
-      let summary = BowelMovementMonthlySummary(bowelMovements: monthlyMovements)
+      let summary = BowelMovementSummary(bowelMovements: monthlyMovements)
 
       let regularityScore: MetricWithTrend?
       if let rating = summary.rating {

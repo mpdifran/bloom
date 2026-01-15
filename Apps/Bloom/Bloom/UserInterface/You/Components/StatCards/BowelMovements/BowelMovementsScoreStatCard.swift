@@ -10,7 +10,7 @@ import SFSafeSymbols
 import CoreHealth
 
 struct BowelMovementsScoreStatCard: View {
-  let summary: BowelMovementMonthlySummary?
+  let summary: BowelMovementSummary?
 
   var body: some View {
     if let summary, let rating = summary.rating {
@@ -35,7 +35,7 @@ struct BowelMovementsScoreStatCard: View {
 #Preview {
   PreviewEnvironment {
     BloomScrollView {
-      // Note: BowelMovementMonthlySummary requires BowelMovementDTO with PersistentIdentifier
+      // Note: BowelMovementSummary requires BowelMovementDTO with PersistentIdentifier
       // which cannot be easily mocked. Use the app with real data for full preview.
       HStack {
         BowelMovementsScoreStatCard(summary: nil)

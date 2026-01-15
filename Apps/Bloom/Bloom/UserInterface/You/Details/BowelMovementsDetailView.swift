@@ -16,7 +16,7 @@ import DataContainer
 
 struct BowelMovementsDetailView: View {
 
-  @State private var selectedPeriod: StatTimePeriod = .oneMonth
+  @State private var selectedPeriod: StatTimePeriod = .sevenDays
   @State private var bowelMovements: [BowelMovementDTO] = []
   @State private var presentedSheet: AnyView?
   @State private var selectedBristolType = 0
@@ -166,9 +166,9 @@ private extension BowelMovementsDetailView {
     }
   }
 
-  var summary: BowelMovementMonthlySummary? {
+  var summary: BowelMovementSummary? {
     guard bowelMovements.isNotEmpty else { return nil }
-    return BowelMovementMonthlySummary(bowelMovements: bowelMovements)
+    return BowelMovementSummary(bowelMovements: bowelMovements)
   }
 
   var contentView: some View {
@@ -228,7 +228,7 @@ private extension BowelMovementsDetailView {
     }
   }
 
-  func stoolTypeTimelineChart(summary: BowelMovementMonthlySummary) -> some View {
+  func stoolTypeTimelineChart(summary: BowelMovementSummary) -> some View {
     Chart {
       ForEach(summary.bowelMovements) { bowelMovement in
         if bowelMovement.isValidBristolStoolType {
@@ -267,7 +267,7 @@ private extension BowelMovementsDetailView {
     .frame(height: 350)
   }
 
-  func stoolTypeDistributionChart(summary: BowelMovementMonthlySummary) -> some View {
+  func stoolTypeDistributionChart(summary: BowelMovementSummary) -> some View {
     Chart {
       ForEach(1...7, id: \.self) { type in
         let count = summary.stoolTypeDistribution[type]?.count ?? 0
@@ -736,7 +736,7 @@ private extension BowelMovementsDetailView {
     }
   }
 
-  func intervalDistributionChart(summary: BowelMovementMonthlySummary) -> some View {
+  func intervalDistributionChart(summary: BowelMovementSummary) -> some View {
     let intervals = summary.intervalData()
     let bucketCounts = Dictionary(grouping: intervals) { interval in
       IntervalBucket.bucket(for: interval.intervalHours)

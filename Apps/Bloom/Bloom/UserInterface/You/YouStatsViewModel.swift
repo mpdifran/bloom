@@ -19,7 +19,7 @@ final class YouStatsViewModel: Sendable {
   var stressSummary: StressMonthlySummary?
   var nutritionSummary: NutritionMonthlySummary?
   var exerciseEffectivenessSummary: ExerciseEffectivenessMonthlySummary?
-  var bowelMovementSummary: BowelMovementMonthlySummary?
+  var bowelMovementSummary: BowelMovementSummary?
   var menstrualSummary: MenstrualSummary?
 
   // YouStatsCalculator data

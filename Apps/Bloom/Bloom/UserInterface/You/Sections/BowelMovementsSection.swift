@@ -12,7 +12,7 @@ import DataContainer
 
 struct BowelMovementsSection: View {
   @Binding var presentedNavigationDestination: AnyView?
-  let summary: BowelMovementMonthlySummary?
+  let summary: BowelMovementSummary?
 
   var body: some View {
     StatSection(symbol: SFSymbol(rawValue: VitalModel.Kind.bowelMovements.systemImage), title: "Bowel Movements", subtitle: "Last 7 Days") {
@@ -56,7 +56,7 @@ private extension BowelMovementsSection {
   }
 }
 
-private extension BowelMovementMonthlySummary.Rating {
+private extension BowelMovementSummary.Rating {
 
   var displayColor: Color {
     switch self {

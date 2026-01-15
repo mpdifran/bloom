@@ -10,7 +10,7 @@ import SFSafeSymbols
 import CoreHealth
 
 struct BowelMovementsTimeOfDayStatCard: View {
-  let summary: BowelMovementMonthlySummary?
+  let summary: BowelMovementSummary?
 
   private var mostCommonTimeOfDay: Calendar.TimeOfDay? {
     guard let summary, !summary.bowelMovements.isEmpty else { return nil }

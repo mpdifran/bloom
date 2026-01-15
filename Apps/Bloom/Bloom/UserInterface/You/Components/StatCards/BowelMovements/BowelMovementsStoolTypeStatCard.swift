@@ -10,7 +10,7 @@ import SFSafeSymbols
 import CoreHealth
 
 struct BowelMovementsStoolTypeStatCard: View {
-  let summary: BowelMovementMonthlySummary?
+  let summary: BowelMovementSummary?
 
   private var typeCounts: [Int] {
     guard let summary else { return Array(repeating: 0, count: 7) }

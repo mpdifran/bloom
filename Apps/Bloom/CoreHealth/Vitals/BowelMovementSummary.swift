@@ -1,5 +1,5 @@
 //
-//  BowelMovementMonthlySummary.swift
+//  BowelMovementSummary.swift
 //  Supplements
 //
 //  Created by Mark DiFranco on 2024-08-28.
@@ -23,7 +23,7 @@ private enum Constants {
   ]
 }
 
-public extension BowelMovementMonthlySummary {
+public extension BowelMovementSummary {
   enum Rating {
     case poor
     case fair
@@ -58,7 +58,7 @@ public extension BowelMovementMonthlySummary {
   }
 }
 
-public struct BowelMovementMonthlySummary: Sendable {
+public struct BowelMovementSummary: Sendable {
   public let bowelMovements: [BowelMovementDTO]
 
   public init(bowelMovements: [BowelMovementDTO]) {
@@ -104,7 +104,7 @@ public struct BowelMovementMonthlySummary: Sendable {
   private(set) public var coefficientOfVariation: Double?
 }
 
-public extension BowelMovementMonthlySummary {
+public extension BowelMovementSummary {
 
   mutating func calculateScore() {
     guard bowelMovements.isNotEmpty else {
@@ -208,7 +208,7 @@ public extension BowelMovementMonthlySummary {
     return frequencyText
   }
 
-  var rating: BowelMovementMonthlySummary.Rating? {
+  var rating: BowelMovementSummary.Rating? {
     guard bowelMovements.isNotEmpty else {
       return nil
     }
@@ -328,7 +328,7 @@ public extension BowelMovementMonthlySummary {
   }
 }
 
-private extension BowelMovementMonthlySummary {
+private extension BowelMovementSummary {
 
   struct BowelMovementIntervalStatistics {
     let averageIntervalHours: Double

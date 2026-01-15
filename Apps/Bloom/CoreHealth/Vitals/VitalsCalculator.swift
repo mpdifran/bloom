@@ -21,7 +21,7 @@ public final actor VitalsCalculator {
   @AsyncStreamable public var stressSummary: StressMonthlySummary?
   @AsyncStreamable public var nutritionSummary: NutritionMonthlySummary?
   @AsyncStreamable public var exerciseEffectivenessSummary: ExerciseEffectivenessMonthlySummary?
-  @AsyncStreamable public var bowelMovementSummary: BowelMovementMonthlySummary?
+  @AsyncStreamable public var bowelMovementSummary: BowelMovementSummary?
   @AsyncStreamable public var menstrualSummary: MenstrualSummary?
 
   private init() {
@@ -65,7 +65,7 @@ public extension VitalsCalculator {
     nutritionSummary = await HealthStoreFetcher.shared.fetchNutritionMonthlySummary()
     exerciseEffectivenessSummary = await HealthStoreFetcher.shared.fetchExerciseEffectivenessSummary()
     menstrualSummary = await HealthStoreFetcher.shared.fetchMenstrualSummary()
-    bowelMovementSummary = await fetchBowelMovementMonthlySummary()
+    bowelMovementSummary = await fetchBowelMovementSummary()
 
     await createVitals()
   }
@@ -77,7 +77,7 @@ public extension VitalsCalculator {
   }
 
   func fetchSwiftDataTypes() async {
-    self.bowelMovementSummary = await fetchBowelMovementMonthlySummary()
+    self.bowelMovementSummary = await fetchBowelMovementSummary()
 
     await createVitals()
   }
@@ -89,10 +89,10 @@ public extension VitalsCalculator {
 
 private extension VitalsCalculator {
 
-  func fetchBowelMovementMonthlySummary() async -> BowelMovementMonthlySummary? {
+  func fetchBowelMovementSummary() async -> BowelMovementSummary? {
     let modelActor = BowelMovementModelActor.standard()
-    let samples = (try? await modelActor.fetchBowelMovements(dateRange: .trailingMonthsFromNow(1))) ?? []
-    return BowelMovementMonthlySummary(bowelMovements: samples)
+    let samples = (try? await modelActor.fetchBowelMovements(dateRange: .trailingDaysFromNow(7))) ?? []
+    return BowelMovementSummary(bowelMovements: samples)
   }
 }
 
