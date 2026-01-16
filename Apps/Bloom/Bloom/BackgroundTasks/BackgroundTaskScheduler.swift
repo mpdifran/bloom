@@ -81,20 +81,6 @@ extension BackgroundTaskScheduler {
       // Calculate new states
       let newResults = try await DetectionEngine.shared.calculateAllStates()
 
-      // Check if any monitors transitioned to concerning state
-      let hasNewConcerningState = newResults.contains { result in
-        let previousState = previousStates[result.monitorType]
-        return result.state.isConcerning && previousState != result.state
-      }
-
-      // Generate AI summary if there's a new concerning state
-      if hasNewConcerningState {
-        await generateAndCacheAISummary(for: newResults)
-      } else if newResults.allSatisfy({ $0.state == .good }) {
-        // Clear cache when all monitors return to Good
-        await MonitorSummaryCache.shared.clearCache()
-      }
-
       // Check for state changes and send notifications
       for result in newResults {
         let previousState = previousStates[result.monitorType]
@@ -111,46 +97,6 @@ extension BackgroundTaskScheduler {
 
     // Schedule the next background task for tomorrow
     scheduleMonitorAggregationTask()
-  }
-
-  /// Generates an AI summary for the current monitor results and caches it.
-  private func generateAndCacheAISummary(for results: [MonitorResult]) async {
-    do {
-      // Build monitor context JSON
-      let monitorContext = try JSONEncoder().encode(results)
-      guard let monitorContextString = String(data: monitorContext, encoding: .utf8) else {
-        print("BackgroundTaskScheduler: Failed to encode monitor context")
-        return
-      }
-
-      // Build health context (simplified - baseline metrics)
-      let healthContext = "Monitor results included in monitorContext"
-
-      // Get timezone
-      let timezone = TimeZone.current.identifier
-
-      // Create request
-      let request = MonitorSummaryRequest(
-        monitorContext: monitorContextString,
-        healthContext: healthContext,
-        timezone: timezone
-      )
-
-      // Call backend API
-      let urlRequest = try await URLRequest.Monitor.getSummary(body: request)
-      let summary: MonitorSummaryResponse = try await URLSession.shared.authenticatedBloomRequestWithResponse(
-        request: urlRequest,
-        responseType: MonitorSummaryResponse.self
-      )
-
-      // Cache the summary
-      await MonitorSummaryCache.shared.cache(summary)
-
-      print("BackgroundTaskScheduler: AI summary generated and cached")
-    } catch {
-      // Don't fail the aggregation if AI summary fails
-      print("BackgroundTaskScheduler: Failed to generate AI summary: \(error.localizedDescription)")
-    }
   }
 
   /// Calculates the next time to run the monitor aggregation (2 AM local time).

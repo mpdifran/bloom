@@ -19,6 +19,7 @@ struct MonitorSettingsView: View {
     NavigationStack {
       BloomScrollView(showsChatBar: false) {
         notificationSection
+        badgeSection
       }
       .navigationTitle("Preferences")
       .navigationBarTitleDisplayMode(.inline)
@@ -52,6 +53,37 @@ struct MonitorSettingsView: View {
         .padding(.horizontal)
         .padding(.top, 4)
     }
+  }
+
+  // MARK: - Badge Section
+
+  private var badgeSection: some View {
+    VStack {
+      SectionTitleView("Badges")
+        .padding(.horizontal)
+
+      HStack {
+        VStack(alignment: .leading, spacing: 2) {
+          Text("Show Badge")
+            .font(.body)
+            .fontWeight(.medium)
+
+          Text("Display count on tab and app icon")
+            .font(.caption)
+            .foregroundStyle(.secondary)
+        }
+
+        Spacer()
+
+        Toggle("", isOn: $preferences.badgesEnabled)
+          .labelsHidden()
+      }
+      .cardContainer()
+      .onChange(of: preferences.badgesEnabled) {
+        MonitorViewModel.shared.updateBadges()
+      }
+    }
+    .padding(.top, 16)
   }
 
   // MARK: - Monitor Row

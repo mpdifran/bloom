@@ -25,6 +25,11 @@ public final class MonitorNotificationPreferences: ObservableObject {
   @AppStorage("monitor.notifications.sleep.enabled")
   public var sleepEnabled: Bool = true
 
+  // MARK: - Badge State
+
+  @AppStorage("monitor.badges.enabled")
+  public var badgesEnabled: Bool = true
+
   // MARK: - Snooze State (stored as TimeInterval since reference date, 0 = not snoozed)
 
   @AppStorage("monitor.notifications.recovery.snoozedUntil")

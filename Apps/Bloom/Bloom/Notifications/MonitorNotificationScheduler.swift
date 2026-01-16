@@ -82,13 +82,9 @@ public actor MonitorNotificationScheduler {
   // MARK: - Private Methods
 
   private func scheduleNotification(for result: MonitorResult) async {
-    // Try to get cached AI summary for enhanced notification body
-    let cachedSummary = await MonitorSummaryCache.shared.getCachedSummary()
-
     let content = createNotificationContent(
       monitorType: result.monitorType,
-      state: result.state,
-      aiSummaryBody: cachedSummary?.notificationBody
+      state: result.state
     )
     let identifier = notificationIdentifier(for: result.monitorType, state: result.state)
 
@@ -112,8 +108,7 @@ public actor MonitorNotificationScheduler {
 
   private func createNotificationContent(
     monitorType: MonitorType,
-    state: MonitorStateValue,
-    aiSummaryBody: String? = nil
+    state: MonitorStateValue
   ) -> UNMutableNotificationContent {
     let content = UNMutableNotificationContent()
     content.sound = .default
@@ -122,22 +117,29 @@ public actor MonitorNotificationScheduler {
     // Store monitor type in userInfo for action handling
     content.userInfo = ["monitorType": monitorType.rawValue]
 
-    switch state {
-    case .attention:
-      content.title = "\(monitorType.displayName) Needs Attention"
-      // Use AI-generated body if available, otherwise fallback
-      content.body = aiSummaryBody ?? "Some of your health metrics are trending outside your normal range."
-    case .alert:
-      content.title = "\(monitorType.displayName) Alert"
-      // Use AI-generated body if available, otherwise fallback
-      content.body = aiSummaryBody ?? "Your health metrics show significant changes that may need attention."
-    default:
-      // Should not happen - we only notify for concerning states
-      content.title = monitorType.displayName
-      content.body = "Tap to view details."
-    }
+    content.title = "\(monitorType.displayName) \(state == .alert ? "Alert" : "Needs Attention")"
+    content.body = notificationBody(for: monitorType, state: state)
 
     return content
+  }
+
+  private func notificationBody(for monitorType: MonitorType, state: MonitorStateValue) -> String {
+    switch (monitorType, state) {
+    case (.recovery, .attention):
+      return "Your recovery metrics are outside your normal range. Consider taking it easy today."
+    case (.recovery, .alert):
+      return "Your body may be working harder than usual. Prioritize rest and recovery."
+    case (.stress, .attention):
+      return "Your training load or stress indicators are elevated. Monitor how you're feeling."
+    case (.stress, .alert):
+      return "Signs of overtraining or burnout detected. Consider a rest day."
+    case (.sleep, .attention):
+      return "Your sleep patterns have been inconsistent. Try to prioritize rest tonight."
+    case (.sleep, .alert):
+      return "Your sleep quality has been significantly impacted. Focus on improving your sleep routine."
+    default:
+      return "Tap to view details."
+    }
   }
 
   private func notificationIdentifier(for monitorType: MonitorType, state: MonitorStateValue) -> String {

@@ -7,6 +7,7 @@
 
 import Foundation
 import BloomModel
+import UIKit
 
 /// ViewModel for the Monitor tab that manages health monitor states.
 @Observable @MainActor
@@ -16,9 +17,6 @@ final class MonitorViewModel {
 
   /// Current monitor results for all three monitors
   var results: [MonitorResult] = []
-
-  /// Cached AI-generated summary (when monitors need attention)
-  var aiSummary: MonitorSummaryResponse?
 
   /// Whether data is currently being loaded
   var isLoading = false
@@ -39,8 +37,27 @@ final class MonitorViewModel {
     error = nil
 
     do {
+      // Get previous states before calculating (for change detection)
+      let previousResults = await DetectionEngine.shared.getAllCachedResults()
+      let previousStates: [MonitorType: MonitorStateValue] = Dictionary(
+        uniqueKeysWithValues: previousResults.map { ($0.monitorType, $0.state) }
+      )
+
+      // Calculate new states
       results = try await MonitorCalculator.shared.calculateMetricsAndDetect()
       hasLoaded = true
+
+      // Check for state changes and send notifications
+      for result in results {
+        let previousState = previousStates[result.monitorType]
+        await MonitorNotificationScheduler.shared.scheduleNotificationIfNeeded(
+          result: result,
+          previousState: previousState
+        )
+      }
+
+      // Update badges
+      updateBadges()
     } catch {
       self.error = error
     }
@@ -54,13 +71,22 @@ final class MonitorViewModel {
     if !cached.isEmpty {
       results = cached
       hasLoaded = true
+      updateBadges()
     }
+  }
 
-    // Load cached AI summary
-    aiSummary = await MonitorSummaryCache.shared.getCachedSummary()
+  /// Updates badge count on tab and app icon based on current results
+  func updateBadges() {
+    let count = MonitorNotificationPreferences.shared.badgesEnabled ? monitorsNeedingAttention.count : 0
+    UIApplication.shared.applicationIconBadgeNumber = count
   }
 
   // MARK: - Computed Properties
+
+  /// Badge count for tab and app icon (respects user preference)
+  var badgeCount: Int {
+    MonitorNotificationPreferences.shared.badgesEnabled ? monitorsNeedingAttention.count : 0
+  }
 
   /// Whether all monitors are in "Good" state
   var isAllGood: Bool {

@@ -346,6 +346,7 @@ private extension RootView {
         .tag(Tab.vitals)
       MonitorView()
         .tag(Tab.monitor)
+        .badge(MonitorViewModel.shared.badgeCount)
       WorkoutsTabView()
         .tag(Tab.workouts)
     }

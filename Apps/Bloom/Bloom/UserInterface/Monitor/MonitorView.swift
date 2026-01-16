@@ -77,10 +77,6 @@ struct MonitorView: View {
           }
         }
 
-        // AI summary after concerning monitors
-        if let summary = viewModel.aiSummary {
-          MonitorSummaryView(summary: summary)
-        }
       }
 
       // Section 2: Other monitors (good, encourage, unavailable)

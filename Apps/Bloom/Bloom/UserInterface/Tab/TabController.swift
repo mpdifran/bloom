@@ -66,6 +66,7 @@ struct ChatContext: Identifiable, Hashable, Sendable, Codable {
 final class TabController {
   var activeTab = Tab.today
   var isShowingChat = false
+  var monitorBadgeCount: Int = 0
   var chatContexts = [ChatContext]()
   var chatLauncherSafeAreaInset: CGFloat = 0
 
