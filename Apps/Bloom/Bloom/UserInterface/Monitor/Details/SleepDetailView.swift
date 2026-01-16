@@ -162,6 +162,7 @@ struct SleepDetailView: View {
         .foregroundStyle(.secondary)
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .groupedBackground()
   }
 
   // MARK: - Empty
@@ -172,6 +173,8 @@ struct SleepDetailView: View {
       systemImage: "moon.fill",
       description: Text("We need more sleep data to show your sleep quality history.")
     )
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .groupedBackground()
   }
 
   // MARK: - Data Loading

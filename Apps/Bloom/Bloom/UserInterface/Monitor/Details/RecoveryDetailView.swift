@@ -161,6 +161,7 @@ struct RecoveryDetailView: View {
         .foregroundStyle(.secondary)
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .groupedBackground()
   }
 
   // MARK: - Empty
@@ -171,6 +172,8 @@ struct RecoveryDetailView: View {
       systemImage: "heart.fill",
       description: Text("We need more health data to show your recovery history.")
     )
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .groupedBackground()
   }
 
   // MARK: - Data Loading

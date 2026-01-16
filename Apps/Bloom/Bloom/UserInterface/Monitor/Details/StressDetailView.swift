@@ -167,6 +167,7 @@ struct StressDetailView: View {
         .foregroundStyle(.secondary)
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .groupedBackground()
   }
 
   // MARK: - Empty
@@ -177,6 +178,8 @@ struct StressDetailView: View {
       systemImage: "flame.fill",
       description: Text("We need more activity data to show your workout load history.")
     )
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .groupedBackground()
   }
 
   // MARK: - Data Loading
