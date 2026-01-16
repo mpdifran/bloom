@@ -106,7 +106,7 @@ actor StressStateCalculator: MonitorStateCalculator {
         date: date,
         zScore: trainingLoadSummary.percentageDifference / 10, // Normalize to z-score-like value
         direction: .higher,
-        description: "Your training load has spiked significantly"
+        description: "Your Training Load Has Spiked Significantly"
       ))
     case .above:
       signals.append(Signal(
@@ -114,7 +114,7 @@ actor StressStateCalculator: MonitorStateCalculator {
         date: date,
         zScore: trainingLoadSummary.percentageDifference / 10,
         direction: .higher,
-        description: "Your training load is above your baseline"
+        description: "Your Training Load Is Above Your Baseline"
       ))
     case .wellBelow:
       signals.append(Signal(
@@ -122,7 +122,7 @@ actor StressStateCalculator: MonitorStateCalculator {
         date: date,
         zScore: abs(trainingLoadSummary.percentageDifference) / 10,
         direction: .lower,
-        description: "Your training load is well below your usual"
+        description: "Your Training Load Is Well Below Your Usual"
       ))
     case .below:
       signals.append(Signal(
@@ -130,7 +130,7 @@ actor StressStateCalculator: MonitorStateCalculator {
         date: date,
         zScore: abs(trainingLoadSummary.percentageDifference) / 10,
         direction: .lower,
-        description: "Your training load is below your usual"
+        description: "Your Training Load Is Below Your Usual"
       ))
     case .steady:
       break // No signal for steady state
@@ -147,7 +147,7 @@ actor StressStateCalculator: MonitorStateCalculator {
           date: date,
           zScore: decline * 10, // Convert to approximate z-score
           direction: .lower,
-          description: "Your HRV has declined significantly over recent days"
+          description: "Your HRV Has Declined Significantly Over Recent Days"
         ))
       } else if decline > 0.05 { // 5-15% decline
         signals.append(Signal(
@@ -155,7 +155,7 @@ actor StressStateCalculator: MonitorStateCalculator {
           date: date,
           zScore: decline * 10,
           direction: .lower,
-          description: "Your HRV is trending downward"
+          description: "Your HRV Is Trending Downward"
         ))
       }
     }
@@ -183,7 +183,7 @@ actor StressStateCalculator: MonitorStateCalculator {
             date: date,
             zScore: decline * 10,
             direction: .lower,
-            description: "HRV trending down for \(hrvTrend.consecutiveDecliningDays) days"
+            description: "HRV Trending Down For \(hrvTrend.consecutiveDecliningDays) Days"
           ))
         }
       }
@@ -344,7 +344,7 @@ actor StressStateCalculator: MonitorStateCalculator {
           date: date,
           zScore: zScore,
           direction: .lower,
-          description: "Sleep efficiency is reduced"
+          description: "Sleep Efficiency Is Reduced"
         ))
       }
     }
@@ -358,7 +358,7 @@ actor StressStateCalculator: MonitorStateCalculator {
         date: date,
         zScore: zScore,
         direction: .lower,
-        description: "Deep sleep is below your usual",
+        description: "Deep Sleep Is Below Your Usual",
         difference: difference
       ))
     }
@@ -372,7 +372,7 @@ actor StressStateCalculator: MonitorStateCalculator {
         date: date,
         zScore: zScore,
         direction: .higher,
-        description: "Resting heart rate is elevated",
+        description: "Resting Heart Rate Is Elevated",
         difference: difference
       ))
     }
@@ -387,7 +387,7 @@ actor StressStateCalculator: MonitorStateCalculator {
         date: date,
         zScore: zScore,
         direction: .lower,
-        description: "Heart rate recovery is below your usual",
+        description: "Heart Rate Recovery Is Below Your Usual",
         difference: difference
       ))
     }
@@ -511,7 +511,7 @@ actor StressStateCalculator: MonitorStateCalculator {
       explanation += " Consider taking a rest day or reducing intensity."
 
       findings.append(Finding(
-        title: "Training load needs attention",
+        title: "Training Load Needs Attention",
         explanation: explanation,
         confidence: hrvTrend.declinePercent != nil ? .high : .medium,
         relatedMetrics: [.activeEnergy] + (hrvTrend.declinePercent != nil ? [.heartRateVariability] : [])
@@ -535,7 +535,7 @@ actor StressStateCalculator: MonitorStateCalculator {
       explanation += " Keep an eye on how you're feeling."
 
       findings.append(Finding(
-        title: "Training load trending high",
+        title: "Training Load Trending High",
         explanation: explanation,
         confidence: relatedMetrics.count > 1 ? .medium : .low,
         relatedMetrics: relatedMetrics
@@ -593,7 +593,7 @@ actor StressStateCalculator: MonitorStateCalculator {
     relatedMetrics.append(contentsOf: burnoutSignals.map { $0.metricType })
 
     findings.append(Finding(
-      title: state == .alert ? "Signs of burnout detected" : "Possible burnout pattern emerging",
+      title: state == .alert ? "Signs Of Burnout Detected" : "Possible Burnout Pattern Emerging",
       explanation: explanation,
       confidence: burnoutSignals.count >= 2 ? .high : .medium,
       relatedMetrics: relatedMetrics
@@ -681,14 +681,14 @@ actor StressStateCalculator: MonitorStateCalculator {
     switch classification {
     case .beginner:
       finding = Finding(
-        title: "Ready to start your fitness journey?",
+        title: "Ready To Start Your Fitness Journey?",
         explanation: "Starting a workout routine can feel overwhelming, but even small steps count. Try beginning with a 10-15 minute walk or a beginner-friendly workout. Your body will thank you!",
         confidence: .medium,
         relatedMetrics: [.activeEnergy]
       )
     case .returning:
       finding = Finding(
-        title: "Time to get back in the game?",
+        title: "Time To Get Back In The Game?",
         explanation: "We noticed you've been less active recently. Life happens! When you're ready, start slow and gradually build back up. Your body remembers more than you think.",
         confidence: .medium,
         relatedMetrics: [.activeEnergy]
@@ -696,7 +696,7 @@ actor StressStateCalculator: MonitorStateCalculator {
     case .active:
       // Should not happen, but handle gracefully
       finding = Finding(
-        title: "Keep up the good work",
+        title: "Keep Up The Good Work",
         explanation: "Your activity levels are looking healthy.",
         confidence: .low,
         relatedMetrics: [.activeEnergy]

@@ -16,6 +16,7 @@ struct MonitorCard: View {
 
   let result: MonitorResult
 
+  @ObservedObject private var preferences = MonitorNotificationPreferences.shared
   @State private var summaryBarData: MonitorSummaryBarData?
 
   /// Whether the card should show expanded content (findings)
@@ -49,6 +50,38 @@ struct MonitorCard: View {
       }
     }
     .cardContainer()
+    .contextMenu {
+      // Only show "Turn On" if currently off or snoozed
+      if !preferences.isEnabled(for: result.monitorType) || preferences.isSnoozed(for: result.monitorType) {
+        Button {
+          preferences.clearSnooze(for: result.monitorType)
+          preferences.setEnabled(true, for: result.monitorType)
+        } label: {
+          Label("Turn On Notifications", systemSymbol: .bell)
+        }
+      }
+
+      // Only show snooze options if enabled and not already snoozed
+      if preferences.isEnabled(for: result.monitorType) && !preferences.isSnoozed(for: result.monitorType) {
+        Divider()
+
+        ForEach(MonitorNotificationPreferences.SnoozeDuration.allCases, id: \.self) { duration in
+          Button {
+            preferences.snooze(result.monitorType, for: duration.timeInterval)
+          } label: {
+            Label("Snooze for \(duration.displayName)", systemSymbol: .moonZzz)
+          }
+        }
+
+        Divider()
+
+        Button {
+          preferences.setEnabled(false, for: result.monitorType)
+        } label: {
+          Label("Turn Off Notifications", systemSymbol: .bellSlash)
+        }
+      }
+    }
     .task {
       await loadSummaryBarData()
     }
@@ -150,15 +183,34 @@ private extension MonitorCard {
           .font(.headline)
           .fontWeight(.semibold)
 
-        Text(subtitleText)
-          .font(.subheadline)
-          .foregroundStyle(.secondary)
+        subtitleView
       }
 
       Spacer()
 
-      MonitorStateBadge(state: result.state)
+      HStack {
+        MonitorStateBadge(state: result.state)
+
+        Image(systemSymbol: .chevronForward)
+          .font(.caption)
+          .foregroundStyle(.secondary)
+      }
     }
+  }
+
+  var subtitleView: some View {
+    HStack(spacing: 4) {
+      Text(subtitleText)
+
+      if preferences.isSnoozed(for: result.monitorType) {
+        Text("•")
+        Image(systemSymbol: .bellSlashFill)
+          .foregroundStyle(.mutedYellow)
+          .font(.caption)
+      }
+    }
+    .font(.subheadline)
+    .foregroundStyle(.secondary)
   }
 
   // MARK: - Signal Summary

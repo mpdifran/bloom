@@ -55,7 +55,7 @@ actor SleepStateCalculator: MonitorStateCalculator {
           date: date,
           zScore: zScore,
           direction: .lower,
-          description: "Your sleep duration is very low",
+          description: "Your Sleep Duration Is Very Low",
           difference: difference
         ))
       } else if zScore < -1.0 {
@@ -64,7 +64,7 @@ actor SleepStateCalculator: MonitorStateCalculator {
           date: date,
           zScore: zScore,
           direction: .lower,
-          description: "You've been getting less sleep than your usual",
+          description: "You've Been Getting Less Sleep Than Your Usual",
           difference: difference
         ))
       }
@@ -81,7 +81,7 @@ actor SleepStateCalculator: MonitorStateCalculator {
           date: date,
           zScore: (0.85 - efficiency) * 10, // Approximate z-score
           direction: .lower,
-          description: "Sleep efficiency is low — you may be waking frequently",
+          description: "Sleep Efficiency Is Low — You May Be Waking Frequently",
           difference: difference
         ))
       } else if efficiency < 0.85 {
@@ -90,7 +90,7 @@ actor SleepStateCalculator: MonitorStateCalculator {
           date: date,
           zScore: (0.85 - efficiency) * 10,
           direction: .lower,
-          description: "Sleep efficiency is below optimal",
+          description: "Sleep Efficiency Is Below Optimal",
           difference: difference
         ))
       }
@@ -106,7 +106,7 @@ actor SleepStateCalculator: MonitorStateCalculator {
           date: date,
           zScore: variabilityMinutes / 30, // Approximate z-score
           direction: .variable,
-          description: "Your sleep schedule has been highly variable",
+          description: "Your Sleep Schedule Has Been Highly Variable",
           difference: variabilityMinutes
         ))
       } else if variabilityMinutes > 60 {
@@ -115,7 +115,7 @@ actor SleepStateCalculator: MonitorStateCalculator {
           date: date,
           zScore: variabilityMinutes / 30,
           direction: .variable,
-          description: "Your bedtime has been inconsistent",
+          description: "Your Bedtime Has Been Inconsistent",
           difference: variabilityMinutes
         ))
       }
@@ -130,7 +130,7 @@ actor SleepStateCalculator: MonitorStateCalculator {
           date: date,
           zScore: variabilityMinutes / 30,
           direction: .variable,
-          description: "Your wake time has been highly variable",
+          description: "Your Wake Time Has Been Highly Variable",
           difference: variabilityMinutes
         ))
       } else if variabilityMinutes > 60 {
@@ -139,7 +139,7 @@ actor SleepStateCalculator: MonitorStateCalculator {
           date: date,
           zScore: variabilityMinutes / 30,
           direction: .variable,
-          description: "Your wake time has been inconsistent",
+          description: "Your Wake Time Has Been Inconsistent",
           difference: variabilityMinutes
         ))
       }
@@ -279,10 +279,10 @@ actor SleepStateCalculator: MonitorStateCalculator {
 
     // Variability finding
     if let variabilityMinutes = variability, variabilityMinutes > 60 {
-      let variabilityDescription = variabilityMinutes > 90 ? "highly variable" : "inconsistent"
+      let variabilityDescription = variabilityMinutes > 90 ? "Highly Variable" : "Inconsistent"
 
       findings.append(Finding(
-        title: "Your sleep schedule has been \(variabilityDescription)",
+        title: "Your Sleep Schedule Has Been \(variabilityDescription)",
         explanation: "Your bedtime has varied by about \(Int(variabilityMinutes)) minutes over the past week. A more consistent schedule can improve sleep quality.",
         confidence: variabilityMinutes > 90 ? .high : .medium,
         relatedMetrics: [.bedtime, .wakeTime]

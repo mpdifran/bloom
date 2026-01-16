@@ -58,7 +58,7 @@ actor RecoveryStateCalculator: MonitorStateCalculator {
         date: date,
         zScore: zScore,
         direction: .higher,
-        description: "Your resting heart rate is higher than usual",
+        description: "Your Resting Heart Rate Is Higher Than Usual",
         difference: difference
       ))
     }
@@ -72,7 +72,7 @@ actor RecoveryStateCalculator: MonitorStateCalculator {
         date: date,
         zScore: zScore,
         direction: .lower,
-        description: "Your heart rate variability is lower than usual",
+        description: "Your Heart Rate Variability Is Lower Than Usual",
         difference: difference
       ))
     }
@@ -86,7 +86,7 @@ actor RecoveryStateCalculator: MonitorStateCalculator {
         date: date,
         zScore: zScore,
         direction: .higher,
-        description: "Elevated wrist temperature during sleep",
+        description: "Elevated Wrist Temperature During Sleep",
         difference: difference
       ))
     }
@@ -100,7 +100,7 @@ actor RecoveryStateCalculator: MonitorStateCalculator {
         date: date,
         zScore: zScore,
         direction: .higher,
-        description: "Your respiratory rate is higher than usual",
+        description: "Your Respiratory Rate Is Higher Than Usual",
         difference: difference
       ))
     }
@@ -226,7 +226,7 @@ actor RecoveryStateCalculator: MonitorStateCalculator {
       let descriptions = elevatedSignals.map { $0.description }.joined(separator: ". ")
 
       findings.append(Finding(
-        title: state == .alert ? "Your body may be fighting something" : "Some recovery metrics are off",
+        title: state == .alert ? "Your Body May Be Fighting Something" : "Some Recovery Metrics Are Off",
         explanation: "\(descriptions). This pattern has been present for multiple days. Consider taking it easy and getting extra rest.",
         confidence: .high,
         relatedMetrics: metrics

@@ -16,15 +16,15 @@ struct MonitorStateBadge: View {
         .fill(textColor)
         .frame(square: 10)
       Text(state.displayName)
+        .foregroundStyle(.text)
     }
     .font(.caption2)
     .fontWeight(.medium)
     .fontDesign(.rounded)
-    .foregroundStyle(textColor)
     .padding(.leading, 6)
     .padding(.trailing, 10)
     .padding(.vertical, 5)
-    .background(textColor.secondary, in: Capsule())
+    .background(textColor.tertiary, in: Capsule())
   }
 
   private var textColor: Color {
@@ -38,7 +38,7 @@ struct MonitorStateBadge: View {
     case .unavailable:
       return .gray
     case .encourage:
-      return .mutedBlue
+      return .mutedOrange
     }
   }
 }
