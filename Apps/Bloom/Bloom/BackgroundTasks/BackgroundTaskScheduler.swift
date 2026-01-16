@@ -47,12 +47,11 @@ extension BackgroundTaskScheduler {
 
 extension BackgroundTaskScheduler {
 
-  /// Schedules the monitor daily aggregation task to run overnight.
-  /// Uses BGProcessingTask for longer processing time, requires device to be charging.
+  /// Schedules the monitor aggregation task to run every 12 hours.
+  /// Uses BGProcessingTask for longer processing time.
   func scheduleMonitorAggregationTask() {
     let request = BGProcessingTaskRequest(identifier: "monitor-daily-aggregation")
-    // Schedule for overnight (around 2 AM), requires charging for battery efficiency
-    request.requiresExternalPower = true
+    request.requiresExternalPower = false
     request.requiresNetworkConnectivity = false
     request.earliestBeginDate = nextMonitorAggregationTime()
 
@@ -99,21 +98,8 @@ extension BackgroundTaskScheduler {
     scheduleMonitorAggregationTask()
   }
 
-  /// Calculates the next time to run the monitor aggregation (2 AM local time).
+  /// Calculates the next time to run the monitor aggregation (12 hours from now).
   private func nextMonitorAggregationTime() -> Date {
-    let calendar = Calendar.current
-    var components = calendar.dateComponents([.year, .month, .day], from: Date())
-    components.hour = 2
-    components.minute = 0
-    components.second = 0
-
-    var scheduledDate = calendar.date(from: components) ?? Date()
-
-    // If 2 AM today has already passed, schedule for tomorrow
-    if scheduledDate <= Date() {
-      scheduledDate = calendar.date(byAdding: .day, value: 1, to: scheduledDate) ?? Date()
-    }
-
-    return scheduledDate
+    Calendar.current.date(byAdding: .hour, value: 12, to: Date()) ?? Date()
   }
 }
