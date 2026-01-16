@@ -129,17 +129,17 @@ public extension MonitorNotificationPreferences {
   /// Common snooze durations
   enum SnoozeDuration: CaseIterable {
     case oneDay
-    case threeDays
     case oneWeek
+    case oneMonth
 
     public var timeInterval: TimeInterval {
       switch self {
       case .oneDay:
-        return 24 * 60 * 60 // 86400 seconds
-      case .threeDays:
-        return 3 * 24 * 60 * 60
+        return 24 * 60 * 60
       case .oneWeek:
         return 7 * 24 * 60 * 60
+      case .oneMonth:
+        return 30 * 24 * 60 * 60
       }
     }
 
@@ -147,10 +147,10 @@ public extension MonitorNotificationPreferences {
       switch self {
       case .oneDay:
         return "1 Day"
-      case .threeDays:
-        return "3 Days"
       case .oneWeek:
         return "1 Week"
+      case .oneMonth:
+        return "1 Month"
       }
     }
   }

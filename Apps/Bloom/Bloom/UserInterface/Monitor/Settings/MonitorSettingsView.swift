@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AppUI
 import SFSafeSymbols
 
 /// Settings view for Monitor tab preferences, following the You/Today pattern.
@@ -13,8 +14,6 @@ import SFSafeSymbols
 struct MonitorSettingsView: View {
 
   @ObservedObject private var preferences = MonitorNotificationPreferences.shared
-
-  @State private var showingSnoozeOptions: MonitorType?
 
   var body: some View {
     NavigationStack {
@@ -30,26 +29,6 @@ struct MonitorSettingsView: View {
         }
       }
     }
-    .confirmationDialog(
-      "Snooze Notifications",
-      isPresented: Binding(
-        get: { showingSnoozeOptions != nil },
-        set: { if !$0 { showingSnoozeOptions = nil } }
-      ),
-      titleVisibility: .visible
-    ) {
-      if let monitorType = showingSnoozeOptions {
-        ForEach(MonitorNotificationPreferences.SnoozeDuration.allCases, id: \.self) { duration in
-          Button(duration.displayName) {
-            preferences.snooze(monitorType, for: duration.timeInterval)
-            showingSnoozeOptions = nil
-          }
-        }
-        Button("Cancel", role: .cancel) {
-          showingSnoozeOptions = nil
-        }
-      }
-    }
   }
 
   // MARK: - Notification Section
@@ -59,30 +38,33 @@ struct MonitorSettingsView: View {
       SectionTitleView("Notifications")
         .padding(.horizontal)
 
-      VStack(spacing: 0) {
-        ForEach(Array(MonitorType.allCases.enumerated()), id: \.element) { index, monitorType in
-          if index > 0 {
-            Divider()
-              .padding(.leading, 56)
-          }
-          monitorNotificationRow(for: monitorType)
+      VStack(spacing: 8) {
+        ForEach(MonitorType.allCases, id: \.self) { monitorType in
+          monitorRow(for: monitorType)
+            .cardContainer()
         }
       }
-      .cardContainer()
 
-      Text("Get notified when a monitor needs your attention. Notifications are only sent when there's a change in your health status.")
+      Text("Get notified when a monitor needs your attention. Notifications are only sent when a monitor changes to attention or alert.")
         .font(.caption)
         .foregroundStyle(.secondary)
+        .horizontalAlignment(.leading)
         .padding(.horizontal)
         .padding(.top, 4)
     }
   }
 
-  private func monitorNotificationRow(for monitorType: MonitorType) -> some View {
-    HStack(spacing: 12) {
+  // MARK: - Monitor Row
+
+  private func monitorRow(for monitorType: MonitorType) -> some View {
+    let isActive = preferences.isEnabled(for: monitorType) || preferences.isSnoozed(for: monitorType)
+
+    return HStack(spacing: 12) {
       Image(systemSymbol: monitorIcon(for: monitorType))
         .font(.title3)
         .foregroundStyle(monitorColor(for: monitorType))
+        .saturation(isActive ? 1 : 0)
+        .animation(.easeInOut(duration: 0.2), value: isActive)
         .frame(width: 32)
 
       VStack(alignment: .leading, spacing: 2) {
@@ -90,60 +72,89 @@ struct MonitorSettingsView: View {
           .font(.body)
           .fontWeight(.medium)
 
-        if preferences.isSnoozed(for: monitorType) {
-          if let snoozedUntil = preferences.snoozedUntil(for: monitorType) {
-            Text("Snoozed until \(snoozedUntil, style: .date)")
-              .font(.caption)
-              .foregroundStyle(.orange)
-          }
-        } else if !preferences.isEnabled(for: monitorType) {
-          Text("Notifications off")
-            .font(.caption)
-            .foregroundStyle(.secondary)
-        }
+        statusSubtitle(for: monitorType)
       }
 
       Spacer()
 
-      if preferences.isSnoozed(for: monitorType) {
-        Button("Unsnooze") {
-          preferences.clearSnooze(for: monitorType)
-        }
+      statusMenu(for: monitorType)
+    }
+  }
+
+  @ViewBuilder
+  private func statusSubtitle(for monitorType: MonitorType) -> some View {
+    if preferences.isSnoozed(for: monitorType),
+       let snoozedUntil = preferences.snoozedUntil(for: monitorType) {
+      Text(daysRemainingText(until: snoozedUntil))
         .font(.caption)
         .foregroundStyle(.orange)
-        .buttonStyle(.plain)
-      } else {
-        Menu {
-          Button {
-            preferences.setEnabled(!preferences.isEnabled(for: monitorType), for: monitorType)
-          } label: {
-            if preferences.isEnabled(for: monitorType) {
-              Label("Turn Off", systemSymbol: .bellSlash)
-            } else {
-              Label("Turn On", systemSymbol: .bell)
-            }
-          }
-
-          if preferences.isEnabled(for: monitorType) {
-            Divider()
-            Button {
-              showingSnoozeOptions = monitorType
-            } label: {
-              Label("Snooze...", systemSymbol: .moonZzz)
-            }
-          }
-        } label: {
-          Toggle("", isOn: Binding(
-            get: { preferences.isEnabled(for: monitorType) },
-            set: { preferences.setEnabled($0, for: monitorType) }
-          ))
-          .labelsHidden()
-        }
-        .menuStyle(.borderlessButton)
-      }
+    } else if !preferences.isEnabled(for: monitorType) {
+      Text("Disabled")
+        .font(.caption)
+        .foregroundStyle(.secondary)
+    } else {
+      EmptyView()
     }
-    .padding(.vertical, 12)
-    .padding(.horizontal, 16)
+  }
+
+  private func daysRemainingText(until date: Date) -> String {
+    let calendar = Calendar.current
+    let components = calendar.dateComponents([.day], from: Date(), to: date)
+    let days = max(0, components.day ?? 0)
+
+    if days == 0 {
+      return "Less than 1 day remaining"
+    } else if days == 1 {
+      return "1 day remaining"
+    } else {
+      return "\(days) days remaining"
+    }
+  }
+
+  private func statusMenu(for monitorType: MonitorType) -> some View {
+    Menu {
+      Button {
+        preferences.clearSnooze(for: monitorType)
+        preferences.setEnabled(true, for: monitorType)
+      } label: {
+        Label("Turn On", systemSymbol: .bell)
+      }
+
+      Divider()
+
+      ForEach(MonitorNotificationPreferences.SnoozeDuration.allCases, id: \.self) { duration in
+        Button {
+          preferences.snooze(monitorType, for: duration.timeInterval)
+        } label: {
+          Label("Snooze for \(duration.displayName)", systemSymbol: .moonZzz)
+        }
+      }
+
+      Divider()
+
+      Button {
+        preferences.clearSnooze(for: monitorType)
+        preferences.setEnabled(false, for: monitorType)
+      } label: {
+        Label("Turn Off", systemSymbol: .bellSlash)
+      }
+    } label: {
+      HStack(spacing: 4) {
+        Text(statusLabel(for: monitorType))
+        Image(systemSymbol: .chevronUpChevronDown)
+      }
+      .font(.subheadline)
+    }
+  }
+
+  private func statusLabel(for monitorType: MonitorType) -> String {
+    if preferences.isSnoozed(for: monitorType) {
+      return "Snoozed"
+    } else if preferences.isEnabled(for: monitorType) {
+      return "On"
+    } else {
+      return "Off"
+    }
   }
 
   // MARK: - Helpers

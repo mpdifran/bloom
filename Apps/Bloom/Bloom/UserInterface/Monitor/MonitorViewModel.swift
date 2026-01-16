@@ -82,24 +82,4 @@ final class MonitorViewModel {
   func result(for monitorType: MonitorType) -> MonitorResult? {
     results.first { $0.monitorType == monitorType }
   }
-
-  /// Overall status text for display
-  var statusSummary: String {
-    guard hasLoaded else { return "Loading..." }
-
-    let attentionCount = monitorsNeedingAttention.count
-    let encourageCount = monitorsWithEncouragement.count
-
-    if attentionCount > 0 {
-      if attentionCount == 1 {
-        return "1 monitor needs attention"
-      } else {
-        return "\(attentionCount) monitors need attention"
-      }
-    } else if encourageCount > 0 {
-      return "Ready to get moving?"
-    } else {
-      return "All systems healthy"
-    }
-  }
 }

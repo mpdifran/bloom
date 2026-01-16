@@ -38,9 +38,7 @@ struct MonitorView: View {
           }
           .buttonStyle(.plain)
         }
-        ToolbarItem(placement: .primaryAction) {
-          refreshButton
-        }
+        SettingsProfileViewToolbarButton()
       }
       .navigationDestination($presentedNavigationDestination)
       .sheet($presentedSheet)
@@ -55,9 +53,6 @@ struct MonitorView: View {
       // Then refresh with fresh data
       await viewModel.refresh()
     }
-    .refreshable {
-      await viewModel.refresh()
-    }
     .onAppear {
       TelemetryDeck.signal("View Monitor Tab")
     }
@@ -67,19 +62,44 @@ struct MonitorView: View {
 
   private var contentView: some View {
     BloomScrollView(spacing: 16) {
-      statusHeader
+      // Section 1: Monitors needing attention
+      if !viewModel.monitorsNeedingAttention.isEmpty {
+        VStack(alignment: .leading, spacing: 12) {
+          Text("Needs Attention")
+            .font(.headline)
+            .padding(.horizontal)
 
-      // Show AI summary when monitors need attention
-      if let summary = viewModel.aiSummary, !viewModel.monitorsNeedingAttention.isEmpty {
-        MonitorSummaryView(summary: summary)
+          ForEach(viewModel.monitorsNeedingAttention) { result in
+            MonitorCard(result: result)
+              .onTapGesture {
+                navigateToDetails(for: result.monitorType)
+              }
+          }
+        }
+
+        // AI summary after concerning monitors
+        if let summary = viewModel.aiSummary {
+          MonitorSummaryView(summary: summary)
+        }
       }
 
-      ForEach(MonitorType.allCases, id: \.self) { monitorType in
-        if let result = viewModel.result(for: monitorType) {
-          MonitorCard(result: result)
-            .onTapGesture {
-              navigateToDetails(for: monitorType)
-            }
+      // Section 2: Other monitors (good, encourage, unavailable)
+      let otherMonitors = viewModel.results.filter { !$0.state.isConcerning }
+      if !otherMonitors.isEmpty {
+        VStack(alignment: .leading, spacing: 12) {
+          // Only show header if there's also a "Needs Attention" section
+          if !viewModel.monitorsNeedingAttention.isEmpty {
+            Text("Other Monitors")
+              .font(.headline)
+              .padding(.horizontal)
+          }
+
+          ForEach(otherMonitors) { result in
+            MonitorCard(result: result)
+              .onTapGesture {
+                navigateToDetails(for: result.monitorType)
+              }
+          }
         }
       }
 
@@ -94,27 +114,6 @@ struct MonitorView: View {
         .padding(.top, 8)
       }
     }
-  }
-
-  private var statusHeader: some View {
-    VStack(spacing: 8) {
-      Image(systemSymbol: statusIcon)
-        .font(.system(size: 48))
-        .foregroundStyle(statusColor)
-
-      Text(viewModel.statusSummary)
-        .font(.headline)
-        .multilineTextAlignment(.center)
-
-      if let error = viewModel.error {
-        Text(error.localizedDescription)
-          .font(.caption)
-          .foregroundStyle(.red)
-          .multilineTextAlignment(.center)
-      }
-    }
-    .frame(maxWidth: .infinity)
-    .padding(.vertical, 24)
   }
 
   // MARK: - Loading View
@@ -162,23 +161,6 @@ struct MonitorView: View {
     .frame(maxWidth: .infinity, maxHeight: .infinity)
   }
 
-  // MARK: - Toolbar
-
-  private var refreshButton: some View {
-    Button {
-      Task {
-        await viewModel.refresh()
-      }
-    } label: {
-      if viewModel.isLoading {
-        ProgressView()
-      } else {
-        Image(systemSymbol: .arrowClockwise)
-      }
-    }
-    .disabled(viewModel.isLoading)
-  }
-
   // MARK: - Navigation
 
   private func navigateToDetails(for monitorType: MonitorType) {
@@ -192,31 +174,6 @@ struct MonitorView: View {
     }
   }
 
-  // MARK: - Status Helpers
-
-  private var statusIcon: SFSymbol {
-    if viewModel.monitorsNeedingAttention.contains(where: { $0.state == .alert }) {
-      return .exclamationmarkTriangleFill
-    } else if viewModel.monitorsNeedingAttention.contains(where: { $0.state == .attention }) {
-      return .exclamationmarkCircleFill
-    } else if !viewModel.monitorsWithEncouragement.isEmpty {
-      return .figureMixedCardio
-    } else {
-      return .checkmarkCircleFill
-    }
-  }
-
-  private var statusColor: Color {
-    if viewModel.monitorsNeedingAttention.contains(where: { $0.state == .alert }) {
-      return .red
-    } else if viewModel.monitorsNeedingAttention.contains(where: { $0.state == .attention }) {
-      return .orange
-    } else if !viewModel.monitorsWithEncouragement.isEmpty {
-      return .blue
-    } else {
-      return .green
-    }
-  }
 }
 
 // MARK: - Preview

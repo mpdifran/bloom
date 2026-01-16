@@ -77,14 +77,8 @@ struct StressDetailView: View {
 
       metricRangesSection
 
-      if let result = currentResult {
-        if !result.signals.isEmpty {
-          signalsSection(result: result)
-        }
-
-        if !result.findings.isEmpty {
-          findingsSection(result: result)
-        }
+      if let result = currentResult, !result.findings.isEmpty {
+        findingsSection(result: result)
       }
 
       infoCard
@@ -122,23 +116,6 @@ struct StressDetailView: View {
               Divider()
             }
           }
-        }
-      }
-      .cardContainer()
-    }
-  }
-
-  // MARK: - Signals
-
-  private func signalsSection(result: MonitorResult) -> some View {
-    VStack(alignment: .leading, spacing: 12) {
-      Text("Current Signals")
-        .font(.headline)
-        .padding(.horizontal)
-
-      VStack(spacing: 8) {
-        ForEach(result.signals) { signal in
-          MetricSignalRow(signal: signal)
         }
       }
       .cardContainer()
