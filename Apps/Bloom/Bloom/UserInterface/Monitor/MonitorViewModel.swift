@@ -27,6 +27,10 @@ final class MonitorViewModel {
   /// Whether we've completed at least one load
   var hasLoaded = false
 
+  /// Tracks the monitor states that were present when user last viewed the tab.
+  /// Used to determine if there are "unseen" alerts that should show a badge.
+  private var seenMonitorStates: [MonitorType: MonitorStateValue] = [:]
+
   private init() { }
 
   // MARK: - Public Methods
@@ -77,15 +81,27 @@ final class MonitorViewModel {
 
   /// Updates badge count on tab and app icon based on current results
   func updateBadges() {
-    let count = MonitorNotificationPreferences.shared.badgesEnabled ? monitorsNeedingAttention.count : 0
-    UIApplication.shared.applicationIconBadgeNumber = count
+    UIApplication.shared.applicationIconBadgeNumber = badgeCount
+  }
+
+  /// Call when user views the Monitor tab to mark current alerts as "seen"
+  func markAlertsAsSeen() {
+    for result in results {
+      seenMonitorStates[result.monitorType] = result.state
+    }
+    updateBadges()
   }
 
   // MARK: - Computed Properties
 
-  /// Badge count for tab and app icon (respects user preference)
+  /// Badge count for tab and app icon - only counts unseen concerning states
   var badgeCount: Int {
-    MonitorNotificationPreferences.shared.badgesEnabled ? monitorsNeedingAttention.count : 0
+    guard MonitorNotificationPreferences.shared.badgesEnabled else { return 0 }
+    return results.filter { result in
+      guard result.state.isConcerning else { return false }
+      // Only count if user hasn't seen this exact state
+      return seenMonitorStates[result.monitorType] != result.state
+    }.count
   }
 
   /// Whether all monitors are in "Good" state

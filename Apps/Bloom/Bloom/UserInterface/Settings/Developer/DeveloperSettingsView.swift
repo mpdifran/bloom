@@ -338,6 +338,36 @@ extension DeveloperSettingsView {
 
         Divider()
 
+        Menu {
+          ForEach(MonitorType.allCases, id: \.self) { monitorType in
+            Menu(monitorType.displayName) {
+              Button("Attention") {
+                Task {
+                  await MonitorNotificationScheduler.shared.sendTestNotification(
+                    for: monitorType,
+                    state: .attention
+                  )
+                }
+              }
+
+              Button("Alert") {
+                Task {
+                  await MonitorNotificationScheduler.shared.sendTestNotification(
+                    for: monitorType,
+                    state: .alert
+                  )
+                }
+              }
+            }
+          }
+        } label: {
+          SettingsCell("Test Monitor Notifications") {
+            Image(systemSymbol: .heartTextSquare)
+          }
+        }
+
+        Divider()
+
         AsyncButton {
           do {
             try await NetworkRequester.shared.testPushNotification()

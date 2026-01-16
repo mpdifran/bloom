@@ -17,6 +17,13 @@ public actor MonitorNotificationScheduler {
 
   private let notificationCenter = UNUserNotificationCenter.current()
 
+  // UserDefaults keys for persisting last notified state
+  private enum UserDefaultsKey {
+    static let lastNotifiedRecoveryState = "monitor.lastNotified.recovery"
+    static let lastNotifiedStressState = "monitor.lastNotified.stress"
+    static let lastNotifiedSleepState = "monitor.lastNotified.sleep"
+  }
+
   private init() {}
 
   // MARK: - Public API
@@ -24,7 +31,7 @@ public actor MonitorNotificationScheduler {
   /// Checks if a notification should be sent for a state change and schedules it if needed.
   /// - Parameters:
   ///   - result: The current monitor result
-  ///   - previousState: The previous state for this monitor (nil if first calculation)
+  ///   - previousState: The previous state for this monitor (unused, kept for API compatibility)
   public func scheduleNotificationIfNeeded(
     result: MonitorResult,
     previousState: MonitorStateValue?
@@ -32,8 +39,11 @@ public actor MonitorNotificationScheduler {
     // Only notify on concerning states (Attention or Alert)
     guard result.state.isConcerning else { return }
 
-    // Only notify on state *changes* - don't re-notify if state is the same
-    if let previous = previousState, previous == result.state {
+    // Use persisted last notified state (survives app restarts)
+    let lastNotified = getLastNotifiedState(for: result.monitorType)
+
+    // Don't re-notify if we already notified for this exact state
+    if let lastNotified, lastNotified == result.state {
       return
     }
 
@@ -44,6 +54,9 @@ public actor MonitorNotificationScheduler {
 
     // Schedule the notification
     await scheduleNotification(for: result)
+
+    // Persist that we notified for this state
+    setLastNotifiedState(result.state, for: result.monitorType)
   }
 
   /// Sends a test notification immediately (for developer settings).
@@ -159,5 +172,32 @@ public actor MonitorNotificationScheduler {
     default:
       return "monitor-\(monitorType.rawValue)-\(state.rawValue)"
     }
+  }
+
+  // MARK: - State Persistence
+
+  /// Gets the last state we sent a notification for (persisted to UserDefaults).
+  private nonisolated func getLastNotifiedState(for monitorType: MonitorType) -> MonitorStateValue? {
+    let key: String
+    switch monitorType {
+    case .recovery: key = UserDefaultsKey.lastNotifiedRecoveryState
+    case .stress: key = UserDefaultsKey.lastNotifiedStressState
+    case .sleep: key = UserDefaultsKey.lastNotifiedSleepState
+    }
+
+    guard let rawValue = UserDefaults.standard.string(forKey: key) else { return nil }
+    return MonitorStateValue(rawValue: rawValue)
+  }
+
+  /// Persists the state we just sent a notification for.
+  private nonisolated func setLastNotifiedState(_ state: MonitorStateValue, for monitorType: MonitorType) {
+    let key: String
+    switch monitorType {
+    case .recovery: key = UserDefaultsKey.lastNotifiedRecoveryState
+    case .stress: key = UserDefaultsKey.lastNotifiedStressState
+    case .sleep: key = UserDefaultsKey.lastNotifiedSleepState
+    }
+
+    UserDefaults.standard.set(state.rawValue, forKey: key)
   }
 }

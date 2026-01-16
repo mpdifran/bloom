@@ -16,6 +16,8 @@ struct MonitorView: View {
   @State private var presentedNavigationDestination: AnyView?
   @State private var presentedSheet: AnyView?
 
+  @Environment(TabController.self) private var tabController
+
   var body: some View {
     NavigationStack {
       Group {
@@ -49,12 +51,30 @@ struct MonitorView: View {
     .task {
       // Load cached data first for instant display
       await viewModel.loadCached()
+      viewModel.markAlertsAsSeen()
 
       // Then refresh with fresh data
       await viewModel.refresh()
+      viewModel.markAlertsAsSeen()
     }
     .onAppear {
       TelemetryDeck.signal("View Monitor Tab")
+    }
+    .onChange(of: tabController.activeTab) { _, newTab in
+      if newTab == .monitor {
+        viewModel.markAlertsAsSeen()
+      }
+    }
+    .onForeground {
+      if tabController.activeTab == .monitor {
+        viewModel.markAlertsAsSeen()
+      }
+    }
+    .onChange(of: tabController.pendingMonitorNavigation) { _, newValue in
+      if let monitorType = newValue {
+        navigateToDetails(for: monitorType)
+        tabController.pendingMonitorNavigation = nil
+      }
     }
   }
 

@@ -77,15 +77,14 @@ final class TabController {
   var pendingFoodItemNavigation: String?
   var pendingSavedMealNavigation: String?
   var pendingYearInBloomNavigation: Int?
+  var pendingMonitorNavigation: MonitorType?
 
   private var notificationCenterDelegate: NotificationCenterDelegate!
 
   init() {
     self.notificationCenterDelegate = NotificationCenterDelegate { [weak self] response in
-      Task {
-        await MainActor.run {
-          self?.handle(response: response)
-        }
+      Task { @MainActor in
+        self?.handle(response: response)
       }
     }
   }
@@ -121,6 +120,13 @@ private extension TabController {
         } catch {
           print("TabController: Failed to show manage subscriptions: \(error)")
         }
+      }
+    case .CategoryID.monitorAlert:
+      dismiss()
+      select(.monitor)
+      if let monitorTypeRaw = response.notification.request.content.userInfo["monitorType"] as? String,
+         let monitorType = MonitorType(rawValue: monitorTypeRaw) {
+        pendingMonitorNavigation = monitorType
       }
     default:
       break
