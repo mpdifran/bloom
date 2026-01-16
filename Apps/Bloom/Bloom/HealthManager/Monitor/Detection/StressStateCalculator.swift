@@ -80,8 +80,9 @@ actor StressStateCalculator: MonitorStateCalculator {
     samples: [DailyMetricSampleDTO],
     previousResults: [MonitorResult]
   ) async -> MonitorResult {
-    // Fetch TrainingLoadSummary which uses actual workout data (Apple's Workout Effort Scores)
-    let trainingLoadSummary = await HealthStoreFetcher.shared.fetchTrainingLoadSummary()
+    // Use TrainingLoadCalculator for consistency with TrainingLoadChartView and MonitorStateChart
+    await TrainingLoadCalculator.shared.refreshTrainingLoad()
+    let trainingLoadSummary = await TrainingLoadCalculator.shared.trainingLoadSummary
 
     // If no training load data, show encourage state
     guard let trainingLoadSummary else {

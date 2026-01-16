@@ -144,8 +144,12 @@ public enum MonitorMetricType: String, CaseIterable, Sendable, Codable {
       return .recovery
     case .heartRateRecovery:
       return .stress
-    case .sleepDuration, .deepSleep, .remSleep, .sleepEfficiency, .bedtime, .wakeTime:
+    case .sleepDuration, .sleepEfficiency, .bedtime, .wakeTime:
       return .sleep
+    case .deepSleep, .remSleep:
+      // Removed from sleep monitor due to noisy/unreliable data
+      // Deep sleep still used in stress monitor for burnout detection
+      return nil
     case .activeEnergy:
       // Training load is computed from workouts via TrainingLoadSummary, not active energy samples
       return nil
@@ -387,6 +391,26 @@ public enum MonitorType: String, CaseIterable, Sendable, Codable {
   /// The metrics used by this monitor
   public var metrics: [MonitorMetricType] {
     MonitorMetricType.allCases.filter { $0.monitor == .some(self) }
+  }
+
+  /// Metrics used for state detection (may include metrics from other monitors).
+  /// Use this for displaying all relevant metrics in detail views.
+  public var detectionMetrics: [MonitorMetricType] {
+    switch self {
+    case .recovery:
+      return metrics
+    case .stress:
+      // Includes burnout detection metrics from other monitors
+      return [
+        .heartRateRecovery,      // Owned - low recovery indicates overtraining
+        .heartRateVariability,   // From recovery - HRV trend analysis
+        .sleepEfficiency,        // From sleep - burnout signal
+        .deepSleep,              // From sleep - burnout signal
+        .restingHeartRate        // From recovery - elevated RHR signal
+      ]
+    case .sleep:
+      return metrics
+    }
   }
 
   /// The required metrics for this monitor to function

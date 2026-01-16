@@ -206,7 +206,7 @@ struct StressDetailView: View {
   private func loadAllData() async {
     isLoading = true
 
-    let metrics: [(type: String, displayName: String)] = MonitorType.stress.metrics.map {
+    let metrics: [(type: String, displayName: String)] = MonitorType.stress.detectionMetrics.map {
       ($0.rawValue, $0.displayName)
     }
 

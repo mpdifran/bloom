@@ -57,34 +57,66 @@ struct MonitorStateChart: View {
   }
 
   private func loadStressData() async {
-    guard let summary = await HealthStoreFetcher.shared.fetchTrainingLoadSummary() else {
-      dayRanges = []
+    let calendar = Calendar.current
+
+    // 1. Load burnout metrics from DailyMetricSample (HRV, sleep efficiency, etc.)
+    let actor = DailyMetricSampleModelActor.standard()
+    let metricTypes = MonitorType.stress.detectionMetrics.map { $0.rawValue }
+    let metricRanges = (try? await actor.fetchDailyZScoreRanges(metricTypes: metricTypes, days: days)) ?? []
+
+    // 2. Load training load z-scores
+    await TrainingLoadCalculator.shared.refreshTrainingLoad()
+    guard let summary = await TrainingLoadCalculator.shared.trainingLoadSummary else {
+      // No training load - just use metric ranges
+      dayRanges = metricRanges
       return
     }
 
-    let calendar = Calendar.current
-    var ranges: [DayZScoreRange] = []
-
-    let trendCount = min(summary.sevenDayTrend.count, summary.twentyEightDayTrend.count)
+    // 3. Calculate training load z-scores per day
+    var trainingLoadByDate: [Date: Double] = [:]
+    let trendCount = summary.sevenDayTrend.count
     let startIndex = max(0, trendCount - days)
 
     for index in startIndex..<trendCount {
       let sevenDayPoint = summary.sevenDayTrend[index]
-      let twentyEightDayValue = summary.twentyEightDayTrend[index].value
+      let twentyEightDayValue = index < summary.twentyEightDayTrend.count
+        ? summary.twentyEightDayTrend[index].value
+        : 0
 
-      guard twentyEightDayValue > 0 else { continue }
+      let zScore: Double
+      if twentyEightDayValue > 0 {
+        let percentDiff = ((sevenDayPoint.value - twentyEightDayValue) / twentyEightDayValue) * 100
+        zScore = percentDiff / 10.0
+      } else {
+        zScore = 0
+      }
 
-      let percentDiff = ((sevenDayPoint.value - twentyEightDayValue) / twentyEightDayValue) * 100
-      let zScore = percentDiff / 10.0
-
-      ranges.append(DayZScoreRange(
-        date: calendar.startOfDay(for: sevenDayPoint.date),
-        minZScore: zScore,
-        maxZScore: zScore
-      ))
+      let dayStart = calendar.startOfDay(for: sevenDayPoint.date)
+      trainingLoadByDate[dayStart] = zScore
     }
 
-    dayRanges = ranges.sorted { $0.date < $1.date }
+    // 4. Merge training load with metric ranges
+    var mergedRanges: [Date: (min: Double, max: Double)] = [:]
+
+    // Add metric ranges
+    for range in metricRanges {
+      let dayStart = calendar.startOfDay(for: range.date)
+      mergedRanges[dayStart] = (range.minZScore, range.maxZScore)
+    }
+
+    // Merge in training load z-scores
+    for (date, zScore) in trainingLoadByDate {
+      if let existing = mergedRanges[date] {
+        mergedRanges[date] = (min(existing.min, zScore), max(existing.max, zScore))
+      } else {
+        mergedRanges[date] = (zScore, zScore)
+      }
+    }
+
+    // 5. Convert to DayZScoreRange array
+    dayRanges = mergedRanges.map { date, range in
+      DayZScoreRange(date: date, minZScore: range.min, maxZScore: range.max)
+    }.sorted { $0.date < $1.date }
   }
 
   // MARK: - Chart
@@ -99,19 +131,16 @@ struct MonitorStateChart: View {
   }
 
   private var chart: some View {
-    Chart {
-      ForEach(dayRanges) { range in
-        let clampedMin = max(-displayRange, min(displayRange, range.minZScore))
-        let clampedMax = max(-displayRange, min(displayRange, range.maxZScore))
-        BarMark(
-          x: .value("Date", range.date, unit: .day),
-          yStart: .value("Min", clampedMin),
-          yEnd: .value("Max", clampedMax),
-          width: barWidth
-        )
-        .foregroundStyle(gradientForRange(min: range.minZScore, max: range.maxZScore))
-        .clipShape(Capsule())
-      }
+    Chart(dayRanges) { range in
+      let (adjustedMin, adjustedMax) = adjustedRange(for: range)
+      BarMark(
+        x: .value("Date", range.date, unit: .day),
+        yStart: .value("Min", adjustedMin),
+        yEnd: .value("Max", adjustedMax),
+        width: barWidth
+      )
+      .foregroundStyle(gradientForRange(min: range.minZScore, max: range.maxZScore))
+      .clipShape(Capsule())
     }
     .chartYScale(domain: -displayRange...displayRange)
     .chartYAxis {
@@ -154,6 +183,23 @@ struct MonitorStateChart: View {
   private var xAxisStride: Int {
     // Show fewer labels for longer periods
     days > 14 ? 7 : 1
+  }
+
+  /// Clamps z-score range to display range and ensures minimum visible bar height
+  private func adjustedRange(for range: DayZScoreRange) -> (min: Double, max: Double) {
+    let clampedMin = max(-displayRange, min(displayRange, range.minZScore))
+    let clampedMax = max(-displayRange, min(displayRange, range.maxZScore))
+
+    // Ensure minimum visible bar height after clamping
+    let minVisibleHeight = 0.15
+    if clampedMax - clampedMin < minVisibleHeight * 2 {
+      let center = (clampedMin + clampedMax) / 2
+      return (
+        max(-displayRange, center - minVisibleHeight),
+        min(displayRange, center + minVisibleHeight)
+      )
+    }
+    return (clampedMin, clampedMax)
   }
 
   private var barWidth: MarkDimension {

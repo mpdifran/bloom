@@ -15,7 +15,7 @@ actor SleepStateCalculator: MonitorStateCalculator {
   let monitorType: MonitorType = .sleep
 
   let requiredMetrics: [MonitorMetricType] = [.sleepDuration]
-  let optionalMetrics: [MonitorMetricType] = [.deepSleep, .remSleep, .sleepEfficiency, .bedtime, .wakeTime]
+  let optionalMetrics: [MonitorMetricType] = [.sleepEfficiency, .bedtime, .wakeTime]
 
   func calculateState(
     for date: Date,
@@ -34,14 +34,12 @@ actor SleepStateCalculator: MonitorStateCalculator {
 
     // Get optional sleep metrics using the same lookback window
     let efficiencySample = mostRecentSample(for: .sleepEfficiency, in: samples, targetDate: date)
-    let deepSleepSample = mostRecentSample(for: .deepSleep, in: samples, targetDate: date)
-    let remSleepSample = mostRecentSample(for: .remSleep, in: samples, targetDate: date)
     let bedtimeSample = mostRecentSample(for: .bedtime, in: samples, targetDate: date)
     let wakeTimeSample = mostRecentSample(for: .wakeTime, in: samples, targetDate: date)
 
     // For confidence calculation, check which metrics are present in recent window
     let presentMetrics = Set(
-      [durationSample, efficiencySample, deepSleepSample, remSleepSample, bedtimeSample, wakeTimeSample]
+      [durationSample, efficiencySample, bedtimeSample, wakeTimeSample]
         .compactMap { $0?.metricType }
     )
 
@@ -96,34 +94,6 @@ actor SleepStateCalculator: MonitorStateCalculator {
           difference: difference
         ))
       }
-    }
-
-    // Deep sleep signals (optional)
-    if let deepSleepSample, let zScore = deepSleepSample.zScore, zScore < -1.0 {
-      let baseline = deepSleepSample.baseline7Day ?? deepSleepSample.baseline28Day
-      let difference = baseline.map { deepSleepSample.value - $0 }
-      signals.append(Signal(
-        metricType: .deepSleep,
-        date: date,
-        zScore: zScore,
-        direction: .lower,
-        description: "Deep sleep is below your usual",
-        difference: difference
-      ))
-    }
-
-    // REM sleep signals (optional)
-    if let remSleepSample, let zScore = remSleepSample.zScore, zScore < -1.0 {
-      let baseline = remSleepSample.baseline7Day ?? remSleepSample.baseline28Day
-      let difference = baseline.map { remSleepSample.value - $0 }
-      signals.append(Signal(
-        metricType: .remSleep,
-        date: date,
-        zScore: zScore,
-        direction: .lower,
-        description: "REM sleep is below your usual",
-        difference: difference
-      ))
     }
 
     // Bedtime/wake variability signals (optional)
@@ -253,39 +223,27 @@ actor SleepStateCalculator: MonitorStateCalculator {
   }
 
   private func determineState(signals: [Signal], variability: Double?) -> MonitorStateValue {
-    // Alert: Duration very low OR efficiency < 0.75 OR variability > 90min OR very low deep/REM
+    // Alert: Duration very low OR efficiency < 0.75 OR variability > 90min
     let hasVeryLowDuration = signals.contains {
       $0.metricType == .sleepDuration && $0.magnitude > 2.0
     }
     let hasLowEfficiency = signals.contains {
       $0.metricType == .sleepEfficiency && $0.magnitude > 1.0
     }
-    let hasVeryLowDeepSleep = signals.contains {
-      $0.metricType == .deepSleep && $0.magnitude > 1.5
-    }
-    let hasVeryLowRemSleep = signals.contains {
-      $0.metricType == .remSleep && $0.magnitude > 1.5
-    }
 
-    if hasVeryLowDuration || hasLowEfficiency || (variability ?? 0) > 90 || hasVeryLowDeepSleep || hasVeryLowRemSleep {
+    if hasVeryLowDuration || hasLowEfficiency || (variability ?? 0) > 90 {
       return .alert
     }
 
-    // Attention: Duration declining OR efficiency 0.75-0.85 OR variability 60-90min OR declining deep/REM
+    // Attention: Duration declining OR efficiency 0.75-0.85 OR variability 60-90min
     let hasDecliningDuration = signals.contains {
       $0.metricType == .sleepDuration && $0.magnitude > 1.0
     }
     let hasModerateEfficiency = signals.contains {
       $0.metricType == .sleepEfficiency && $0.magnitude > 0.5
     }
-    let hasLowDeepSleep = signals.contains {
-      $0.metricType == .deepSleep && $0.magnitude > 1.0
-    }
-    let hasLowRemSleep = signals.contains {
-      $0.metricType == .remSleep && $0.magnitude > 1.0
-    }
 
-    if hasDecliningDuration || hasModerateEfficiency || (variability ?? 0) > 60 || hasLowDeepSleep || hasLowRemSleep {
+    if hasDecliningDuration || hasModerateEfficiency || (variability ?? 0) > 60 {
       return .attention
     }
 
@@ -316,26 +274,6 @@ actor SleepStateCalculator: MonitorStateCalculator {
         explanation: "You may be spending more time awake in bed than usual. Consider limiting screen time before bed and keeping a consistent sleep schedule.",
         confidence: .medium,
         relatedMetrics: [.sleepEfficiency]
-      ))
-    }
-
-    // Deep sleep finding
-    if let deepSleepSignal = signals.first(where: { $0.metricType == .deepSleep }) {
-      findings.append(Finding(
-        title: deepSleepSignal.description,
-        explanation: "Deep sleep is crucial for physical recovery. Consider avoiding alcohol and caffeine close to bedtime.",
-        confidence: .medium,
-        relatedMetrics: [.deepSleep]
-      ))
-    }
-
-    // REM sleep finding
-    if let remSleepSignal = signals.first(where: { $0.metricType == .remSleep }) {
-      findings.append(Finding(
-        title: remSleepSignal.description,
-        explanation: "REM sleep is important for memory and emotional processing. Stress and irregular schedules can affect REM sleep.",
-        confidence: .medium,
-        relatedMetrics: [.remSleep]
       ))
     }
 
