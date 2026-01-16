@@ -143,14 +143,15 @@ struct StressDetailView: View {
 
   private var infoCard: some View {
     VStack(alignment: .leading, spacing: 8) {
-      Label("About Workout Load Monitoring", systemSymbol: .infoCircle)
-        .font(.subheadline)
+      Text("About Workout Load Monitoring")
+        .font(.headline)
         .fontWeight(.medium)
 
       Text("This monitor tracks your training load using Apple's Workout Effort Scores. It compares your recent 7-day training load to your 28-day average to help you avoid overtraining or detraining. HRV trends and recovery metrics are also considered when available.")
-        .font(.caption)
+        .font(.body)
         .foregroundStyle(.secondary)
     }
+    .horizontalAlignment(.leading)
     .cardContainer()
   }
 

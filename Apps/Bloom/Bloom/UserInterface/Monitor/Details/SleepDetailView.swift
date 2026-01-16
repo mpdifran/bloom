@@ -129,6 +129,7 @@ struct SleepDetailView: View {
           MonitorFindingCell(finding: finding)
         }
       }
+      .horizontalAlignment(.leading)
       .cardContainer()
     }
   }
@@ -137,14 +138,15 @@ struct SleepDetailView: View {
 
   private var infoCard: some View {
     VStack(alignment: .leading, spacing: 8) {
-      Label("About Sleep Monitoring", systemSymbol: .infoCircle)
-        .font(.subheadline)
+      Text("About Sleep Monitoring")
+        .font(.headline)
         .fontWeight(.medium)
 
       Text("This monitor tracks your sleep patterns including duration, efficiency, and schedule consistency. It detects when your sleep is declining or when your bedtime and wake time are becoming irregular, which can affect your circadian rhythm and overall health.")
-        .font(.caption)
+        .font(.body)
         .foregroundStyle(.secondary)
     }
+    .horizontalAlignment(.leading)
     .cardContainer()
   }
 

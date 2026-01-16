@@ -137,14 +137,15 @@ struct RecoveryDetailView: View {
 
   private var infoCard: some View {
     VStack(alignment: .leading, spacing: 8) {
-      Label("About Recovery Monitoring", systemSymbol: .infoCircle)
-        .font(.subheadline)
+      Text("About Recovery Monitoring")
+        .font(.headline)
         .fontWeight(.medium)
 
       Text("This monitor tracks early physiological signs that may indicate your body is fighting off illness or needs extra recovery time. It analyzes your resting heart rate, heart rate variability, wrist temperature, and respiratory rate to detect subtle changes from your personal baseline.")
-        .font(.caption)
+        .font(.body)
         .foregroundStyle(.secondary)
     }
+    .horizontalAlignment(.leading)
     .cardContainer()
   }
 

@@ -210,7 +210,7 @@ public enum MonitorMetricType: String, CaseIterable, Sendable, Codable {
     case .sleepEfficiency:
       return .chartBarFill
     case .bedtime:
-      return .moonFill
+      return .moonsetFill
     case .wakeTime:
       return .sunriseFill
     }

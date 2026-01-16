@@ -15,11 +15,11 @@ struct MonitorFindingCell: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 6) {
       Text(finding.title)
-        .font(.subheadline)
+        .font(.headline)
         .fontWeight(.medium)
 
       Text(finding.explanation)
-        .font(.caption)
+        .font(.body)
         .foregroundStyle(.secondary)
         .fixedSize(horizontal: false, vertical: true)
     }
