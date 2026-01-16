@@ -144,6 +144,7 @@ struct MonitorView: View {
         .foregroundStyle(.secondary)
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .groupedBackground()
   }
 
   // MARK: - Empty View
@@ -175,6 +176,7 @@ struct MonitorView: View {
       .padding(.top, 8)
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .groupedBackground()
   }
 
   // MARK: - Navigation
