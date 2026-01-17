@@ -24,11 +24,6 @@ struct MonitorCard: View {
     result.state.isConcerning && !result.findings.isEmpty
   }
 
-  /// Signals with elevated or high severity (z-score >= 1.0)
-  private var elevatedSignals: [Signal] {
-    result.signals.filter { $0.severity >= .elevated }
-  }
-
   var body: some View {
     VStack(alignment: .leading, spacing: 0) {
       headerView
@@ -36,10 +31,6 @@ struct MonitorCard: View {
       if let summaryBarData {
         MonitorSummaryBar(data: summaryBarData)
           .padding(.top, 12)
-      }
-
-      if result.state == .good && !elevatedSignals.isEmpty {
-        signalSummarySection
       }
 
       if isExpanded {
@@ -211,19 +202,6 @@ private extension MonitorCard {
     }
     .font(.subheadline)
     .foregroundStyle(.secondary)
-  }
-
-  // MARK: - Signal Summary
-
-  var signalSummarySection: some View {
-    VStack(alignment: .leading, spacing: 6) {
-      Divider()
-        .padding(.vertical, 10)
-
-      ForEach(elevatedSignals) { signal in
-        SignalSummaryRow(signal: signal)
-      }
-    }
   }
 
   // MARK: - Findings
