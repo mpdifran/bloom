@@ -18,14 +18,17 @@ final class MonitorViewModel {
   /// Current monitor results for all three monitors
   var results: [MonitorResult] = []
 
-  /// Whether data is currently being loaded
-  var isLoading = false
-
   /// Any error that occurred during loading
   var error: Error?
 
   /// Whether we've completed at least one load
   var hasLoaded = false
+
+  /// Timestamp of the last successful refresh
+  private(set) var lastRefreshDate: Date?
+
+  /// Staleness threshold: 5 minutes
+  private let stalenessInterval: TimeInterval = 5 * 60
 
   /// Tracks the monitor states that were present when user last viewed the tab.
   /// Used to determine if there are "unseen" alerts that should show a badge.
@@ -33,11 +36,24 @@ final class MonitorViewModel {
 
   private init() { }
 
+  // MARK: - Staleness
+
+  /// Whether data is stale and needs refreshing
+  var isStale: Bool {
+    guard let lastRefresh = lastRefreshDate else { return true }
+    return Date().timeIntervalSince(lastRefresh) > stalenessInterval
+  }
+
   // MARK: - Public Methods
+
+  /// Refreshes data only if stale or never loaded.
+  func refreshIfNeeded() async {
+    guard isStale else { return }
+    await refresh()
+  }
 
   /// Refresh all monitor states by fetching fresh data from HealthKit
   func refresh() async {
-    isLoading = true
     error = nil
 
     do {
@@ -48,8 +64,10 @@ final class MonitorViewModel {
       )
 
       // Calculate new states
-      results = try await MonitorCalculator.shared.calculateMetricsAndDetect()
+      let calculatedResults = try await MonitorCalculator.shared.calculateMetricsAndDetect()
+      results = ensureAllMonitorTypes(calculatedResults)
       hasLoaded = true
+      lastRefreshDate = Date()
 
       // Check for state changes and send notifications
       for result in results {
@@ -65,15 +83,13 @@ final class MonitorViewModel {
     } catch {
       self.error = error
     }
-
-    isLoading = false
   }
 
   /// Get cached states without fetching new data
   func loadCached() async {
     let cached = await MonitorCalculator.shared.getCachedStates()
+    results = ensureAllMonitorTypes(cached)
     if !cached.isEmpty {
-      results = cached
       hasLoaded = true
       updateBadges()
     }
@@ -123,5 +139,27 @@ final class MonitorViewModel {
   /// Get result for a specific monitor type
   func result(for monitorType: MonitorType) -> MonitorResult? {
     results.first { $0.monitorType == monitorType }
+  }
+
+  // MARK: - Private Helpers
+
+  /// Ensures all monitor types have a result, filling in unavailable placeholders.
+  private func ensureAllMonitorTypes(_ results: [MonitorResult]) -> [MonitorResult] {
+    var resultsByType = Dictionary(uniqueKeysWithValues: results.map { ($0.monitorType, $0) })
+
+    for monitorType in MonitorType.allCases {
+      if resultsByType[monitorType] == nil {
+        resultsByType[monitorType] = MonitorResult(
+          monitorType: monitorType,
+          state: .unavailable,
+          confidence: 0,
+          consecutiveDays: 0,
+          signals: [],
+          findings: []
+        )
+      }
+    }
+
+    return MonitorType.allCases.compactMap { resultsByType[$0] }
   }
 }

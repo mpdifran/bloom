@@ -31,6 +31,7 @@ struct MonitorCard: View {
       if let summaryBarData {
         MonitorSummaryBar(data: summaryBarData)
           .padding(.top, 12)
+          .transition(.opacity.combined(with: .scale(scale: 0.95)))
       }
 
       if isExpanded {
@@ -40,6 +41,7 @@ struct MonitorCard: View {
         findingsView
       }
     }
+    .animation(.easeInOut(duration: 0.2), value: summaryBarData != nil)
     .cardContainer()
     .contextMenu {
       // Only show "Turn On" if currently off or snoozed
@@ -105,31 +107,31 @@ private extension MonitorCard {
     // Fetch training load summary
     let trainingLoadSummary = await HealthStoreFetcher.shared.fetchTrainingLoadSummary()
 
-    // Fetch any heart rate recovery data
-    let hrrData = try await actor.fetchSummaryBarData(
-      metricTypes: [MonitorMetricType.heartRateRecovery.rawValue],
+    // Fetch all stress detection metrics (HRR, HRV, sleep efficiency, deep sleep, RHR)
+    let metricsData = try await actor.fetchSummaryBarData(
+      metricTypes: MonitorType.stress.detectionMetrics.map { $0.rawValue },
       for: Date()
     )
 
-    // If no training load data, fall back to HRR-only data
+    // If no training load data, fall back to metrics-only data
     guard let summary = trainingLoadSummary else {
-      return hrrData
+      return metricsData
     }
 
     // Convert training load to z-score (10% = 1 z-score)
     let trainingLoadZScore = summary.percentageDifference / 10.0
     let (minZScore, maxZScore) = calculateTrainingLoadZScoreRange(summary: summary)
 
-    // Combine with HRR data if available
+    // Combine with other metrics data if available
     var metricZScores = [MetricZScorePoint(metricType: "trainingLoad", zScore: trainingLoadZScore)]
 
-    if let hrrData {
-      metricZScores.append(contentsOf: hrrData.metricZScores)
-      // Expand range to include HRR data
+    if let metricsData {
+      metricZScores.append(contentsOf: metricsData.metricZScores)
+      // Expand range to include other metrics data
       return MonitorSummaryBarData(
         metricZScores: metricZScores,
-        min7DayZScore: min(minZScore, hrrData.min7DayZScore),
-        max7DayZScore: max(maxZScore, hrrData.max7DayZScore)
+        min7DayZScore: min(minZScore, metricsData.min7DayZScore),
+        max7DayZScore: max(maxZScore, metricsData.max7DayZScore)
       )
     }
 

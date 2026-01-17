@@ -33,8 +33,10 @@ struct MonitorStateChart: View {
         emptyChart
       } else {
         chartWithBackground
+          .transition(.opacity)
       }
     }
+    .animation(.easeInOut(duration: 0.3), value: dayRanges.map(\.id))
     .task(id: days) {
       await loadData()
     }

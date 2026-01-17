@@ -20,15 +20,7 @@ struct MonitorView: View {
 
   var body: some View {
     NavigationStack {
-      Group {
-        if viewModel.isLoading && !viewModel.hasLoaded {
-          loadingView
-        } else if viewModel.results.isEmpty {
-          emptyView
-        } else {
-          contentView
-        }
-      }
+      contentView
       .navigationTitle("Monitor")
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
@@ -53,8 +45,8 @@ struct MonitorView: View {
       await viewModel.loadCached()
       viewModel.markAlertsAsSeen()
 
-      // Then refresh with fresh data
-      await viewModel.refresh()
+      // Only refresh if data is stale
+      await viewModel.refreshIfNeeded()
       viewModel.markAlertsAsSeen()
     }
     .onAppear {
@@ -118,65 +110,7 @@ struct MonitorView: View {
           }
         }
       }
-
-      if viewModel.isLoading {
-        HStack {
-          ProgressView()
-            .scaleEffect(0.8)
-          Text("Updating...")
-            .font(.caption)
-            .foregroundStyle(.secondary)
-        }
-        .padding(.top, 8)
-      }
     }
-  }
-
-  // MARK: - Loading View
-
-  private var loadingView: some View {
-    VStack(spacing: 16) {
-      ProgressView()
-        .scaleEffect(1.5)
-
-      Text("Analyzing your health data...")
-        .font(.subheadline)
-        .foregroundStyle(.secondary)
-    }
-    .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .groupedBackground()
-  }
-
-  // MARK: - Empty View
-
-  private var emptyView: some View {
-    VStack(spacing: 16) {
-      Image(systemSymbol: .waveformPathEcg)
-        .font(.system(size: 64))
-        .foregroundStyle(.secondary)
-
-      Text("No Monitor Data")
-        .font(.headline)
-
-      Text("We need a few days of health data to start monitoring your recovery, stress, and sleep patterns.")
-        .font(.subheadline)
-        .foregroundStyle(.secondary)
-        .multilineTextAlignment(.center)
-        .padding(.horizontal, 32)
-
-      Button {
-        Task {
-          await viewModel.refresh()
-        }
-      } label: {
-        Text("Try Again")
-          .fontWeight(.medium)
-      }
-      .buttonStyle(.borderedProminent)
-      .padding(.top, 8)
-    }
-    .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .groupedBackground()
   }
 
   // MARK: - Navigation

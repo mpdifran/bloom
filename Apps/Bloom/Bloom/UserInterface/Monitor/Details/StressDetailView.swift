@@ -19,7 +19,6 @@ struct StressDetailView: View {
   @State private var historicalResults30Day: [MonitorResult] = []
   @State private var rangeData7Day: [MetricRangeData] = []
   @State private var rangeData30Day: [MetricRangeData] = []
-  @State private var isLoading = false
 
   private var historicalResults: [MonitorResult] {
     selectedPeriod == .sevenDays ? historicalResults7Day : historicalResults30Day
@@ -35,15 +34,7 @@ struct StressDetailView: View {
   }
 
   var body: some View {
-    Group {
-      if isLoading && historicalResults7Day.isEmpty {
-        loadingView
-      } else if historicalResults7Day.isEmpty {
-        emptyView
-      } else {
-        contentView
-      }
-    }
+    contentView
     .toolbar {
       ToolbarItem(placement: .principal) {
         Text("Stress & Workout Load")
@@ -95,7 +86,9 @@ struct StressDetailView: View {
   // MARK: - Metric Ranges
 
   private var metricRangesSection: some View {
-    VStack(alignment: .leading, spacing: 12) {
+    let metrics = MonitorType.stress.detectionMetrics
+
+    return VStack(alignment: .leading, spacing: 12) {
       Text(selectedPeriod == .sevenDays ? "7-Day Ranges" : "30-Day Ranges")
         .font(.headline)
         .padding(.horizontal)
@@ -104,20 +97,31 @@ struct StressDetailView: View {
         // Training Load (from workouts)
         TrainingLoadRangeRow(selectedPeriod: selectedPeriod)
 
-        if !rangeData.isEmpty {
+        if !metrics.isEmpty {
           Divider()
         }
 
         // Other metrics (Heart Rate Recovery, etc.)
-        ForEach(rangeData) { data in
-          if let metricType = MonitorMetricType(rawValue: data.metricType) {
-            MetricRangeRow(rangeData: data, metricType: metricType)
-            if data.id != rangeData.last?.id {
-              Divider()
-            }
+        ForEach(metrics, id: \.rawValue) { metricType in
+          let data = rangeData.first { $0.metricType == metricType.rawValue }
+            ?? MetricRangeData(
+              metricType: metricType.rawValue,
+              displayName: metricType.displayName,
+              currentValue: nil,
+              min7Day: nil,
+              max7Day: nil,
+              baseline28Day: nil,
+              zScore: nil,
+              min7DayZScore: nil,
+              max7DayZScore: nil
+            )
+          MetricRangeRow(rangeData: data, metricType: metricType)
+          if metricType != metrics.last {
+            Divider()
           }
         }
       }
+      .animation(.easeInOut(duration: 0.3), value: rangeData.map(\.metricType))
       .cardContainer()
     }
   }
@@ -155,38 +159,9 @@ struct StressDetailView: View {
     .cardContainer()
   }
 
-  // MARK: - Loading
-
-  private var loadingView: some View {
-    VStack(spacing: 16) {
-      ProgressView()
-        .scaleEffect(1.5)
-
-      Text("Loading history...")
-        .font(.subheadline)
-        .foregroundStyle(.secondary)
-    }
-    .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .groupedBackground()
-  }
-
-  // MARK: - Empty
-
-  private var emptyView: some View {
-    ContentUnavailableView(
-      "No History Available",
-      systemImage: "flame.fill",
-      description: Text("We need more activity data to show your workout load history.")
-    )
-    .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .groupedBackground()
-  }
-
   // MARK: - Data Loading
 
   private func loadAllData() async {
-    isLoading = true
-
     let metrics: [(type: String, displayName: String)] = MonitorType.stress.detectionMetrics.map {
       ($0.rawValue, $0.displayName)
     }
@@ -236,8 +211,6 @@ struct StressDetailView: View {
         rangeData30Day = rangeData
       }
     }
-
-    isLoading = false
   }
 }
 
