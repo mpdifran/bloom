@@ -164,7 +164,7 @@ struct MonitorStateChart: View {
     }
     .chartXAxis {
       AxisMarks(values: .stride(by: .day, count: xAxisStride)) { _ in
-        AxisValueLabel(format: .dateTime.weekday(.abbreviated))
+        AxisValueLabel(format: days > 7 ? .dateTime.day() : .dateTime.weekday(.abbreviated))
         AxisGridLine()
       }
     }
