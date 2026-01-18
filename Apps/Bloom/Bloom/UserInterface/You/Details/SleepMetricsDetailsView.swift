@@ -166,7 +166,7 @@ private extension SleepMetricsDetailsView {
       VStack {
         VitalDetailChartTitleView(
           title: "Sleep Heart Rate",
-          value: averageSleepHR.map { "\($0) bpm avg" } ?? ""
+          value: averageSleepHR.map { "\($0) bpm" } ?? ""
         )
 
         Chart {
@@ -324,7 +324,7 @@ private extension SleepMetricsDetailsView {
     let measurement = Measurement(value: avg, unit: UnitTemperature.fahrenheit)
     let localized = measurement.localizedValue
     let unit = UnitTemperature(forLocale: .current).symbol
-    return "\(localized.format(using: .oneDecimalPlace))\(unit) avg"
+    return "\(localized.format(using: .oneDecimalPlace))\(unit)"
   }
 
   var temperatureChartSection: some View {
@@ -426,7 +426,7 @@ private extension SleepMetricsDetailsView {
 
   var formattedAverageRespRate: String? {
     guard let avg = averageRespRate else { return nil }
-    return "\(Int(avg.rounded())) breaths/min avg"
+    return "\(Int(avg.rounded())) breaths/min"
   }
 
   var respiratoryRateChartSection: some View {
