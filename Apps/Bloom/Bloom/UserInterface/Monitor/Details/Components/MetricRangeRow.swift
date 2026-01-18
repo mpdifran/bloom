@@ -44,26 +44,12 @@ struct MetricRangeRow: View {
       }
 
       // Z-score range bar
-      if rangeData.hasData, let summaryData = MonitorSummaryBarData(from: rangeData) {
-        MonitorSummaryBar(
-          data: summaryData,
-          lowLabel: lowLabel,
-          normalLabel: normalLabel,
-          highLabel: highLabel
-        )
-      } else if rangeData.hasData {
-        // Fallback for missing z-score data but with value data
-        MetricRangeChart(
-          rangeData: rangeData,
-          isCondensed: false,
-          tintColor: tintColor
-        )
-      } else {
-        // Placeholder bar for metrics without data
-        Capsule()
-          .fill(Color(.systemGray5))
-          .frame(height: 20)
-      }
+      MonitorSummaryBar(
+        data: MonitorSummaryBarData(from: rangeData) ?? .empty,
+        lowLabel: lowLabel,
+        normalLabel: normalLabel,
+        highLabel: highLabel
+      )
     }
   }
 
@@ -106,19 +92,10 @@ struct MetricRangeRowCondensed: View {
         .foregroundStyle(.secondary)
         .frame(width: 20)
 
-      if rangeData.hasData, let summaryData = MonitorSummaryBarData(from: rangeData) {
-        MonitorSummaryBar(data: summaryData, showsLabels: false)
-      } else if rangeData.hasData {
-        MetricRangeChart(
-          rangeData: rangeData,
-          isCondensed: true,
-          tintColor: tintColor
-        )
-      } else {
-        Capsule()
-          .fill(Color(.systemGray5))
-          .frame(height: 12)
-      }
+      MonitorSummaryBar(
+        data: MonitorSummaryBarData(from: rangeData) ?? .empty,
+        hasData: MonitorSummaryBarData(from: rangeData) == nil ? false : true
+      )
 
       if let value = rangeData.currentValue {
         Text(metricType.formatValueShort(value))

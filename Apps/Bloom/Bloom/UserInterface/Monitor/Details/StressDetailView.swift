@@ -52,6 +52,7 @@ struct StressDetailView: View {
     }
     .navigationTitle("Stress")
     .navigationBarTitleDisplayMode(.inline)
+    .sensoryFeedback(.selection, trigger: selectedPeriod)
     .task {
       await loadAllData()
     }

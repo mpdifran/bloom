@@ -24,15 +24,17 @@ struct MonitorCard: View {
     result.state.isConcerning && !result.findings.isEmpty
   }
 
+  /// The data to display - real data or empty placeholder
+  private var displayBarData: MonitorSummaryBarData {
+    summaryBarData ?? .empty
+  }
+
   var body: some View {
     VStack(alignment: .leading, spacing: 0) {
       headerView
 
-      if let summaryBarData {
-        MonitorSummaryBar(data: summaryBarData)
-          .padding(.top, 12)
-          .transition(.opacity.combined(with: .scale(scale: 0.95)))
-      }
+      MonitorSummaryBar(data: displayBarData)
+        .padding(.top, 12)
 
       if isExpanded {
         Divider()
@@ -41,7 +43,7 @@ struct MonitorCard: View {
         findingsView
       }
     }
-    .animation(.easeInOut(duration: 0.2), value: summaryBarData != nil)
+    .animation(.default, value: summaryBarData?.metricZScores.map(\.metricType))
     .cardContainer()
     .contextMenu {
       // Only show "Turn On" if currently off or snoozed

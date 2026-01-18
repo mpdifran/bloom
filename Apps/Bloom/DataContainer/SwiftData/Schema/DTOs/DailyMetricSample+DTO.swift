@@ -147,6 +147,13 @@ public struct DayZScoreRange: Sendable, Equatable, Identifiable {
 }
 
 public extension MonitorSummaryBarData {
+  /// Empty placeholder data - centered bar with no dots
+  static let empty = MonitorSummaryBarData(
+    metricZScores: [],
+    min7DayZScore: 0,
+    max7DayZScore: 0
+  )
+
   /// Creates summary bar data from a single metric's range data.
   /// Returns nil if z-score data is not available.
   init?(from rangeData: MetricRangeData) {

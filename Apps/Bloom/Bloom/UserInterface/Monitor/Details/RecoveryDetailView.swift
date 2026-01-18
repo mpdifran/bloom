@@ -52,6 +52,7 @@ struct RecoveryDetailView: View {
     }
     .navigationTitle("Recovery")
     .navigationBarTitleDisplayMode(.inline)
+    .sensoryFeedback(.selection, trigger: selectedPeriod)
     .task {
       await loadAllData()
     }

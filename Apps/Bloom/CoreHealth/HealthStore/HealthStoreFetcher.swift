@@ -977,6 +977,44 @@ public extension HealthStoreFetcher {
     return MenstrualSummary(menstrualCycles: cycles)
   }
 
+  /// Calculates an Exponential Weighted Moving Average (EWMA) for training load.
+  /// EWMA gives more weight to recent days, making the metric more responsive to current behavior.
+  /// Formula: EWMA_today = α × load_today + (1 - α) × EWMA_yesterday
+  /// Uses standard EWMA decay: α = 2/(decayDays + 1)
+  /// - Parameters:
+  ///   - dailyLoads: Dictionary mapping dates to their training load values
+  ///   - endDate: The end date for the EWMA calculation
+  ///   - decayDays: The decay constant (7 for acute, 28 for chronic) - controls how fast old data fades
+  ///   - allDates: All available dates sorted oldest to newest
+  /// - Returns: The EWMA value ending on endDate
+  private func calculateEWMA(
+    dailyLoads: [Date: Double],
+    endDate: Date,
+    decayDays: Int,
+    allDates: [Date]
+  ) -> Double {
+    // Standard EWMA decay constant
+    let alpha = 2.0 / Double(decayDays + 1)
+    var ewma: Double = 0
+    var isFirst = true
+
+    // Process ALL historical dates (sorted oldest to newest) up to endDate
+    let calendar = Calendar.current
+    let endDayStart = calendar.startOfDay(for: endDate)
+    let relevantDates = allDates.filter { $0 <= endDayStart }
+
+    for date in relevantDates {
+      let load = dailyLoads[date] ?? 0
+      if isFirst {
+        ewma = load
+        isFirst = false
+      } else {
+        ewma = alpha * load + (1 - alpha) * ewma
+      }
+    }
+    return ewma
+  }
+
   func fetchTrainingLoadSummary() async -> TrainingLoadSummary? {
     let dateRange = DateRange.trailingDaysFromNow(56)
     let workouts = await fetchWorkouts(dateRange: dateRange)
@@ -1020,62 +1058,62 @@ public extension HealthStoreFetcher {
     }
     
     // Add all-day load adjustments based on active calories deviation from baseline
-    let caloriesByDate = Dictionary(uniqueKeysWithValues: activeEnergyData.map { 
+    let caloriesByDate = Dictionary(uniqueKeysWithValues: activeEnergyData.map {
       (Calendar.current.startOfDay(for: $0.date), $0.quantity.doubleValue(for: .largeCalorie()))
     })
-    
+
     // Calculate rolling 28-day baseline for each day
     for date in Calendar.current.dateCollection(for: dateRange) {
       let dayStart = Calendar.current.startOfDay(for: date)
-      
+
       // Calculate 7-day baseline ending on the previous day
       let baselineEndDate = Calendar.current.date(byAdding: .day, value: -1, to: dayStart) ?? dayStart
       let baselineStartDate = Calendar.current.date(byAdding: .day, value: -7, to: baselineEndDate) ?? baselineEndDate
-      
+
       var baselineCalories: [Double] = []
       for baselineDate in Calendar.current.dateCollection(for: DateRange(baselineStartDate, baselineEndDate)) {
         if let calories = caloriesByDate[Calendar.current.startOfDay(for: baselineDate)] {
           baselineCalories.append(calories)
         }
       }
-      
+
       let baseline = baselineCalories.isEmpty ? 0 : baselineCalories.reduce(0, +) / Double(baselineCalories.count)
-      
+
       // Get today's active calories
       let todayCalories = caloriesByDate[dayStart] ?? 0
-      
+
       // Calculate all-day adjustment (both positive and negative deviations)
       // Scaling factor of 2.0 to balance with workout loads
       let allDayAdjustment = (todayCalories - baseline) / 2.0
-      
-      // Add all-day adjustment to existing workout load
-      dailyLoads[dayStart, default: 0] += allDayAdjustment
+
+      // Add all-day adjustment to existing workout load, clamped to zero minimum
+      // This prevents rest days from going negative and creating extreme percentages
+      dailyLoads[dayStart] = max(0, dailyLoads[dayStart, default: 0] + allDayAdjustment)
     }
     
     // Generate date samples for the last 28 days
     let startDate = Calendar.current.date(byAdding: .day, value: -27, to: Date()) ?? Date()
     let endDate = Date()
     let last28Days = Calendar.current.dateCollection(for: DateRange(startDate, endDate))
-    
+
+    // Collect all dates from dailyLoads sorted oldest to newest for EWMA calculation
+    let allDates = Array(dailyLoads.keys).sorted()
+
     var sevenDayTrend: [DateValueSample] = []
     var twentyEightDayTrend: [DateValueSample] = []
     var dailyLoadSamples: [DateValueSample] = []
-    
+
     for date in last28Days {
       let dayStart = Calendar.current.startOfDay(for: date)
-      
-      // Calculate 7-day rolling average ending on this date
-      let sevenDayStartDate = Calendar.current.date(byAdding: .day, value: -6, to: dayStart) ?? dayStart
-      let sevenDayWindow = Calendar.current.dateCollection(for: DateRange(sevenDayStartDate, dayStart))
-      let sevenDayLoads = sevenDayWindow.map { dailyLoads[$0] ?? 0 }
-      let sevenDayAvg = sevenDayLoads.isEmpty ? 0 : sevenDayLoads.reduce(0, +) / Double(sevenDayLoads.count)
-      
-      // Calculate 28-day rolling average ending on this date
-      let twentyEightDayStartDate = Calendar.current.date(byAdding: .day, value: -27, to: dayStart) ?? dayStart
-      let twentyEightDayWindow = Calendar.current.dateCollection(for: DateRange(twentyEightDayStartDate, dayStart))
-      let twentyEightDayLoads = twentyEightDayWindow.map { dailyLoads[$0] ?? 0 }
-      let twentyEightDayAvg = twentyEightDayLoads.isEmpty ? 0 : twentyEightDayLoads.reduce(0, +) / Double(twentyEightDayLoads.count)
-      
+
+      // Calculate 7-day EWMA (acute load) ending on this date
+      // Uses all historical data with 7-day decay constant - responds quickly to recent changes
+      let sevenDayAvg = calculateEWMA(dailyLoads: dailyLoads, endDate: dayStart, decayDays: 7, allDates: allDates)
+
+      // Calculate 28-day EWMA (chronic load) ending on this date
+      // Uses all historical data with 28-day decay constant - retains more baseline fitness data
+      let twentyEightDayAvg = calculateEWMA(dailyLoads: dailyLoads, endDate: dayStart, decayDays: 28, allDates: allDates)
+
       sevenDayTrend.append(DateValueSample(date: date, value: sevenDayAvg))
       twentyEightDayTrend.append(DateValueSample(date: date, value: twentyEightDayAvg))
       dailyLoadSamples.append(DateValueSample(date: date, value: dailyLoads[dayStart] ?? 0))

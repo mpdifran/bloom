@@ -12,7 +12,7 @@ import BloomFoundation
 struct MonitorSummaryBar: View {
 
   let data: MonitorSummaryBarData
-  var showsLabels: Bool = true
+  var hasData: Bool = true
   var lowLabel: String = "Low"
   var normalLabel: String = "Typical"
   var highLabel: String = "High"
@@ -44,10 +44,7 @@ struct MonitorSummaryBar: View {
       }
       .frame(height: barHeight)
 
-      // Zone labels
-      if showsLabels {
-        zoneLabels
-      }
+      zoneLabels
     }
   }
 }
@@ -204,7 +201,7 @@ private extension MonitorSummaryBar {
     }.sorted { $0.xPosition < $1.xPosition }
 
     // Group close positions while preserving identity
-    let groups = groupClosePositions(dotPositions, threshold: dotSize * 4)
+    let groups = groupClosePositions(dotPositions, threshold: dotSize * 3)
 
     return ForEach(groups) { group in
       if group.positions.count == 1 {
@@ -252,13 +249,20 @@ private extension MonitorSummaryBar {
 
   /// Zone labels below the bar
   var zoneLabels: some View {
-    HStack {
-      Text(lowLabel)
-        .frame(maxWidth: .infinity)
-      Text(normalLabel)
-        .frame(maxWidth: .infinity)
-      Text(highLabel)
-        .frame(maxWidth: .infinity)
+    Group {
+      if hasData {
+        HStack {
+          Text(lowLabel)
+            .frame(maxWidth: .infinity)
+          Text(normalLabel)
+            .frame(maxWidth: .infinity)
+          Text(highLabel)
+            .frame(maxWidth: .infinity)
+        }
+      } else {
+        Text("No Data")
+          .frame(maxWidth: .infinity)
+      }
     }
     .font(.caption2)
     .foregroundStyle(.secondary)

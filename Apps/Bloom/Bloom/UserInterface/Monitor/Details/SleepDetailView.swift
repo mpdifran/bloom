@@ -52,6 +52,7 @@ struct SleepDetailView: View {
     }
     .navigationTitle("Sleep")
     .navigationBarTitleDisplayMode(.inline)
+    .sensoryFeedback(.selection, trigger: selectedPeriod)
     .task {
       await loadAllData()
     }
