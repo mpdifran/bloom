@@ -23,6 +23,7 @@ struct MonitorFindingCell: View {
         .foregroundStyle(.secondary)
         .fixedSize(horizontal: false, vertical: true)
     }
+    .horizontalAlignment(.leading)
   }
 }
 
