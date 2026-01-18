@@ -22,11 +22,14 @@ actor RecoveryStateCalculator: MonitorStateCalculator {
     samples: [DailyMetricSampleDTO],
     previousResults: [MonitorResult]
   ) async -> MonitorResult {
-    // Check required metrics using lookback window (today + yesterday)
-    // Sleep-derived metrics like RHR and HRV may be attributed to either day
-    // depending on when the overnight sleep session started/ended
-    let rhrSample = mostRecentSample(for: .restingHeartRate, in: samples, targetDate: date)
-    let hrvSample = mostRecentSample(for: .heartRateVariability, in: samples, targetDate: date)
+    // Use yesterday's sleep-derived metrics for stability.
+    // Today's data may change as HealthKit processes more samples throughout the day.
+    // Yesterday's data is finalized and won't fluctuate.
+    let calendar = Calendar.current
+    let yesterday = calendar.date(byAdding: .day, value: -1, to: date)!
+
+    let rhrSample = mostRecentSample(for: .restingHeartRate, in: samples, targetDate: yesterday, lookbackDays: 1)
+    let hrvSample = mostRecentSample(for: .heartRateVariability, in: samples, targetDate: yesterday, lookbackDays: 1)
 
     guard rhrSample != nil && hrvSample != nil else {
       return .unavailable(
@@ -36,9 +39,9 @@ actor RecoveryStateCalculator: MonitorStateCalculator {
       )
     }
 
-    // Get optional metrics using the same lookback window
-    let tempSample = mostRecentSample(for: .wristTemperature, in: samples, targetDate: date)
-    let respSample = mostRecentSample(for: .respiratoryRate, in: samples, targetDate: date)
+    // Get optional metrics using yesterday as well
+    let tempSample = mostRecentSample(for: .wristTemperature, in: samples, targetDate: yesterday, lookbackDays: 1)
+    let respSample = mostRecentSample(for: .respiratoryRate, in: samples, targetDate: yesterday, lookbackDays: 1)
 
     // For confidence calculation, check which metrics are present in recent window
     let presentMetrics = Set(

@@ -57,7 +57,8 @@ struct MonitorView: View {
         viewModel.markAlertsAsSeen()
       }
     }
-    .onForeground {
+    .onForegroundTask {
+      await viewModel.refreshIfNeeded()
       if tabController.activeTab == .monitor {
         viewModel.markAlertsAsSeen()
       }
