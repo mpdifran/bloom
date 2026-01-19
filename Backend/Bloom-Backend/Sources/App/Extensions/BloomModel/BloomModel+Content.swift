@@ -74,3 +74,5 @@ extension AdminApplyIssueReportRequest: @retroactive Content { }
 extension AdminApplyIssueReportResponse: @retroactive Content { }
 extension MonitorSummaryRequest: @retroactive Content { }
 extension MonitorSummaryResponse: @retroactive Content { }
+extension MonitorInsightRequest: @retroactive Content { }
+extension MonitorInsightResponse: @retroactive Content { }
