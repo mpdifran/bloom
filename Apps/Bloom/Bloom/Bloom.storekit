@@ -24,7 +24,7 @@
     "_developerTeamID" : "GUJ47GUV2Q",
     "_disableDialogs" : false,
     "_failTransactionsEnabled" : false,
-    "_lastSynchronizedDate" : 787003985.39277101,
+    "_lastSynchronizedDate" : 790551681.83971202,
     "_locale" : "en_US",
     "_renewalBillingIssuesEnabled" : false,
     "_storefront" : "USA",
@@ -114,7 +114,7 @@
                 "new",
                 "expired"
               ],
-              "internalID" : "B9DBC6AC",
+              "internalID" : "3E0FCC39",
               "isStackable" : false,
               "numberOfPeriods" : 1,
               "paymentMode" : "free",
@@ -127,7 +127,7 @@
                 "existing",
                 "expired"
               ],
-              "internalID" : "9DD53DE7",
+              "internalID" : "0CA99F4B",
               "isStackable" : true,
               "numberOfPeriods" : 1,
               "paymentMode" : "free",
@@ -136,11 +136,11 @@
             },
             {
               "eligibility" : [
-                "new",
                 "existing",
+                "new",
                 "expired"
               ],
-              "internalID" : "2D291DBF",
+              "internalID" : "BCE44D87",
               "isStackable" : true,
               "numberOfPeriods" : 1,
               "paymentMode" : "free",
@@ -150,10 +150,10 @@
             {
               "eligibility" : [
                 "existing",
-                "new",
-                "expired"
+                "expired",
+                "new"
               ],
-              "internalID" : "84C80783",
+              "internalID" : "34B7EFC6",
               "isStackable" : false,
               "numberOfPeriods" : 1,
               "paymentMode" : "free",
@@ -164,10 +164,10 @@
               "displayPrice" : "19.99",
               "eligibility" : [
                 "expired",
-                "existing",
-                "new"
+                "new",
+                "existing"
               ],
-              "internalID" : "1A8BBBFB",
+              "internalID" : "53411009",
               "isStackable" : true,
               "numberOfPeriods" : 1,
               "paymentMode" : "payAsYouGo",
@@ -180,7 +180,7 @@
                 "new",
                 "expired"
               ],
-              "internalID" : "8E224A5B",
+              "internalID" : "AE92BEBF",
               "isStackable" : false,
               "numberOfPeriods" : 1,
               "paymentMode" : "payUpFront",
@@ -193,7 +193,7 @@
           "groupNumber" : 1,
           "internalID" : "6740501424",
           "introductoryOffer" : {
-            "internalID" : "AD1064BA",
+            "internalID" : "0866E222",
             "numberOfPeriods" : 1,
             "paymentMode" : "free",
             "subscriptionPeriod" : "P3D"
@@ -263,7 +263,7 @@
           "groupNumber" : 1,
           "internalID" : "6751232035",
           "introductoryOffer" : {
-            "internalID" : "51D07B16",
+            "internalID" : "EA11A5C7",
             "numberOfPeriods" : 1,
             "paymentMode" : "free",
             "subscriptionPeriod" : "P3D"
@@ -283,7 +283,7 @@
           "winbackOffers" : [
             {
               "displayPrice" : "9.99",
-              "internalID" : "687009E0",
+              "internalID" : "92FD6934",
               "isEligible" : true,
               "numberOfPeriods" : 1,
               "offerID" : "bloom_999_1y_wb",
@@ -307,7 +307,19 @@
 
           ],
           "codeOffers" : [
-
+            {
+              "eligibility" : [
+                "existing",
+                "new",
+                "expired"
+              ],
+              "internalID" : "E143DD16",
+              "isStackable" : false,
+              "numberOfPeriods" : 1,
+              "paymentMode" : "free",
+              "referenceName" : "Free Month - Loyalty",
+              "subscriptionPeriod" : "P1M"
+            }
           ],
           "displayPrice" : "3.99",
           "familyShareable" : false,
@@ -368,7 +380,19 @@
                 "expired",
                 "new"
               ],
-              "internalID" : "BCC720FD",
+              "internalID" : "8CBB1F15",
+              "isStackable" : false,
+              "numberOfPeriods" : 1,
+              "paymentMode" : "free",
+              "referenceName" : "Apple Watch Fitness",
+              "subscriptionPeriod" : "P1M"
+            },
+            {
+              "eligibility" : [
+                "new",
+                "expired"
+              ],
+              "internalID" : "EAA601E0",
               "isStackable" : false,
               "numberOfPeriods" : 1,
               "paymentMode" : "free",
@@ -377,11 +401,11 @@
             },
             {
               "eligibility" : [
-                "new",
+                "existing",
                 "expired",
-                "existing"
+                "new"
               ],
-              "internalID" : "442695DC",
+              "internalID" : "93403653",
               "isStackable" : false,
               "numberOfPeriods" : 1,
               "paymentMode" : "free",
@@ -391,29 +415,15 @@
             {
               "displayPrice" : "14.99",
               "eligibility" : [
-                "new",
-                "expired",
-                "existing"
-              ],
-              "internalID" : "97C323F6",
-              "isStackable" : false,
-              "numberOfPeriods" : 1,
-              "paymentMode" : "payUpFront",
-              "referenceName" : "IndieAppSales",
-              "subscriptionPeriod" : "P1Y"
-            },
-            {
-              "displayPrice" : "6.99",
-              "eligibility" : [
                 "expired",
                 "existing",
                 "new"
               ],
-              "internalID" : "636476C1",
+              "internalID" : "502E3E2D",
               "isStackable" : false,
               "numberOfPeriods" : 1,
               "paymentMode" : "payUpFront",
-              "referenceName" : "TestFlight",
+              "referenceName" : "IndieAppSales",
               "subscriptionPeriod" : "P1Y"
             },
             {
@@ -422,11 +432,25 @@
                 "expired",
                 "new"
               ],
-              "internalID" : "64DE1B6A",
+              "internalID" : "64F2DD88",
               "isStackable" : true,
               "numberOfPeriods" : 1,
               "paymentMode" : "payAsYouGo",
               "referenceName" : "Hulry",
+              "subscriptionPeriod" : "P1Y"
+            },
+            {
+              "displayPrice" : "6.99",
+              "eligibility" : [
+                "existing",
+                "new",
+                "expired"
+              ],
+              "internalID" : "2B4EAF44",
+              "isStackable" : false,
+              "numberOfPeriods" : 1,
+              "paymentMode" : "payUpFront",
+              "referenceName" : "TestFlight",
               "subscriptionPeriod" : "P1Y"
             }
           ],
@@ -435,7 +459,7 @@
           "groupNumber" : 1,
           "internalID" : "6753174998",
           "introductoryOffer" : {
-            "internalID" : "4A2C2265",
+            "internalID" : "81491AF6",
             "numberOfPeriods" : 1,
             "paymentMode" : "free",
             "subscriptionPeriod" : "P1W"
@@ -455,7 +479,7 @@
           "winbackOffers" : [
             {
               "displayPrice" : "14.99",
-              "internalID" : "E5A1AC4D",
+              "internalID" : "1D3F996F",
               "isEligible" : true,
               "numberOfPeriods" : 1,
               "offerID" : "bloom_1499_1y_wb",

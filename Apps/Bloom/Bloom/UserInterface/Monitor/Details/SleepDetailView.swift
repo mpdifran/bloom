@@ -70,6 +70,13 @@ struct SleepDetailView: View {
     BloomScrollView(spacing: 20) {
       stateHistorySection
 
+      if let currentResult {
+        MonitorInsightCard(
+          monitorType: .sleep,
+          currentResult: currentResult
+        )
+      }
+
       metricRangesSection
 
       if let result = currentResult, !result.findings.isEmpty {

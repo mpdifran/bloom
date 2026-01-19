@@ -70,6 +70,13 @@ struct StressDetailView: View {
     BloomScrollView(spacing: 20) {
       stateHistorySection
 
+      if let currentResult {
+        MonitorInsightCard(
+          monitorType: .stress,
+          currentResult: currentResult
+        )
+      }
+
       metricRangesSection
 
       if let result = currentResult, !result.findings.isEmpty {

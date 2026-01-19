@@ -218,4 +218,75 @@ extension HealthReportService {
 
     return monitorSummary
   }
+
+  func generateMonitorInsight(
+    monitorType: String,
+    monitorContext: String,
+    healthContext: String,
+    timezone: String,
+    userID: UserIdentifier
+  ) async throws -> MonitorInsightResponse {
+
+    var inputItems = [OpenAIKit.Response.InputItem]()
+
+    inputItems.append(
+      .message(
+        .init(
+          role: .system,
+          content: [
+            .text(.init(text: "Monitor type: \(monitorType)"))
+          ]
+        )
+      )
+    )
+
+    inputItems.append(
+      .message(
+        .init(
+          role: .system,
+          content: [
+            .text(.init(text: "Current monitor state and signals:\n\(monitorContext)"))
+          ]
+        )
+      )
+    )
+
+    inputItems.append(
+      .message(
+        .init(
+          role: .system,
+          content: [
+            .text(.init(text: "User's health baseline data:\n\(healthContext)"))
+          ]
+        )
+      )
+    )
+
+    inputItems.append(
+      .message(
+        .init(
+          role: .system,
+          content: [
+            .text(.init(text: "User's timezone: \(timezone)"))
+          ]
+        )
+      )
+    )
+
+    let response = try await openAIService.openAI.responses.createResponse(
+      input: inputItems,
+      model: modelID,
+      instructions: .Prompt.monitorInsight,
+      reasoning: .init(effort: .low, summary: .auto),
+      text: OpenAIKit.Text(format: Format(type: .jsonSchema(.monitorInsight))),
+      truncation: .auto,
+      user: userID.value
+    )
+
+    guard let monitorInsight = try response.parse(MonitorInsightResponse.self) else {
+      throw Abort(.internalServerError, reason: "Failed to parse monitor insight response")
+    }
+
+    return monitorInsight
+  }
 }

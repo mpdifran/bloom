@@ -180,5 +180,9 @@ public extension URLRequest {
     public static func getSummary(body: MonitorSummaryRequest) async throws -> URLRequest {
       try await URLRequest.post("v1/monitor/summary", body: body)
     }
+
+    public static func getInsight(body: MonitorInsightRequest) async throws -> URLRequest {
+      try await URLRequest.post("v1/monitor/insight", body: body)
+    }
   }
 }

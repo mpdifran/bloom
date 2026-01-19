@@ -29,6 +29,7 @@ extension HealthReportController: RouteCollection {
         }
         $0.group("monitor") {
           $0.post("summary", use: generateMonitorSummary)
+          $0.post("insight", use: generateMonitorInsight)
         }
       }
     }
@@ -180,6 +181,24 @@ private extension HealthReportController {
     }
 
     return try await request.healthReportService.generateMonitorSummary(
+      monitorContext: body.monitorContext,
+      healthContext: body.healthContext,
+      timezone: body.timezone,
+      userID: userID
+    )
+  }
+
+  @Sendable
+  func generateMonitorInsight(_ request: Request) async throws -> MonitorInsightResponse {
+    let body = try request.content.decode(MonitorInsightRequest.self)
+    let user = try request.auth.require(User.self)
+
+    guard let userID = user.id else {
+      throw Abort(.unauthorized)
+    }
+
+    return try await request.healthReportService.generateMonitorInsight(
+      monitorType: body.monitorType,
       monitorContext: body.monitorContext,
       healthContext: body.healthContext,
       timezone: body.timezone,

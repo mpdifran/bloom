@@ -70,6 +70,13 @@ struct RecoveryDetailView: View {
     BloomScrollView(spacing: 20) {
       stateHistorySection
 
+      if let currentResult {
+        MonitorInsightCard(
+          monitorType: .recovery,
+          currentResult: currentResult
+        )
+      }
+
       metricRangesSection
 
       if let result = currentResult, !result.findings.isEmpty {
