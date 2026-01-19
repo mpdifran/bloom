@@ -185,6 +185,8 @@ private extension RootView {
       switch focusParam {
       case "todayInsights":
         focus = .todayInsights
+      case "monitor":
+        focus = .monitor
       default:
         focus = .standard
       }

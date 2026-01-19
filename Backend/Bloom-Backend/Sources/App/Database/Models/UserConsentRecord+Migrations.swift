@@ -120,6 +120,20 @@ extension UserConsentRecord {
       try await UserConsentRecord.query(on: database).delete()
     }
   }
+
+  struct AddMonitorConsent: AsyncMigration {
+    func prepare(on database: any Database) async throws {
+      try await database.schema(UserConsentRecord.schema)
+        .field("monitor_consent", .bool)
+        .update()
+    }
+
+    func revert(on database: any Database) async throws {
+      try await database.schema(UserConsentRecord.schema)
+        .deleteField("monitor_consent")
+        .update()
+    }
+  }
 }
 
 extension User {

@@ -8,15 +8,28 @@
 import SwiftUI
 import SFSafeSymbols
 import DataContainer
+import BloomUI
+import BloomFoundation
 
 struct MonitorWelcomeView: View {
 
-  @State private var fakeIsMonitorEnabled = false
+  @Binding var presentedSheet: AnyView?
+
+  @State private var minZScore: Double = -0.8
+  @State private var maxZScore: Double = 1.6
+  @State private var metricZScores: [MetricZScorePoint] = []
+  @State private var stateIndex = 0
+
+  private let barStates: [(min: Double, max: Double, metrics: [MetricZScorePoint])] = [
+    (-0.8, 1.6, [MetricZScorePoint(metricType: "demo", zScore: 1)]),
+    (-0.8, 2.8, [MetricZScorePoint(metricType: "demo", zScore: 2.2)]),
+    (-2.8, 0.2, [MetricZScorePoint(metricType: "demo", zScore: -1.5)]),
+    (-2.0, 2.0, [MetricZScorePoint(metricType: "demo", zScore: 0.5)]),
+  ]
 
   var body: some View {
     BloomScrollView {
       titleCard
-      toggleSection
     }
   }
 }
@@ -25,10 +38,8 @@ private extension MonitorWelcomeView {
 
   var titleCard: some View {
     VStack {
-      Image(systemSymbol: .waveformPathEcg)
-        .font(.largeTitle)
-        .fontWeight(.heavy)
-        .foregroundStyle(
+      Circle()
+        .fill(
           LinearGradient(
             colors: [
               .monitorLow,
@@ -39,6 +50,13 @@ private extension MonitorWelcomeView {
             endPoint: .trailing
           )
         )
+        .frame(square: 60)
+        .overlay {
+          Image(systemSymbol: .waveformPathEcg)
+            .font(.largeTitle)
+            .fontWeight(.heavy)
+            .foregroundStyle(.white)
+        }
         .padding(.top)
 
       Text("Monitor")
@@ -50,31 +68,59 @@ private extension MonitorWelcomeView {
         .font(.body)
         .foregroundStyle(.secondary)
         .horizontalAlignment(.leading)
+        .fixedSize(horizontal: false, vertical: true)
         .padding(.bottom)
 
       MonitorSummaryBar(
         data: MonitorSummaryBarData(
-          metricZScores: [],
-          min7DayZScore: -0.8,
-          max7DayZScore: 1.6
+          metricZScores: metricZScores,
+          min7DayZScore: minZScore,
+          max7DayZScore: maxZScore
         )
       )
+
+      Button {
+        presentedSheet = BloomPlusPaywall(focus: .monitor, onDismiss: {
+          guard EntitlementController.shared.hasBloomPro == true else { return }
+
+          Task {
+            await Delay(300)
+            presentedSheet = WelcomeToBloomPlusView {
+              // MonitorView will reactively show content
+            }.asAny
+          }
+        }).asAny
+      } label: {
+        Text("Turn On Monitor")
+          .horizontallyCentered()
+      }
+      .buttonStyle(.primary)
+      .padding(.top)
     }
     .horizontallyCentered()
     .cardContainer()
+    .animation(.default, value: metricZScores)
+    .animation(.default, value: minZScore)
+    .animation(.default, value: maxZScore)
+    .task {
+      await runBarLoop()
+    }
   }
 
-  var toggleSection: some View {
-    Toggle(isOn: $fakeIsMonitorEnabled) {
-      Text("Enable Monitor")
-        .bold()
+  func runBarLoop() async {
+    while true {
+      await Delay(3000)
+      stateIndex = (stateIndex + 1) % barStates.count
+      let state = barStates[stateIndex]
+      minZScore = state.min
+      maxZScore = state.max
+      metricZScores = state.metrics
     }
-    .cardContainer()
   }
 }
 
 #Preview {
   PreviewEnvironment {
-    MonitorWelcomeView()
+    MonitorWelcomeView(presentedSheet: .constant(nil))
   }
 }

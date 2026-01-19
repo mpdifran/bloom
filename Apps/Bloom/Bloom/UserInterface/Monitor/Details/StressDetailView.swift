@@ -9,10 +9,13 @@ import SwiftUI
 import SFSafeSymbols
 import TelemetryDeck
 import DataContainer
+import BloomUI
 
 /// Detail view for the Stress & Workout Load monitor.
 /// Shows state history, training load signals, and findings.
 struct StressDetailView: View {
+
+  @ObservedObject private var aiFeatureSettings = AIFeatureSettings.shared
 
   @State private var selectedPeriod: StatTimePeriod = .sevenDays
   @State private var historicalResults7Day: [MonitorResult] = []
@@ -74,6 +77,16 @@ struct StressDetailView: View {
       }
 
       infoCard
+
+      if !aiFeatureSettings.monitorEnabled {
+        MonitorPrivacyAIFeatureOptInCell()
+          .cardContainer()
+      }
+    }
+    .onChange(of: aiFeatureSettings.monitorEnabled) {
+      Task {
+        await ConsentManager.shared.syncGranularConsentSilently()
+      }
     }
   }
 

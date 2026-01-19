@@ -180,11 +180,19 @@ private extension SettingsView {
       ChatPrivacyAIFeatureOptInCell()
         .cardContainer()
 
+      MonitorPrivacyAIFeatureOptInCell()
+        .cardContainer()
+
       AIDataShareCell()
         .cardContainer()
         .onTapGesture {
           presentedSheet = AIDataSharingView(showDismiss: true).asAny
         }
+    }
+    .onChange(of: aiFeatureSettings.monitorEnabled) {
+      Task {
+        await ConsentManager.shared.syncGranularConsentSilently()
+      }
     }
   }
 

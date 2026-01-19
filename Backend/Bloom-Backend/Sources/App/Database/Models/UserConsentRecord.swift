@@ -39,6 +39,9 @@ final class UserConsentRecord: Model, Content, @unchecked Sendable {
   @Field(key: "today_insights_consent")
   var todayInsightsConsent: Bool?
 
+  @Field(key: "monitor_consent")
+  var monitorConsent: Bool?
+
   @Field(key: "biological_age_consent")
   var biologicalAgeConsent: Bool?
 
@@ -89,6 +92,7 @@ final class UserConsentRecord: Model, Content, @unchecked Sendable {
     healthDataConsent: Bool? = nil,
     chatWithBudConsent: Bool? = nil,
     todayInsightsConsent: Bool? = nil,
+    monitorConsent: Bool? = nil,
     biologicalAgeConsent: Bool? = nil,
     physicalActivityConsent: Bool? = nil,
     bodyMetricsConsent: Bool? = nil,
@@ -110,6 +114,7 @@ final class UserConsentRecord: Model, Content, @unchecked Sendable {
     self.healthDataConsent = healthDataConsent
     self.chatWithBudConsent = chatWithBudConsent
     self.todayInsightsConsent = todayInsightsConsent
+    self.monitorConsent = monitorConsent
     self.biologicalAgeConsent = biologicalAgeConsent
     self.physicalActivityConsent = physicalActivityConsent
     self.bodyMetricsConsent = bodyMetricsConsent

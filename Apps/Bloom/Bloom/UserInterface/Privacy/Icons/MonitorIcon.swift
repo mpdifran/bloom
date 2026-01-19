@@ -34,19 +34,24 @@ struct MonitorIcon: View {
         .fill(.background.secondary)
         .overlay {
           VStack(spacing: padding(for: proxy)) {
-            RoundedRectangle(cornerRadius: innerCornerRadius(for: proxy))
-              .fill(.fill)
-              .if(isEnabled) {
-                $0.shimmer()
-              }
-              .transition(.scale(scale: 0.1, anchor: .bottom).combined(with: .opacity))
-
             MiniMonitorBar(
               metricZScore: metricZScore,
               minZScore: minZScore,
               maxZScore: maxZScore
             )
             .frame(height: proxy.size.width * 0.15)
+            .padding(proxy.size.width * 0.08)
+            .background {
+              RoundedRectangle(cornerRadius: innerCornerRadius(for: proxy))
+                .fill(.background)
+            }
+
+            RoundedRectangle(cornerRadius: innerCornerRadius(for: proxy))
+              .fill(.fill)
+              .if(isEnabled) {
+                $0.shimmer()
+              }
+              .transition(.scale(scale: 0.1, anchor: .bottom).combined(with: .opacity))
           }
           .padding(padding(for: proxy))
           .horizontallyCentered()

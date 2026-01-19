@@ -16,6 +16,7 @@ struct MonitorView: View {
   @State private var presentedNavigationDestination: AnyView?
   @State private var presentedSheet: AnyView?
 
+  @ObservedObject private var entitlementController = EntitlementController.shared
   @Environment(TabController.self) private var tabController
 
   var body: some View {
@@ -23,14 +24,16 @@ struct MonitorView: View {
       contentView
       .navigationTitle("Monitor")
       .toolbar {
-        ToolbarItem(placement: .cancellationAction) {
-          Button {
-            presentedSheet = MonitorSettingsView().asAny
-          } label: {
-            Image(systemSymbol: .sliderHorizontal3)
-              .bold()
+        if entitlementController.hasBloomPro == true {
+          ToolbarItem(placement: .cancellationAction) {
+            Button {
+              presentedSheet = MonitorSettingsView().asAny
+            } label: {
+              Image(systemSymbol: .sliderHorizontal3)
+                .bold()
+            }
+            .buttonStyle(.plain)
           }
-          .buttonStyle(.plain)
         }
         SettingsProfileViewToolbarButton()
       }
@@ -73,7 +76,16 @@ struct MonitorView: View {
 
   // MARK: - Content View
 
+  @ViewBuilder
   private var contentView: some View {
+    if entitlementController.hasBloomPro == true {
+      monitorListContent
+    } else {
+      MonitorWelcomeView(presentedSheet: $presentedSheet)
+    }
+  }
+
+  private var monitorListContent: some View {
     BloomScrollView(spacing: 16) {
       // Section 1: Monitors needing attention
       if !viewModel.monitorsNeedingAttention.isEmpty {

@@ -26,6 +26,8 @@ public struct ConsentResponse: Codable, Hashable, Sendable {
   public let chatWithBudConsent: Bool?
   /// Whether the user has granted consent for Today Insights feature (true = granted, false = denied, nil = not asked)
   public let todayInsightsConsent: Bool?
+  /// Whether the user has granted consent for Monitor feature (true = granted, false = denied, nil = not asked)
+  public let monitorConsent: Bool?
   /// Whether the user has granted consent for Biological Age feature (true = granted, false = denied, nil = not asked)
   public let biologicalAgeConsent: Bool?
 
@@ -62,6 +64,7 @@ public struct ConsentResponse: Codable, Hashable, Sendable {
     healthDataConsent: Bool? = nil,
     chatWithBudConsent: Bool? = nil,
     todayInsightsConsent: Bool? = nil,
+    monitorConsent: Bool? = nil,
     biologicalAgeConsent: Bool? = nil,
     physicalActivityConsent: Bool? = nil,
     bodyMetricsConsent: Bool? = nil,
@@ -82,6 +85,7 @@ public struct ConsentResponse: Codable, Hashable, Sendable {
     self.healthDataConsent = healthDataConsent
     self.chatWithBudConsent = chatWithBudConsent
     self.todayInsightsConsent = todayInsightsConsent
+    self.monitorConsent = monitorConsent
     self.biologicalAgeConsent = biologicalAgeConsent
     self.physicalActivityConsent = physicalActivityConsent
     self.bodyMetricsConsent = bodyMetricsConsent

@@ -15,6 +15,7 @@ extension BloomPlusPaywall {
   enum Focus {
     case standard
     case todayInsights
+    case monitor
   }
 }
 
@@ -69,6 +70,8 @@ struct BloomPlusPaywall: View {
             standardContent
           case .todayInsights:
             todayInsightFocusedContent
+          case .monitor:
+            monitorFocusedContent
           }
         }
         .background {
@@ -133,9 +136,8 @@ private extension BloomPlusPaywall {
         }
 
         BloomPlusTodayCardShowcaseCell()
-        BloomPlusBioAgeMeterView()
-          .padding(.horizontal)
         BloomPlusFeaturesListView()
+        BloomPlusMonitorCardShowcaseCell()
       }
 
       VStack(spacing: 30) {
@@ -166,10 +168,40 @@ private extension BloomPlusPaywall {
             .padding(.horizontal)
         }
 
-        BloomPlusBioAgeMeterView()
+        BloomPlusFeaturesListView()
+        BloomPlusMonitorCardShowcaseCell()
+      }
+
+      VStack(spacing: 30) {
+        BloomPlusUserReviewListView()
+        BloomPlusFAQView()
+        BloomPlusLegalSectionView(restorePurchases: {
+          ThrowingUserTask(error: $error) {
+            try await viewModel.restorePurchases()
+          }
+        })
+      }
+      .padding()
+    }
+  }
+
+  var monitorFocusedContent: some View {
+    VStack {
+      VStack(spacing: 30) {
+        BloomPlusMonitorHeaderView()
+          .padding(.top)
+          .horizontallyCentered()
           .padding(.horizontal)
 
+        BloomPlusMonitorCardShowcaseCell()
+
+        if let package = selectedPackage, package.hasFreeIntroductoryOffer {
+          BloomPlusFreeTrialTimelineView(package: package)
+            .padding(.horizontal)
+        }
+
         BloomPlusFeaturesListView()
+        BloomPlusTodayCardShowcaseCell()
       }
 
       VStack(spacing: 30) {
@@ -267,5 +299,11 @@ private extension BloomPlusPaywall {
 #Preview("Today Insight Focused") {
   PreviewEnvironment {
     BloomPlusPaywall(focus: .todayInsights)
+  }
+}
+
+#Preview("Monitor Focused") {
+  PreviewEnvironment {
+    BloomPlusPaywall(focus: .monitor)
   }
 }

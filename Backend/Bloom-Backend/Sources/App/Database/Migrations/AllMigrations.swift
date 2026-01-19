@@ -60,4 +60,5 @@ let allMigrations: [Migration] = [
   SaleRecord.AddDiscountBadgeColors(),
   SaleRecord.RemoveImageId(),
   SaleRecord.ConvertTargetAudiencesToText(),
+  UserConsentRecord.AddMonitorConsent(),
 ]

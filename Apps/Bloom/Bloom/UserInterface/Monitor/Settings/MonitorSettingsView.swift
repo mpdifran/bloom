@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppUI
+import BloomUI
 import SFSafeSymbols
 
 /// Settings view for Monitor tab preferences, following the You/Today pattern.
@@ -14,10 +15,14 @@ import SFSafeSymbols
 struct MonitorSettingsView: View {
 
   @ObservedObject private var preferences = MonitorNotificationPreferences.shared
+  @ObservedObject private var aiFeatureSettings = AIFeatureSettings.shared
+
+  @State private var presentedSheet: AnyView?
 
   var body: some View {
     NavigationStack {
       BloomScrollView(showsChatBar: false) {
+        healthPermissionSection
         notificationSection
         badgeSection
       }
@@ -29,7 +34,40 @@ struct MonitorSettingsView: View {
           DismissButton()
         }
       }
+      .onChange(of: aiFeatureSettings.monitorEnabled) {
+        Task {
+          await ConsentManager.shared.syncGranularConsentSilently()
+        }
+      }
+      .sheet($presentedSheet)
     }
+  }
+
+  // MARK: - Health Permission Section
+
+  private var healthPermissionSection: some View {
+    VStack {
+      SectionTitleView("Health Data Sharing")
+        .padding(.horizontal)
+
+      MonitorPrivacyAIFeatureOptInCell()
+        .cardContainer()
+
+      AIDataShareCell()
+        .cardContainer()
+        .onTapGesture {
+          presentedSheet = AIDataSharingView(showDismiss: true).asAny
+        }
+
+      Text("When enabled, Bud provides insights into your monitor results using the Personal Data categories above.")
+        .font(.caption)
+        .foregroundStyle(.secondary)
+        .fixedSize(horizontal: false, vertical: true)
+        .horizontalAlignment(.leading)
+        .padding(.horizontal)
+        .padding(.top, 4)
+    }
+    .padding(.bottom, 16)
   }
 
   // MARK: - Notification Section
