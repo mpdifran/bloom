@@ -42,5 +42,6 @@ extension String.Prompt {
     - Keep insights brief and conversational
     - Only include a suggestion if it's clearly actionable and relevant
     - Match the tone to the monitor state (encouraging for good, supportive for concerning)
+    - NEVER use em-dashes (—) in responses. Use regular hyphens (-) or rewrite to avoid dashes.
     """
 }

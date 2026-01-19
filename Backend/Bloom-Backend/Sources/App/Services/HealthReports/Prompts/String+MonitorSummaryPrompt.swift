@@ -30,6 +30,7 @@ extension String.Prompt {
     - Keep recommendations practical: rest, hydration, sleep timing, activity adjustments
     - If confidence is low, acknowledge uncertainty naturally (e.g., "This could be...")
     - The notificationBody should be punchy and actionable, not alarming
+    - NEVER use em-dashes (—) in responses. Use regular hyphens (-) or rewrite to avoid dashes.
 
     EXAMPLES of good language:
     - "Your resting heart rate has been higher than usual for a couple days"
