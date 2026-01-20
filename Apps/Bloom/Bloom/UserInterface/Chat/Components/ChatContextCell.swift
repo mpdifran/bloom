@@ -52,7 +52,8 @@ struct ChatContextCell: View {
         ChatContextCell(
           chatContext: ChatContext(
             title: "Fiber Win",
-            context: "You crushed your fiber goal with 11 g (110% of target), thanks to snacks like sourmelon bites. Fiber's your friend for digestion and fullness."
+            context: "You crushed your fiber goal with 11 g (110% of target), thanks to snacks like sourmelon bites. Fiber's your friend for digestion and fullness.",
+            source: .todayInsight
           )
         )
       }

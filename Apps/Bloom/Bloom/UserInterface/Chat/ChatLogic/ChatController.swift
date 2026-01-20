@@ -227,7 +227,8 @@ extension ChatController {
       let chatContextTexts = chatContexts.reduce("", { partialResult, chatContext in
         partialResult + "\n\(chatContext.title): \(chatContext.context)"
       })
-      extraSystemContext = "The user is asking a question about these insights from the Today View: \n\n\(chatContextTexts)"
+      let sourcePrompt = chatContexts.first?.source.systemPromptPrefix ?? "The user is asking about:"
+      extraSystemContext = "\(sourcePrompt)\n\n\(chatContextTexts)"
     } else {
       extraSystemContext = nil
     }

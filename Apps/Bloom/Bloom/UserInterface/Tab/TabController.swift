@@ -60,6 +60,21 @@ struct ChatContext: Identifiable, Hashable, Sendable, Codable {
 
   let title: String
   let context: String
+  let source: Source
+
+  enum Source: String, Codable, Hashable, Sendable {
+    case todayInsight
+    case monitorInsight
+
+    var systemPromptPrefix: String {
+      switch self {
+      case .todayInsight:
+        return "The user is asking a question about these insights from the Today View:"
+      case .monitorInsight:
+        return "The user is asking a question about this AI insight from a Health Monitor:"
+      }
+    }
+  }
 }
 
 @Observable @MainActor

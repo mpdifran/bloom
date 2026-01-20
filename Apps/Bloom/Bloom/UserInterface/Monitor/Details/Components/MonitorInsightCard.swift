@@ -17,6 +17,7 @@ struct MonitorInsightCard: View {
   let suggestion: String?
   let isLoading: Bool
   let reloadInsight: () async -> Void
+  var askBudAction: (() -> Void)?
 
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {
@@ -50,6 +51,7 @@ struct MonitorInsightCard: View {
         .font(.body)
         .contentTransition(.numericText())
         .frame(maxWidth: .infinity)
+        .fixedSize(horizontal: false, vertical: true)
         .if(isLoading) {
           $0.padding(.bottom)
         }
@@ -63,6 +65,7 @@ struct MonitorInsightCard: View {
         Text(suggestion)
           .font(.subheadline)
           .foregroundStyle(.secondary)
+          .fixedSize(horizontal: false, vertical: true)
       }
 
       if hasError {
@@ -82,6 +85,13 @@ struct MonitorInsightCard: View {
         endPoint: .trailing
       )
     )
+    .contextMenu {
+      if insight != nil, let askBudAction {
+        Button("Chat with Bud", systemImage: "ellipsis.message") {
+          askBudAction()
+        }
+      }
+    }
     .shadow(color: .monitorLow.opacity(0.3), radius: 20)
     .animation(.default, value: insight)
     .animation(.default, value: suggestion)

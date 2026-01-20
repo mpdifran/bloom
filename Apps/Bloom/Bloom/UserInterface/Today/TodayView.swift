@@ -755,7 +755,7 @@ extension TodayView {
     TelemetryDeck.signal("Ask Bud Attempted", parameters: ["source": source])
 
     EntitledAction(presentedSheet: $presentedSheet) {
-      let context = ChatContext(title: title, context: content)
+      let context = ChatContext(title: title, context: content, source: .todayInsight)
       tabController.chatContexts = [context]
       tabController.isShowingChat = true
 

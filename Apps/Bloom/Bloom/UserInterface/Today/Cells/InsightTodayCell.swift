@@ -95,7 +95,7 @@ struct InsightCard: View {
     TelemetryDeck.signal("Ask Bud Attempted", parameters: ["source": "Today Insight"])
     
     EntitledAction(presentedSheet: $presentedSheet, focus: .todayInsights) {
-      let context = ChatContext(title: insight.title, context: insight.body)
+      let context = ChatContext(title: insight.title, context: insight.body, source: .todayInsight)
       tabController.chatContexts = [context]
       tabController.isShowingChat = true
       
