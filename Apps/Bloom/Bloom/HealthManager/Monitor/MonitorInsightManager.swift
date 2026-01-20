@@ -33,9 +33,6 @@ final class MonitorInsightManager {
   /// Cached insights per monitor type (in-memory + UserDefaults)
   private var cachedInsights: [MonitorType: CachedInsight] = [:]
 
-  /// Cache duration: 1 hour
-  private let cacheValidityDuration: TimeInterval = 60 * 60
-
   private init() {
     loadAllCachedInsights()
   }
@@ -44,8 +41,7 @@ final class MonitorInsightManager {
 
   func insight(for monitorType: MonitorType) -> MonitorInsightResponse? {
     guard AIFeatureSettings.shared.monitorEnabled else { return nil }
-    guard let cached = cachedInsights[monitorType],
-          isCacheValid(cached) else { return nil }
+    guard let cached = cachedInsights[monitorType] else { return nil }
     return cached.response
   }
 
@@ -68,7 +64,6 @@ final class MonitorInsightManager {
 
     // Check if cache is still valid and monitor state hasn't changed
     if let cached = cachedInsights[monitorType],
-       isCacheValid(cached),
        cached.monitorState == currentResult.state {
       return // Cache is valid, no refresh needed
     }
@@ -174,10 +169,6 @@ final class MonitorInsightManager {
     case .stress:
       return [.physicalActivity, .bodyMetrics, .mentalWellness]
     }
-  }
-
-  private func isCacheValid(_ cached: CachedInsight) -> Bool {
-    Date().timeIntervalSince(cached.timestamp) < cacheValidityDuration
   }
 
   private func clearCache(for monitorType: MonitorType) {

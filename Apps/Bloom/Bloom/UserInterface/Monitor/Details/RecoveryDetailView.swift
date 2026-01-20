@@ -56,6 +56,7 @@ struct RecoveryDetailView: View {
     .navigationTitle("Recovery")
     .navigationBarTitleDisplayMode(.inline)
     .sensoryFeedback(.selection, trigger: selectedPeriod)
+    .animation(.default, value: currentResult)
     .task {
       await loadAllData()
     }
@@ -71,7 +72,7 @@ struct RecoveryDetailView: View {
       stateHistorySection
 
       if let currentResult {
-        MonitorInsightCard(
+        MonitorInsightCardLoader(
           monitorType: .recovery,
           currentResult: currentResult
         )

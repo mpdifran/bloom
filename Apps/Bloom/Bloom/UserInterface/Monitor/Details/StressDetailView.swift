@@ -56,6 +56,7 @@ struct StressDetailView: View {
     .navigationTitle("Stress")
     .navigationBarTitleDisplayMode(.inline)
     .sensoryFeedback(.selection, trigger: selectedPeriod)
+    .animation(.default, value: currentResult)
     .task {
       await loadAllData()
     }
@@ -71,7 +72,7 @@ struct StressDetailView: View {
       stateHistorySection
 
       if let currentResult {
-        MonitorInsightCard(
+        MonitorInsightCardLoader(
           monitorType: .stress,
           currentResult: currentResult
         )

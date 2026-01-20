@@ -56,6 +56,7 @@ struct SleepDetailView: View {
     .navigationTitle("Sleep")
     .navigationBarTitleDisplayMode(.inline)
     .sensoryFeedback(.selection, trigger: selectedPeriod)
+    .animation(.default, value: currentResult)
     .task {
       await loadAllData()
     }
@@ -71,7 +72,7 @@ struct SleepDetailView: View {
       stateHistorySection
 
       if let currentResult {
-        MonitorInsightCard(
+        MonitorInsightCardLoader(
           monitorType: .sleep,
           currentResult: currentResult
         )

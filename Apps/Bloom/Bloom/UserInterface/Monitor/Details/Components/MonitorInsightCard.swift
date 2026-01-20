@@ -9,110 +9,146 @@ import SwiftUI
 import SFSafeSymbols
 import BloomModel
 import BloomUI
+import AppUI
 
 /// A card displaying AI-generated insight for a monitor detail view.
 struct MonitorInsightCard: View {
-  let monitorType: MonitorType
-  let currentResult: MonitorResult
-
-  @State private var manager = MonitorInsightManager.shared
-  @ObservedObject private var aiFeatureSettings = AIFeatureSettings.shared
+  let insight: String?
+  let suggestion: String?
+  let isLoading: Bool
+  let reloadInsight: () async -> Void
 
   var body: some View {
-    Group {
-      if !aiFeatureSettings.monitorEnabled {
-        // Don't show anything if monitor AI is disabled
-        EmptyView()
-      } else if manager.isLoading(for: monitorType) {
-        loadingView
-      } else if let insight = manager.insight(for: monitorType) {
-        insightContent(insight)
-      } else if manager.hasError(for: monitorType) {
-        errorView
-      } else {
-        // No insight yet, will load in task
-        loadingView
+    VStack(alignment: .leading, spacing: 12) {
+      HStack(spacing: 8) {
+        Text("Bud's Insight")
+          .font(.title3)
+          .bold()
+          .fontDesign(.rounded)
+
+        Spacer()
+
+        Image(systemSymbol: .sparkles)
+          .foregroundStyle(
+            LinearGradient(
+              colors: [.monitorLow, .monitorHigh],
+              startPoint: .topLeading,
+              endPoint: .bottomTrailing
+            )
+          )
+          .font(.title2)
+      }
+
+      if isLoading {
+        CircularSpinnerView()
+          .foregroundStyle(.tint)
+          .horizontallyCentered()
+          .padding(.top)
+      }
+
+      Text(mainText)
+        .font(.body)
+        .contentTransition(.numericText())
+        .frame(maxWidth: .infinity)
+        .if(isLoading) {
+          $0.padding(.bottom)
+        }
+        .if(hasError) {
+          $0.padding(.vertical)
+        }
+
+      if let suggestion {
+        Divider()
+
+        Text(suggestion)
+          .font(.subheadline)
+          .foregroundStyle(.secondary)
+      }
+
+      if hasError {
+        AsyncButton {
+          await reloadInsight()
+        } label: {
+          Text("Try Again")
+        }
+        .buttonStyle(.secondary)
+        .horizontallyCentered()
       }
     }
-    .task {
-      await manager.loadInsightIfNeeded(
-        for: monitorType,
-        currentResult: currentResult
+    .cardContainer(
+      stroke: LinearGradient(
+        colors: [.monitorLow, .monitorTypical, .monitorHigh],
+        startPoint: .leading,
+        endPoint: .trailing
+      )
+    )
+    .shadow(color: .monitorLow.opacity(0.3), radius: 20)
+    .animation(.default, value: insight)
+    .animation(.default, value: suggestion)
+    .animation(.default, value: isLoading)
+  }
+}
+
+private extension MonitorInsightCard {
+
+  var mainText: String {
+    if let insight {
+      return insight
+    } else if isLoading {
+      return  "Thinking..."
+    } else {
+      return "Oops, there was an error."
+    }
+  }
+
+  var hasError: Bool {
+    insight == nil && !isLoading
+  }
+}
+
+// MARK: - Previews
+
+#Preview("With Suggestion") {
+  PreviewEnvironment {
+    BloomScrollView {
+      MonitorInsightCard(
+        insight: "Your recovery metrics have been elevated for 2 days now. Your resting heart rate and HRV both suggest your body is working harder than usual to recover. This pattern often appears when fighting off an illness or after intense training.",
+        suggestion: "Consider taking it easy today and prioritizing sleep tonight.",
+        isLoading: false,
+        reloadInsight: { }
       )
     }
-    .onChange(of: currentResult.state) { _, _ in
-      Task {
-        await manager.refreshInsight(
-          for: monitorType,
-          currentResult: currentResult
-        )
-      }
+  }
+}
+
+#Preview("Without Suggestion") {
+  PreviewEnvironment {
+    BloomScrollView {
+      MonitorInsightCard(
+        insight: "Your sleep rhythm has been consistent this week. Your bedtime and wake time variability are both within healthy ranges, which supports better sleep quality overall.",
+        suggestion: nil,
+        isLoading: false,
+        reloadInsight: { }
+      )
     }
   }
+}
 
-  // MARK: - Content Views
-
-  private func insightContent(_ insight: MonitorInsightResponse) -> some View {
-    VStack(alignment: .leading, spacing: 12) {
-      // Header
-      HStack(spacing: 8) {
-        Image(systemSymbol: .sparkles)
-          .foregroundStyle(.accent)
-        Text("AI Insight")
-          .font(.headline)
-      }
-
-      // Main insight text
-      Text(insight.insight)
-        .font(.body)
-        .foregroundStyle(.primary)
-
-      // Suggestion if present
-      if let suggestion = insight.suggestion {
-        HStack(alignment: .top, spacing: 8) {
-          Image(systemSymbol: .lightbulbFill)
-            .foregroundStyle(.yellow)
-            .font(.subheadline)
-          Text(suggestion)
-            .font(.subheadline)
-            .foregroundStyle(.secondary)
-        }
-        .padding(.top, 4)
-      }
+#Preview("Loading and Error") {
+  PreviewEnvironment {
+    BloomScrollView {
+      MonitorInsightCard(
+        insight: nil,
+        suggestion: nil,
+        isLoading: true,
+        reloadInsight: { }
+      )
+      MonitorInsightCard(
+        insight: nil,
+        suggestion: nil,
+        isLoading: false,
+        reloadInsight: { }
+      )
     }
-    .cardContainer()
-  }
-
-  private var loadingView: some View {
-    HStack(spacing: 12) {
-      ProgressView()
-      Text("Generating insight...")
-        .font(.subheadline)
-        .foregroundStyle(.secondary)
-    }
-    .frame(maxWidth: .infinity)
-    .padding(.vertical, 20)
-    .cardContainer()
-  }
-
-  private var errorView: some View {
-    VStack(spacing: 8) {
-      Text("Unable to load insight")
-        .font(.subheadline)
-        .foregroundStyle(.secondary)
-
-      Button("Try Again") {
-        Task {
-          await manager.refreshInsight(
-            for: monitorType,
-            currentResult: currentResult
-          )
-        }
-      }
-      .font(.subheadline)
-    }
-    .frame(maxWidth: .infinity)
-    .padding(.vertical, 16)
-    .cardContainer()
   }
 }
