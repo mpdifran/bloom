@@ -16,4 +16,5 @@ struct DayReviewHealthData: SendableNetworkModel {
   let simplifiedWeather: SimplifiedWeatherData?
   let events: DayReviewEventData?
   let biologicalAgeDiff: HealthVitalData.BioAgeDailyDiff?
+  let monitorAlerts: [MonitorContextData]?
 }

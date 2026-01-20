@@ -38,7 +38,8 @@ extension DayReviewCalculator {
         weather: nil,
         simplifiedWeather: nil,
         events: nil,
-        biologicalAgeDiff: nil
+        biologicalAgeDiff: nil,
+        monitorAlerts: nil
       )
     }
 
@@ -60,14 +61,16 @@ extension DayReviewCalculator {
     async let simplifiedWeather = shouldFetchWeather ? DayReviewWeatherCalculator.shared.calculateSimplifiedWeatherData(for: date) : nil
     async let events = shouldFetchCalendarEvents ? DayReviewEventCalculator.shared.calculateEventData(for: date) : nil
     async let bioAgeDiff = generateBiologicalAgeDiff(for: date, enabledCategories: enabledCategories)
+    async let monitorAlerts = fetchMonitorAlerts(enabledCategories: enabledCategories)
 
-    let (demographicsResult, vitalsResult, goalProgressResult, simplifiedWeatherResult, eventsResult, bioAgeDiffResult) = await (
+    let (demographicsResult, vitalsResult, goalProgressResult, simplifiedWeatherResult, eventsResult, bioAgeDiffResult, monitorAlertsResult) = await (
       demographics,
       vitals,
       try goalProgress,
       simplifiedWeather,
       events,
-      bioAgeDiff
+      bioAgeDiff,
+      monitorAlerts
     )
 
     return DayReviewHealthData(
@@ -77,7 +80,8 @@ extension DayReviewCalculator {
       weather: nil,
       simplifiedWeather: simplifiedWeatherResult,
       events: eventsResult,
-      biologicalAgeDiff: bioAgeDiffResult
+      biologicalAgeDiff: bioAgeDiffResult,
+      monitorAlerts: monitorAlertsResult
     )
   }
 
@@ -240,5 +244,59 @@ private extension DayReviewCalculator {
   func formatImprovement(_ improvement: Double) -> String {
     let sign = improvement >= 0 ? "+" : ""
     return "\(sign)\(improvement.format(using: .oneDecimalPlace)) years"
+  }
+}
+
+// MARK: - Monitor Alerts
+
+private extension DayReviewCalculator {
+
+  /// Fetches monitor alerts (only alert/attention states) filtered by privacy settings.
+  /// A monitor's data is only included if all of its required categories are enabled.
+  func fetchMonitorAlerts(enabledCategories: Set<AIHealthCategory>) async -> [MonitorContextData]? {
+    // Get cached monitor results
+    let results = await MonitorCalculator.shared.getCachedStates()
+
+    // Filter to only concerning states (alert or attention)
+    let concerningResults = results.filter { $0.state.isConcerning }
+
+    guard !concerningResults.isEmpty else { return nil }
+
+    // Filter by privacy settings - all required categories must be enabled
+    let filteredResults = concerningResults.filter { result in
+      let requiredCategories = requiredCategories(for: result.monitorType)
+      return requiredCategories.isSubset(of: enabledCategories)
+    }
+
+    guard !filteredResults.isEmpty else { return nil }
+
+    // Convert to context data
+    return filteredResults.map { result in
+      MonitorContextData(
+        monitorType: result.monitorType.rawValue,
+        state: result.state.rawValue,
+        consecutiveDays: result.consecutiveDays,
+        findings: result.findings.map { finding in
+          MonitorContextData.FindingData(
+            title: finding.title,
+            explanation: finding.explanation
+          )
+        },
+        stressSubtype: result.stressSubtype?.rawValue
+      )
+    }
+  }
+
+  /// Returns the required health categories for a monitor type.
+  /// Same mapping as MonitorInsightManager.
+  func requiredCategories(for monitorType: MonitorType) -> Set<AIHealthCategory> {
+    switch monitorType {
+    case .sleep:
+      return [.sleep, .physicalActivity]
+    case .recovery:
+      return [.bodyMetrics, .physicalActivity]
+    case .stress:
+      return [.physicalActivity, .bodyMetrics, .mentalWellness]
+    }
   }
 }
