@@ -89,6 +89,14 @@ final class MonitorInsightManager {
     for monitorType: MonitorType,
     currentResult: MonitorResult
   ) async {
+    // Check if required categories are enabled - skip entirely if not
+    // to prevent leaking health data in the monitorContext
+    let enabledCategories = AIDataSharingSettings.shared.enabledCategories
+    let required = requiredCategories(for: monitorType)
+    guard required.isSubset(of: enabledCategories) else {
+      return
+    }
+
     loadingStates[monitorType] = true
     errorStates[monitorType] = false
 

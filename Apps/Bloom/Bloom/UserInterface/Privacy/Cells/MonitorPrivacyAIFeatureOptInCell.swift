@@ -25,7 +25,7 @@ struct MonitorPrivacyAIFeatureOptInCell: View {
         MonitorIcon(isEnabled: aiFeatureSettings.monitorEnabled)
           .frame(width: 40)
       }
-      .tint(.monitorTypical)
+      .tint(.monitorHigh)
   }
 }
 

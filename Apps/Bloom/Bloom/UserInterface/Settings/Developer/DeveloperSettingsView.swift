@@ -13,6 +13,7 @@ import DataContainer
 import CoreHealth
 import CoreNetwork
 import BloomModel
+import BloomUI
 
 struct DeveloperSettingsView: View {
 
@@ -432,6 +433,40 @@ extension DeveloperSettingsView {
         } label: {
           LabeledContent("Copy Today Insight Data to Clipboard") {
             Image(systemSymbol: .sunrise)
+          }
+          .multilineTextAlignment(.leading)
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
+          .selectable()
+        }
+        .frame(height: 60)
+
+        Divider()
+
+        AsyncButton {
+          do {
+            let contexts = try await generateMonitorInsightContexts()
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+            let jsonData = try encoder.encode(contexts)
+            let jsonString = String(data: jsonData, encoding: .utf8) ?? "{}"
+            UIPasteboard.general.string = jsonString
+
+            await MainActor.run {
+              alertDetails = AlertDetails(
+                title: "Copied to Clipboard",
+                message: "Monitor insight contexts have been copied to your clipboard."
+              )
+            }
+          } catch {
+            await MainActor.run {
+              self.error = error
+            }
+          }
+        } label: {
+          LabeledContent("Copy Monitor Insight Context to Clipboard") {
+            Image(systemSymbol: .waveformPathEcg)
           }
           .multilineTextAlignment(.leading)
           .bold()
@@ -972,6 +1007,84 @@ extension DeveloperSettingsView {
       return state.rawValue.capitalized
     }
   }
+
+  // MARK: - Monitor Insight Context
+
+  private func generateMonitorInsightContexts() async throws -> [MonitorInsightContextDebug] {
+    let results = await MonitorCalculator.shared.getCachedStates()
+    let enabledCategories = await AIDataSharingSettings.shared.enabledCategories
+
+    var contexts: [MonitorInsightContextDebug] = []
+
+    for result in results {
+      // Check if required categories are enabled - skip entirely if not
+      // to prevent leaking health data in the monitorContext
+      let required = requiredCategories(for: result.monitorType)
+      guard required.isSubset(of: enabledCategories) else {
+        continue
+      }
+
+      let monitorContext = try JSONEncoder.bloomModel.encode(result)
+      let monitorContextString = String(data: monitorContext, encoding: .utf8) ?? "{}"
+
+      let healthContext = try await generateHealthContext(
+        for: result.monitorType,
+        enabledCategories: enabledCategories
+      )
+
+      contexts.append(MonitorInsightContextDebug(
+        monitorType: result.monitorType.rawValue,
+        monitorContext: monitorContextString,
+        healthContext: healthContext,
+        timezone: TimeZone.current.identifier
+      ))
+    }
+
+    return contexts
+  }
+
+  private func generateHealthContext(
+    for monitorType: MonitorType,
+    enabledCategories: Set<AIHealthCategory>
+  ) async throws -> String {
+    let relevantCategories = requiredCategories(for: monitorType)
+    let activeCategories = relevantCategories.intersection(enabledCategories)
+
+    guard !activeCategories.isEmpty else {
+      return "{}"
+    }
+
+    let startDate = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
+    guard let healthData = await ChatVitalConverter.shared.convertHealthData(
+      from: startDate,
+      enabledCategories: activeCategories
+    ) else {
+      return "{}"
+    }
+
+    let data = try JSONEncoder.bloomModel.encode(healthData)
+    return String(data: data, encoding: .utf8) ?? "{}"
+  }
+
+  private func requiredCategories(for monitorType: MonitorType) -> Set<AIHealthCategory> {
+    switch monitorType {
+    case .sleep:
+      return [.sleep, .physicalActivity]
+    case .recovery:
+      return [.bodyMetrics, .physicalActivity]
+    case .stress:
+      return [.physicalActivity, .bodyMetrics, .mentalWellness]
+    }
+  }
+}
+
+// MARK: - Debug Models
+
+private struct MonitorInsightContextDebug: Codable {
+  let monitorType: String
+  let monitorContext: String
+  let healthContext: String
+  let timezone: String
 }
 
 #Preview {
