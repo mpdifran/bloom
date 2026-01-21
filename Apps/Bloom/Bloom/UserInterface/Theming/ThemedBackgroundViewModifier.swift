@@ -15,7 +15,7 @@ struct ThemedBackgroundViewModifier: ViewModifier {
     content
       .background {
         Rectangle()
-          .fill(themeController.theme.backgroundColor)
+          .fill(.background.secondary)
           .ignoresSafeArea()
       }
   }
