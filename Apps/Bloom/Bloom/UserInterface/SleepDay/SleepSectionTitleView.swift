@@ -37,7 +37,7 @@ struct SleepSectionTitleView: View {
 
       Spacer()
     }
-    .font(.title2)
+    .font(.title3)
     .bold()
     .fontDesign(.rounded)
   }

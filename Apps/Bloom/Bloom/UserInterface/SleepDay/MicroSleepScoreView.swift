@@ -1,22 +1,15 @@
 //
-//  SleepScoreView.swift
-//  Supplements
+//  MicroSleepScoreView.swift
+//  Bloom
 //
-//  Created by Mark DiFranco on 2024-07-10.
+//  Created by Mark DiFranco on 2026-01-21.
 //
 
-import SFSafeSymbols
 import SwiftUI
-import CoreHealth
+import BloomFoundation
 
-struct SleepScoreView: View {
+struct MicroSleepScoreView: View {
   let score: Int?
-  let isMini: Bool
-
-  init(score: Int?, isMini: Bool = false) {
-    self.score = score
-    self.isMini = isMini
-  }
 
   var body: some View {
     HStack(spacing: 4) {
@@ -28,7 +21,7 @@ struct SleepScoreView: View {
         Text("--")
       }
     }
-    .font(isMini ? .title2 : .system(size: 50))
+    .font(.title3)
     .bold()
     .fontDesign(.rounded)
     .foregroundStyle(.white)
@@ -47,19 +40,19 @@ struct SleepScoreView: View {
           )
         )
     }
+    .frame(height: 30)
     .animation(.default, value: score)
   }
 }
 
 #Preview {
   PreviewEnvironment {
-    List {
-      SleepScoreView(score: 93)
-      SleepScoreView(score: 100)
-      SleepScoreView(score: 13)
-      SleepScoreView(score: nil)
-      SleepScoreView(score: 56, isMini: true)
+    BloomScrollView {
+      VStack {
+        MicroSleepScoreView(score: 85)
+        MicroSleepScoreView(score: 72)
+        MicroSleepScoreView(score: nil)
+      }
     }
-    .listStyle(.plain)
   }
 }

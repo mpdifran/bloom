@@ -19,26 +19,18 @@ struct SleepScoreStatCard: View {
       sleepGauge
         .padding(.bottom, 8)
     }
-    .tint(score == nil ? AnyShapeStyle(.gray) : AnyShapeStyle(.awakeSleep))
+    .tint(score == nil ? AnyShapeStyle(.gray) : AnyShapeStyle(.coreSleep))
   }
 }
 
 private extension SleepScoreStatCard {
 
-  @ViewBuilder
   var sleepGauge: some View {
-    if let score {
-      StatGauge(
-        progress: score / 100,
-        label: "\(Int(score))",
-        color: .awakeSleep
-      )
-    } else {
-      StatGauge(
-        progress: 0,
-        label: "--",
-        color: .gray
-      )
+    StatGauge(
+      progress: (score ?? 0) / 100,
+      color: score == nil ? .gray : .coreSleep
+    ) {
+      MicroSleepScoreView(score: score.map { Int($0) })
     }
   }
 }

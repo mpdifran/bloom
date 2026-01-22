@@ -14,33 +14,53 @@ struct SleepRespiratoryRateChartView: View {
 
     var body: some View {
         Chart(respiratoryRates) { respiratoryRate in
+            AreaMark(
+                x: .value("Date", respiratoryRate.startDate),
+                y: .value("Average", respiratoryRate.averageRespiratoryRate)
+            )
+            .foregroundStyle(
+                LinearGradient(
+                    colors: [Color.mutedLightBlue.opacity(0.4), Color.mutedLightBlue.opacity(0.05)],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            )
+            .interpolationMethod(.catmullRom)
+
             LineMark(
                 x: .value("Date", respiratoryRate.startDate),
                 y: .value("Average", respiratoryRate.averageRespiratoryRate)
             )
-            .foregroundStyle(.mutedTeal)
+            .foregroundStyle(Color.mutedLightBlue)
+            .lineStyle(StrokeStyle(lineWidth: 3))
+            .interpolationMethod(.catmullRom)
         }
         .chartYScale(
             domain: ((minY ?? 0) - 5)...((maxY ?? 0) + 5),
             range: .plotDimension
         )
         .chartYAxis {
-            AxisMarks { value in
+            AxisMarks(position: .trailing) { value in
                 AxisGridLine()
-                AxisTick()
-                AxisValueLabel()
+                    .foregroundStyle(.secondary.opacity(0.3))
+                if let doubleValue = value.as(Double.self) {
+                    AxisValueLabel {
+                        Text("\(Int(doubleValue))")
+                            .font(.caption2)
+                    }
+                }
             }
         }
         .chartXAxis {
-            AxisMarks(values: .stride(by: .hour)) { value in
+            AxisMarks(values: .stride(by: .hour)) { _ in
                 AxisGridLine()
-                AxisTick()
                 AxisValueLabel(format: .dateTime.hour())
             }
         }
         .chartForegroundStyleScale([
-            "Respiratory Rate": .mutedTeal
+            "Respiratory Rate": .mutedLightBlue
         ])
+        .chartLegend(.hidden)
     }
 }
 

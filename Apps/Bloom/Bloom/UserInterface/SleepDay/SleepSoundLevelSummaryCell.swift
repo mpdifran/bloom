@@ -10,29 +10,30 @@ import SwiftUI
 import CoreHealth
 
 struct SleepSoundLevelSummaryCell: View {
-    let soundLevels: [SleepAnalysis.SoundLevelDataPoint]
+  let soundLevels: [SleepAnalysis.SoundLevelDataPoint]
 
-    var body: some View {
-        Section {
-            VStack {
-                SleepSectionTitleView(
-                    title: "Sound Levels",
-                    symbol: .speakerZzzFill
-                )
+  var body: some View {
+    VStack {
+      SleepSectionTitleView(
+        title: "Sound Levels",
+        symbol: .speakerZzzFill
+      )
+      .padding(.top)
+      .padding(.horizontal)
 
-                SleepSoundLevelChartView(soundLevels: soundLevels)
-                    .frame(height: 120)
-            }
-            .padding(.bottom)
-        }
-        .tint(.mutedYellow)
+      SleepSoundLevelChartView(soundLevels: soundLevels)
+        .frame(height: 180)
+        .padding(.trailing)
     }
+    .cardContainer(includePadding: false)
+    .tint(.mutedYellow)
+  }
 }
 
 #Preview {
-    List {
-        SleepSoundLevelSummaryCell(
-            soundLevels: SleepAnalysis.SoundLevelDataPoint.previewData
-        )
-    }
+  List {
+    SleepSoundLevelSummaryCell(
+      soundLevels: SleepAnalysis.SoundLevelDataPoint.previewData
+    )
+  }
 }

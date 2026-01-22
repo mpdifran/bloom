@@ -52,12 +52,15 @@ private extension SleepHeartRateStatCard {
           x: .value("Day", dataPoint.date),
           y: .value("HR", dataPoint.heartRate)
         )
-        .symbol {
-          Circle()
-            .strokeBorder(Color.mutedRed, lineWidth: 2)
-            .background(Circle().fill(.background))
-            .frame(width: 8, height: 8)
-        }
+        .foregroundStyle(Color(.systemBackground))
+        .symbolSize(60)
+
+        PointMark(
+          x: .value("Day", dataPoint.date),
+          y: .value("HR", dataPoint.heartRate)
+        )
+        .foregroundStyle(Color.mutedRed)
+        .symbolSize(30)
       }
       .chartXAxis(.hidden)
       .chartYAxis(.hidden)

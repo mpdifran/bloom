@@ -311,7 +311,7 @@ private extension SleepStagesDetailsView {
 
       educationalCard(
         title: "Awake Time",
-        icon: .sunMaxFill,
+        icon: .boltHorizontal,
         color: .awakeSleep,
         goal: "Less than 5%",
         goalRange: nil,
@@ -323,7 +323,7 @@ private extension SleepStagesDetailsView {
 
       educationalCard(
         title: "REM Sleep",
-        icon: .eyeFill,
+        icon: .eyes,
         color: .remSleep,
         goal: "5-20% of sleep",
         goalRange: 5...20,
@@ -335,7 +335,7 @@ private extension SleepStagesDetailsView {
 
       educationalCard(
         title: "Core Sleep",
-        icon: .bedDoubleFill,
+        icon: .circleDottedCircle,
         color: .coreSleep,
         goal: "20-45% of sleep",
         goalRange: 20...45,
@@ -347,7 +347,7 @@ private extension SleepStagesDetailsView {
 
       educationalCard(
         title: "Deep Sleep",
-        icon: .moonFill,
+        icon: .arrowDownToLine,
         color: .deepSleep,
         goal: "5-15% of sleep",
         goalRange: 5...15,
@@ -475,7 +475,7 @@ private struct SleepStageAverages {
   var formattedTotalSleep: String {
     let hours = Int(totalSleepMinutes) / 60
     let mins = Int(totalSleepMinutes) % 60
-    return "\(hours)h \(mins)m avg"
+    return "\(hours)h \(mins)m"
   }
 
   var corePercentage: Double {

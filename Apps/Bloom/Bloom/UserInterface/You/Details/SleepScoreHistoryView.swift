@@ -187,7 +187,7 @@ private extension SleepScoreHistoryView {
 
   func sleepAnalysisCell(_ analysis: SleepAnalysis) -> some View {
     HStack(spacing: 12) {
-      SleepScoreView(sleepAnalysis: analysis, isMini: true)
+      SleepScoreView(score: analysis.overallScore, isMini: true)
 
       VStack(alignment: .leading, spacing: 4) {
         Text(analysis.endDate.formatted(.dateTime.weekday(.wide).month(.abbreviated).day()))

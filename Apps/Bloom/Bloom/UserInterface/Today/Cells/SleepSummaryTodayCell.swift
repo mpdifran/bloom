@@ -43,11 +43,30 @@ private extension SleepSummaryTodayCell {
   }
 
   func contentView(sleepAnalysis: SleepAnalysis) -> some View {
-    HStack(alignment: .top) {
-      SleepScoreView(sleepAnalysis: sleepAnalysis, isMini: true)
-        .fixedSize()
+    VStack(spacing: 12) {
+      if sleepAnalysis.hasDetailedSleepCategories {
+        MiniSleepStageChartView(sleepAnalysis: sleepAnalysis)
+
+        Divider()
+      }
 
       VStack(alignment: .leading) {
+        HStack(alignment: .top) {
+          VStack(alignment: .leading) {
+            Text(DateFormatter.weekdayFullMonthDayYear.string(from: sleepAnalysis.endDate))
+              .font(.title3)
+
+            Text("\(DateFormatter.justTimeShort.string(from: sleepAnalysis.startDate)) - \(DateFormatter.justTimeShort.string(from: sleepAnalysis.endDate))")
+              .font(.subheadline)
+              .foregroundStyle(.secondary)
+          }
+          .bold()
+          .fontDesign(.rounded)
+
+          Spacer()
+
+          MicroSleepScoreView(score: sleepAnalysis.overallScore)
+        }
         Text(summary)
           .font(.body)
           .multilineTextAlignment(.leading)

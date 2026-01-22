@@ -13,53 +13,47 @@ struct SleepScoreDetailsView: View {
   let sleepAnalysis: SleepAnalysis
 
   var body: some View {
-    HStack {
-      VStack(alignment: .leading, spacing: 20) {
+    VStack {
+      HStack {
         LabelledText(
-          label: "Sleep Length",
+          label: "Length",
           symbol: .clock,
           value: "\(DateFormatter.timeIntervalHourMinuteAbbreviated.string(for: sleepAnalysis.overallDurationComponents) ?? "")"
         )
         .tint(.mutedGreen)
 
         LabelledText(
-          label: "REM Sleep",
-          symbol: .eyes,
-          value: remDescription
-        )
-        .tint(sleepAnalysis.remSleepHours == nil ? Color.gray : Color.remSleep)
-      }
-
-      Spacer()
-
-      VStack(alignment: .leading, spacing: 20) {
-        LabelledText(
-          label: "Awake Time",
+          label: "Awake",
           symbol: .boltHorizontal,
           value: awakeDescription
         )
         .tint(sleepAnalysis.awakeSleepHours == nil ? .gray : .awakeSleep)
 
         LabelledText(
-          label: "Core Sleep",
-          symbol: .circleDottedCircle,
-          value: coreDescription
-        )
-        .tint(sleepAnalysis.coreSleepHours == nil ? .gray : .coreSleep)
-      }
-
-      Spacer()
-
-      VStack(alignment: .leading, spacing: 20) {
-        LabelledText(
-          label: "Heart Rate",
+          label: "HR",
           symbol: .heart,
           value: heartRateDescription
         )
         .tint(sleepAnalysis.averageHeartRate == nil ? .gray : .mutedPink)
+      }
+
+      HStack {
+        LabelledText(
+          label: "REM",
+          symbol: .eyes,
+          value: remDescription
+        )
+        .tint(sleepAnalysis.remSleepHours == nil ? Color.gray : Color.remSleep)
+        
+        LabelledText(
+          label: "Core",
+          symbol: .circleDottedCircle,
+          value: coreDescription
+        )
+        .tint(sleepAnalysis.coreSleepHours == nil ? .gray : .coreSleep)
 
         LabelledText(
-          label: "Deep Sleep",
+          label: "Deep",
           symbol: .arrowDownToLine,
           value: deepDescription
         )
@@ -114,43 +108,53 @@ private struct LabelledText: View {
   let value: String
 
   var body: some View {
-    VStack(alignment: .leading) {
-      HStack(spacing: 2) {
-        Image(systemSymbol: symbol)
+    VStack(alignment: .leading, spacing: 8) {
+      HStack(spacing: 0) {
         Text(label)
+
+        Spacer()
+
+        Image(systemSymbol: symbol)
       }
       .font(.caption)
       .bold()
+      .foregroundStyle(.tint)
 
       Text(value)
         .foregroundStyle(.tint)
         .bold()
         .font(.title3)
         .fontDesign(.rounded)
+        .lineLimit(1)
+        .minimumScaleFactor(0.7)
     }
+    .horizontalAlignment(.leading)
+    .frame(maxWidth: .infinity)
+    .cardContainer()
   }
 }
 
 #Preview {
-  List {
-    SleepScoreDetailsView(sleepAnalysis: SleepAnalysis.previewData[0])
+  PreviewEnvironment {
+    BloomScrollView {
+      SleepScoreDetailsView(sleepAnalysis: SleepAnalysis.previewData[0])
 
-    SleepScoreDetailsView(
-      sleepAnalysis: SleepAnalysis(
-        startDate: .now.addingTimeInterval(-30000),
-        endDate: .now,
-        hasDetailedSleepCategories: false,
-        deepSleepMinutes: 0,
-        coreSleepMinutes: 0,
-        remSleepMinutes: 0,
-        awakeSleepMinutes: 0,
-        averageRestingHeartRate: nil,
-        environmentalSoundLevels: [],
-        heartRate: [],
-        respiratoryRate: [],
-        wristTemperature: nil
+      SleepScoreDetailsView(
+        sleepAnalysis: SleepAnalysis(
+          startDate: .now.addingTimeInterval(-30000),
+          endDate: .now,
+          hasDetailedSleepCategories: false,
+          deepSleepMinutes: 0,
+          coreSleepMinutes: 0,
+          remSleepMinutes: 0,
+          awakeSleepMinutes: 0,
+          averageRestingHeartRate: nil,
+          environmentalSoundLevels: [],
+          heartRate: [],
+          respiratoryRate: [],
+          wristTemperature: nil
+        )
       )
-    )
+    }
   }
-  .listStyle(.plain)
 }

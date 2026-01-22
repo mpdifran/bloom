@@ -18,33 +18,50 @@ struct SleepHeartRateChartView: View {
                 x: .value("Date", heartRate.startDate),
                 y: .value("Average", heartRate.averageHeartRate)
             )
-            .foregroundStyle(.mutedPink)
+            .foregroundStyle(Color.mutedRed)
+            .lineStyle(StrokeStyle(lineWidth: 3))
+            .interpolationMethod(.catmullRom)
+
+            PointMark(
+                x: .value("Date", heartRate.startDate),
+                y: .value("Average", heartRate.averageHeartRate)
+            )
+            .foregroundStyle(Color(.systemBackground))
+            .symbolSize(60)
+
+            PointMark(
+                x: .value("Date", heartRate.startDate),
+                y: .value("Average", heartRate.averageHeartRate)
+            )
+            .foregroundStyle(Color.mutedRed)
+            .symbolSize(30)
         }
         .chartYScale(
             domain: ((minY ?? 0) - 10)...((maxY ?? 0) + 10),
             range: .plotDimension
         )
         .chartYAxis {
-            AxisMarks { value in
+            AxisMarks(position: .trailing) { value in
+                AxisGridLine()
+                    .foregroundStyle(.secondary.opacity(0.3))
                 if let doubleValue = value.as(Double.self) {
-                    AxisGridLine()
-                    AxisTick()
                     AxisValueLabel {
-                        Text("\(Int(doubleValue)) bpm")
+                        Text("\(Int(doubleValue))")
+                            .font(.caption2)
                     }
                 }
             }
         }
         .chartXAxis {
-            AxisMarks(values: .stride(by: .hour)) { value in
+            AxisMarks(values: .stride(by: .hour)) { _ in
                 AxisGridLine()
-                AxisTick()
                 AxisValueLabel(format: .dateTime.hour())
             }
         }
         .chartForegroundStyleScale([
-            "Heart Rate": .mutedPink
+            "Heart Rate": .mutedRed
         ])
+        .chartLegend(.hidden)
     }
 }
 

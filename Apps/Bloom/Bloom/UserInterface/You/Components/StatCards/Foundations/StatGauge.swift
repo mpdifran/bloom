@@ -11,19 +11,19 @@ private extension CGFloat {
   static let lineWidth: CGFloat = 16
 }
 
-struct StatGauge: View {
+struct StatGauge<Content: View>: View {
   let progress: CGFloat
-  let label: String?
   let color: Color
+  @ViewBuilder let content: () -> Content
 
   init(
     progress: CGFloat,
-    label: String? = nil,
-    color: Color
+    color: Color,
+    @ViewBuilder content: @escaping () -> Content
   ) {
     self.progress = progress
-    self.label = label
     self.color = color
+    self.content = content
   }
 
   private var clippedProgress: CGFloat {
@@ -70,15 +70,9 @@ struct StatGauge: View {
             radius: 3, x: 10, y: 0
           )
 
-        // Center label
-        if let label {
-          Text(label)
-            .font(.title)
-            .fontWeight(.heavy)
-            .fontDesign(.rounded)
-            .minimumScaleFactor(0.5)
-            .padding(.lineWidth + 4)
-        }
+        // Center content
+        content()
+          .padding(.lineWidth + 4)
       }
       .padding(.lineWidth / 2)
       .frame(width: dimension, height: dimension)
@@ -86,6 +80,30 @@ struct StatGauge: View {
     }
     .aspectRatio(1, contentMode: .fit)
     .animation(.bouncy(duration: 1.2), value: clippedProgress)
+  }
+}
+
+extension StatGauge where Content == AnyView {
+  init(
+    progress: CGFloat,
+    label: String?,
+    color: Color
+  ) {
+    self.progress = progress
+    self.color = color
+    self.content = {
+      AnyView(
+        Group {
+          if let label {
+            Text(label)
+              .font(.title)
+              .fontWeight(.heavy)
+              .fontDesign(.rounded)
+              .minimumScaleFactor(0.5)
+          }
+        }
+      )
+    }
   }
 }
 

@@ -146,15 +146,18 @@ public extension SleepAnalysis {
     public var id: Int { hashValue }
 
     public let averageWristTemperature: Double
+    public let baselineWristTemperature: Double?
     public let startDate: Date
     public let timeRangeSeconds: TimeInterval
 
     public init(
       averageWristTemperature: Double,
+      baselineWristTemperature: Double?,
       startDate: Date,
       timeRangeSeconds: TimeInterval
     ) {
       self.averageWristTemperature = averageWristTemperature
+      self.baselineWristTemperature = baselineWristTemperature
       self.startDate = startDate
       self.timeRangeSeconds = timeRangeSeconds
     }
@@ -651,7 +654,8 @@ public extension SleepAnalysis.RespiratoryRateDataPoint {
 public extension SleepAnalysis.WristTemperatureDataPoint {
 
   static let previewData = SleepAnalysis.WristTemperatureDataPoint(
-    averageWristTemperature: 96,
+    averageWristTemperature: 97.8,
+    baselineWristTemperature: 97.5,
     startDate: .now,
     timeRangeSeconds: 900
   )

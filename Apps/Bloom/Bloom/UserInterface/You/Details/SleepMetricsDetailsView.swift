@@ -380,6 +380,7 @@ private extension SleepMetricsDetailsView {
         .chartYScale(domain: tempChartYDomain)
         .chartXScale(domain: tempChartXDomain)
         .frame(height: 200)
+        .padding(.trailing)
       }
       .cardContainer(includePadding: false)
 
@@ -482,6 +483,7 @@ private extension SleepMetricsDetailsView {
         .chartYScale(domain: respChartYDomain)
         .chartXScale(domain: respChartXDomain)
         .frame(height: 200)
+        .padding(.trailing)
       }
       .cardContainer(includePadding: false)
 

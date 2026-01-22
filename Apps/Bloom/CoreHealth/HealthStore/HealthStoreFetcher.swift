@@ -521,7 +521,7 @@ extension HealthStoreFetcher {
 
       guard startDate < endDate else { continue }
 
-      let timePeriod: Int = 10 // minutes
+      let timePeriod: Int = 30 // minutes
       let dateRange = DateRange(startDate, endDate)
 
       // Sound levels
@@ -596,6 +596,12 @@ extension HealthStoreFetcher {
         if let shiftedStart = Calendar.current.date(byAdding: .minute, value: -30, to: startDate),
            let shiftedEnd = Calendar.current.date(byAdding: .minute, value: 30, to: endDate)
         {
+          // Fetch baseline (trailing 7-day average)
+          let baselineTemp = try? await healthStore.fetchQuantity(
+            for: .appleSleepingWristTemperature,
+            dateRange: .trailingDays(from: startDate, numberOfDays: 7),
+            option: .discreteAverage
+          ).doubleValue(for: .degreeFahrenheit())
 
           let dateRange = DateRange(shiftedStart, shiftedEnd)
           let samples = try await healthStore.fetchSamples(
@@ -606,6 +612,7 @@ extension HealthStoreFetcher {
           for sample in samples {
             let dataPoint = SleepAnalysis.WristTemperatureDataPoint(
               averageWristTemperature: sample.quantity.doubleValue(for: .degreeFahrenheit()),
+              baselineWristTemperature: baselineTemp,
               startDate: sample.startDate,
               timeRangeSeconds: sample.timeInterval
             )

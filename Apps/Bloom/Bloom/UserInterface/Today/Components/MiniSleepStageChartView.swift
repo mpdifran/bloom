@@ -1,40 +1,37 @@
 //
-//  SleepStageChartView.swift
-//  Supplements
+//  MiniSleepStageChartView.swift
+//  Bloom
 //
-//  Created by Mark DiFranco on 2024-07-11.
+//  Created by Claude on 2026-01-21.
 //
 
-import SFSafeSymbols
 import SwiftUI
 import Charts
-import BloomFoundation
 import CoreHealth
+import BloomFoundation
 @preconcurrency import HealthKit
 
 @MainActor
-struct SleepStageChartView: View {
+struct MiniSleepStageChartView: View {
   let sleepAnalysis: SleepAnalysis
 
   @State private var samples = [HKSample]()
 
   var body: some View {
-    VStack {
-      chartView
-        .frame(height: 250)
-    }
-    .task {
-      await loadSamples()
-    }
-    .onChange(of: sleepAnalysis) { _, _ in
-      Task {
+    chartView
+      .frame(height: 180)
+      .task {
         await loadSamples()
       }
-    }
+      .onChange(of: sleepAnalysis) { _, _ in
+        Task {
+          await loadSamples()
+        }
+      }
   }
 }
 
-private extension SleepStageChartView {
+private extension MiniSleepStageChartView {
 
   func loadSamples() async {
     self.samples = await Task {
@@ -46,7 +43,7 @@ private extension SleepStageChartView {
   }
 }
 
-private extension SleepStageChartView {
+private extension MiniSleepStageChartView {
 
   var chartView: some View {
     Chart {
@@ -62,7 +59,7 @@ private extension SleepStageChartView {
             y: .value("Sleep Stage", category.name)
           )
           .foregroundStyle(by: .value("Sleep Stage", category.name))
-          .cornerRadius(6)
+          .cornerRadius(4)
         }
       }
     }
@@ -72,26 +69,18 @@ private extension SleepStageChartView {
       "Core Sleep": .coreSleep,
       "Deep Sleep": .deepSleep
     ])
-    .chartYAxis {
-      AxisMarks(values: ["Awake", "REM Sleep", "Core Sleep", "Deep Sleep"]) {
-        AxisGridLine()
-        AxisTick()
-      }
-    }
+    .chartYAxis(.hidden)
+    .chartXAxis(.hidden)
+    .chartLegend(.hidden)
     .chartYScale(domain: ["Awake", "REM Sleep", "Core Sleep", "Deep Sleep"])
-    .chartXAxis {
-      AxisMarks(values: .stride(by: .hour)) { value in
-        AxisGridLine()
-        AxisTick()
-        AxisValueLabel(format: .dateTime.hour())
-      }
-    }
   }
 }
 
 #Preview {
-  List {
-    SleepStageChartView(sleepAnalysis: SleepAnalysis.previewData[0])
+  PreviewEnvironment {
+    BloomScrollView {
+      MiniSleepStageChartView(sleepAnalysis: SleepAnalysis.previewData[0])
+        .cardContainer()
+    }
   }
-  .listStyle(.plain)
 }

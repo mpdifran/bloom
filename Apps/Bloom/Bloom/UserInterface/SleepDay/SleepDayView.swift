@@ -31,33 +31,37 @@ struct SleepDayView: View {
     Group {
       if let sleepAnalysis {
         BloomScrollView(showsChatBar: showsChatBar) {
-          VStack {
-            SleepScoreView(sleepAnalysis: sleepAnalysis)
-              .frame(maxHeight: 350)
+          VStack(spacing: 16) {
+            SleepStageChartView(sleepAnalysis: sleepAnalysis)
+              .padding(.bottom)
+
+            HStack {
+              Text("Sleep Score")
+                .font(.headline)
+                .fontDesign(.rounded)
+                .bold()
+
+              Spacer()
+
+              SleepScoreView(score: sleepAnalysis.overallScore, isMini: true)
+            }
+            .cardContainer()
 
             SleepScoreDetailsView(sleepAnalysis: sleepAnalysis)
-          }
-          .cardContainer()
 
-          SleepStageChartView(sleepAnalysis: sleepAnalysis)
-            .cardContainer()
+            SleepHeartRateSummaryCell(heartRates: sleepAnalysis.heartRate)
+            SleepSoundLevelSummaryCell(soundLevels: sleepAnalysis.environmentalSoundLevels)
+            SleepRespiratoryRateSummaryCell(respiratoryRates: sleepAnalysis.respiratoryRate)
 
-          SleepHeartRateSummaryCell(heartRates: sleepAnalysis.heartRate)
-            .cardContainer()
-          SleepSoundLevelSummaryCell(soundLevels: sleepAnalysis.environmentalSoundLevels)
-            .cardContainer()
-          SleepRespiratoryRateSummaryCell(respiratoryRates: sleepAnalysis.respiratoryRate)
-            .cardContainer()
-          if let wristTemperature = sleepAnalysis.wristTemperature {
-            WristTemperatureSummaryCell(wristTemperature: wristTemperature)
-              .cardContainer()
+            if let wristTemperature = sleepAnalysis.wristTemperature {
+              WristTemperatureSummaryCell(wristTemperature: wristTemperature)
+            }
           }
         }
-        .listStyle(.plain)
       } else {
         ContentUnavailableView(
           "No Data Available",
-          systemImage: "moon.zzz",
+          systemSymbol: .moonZzzFill,
           description: Text("There is no sleep analysis available for \(date, formatter: DateFormatter.justRelativeDateMedium).")
         )
       }
@@ -98,7 +102,7 @@ private extension SleepDayView {
 }
 
 #Preview {
-  TabView {
+  PreviewEnvironment {
     SleepDayView(showsChatBar: false)
   }
 }

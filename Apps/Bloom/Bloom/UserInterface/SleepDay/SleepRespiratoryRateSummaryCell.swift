@@ -10,29 +10,30 @@ import SwiftUI
 import CoreHealth
 
 struct SleepRespiratoryRateSummaryCell: View {
-    let respiratoryRates: [SleepAnalysis.RespiratoryRateDataPoint]
+  let respiratoryRates: [SleepAnalysis.RespiratoryRateDataPoint]
 
-    var body: some View {
-        Section {
-            VStack {
-                SleepSectionTitleView(
-                    title: "Respiratory Rate",
-                    symbol: .lungsFill
-                )
+  var body: some View {
+    VStack {
+      SleepSectionTitleView(
+        title: "Respiratory Rate",
+        symbol: .lungsFill
+      )
+      .padding(.top)
+      .padding(.horizontal)
 
-                SleepRespiratoryRateChartView(respiratoryRates: respiratoryRates)
-                    .frame(height: 120)
-            }
-            .padding(.bottom)
-        }
-        .tint(.mutedTeal)
+      SleepRespiratoryRateChartView(respiratoryRates: respiratoryRates)
+        .frame(height: 180)
+        .padding(.trailing)
     }
+    .cardContainer(includePadding: false)
+    .tint(.mutedLightBlue)
+  }
 }
 
 #Preview {
-    List {
-        SleepRespiratoryRateSummaryCell(
-            respiratoryRates: SleepAnalysis.RespiratoryRateDataPoint.previewData
-        )
-    }
+  List {
+    SleepRespiratoryRateSummaryCell(
+      respiratoryRates: SleepAnalysis.RespiratoryRateDataPoint.previewData
+    )
+  }
 }
