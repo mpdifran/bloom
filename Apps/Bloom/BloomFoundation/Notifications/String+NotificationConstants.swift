@@ -25,6 +25,9 @@ public extension String {
     public static let monitorStressAlert = "monitor-stress-alert"
     public static let monitorSleepAttention = "monitor-sleep-attention"
     public static let monitorSleepAlert = "monitor-sleep-alert"
+
+    // Workout notifications
+    public static let workoutCompletion = "workout-completion"
   }
 
   enum CategoryID {
@@ -35,6 +38,7 @@ public extension String {
     public static let periodPrediction = "period-prediction"
     public static let reEngagementOnboarding = "re-engagement-onboarding"
     public static let monitorAlert = "monitor-alert"
+    public static let workoutCompletion = "workout-completion"
   }
 
   enum ActionID {
@@ -44,5 +48,6 @@ public extension String {
     public static let logPeriod = "log-period"
     public static let viewMonitor = "view-monitor"
     public static let snoozeMonitor = "snooze-monitor"
+    public static let viewWorkoutAnalysis = "view-workout-analysis"
   }
 }

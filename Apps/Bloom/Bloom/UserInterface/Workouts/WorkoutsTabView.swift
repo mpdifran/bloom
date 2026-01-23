@@ -22,6 +22,7 @@ struct WorkoutsTabView: View {
   private var workoutPlans: [WorkoutPlan]
 
   @Environment(\.modelContext) private var modelContext
+  @Environment(TabController.self) private var tabController
 
   init() {
     var fetchDescriptor = FetchDescriptor<WorkoutPlan>()
@@ -60,6 +61,14 @@ struct WorkoutsTabView: View {
     .task {
       await loadWorkouts()
     }
+    .onChange(of: tabController.pendingWorkoutNavigation) { _, newValue in
+      if let workoutUUID = newValue {
+        Task {
+          await navigateToWorkout(uuid: workoutUUID)
+        }
+        tabController.pendingWorkoutNavigation = nil
+      }
+    }
   }
 }
 
@@ -67,6 +76,22 @@ private extension WorkoutsTabView {
 
   func loadWorkouts() async {
     self.workouts = await HealthStoreFetcher.shared.fetchWorkouts(dateRange: .trailingMonthsFromNow(1000), limit: 3)
+  }
+
+  func navigateToWorkout(uuid: String) async {
+    guard let workoutUUID = UUID(uuidString: uuid) else { return }
+
+    // Fetch recent workouts and find the one with matching UUID
+    let recentWorkouts = await HealthStoreFetcher.shared.fetchWorkouts(
+      dateRange: .trailingDaysFromNow(7),
+      limit: 100
+    )
+
+    if let workout = recentWorkouts.first(where: { $0.uuid == workoutUUID }) {
+      await MainActor.run {
+        presentedSheet = WorkoutDetailsView(workout: workout).asAny
+      }
+    }
   }
 }
 

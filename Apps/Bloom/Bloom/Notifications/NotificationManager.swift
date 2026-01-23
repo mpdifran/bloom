@@ -59,6 +59,23 @@ extension NotificationManager {
     )
   }
 
+  func sendWorkoutNotification(title: String, subtitle: String, workoutUUID: String) async {
+    let content = UNMutableNotificationContent()
+    content.title = title
+    content.subtitle = subtitle
+    content.sound = .default
+    content.categoryIdentifier = .CategoryID.workoutCompletion
+    content.userInfo = ["workoutUUID": workoutUUID]
+
+    try? await UNUserNotificationCenter.current().add(
+      UNNotificationRequest(
+        identifier: .NotificationID.workoutCompletion + "-" + workoutUUID,
+        content: content,
+        trigger: nil
+      )
+    )
+  }
+
   func removeAllScheduledNotifications() {
     center.removeAllPendingNotificationRequests()
   }

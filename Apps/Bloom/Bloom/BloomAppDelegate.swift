@@ -20,6 +20,14 @@ class BloomAppDelegate: NSObject, UIApplicationDelegate {
     registerBackgroundTasks()
     BackgroundTaskScheduler.shared.scheduleReminderNotificationUpdateTask()
     BackgroundTaskScheduler.shared.scheduleMonitorAggregationTask()
+
+    // Start HealthKit observers for background delivery
+    // This must be done in AppDelegate to ensure observers are registered
+    // on background launches (not just foreground via SwiftUI .task)
+    Task {
+      await WorkoutCompletionObserver.shared.startObserving()
+    }
+
     return true
   }
 

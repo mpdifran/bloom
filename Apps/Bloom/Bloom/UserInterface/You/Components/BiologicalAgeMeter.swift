@@ -90,19 +90,10 @@ struct BiologicalAgeMeter: View {
           .frame(width: radius * 2, height: radius * 2)
           .shadow(color: progressColor.opacity(0.3), radius: size * 0.02, x: 0, y: size * 0.01)
 
-        ZStack {
-          // Muted yellow circle for neutral case
-          if abs(ageDifference) < 0.5 {
-            Circle()
-              .fill(.mutedYellow)
-              .frame(width: size * 0.16, height: size * 0.16)
-          }
-
-          Circle()
-            .fill(.white)
-            .frame(width: size * 0.12, height: size * 0.12)
-            .shadow(color: .black.opacity(0.2), radius: size * 0.015, x: 0, y: size * 0.01)
-        }
+        Circle()
+          .fill(.white)
+          .frame(width: size * 0.12, height: size * 0.12)
+          .shadow(color: .black.opacity(0.2), radius: size * 0.015, x: 0, y: size * 0.01)
         .offset(y: -radius)
         .rotationEffect(indicatorAngle)
 
@@ -183,23 +174,11 @@ private extension BiologicalAgeMeter {
   }
 
   private var progressColor: Color {
-    if abs(ageDifference) < 0.5 {
-      return .clear
-    } else if ageDifference < 0 {
-      return .mutedGreen
-    } else {
-      return .mutedPink
-    }
+    ageDifference <= 0 ? .mutedGreen : .mutedPink
   }
 
   private var ageDifferenceBackgroundColor: Color {
-    if abs(ageDifference) < 0.5 {
-      return .mutedYellow
-    } else if ageDifference < 0 {
-      return .mutedGreen
-    } else {
-      return .mutedPink
-    }
+    ageDifference <= 0 ? .mutedGreen : .mutedPink
   }
 }
 

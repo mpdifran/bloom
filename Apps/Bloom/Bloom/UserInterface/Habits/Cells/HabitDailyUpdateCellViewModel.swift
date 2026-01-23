@@ -163,6 +163,8 @@ private extension HabitDailyUpdateCellViewModel {
   }
 
   func sendHabitHitNotification() async {
+    guard NotificationPreferences.shared.goalAchievementsEnabled else { return }
+
     if UIApplication.shared.applicationState != .active {
       await NotificationManager.shared.sendNotification(
         title: "You Did It!",

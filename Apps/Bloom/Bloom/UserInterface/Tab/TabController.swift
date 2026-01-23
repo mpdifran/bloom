@@ -93,6 +93,7 @@ final class TabController {
   var pendingSavedMealNavigation: String?
   var pendingYearInBloomNavigation: Int?
   var pendingMonitorNavigation: MonitorType?
+  var pendingWorkoutNavigation: String?
 
   private var notificationCenterDelegate: NotificationCenterDelegate!
 
@@ -142,6 +143,12 @@ private extension TabController {
       if let monitorTypeRaw = response.notification.request.content.userInfo["monitorType"] as? String,
          let monitorType = MonitorType(rawValue: monitorTypeRaw) {
         pendingMonitorNavigation = monitorType
+      }
+    case .CategoryID.workoutCompletion:
+      dismiss()
+      select(.workouts)
+      if let workoutUUID = response.notification.request.content.userInfo["workoutUUID"] as? String {
+        pendingWorkoutNavigation = workoutUUID
       }
     default:
       break

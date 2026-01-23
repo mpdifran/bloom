@@ -17,6 +17,7 @@ import TelemetryDeck
 extension Notification.Name {
   static let showLogPeriodSheet = Notification.Name("showLogPeriodSheet")
   static let navigateToMonitor = Notification.Name("navigateToMonitor")
+  static let navigateToWorkout = Notification.Name("navigateToWorkout")
 }
 
 @MainActor
@@ -90,6 +91,11 @@ extension NotificationCenterDelegate: UNUserNotificationCenterDelegate {
     case UNNotificationDefaultActionIdentifier where categoryID == .CategoryID.monitorAlert:
       // User tapped the notification itself (not an action button)
       await handleViewMonitorAction()
+    case .ActionID.viewWorkoutAnalysis where categoryID == .CategoryID.workoutCompletion:
+      await handleViewWorkoutAction(response.notification)
+    case UNNotificationDefaultActionIdentifier where categoryID == .CategoryID.workoutCompletion:
+      // User tapped the notification itself (not an action button)
+      await handleViewWorkoutAction(response.notification)
     default:
       break
     }
@@ -153,6 +159,20 @@ extension NotificationCenterDelegate: UNUserNotificationCenterDelegate {
     // Snooze for 1 day
     MonitorNotificationPreferences.shared.snooze(monitorType, for: 86400)
     TelemetryDeck.signal("Snooze Monitor From Notification", parameters: ["monitorType": monitorTypeRaw])
+  }
+
+  private func handleViewWorkoutAction(_ notification: UNNotification) async {
+    let workoutUUID = notification.request.content.userInfo["workoutUUID"] as? String
+
+    // Post notification to navigate to Workouts tab and show workout details
+    await MainActor.run {
+      NotificationCenter.default.post(
+        name: .navigateToWorkout,
+        object: nil,
+        userInfo: workoutUUID.map { ["workoutUUID": $0] }
+      )
+    }
+    TelemetryDeck.signal("View Workout From Notification")
   }
 
   private func isReminderCompleted(notification: UNNotification) async -> Bool {

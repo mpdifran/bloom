@@ -320,6 +320,34 @@ extension BiologicalAgeCalculator {
       metricContributions: contributions
     )
   }
+
+  /// Calculates the bio age delta from workout-affected metrics only.
+  /// This is an optimized calculation that only recalculates Zone Minutes and Activity Level,
+  /// comparing against stored previous values.
+  /// Returns the delta in years (negative = younger).
+  public func calculateWorkoutBioAgeDelta() async -> Double? {
+    // Load stored metric contributions
+    guard let storedContributions = loadMetricContributions() else { return nil }
+
+    // Get previous values for workout-affected metrics
+    let previousZoneMinutes = storedContributions.first { $0.metric == .zoneMinutes }?.weightedDelta ?? 0
+    let previousActivityLevel = storedContributions.first { $0.metric == .activityLevel }?.weightedDelta ?? 0
+
+    // Recalculate with current data (which includes the new workout)
+    let newZoneMinutes = await calculateZoneMinutesContribution(referenceDate: .now)?.weightedDelta ?? 0
+    let newActivityLevel = await calculateActivityLevelContribution(referenceDate: .now)?.weightedDelta ?? 0
+
+    // Calculate the delta
+    let zoneMinutesDelta = newZoneMinutes - previousZoneMinutes
+    let activityLevelDelta = newActivityLevel - previousActivityLevel
+
+    let totalDelta = zoneMinutesDelta + activityLevelDelta
+
+    // Return nil if no significant change (less than ~1 hour = 0.000114 years)
+    guard abs(totalDelta) > 0.0001 else { return nil }
+
+    return totalDelta
+  }
 }
 
 // MARK: - Interpolation Helpers

@@ -105,6 +105,23 @@ final class NotificationCategoryManager {
 
     categories.insert(monitorAlertCategory)
 
+    // Workout completion category with View Analysis action
+    let viewWorkoutAnalysisAction = UNNotificationAction(
+      identifier: .ActionID.viewWorkoutAnalysis,
+      title: "View Analysis",
+      options: [.foreground],
+      icon: UNNotificationActionIcon(systemImageName: "figure.run")
+    )
+
+    let workoutCompletionCategory = UNNotificationCategory(
+      identifier: .CategoryID.workoutCompletion,
+      actions: [viewWorkoutAnalysisAction],
+      intentIdentifiers: [],
+      options: []
+    )
+
+    categories.insert(workoutCompletionCategory)
+
     return categories
   }
 }

@@ -70,6 +70,7 @@ struct SettingsView: View {
           aiPrivacySection
         }
 
+        notificationsSection
         workoutEquipmentSection
         unitsSection
         subscriptionSection
@@ -261,11 +262,27 @@ private extension SettingsView {
     })
   }
   
+  var notificationsSection: some View {
+    VStack {
+      SectionTitleView("Notifications")
+        .padding(.horizontal)
+
+      SettingsSectionContainer {
+        SettingsCell("Notification Settings", iconType: .disclosure) {
+          EmptyView()
+        }
+        .onTapGesture {
+          presentedSheet = NotificationSettingsView().asAny
+        }
+      }
+    }
+  }
+
   var workoutEquipmentSection: some View {
     VStack {
       SectionTitleView("Workouts")
         .padding(.horizontal)
-      
+
       SettingsSectionContainer {
         SettingsCell("Workout Equipment") {
           HStack {
