@@ -26,12 +26,12 @@ struct ActionsView: View {
               }.asAny
             }
 
-          ActionInstanceCell(image: .logWaterIcon, title: "Water")
+          ActionInstanceCell(image: .logWaterIcon, title: "Drinks")
             .tint(.mutedBlue)
             .onTapGesture {
-              presentedCardSheet = WaterActionCardView {
+              presentedCardSheet = DrinkSelectionView(performDismiss: {
                 dismiss()
-              }.asAny
+              }).asAny
             }
 
           if HealthManager.shared.sex() == .female {

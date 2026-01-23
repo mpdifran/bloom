@@ -60,7 +60,8 @@ public final class HealthPermissionChecker: Sendable {
   public let nutritionTypes: Set<HKObjectType> = [
     HKQuantityType(.dietaryEnergyConsumed),
     //        HKQuantityType(.dietaryBiotin),
-    //        HKQuantityType(.dietaryCaffeine),
+    HKQuantityType(.dietaryCaffeine),
+    HKQuantityType(.numberOfAlcoholicBeverages),
     HKQuantityType(.dietaryCalcium),
     HKQuantityType(.dietaryCarbohydrates),
     //        HKQuantityType(.dietaryChloride),
@@ -101,6 +102,8 @@ public final class HealthPermissionChecker: Sendable {
 
   public let writeNutritionTypes: Set<HKSampleType> = [
     HKQuantityType(.dietaryEnergyConsumed),
+    HKQuantityType(.dietaryCaffeine),
+    HKQuantityType(.numberOfAlcoholicBeverages),
     HKQuantityType(.dietaryCalcium),
     HKQuantityType(.dietaryCarbohydrates),
     HKQuantityType(.dietaryCholesterol),
