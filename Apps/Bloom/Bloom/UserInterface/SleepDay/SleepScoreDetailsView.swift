@@ -17,22 +17,25 @@ struct SleepScoreDetailsView: View {
       HStack {
         LabelledText(
           label: "Length",
-          symbol: .clock,
-          value: "\(DateFormatter.timeIntervalHourMinuteAbbreviated.string(for: sleepAnalysis.overallDurationComponents) ?? "")"
+          symbol: .clockFill,
+          value: "\(DateFormatter.timeIntervalHourMinuteAbbreviated.string(for: sleepAnalysis.overallDurationComponents) ?? "")",
+          progress: sleepAnalysis.sleepLengthScore / 100
         )
         .tint(.mutedGreen)
 
         LabelledText(
           label: "Awake",
-          symbol: .boltHorizontal,
-          value: awakeDescription
+          symbol: .boltHorizontalFill,
+          value: awakeDescription,
+          progress: sleepAnalysis.awakeSleepScore.map { $0 / 100 }
         )
         .tint(sleepAnalysis.awakeSleepHours == nil ? .gray : .awakeSleep)
 
         LabelledText(
           label: "HR",
-          symbol: .heart,
-          value: heartRateDescription
+          symbol: .heartFill,
+          value: heartRateDescription,
+          progress: sleepAnalysis.heartRateScore.map { $0 / 100 }
         )
         .tint(sleepAnalysis.averageHeartRate == nil ? .gray : .mutedPink)
       }
@@ -41,21 +44,24 @@ struct SleepScoreDetailsView: View {
         LabelledText(
           label: "REM",
           symbol: .eyes,
-          value: remDescription
+          value: remDescription,
+          progress: sleepAnalysis.remSleepScore.map { $0 / 100 }
         )
         .tint(sleepAnalysis.remSleepHours == nil ? Color.gray : Color.remSleep)
-        
+
         LabelledText(
           label: "Core",
           symbol: .circleDottedCircle,
-          value: coreDescription
+          value: coreDescription,
+          progress: sleepAnalysis.coreSleepScore.map { $0 / 100 }
         )
         .tint(sleepAnalysis.coreSleepHours == nil ? .gray : .coreSleep)
 
         LabelledText(
           label: "Deep",
           symbol: .arrowDownToLine,
-          value: deepDescription
+          value: deepDescription,
+          progress: sleepAnalysis.deepSleepScore.map { $0 / 100 }
         )
         .tint(sleepAnalysis.deepSleepHours == nil ? .gray : .deepSleep.lighter())
       }
@@ -107,6 +113,7 @@ private struct LabelledText: View {
   let label: String
   let symbol: SFSymbol
   let value: String
+  var progress: Double?
 
   var body: some View {
     VStack(alignment: .leading, spacing: 8) {
@@ -129,6 +136,20 @@ private struct LabelledText: View {
         .lineLimit(1)
         .minimumScaleFactor(0.7)
         .contentTransition(.numericText())
+
+      GeometryReader { geometry in
+        ZStack(alignment: .leading) {
+          Capsule()
+            .fill(.tint.tertiary)
+
+          if let progress {
+            Capsule()
+              .fill(.tint)
+              .frame(width: geometry.size.width * progress)
+          }
+        }
+      }
+      .frame(height: 6)
     }
     .horizontalAlignment(.leading)
     .frame(maxWidth: .infinity)

@@ -287,7 +287,7 @@ private extension AppleSleepStageChartView {
 
     for stage in AppleSleepStage.allCases {
       let centerY = verticalPadding + CGFloat(stage.rawValue) * stageSpacing
-      let color = stage.color.opacity(0.5)
+      let color = stage.color.opacity(0.3)
 
       // Add stop at center of each row
       let location = min(max(centerY / totalHeight, 0), 1) // Clamp to valid range
