@@ -59,7 +59,7 @@ struct MonitorInsightCard: View {
           $0.padding(.vertical)
         }
 
-      if let suggestion {
+      if let suggestion, !isLoading {
         Divider()
 
         Text(suggestion)
@@ -102,10 +102,10 @@ struct MonitorInsightCard: View {
 private extension MonitorInsightCard {
 
   var mainText: String {
-    if let insight {
-      return insight
-    } else if isLoading {
+    if isLoading {
       return  "Thinking..."
+    } else if let insight {
+      return insight
     } else {
       return "Oops, there was an error."
     }

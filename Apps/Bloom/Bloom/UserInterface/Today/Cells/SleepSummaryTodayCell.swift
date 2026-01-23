@@ -45,7 +45,8 @@ private extension SleepSummaryTodayCell {
   func contentView(sleepAnalysis: SleepAnalysis) -> some View {
     VStack(spacing: 12) {
       if sleepAnalysis.hasDetailedSleepCategories {
-        MiniSleepStageChartView(sleepAnalysis: sleepAnalysis)
+        AppleSleepStageChartView(sleepAnalysis: sleepAnalysis)
+          .frame(height: 200)
 
         Divider()
       }

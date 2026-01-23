@@ -62,7 +62,7 @@ private extension SleepStageChartView {
             y: .value("Sleep Stage", category.name)
           )
           .foregroundStyle(by: .value("Sleep Stage", category.name))
-          .cornerRadius(6)
+          .cornerRadius(10)
         }
       }
     }

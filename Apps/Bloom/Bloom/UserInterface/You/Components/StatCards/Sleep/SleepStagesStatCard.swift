@@ -47,10 +47,10 @@ private extension SleepStagesStatCard {
         .interpolationMethod(.catmullRom)
       }
       .chartForegroundStyleScale([
-        SleepStage.core.rawValue: Color.coreSleep,
-        SleepStage.deep.rawValue: Color.deepSleep,
-        SleepStage.rem.rawValue: Color.remSleep,
-        SleepStage.awake.rawValue: Color.awakeSleep
+        CoreHealth.SleepStage.core.rawValue: Color.coreSleep,
+        CoreHealth.SleepStage.deep.rawValue: Color.deepSleep,
+        CoreHealth.SleepStage.rem.rawValue: Color.remSleep,
+        CoreHealth.SleepStage.awake.rawValue: Color.awakeSleep
       ])
       .chartXAxis(.hidden)
       .chartYAxis(.hidden)

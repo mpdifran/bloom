@@ -60,6 +60,7 @@ struct SleepScoreDetailsView: View {
         .tint(sleepAnalysis.deepSleepHours == nil ? .gray : .deepSleep.lighter())
       }
     }
+    .animation(.default, value: sleepAnalysis)
   }
 }
 
@@ -127,6 +128,7 @@ private struct LabelledText: View {
         .fontDesign(.rounded)
         .lineLimit(1)
         .minimumScaleFactor(0.7)
+        .contentTransition(.numericText())
     }
     .horizontalAlignment(.leading)
     .frame(maxWidth: .infinity)

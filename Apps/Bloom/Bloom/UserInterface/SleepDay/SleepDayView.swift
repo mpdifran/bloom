@@ -32,8 +32,9 @@ struct SleepDayView: View {
       if let sleepAnalysis {
         BloomScrollView(showsChatBar: showsChatBar) {
           VStack(spacing: 16) {
-            SleepStageChartView(sleepAnalysis: sleepAnalysis)
-              .padding(.bottom)
+            AppleSleepStageChartView(sleepAnalysis: sleepAnalysis)
+              .frame(height: 200)
+              .cardContainer()
 
             HStack {
               Text("Sleep Score")
@@ -58,6 +59,7 @@ struct SleepDayView: View {
             }
           }
         }
+        .animation(.default, value: sleepAnalysis)
       } else {
         ContentUnavailableView(
           "No Data Available",
