@@ -24,7 +24,18 @@ struct YouSettingsStorage: DynamicProperty {
   var wrappedValue: YouSettings {
     get {
       if let decoded = try? JSONDecoder().decode(YouSettings.self, from: _storedData) {
-        return decoded
+        // Migrate: Add any new sections from defaultOrder that aren't in the stored order
+        let defaultSections = YouSettings.defaultOrder
+        let missingSections = defaultSections.filter { !decoded.sectionOrder.contains($0) }
+
+        if missingSections.isEmpty {
+          return decoded
+        } else {
+          // Append missing sections at the end
+          var migrated = decoded
+          migrated.sectionOrder.append(contentsOf: missingSections)
+          return migrated
+        }
       }
       return defaultValue
     }
