@@ -58,6 +58,18 @@ public struct AlcoholSummary: Sendable, Equatable {
       self.date = date
       self.drinks = drinks
     }
+
+    public func color(for sex: HKBiologicalSex) -> Color {
+      let bingeThreshold = (sex == .male) ? 5 : 4
+
+      if drinks >= bingeThreshold {
+        return .vitalSevere
+      } else if drinks > 0 {
+        return .vitalGood
+      } else {
+        return .vitalGreat
+      }
+    }
   }
 
   public init(

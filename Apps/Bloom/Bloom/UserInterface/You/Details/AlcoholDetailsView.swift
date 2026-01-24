@@ -99,7 +99,7 @@ private extension AlcoholDetailsView {
           x: .value("Day", dayData.date, unit: selectedPeriod.aggregatesByWeek ? .weekOfYear : .day),
           y: .value("Drinks", dayData.drinks)
         )
-        .foregroundStyle(summary.riskLevel.color.gradient)
+        .foregroundStyle(dayData.color(for: healthManager.sexKind).gradient)
         .cornerRadius(4)
       }
       .chartXAxis {
