@@ -15,6 +15,8 @@ struct DrinkSelectionView: View {
   // MARK: - State
 
   @State private var presentedSheet: SheetType?
+  @State private var selectedDate: Date = Date()
+  @State private var showDatePicker = false
 
   // MARK: - Types
 
@@ -34,7 +36,10 @@ struct DrinkSelectionView: View {
 
   var body: some View {
     LargeTitleActionCard("Choose a drink") {
-      drinkGrid
+      VStack(spacing: 0) {
+        drinkGrid
+        dateSelectorFooter
+      }
     }
     .presentationDragIndicator(.visible)
     .presentationDetents([.medium, .large])
@@ -46,6 +51,38 @@ struct DrinkSelectionView: View {
 }
 
 private extension DrinkSelectionView {
+
+  // MARK: - Date Selector Footer
+
+  var dateSelectorFooter: some View {
+    Button {
+      showDatePicker.toggle()
+    } label: {
+      HStack {
+        Text("Date")
+          .foregroundStyle(.secondary)
+          .bold()
+        Spacer()
+        HStack(spacing: 4) {
+          Text(selectedDate, formatter: DateFormatter.justRelativeDateMedium)
+          Image(systemSymbol: .chevronUpChevronDown)
+            .font(.caption)
+        }
+        .bold()
+        .popover(isPresented: $showDatePicker) {
+          DatePicker(selection: $selectedDate, in: ...Date(), displayedComponents: .date) { }
+            .datePickerStyle(.graphical)
+            .frame(width: 280)
+            .presentationCompactAdaptation(.popover)
+        }
+        .onChange(of: selectedDate) { _, _ in
+          showDatePicker = false
+        }
+      }
+    }
+    .buttonStyle(.plain)
+    .cardContainer()
+  }
 
   // MARK: - Drink Grid
 
@@ -62,7 +99,6 @@ private extension DrinkSelectionView {
             }
         }
       }
-      .padding()
     }
   }
 
@@ -107,6 +143,7 @@ private extension DrinkSelectionView {
     case .selectContainer(let drink):
       ContainerSelectionView(
         drink: drink,
+        selectedDate: selectedDate,
         performDismiss: performDismiss
       )
     }

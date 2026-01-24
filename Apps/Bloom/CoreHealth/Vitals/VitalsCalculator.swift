@@ -8,6 +8,7 @@
 import Foundation
 import DataContainer
 import BloomFoundation
+import HealthKit
 
 public final actor VitalsCalculator {
   public static let shared = VitalsCalculator()
@@ -24,6 +25,8 @@ public final actor VitalsCalculator {
   @AsyncStreamable public var bowelMovementSummary: BowelMovementSummary?
   @AsyncStreamable public var menstrualSummary: MenstrualSummary?
   @AsyncStreamable public var alcoholSummary: AlcoholSummary?
+
+  private var alcoholObserverHandle: HKObserverQueryHandle?
 
   private init() {
     if let date = UserDefaults.group.object(forKey: "VitalsCalculator.lastVitalFetchDate") as? Date {
@@ -70,6 +73,7 @@ public extension VitalsCalculator {
     alcoholSummary = await HealthStoreFetcher.shared.fetchAlcoholSummary(
       sex: HealthDefaults.shared.getSexKind()
     )
+    startObservingAlcoholChanges()
 
     await createVitals()
   }
@@ -88,6 +92,22 @@ public extension VitalsCalculator {
 
   func recalculateVitals() async {
     await createVitals()
+  }
+
+  func startObservingAlcoholChanges() {
+    alcoholObserverHandle = HealthManager.shared.healthStore.observeChanges(
+      sampleType: HKQuantityType(.numberOfAlcoholicBeverages),
+      startDate: Calendar.current.date(byAdding: .day, value: -7, to: .now) ?? .now
+    ) {
+      let summary = await HealthStoreFetcher.shared.fetchAlcoholSummary(
+        sex: HealthDefaults.shared.getSexKind()
+      )
+      await self.setAlcoholSummary(summary)
+    }
+  }
+
+  func setAlcoholSummary(_ summary: AlcoholSummary?) {
+    self.alcoholSummary = summary
   }
 }
 

@@ -15,6 +15,7 @@ import CoreHealth
 
 struct ContainerSelectionView: View {
   let drink: DrinkType
+  let selectedDate: Date
   let performDismiss: (() -> Void)?
 
   @State private var containers: [ContainerSizeModel] = ContainerSizeModel.loadAll()
@@ -181,8 +182,8 @@ struct ContainerSelectionView: View {
     let waterSample = HKQuantitySample(
       type: HKQuantityType(.dietaryWater),
       quantity: HKQuantity(unit: .literUnit(with: .milli), doubleValue: hydratedAmount),
-      start: Date.now,
-      end: Date.now,
+      start: selectedDate,
+      end: selectedDate,
       metadata: [
         HKMetadataKeyWasUserEntered: true
       ]
@@ -194,8 +195,8 @@ struct ContainerSelectionView: View {
       let caffeineSample = HKQuantitySample(
         type: HKQuantityType(.dietaryCaffeine),
         quantity: HKQuantity(unit: .gramUnit(with: .milli), doubleValue: caffeineMG),
-        start: Date.now,
-        end: Date.now,
+        start: selectedDate,
+        end: selectedDate,
         metadata: [
           HKMetadataKeyWasUserEntered: true
         ]
@@ -208,8 +209,8 @@ struct ContainerSelectionView: View {
       let sugarSample = HKQuantitySample(
         type: HKQuantityType(.dietarySugar),
         quantity: HKQuantity(unit: .gram(), doubleValue: sugarG),
-        start: Date.now,
-        end: Date.now,
+        start: selectedDate,
+        end: selectedDate,
         metadata: [
           HKMetadataKeyWasUserEntered: true
         ]
@@ -222,8 +223,8 @@ struct ContainerSelectionView: View {
       let alcoholSample = HKQuantitySample(
         type: HKQuantityType(.numberOfAlcoholicBeverages),
         quantity: HKQuantity(unit: .count(), doubleValue: 1),
-        start: Date.now,
-        end: Date.now,
+        start: selectedDate,
+        end: selectedDate,
         metadata: [
           HKMetadataKeyWasUserEntered: true
         ]
@@ -253,6 +254,7 @@ struct ContainerSelectionView: View {
 #Preview {
   ContainerSelectionView(
     drink: DrinkType.defaultDrinks.first!,
+    selectedDate: Date(),
     performDismiss: nil
   )
 }
