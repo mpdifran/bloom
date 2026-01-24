@@ -16,7 +16,6 @@ import BloomFoundation
 struct SleepStagesDetailsView: View {
   @State private var selectedPeriod: StatTimePeriod = .sevenDays
   @State private var sleepStageDataPoints: [SleepStageDataPoint]?
-  @State private var singleDaySamples: [HKSample] = []
   @State private var sleepAnalysis: SleepAnalysis?
   @State private var stageAverages: SleepStageAverages?
 
@@ -55,7 +54,7 @@ private extension SleepStagesDetailsView {
 
   var hasData: Bool {
     if selectedPeriod == .oneDay {
-      return singleDaySamples.isNotEmpty
+      return sleepAnalysis != nil
     }
     return sleepStageDataPoints?.isNotEmpty ?? false
   }
@@ -69,20 +68,9 @@ private extension SleepStagesDetailsView {
   }
 
   func loadSingleDayData() async {
-    // Get the most recent sleep analysis for today
     let dateRange = selectedPeriod.dateRange
     let analyses = await HealthStoreFetcher.shared.fetchSleepAnalysis(dateRange: dateRange)
-
-    if let latestAnalysis = analyses.first {
-      sleepAnalysis = latestAnalysis
-      singleDaySamples = (try? await HealthStoreFetcher.shared.fetchSamples(
-        for: HKCategoryType(.sleepAnalysis),
-        dateRange: DateRange(latestAnalysis.startDate, latestAnalysis.endDate)
-      )) ?? []
-    } else {
-      sleepAnalysis = nil
-      singleDaySamples = []
-    }
+    sleepAnalysis = analyses.first
   }
 
   func loadMultiDayData() async {
@@ -222,42 +210,10 @@ private extension SleepStagesDetailsView {
           value: sleepAnalysis.map { formatDuration($0.overallMinutes) } ?? ""
         )
 
-        Chart {
-          ForEach(singleDaySamples, id: \.hashValue) { sample in
-            if let categorySample = sample as? HKCategorySample,
-               let category = categorySample.sleepCategory,
-               category != .inBed && category != .asleepUnspecified {
-              BarMark(
-                xStart: .value("Start", sample.startDate, unit: .second),
-                xEnd: .value("End", sample.endDate, unit: .second),
-                y: .value("Stage", category.name)
-              )
-              .foregroundStyle(by: .value("Stage", category.name))
-              .cornerRadius(6)
-            }
-          }
+        if let sleepAnalysis {
+          AppleSleepStageChartView(sleepAnalysis: sleepAnalysis)
+            .frame(height: 200)
         }
-        .chartForegroundStyleScale([
-          "Awake": Color.awakeSleep,
-          "REM Sleep": Color.remSleep,
-          "Core Sleep": Color.coreSleep,
-          "Deep Sleep": Color.deepSleep
-        ])
-        .chartYAxis {
-          AxisMarks(values: ["Awake", "REM Sleep", "Core Sleep", "Deep Sleep"]) {
-            AxisGridLine()
-            AxisTick()
-          }
-        }
-        .chartYScale(domain: ["Awake", "REM Sleep", "Core Sleep", "Deep Sleep"])
-        .chartXAxis {
-          AxisMarks(values: .stride(by: .hour)) { _ in
-            AxisGridLine()
-            AxisTick()
-            AxisValueLabel(format: .dateTime.hour())
-          }
-        }
-        .frame(height: 250)
       }
       .cardContainer()
 
