@@ -33,20 +33,23 @@ struct DrinkSelectionView: View {
   // MARK: - Body
 
   var body: some View {
-    CardView {
-      LargeTitleActionCard("Choose a drink") {
-        drinkGrid
-      }
+    LargeTitleActionCard("Choose a drink") {
+      drinkGrid
     }
+    .presentationDragIndicator(.visible)
+    .presentationDetents([.medium, .large])
     .tint(.mutedBlue)
     .sheet(item: $presentedSheet) { sheet in
       sheetContent(for: sheet)
     }
   }
+}
+
+private extension DrinkSelectionView {
 
   // MARK: - Drink Grid
 
-  private var drinkGrid: some View {
+  var drinkGrid: some View {
     ScrollView {
       LazyVGrid(
         columns: [GridItem(.adaptive(minimum: 100, maximum: 140), spacing: 12)],
@@ -65,7 +68,7 @@ struct DrinkSelectionView: View {
 
   // MARK: - Navigation
 
-  private func handleDrinkSelected(_ drink: DrinkType) {
+  func handleDrinkSelected(_ drink: DrinkType) {
     if drink.hasSubTypes {
       presentedSheet = .selectSubType(drink)
     } else {
@@ -73,14 +76,14 @@ struct DrinkSelectionView: View {
     }
   }
 
-  private func handleSubTypeSelected(_ subType: DrinkType) {
+  func handleSubTypeSelected(_ subType: DrinkType) {
     presentedSheet = .selectContainer(subType)
   }
 
   // MARK: - Sheets
 
   @ViewBuilder
-  private func sheetContent(for sheet: SheetType) -> some View {
+  func sheetContent(for sheet: SheetType) -> some View {
     switch sheet {
     case .selectSubType(let parentDrink):
       NavigationStack {

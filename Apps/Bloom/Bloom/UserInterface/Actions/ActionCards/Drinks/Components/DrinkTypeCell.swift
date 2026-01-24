@@ -16,7 +16,7 @@ struct DrinkTypeCell: View {
     VStack(spacing: 8) {
       ZStack {
         // Background with drink color
-        RoundedRectangle(cornerRadius: 16)
+        RoundedRectangle(cornerRadius: 18)
           .fill(.tint.tertiary)
 
         // Icon
@@ -35,11 +35,8 @@ struct DrinkTypeCell: View {
         .multilineTextAlignment(.center)
     }
     .padding(8)
-    .background {
-      RoundedRectangle(cornerRadius: 20)
-        .fill(.tint.tertiary)
-    }
-    .contentShape(RoundedRectangle(cornerRadius: 20))
+    .cardContainer(fill: .tint.tertiary, includePadding: false)
+    .cardContainer(fill: .invertedText, includePadding: false)
     .tint(drink.liquidColor)
   }
 }

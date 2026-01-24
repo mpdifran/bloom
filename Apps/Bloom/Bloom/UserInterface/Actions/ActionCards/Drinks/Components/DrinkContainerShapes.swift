@@ -729,16 +729,18 @@ struct ShotGlassShape: DrinkContainerShape {
     var path = Path()
 
     let width = rect.width
+    let height = rect.height
     let centerX = rect.midX
 
-    // Shot glass proportions (small, tapered)
-    let topWidth = width * 0.6
-    let bottomWidth = width * 0.4
-    let baseWidth = width * 0.5
-    let baseHeight = rect.height * 0.08
+    // Shot glass proportions - short and wide
+    let glassHeight = height * 0.55  // Only use 55% of height for a squat shot glass
+    let topWidth = width * 0.7
+    let bottomWidth = width * 0.5
+    let baseWidth = width * 0.6
+    let baseHeight = glassHeight * 0.12
     let cornerRadius = width * 0.06
 
-    let glassTop = rect.minY
+    let glassTop = rect.maxY - glassHeight  // Anchor to bottom
     let glassBottom = rect.maxY - baseHeight
     let baseBottom = rect.maxY
 

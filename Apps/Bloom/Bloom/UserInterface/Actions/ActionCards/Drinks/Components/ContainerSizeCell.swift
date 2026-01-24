@@ -13,7 +13,7 @@ struct ContainerSizeCell: View {
   let drinkColor: Color
 
   var body: some View {
-    VStack(spacing: 8) {
+    VStack(spacing: 16) {
       // Mini container preview using container's own shape
       ContainerShapeView(
         shapeType: container.shapeType,
@@ -23,25 +23,27 @@ struct ContainerSizeCell: View {
       )
       .frame(width: 40, height: 50)
 
-      // Name
-      Text(container.name)
-        .font(.caption)
-        .fontWeight(.medium)
-        .lineLimit(1)
+      VStack {
+        Text(container.name)
 
-      // Volume
-      Text(container.displayValue())
-        .font(.caption2)
-        .foregroundStyle(.secondary)
+        Text(container.displayValue())
+          .foregroundStyle(.secondary)
+      }
+      .font(.caption)
+      .bold()
+      .lineLimit(1)
     }
     .frame(maxWidth: .infinity)
-    .padding(.horizontal, 12)
-    .padding(.vertical, 10)
+    .padding()
     .background {
-      RoundedRectangle(cornerRadius: 16)
-        .fill(.tint.tertiary)
+      ZStack {
+        RoundedRectangle(cornerRadius: 26)
+          .fill(.invertedText)
+        RoundedRectangle(cornerRadius: 26)
+          .fill(.tint.tertiary)
+      }
     }
-    .contentShape(RoundedRectangle(cornerRadius: 16))
+    .contentShape(RoundedRectangle(cornerRadius: 26))
     .tint(drinkColor)
   }
 }

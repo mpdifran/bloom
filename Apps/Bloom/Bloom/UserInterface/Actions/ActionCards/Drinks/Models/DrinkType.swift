@@ -69,6 +69,7 @@ struct DrinkType: Identifiable, Hashable, Codable, Sendable {
   let subTypes: [DrinkType]?
   let abv: Double?
   let caffeinePer250ML: Double?
+  let sugarPer250ML: Double?
 
   init(
     id: UUID = UUID(),
@@ -81,7 +82,8 @@ struct DrinkType: Identifiable, Hashable, Codable, Sendable {
     isCustom: Bool = false,
     subTypes: [DrinkType]? = nil,
     abv: Double? = nil,
-    caffeinePer250ML: Double? = nil
+    caffeinePer250ML: Double? = nil,
+    sugarPer250ML: Double? = nil
   ) {
     self.id = id
     self.name = name
@@ -94,6 +96,7 @@ struct DrinkType: Identifiable, Hashable, Codable, Sendable {
     self.subTypes = subTypes
     self.abv = abv
     self.caffeinePer250ML = caffeinePer250ML
+    self.sugarPer250ML = sugarPer250ML
   }
 
   var hasSubTypes: Bool {
@@ -103,6 +106,11 @@ struct DrinkType: Identifiable, Hashable, Codable, Sendable {
   func caffeineContent(forML amount: Double) -> Double? {
     guard let caffeine = caffeinePer250ML, caffeine > 0 else { return nil }
     return (amount / 250.0) * caffeine
+  }
+
+  func sugarContent(forML amount: Double) -> Double? {
+    guard let sugar = sugarPer250ML, sugar > 0 else { return nil }
+    return (amount / 250.0) * sugar
   }
 
   var liquidColor: Color {
@@ -233,21 +241,14 @@ extension DrinkType {
 
     // Soft Drinks
     DrinkType(
-      name: "Juice",
-      category: .soft,
-      symbolName: "carrot.fill",
-      colorHex: "#FFA500",
-      hydrationCoefficient: 0.85,
-      containerShapeType: .glass
-    ),
-    DrinkType(
       name: "Soda",
       category: .soft,
       symbolName: "bubbles.and.sparkles",
       colorHex: "#8B4513",
       hydrationCoefficient: 0.85,
       containerShapeType: .glass,
-      caffeinePer250ML: 34
+      caffeinePer250ML: 34,
+      sugarPer250ML: 27
     ),
 
     // Alcohol (Parent categories with sub-types)

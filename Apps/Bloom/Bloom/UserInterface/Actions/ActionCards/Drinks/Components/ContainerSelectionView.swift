@@ -41,6 +41,7 @@ struct ContainerSelectionView: View {
         sampleTypes: [
           HKQuantityType(.dietaryWater),
           HKQuantityType(.dietaryCaffeine),
+          HKQuantityType(.dietarySugar),
           HKQuantityType(.numberOfAlcoholicBeverages)
         ],
         showSaveBar: false,
@@ -80,7 +81,7 @@ struct ContainerSelectionView: View {
   private func containerGrid(handleSave: @escaping () -> Void) -> some View {
     ScrollView {
       LazyVGrid(
-        columns: [GridItem(.adaptive(minimum: 90, maximum: 120), spacing: 12)],
+        columns: [GridItem(.adaptive(minimum: 100, maximum: 140), spacing: 12)],
         spacing: 12
       ) {
         ForEach(containers) { container in
@@ -202,7 +203,21 @@ struct ContainerSelectionView: View {
       try await HealthStoreModifier.shared.write(caffeineSample)
     }
 
-    // 3. Log alcoholic beverages (for alcohol category)
+    // 3. Log sugar (for sugary drinks)
+    if let sugarG = drink.sugarContent(forML: amountML), sugarG > 0 {
+      let sugarSample = HKQuantitySample(
+        type: HKQuantityType(.dietarySugar),
+        quantity: HKQuantity(unit: .gram(), doubleValue: sugarG),
+        start: Date.now,
+        end: Date.now,
+        metadata: [
+          HKMetadataKeyWasUserEntered: true
+        ]
+      )
+      try await HealthStoreModifier.shared.write(sugarSample)
+    }
+
+    // 4. Log alcoholic beverages (for alcohol category)
     if drink.category == .alcohol {
       let alcoholSample = HKQuantitySample(
         type: HKQuantityType(.numberOfAlcoholicBeverages),
