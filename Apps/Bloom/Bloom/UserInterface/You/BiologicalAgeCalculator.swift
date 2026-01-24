@@ -295,22 +295,16 @@ extension BiologicalAgeCalculator {
       contributions.append(bpContribution)
     }
 
-    // 17. Macro Balance (2%)
-    if let macroContribution = await calculateMacroBalanceContribution(referenceDate: referenceDate) {
-      totalWeightedDelta += macroContribution.weightedDelta
-      contributions.append(macroContribution)
+    // 17. Smoking (7%)
+    if let smokingContribution = await calculateSmokingContribution() {
+      totalWeightedDelta += smokingContribution.weightedDelta
+      contributions.append(smokingContribution)
     }
 
-    // 18. Sugar Intake (2%)
-    if let sugarContribution = await calculateSugarIntakeContribution(referenceDate: referenceDate) {
-      totalWeightedDelta += sugarContribution.weightedDelta
-      contributions.append(sugarContribution)
-    }
-
-    // 19. Bowel Regularity (1%)
-    if let bowelContribution = await calculateBowelRegularityContribution(referenceDate: referenceDate) {
-      totalWeightedDelta += bowelContribution.weightedDelta
-      contributions.append(bowelContribution)
+    // 18. Alcohol (3%)
+    if let alcoholContribution = await calculateAlcoholContribution(referenceDate: referenceDate) {
+      totalWeightedDelta += alcoholContribution.weightedDelta
+      contributions.append(alcoholContribution)
     }
 
     let rawBiologicalAge = actualAge + totalWeightedDelta
@@ -918,73 +912,44 @@ private extension BiologicalAgeCalculator {
   }
 }
 
-// MARK: - Nutrition Metrics
+// MARK: - Lifestyle Metrics
 
 private extension BiologicalAgeCalculator {
 
-  // 17. Macro Balance (2%)
-  func calculateMacroBalanceContribution(referenceDate: Date) async -> MetricContribution? {
-    let dateRange = DateRange.trailingDays(from: referenceDate, numberOfDays: 7)
+  // 17. Smoking (7%)
+  func calculateSmokingContribution() async -> MetricContribution? {
+    let status = healthDefaults.getSmokingStatus()
+    guard status != .unknown else { return nil }
 
-    // Fetch total calories and macros
-    let energySamples = await healthStoreFetcher.fetchCollatedQuantity(
-      for: .dietaryEnergyConsumed,
-      unit: .kilocalorie(),
-      interval: DateComponents(day: 1),
-      dateRange: dateRange
-    )
+    let ageDelta: Double
+    let rawValue: Double
 
-    let proteinSamples = await healthStoreFetcher.fetchCollatedQuantity(
-      for: .dietaryProtein,
-      unit: .gram(),
-      interval: DateComponents(day: 1),
-      dateRange: dateRange
-    )
+    switch status {
+    case .current:
+      ageDelta = 8.0
+      rawValue = 1.0
+    case .former:
+      if let quitDate = healthDefaults.getSmokingQuitDate() {
+        let yearsSinceQuit = Date().timeIntervalSince(quitDate) / (365.25 * 24 * 3600)
+        ageDelta = 6.0 * exp(-yearsSinceQuit / 6.0)
+        rawValue = yearsSinceQuit
+      } else {
+        // Assume mid-recovery if quit date not set
+        ageDelta = 3.0
+        rawValue = 3.0
+      }
+    case .never:
+      ageDelta = 0.0
+      rawValue = 0.0
+    case .unknown:
+      return nil
+    }
 
-    let carbSamples = await healthStoreFetcher.fetchCollatedQuantity(
-      for: .dietaryCarbohydrates,
-      unit: .gram(),
-      interval: DateComponents(day: 1),
-      dateRange: dateRange
-    )
-
-    let fatSamples = await healthStoreFetcher.fetchCollatedQuantity(
-      for: .dietaryFatTotal,
-      unit: .gram(),
-      interval: DateComponents(day: 1),
-      dateRange: dateRange
-    )
-
-    guard energySamples.isNotEmpty else { return nil }
-
-    let totalEnergy = energySamples.map { $0.quantity.doubleValue(for: .kilocalorie()) }.reduce(0, +)
-    let totalProtein = proteinSamples.map { $0.quantity.doubleValue(for: .gram()) }.reduce(0, +)
-    let totalCarbs = carbSamples.map { $0.quantity.doubleValue(for: .gram()) }.reduce(0, +)
-    let totalFat = fatSamples.map { $0.quantity.doubleValue(for: .gram()) }.reduce(0, +)
-
-    guard totalEnergy > 0 else { return nil }
-
-    // Calculate percentages (protein: 4 cal/g, carbs: 4 cal/g, fat: 9 cal/g)
-    let proteinPercent = (totalProtein * 4) / totalEnergy
-    let carbPercent = (totalCarbs * 4) / totalEnergy
-    let fatPercent = (totalFat * 9) / totalEnergy
-
-    // Check how many macros are in range
-    let carbRange = healthGoalProvider.recommendedDailyCarbohydratesPercentOfDietaryEnergy()
-    let fatRange = healthGoalProvider.recommendedDailyFatPercentOfDietaryEnergy()
-    let proteinRange = healthGoalProvider.recommendedDailyProteinPercentOfDietaryEnergy()
-
-    var macrosInRange = 0
-    if carbRange.contains(carbPercent) { macrosInRange += 1 }
-    if fatRange.contains(fatPercent) { macrosInRange += 1 }
-    if proteinRange.contains(proteinPercent) { macrosInRange += 1 }
-
-    let ageDelta = healthGoalProvider.macroBalanceAgeDelta(macrosInRange: macrosInRange)
-    let weight = 0.02
+    let weight = 0.07
 
     return MetricContribution(
-      metric: .macroBalance,
-      rawValue: Double(macrosInRange),
+      metric: .smoking,
+      rawValue: rawValue,
       equivalentAge: nil,
       ageDelta: ageDelta,
       weight: weight,
@@ -992,53 +957,38 @@ private extension BiologicalAgeCalculator {
     )
   }
 
-  // 18. Sugar Intake (2%)
-  func calculateSugarIntakeContribution(referenceDate: Date) async -> MetricContribution? {
-    let sugarSamples = await healthStoreFetcher.fetchCollatedQuantity(
-      for: .dietarySugar,
-      unit: .gram(),
+  // 18. Alcohol (3%)
+  func calculateAlcoholContribution(referenceDate: Date) async -> MetricContribution? {
+    let samples = await healthStoreFetcher.fetchCollatedQuantity(
+      for: .numberOfAlcoholicBeverages,
+      unit: .count(),
       interval: DateComponents(day: 1),
       dateRange: .trailingDays(from: referenceDate, numberOfDays: 7)
     )
+    guard samples.isNotEmpty else { return nil }
 
-    guard sugarSamples.isNotEmpty else { return nil }
+    let sex = healthDefaults.getSexKind()
+    let bingeThreshold = (sex == .male) ? 5.0 : 4.0
+    let heavyThreshold = (sex == .male) ? 10.0 : 8.0
 
-    let avgDailySugar = sugarSamples.map { $0.quantity.doubleValue(for: .gram()) }.reduce(0, +) / Double(sugarSamples.count)
-    let recommendedMax = healthGoalProvider.recommendedMaxDailyIntakeForSugar().doubleValue(for: .gram())
+    let dailyDrinks = samples.map { $0.quantity.doubleValue(for: .count()) }
+    let weeklyTotal = dailyDrinks.reduce(0, +)
+    let bingeDays = dailyDrinks.filter { $0 >= bingeThreshold }.count
+    let heavyDays = dailyDrinks.filter { $0 >= heavyThreshold }.count
 
-    guard recommendedMax > 0 else { return nil }
+    // Risk score (0-1)
+    let bingeComponent = min(1.0, Double(bingeDays) / 2.0)
+    let heavyComponent = min(1.0, Double(heavyDays) / 1.0) * 0.5
+    let totalComponent = weeklyTotal > 7 ? min(1.0, (weeklyTotal - 7) / 14) * 0.5 : 0.0
 
-    let percentOfLimit = (avgDailySugar / recommendedMax) * 100
-    let dataPoints = healthGoalProvider.sugarIntakeAgeDeltaDataPoints()
-    let ageDelta = interpolateAgeDelta(value: percentOfLimit, dataPoints: dataPoints)
-    let weight = 0.02
+    let risk = min(1.0, max(0.0, 0.6 * bingeComponent + 0.2 * heavyComponent + 0.2 * totalComponent))
+    let ageDelta = 6.0 * risk  // 0 to +6 years
 
-    return MetricContribution(
-      metric: .sugarIntake,
-      rawValue: percentOfLimit,
-      equivalentAge: nil,
-      ageDelta: ageDelta,
-      weight: weight,
-      weightedDelta: ageDelta * weight
-    )
-  }
-
-  // 19. Bowel Regularity (1%)
-  func calculateBowelRegularityContribution(referenceDate: Date) async -> MetricContribution? {
-    let modelActor = BowelMovementModelActor.standard()
-    guard let bowelMovements = try? await modelActor.fetchBowelMovements(dateRange: .trailingDays(from: referenceDate, numberOfDays: 7)),
-          bowelMovements.isNotEmpty else { return nil }
-
-    // Use existing scoring logic
-    let summary = BowelMovementSummary(bowelMovements: bowelMovements)
-    let score = summary.score
-
-    let ageDelta = healthGoalProvider.bowelRegularityAgeDelta(score: score)
-    let weight = 0.01
+    let weight = 0.03
 
     return MetricContribution(
-      metric: .bowelRegularity,
-      rawValue: score,
+      metric: .alcohol,
+      rawValue: weeklyTotal,
       equivalentAge: nil,
       ageDelta: ageDelta,
       weight: weight,
@@ -1138,31 +1088,29 @@ public enum BiologicalAgeMetric: String, Sendable, CaseIterable, Codable {
   case sleepRespiratoryRate = "Respiratory Rate"
   case bodyFatPercentage = "Body Fat %"
   case bloodPressure = "Blood Pressure"
-  case macroBalance = "Macro Balance"
-  case sugarIntake = "Sugar Intake"
-  case bowelRegularity = "Bowel Regularity"
+  case smoking = "Smoking"
+  case alcohol = "Alcohol"
 
   public var weight: Double {
     switch self {
     case .vo2Max: 0.18
     case .restingHeartRate: 0.06
-    case .heartRateRecovery: 0.06
+    case .heartRateRecovery: 0.04
     case .hrvTrend: 0.06
     case .heartRateReserve: 0.04
-    case .zoneMinutes: 0.08
+    case .zoneMinutes: 0.07
     case .activityLevel: 0.06
     case .walkingSpeed: 0.03
     case .stairClimbSpeed: 0.03
-    case .sleepScore: 0.08
+    case .sleepScore: 0.07
     case .sleepDurationVariability: 0.04
     case .bedtimeConsistency: 0.03
     case .sleepHeartRate: 0.03
     case .sleepRespiratoryRate: 0.02
-    case .bodyFatPercentage: 0.07
+    case .bodyFatPercentage: 0.06
     case .bloodPressure: 0.08
-    case .macroBalance: 0.02
-    case .sugarIntake: 0.02
-    case .bowelRegularity: 0.01
+    case .smoking: 0.07
+    case .alcohol: 0.03
     }
   }
 
@@ -1176,8 +1124,8 @@ public enum BiologicalAgeMetric: String, Sendable, CaseIterable, Codable {
       return .sleep
     case .bodyFatPercentage, .bloodPressure:
       return .bodyComposition
-    case .macroBalance, .sugarIntake, .bowelRegularity:
-      return .nutrition
+    case .smoking, .alcohol:
+      return .lifestyle
     }
   }
 }
@@ -1187,5 +1135,5 @@ public enum BiologicalAgeCategory: String, Sendable, CaseIterable {
   case activity = "Activity"
   case sleep = "Sleep"
   case bodyComposition = "Body Composition"
-  case nutrition = "Nutrition"
+  case lifestyle = "Lifestyle"
 }

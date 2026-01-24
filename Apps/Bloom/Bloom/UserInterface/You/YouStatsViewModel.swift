@@ -21,6 +21,7 @@ final class YouStatsViewModel: Sendable {
   var exerciseEffectivenessSummary: ExerciseEffectivenessMonthlySummary?
   var bowelMovementSummary: BowelMovementSummary?
   var menstrualSummary: MenstrualSummary?
+  var alcoholSummary: AlcoholSummary?
 
   // YouStatsCalculator data
   var bedtimeChartData: BedtimeChartData?
@@ -122,6 +123,13 @@ private extension YouStatsViewModel {
       for await menstrualSummary in await VitalsCalculator.shared.$menstrualSummary {
         await MainActor.run {
           self.menstrualSummary = menstrualSummary
+        }
+      }
+    })
+    tasks.append(Task.detached {
+      for await alcoholSummary in await VitalsCalculator.shared.$alcoholSummary {
+        await MainActor.run {
+          self.alcoholSummary = alcoholSummary
         }
       }
     })

@@ -218,12 +218,9 @@ private extension ChatHealthQueryPerformer {
       averageVitaminE: await formattedAverage(for: .dietaryVitaminE, unit: .gramUnit(with: .milli), dateRange: dateRange)
     )
 
-    let bioAgeSummary = await fetchBioAgeSummary(for: [.macroBalance, .sugarIntake])
-
     let nutrition = HealthVitalData.Nutrition(
       nutritionAverages: averages,
-      foodLogs: [],
-      bioAgeSummary: bioAgeSummary
+      foodLogs: []
     )
     return convertToString(value: nutrition)
   }
@@ -346,9 +343,7 @@ private extension ChatHealthQueryPerformer {
         return convertToString(value: HealthVitalData.BowelMovements(samples: []))
       }
 
-      let bioAgeSummary = await fetchBioAgeSummary(for: [.bowelRegularity])
-
-      let bowelMovements = HealthVitalData.BowelMovements(samples: samples, bioAgeSummary: bioAgeSummary)
+      let bowelMovements = HealthVitalData.BowelMovements(samples: samples, bioAgeSummary: nil)
 
       return convertToString(value: bowelMovements)
     } catch {
@@ -833,12 +828,10 @@ private extension ChatHealthQueryPerformer {
       return "\(formatter.string(for: value) ?? "")%"
     case .bloodPressure:
       return "\(NumberFormatter.noDecimalPlaces.string(for: value) ?? "") mmHg"
-    case .macroBalance:
-      return "\(NumberFormatter.noDecimalPlaces.string(for: value) ?? "")/3 in range"
-    case .sugarIntake:
-      return "\(NumberFormatter.noDecimalPlaces.string(for: value) ?? "")% of limit"
-    case .bowelRegularity:
-      return "\(formatter.string(for: value) ?? "") score"
+    case .smoking:
+      return "\(formatter.string(for: value) ?? "") years since quit"
+    case .alcohol:
+      return "\(NumberFormatter.noDecimalPlaces.string(for: value) ?? "") drinks/week"
     }
   }
 

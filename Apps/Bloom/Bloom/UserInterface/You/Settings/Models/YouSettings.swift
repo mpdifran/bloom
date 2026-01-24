@@ -19,6 +19,7 @@ struct YouSettings: Codable, Equatable {
       .bodyComposition,
       .stressLevels,
       .nutrition,
+      .lifestyle,
       .exerciseEffectiveness,
       .cycleTracking,
       .bowelMovements

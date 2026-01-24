@@ -1186,3 +1186,67 @@ public extension HealthStoreFetcher {
     )
   }
 }
+
+// MARK: - Alcohol
+
+public extension HealthStoreFetcher {
+
+  func fetchAlcoholSummary(
+    dateRange: DateRange = .trailingDaysFromNow(7),
+    interval: DateComponents = DateComponents(day: 1),
+    sex: HKBiologicalSex = .notSet
+  ) async -> AlcoholSummary {
+    // Fetch data with requested interval for chart display
+    let samples = await fetchCollatedQuantity(
+      for: .numberOfAlcoholicBeverages,
+      unit: .count(),
+      interval: interval,
+      dateRange: dateRange
+    )
+
+    guard samples.isNotEmpty else {
+      return .empty
+    }
+
+    // Convert to chart data (may be daily or weekly depending on interval)
+    let chartData = samples.map { sample in
+      AlcoholSummary.DailyAlcoholData(
+        date: sample.date,
+        drinks: Int(sample.quantity.doubleValue(for: .count()))
+      )
+    }
+
+    let total = chartData.reduce(0) { $0 + $1.drinks }
+
+    // For binge/heavy day calculations, always use daily data
+    let dailySamples: [DateQuantitySample]
+    if interval == DateComponents(day: 1) {
+      dailySamples = samples
+    } else {
+      dailySamples = await fetchCollatedQuantity(
+        for: .numberOfAlcoholicBeverages,
+        unit: .count(),
+        interval: DateComponents(day: 1),
+        dateRange: dateRange
+      )
+    }
+
+    // Calculate binge days (sex-specific thresholds) using daily data
+    let bingeThreshold = (sex == .male) ? 5 : 4
+    let heavyThreshold = (sex == .male) ? 10 : 8
+
+    let bingeDays = dailySamples.filter {
+      Int($0.quantity.doubleValue(for: .count())) >= bingeThreshold
+    }.count
+    let heavyDays = dailySamples.filter {
+      Int($0.quantity.doubleValue(for: .count())) >= heavyThreshold
+    }.count
+
+    return AlcoholSummary(
+      weeklyTotal: total,
+      dailyData: chartData,
+      bingeDays: bingeDays,
+      heavyDays: heavyDays
+    )
+  }
+}

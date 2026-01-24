@@ -12,6 +12,7 @@ public enum AIHealthCategory: String, Codable, CaseIterable, Sendable {
   case nutrition
   case digestiveHealth
   case menstrualHealth
+  case lifestyle
 
   // Other Data
   case demographics
@@ -37,6 +38,8 @@ public enum AIHealthCategory: String, Codable, CaseIterable, Sendable {
       return "Digestive Health"
     case .menstrualHealth:
       return "Menstrual Health"
+    case .lifestyle:
+      return "Lifestyle"
     case .demographics:
       return "Demographics"
     case .goals:
@@ -67,6 +70,8 @@ public enum AIHealthCategory: String, Codable, CaseIterable, Sendable {
       return .toiletFill
     case .menstrualHealth:
       return .circleDottedAndCircle
+    case .lifestyle:
+      return .leafFill
     case .demographics:
       return .personCircleFill
     case .goals:
@@ -96,6 +101,8 @@ public enum AIHealthCategory: String, Codable, CaseIterable, Sendable {
         .brown
     case .menstrualHealth:
         .mutedPink
+    case .lifestyle:
+        .mutedTeal
     case .demographics:
         .mutedIndigo
     case .goals:
@@ -126,6 +133,8 @@ public enum AIHealthCategory: String, Codable, CaseIterable, Sendable {
           return "Bowel movements and patterns. Used to help Bud answer questions about digestive health and provide personalized insights."
       case .menstrualHealth:
           return "Cycle tracking and related data. Used to help Bud answer questions about menstrual health and provide personalized insights."
+      case .lifestyle:
+          return "Alcohol consumption and smoking status. Used to help Bud understand lifestyle factors that may affect your health."
       case .demographics:
           return "Age, biological sex, height, and your focus. Used to help Bud personalize responses and tailor insights to you."
       case .goals:
@@ -143,7 +152,7 @@ public enum AIHealthCategory: String, Codable, CaseIterable, Sendable {
   public var isHealthData: Bool {
     switch self {
     case .physicalActivity, .bodyMetrics, .mentalWellness, .sleep,
-        .nutrition, .digestiveHealth, .menstrualHealth:
+        .nutrition, .digestiveHealth, .menstrualHealth, .lifestyle:
       return true
     case .demographics, .goals, .location, .weather, .calendarEvents:
       return false

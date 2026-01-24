@@ -671,10 +671,8 @@ extension ChatVitalConverter {
       return .physicalActivity
     case .sleepScore, .sleepDurationVariability, .bedtimeConsistency, .sleepHeartRate, .sleepRespiratoryRate:
       return .sleep
-    case .macroBalance, .sugarIntake:
-      return .nutrition
-    case .bowelRegularity:
-      return .digestiveHealth
+    case .smoking, .alcohol:
+      return .lifestyle
     }
   }
 
@@ -707,12 +705,10 @@ extension ChatVitalConverter {
       return "\(formatter.string(for: value) ?? "")%"
     case .bloodPressure:
       return "\(NumberFormatter.noDecimalPlaces.string(for: value) ?? "") mmHg"
-    case .macroBalance:
-      return "\(NumberFormatter.noDecimalPlaces.string(for: value) ?? "")/3 in range"
-    case .sugarIntake:
-      return "\(NumberFormatter.noDecimalPlaces.string(for: value) ?? "")% of limit"
-    case .bowelRegularity:
-      return "\(formatter.string(for: value) ?? "") score"
+    case .smoking:
+      return "\(formatter.string(for: value) ?? "") years since quit"
+    case .alcohol:
+      return "\(NumberFormatter.noDecimalPlaces.string(for: value) ?? "") drinks/week"
     }
   }
 

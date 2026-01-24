@@ -74,6 +74,7 @@ extension ConsentManager {
       nutritionConsent: aiDataSharing.enabledCategories.contains(.nutrition),
       digestiveHealthConsent: aiDataSharing.enabledCategories.contains(.digestiveHealth),
       menstrualHealthConsent: aiDataSharing.enabledCategories.contains(.menstrualHealth),
+      lifestyleConsent: aiDataSharing.enabledCategories.contains(.lifestyle),
       demographicsConsent: aiDataSharing.enabledCategories.contains(.demographics),
       goalsConsent: aiDataSharing.enabledCategories.contains(.goals),
       locationConsent: aiDataSharing.enabledCategories.contains(.location),
@@ -103,6 +104,7 @@ extension ConsentManager {
       nutritionConsent: aiDataSharing.enabledCategories.contains(.nutrition),
       digestiveHealthConsent: aiDataSharing.enabledCategories.contains(.digestiveHealth),
       menstrualHealthConsent: aiDataSharing.enabledCategories.contains(.menstrualHealth),
+      lifestyleConsent: aiDataSharing.enabledCategories.contains(.lifestyle),
       demographicsConsent: aiDataSharing.enabledCategories.contains(.demographics),
       goalsConsent: aiDataSharing.enabledCategories.contains(.goals),
       locationConsent: aiDataSharing.enabledCategories.contains(.location),
@@ -157,6 +159,7 @@ extension ConsentManager {
       let unknownNutrition: Bool = response.nutritionConsent == nil
       let unknownDigestive: Bool = response.digestiveHealthConsent == nil
       let unknownMenstrual: Bool = response.menstrualHealthConsent == nil
+      let unknownLifestyle: Bool = response.lifestyleConsent == nil
       let unknownDemographics: Bool = response.demographicsConsent == nil
       let unknownGoals: Bool = response.goalsConsent == nil
       let unknownLocation: Bool = response.locationConsent == nil
@@ -165,7 +168,7 @@ extension ConsentManager {
 
       let hasUnknownCategories = unknownPhysical || unknownBody || unknownMental ||
                                   unknownSleep || unknownNutrition || unknownDigestive
-      let hasUnknownCategories2 = unknownMenstrual || unknownDemographics || unknownGoals ||
+      let hasUnknownCategories2 = unknownMenstrual || unknownLifestyle || unknownDemographics || unknownGoals ||
                                    unknownLocation || unknownWeather || unknownCalendar
 
       var consentTypes = [ConsentType]()
@@ -260,6 +263,7 @@ private extension ConsentManager {
       nutritionConsent: nil,
       digestiveHealthConsent: nil,
       menstrualHealthConsent: nil,
+      lifestyleConsent: nil,
       demographicsConsent: nil,
       goalsConsent: nil,
       locationConsent: nil,

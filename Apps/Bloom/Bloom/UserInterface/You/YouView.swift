@@ -25,6 +25,7 @@ struct YouView: View {
   @Environment(TabController.self) private var tabController: TabController
 
   @ObservedObject private var aiFeatureSettings = AIFeatureSettings.shared
+  @ObservedObject private var healthManager = HealthManager.shared
 
   var body: some View {
     NavigationStack(path: $path) {
@@ -50,6 +51,7 @@ struct YouView: View {
         case .exerciseEffectiveness: ExerciseEffectivenessView()
         case .cycleTracking: MenstruationDetailView()
         case .bowelMovements: BowelMovementsDetailView()
+        case .lifestyle: AlcoholDetailsView()
         @unknown default:
           fatalError("Unknown case")
         }
@@ -134,6 +136,13 @@ struct YouView: View {
         summary: viewModel.nutritionSummary,
         fiberChartData: viewModel.fiberChartData,
         sugarChartData: viewModel.sugarChartData
+      )
+    case .lifestyle:
+      LifestyleSection(
+        presentedNavigationDestination: $presentedNavigationDestination,
+        alcoholSummary: viewModel.alcoholSummary,
+        smokingStatus: healthManager.smokingStatus,
+        smokingQuitDate: healthManager.smokingQuitDate
       )
     case .exerciseEffectiveness:
       ExerciseEffectivenessSection(

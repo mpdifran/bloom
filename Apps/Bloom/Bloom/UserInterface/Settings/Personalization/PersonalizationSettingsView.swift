@@ -25,6 +25,7 @@ struct PersonalizationSettingsView: View {
     NavigationStack {
       BloomScrollView {
         userDetailsSection
+        lifestyleSection
         userFactsSection
       }
       .navigationTitle("Personal Details")
@@ -44,6 +45,16 @@ struct PersonalizationSettingsView: View {
           .horizontallyCentered()
       }
       .buttonStyle(.primary)
+    }
+    .onChange(of: healthManager.smokingStatus) { _, _ in
+      Task {
+        await BiologicalAgeViewModel.shared.forceCalculateBiologicalAge()
+      }
+    }
+    .onChange(of: healthManager.smokingQuitDate) { _, _ in
+      Task {
+        await BiologicalAgeViewModel.shared.forceCalculateBiologicalAge()
+      }
     }
   }
 }
@@ -116,6 +127,42 @@ private extension PersonalizationSettingsView {
     }
   }
   
+  var lifestyleSection: some View {
+    VStack {
+      SectionTitleView("Lifestyle")
+        .padding(.horizontal)
+
+      SettingsSectionContainer {
+        SettingsCell("Smoking Status") {
+          Picker("", selection: $healthManager.smokingStatus) {
+            ForEach(SmokingStatus.allCases, id: \.self) { status in
+              Text(status.displayName)
+                .tag(status)
+            }
+          }
+          .pickerStyle(.menu)
+        }
+
+        if healthManager.smokingStatus == .former {
+          Divider()
+
+          SettingsCell("Quit Date") {
+            DatePicker(
+              "",
+              selection: Binding(
+                get: { healthManager.smokingQuitDate ?? Date() },
+                set: { healthManager.smokingQuitDate = $0 }
+              ),
+              in: ...Date(),
+              displayedComponents: .date
+            )
+            .datePickerStyle(.compact)
+          }
+        }
+      }
+    }
+  }
+
   var userFactsSection: some View {
     VStack {
       SectionTitleView("Bud")

@@ -46,6 +46,8 @@ public struct ConsentResponse: Codable, Hashable, Sendable {
   public let digestiveHealthConsent: Bool?
   /// Whether the user has granted consent for menstrual health data (true = granted, false = denied, nil = not asked)
   public let menstrualHealthConsent: Bool?
+  /// Whether the user has granted consent for lifestyle data (alcohol, smoking) (true = granted, false = denied, nil = not asked)
+  public let lifestyleConsent: Bool?
   /// Whether the user has granted consent for demographics data (true = granted, false = denied, nil = not asked)
   public let demographicsConsent: Bool?
   /// Whether the user has granted consent for goals data (true = granted, false = denied, nil = not asked)
@@ -73,6 +75,7 @@ public struct ConsentResponse: Codable, Hashable, Sendable {
     nutritionConsent: Bool? = nil,
     digestiveHealthConsent: Bool? = nil,
     menstrualHealthConsent: Bool? = nil,
+    lifestyleConsent: Bool? = nil,
     demographicsConsent: Bool? = nil,
     goalsConsent: Bool? = nil,
     locationConsent: Bool? = nil,
@@ -94,6 +97,7 @@ public struct ConsentResponse: Codable, Hashable, Sendable {
     self.nutritionConsent = nutritionConsent
     self.digestiveHealthConsent = digestiveHealthConsent
     self.menstrualHealthConsent = menstrualHealthConsent
+    self.lifestyleConsent = lifestyleConsent
     self.demographicsConsent = demographicsConsent
     self.goalsConsent = goalsConsent
     self.locationConsent = locationConsent

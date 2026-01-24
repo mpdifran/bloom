@@ -61,4 +61,5 @@ let allMigrations: [Migration] = [
   SaleRecord.RemoveImageId(),
   SaleRecord.ConvertTargetAudiencesToText(),
   UserConsentRecord.AddMonitorConsent(),
+  UserConsentRecord.AddLifestyleConsent(),
 ]

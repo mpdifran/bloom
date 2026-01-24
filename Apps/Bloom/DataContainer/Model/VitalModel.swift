@@ -16,6 +16,7 @@ public extension VitalModel {
     case bodyComposition
     case stressLevels
     case nutrition
+    case lifestyle
     case exerciseEffectiveness
     case cycleTracking
     case bowelMovements
@@ -37,6 +38,8 @@ public extension VitalModel {
         "Stress Levels"
       case .nutrition:
         "Nutrition"
+      case .lifestyle:
+        "Lifestyle"
       case .exerciseEffectiveness:
         "Exercise Effectiveness"
       case .cycleTracking:
@@ -60,6 +63,8 @@ public extension VitalModel {
         "bolt.fill"
       case .nutrition:
         "fork.knife"
+      case .lifestyle:
+        "leaf.fill"
       case .exerciseEffectiveness:
         "figure.mixed.cardio"
       case .cycleTracking:
@@ -81,7 +86,8 @@ public extension VitalModel {
       case .sleepQuality, // No goals yet!
           .bodyComposition,
           .cycleTracking,
-          .cardioFitness:
+          .cardioFitness,
+          .lifestyle:
         return false
       }
     }

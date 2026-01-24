@@ -67,6 +67,9 @@ final class UserConsentRecord: Model, Content, @unchecked Sendable {
   @Field(key: "menstrual_health_consent")
   var menstrualHealthConsent: Bool?
 
+  @Field(key: "lifestyle_consent")
+  var lifestyleConsent: Bool?
+
   @Field(key: "demographics_consent")
   var demographicsConsent: Bool?
 
@@ -101,6 +104,7 @@ final class UserConsentRecord: Model, Content, @unchecked Sendable {
     nutritionConsent: Bool? = nil,
     digestiveHealthConsent: Bool? = nil,
     menstrualHealthConsent: Bool? = nil,
+    lifestyleConsent: Bool? = nil,
     demographicsConsent: Bool? = nil,
     goalsConsent: Bool? = nil,
     locationConsent: Bool? = nil,
@@ -123,6 +127,7 @@ final class UserConsentRecord: Model, Content, @unchecked Sendable {
     self.nutritionConsent = nutritionConsent
     self.digestiveHealthConsent = digestiveHealthConsent
     self.menstrualHealthConsent = menstrualHealthConsent
+    self.lifestyleConsent = lifestyleConsent
     self.demographicsConsent = demographicsConsent
     self.goalsConsent = goalsConsent
     self.locationConsent = locationConsent

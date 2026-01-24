@@ -24,6 +24,8 @@ public extension String {
     case isPregnant = "HealthManager.isPregnant"
     case isBreastFeeding = "HealthManager.isBreastfeeding"
     case selectedWorkoutEquipment = "HealthManager.selectedWorkoutEquipment"
+    case smokingStatus = "HealthManager.smokingStatus"
+    case smokingQuitDate = "HealthManager.smokingQuitDate"
 
     public var key: String { rawValue }
   }
@@ -94,6 +96,18 @@ public extension HealthDefaults {
   func setSelectedWorkoutEquipment(_ equipment: [String]) {
     setValue(equipment, for: .selectedWorkoutEquipment)
   }
+
+  func setSmokingStatus(_ status: SmokingStatus) {
+    setValue(status.rawValue, for: .smokingStatus)
+  }
+
+  func setSmokingQuitDate(_ date: Date?) {
+    if let date {
+      setValue(date.timeIntervalSince1970, for: .smokingQuitDate)
+    } else {
+      setValue(nil, for: .smokingQuitDate)
+    }
+  }
 }
 
 public extension HealthDefaults {
@@ -145,6 +159,21 @@ public extension HealthDefaults {
   
   func getSelectedWorkoutEquipment() -> [String] {
     getValue(for: .selectedWorkoutEquipment) ?? []
+  }
+
+  func getSmokingStatus() -> SmokingStatus {
+    if let value: String = getValue(for: .smokingStatus),
+       let status = SmokingStatus(rawValue: value) {
+      return status
+    }
+    return .unknown
+  }
+
+  func getSmokingQuitDate() -> Date? {
+    guard let timestamp: TimeInterval = getValue(for: .smokingQuitDate) else {
+      return nil
+    }
+    return Date(timeIntervalSince1970: timestamp)
   }
 }
 

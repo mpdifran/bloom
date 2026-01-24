@@ -134,6 +134,20 @@ extension UserConsentRecord {
         .update()
     }
   }
+
+  struct AddLifestyleConsent: AsyncMigration {
+    func prepare(on database: any Database) async throws {
+      try await database.schema(UserConsentRecord.schema)
+        .field("lifestyle_consent", .bool)
+        .update()
+    }
+
+    func revert(on database: any Database) async throws {
+      try await database.schema(UserConsentRecord.schema)
+        .deleteField("lifestyle_consent")
+        .update()
+    }
+  }
 }
 
 extension User {

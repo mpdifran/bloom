@@ -23,6 +23,7 @@ public final actor VitalsCalculator {
   @AsyncStreamable public var exerciseEffectivenessSummary: ExerciseEffectivenessMonthlySummary?
   @AsyncStreamable public var bowelMovementSummary: BowelMovementSummary?
   @AsyncStreamable public var menstrualSummary: MenstrualSummary?
+  @AsyncStreamable public var alcoholSummary: AlcoholSummary?
 
   private init() {
     if let date = UserDefaults.group.object(forKey: "VitalsCalculator.lastVitalFetchDate") as? Date {
@@ -66,6 +67,9 @@ public extension VitalsCalculator {
     exerciseEffectivenessSummary = await HealthStoreFetcher.shared.fetchExerciseEffectivenessSummary()
     menstrualSummary = await HealthStoreFetcher.shared.fetchMenstrualSummary()
     bowelMovementSummary = await fetchBowelMovementSummary()
+    alcoholSummary = await HealthStoreFetcher.shared.fetchAlcoholSummary(
+      sex: HealthDefaults.shared.getSexKind()
+    )
 
     await createVitals()
   }

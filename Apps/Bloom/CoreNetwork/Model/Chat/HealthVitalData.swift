@@ -721,16 +721,13 @@ extension HealthVitalData {
   public struct Nutrition: SendableNetworkModel {
     public let nutritionAverages: HealthVitalData.NutritionAverages
     public let foodLogs: [FoodLogDay]
-    public let bioAgeSummary: BioAgeSummary?
 
     public init(
       nutritionAverages: HealthVitalData.NutritionAverages,
-      foodLogs: [FoodLogDay],
-      bioAgeSummary: BioAgeSummary? = nil
+      foodLogs: [FoodLogDay]
     ) {
       self.nutritionAverages = nutritionAverages
       self.foodLogs = foodLogs
-      self.bioAgeSummary = bioAgeSummary
     }
   }
 }

@@ -157,6 +157,13 @@ public final class HealthManager: ObservableObject {
     didSet { healthDefaults.setSelectedWorkoutEquipment(Array(selectedWorkoutEquipment)) }
   }
 
+  @Published public var smokingStatus: SmokingStatus = .unknown {
+    didSet { healthDefaults.setSmokingStatus(smokingStatus) }
+  }
+  @Published public var smokingQuitDate: Date? {
+    didSet { healthDefaults.setSmokingQuitDate(smokingQuitDate) }
+  }
+
   public var healthTargetDetails: HealthTargetDetails {
     HealthTargetDetails(
       targetWeight: targetWeight,
@@ -177,6 +184,8 @@ public final class HealthManager: ObservableObject {
     self.focus = healthDefaults.getFocus()
     self.weightLossSpeed = healthDefaults.getWeightLossSpeed()
     self.selectedWorkoutEquipment = Set(healthDefaults.getSelectedWorkoutEquipment())
+    self.smokingStatus = healthDefaults.getSmokingStatus()
+    self.smokingQuitDate = healthDefaults.getSmokingQuitDate()
 
     if let activityLevel = healthDefaults.getActivityLevel() {
       self.userReportedActivityLevel = activityLevel
