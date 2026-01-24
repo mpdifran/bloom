@@ -83,6 +83,14 @@ struct DrinkFillContainerView: View {
       WineGlassShape().fill(style)
     case .shaker:
       ShakerShape().fill(style)
+    case .can:
+      CanShape().fill(style)
+    case .mug:
+      MugShape().fill(style)
+    case .tumbler:
+      TumblerShape().fill(style)
+    case .shotGlass:
+      ShotGlassShape().fill(style)
     }
   }
 
@@ -105,6 +113,14 @@ struct DrinkFillContainerView: View {
       WineGlassShape().stroke(Color.secondary.opacity(0.3), lineWidth: 3)
     case .shaker:
       ShakerShape().stroke(Color.secondary.opacity(0.3), lineWidth: 3)
+    case .can:
+      CanShape().stroke(Color.secondary.opacity(0.3), lineWidth: 3)
+    case .mug:
+      MugShape().stroke(Color.secondary.opacity(0.3), lineWidth: 3)
+    case .tumbler:
+      TumblerShape().stroke(Color.secondary.opacity(0.3), lineWidth: 3)
+    case .shotGlass:
+      ShotGlassShape().stroke(Color.secondary.opacity(0.3), lineWidth: 3)
     }
   }
 }

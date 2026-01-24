@@ -22,14 +22,11 @@ struct ManageContainersView: View {
   var body: some View {
     NavigationStack {
       BloomScrollView(showsChatBar: false) {
-        VStack(spacing: 12) {
-          ForEach(containers) { container in
-            containerRow(container)
-          }
-
-          addButton
+        ForEach(containers) { container in
+          containerRow(container)
         }
-        .padding(.horizontal)
+
+        addButton
       }
       .navigationTitle("Manage Containers")
       .navigationBarTitleDisplayMode(.inline)
@@ -39,13 +36,10 @@ struct ManageContainersView: View {
         }
 
         ToolbarItem(placement: .primaryAction) {
-          Menu {
-            Button("Reset to Defaults", systemImage: "arrow.counterclockwise") {
-              showingResetAlert = true
-            }
-          } label: {
-            Image(systemSymbol: .ellipsisCircle)
+          Button("Reset to Defaults", systemSymbol: .arrowCounterclockwise) {
+            showingResetAlert = true
           }
+          .buttonStyle(.plain)
         }
       }
       .sheet(item: $editingContainer) { container in
@@ -77,6 +71,15 @@ struct ManageContainersView: View {
 
   private func containerRow(_ container: ContainerSizeModel) -> some View {
     HStack(spacing: 12) {
+      // Delete button
+      Button {
+        deleteContainer(container)
+      } label: {
+        Image(systemSymbol: .minusCircleFill)
+          .foregroundStyle(.white, .red)
+      }
+      .buttonStyle(.plain)
+
       // Mini container shape
       ContainerShapeView(
         shapeType: .glass,
@@ -104,47 +107,20 @@ struct ManageContainersView: View {
         editingContainer = container
       } label: {
         Image(systemSymbol: .pencil)
-          .foregroundStyle(.secondary)
-      }
-      .buttonStyle(.plain)
-
-      // Delete button
-      Button {
-        deleteContainer(container)
-      } label: {
-        Image(systemSymbol: .trash)
-          .foregroundStyle(.red)
       }
       .buttonStyle(.plain)
     }
-    .padding()
-    .background {
-      RoundedRectangle(cornerRadius: 12)
-        .fill(.fill)
-    }
+    .cardContainer()
   }
 
   private var addButton: some View {
     Button {
       showingAddSheet = true
     } label: {
-      HStack {
-        Image(systemSymbol: .plusCircle)
-        Text("Add Container")
-      }
-      .font(.subheadline)
-      .fontWeight(.medium)
-      .foregroundStyle(.tint)
-      .frame(maxWidth: .infinity)
-      .padding()
-      .background {
-        RoundedRectangle(cornerRadius: 12)
-          .fill(.fill)
-          .strokeBorder(style: StrokeStyle(lineWidth: 1, dash: [5]))
-          .foregroundStyle(.tint.opacity(0.3))
-      }
+      Label("Add Container", systemSymbol: .plus)
+        .horizontallyCentered()
     }
-    .buttonStyle(.plain)
+    .buttonStyle(.primary)
   }
 
   private func deleteContainer(_ container: ContainerSizeModel) {

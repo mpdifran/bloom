@@ -63,13 +63,10 @@ struct ContainerSelectionView: View {
           DismissButton()
         }
         ToolbarItem(placement: .primaryAction) {
-          Menu {
-            Button("Manage Containers", systemImage: "pencil") {
-              presentedSheet = .manageContainers
-            }
-          } label: {
-            Image(systemSymbol: .ellipsisCircle)
+          Button("Manage Containers", systemSymbol: .ellipsis) {
+            presentedSheet = .manageContainers
           }
+          .buttonStyle(.plain)
         }
       }
     }
@@ -89,7 +86,6 @@ struct ContainerSelectionView: View {
         ForEach(containers) { container in
           ContainerSizeCell(
             container: container,
-            shapeType: drink.containerShapeType,
             drinkColor: drink.liquidColor
           )
           .onTapGesture {

@@ -10,14 +10,13 @@ import BloomUI
 
 struct ContainerSizeCell: View {
   let container: ContainerSizeModel
-  let shapeType: ContainerShapeType
   let drinkColor: Color
 
   var body: some View {
     VStack(spacing: 8) {
-      // Mini container preview
+      // Mini container preview using container's own shape
       ContainerShapeView(
-        shapeType: shapeType,
+        shapeType: container.shapeType,
         fillColor: drinkColor.opacity(0.3),
         strokeColor: drinkColor.opacity(0.6),
         strokeWidth: 1.5
@@ -51,19 +50,16 @@ struct ContainerSizeCell: View {
   HStack(spacing: 12) {
     ContainerSizeCell(
       container: ContainerSizeModel.defaults[0],
-      shapeType: .glass,
       drinkColor: .blue
     )
 
     ContainerSizeCell(
       container: ContainerSizeModel.defaults[2],
-      shapeType: .glass,
       drinkColor: .blue
     )
 
     ContainerSizeCell(
       container: ContainerSizeModel.defaults[4],
-      shapeType: .beerGlass,
       drinkColor: .orange
     )
   }

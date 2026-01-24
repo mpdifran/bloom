@@ -13,17 +13,20 @@ struct ContainerSizeModel: Identifiable, Hashable, Codable, Sendable {
   let id: UUID
   var name: String
   var volumeML: Double
+  var shapeType: ContainerShapeType
   let isSystemDefault: Bool
 
   init(
     id: UUID = UUID(),
     name: String,
     volumeML: Double,
+    shapeType: ContainerShapeType = .glass,
     isSystemDefault: Bool = false
   ) {
     self.id = id
     self.name = name
     self.volumeML = volumeML
+    self.shapeType = shapeType
     self.isSystemDefault = isSystemDefault
   }
 
@@ -51,15 +54,15 @@ struct ContainerSizeModel: Identifiable, Hashable, Codable, Sendable {
 extension ContainerSizeModel {
 
   static let defaults: [ContainerSizeModel] = [
-    ContainerSizeModel(name: "Shot", volumeML: 30, isSystemDefault: true),
-    ContainerSizeModel(name: "Small Glass", volumeML: 150, isSystemDefault: true),
-    ContainerSizeModel(name: "Glass", volumeML: 250, isSystemDefault: true),
-    ContainerSizeModel(name: "Large Glass", volumeML: 350, isSystemDefault: true),
-    ContainerSizeModel(name: "Can", volumeML: 355, isSystemDefault: true),
-    ContainerSizeModel(name: "Bottle", volumeML: 500, isSystemDefault: true),
-    ContainerSizeModel(name: "Pint", volumeML: 473, isSystemDefault: true),
-    ContainerSizeModel(name: "Large Bottle", volumeML: 750, isSystemDefault: true),
-    ContainerSizeModel(name: "Liter", volumeML: 1000, isSystemDefault: true)
+    ContainerSizeModel(name: "Shot", volumeML: 30, shapeType: .shotGlass, isSystemDefault: true),
+    ContainerSizeModel(name: "Small Glass", volumeML: 150, shapeType: .glass, isSystemDefault: true),
+    ContainerSizeModel(name: "Glass", volumeML: 250, shapeType: .glass, isSystemDefault: true),
+    ContainerSizeModel(name: "Large Glass", volumeML: 350, shapeType: .glass, isSystemDefault: true),
+    ContainerSizeModel(name: "Can", volumeML: 355, shapeType: .can, isSystemDefault: true),
+    ContainerSizeModel(name: "Bottle", volumeML: 500, shapeType: .waterBottle, isSystemDefault: true),
+    ContainerSizeModel(name: "Pint", volumeML: 473, shapeType: .beerGlass, isSystemDefault: true),
+    ContainerSizeModel(name: "Large Bottle", volumeML: 750, shapeType: .waterBottle, isSystemDefault: true),
+    ContainerSizeModel(name: "Liter", volumeML: 1000, shapeType: .waterBottle, isSystemDefault: true)
   ]
 }
 

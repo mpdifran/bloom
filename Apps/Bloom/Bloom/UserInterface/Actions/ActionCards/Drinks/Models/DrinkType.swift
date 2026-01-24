@@ -32,6 +32,27 @@ enum ContainerShapeType: String, Codable, Sendable, CaseIterable {
   case beerGlass
   case wineGlass
   case shaker
+  case can
+  case mug
+  case tumbler
+  case shotGlass
+
+  var displayName: String {
+    switch self {
+    case .waterBottle: "Water Bottle"
+    case .coffeeCup: "Coffee Cup"
+    case .espressoCup: "Espresso Cup"
+    case .teaCup: "Tea Cup"
+    case .glass: "Glass"
+    case .beerGlass: "Beer Glass"
+    case .wineGlass: "Wine Glass"
+    case .shaker: "Shaker"
+    case .can: "Can"
+    case .mug: "Mug"
+    case .tumbler: "Tumbler"
+    case .shotGlass: "Shot Glass"
+    }
+  }
 }
 
 // MARK: - DrinkType

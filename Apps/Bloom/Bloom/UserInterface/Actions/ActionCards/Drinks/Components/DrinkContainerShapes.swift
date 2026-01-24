@@ -512,6 +512,274 @@ struct ShakerShape: DrinkContainerShape {
   }
 }
 
+// MARK: - Can Shape
+
+struct CanShape: DrinkContainerShape {
+  static let name = "Can"
+
+  func path(in rect: CGRect) -> Path {
+    var path = Path()
+
+    let width = rect.width
+    let height = rect.height
+    let centerX = rect.midX
+
+    // Can proportions (cylindrical)
+    let canWidth = width * 0.65
+    let topCurve = height * 0.06
+    let bottomCurve = height * 0.04
+    let lipHeight = height * 0.03
+
+    let canTop = rect.minY
+    let canBottom = rect.maxY
+
+    // Top lip
+    path.move(to: CGPoint(x: centerX - canWidth / 2 + width * 0.05, y: canTop))
+    path.addLine(to: CGPoint(x: centerX + canWidth / 2 - width * 0.05, y: canTop))
+
+    // Top right curve (lip to body)
+    path.addQuadCurve(
+      to: CGPoint(x: centerX + canWidth / 2, y: canTop + lipHeight + topCurve),
+      control: CGPoint(x: centerX + canWidth / 2, y: canTop + lipHeight)
+    )
+
+    // Right side
+    path.addLine(to: CGPoint(x: centerX + canWidth / 2, y: canBottom - bottomCurve))
+
+    // Bottom right curve
+    path.addQuadCurve(
+      to: CGPoint(x: centerX + canWidth / 2 - width * 0.05, y: canBottom),
+      control: CGPoint(x: centerX + canWidth / 2, y: canBottom)
+    )
+
+    // Bottom
+    path.addLine(to: CGPoint(x: centerX - canWidth / 2 + width * 0.05, y: canBottom))
+
+    // Bottom left curve
+    path.addQuadCurve(
+      to: CGPoint(x: centerX - canWidth / 2, y: canBottom - bottomCurve),
+      control: CGPoint(x: centerX - canWidth / 2, y: canBottom)
+    )
+
+    // Left side
+    path.addLine(to: CGPoint(x: centerX - canWidth / 2, y: canTop + lipHeight + topCurve))
+
+    // Top left curve (body to lip)
+    path.addQuadCurve(
+      to: CGPoint(x: centerX - canWidth / 2 + width * 0.05, y: canTop),
+      control: CGPoint(x: centerX - canWidth / 2, y: canTop + lipHeight)
+    )
+
+    path.closeSubpath()
+
+    return path
+  }
+}
+
+// MARK: - Mug Shape
+
+struct MugShape: DrinkContainerShape {
+  static let name = "Mug"
+
+  func path(in rect: CGRect) -> Path {
+    var path = Path()
+
+    let width = rect.width
+    let height = rect.height
+
+    // Mug proportions - squat and wide like a coffee mug
+    let cupWidth = width * 0.72
+    let cupHeight = height * 0.65  // Only use 65% of height for a squatter look
+    let handleWidth = width * 0.16
+    let cornerRadius = width * 0.1
+    let cupOffsetX = -width * 0.06  // Shift cup left to center with handle
+
+    let centerX = rect.midX + cupOffsetX
+    let cupTop = rect.maxY - cupHeight  // Anchor to bottom
+    let cupBottom = rect.maxY
+    let handleTop = cupTop + cupHeight * 0.15
+    let handleBottom = cupBottom - cupHeight * 0.15
+
+    // Cup body - top left
+    path.move(to: CGPoint(x: centerX - cupWidth / 2, y: cupTop))
+
+    // Left side
+    path.addLine(to: CGPoint(x: centerX - cupWidth / 2, y: cupBottom - cornerRadius))
+
+    // Bottom left corner
+    path.addQuadCurve(
+      to: CGPoint(x: centerX - cupWidth / 2 + cornerRadius, y: cupBottom),
+      control: CGPoint(x: centerX - cupWidth / 2, y: cupBottom)
+    )
+
+    // Bottom
+    path.addLine(to: CGPoint(x: centerX + cupWidth / 2 - cornerRadius, y: cupBottom))
+
+    // Bottom right corner
+    path.addQuadCurve(
+      to: CGPoint(x: centerX + cupWidth / 2, y: cupBottom - cornerRadius),
+      control: CGPoint(x: centerX + cupWidth / 2, y: cupBottom)
+    )
+
+    // Right side up to handle
+    path.addLine(to: CGPoint(x: centerX + cupWidth / 2, y: handleBottom))
+
+    // Handle outer curve
+    path.addQuadCurve(
+      to: CGPoint(x: centerX + cupWidth / 2 + handleWidth, y: (handleTop + handleBottom) / 2),
+      control: CGPoint(x: centerX + cupWidth / 2 + handleWidth * 1.1, y: handleBottom)
+    )
+    path.addQuadCurve(
+      to: CGPoint(x: centerX + cupWidth / 2, y: handleTop),
+      control: CGPoint(x: centerX + cupWidth / 2 + handleWidth * 1.1, y: handleTop)
+    )
+
+    // Right side from handle to top
+    path.addLine(to: CGPoint(x: centerX + cupWidth / 2, y: cupTop))
+
+    path.closeSubpath()
+
+    // Handle inner cutout
+    let innerHandleWidth = handleWidth * 0.45
+    let innerHandleTop = handleTop + cupHeight * 0.08
+    let innerHandleBottom = handleBottom - cupHeight * 0.08
+
+    path.move(to: CGPoint(x: centerX + cupWidth / 2 + width * 0.02, y: innerHandleBottom))
+    path.addQuadCurve(
+      to: CGPoint(x: centerX + cupWidth / 2 + innerHandleWidth, y: (innerHandleTop + innerHandleBottom) / 2),
+      control: CGPoint(x: centerX + cupWidth / 2 + innerHandleWidth * 1.2, y: innerHandleBottom)
+    )
+    path.addQuadCurve(
+      to: CGPoint(x: centerX + cupWidth / 2 + width * 0.02, y: innerHandleTop),
+      control: CGPoint(x: centerX + cupWidth / 2 + innerHandleWidth * 1.2, y: innerHandleTop)
+    )
+    path.closeSubpath()
+
+    return path
+  }
+}
+
+// MARK: - Tumbler Shape
+
+struct TumblerShape: DrinkContainerShape {
+  static let name = "Tumbler"
+
+  func path(in rect: CGRect) -> Path {
+    var path = Path()
+
+    let width = rect.width
+    let height = rect.height
+    let centerX = rect.midX
+
+    // Tumbler proportions (tall travel mug with lid)
+    let lidWidth = width * 0.5
+    let lidHeight = height * 0.08
+    let bodyTopWidth = width * 0.6
+    let bodyBottomWidth = width * 0.55
+    let cornerRadius = width * 0.06
+
+    let lidTop = rect.minY
+    let lidBottom = lidTop + lidHeight
+    let bodyBottom = rect.maxY
+
+    // Lid
+    path.move(to: CGPoint(x: centerX - lidWidth / 2, y: lidTop))
+    path.addLine(to: CGPoint(x: centerX + lidWidth / 2, y: lidTop))
+    path.addLine(to: CGPoint(x: centerX + lidWidth / 2, y: lidBottom - height * 0.02))
+
+    // Lid to body transition right
+    path.addLine(to: CGPoint(x: centerX + bodyTopWidth / 2, y: lidBottom))
+
+    // Body right side (slight taper)
+    path.addLine(to: CGPoint(x: centerX + bodyBottomWidth / 2, y: bodyBottom - cornerRadius))
+
+    // Bottom right corner
+    path.addQuadCurve(
+      to: CGPoint(x: centerX + bodyBottomWidth / 2 - cornerRadius, y: bodyBottom),
+      control: CGPoint(x: centerX + bodyBottomWidth / 2, y: bodyBottom)
+    )
+
+    // Bottom
+    path.addLine(to: CGPoint(x: centerX - bodyBottomWidth / 2 + cornerRadius, y: bodyBottom))
+
+    // Bottom left corner
+    path.addQuadCurve(
+      to: CGPoint(x: centerX - bodyBottomWidth / 2, y: bodyBottom - cornerRadius),
+      control: CGPoint(x: centerX - bodyBottomWidth / 2, y: bodyBottom)
+    )
+
+    // Body left side
+    path.addLine(to: CGPoint(x: centerX - bodyTopWidth / 2, y: lidBottom))
+
+    // Lid to body transition left
+    path.addLine(to: CGPoint(x: centerX - lidWidth / 2, y: lidBottom - height * 0.02))
+
+    path.closeSubpath()
+
+    return path
+  }
+}
+
+// MARK: - Shot Glass Shape
+
+struct ShotGlassShape: DrinkContainerShape {
+  static let name = "Shot Glass"
+
+  func path(in rect: CGRect) -> Path {
+    var path = Path()
+
+    let width = rect.width
+    let centerX = rect.midX
+
+    // Shot glass proportions (small, tapered)
+    let topWidth = width * 0.6
+    let bottomWidth = width * 0.4
+    let baseWidth = width * 0.5
+    let baseHeight = rect.height * 0.08
+    let cornerRadius = width * 0.06
+
+    let glassTop = rect.minY
+    let glassBottom = rect.maxY - baseHeight
+    let baseBottom = rect.maxY
+
+    // Top left
+    path.move(to: CGPoint(x: centerX - topWidth / 2, y: glassTop))
+
+    // Left side (tapered)
+    path.addLine(to: CGPoint(x: centerX - bottomWidth / 2, y: glassBottom))
+
+    // Base left
+    path.addLine(to: CGPoint(x: centerX - baseWidth / 2, y: glassBottom))
+    path.addLine(to: CGPoint(x: centerX - baseWidth / 2, y: baseBottom - cornerRadius))
+
+    // Bottom left corner
+    path.addQuadCurve(
+      to: CGPoint(x: centerX - baseWidth / 2 + cornerRadius, y: baseBottom),
+      control: CGPoint(x: centerX - baseWidth / 2, y: baseBottom)
+    )
+
+    // Bottom
+    path.addLine(to: CGPoint(x: centerX + baseWidth / 2 - cornerRadius, y: baseBottom))
+
+    // Bottom right corner
+    path.addQuadCurve(
+      to: CGPoint(x: centerX + baseWidth / 2, y: baseBottom - cornerRadius),
+      control: CGPoint(x: centerX + baseWidth / 2, y: baseBottom)
+    )
+
+    // Base right
+    path.addLine(to: CGPoint(x: centerX + baseWidth / 2, y: glassBottom))
+    path.addLine(to: CGPoint(x: centerX + bottomWidth / 2, y: glassBottom))
+
+    // Right side (tapered)
+    path.addLine(to: CGPoint(x: centerX + topWidth / 2, y: glassTop))
+
+    path.closeSubpath()
+
+    return path
+  }
+}
+
 // MARK: - Shape View
 
 struct ContainerShapeView: View {
@@ -566,6 +834,22 @@ struct ContainerShapeView: View {
       ShakerShape()
         .fill(fillColor)
         .overlay { ShakerShape().stroke(strokeColor, lineWidth: strokeWidth) }
+    case .can:
+      CanShape()
+        .fill(fillColor)
+        .overlay { CanShape().stroke(strokeColor, lineWidth: strokeWidth) }
+    case .mug:
+      MugShape()
+        .fill(fillColor)
+        .overlay { MugShape().stroke(strokeColor, lineWidth: strokeWidth) }
+    case .tumbler:
+      TumblerShape()
+        .fill(fillColor)
+        .overlay { TumblerShape().stroke(strokeColor, lineWidth: strokeWidth) }
+    case .shotGlass:
+      ShotGlassShape()
+        .fill(fillColor)
+        .overlay { ShotGlassShape().stroke(strokeColor, lineWidth: strokeWidth) }
     }
   }
 }
