@@ -19,7 +19,7 @@ private extension String {
 }
 
 /// Manages AI-generated insights for monitor detail views.
-/// Caches insights with 1-hour TTL and invalidates when monitor state changes.
+/// Caches insights per calendar day and invalidates when monitor state changes.
 @MainActor @Observable
 final class MonitorInsightManager {
   static let shared = MonitorInsightManager()
@@ -62,9 +62,10 @@ final class MonitorInsightManager {
     guard EntitlementController.shared.hasBloomPro == true else { return }
     guard !isLoading(for: monitorType) else { return }
 
-    // Check if cache is still valid and monitor state hasn't changed
+    // Check if cache is still valid: same state AND same calendar day
     if let cached = cachedInsights[monitorType],
-       cached.monitorState == currentResult.state {
+       cached.monitorState == currentResult.state,
+       Calendar.current.isDate(cached.timestamp, inSameDayAs: Date()) {
       return // Cache is valid, no refresh needed
     }
 

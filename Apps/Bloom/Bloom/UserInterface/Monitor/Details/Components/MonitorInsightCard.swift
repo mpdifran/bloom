@@ -49,6 +49,7 @@ struct MonitorInsightCard: View {
 
       Text(mainText)
         .font(.body)
+        .horizontalAlignment(.leading)
         .contentTransition(.numericText())
         .frame(maxWidth: .infinity)
         .fixedSize(horizontal: false, vertical: true)
@@ -65,6 +66,7 @@ struct MonitorInsightCard: View {
         Text(suggestion)
           .font(.subheadline)
           .foregroundStyle(.secondary)
+          .horizontalAlignment(.leading)
           .fixedSize(horizontal: false, vertical: true)
       }
 

@@ -19,6 +19,10 @@ platform :ios do
     match(type: "development", platform: "ios")
   end
 
+  lane :matchiOSAppStore do
+    match(type: "appstore", platform: "ios")
+  end
+
   lane :setupMatch do
     match(readonly: true)
   end
