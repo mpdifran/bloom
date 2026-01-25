@@ -13,6 +13,7 @@ import AppUI
 
 struct BudSummaryWidgetView: View {
   @Environment(\.widgetFamily) var family
+  @Environment(\.widgetRenderingMode) var renderingMode
   let entry: BudSummaryEntry
 
   @State private var largeWidgetContentHeight: CGFloat = 0
@@ -52,8 +53,10 @@ private extension BudSummaryWidgetView {
       }
       .padding()
       .background {
-        RoundedRectangle(cornerRadius: 20)
-          .fill(.thinMaterial)
+        if renderingMode == .fullColor {
+          RoundedRectangle(cornerRadius: 20)
+            .fill(.thinMaterial)
+        }
       }
       .padding(-8)
       .padding(.trailing, 8)
@@ -83,8 +86,10 @@ private extension BudSummaryWidgetView {
       .horizontalAlignment(.leading)
       .padding()
       .background {
-        RoundedRectangle(cornerRadius: 20)
-          .fill(.thinMaterial)
+        if renderingMode == .fullColor {
+          RoundedRectangle(cornerRadius: 20)
+            .fill(.thinMaterial)
+        }
       }
       .padding(-8)
     }
@@ -116,8 +121,10 @@ private extension BudSummaryWidgetView {
       }
       .padding()
       .background {
-        RoundedRectangle(cornerRadius: 20)
-          .fill(.thinMaterial)
+        if renderingMode == .fullColor {
+          RoundedRectangle(cornerRadius: 20)
+            .fill(.thinMaterial)
+        }
       }
       .padding(-8)
       .padding(.trailing, 8)
@@ -141,8 +148,10 @@ private extension BudSummaryWidgetView {
       .horizontalAlignment(.leading)
       .padding()
       .background {
-        RoundedRectangle(cornerRadius: 20)
-          .fill(.thinMaterial)
+        if renderingMode == .fullColor {
+          RoundedRectangle(cornerRadius: 20)
+            .fill(.thinMaterial)
+        }
       }
       .padding(-8)
     }

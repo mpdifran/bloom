@@ -9,10 +9,12 @@ import SwiftUI
 import WidgetKit
 import SFSafeSymbols
 import AppIntents
+import AppUI
 
 struct LogActionsWidgetView: View {
   let entry: LogActionsEntry
   @Environment(\.widgetFamily) var widgetFamily
+  @Environment(\.widgetRenderingMode) var renderingMode
 
   var body: some View {
     GeometryReader { geometry in
@@ -87,7 +89,15 @@ private extension LogActionsWidgetView {
       .fontDesign(.rounded)
       .frame(maxWidth: .infinity, maxHeight: .infinity)
       .padding(.horizontal)
-      .background(actionType.color.gradient)
+      .if(renderingMode == .fullColor) {
+        $0.background(actionType.color.gradient)
+      }
+      .if(renderingMode != .fullColor) {
+        $0.background {
+          RoundedRectangle(cornerRadius: 20)
+            .stroke(.fill)
+        }
+      }
       .clipShape(RoundedRectangle(cornerRadius: 20))
     }
     .buttonStyle(.plain)

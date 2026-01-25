@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppUI
+import WidgetKit
 
 public struct BudImage: View {
   let resource: ImageResource
@@ -23,6 +24,7 @@ public struct BudImage: View {
   public var body: some View {
     Image(resource)
       .resizable()
+      .widgetAccentedRenderingMode(.fullColor)
       .aspectRatio(contentMode: .fit)
       .frame(height: dimension)
       .shadow(color: .white, radius: 1)

@@ -15,6 +15,8 @@ import BloomFoundation
 struct TodayInsightWidgetView: View {
   let entry: TodayInsightEntry
 
+  @Environment(\.widgetRenderingMode) var renderingMode
+
   var body: some View {
     if !entry.isSubscribed {
       nonSubscriberView
@@ -36,10 +38,19 @@ struct TodayInsightWidgetView: View {
           .foregroundStyle(entry.color)
           .frame(square: 30)
           .padding(6)
-          .background {
-            RoundedRectangle(cornerRadius: 13)
-              .fill(.white)
+          .if(renderingMode == .fullColor) {
+            $0.background {
+              RoundedRectangle(cornerRadius: 13)
+                .fill(.white)
+            }
           }
+          .if(renderingMode != .fullColor) {
+            $0.background {
+              RoundedRectangle(cornerRadius: 13)
+                .stroke(.fill)
+            }
+          }
+
 
         Text(entry.title)
           .font(.title3)
@@ -71,9 +82,17 @@ struct TodayInsightWidgetView: View {
           .foregroundStyle(entry.color)
           .frame(square: 30)
           .padding(6)
-          .background {
-            RoundedRectangle(cornerRadius: 13)
-              .fill(.white)
+          .if(renderingMode == .fullColor) {
+            $0.background {
+              RoundedRectangle(cornerRadius: 13)
+                .fill(.white)
+            }
+          }
+          .if(renderingMode != .fullColor) {
+            $0.background {
+              RoundedRectangle(cornerRadius: 13)
+                .stroke(.fill)
+            }
           }
 
         Text(entry.title)
@@ -106,9 +125,17 @@ struct TodayInsightWidgetView: View {
           .foregroundStyle(entry.color)
           .frame(square: 30)
           .padding(6)
-          .background {
-            RoundedRectangle(cornerRadius: 13)
-              .fill(.white)
+          .if(renderingMode == .fullColor) {
+            $0.background {
+              RoundedRectangle(cornerRadius: 13)
+                .fill(.white)
+            }
+          }
+          .if(renderingMode != .fullColor) {
+            $0.background {
+              RoundedRectangle(cornerRadius: 13)
+                .stroke(.fill)
+            }
           }
 
         Text(entry.title)
@@ -142,9 +169,17 @@ struct TodayInsightWidgetView: View {
           .foregroundStyle(.red)
           .frame(square: 30)
           .padding(6)
-          .background {
-            RoundedRectangle(cornerRadius: 13)
-              .fill(.white)
+          .if(renderingMode == .fullColor) {
+            $0.background {
+              RoundedRectangle(cornerRadius: 13)
+                .fill(.white)
+            }
+          }
+          .if(renderingMode != .fullColor) {
+            $0.background {
+              RoundedRectangle(cornerRadius: 13)
+                .stroke(.fill)
+            }
           }
 
         Text("Error")
