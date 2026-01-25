@@ -580,6 +580,7 @@
 		FF97C40E2E9C408C00FE7A82 /* SharedAppIntents */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FF97CD872E9E812400FE7A82 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, FF97CD882E9E812400FE7A82 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = SharedAppIntents; sourceTree = "<group>"; };
 		FF97D6932EA16EE300FE7A82 /* CoreNetwork */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CoreNetwork; sourceTree = "<group>"; };
 		FFCE852F2C99DBD6002C46B1 /* DataContainer */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FFCE85362C99DBD6002C46B1 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = DataContainer; sourceTree = "<group>"; };
+		FFD462BF2F25B44B002716B9 /* workflows */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = workflows; sourceTree = "<group>"; };
 		FFECC1CF2DC2C327002F6AAA /* CoreHealth */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CoreHealth; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -820,6 +821,7 @@
 				FF0B2C5B2D73C82500196463 /* Scripts */,
 				FF9782D12C9A1CC700A8ED7E /* ci_scripts */,
 				4BD93F212CFA88C900D1AFB8 /* fastlane */,
+				FFD462BC2F25B400002716B9 /* GitHub */,
 				FF9782D82C9A22C900A8ED7E /* Umbrella */,
 				FF89B4002EA31BBC00C76B6C /* BloomWidgetsExtensionDebug.entitlements */,
 				FF89B3FF2EA31B7A00C76B6C /* BloomWidgetsExtension.entitlements */,
@@ -850,6 +852,15 @@
 				FF89BDB12EA5564300C76B6C /* BloomUI.framework */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		FFD462BC2F25B400002716B9 /* GitHub */ = {
+			isa = PBXGroup;
+			children = (
+				FFD462BF2F25B44B002716B9 /* workflows */,
+			);
+			name = GitHub;
+			path = ../../.github;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
