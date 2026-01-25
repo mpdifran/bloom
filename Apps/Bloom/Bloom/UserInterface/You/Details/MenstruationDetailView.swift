@@ -32,8 +32,9 @@ struct MenstruationDetailView: View {
     BloomScrollView(spacing: 20) {
       calendarSection
 
+      StatTimePeriodPicker(selectedPeriod: $selectedPeriod)
+
       if hasData {
-        StatTimePeriodPicker(selectedPeriod: $selectedPeriod)
         cycleLengthChart
         periodDurationChart
         phaseActivitySection

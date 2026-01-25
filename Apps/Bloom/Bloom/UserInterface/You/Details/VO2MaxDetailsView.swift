@@ -28,7 +28,9 @@ struct VO2MaxDetailsView: View {
   ]
 
   var body: some View {
-    Group {
+    BloomScrollView(spacing: 20) {
+      StatTimePeriodPicker(selectedPeriod: $selectedPeriod)
+
       if vo2MaxSamples.isNotEmpty {
         contentView
       } else {
@@ -63,12 +65,9 @@ struct VO2MaxDetailsView: View {
 
 private extension VO2MaxDetailsView {
 
+  @ViewBuilder
   var contentView: some View {
-    BloomScrollView(spacing: 20) {
-      StatTimePeriodPicker(selectedPeriod: $selectedPeriod)
-
-      vo2MaxChartSection
-    }
+    vo2MaxChartSection
   }
 
   var emptyView: some View {

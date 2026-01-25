@@ -23,7 +23,9 @@ struct MobilityDetailsView: View {
   private let healthGoalProvider = HealthGoalProvider.shared
 
   var body: some View {
-    Group {
+    BloomScrollView(spacing: 20) {
+      StatTimePeriodPicker(selectedPeriod: $selectedPeriod, includeOneDay: true)
+
       if hasData {
         contentView
       } else {
@@ -70,14 +72,11 @@ private extension MobilityDetailsView {
     stairClimbSpeedData = await stairSpeed
   }
 
+  @ViewBuilder
   var contentView: some View {
-    BloomScrollView(spacing: 20) {
-      StatTimePeriodPicker(selectedPeriod: $selectedPeriod, includeOneDay: true)
-
-      stepsChartSection
-      walkingSpeedChartSection
-      stairClimbSpeedChartSection
-    }
+    stepsChartSection
+    walkingSpeedChartSection
+    stairClimbSpeedChartSection
   }
 
   var emptyView: some View {

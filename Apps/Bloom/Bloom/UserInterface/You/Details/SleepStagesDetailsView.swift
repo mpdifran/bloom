@@ -20,7 +20,9 @@ struct SleepStagesDetailsView: View {
   @State private var stageAverages: SleepStageAverages?
 
   var body: some View {
-    Group {
+    BloomScrollView(spacing: 20) {
+      StatTimePeriodPicker(selectedPeriod: $selectedPeriod, includeOneDay: true)
+
       if hasData {
         contentView
       } else {
@@ -120,18 +122,15 @@ private extension SleepStagesDetailsView {
 
 private extension SleepStagesDetailsView {
 
+  @ViewBuilder
   var contentView: some View {
-    BloomScrollView(spacing: 20) {
-      StatTimePeriodPicker(selectedPeriod: $selectedPeriod, includeOneDay: true)
-
-      if selectedPeriod == .oneDay {
-        singleDayChartSection
-      } else {
-        multiDayChartSection
-      }
-
-      educationalSection
+    if selectedPeriod == .oneDay {
+      singleDayChartSection
+    } else {
+      multiDayChartSection
     }
+
+    educationalSection
   }
 
   var emptyView: some View {

@@ -20,7 +20,9 @@ struct SleepMetricsDetailsView: View {
   @State private var respiratoryDataPoints: [DateQuantitySample] = []
 
   var body: some View {
-    Group {
+    BloomScrollView(spacing: 20) {
+      StatTimePeriodPicker(selectedPeriod: $selectedPeriod)
+
       if hasData {
         contentView
       } else {
@@ -124,21 +126,18 @@ private extension SleepMetricsDetailsView {
 
 private extension SleepMetricsDetailsView {
 
+  @ViewBuilder
   var contentView: some View {
-    BloomScrollView(spacing: 20) {
-      StatTimePeriodPicker(selectedPeriod: $selectedPeriod)
+    if sleepHRDataPoints.isNotEmpty || rhrDataPoints.isNotEmpty {
+      heartRateChartSection
+    }
 
-      if sleepHRDataPoints.isNotEmpty || rhrDataPoints.isNotEmpty {
-        heartRateChartSection
-      }
+    if temperatureDataPoints.isNotEmpty {
+      temperatureChartSection
+    }
 
-      if temperatureDataPoints.isNotEmpty {
-        temperatureChartSection
-      }
-
-      if respiratoryDataPoints.isNotEmpty {
-        respiratoryRateChartSection
-      }
+    if respiratoryDataPoints.isNotEmpty {
+      respiratoryRateChartSection
     }
   }
 

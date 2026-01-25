@@ -21,7 +21,9 @@ struct HeartHealthDetailsView: View {
   private let viewModel = VitalsViewModel.shared
 
   var body: some View {
-    Group {
+    BloomScrollView(spacing: 20) {
+      StatTimePeriodPicker(selectedPeriod: $selectedPeriod)
+
       if hasData {
         contentView
       } else {
@@ -76,14 +78,11 @@ private extension HeartHealthDetailsView {
     }
   }
 
+  @ViewBuilder
   var contentView: some View {
-    BloomScrollView(spacing: 20) {
-      StatTimePeriodPicker(selectedPeriod: $selectedPeriod)
-
-      restingHeartRateChart
-      heartRateReserveChart
-      heartRateRecoveryChart
-    }
+    restingHeartRateChart
+    heartRateReserveChart
+    heartRateRecoveryChart
   }
 
   var emptyView: some View {

@@ -20,13 +20,18 @@ struct AlcoholDetailsView: View {
 
   var body: some View {
     BloomScrollView {
-      if isLoading {
-        ProgressView()
-          .padding(.top, 100)
-      } else if let summary = alcoholSummary, summary.hasData {
-        contentView(summary: summary)
-      } else {
-        emptyStateView
+      VStack(spacing: 20) {
+        StatTimePeriodPicker(selectedPeriod: $selectedPeriod)
+          .padding(.horizontal)
+
+        if isLoading {
+          ProgressView()
+            .padding(.top, 100)
+        } else if let summary = alcoholSummary, summary.hasData {
+          contentView(summary: summary)
+        } else {
+          emptyStateView
+        }
       }
     }
     .toolbar {
@@ -71,9 +76,6 @@ private extension AlcoholDetailsView {
   @ViewBuilder
   func contentView(summary: AlcoholSummary) -> some View {
     VStack(spacing: 20) {
-      StatTimePeriodPicker(selectedPeriod: $selectedPeriod)
-        .padding(.horizontal)
-
       weeklyChartSection(summary: summary)
       riskLevelSection(summary: summary)
       infoSection
