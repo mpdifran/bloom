@@ -116,6 +116,8 @@ final actor BiologicalAgeCalculator {
     // If we don't need to recalculate, the biologicalAge is already set from loadLatestResult
     guard shouldRecalculate else { return }
 
+    internalLog(.biologicalAge, "Starting calculation")
+
     let modelActor = BiologicalAgeRecordModelActor.standard()
 
     // Calculate new biological age
@@ -148,6 +150,8 @@ final actor BiologicalAgeCalculator {
       lastCalculated: Date(),
       metricContributions: result.metricContributions
     )
+
+    internalLog(.biologicalAge, "Calculated: \(String(format: "%.1f", clampedAge)) (actual: \(String(format: "%.1f", userAge)))")
 
     let ageDiff = clampedAge - userAge
     TelemetryDeck.signal("Bio Age Calculated", floatValue: ageDiff)

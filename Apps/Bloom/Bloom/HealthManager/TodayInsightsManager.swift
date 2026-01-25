@@ -97,19 +97,12 @@ final class TodayInsightsManager {
   func shouldRefreshContent() -> Bool {
     // Early return if insights are disabled
     guard isInsightsEnabled() else {
-      internalLog(.todayInsights, "Today Insights disabled in settings, returning false for shouldRefreshContent()")
       return false
     }
 
     // Check if we have content for today
     guard let content = lastResponse,
           Calendar.current.isDate(content.day, inSameDayAs: .now) else {
-
-      if lastResponse == nil {
-        internalLog(.todayInsights, "lastResponse was nil, returning true for shouldRefreshContent()")
-      } else {
-        internalLog(.todayInsights, "lastResponse was for yesterday, returning true for shouldRefreshContent()")
-      }
       return true
     }
 
@@ -132,7 +125,6 @@ final class TodayInsightsManager {
   func forceRefreshContent() async {
     guard EntitlementController.shared.hasBloomPro == true else { return }
     // Don't check isLoadingContent - we want to override stale in-flight requests
-    internalLog(.todayInsights, "Forcing refresh of content")
     clearStoredContent()
     await loadTodayContent()
   }
@@ -144,7 +136,6 @@ final class TodayInsightsManager {
   private func loadTodayContent() async {
     // Check if insights are enabled before loading
     guard isInsightsEnabled() else {
-      internalLog(.todayInsights, "Today Insights disabled, skipping load")
       return
     }
 
@@ -154,8 +145,6 @@ final class TodayInsightsManager {
     defer {
       isLoadingContent = false
     }
-
-    internalLog(.todayInsights, "Refreshing content")
 
     do {
       let today = Date()
@@ -204,9 +193,6 @@ final class TodayInsightsManager {
       )
 
       lastResponse = content
-
-      internalLog(.todayInsights, "Finished refresh of content")
-
     } catch {
       hasLoadError = true
       TelemetryDeck.signal(

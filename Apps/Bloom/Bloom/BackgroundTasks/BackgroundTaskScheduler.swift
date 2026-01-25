@@ -65,7 +65,7 @@ extension BackgroundTaskScheduler {
 
   /// Runs the monitor aggregation task - calculates health metrics for today.
   func runMonitorAggregation() async {
-    print("Background task: Running monitor aggregation...")
+    internalLog(.monitorAggregation, "Starting monitor aggregation")
 
     do {
       // Get previous states before calculation (for change detection)
@@ -89,9 +89,9 @@ extension BackgroundTaskScheduler {
         )
       }
 
-      print("Monitor aggregation completed successfully")
+      internalLog(.monitorAggregation, "Completed successfully")
     } catch {
-      print("Monitor aggregation failed: \(error.localizedDescription)")
+      internalLog(.monitorAggregation, "Failed: \(error.localizedDescription)")
     }
 
     // Schedule the next background task for tomorrow

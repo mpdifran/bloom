@@ -56,12 +56,7 @@ private extension HealthSleepObserver {
 
     if newLastSleepAnalysis?.overallMinutesIncludingAwake != previousSleepAnalysis?.overallMinutesIncludingAwake && previousSleepAnalysis != nil {
       // Clear stale insights and trigger refresh when new sleep data is available
-      internalLog(.todayInsights, "newLastSleepAnalysis overall minutes does not match previousSleepAnalysis overall minutes, forcing refresh of content")
       await TodayInsightsManager.shared.forceRefreshContent()
-    } else if previousSleepAnalysis == nil {
-      internalLog(.todayInsights, "previousSleepAnalysis was nil, skipping content refresh")
-    } else {
-      internalLog(.todayInsights, "newLastSleepAnalysis matched previousSleepAnalysis, skipping content refresh")
     }
 
     lastSleepAnalysis = newLastSleepAnalysis

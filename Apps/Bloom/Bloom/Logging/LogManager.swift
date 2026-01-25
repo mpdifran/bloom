@@ -8,7 +8,9 @@
 import Foundation
 
 enum LogTag: String, Codable, CaseIterable, Identifiable {
-  case todayInsights = "Today Insights"
+  case biologicalAge = "Biological Age"
+  case monitorAggregation = "Monitor Aggregation"
+  case workoutAnalysis = "Workout Analysis"
 
   var id: String { rawValue }
 }

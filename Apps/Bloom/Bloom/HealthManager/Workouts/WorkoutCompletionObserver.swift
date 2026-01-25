@@ -61,6 +61,10 @@ private extension WorkoutCompletionObserver {
     let notifiedUUIDs = loadNotifiedWorkoutUUIDs()
     let newWorkouts = workouts.filter { !notifiedUUIDs.contains($0.uuid.uuidString) }
 
+    if newWorkouts.isNotEmpty {
+      internalLog(.workoutAnalysis, "Detected \(newWorkouts.count) new workout(s)")
+    }
+
     for workout in newWorkouts {
       await processWorkoutCompletion(workout)
     }
@@ -69,6 +73,8 @@ private extension WorkoutCompletionObserver {
   func processWorkoutCompletion(_ workout: HKWorkout) async {
     // Mark as notified immediately to prevent duplicates
     markWorkoutAsNotified(workout.uuid.uuidString)
+
+    internalLog(.workoutAnalysis, "Processing \(workout.workoutActivityType.name) workout")
 
     // Check if workout notifications are enabled
     guard NotificationPreferences.shared.workoutCompletionEnabled else { return }
@@ -123,6 +129,8 @@ private extension WorkoutCompletionObserver {
       subtitle: subtitle,
       workoutUUID: workout.uuid.uuidString
     )
+
+    internalLog(.workoutAnalysis, "Sent notification: \(subtitle)")
   }
 }
 
