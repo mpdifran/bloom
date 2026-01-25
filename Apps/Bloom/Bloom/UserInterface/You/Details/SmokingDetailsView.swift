@@ -13,9 +13,14 @@ import SFSafeSymbols
 struct SmokingDetailsView: View {
   @ObservedObject private var healthManager = HealthManager.shared
 
-  @State private var selectedStatus: SmokingStatus = .unknown
-  @State private var quitDate: Date = Date()
+  @State private var selectedStatus: SmokingStatus
+  @State private var quitDate: Date
   @State private var hasChanges = false
+
+  init() {
+    _selectedStatus = State(initialValue: HealthManager.shared.smokingStatus)
+    _quitDate = State(initialValue: HealthManager.shared.smokingQuitDate ?? Date())
+  }
 
   var body: some View {
     BloomScrollView {
@@ -40,8 +45,6 @@ struct SmokingDetailsView: View {
     .navigationBarTitleDisplayMode(.inline)
     .animation(.default, value: selectedStatus)
     .onAppear {
-      selectedStatus = healthManager.smokingStatus
-      quitDate = healthManager.smokingQuitDate ?? Date()
       TelemetryDeck.viewScreen("Smoking Details")
     }
     .onChange(of: selectedStatus) { _, newValue in
