@@ -1,29 +1,31 @@
 //
-//  LaunchWorkoutListView.swift
+//  WorkoutCategoryDetailsView.swift
 //  BloomWatch Watch App
 //
-//  Created by Mark DiFranco on 2025-05-05.
+//  Created by Mark DiFranco on 2026-01-25.
 //
 
 import SwiftUI
-import CoreHealth
 import HealthKit
-import AppUI
+import CoreHealth
 
-struct LaunchWorkoutListView: View {
+struct WorkoutCategoryDetailsView: View {
+  let workoutCategory: WorkoutCategory
 
   @EnvironmentObject var workoutManager: WorkoutManager
+  @Environment(\.dismiss) private var dismiss
 
   @State private var error: Error?
 
   var body: some View {
     List {
-      ForEach(HKWorkoutActivityType.allCases, id: \.self) { workoutType in
+      ForEach(workoutCategory.workoutTypes, id: \.self) { workoutType in
         WorkoutCell(workoutType: workoutType)
           .onTapGesture {
             Task {
               do {
                 try await startWorkout(workoutType: workoutType)
+                dismiss()
               } catch {
                 self.error = error
               }
@@ -32,12 +34,11 @@ struct LaunchWorkoutListView: View {
       }
     }
     .listStyle(.carousel)
-    .navigationTitle("Workout")
     .alert(error: $error)
   }
 }
 
-private extension LaunchWorkoutListView {
+private extension WorkoutCategoryDetailsView {
 
   func startWorkout(workoutType: HKWorkoutActivityType) async throws {
     let configuration = HKWorkoutConfiguration()
@@ -52,7 +53,7 @@ private extension LaunchWorkoutListView {
 }
 
 #Preview {
-  NavigationStack {
-    LaunchWorkoutListView()
+  PreviewEnvironment {
+    WorkoutCategoryDetailsView(workoutCategory: .cardioEndurance)
   }
 }

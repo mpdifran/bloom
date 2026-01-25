@@ -8,6 +8,7 @@
 import SwiftUI
 import CoreHealth
 import AppUI
+import BloomUI
 
 @main
 struct BloomWatch_Watch_AppApp: App {
@@ -21,24 +22,22 @@ struct BloomWatch_Watch_AppApp: App {
 
   var body: some Scene {
     WindowGroup {
-      NavigationStack {
-        LaunchWorkoutListView()
-      }
-      .task {
-        await HealthPermissionChecker.shared.requestAccessIfNeeded()
-      }
-      .onAppear {
-        if workoutManager.sessionState.isActive && presentedFullScreen == nil {
-          presentedFullScreen = ActiveWorkoutView().asAny
+      RootView()
+        .task {
+          await HealthPermissionChecker.shared.requestAccessIfNeeded()
         }
-      }
-      .onChange(of: workoutManager.sessionState) { (_, newValue) in
-        if newValue.isActive && presentedFullScreen == nil {
-          presentedFullScreen = ActiveWorkoutView().asAny
+        .onAppear {
+          if workoutManager.sessionState.isActive && presentedFullScreen == nil {
+            presentedFullScreen = ActiveWorkoutView().asAny
+          }
         }
-      }
-      .fullScreenCover($presentedFullScreen)
-      .environmentObject(workoutManager)
+        .onChange(of: workoutManager.sessionState) { (_, newValue) in
+          if newValue.isActive && presentedFullScreen == nil {
+            presentedFullScreen = ActiveWorkoutView().asAny
+          }
+        }
+        .fullScreenCover($presentedFullScreen)
+        .environmentObject(workoutManager)
     }
   }
 }

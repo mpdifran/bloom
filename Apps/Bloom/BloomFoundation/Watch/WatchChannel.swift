@@ -67,6 +67,7 @@ private final class WatchSessionDelegate: NSObject, WCSessionDelegate {
     }
   }
 
+  #if os(iOS)
   func sessionDidBecomeInactive(_ session: WCSession) {
     print("WCSession did become inactive")
   }
@@ -75,6 +76,7 @@ private final class WatchSessionDelegate: NSObject, WCSessionDelegate {
     print("WCSession did deactivate. Attempting reactivation.")
     WCSession.default.activate()
   }
+  #endif
 
   func session(_ session: WCSession, didReceiveMessageData messageData: Data) {
     Task { [channel] in

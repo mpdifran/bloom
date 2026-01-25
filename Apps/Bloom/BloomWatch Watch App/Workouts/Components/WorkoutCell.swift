@@ -1,5 +1,5 @@
 //
-//  LaunchWorkoutCell.swift
+//  WorkoutCell.swift
 //  BloomWatch Watch App
 //
 //  Created by Mark DiFranco on 2025-05-05.
@@ -11,29 +11,28 @@ import CoreHealth
 import SFSafeSymbols
 import BloomFoundation
 
-struct LaunchWorkoutCell: View {
+struct WorkoutCell: View {
   let workoutType: HKWorkoutActivityType
 
   var body: some View {
-    VStack(alignment: .leading) {
-      Image(systemSymbol: SFSymbol(rawValue: workoutType.systemImage))
-        .font(.largeTitle)
+    HStack(spacing: 10) {
+      WorkoutIcon(symbol: workoutType.systemSymbol)
+
       Text(workoutType.name)
         .font(.title3)
         .bold()
         .fontDesign(.rounded)
         .foregroundStyle(.white)
         .multilineTextAlignment(.leading)
-        .lineLimit(3)
+        .lineLimit(4)
     }
-    .padding(8)
-    .foregroundStyle(.green)
-    .listRowBackground(listRowBackground)
+    .padding(.vertical, 20)
+    .foregroundStyle(.mutedGreen)
     .selectable()
   }
 }
 
-private extension LaunchWorkoutCell {
+private extension WorkoutCell {
 
   var listRowBackground: some View {
     RoundedRectangle(cornerRadius: 20)
@@ -43,10 +42,10 @@ private extension LaunchWorkoutCell {
 
 #Preview {
   List {
-    LaunchWorkoutCell(workoutType: .cycling)
-    LaunchWorkoutCell(workoutType: .running)
-    LaunchWorkoutCell(workoutType: .climbing)
-    LaunchWorkoutCell(workoutType: .highIntensityIntervalTraining)
+    WorkoutCell(workoutType: .cycling)
+    WorkoutCell(workoutType: .running)
+    WorkoutCell(workoutType: .climbing)
+    WorkoutCell(workoutType: .highIntensityIntervalTraining)
   }
   .listStyle(.carousel)
 }

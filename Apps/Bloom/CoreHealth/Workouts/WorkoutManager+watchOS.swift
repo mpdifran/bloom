@@ -54,7 +54,7 @@ public extension WorkoutManager {
     builder = session?.associatedWorkoutBuilder()
     session?.delegate = self
     builder?.delegate = self
-    builder?.dataSource = HKLiveWorkoutDataSource(healthStore: healthStore, workoutConfiguration: workoutConfiguration)
+    builder?.dataSource = HKLiveWorkoutDataSource(healthStore: healthStore, workoutConfiguration: session?.workoutConfiguration)
   }
 }
 

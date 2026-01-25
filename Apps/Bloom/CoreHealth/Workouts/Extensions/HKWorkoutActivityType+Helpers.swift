@@ -7,6 +7,7 @@
 
 import Foundation
 import HealthKit
+import SFSafeSymbols
 
 public extension HKWorkoutActivityType {
 
@@ -168,7 +169,7 @@ public extension HKWorkoutActivityType {
       "figure.play"
     case .preparationAndRecovery:
       "figure.cooldown"
-//      "figure.mind.and.body"
+      //      "figure.mind.and.body"
     case .racquetball:
       "figure.racquetball"
     case .rowing:
@@ -273,6 +274,181 @@ public extension HKWorkoutActivityType {
       "chevron.right.2"
     @unknown default:
       "chevron.right.2"
+    }
+  }
+
+  var systemSymbol: SFSymbol {
+    switch self {
+    case .americanFootball:
+        .figureAmericanFootball
+    case .archery:
+        .figureArchery
+    case .australianFootball:
+        .figureAustralianFootball
+    case .badminton:
+        .figureBadminton
+    case .baseball:
+        .figureBaseball
+    case .basketball:
+        .figureBasketball
+    case .bowling:
+        .figureBowling
+    case .boxing:
+        .figureBoxing
+    case .climbing:
+        .figureClimbing
+    case .cricket:
+        .figureCricket
+    case .crossTraining:
+        .figureCrossTraining
+    case .curling:
+        .figureCurling
+    case .cycling:
+        .figureOutdoorCycle
+    case .dance:
+        .figureDance
+    case .danceInspiredTraining:
+        .figureSocialdance
+    case .elliptical:
+        .figureElliptical
+    case .equestrianSports:
+        .figureEquestrianSports
+    case .fencing:
+        .figureFencing
+    case .fishing:
+        .figureFishing
+    case .functionalStrengthTraining:
+        .figureStrengthtrainingFunctional
+    case .golf:
+        .figureGolf
+    case .gymnastics:
+        .figureGymnastics
+    case .handball:
+        .figureHandball
+    case .hiking:
+        .figureHiking
+    case .hockey:
+        .figureHockey
+    case .hunting:
+        .figureHunting
+    case .lacrosse:
+        .figureLacrosse
+    case .martialArts:
+        .figureMartialArts
+    case .mindAndBody:
+        .figureMindAndBody
+    case .mixedMetabolicCardioTraining:
+        .figureMixedCardio
+    case .paddleSports:
+        .oar2Crossed
+    case .play:
+        .figurePlay
+    case .preparationAndRecovery:
+        .figureCooldown
+    case .racquetball:
+        .figureRacquetball
+    case .rowing:
+        .figureIndoorRowing
+    case .rugby:
+        .figureRugby
+    case .running:
+        .figureRun
+    case .sailing:
+        .figureSailing
+    case .skatingSports:
+        .figureIceSkating
+    case .snowSports:
+        .figureSnowboarding
+    case .soccer:
+        .figureIndoorSoccer
+    case .softball:
+        .figureSoftball
+    case .squash:
+        .figureSquash
+    case .stairClimbing:
+        .figureStairStepper
+    case .surfingSports:
+        .figureSurfing
+    case .swimming:
+        .figurePoolSwim
+    case .tableTennis:
+        .figureTableTennis
+    case .tennis:
+        .figureTennis
+    case .trackAndField:
+        .figureTrackAndField
+    case .traditionalStrengthTraining:
+        .figureStrengthtrainingTraditional
+    case .volleyball:
+        .figureVolleyball
+    case .walking:
+        .figureWalk
+    case .waterFitness:
+        .figureWaterFitness
+    case .waterPolo:
+        .figureWaterpolo
+    case .waterSports:
+        .figureWaterpolo
+    case .wrestling:
+        .figureWrestling
+    case .yoga:
+        .figureYoga
+    case .barre:
+        .figureBarre
+    case .coreTraining:
+        .figureCoreTraining
+    case .crossCountrySkiing:
+        .figureSkiingCrosscountry
+    case .downhillSkiing:
+        .figureSkiingDownhill
+    case .flexibility:
+        .figureFlexibility
+    case .highIntensityIntervalTraining:
+        .figureHighintensityIntervaltraining
+    case .jumpRope:
+        .figureJumprope
+    case .kickboxing:
+        .figureKickboxing
+    case .pilates:
+        .figurePilates
+    case .snowboarding:
+        .figureSnowboarding
+    case .stairs:
+        .figureStairs
+    case .stepTraining:
+        .figureStepTraining
+    case .wheelchairWalkPace:
+        .figureRoll
+    case .wheelchairRunPace:
+        .figureRollRunningpace
+    case .taiChi:
+        .figureTaichi
+    case .mixedCardio:
+        .figureMixedCardio
+    case .handCycling:
+        .figureHandCycling
+    case .discSports:
+        .figureDiscSports
+    case .fitnessGaming:
+        .gamecontroller
+    case .cardioDance:
+        .figureDance
+    case .socialDance:
+        .figureSocialdance
+    case .pickleball:
+        .figurePickleball
+    case .cooldown:
+        .figureCooldown
+    case .swimBikeRun:
+        .figureRunCircle
+    case .transition:
+        .arrowUpArrowDown
+    case .underwaterDiving:
+        .waterWavesAndArrowTriangleheadDown
+    case .other:
+        .chevronRight2
+    @unknown default:
+        .chevronRight2
     }
   }
 }

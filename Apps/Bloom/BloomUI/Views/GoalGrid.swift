@@ -72,7 +72,9 @@ public struct GoalGrid: View {
           }
         }
       }
+      #if os(iOS)
       .sensoryFeedback(.selection, trigger: completionSensoryToggle)
+      #endif
       .onChange(of: model) { _, _ in
         delayedSensoryFeedback(proxy: proxy)
       }

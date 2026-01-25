@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SFSafeSymbols
+import CoreHealth
 
 struct BioAgeConfidenceCardMini: View {
   let result: BiologicalAgeResult

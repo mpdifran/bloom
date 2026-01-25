@@ -53,7 +53,7 @@ struct BloomApp: App {
     HealthDefaults.migrateFromLegacyKeys()
 
     // Listen for workouts starting from Apple Watch
-    WorkoutManager.shared.setupRemoteSessionHandler()
+//    WorkoutManager.shared.setupRemoteSessionHandler()
   }
 
   var body: some Scene {

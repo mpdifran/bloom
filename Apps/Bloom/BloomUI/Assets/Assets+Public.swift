@@ -33,6 +33,7 @@ public extension ImageResource {
   static let budHealthApp        = ImageResource(name: "Bud Health App", bundle: BundleToken.bundle)
 }
 
+#if os(iOS)
 public extension UIImage {
   // Today Scenery
   static var morningScenery: UIImage { UIImage(resource: .morningScenery) }
@@ -58,6 +59,7 @@ public extension UIImage {
   static var budYoga: UIImage { UIImage(resource: .budYoga) }
   static var budHealthApp: UIImage { UIImage(resource: .budHealthApp) }
 }
+#endif
 
 public extension ShapeStyle where Self == Color {
   // Sleep
