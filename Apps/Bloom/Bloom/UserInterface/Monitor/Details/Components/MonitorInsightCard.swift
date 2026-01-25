@@ -49,7 +49,7 @@ struct MonitorInsightCard: View {
 
       Text(mainText)
         .font(.body)
-        .horizontalAlignment(.leading)
+        .horizontalAlignment(isLoading ? .center : .leading)
         .contentTransition(.numericText())
         .frame(maxWidth: .infinity)
         .fixedSize(horizontal: false, vertical: true)
