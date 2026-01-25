@@ -3,7 +3,7 @@ name: Fast-forward develop into main (daily)
 on:
   schedule:
     # 6:00 EST every day
-    - cron: "0 23 * * *"
+    - cron: "0 4 * * *"
   workflow_dispatch: {}
 
 permissions:
