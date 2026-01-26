@@ -7,11 +7,18 @@
 
 import Foundation
 import HealthKit
+import BloomFoundation
 
 #if os(watchOS)
 public extension WorkoutManager {
-  
+
   func startWorkout(workoutConfiguration: HKWorkoutConfiguration, shouldMirror: Bool) async throws {
+    // Load heart rate zones from application context (synced from iOS)
+    if let data = WatchChannel.shared.getApplicationContextData(for: WatchChannel.heartRateZonesKey),
+       let zones = try? JSONDecoder().decode(HeartRateZones.self, from: data) {
+      heartRateZones = zones
+    }
+
     session = try HKWorkoutSession(healthStore: healthStore, configuration: workoutConfiguration)
     builder = session?.associatedWorkoutBuilder()
     session?.delegate = self

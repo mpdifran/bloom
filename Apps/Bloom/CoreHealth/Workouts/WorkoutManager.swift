@@ -26,6 +26,13 @@ public final class WorkoutManager: NSObject, ObservableObject {
   @Published public var water: Double = 0
   @Published public var elapsedTimeInterval: TimeInterval = 0
 
+  // Zone tracking
+  @Published public var heartRateZones: HeartRateZones?
+  @Published public var zoneDurations: [TimeInterval] = [0, 0, 0, 0, 0, 0] // indices 0-5
+  @Published public var currentZone: Int = 0
+
+  private var lastHeartRateDate: Date?
+
   public let healthStore = HKHealthStore()
   internal(set) public var session: HKWorkoutSession?
 
@@ -66,6 +73,12 @@ public extension WorkoutManager {
     cadence = 0
     speed = 0
     sessionState = .notStarted
+
+    // Reset zone tracking
+    heartRateZones = nil
+    zoneDurations = [0, 0, 0, 0, 0, 0]
+    currentZone = 0
+    lastHeartRateDate = nil
   }
 
   func sendData(_ data: Data) async {
@@ -119,7 +132,19 @@ extension WorkoutManager {
     switch statistics.quantityType {
     case HKQuantityType.quantityType(forIdentifier: .heartRate):
       let heartRateUnit = HKUnit.count().unitDivided(by: .minute())
-      heartRate = statistics.mostRecentQuantity()?.doubleValue(for: heartRateUnit) ?? 0
+      let newHeartRate = statistics.mostRecentQuantity()?.doubleValue(for: heartRateUnit) ?? 0
+
+      // Track zone time - matches WorkoutHeartRateReport.swift calculation
+      if heartRateZones != nil, let lastDate = lastHeartRateDate {
+        let duration = statistics.endDate.timeIntervalSince(lastDate)
+        if duration > 0 {
+          zoneDurations[currentZone] += duration
+        }
+      }
+
+      lastHeartRateDate = statistics.endDate
+      currentZone = zone(forHeartRate: newHeartRate)
+      heartRate = newHeartRate
 
     case HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned):
       let energyUnit = HKUnit.kilocalorie()
@@ -211,5 +236,32 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
         print("Failed to handle received data: \(error))")
       }
     }
+  }
+}
+
+// MARK: - Zone Tracking
+
+public extension WorkoutManager {
+
+  /// Weighted zone minutes (zones 3-4 = 2x, zone 5 = 3x)
+  var totalZoneMinutes: Double {
+    let z1 = zoneDurations[1] / 60.0
+    let z2 = zoneDurations[2] / 60.0
+    let z3 = zoneDurations[3] / 60.0
+    let z4 = zoneDurations[4] / 60.0
+    let z5 = zoneDurations[5] / 60.0
+
+    return z1 + z2 + (z3 * .zone34Multiplier) + (z4 * .zone34Multiplier) + (z5 * .zone5Multiplier)
+  }
+
+  func zone(forHeartRate bpm: Double) -> Int {
+    guard let zones = heartRateZones else { return 0 }
+
+    if bpm < zones.zone1 { return 0 }
+    else if bpm < zones.zone2 { return 1 }
+    else if bpm < zones.zone3 { return 2 }
+    else if bpm < zones.zone4 { return 3 }
+    else if bpm < zones.zone5 { return 4 }
+    else { return 5 }
   }
 }

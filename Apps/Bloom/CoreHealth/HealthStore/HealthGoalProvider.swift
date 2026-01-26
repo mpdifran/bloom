@@ -6,6 +6,7 @@
 //
 
 import HealthKit
+import BloomFoundation
 
 public final class HealthGoalProvider: Sendable {
   public static let shared = HealthGoalProvider()
@@ -99,7 +100,7 @@ public extension HealthGoalProvider {
 
     let heartRateReserve = projectedMax - restingHeartRate
 
-    return HeartRateZones(
+    let zones = HeartRateZones(
       heartRateReserve: heartRateReserve,
       restingHeartRate: restingHeartRate,
       maxHeartRate: projectedMax,
@@ -109,6 +110,17 @@ public extension HealthGoalProvider {
       zone4: (0.8 * heartRateReserve) + restingHeartRate,
       zone5: (0.9 * heartRateReserve) + restingHeartRate
     )
+
+    #if os(iOS)
+    if let data = try? JSONEncoder().encode(zones) {
+      try? await WatchChannel.shared.updateApplicationContext(
+        key: WatchChannel.heartRateZonesKey,
+        data: data
+      )
+    }
+    #endif
+
+    return zones
   }
 
   /// - note: https://www.healthline.com/health/exercise-fitness/ideal-body-fat-percentage

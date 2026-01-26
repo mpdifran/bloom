@@ -12,7 +12,6 @@ import WatchKit
 
 private extension ActiveWorkoutView {
   enum Tab {
-    case controls
     case metrics
     case nowPlaying
   }
@@ -28,14 +27,21 @@ struct ActiveWorkoutView: View {
   @Environment(\.dismiss) private var dismiss
 
   var body: some View {
-    TabView(selection: $selection) {
-      ActiveWorkoutControlsView().tag(Tab.controls)
-      ActiveWorkoutMetricsView().tag(Tab.metrics)
-      NowPlayingView().tag(Tab.nowPlaying)
+    NavigationStack {
+      TabView(selection: $selection) {
+        ActiveWorkoutMetricsView()
+          .tag(Tab.metrics)
+        NowPlayingView()
+          .removeCancellationToolbarItem()
+          .tag(Tab.nowPlaying)
+      }
+      .tabViewStyle(.verticalPage)
     }
-    .navigationTitle(title)
-    .navigationBarBackButtonHidden(true)
-    .tabViewStyle(PageTabViewStyle(indexDisplayMode: isLuminanceReduced ? .never : .automatic))
+    .background {
+      Rectangle()
+        .fill(.black)
+        .ignoresSafeArea()
+    }
     .onChange(of: isLuminanceReduced) {
       displayMetricsView()
     }

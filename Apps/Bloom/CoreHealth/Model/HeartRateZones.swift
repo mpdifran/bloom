@@ -9,7 +9,7 @@ import Foundation
 import HealthKit
 import BloomFoundation
 
-public struct HeartRateZones: Hashable, Sendable {
+public struct HeartRateZones: Hashable, Sendable, Codable {
   public let heartRateReserve: Double
   public let restingHeartRate: Double
   public let maxHeartRate: Double

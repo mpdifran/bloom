@@ -9,6 +9,7 @@ import WatchConnectivity
 import HealthKit
 
 public final actor WatchChannel: NSObject {
+  public static let heartRateZonesKey = "heartRateZones"
   public static let shared = WatchChannel()
 
   @AsyncStreamable private(set) public var receivedData: Data?
@@ -37,6 +38,15 @@ public extension WatchChannel {
         continuation.resume(throwing: error)
       }
     }
+  }
+
+  func updateApplicationContext(key: String, data: Data) throws {
+    guard WCSession.default.activationState == .activated else { return }
+    try WCSession.default.updateApplicationContext([key: data])
+  }
+
+  nonisolated func getApplicationContextData(for key: String) -> Data? {
+    WCSession.default.receivedApplicationContext[key] as? Data
   }
 }
 

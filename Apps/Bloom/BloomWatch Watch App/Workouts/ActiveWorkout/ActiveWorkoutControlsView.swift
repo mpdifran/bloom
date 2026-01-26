@@ -14,17 +14,18 @@ struct ActiveWorkoutControlsView: View {
   @EnvironmentObject var workoutManager: WorkoutManager
 
   var body: some View {
-    VStack {
-      HStack {
-        endButton
+    NavigationStack {
+      ScrollView {
+        VStack {
+          endButton
 
-        if workoutManager.sessionState == .running {
-          pauseButton
-        } else {
-          resumeButton
+          if workoutManager.sessionState == .running {
+            pauseButton
+          } else {
+            resumeButton
+          }
         }
       }
-      Spacer()
     }
   }
 }
@@ -32,48 +33,33 @@ struct ActiveWorkoutControlsView: View {
 private extension ActiveWorkoutControlsView {
 
   var pauseButton: some View {
-    VStack {
-      Button {
-        workoutManager.session?.pause()
-      } label: {
-        Image(systemSymbol: .pause)
-      }
-      .tint(.yellow)
-      .bold()
-      .font(.title2)
-
-      Text("Pause")
+    Button {
+      workoutManager.session?.pause()
+    } label: {
+      Label("Pause", systemSymbol: .pause)
     }
+    .tint(.yellow)
+    .bold()
   }
 
   var resumeButton: some View {
-    VStack {
-      Button {
-        workoutManager.session?.resume()
-      } label: {
-        Image(systemSymbol: .play)
-      }
-      .tint(.green)
-      .bold()
-      .font(.title2)
-
-      Text("Resume")
+    Button {
+      workoutManager.session?.resume()
+    } label: {
+      Label("Resume", systemSymbol: .play)
     }
+    .tint(.green)
+    .bold()
   }
 
   var endButton: some View {
-    VStack {
-      Button {
-        workoutManager.session?.stopActivity(with: .now)
-      } label: {
-        Image(systemSymbol: .xmark)
-      }
-      .tint(.red)
-      .bold()
-      .font(.title2)
-
-      Text("End")
+    Button {
+      workoutManager.session?.stopActivity(with: .now)
+    } label: {
+      Label("End", systemSymbol: .xmark)
     }
+    .tint(.red)
+    .bold()
   }
 }
 
