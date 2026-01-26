@@ -13,15 +13,18 @@ struct WorkoutsTabView: View {
   @EnvironmentObject var workoutManager: WorkoutManager
 
   @State private var recentVariants: [WorkoutVariant] = []
-  @State private var showAllWorkouts = false
+  @State private var presentedSheet: AnyView?
   @State private var error: Error?
 
   private let healthStoreFetcher = HealthStoreFetcher.shared
 
   // Default variants if no history
   private static let defaultVariants: [WorkoutVariant] = [
-    .outdoorRunning, .outdoorWalking, .outdoorCycling,
-    .simple(.traditionalStrengthTraining), .simple(.yoga)
+    .outdoorRunning,
+    .outdoorWalking,
+    .outdoorCycling,
+    .simple(.traditionalStrengthTraining),
+    .simple(.yoga)
   ]
 
   var body: some View {
@@ -30,13 +33,7 @@ struct WorkoutsTabView: View {
         ForEach(displayedVariants) { variant in
           WorkoutVariantCell(variant: variant)
             .onTapGesture {
-              Task {
-                do {
-                  try await startWorkout(variant: variant)
-                } catch {
-                  self.error = error
-                }
-              }
+              startWorkout(variant: variant)
             }
         }
       }
@@ -45,27 +42,30 @@ struct WorkoutsTabView: View {
       .toolbar {
         ToolbarItem(placement: .topBarLeading) {
           Button {
-            showAllWorkouts = true
+            presentedSheet = WorkoutPickerView() { workoutVariant in
+              startWorkout(variant: workoutVariant)
+            }.asAny
           } label: {
             Image(systemName: "plus")
           }
         }
       }
-      .alert(error: $error)
       .task {
         await loadRecentVariants()
       }
     }
-    .sheet(isPresented: $showAllWorkouts) {
-      WorkoutCategoryView()
-    }
+    .sheet($presentedSheet)
+    .alert(error: $error)
   }
+}
 
-  private var displayedVariants: [WorkoutVariant] {
+private extension WorkoutsTabView {
+
+  var displayedVariants: [WorkoutVariant] {
     recentVariants.isEmpty ? Self.defaultVariants : recentVariants
   }
 
-  private func loadRecentVariants() async {
+  func loadRecentVariants() async {
     let workouts = await healthStoreFetcher.fetchWorkouts(
       dateRange: .trailingDays(from: .now, numberOfDays: 90),
       limit: 50
@@ -93,7 +93,7 @@ struct WorkoutsTabView: View {
     }
   }
 
-  private func startWorkout(variant: WorkoutVariant) async throws {
+  func startWorkout(variant: WorkoutVariant) {
     let configuration = HKWorkoutConfiguration()
     configuration.activityType = variant.activityType
     configuration.locationType = variant.locationType
@@ -102,10 +102,18 @@ struct WorkoutsTabView: View {
       configuration.swimmingLocationType = variant.locationType == .indoor ? .pool : .openWater
     }
 
-    try await workoutManager.startWorkout(
-      workoutConfiguration: configuration,
-      shouldMirror: false
-    )
+    Task {
+      do {
+        try await workoutManager.startWorkout(
+          workoutConfiguration: configuration,
+          shouldMirror: false
+        )
+      } catch {
+        await MainActor.run {
+          self.error = error
+        }
+      }
+    }
   }
 }
 

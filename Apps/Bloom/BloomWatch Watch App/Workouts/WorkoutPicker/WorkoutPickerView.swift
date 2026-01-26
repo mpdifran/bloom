@@ -1,5 +1,5 @@
 //
-//  WorkoutCategoryView.swift
+//  WorkoutPickerView.swift
 //  BloomWatch Watch App
 //
 //  Created by Mark DiFranco on 2026-01-25.
@@ -12,7 +12,9 @@ import AppUI
 
 // MARK: - All Workouts Sheet
 
-struct WorkoutCategoryView: View {
+struct WorkoutPickerView: View {
+  let pickedWorkout: (WorkoutVariant) -> Void
+
   @State private var presentedNavigationDestination: AnyView?
 
   var body: some View {
@@ -24,7 +26,10 @@ struct WorkoutCategoryView: View {
             workoutVariants: category.workoutVariants
           )
           .onTapGesture {
-            presentedNavigationDestination = WorkoutCategoryDetailsView(workoutCategory: category).asAny
+            presentedNavigationDestination = WorkoutCategoryDetailsView(
+              workoutCategory: category,
+              pickedWorkout: pickedWorkout
+            ).asAny
           }
         }
       }
@@ -37,7 +42,9 @@ struct WorkoutCategoryView: View {
 #Preview {
   PreviewEnvironment {
     NavigationStack {
-      WorkoutCategoryView()
+      WorkoutPickerView() { _ in
+
+      }
     }
   }
 }
