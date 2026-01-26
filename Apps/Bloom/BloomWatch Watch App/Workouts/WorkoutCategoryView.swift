@@ -21,7 +21,7 @@ struct WorkoutCategoryView: View {
         ForEach(WorkoutCategory.allCases) { category in
           WorkoutCategoryCell(
             title: category.rawValue,
-            workoutTypes: category.workoutTypes
+            workoutVariants: category.workoutVariants
           )
           .onTapGesture {
             presentedNavigationDestination = WorkoutCategoryDetailsView(workoutCategory: category).asAny

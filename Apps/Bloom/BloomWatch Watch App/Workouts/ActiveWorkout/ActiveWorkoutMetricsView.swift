@@ -26,6 +26,8 @@ struct ActiveWorkoutMetricsView: View {
 
   var body: some View {
     VStack {
+      workoutTypeView
+
       Spacer()
 
       VStack(spacing: 0) {
@@ -39,13 +41,11 @@ struct ActiveWorkoutMetricsView: View {
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {
         HStack {
-          workoutTypeView
           caloriesComponent
         }
       }
       ToolbarItem(placement: .topBarLeading) {
         HStack {
-          workoutTypeView
           caloriesComponent
         }
       }
@@ -124,7 +124,7 @@ private extension ActiveWorkoutMetricsView {
   @ViewBuilder
   var workoutTypeView: some View {
     Image(systemSymbol: workoutManager.workout?.workoutActivityType.systemSymbol ?? .figureStand)
-      .font(.subheadline)
+      .font(.title)
       .bold()
       .fontDesign(.rounded)
   }
@@ -199,10 +199,17 @@ private extension ActiveWorkoutMetricsView {
   var heartRateComponent: some View {
     HStack {
       Image(systemSymbol: .heartFill)
-        .font(.subheadline)
+        .font(.caption)
 
-      Text(workoutManager.heartRate.format(using: .noDecimalPlaces) + " bpm")
-        .contentTransition(.numericText(value: workoutManager.heartRate))
+      HStack(alignment: .firstTextBaseline) {
+        Text(workoutManager.heartRate.format(using: .noDecimalPlaces))
+          .contentTransition(.numericText(value: workoutManager.heartRate))
+
+        Text("BPM")
+          .font(.caption2)
+          .bold()
+          .fontDesign(.rounded)
+      }
     }
     .font(.title2)
     .fontWeight(.bold)

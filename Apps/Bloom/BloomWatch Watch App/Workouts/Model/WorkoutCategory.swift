@@ -23,52 +23,115 @@ enum WorkoutCategory: String, CaseIterable, Identifiable {
 
   var id: String { rawValue }
 
-  var workoutTypes: [HKWorkoutActivityType] {
+  var workoutVariants: [WorkoutVariant] {
     switch self {
     case .cardioEndurance:
       return [
-        .walking, .running, .cycling, .rowing, .elliptical,
-        .stairClimbing, .stairs, .jumpRope, .mixedCardio, .handCycling,
-        .wheelchairRunPace, .wheelchairWalkPace, .stepTraining, .swimBikeRun, .transition, .trackAndField
+        .outdoorWalking, .indoorWalking,
+        .outdoorRunning, .indoorRunning,
+        .outdoorCycling, .indoorCycling,
+        .outdoorRowing, .indoorRowing,
+        .simple(.elliptical),
+        .simple(.stairClimbing),
+        .simple(.stairs),
+        .simple(.jumpRope),
+        .simple(.mixedCardio),
+        .simple(.handCycling),
+        .simple(.wheelchairRunPace),
+        .simple(.wheelchairWalkPace),
+        .simple(.stepTraining),
+        .simple(.swimBikeRun),
+        .simple(.transition),
+        .simple(.trackAndField)
       ]
     case .strengthConditioning:
       return [
-        .traditionalStrengthTraining, .functionalStrengthTraining, .coreTraining,
-        .crossTraining, .highIntensityIntervalTraining, .gymnastics
+        .simple(.traditionalStrengthTraining),
+        .simple(.functionalStrengthTraining),
+        .simple(.coreTraining),
+        .simple(.crossTraining),
+        .simple(.highIntensityIntervalTraining),
+        .simple(.gymnastics)
       ]
     case .teamCompetitive:
       return [
-        .americanFootball, .australianFootball, .baseball, .basketball, .cricket,
-        .handball, .hockey, .lacrosse, .rugby, .soccer, .softball, .volleyball, .waterPolo
+        .simple(.americanFootball),
+        .simple(.australianFootball),
+        .simple(.baseball),
+        .simple(.basketball),
+        .simple(.cricket),
+        .simple(.handball),
+        .indoorHockey, .outdoorHockey,
+        .simple(.lacrosse),
+        .simple(.rugby),
+        .outdoorSoccer, .indoorSoccer,
+        .simple(.softball),
+        .simple(.volleyball),
+        .simple(.waterPolo)
       ]
     case .skillPrecision:
       return [
-        .archery, .badminton, .bowling, .discSports, .golf, .pickleball,
-        .racquetball, .squash, .tableTennis, .tennis
+        .simple(.archery),
+        .simple(.badminton),
+        .simple(.bowling),
+        .simple(.discSports),
+        .simple(.golf),
+        .simple(.pickleball),
+        .simple(.racquetball),
+        .simple(.squash),
+        .simple(.tableTennis),
+        .simple(.tennis)
       ]
     case .combat:
       return [
-        .boxing, .kickboxing, .martialArts, .wrestling, .fencing
+        .simple(.boxing),
+        .simple(.kickboxing),
+        .simple(.martialArts),
+        .simple(.wrestling),
+        .simple(.fencing)
       ]
     case .outdoorAdventure:
       return [
-        .climbing, .hiking, .equestrianSports, .fishing, .hunting
+        .simple(.climbing),
+        .simple(.hiking),
+        .simple(.equestrianSports),
+        .simple(.fishing),
+        .simple(.hunting)
       ]
     case .waterSnowIce:
       return [
-        .swimming, .downhillSkiing, .snowboarding, .crossCountrySkiing, .curling, .paddleSports, .sailing,
-        .skatingSports, .snowSports, .surfingSports, .waterFitness,
-        .waterSports, .underwaterDiving
+        .poolSwimming, .openWaterSwimming,
+        .simple(.downhillSkiing),
+        .simple(.snowboarding),
+        .simple(.crossCountrySkiing),
+        .simple(.curling),
+        .simple(.paddleSports),
+        .simple(.sailing),
+        .indoorSkating, .outdoorSkating,
+        .simple(.snowSports),
+        .simple(.surfingSports),
+        .simple(.waterFitness),
+        .simple(.waterSports),
+        .simple(.underwaterDiving)
       ]
     case .mindMobilityRecovery:
       return [
-        .yoga, .pilates, .barre, .taiChi, .flexibility, .mindAndBody,
-        .preparationAndRecovery, .cooldown
+        .simple(.yoga),
+        .simple(.pilates),
+        .simple(.barre),
+        .simple(.taiChi),
+        .simple(.flexibility),
+        .simple(.mindAndBody),
+        .simple(.preparationAndRecovery),
+        .simple(.cooldown)
       ]
     case .playDanceOther:
       return [
-        .cardioDance, .socialDance, .play,
-        .fitnessGaming, .other
+        .simple(.cardioDance),
+        .simple(.socialDance),
+        .simple(.play),
+        .simple(.fitnessGaming),
+        .simple(.other)
       ]
     }
   }

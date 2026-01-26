@@ -11,21 +11,21 @@ import HealthKit
 
 struct WorkoutCategoryCell: View {
   let title: String
-  let workoutTypes: [HKWorkoutActivityType]
+  let workoutVariants: [WorkoutVariant]
 
-  private var displayedTypes: [HKWorkoutActivityType] {
-    Array(workoutTypes.prefix(5))
+  private var displayedVariants: [WorkoutVariant] {
+    Array(workoutVariants.prefix(5))
   }
 
   var body: some View {
     VStack(alignment: .leading, spacing: 10) {
       GeometryReader { geometry in
-        let iconCount = displayedTypes.count
+        let iconCount = displayedVariants.count
         let spacing = geometry.size.width / CGFloat(iconCount + 1)
 
         ZStack(alignment: .leading) {
-          ForEach(Array(displayedTypes.reversed().enumerated()), id: \.offset) { index, type in
-            WorkoutIcon(workoutType: type)
+          ForEach(Array(displayedVariants.reversed().enumerated()), id: \.offset) { index, variant in
+            WorkoutIcon(symbol: variant.symbol)
               .shadow(radius: 10)
               .position(x: spacing * CGFloat(iconCount - index), y: geometry.size.height / 2)
           }
@@ -47,12 +47,12 @@ struct WorkoutCategoryCell: View {
     List {
       WorkoutCategoryCell(
         title: "Strength & Conditioning",
-        workoutTypes: [
-          .highIntensityIntervalTraining,
-          .running,
-          .functionalStrengthTraining,
-          .traditionalStrengthTraining,
-          .crossTraining
+        workoutVariants: [
+          .simple(.highIntensityIntervalTraining),
+          .outdoorRunning,
+          .simple(.functionalStrengthTraining),
+          .simple(.traditionalStrengthTraining),
+          .simple(.crossTraining)
         ]
       )
     }

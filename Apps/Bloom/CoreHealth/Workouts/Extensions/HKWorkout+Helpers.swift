@@ -72,6 +72,32 @@ public extension HKWorkout {
     metadata?[HKMetadataKeyElevationDescended] as? HKQuantity
   }
 
+  /// Determines the location type (indoor/outdoor) from workout metadata.
+  /// - Parameter hasRoute: Whether the workout has an associated HKWorkoutRoute (indicates outdoor with GPS)
+  /// - Returns: The inferred location type
+  func inferredLocationType(hasRoute: Bool) -> HKWorkoutSessionLocationType {
+    // Swimming has its own metadata key
+    if workoutActivityType == .swimming {
+      if let rawValue = metadata?[HKMetadataKeySwimmingLocationType] as? NSNumber,
+         let swimmingLocation = HKWorkoutSwimmingLocationType(rawValue: rawValue.intValue) {
+        return swimmingLocation == .pool ? .indoor : .outdoor
+      }
+      return .unknown
+    }
+
+    // Check indoor metadata flag
+    if let isIndoor = metadata?[HKMetadataKeyIndoorWorkout] as? Bool {
+      return isIndoor ? .indoor : .outdoor
+    }
+
+    // If has route data (GPS), assume outdoor
+    if hasRoute {
+      return .outdoor
+    }
+
+    return .unknown
+  }
+
   // TODO: Why do we have this??
 //  var duration: TimeInterval {
 //    endDate.timeIntervalSince(startDate)

@@ -374,6 +374,25 @@ public extension HealthStoreFetcher {
     healthStore.fetchWorkoutRoutes(for: workout)
   }
 
+  /// Checks if a workout has an associated route (GPS data), indicating an outdoor workout.
+  func workoutHasRoute(_ workout: HKWorkout) async -> Bool {
+    await withCheckedContinuation { continuation in
+      let routeType = HKSeriesType.workoutRoute()
+      let predicate = HKQuery.predicateForObjects(from: workout)
+
+      let query = HKSampleQuery(
+        sampleType: routeType,
+        predicate: predicate,
+        limit: 1,
+        sortDescriptors: nil
+      ) { _, samples, _ in
+        continuation.resume(returning: samples?.isEmpty == false)
+      }
+
+      healthStore.execute(query)
+    }
+  }
+
   func fetchSleepAnalysis(dateRange: DateRange) async -> [SleepAnalysis] {
     let samples = (try? await healthStore.fetchSamples(
       for: HKCategoryType(.sleepAnalysis),

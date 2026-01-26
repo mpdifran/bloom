@@ -19,12 +19,12 @@ struct WorkoutCategoryDetailsView: View {
 
   var body: some View {
     List {
-      ForEach(workoutCategory.workoutTypes, id: \.self) { workoutType in
-        WorkoutCell(workoutType: workoutType)
+      ForEach(workoutCategory.workoutVariants) { variant in
+        WorkoutVariantCell(variant: variant)
           .onTapGesture {
             Task {
               do {
-                try await startWorkout(workoutType: workoutType)
+                try await startWorkout(variant: variant)
                 dismiss()
               } catch {
                 self.error = error
@@ -40,10 +40,14 @@ struct WorkoutCategoryDetailsView: View {
 
 private extension WorkoutCategoryDetailsView {
 
-  func startWorkout(workoutType: HKWorkoutActivityType) async throws {
+  func startWorkout(variant: WorkoutVariant) async throws {
     let configuration = HKWorkoutConfiguration()
-    configuration.activityType = workoutType
-    configuration.locationType = .unknown
+    configuration.activityType = variant.activityType
+    configuration.locationType = variant.locationType
+
+    if variant.activityType == .swimming {
+      configuration.swimmingLocationType = variant.locationType == .indoor ? .pool : .openWater
+    }
 
     try await workoutManager.startWorkout(
       workoutConfiguration: configuration,

@@ -12,26 +12,27 @@ import HealthKit
 struct WorkoutsTabView: View {
   @EnvironmentObject var workoutManager: WorkoutManager
 
-  @State private var recentWorkoutTypes: [HKWorkoutActivityType] = []
+  @State private var recentVariants: [WorkoutVariant] = []
   @State private var showAllWorkouts = false
   @State private var error: Error?
 
   private let healthStoreFetcher = HealthStoreFetcher.shared
 
-  // Default workout types if no history
-  private static let defaultWorkoutTypes: [HKWorkoutActivityType] = [
-    .running, .walking, .cycling, .traditionalStrengthTraining, .yoga
+  // Default variants if no history
+  private static let defaultVariants: [WorkoutVariant] = [
+    .outdoorRunning, .outdoorWalking, .outdoorCycling,
+    .simple(.traditionalStrengthTraining), .simple(.yoga)
   ]
 
   var body: some View {
     NavigationStack {
       List {
-        ForEach(displayedWorkoutTypes, id: \.self) { workoutType in
-          WorkoutCell(workoutType: workoutType)
+        ForEach(displayedVariants) { variant in
+          WorkoutVariantCell(variant: variant)
             .onTapGesture {
               Task {
                 do {
-                  try await startWorkout(workoutType: workoutType)
+                  try await startWorkout(variant: variant)
                 } catch {
                   self.error = error
                 }
@@ -52,7 +53,7 @@ struct WorkoutsTabView: View {
       }
       .alert(error: $error)
       .task {
-        await loadRecentWorkoutTypes()
+        await loadRecentVariants()
       }
     }
     .sheet(isPresented: $showAllWorkouts) {
@@ -60,40 +61,46 @@ struct WorkoutsTabView: View {
     }
   }
 
-  private var displayedWorkoutTypes: [HKWorkoutActivityType] {
-    recentWorkoutTypes.isEmpty ? Self.defaultWorkoutTypes : recentWorkoutTypes
+  private var displayedVariants: [WorkoutVariant] {
+    recentVariants.isEmpty ? Self.defaultVariants : recentVariants
   }
 
-  private func loadRecentWorkoutTypes() async {
+  private func loadRecentVariants() async {
     let workouts = await healthStoreFetcher.fetchWorkouts(
       dateRange: .trailingDays(from: .now, numberOfDays: 90),
       limit: 50
     )
 
-    // Get unique workout types, maintaining order of most recent
-    var seenTypes = Set<HKWorkoutActivityType>()
-    var uniqueTypes = [HKWorkoutActivityType]()
+    // Get unique variants, maintaining order of most recent
+    var seenVariantIds = Set<String>()
+    var uniqueVariants = [WorkoutVariant]()
 
     for workout in workouts {
-      let type = workout.workoutActivityType
-      if !seenTypes.contains(type) {
-        seenTypes.insert(type)
-        uniqueTypes.append(type)
+      let hasRoute = await healthStoreFetcher.workoutHasRoute(workout)
+      let variant = WorkoutVariant.from(workout: workout, hasRoute: hasRoute)
+
+      if !seenVariantIds.contains(variant.id) {
+        seenVariantIds.insert(variant.id)
+        uniqueVariants.append(variant)
       }
-      if uniqueTypes.count >= 5 {
+      if uniqueVariants.count >= 5 {
         break
       }
     }
 
     await MainActor.run {
-      recentWorkoutTypes = uniqueTypes
+      recentVariants = uniqueVariants
     }
   }
 
-  private func startWorkout(workoutType: HKWorkoutActivityType) async throws {
+  private func startWorkout(variant: WorkoutVariant) async throws {
     let configuration = HKWorkoutConfiguration()
-    configuration.activityType = workoutType
-    configuration.locationType = .unknown
+    configuration.activityType = variant.activityType
+    configuration.locationType = variant.locationType
+
+    if variant.activityType == .swimming {
+      configuration.swimmingLocationType = variant.locationType == .indoor ? .pool : .openWater
+    }
 
     try await workoutManager.startWorkout(
       workoutConfiguration: configuration,

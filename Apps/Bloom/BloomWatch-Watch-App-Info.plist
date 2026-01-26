@@ -5,7 +5,9 @@
 	<key>BLOOM_APP_GROUP_ID</key>
 	<string>$(BLOOM_APP_GROUP_ID)</string>
 	<key>UIBackgroundModes</key>
-	<array/>
+	<array>
+		<string>audio</string>
+	</array>
 	<key>WKBackgroundModes</key>
 	<array>
 		<string>workout-processing</string>

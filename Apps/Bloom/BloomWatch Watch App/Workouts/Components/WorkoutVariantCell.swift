@@ -1,5 +1,5 @@
 //
-//  WorkoutCell.swift
+//  WorkoutVariantCell.swift
 //  BloomWatch Watch App
 //
 //  Created by Mark DiFranco on 2025-05-05.
@@ -11,14 +11,14 @@ import CoreHealth
 import SFSafeSymbols
 import BloomFoundation
 
-struct WorkoutCell: View {
-  let workoutType: HKWorkoutActivityType
+struct WorkoutVariantCell: View {
+  let variant: WorkoutVariant
 
   var body: some View {
     HStack(spacing: 10) {
-      WorkoutIcon(symbol: workoutType.systemSymbol)
+      WorkoutIcon(symbol: variant.symbol)
 
-      Text(workoutType.name)
+      Text(variant.name)
         .font(.title3)
         .bold()
         .fontDesign(.rounded)
@@ -32,7 +32,7 @@ struct WorkoutCell: View {
   }
 }
 
-private extension WorkoutCell {
+private extension WorkoutVariantCell {
 
   var listRowBackground: some View {
     RoundedRectangle(cornerRadius: 20)
@@ -42,10 +42,10 @@ private extension WorkoutCell {
 
 #Preview {
   List {
-    WorkoutCell(workoutType: .cycling)
-    WorkoutCell(workoutType: .running)
-    WorkoutCell(workoutType: .climbing)
-    WorkoutCell(workoutType: .highIntensityIntervalTraining)
+    WorkoutVariantCell(variant: .outdoorCycling)
+    WorkoutVariantCell(variant: .indoorRunning)
+    WorkoutVariantCell(variant: .simple(.climbing))
+    WorkoutVariantCell(variant: .simple(.highIntensityIntervalTraining))
   }
   .listStyle(.carousel)
 }
