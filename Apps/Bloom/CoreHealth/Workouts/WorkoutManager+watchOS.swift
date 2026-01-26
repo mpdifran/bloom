@@ -56,7 +56,13 @@ public extension WorkoutManager {
   }
 
   func handleActiveWorkoutRecovery() async throws {
-    let session = try await healthStore.recoverActiveWorkoutSession()
+    // Load heart rate zones from application context (synced from iOS)
+    if let data = WatchChannel.shared.getApplicationContextData(for: WatchChannel.heartRateZonesKey),
+       let zones = try? JSONDecoder().decode(HeartRateZones.self, from: data) {
+      heartRateZones = zones
+    }
+
+    session = try await healthStore.recoverActiveWorkoutSession()
 
     builder = session?.associatedWorkoutBuilder()
     session?.delegate = self
