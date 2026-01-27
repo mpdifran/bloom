@@ -28,7 +28,18 @@ struct ActionsView: View {
             performDismiss?()
           }).asAny
         }
-        
+
+        ActionCell(
+          image: .logWaterIcon,
+          title: "Drink",
+          color: .mutedBlue
+        )
+        .onTapGesture {
+          presentedSheet = LogDrinkView(performDismiss: {
+            performDismiss?()
+          }).asAny
+        }
+
         ActionCell(
           image: .logBowelIcon,
           title: "Bowel Movement",

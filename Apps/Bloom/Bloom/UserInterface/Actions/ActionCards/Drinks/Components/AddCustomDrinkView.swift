@@ -9,6 +9,7 @@ import SwiftUI
 import SFSafeSymbols
 import BloomUI
 import AppUI
+import CoreHealth
 
 struct AddCustomDrinkView: View {
   let onAdd: (DrinkType) -> Void

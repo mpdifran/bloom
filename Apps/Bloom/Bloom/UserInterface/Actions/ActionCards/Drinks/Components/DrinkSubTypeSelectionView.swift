@@ -8,6 +8,7 @@
 import SwiftUI
 import SFSafeSymbols
 import BloomUI
+import CoreHealth
 
 struct DrinkSubTypeSelectionView: View {
   let parentDrink: DrinkType

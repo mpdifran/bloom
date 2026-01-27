@@ -1,15 +1,16 @@
 //
 //  DrinkType.swift
-//  Bloom
+//  CoreHealth
 //
 //  Created by Claude on 2026-01-23.
 //
 
 import SwiftUI
+import BloomFoundation
 
 // MARK: - DrinkCategory
 
-enum DrinkCategory: String, CaseIterable, Codable, Sendable {
+public enum DrinkCategory: String, CaseIterable, Codable, Sendable {
   case water = "Water"
   case coffee = "Coffee"
   case tea = "Tea"
@@ -18,12 +19,12 @@ enum DrinkCategory: String, CaseIterable, Codable, Sendable {
   case alcohol = "Alcohol"
   case custom = "Custom"
 
-  var displayName: String { rawValue }
+  public var displayName: String { rawValue }
 }
 
 // MARK: - ContainerShapeType
 
-enum ContainerShapeType: String, Codable, Sendable, CaseIterable {
+public enum ContainerShapeType: String, Codable, Sendable, CaseIterable {
   case waterBottle
   case coffeeCup
   case espressoCup
@@ -37,7 +38,7 @@ enum ContainerShapeType: String, Codable, Sendable, CaseIterable {
   case tumbler
   case shotGlass
 
-  var displayName: String {
+  public var displayName: String {
     switch self {
     case .waterBottle: "Water Bottle"
     case .coffeeCup: "Coffee Cup"
@@ -57,21 +58,21 @@ enum ContainerShapeType: String, Codable, Sendable, CaseIterable {
 
 // MARK: - DrinkType
 
-struct DrinkType: Identifiable, Hashable, Codable, Sendable {
-  let id: UUID
-  let name: String
-  let category: DrinkCategory
-  let symbolName: String
-  let colorHex: String
-  let hydrationCoefficient: Double
-  let containerShapeType: ContainerShapeType
-  let isCustom: Bool
-  let subTypes: [DrinkType]?
-  let abv: Double?
-  let caffeinePer250ML: Double?
-  let sugarPer250ML: Double?
+public struct DrinkType: Identifiable, Hashable, Codable, Sendable {
+  public let id: UUID
+  public let name: String
+  public let category: DrinkCategory
+  public let symbolName: String
+  public let colorHex: String
+  public let hydrationCoefficient: Double
+  public let containerShapeType: ContainerShapeType
+  public let isCustom: Bool
+  public let subTypes: [DrinkType]?
+  public let abv: Double?
+  public let caffeinePer250ML: Double?
+  public let sugarPer250ML: Double?
 
-  init(
+  public init(
     id: UUID = UUID(),
     name: String,
     category: DrinkCategory,
@@ -99,28 +100,28 @@ struct DrinkType: Identifiable, Hashable, Codable, Sendable {
     self.sugarPer250ML = sugarPer250ML
   }
 
-  var hasSubTypes: Bool {
+  public var hasSubTypes: Bool {
     subTypes?.isEmpty == false
   }
 
-  func caffeineContent(forML amount: Double) -> Double? {
+  public func caffeineContent(forML amount: Double) -> Double? {
     guard let caffeine = caffeinePer250ML, caffeine > 0 else { return nil }
     return (amount / 250.0) * caffeine
   }
 
-  func sugarContent(forML amount: Double) -> Double? {
+  public func sugarContent(forML amount: Double) -> Double? {
     guard let sugar = sugarPer250ML, sugar > 0 else { return nil }
     return (amount / 250.0) * sugar
   }
 
-  var liquidColor: Color {
+  public var liquidColor: Color {
     Color(hex: colorHex) ?? .blue
   }
 }
 
 // MARK: - Default Drinks
 
-extension DrinkType {
+public extension DrinkType {
 
   // MARK: Beer Sub-Types
 
@@ -271,24 +272,4 @@ extension DrinkType {
       subTypes: wineSubTypes
     )
   ]
-}
-
-// MARK: - Color Extension
-
-private extension Color {
-  init?(hex: String) {
-    var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines)
-    hexSanitized = hexSanitized.replacingOccurrences(of: "#", with: "")
-
-    guard hexSanitized.count == 6 else { return nil }
-
-    var rgb: UInt64 = 0
-    Scanner(string: hexSanitized).scanHexInt64(&rgb)
-
-    let red = Double((rgb & 0xFF0000) >> 16) / 255.0
-    let green = Double((rgb & 0x00FF00) >> 8) / 255.0
-    let blue = Double(rgb & 0x0000FF) / 255.0
-
-    self.init(red: red, green: green, blue: blue)
-  }
 }

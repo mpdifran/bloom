@@ -1,6 +1,6 @@
 //
 //  DrinkContainerShapes.swift
-//  Bloom
+//  CoreHealth
 //
 //  Created by Claude on 2026-01-23.
 //
@@ -9,16 +9,18 @@ import SwiftUI
 
 // MARK: - Shape Protocol Extension
 
-protocol DrinkContainerShape: Shape {
+public protocol DrinkContainerShape: Shape {
   static var name: String { get }
 }
 
 // MARK: - Water Bottle Shape
 
-struct WaterBottleShape: DrinkContainerShape {
-  static let name = "Water Bottle"
+public struct WaterBottleShape: DrinkContainerShape {
+  public static let name = "Water Bottle"
 
-  func path(in rect: CGRect) -> Path {
+  public init() {}
+
+  public func path(in rect: CGRect) -> Path {
     var path = Path()
 
     let width = rect.width
@@ -87,20 +89,21 @@ struct WaterBottleShape: DrinkContainerShape {
 
 // MARK: - Coffee Cup Shape
 
-struct CoffeeCupShape: DrinkContainerShape {
-  static let name = "Coffee Cup"
+public struct CoffeeCupShape: DrinkContainerShape {
+  public static let name = "Coffee Cup"
 
-  func path(in rect: CGRect) -> Path {
+  public init() {}
+
+  public func path(in rect: CGRect) -> Path {
     var path = Path()
 
     let width = rect.width
-    let height = rect.height
     let centerX = rect.midX
 
     // Cup proportions
     let topWidth = width * 0.75
     let bottomWidth = width * 0.55
-    let rimHeight = height * 0.05
+    let rimHeight = height(for: rect) * 0.05
     let cornerRadius = width * 0.06
 
     let cupTop = rect.minY + rimHeight
@@ -138,18 +141,21 @@ struct CoffeeCupShape: DrinkContainerShape {
 
     return path
   }
+
+  private func height(for rect: CGRect) -> CGFloat { rect.height }
 }
 
 // MARK: - Espresso Cup Shape
 
-struct EspressoCupShape: DrinkContainerShape {
-  static let name = "Espresso Cup"
+public struct EspressoCupShape: DrinkContainerShape {
+  public static let name = "Espresso Cup"
 
-  func path(in rect: CGRect) -> Path {
+  public init() {}
+
+  public func path(in rect: CGRect) -> Path {
     var path = Path()
 
     let width = rect.width
-    let height = rect.height
     let centerX = rect.midX
 
     // Small cup proportions
@@ -192,10 +198,12 @@ struct EspressoCupShape: DrinkContainerShape {
 
 // MARK: - Tea Cup Shape
 
-struct TeaCupShape: DrinkContainerShape {
-  static let name = "Tea Cup"
+public struct TeaCupShape: DrinkContainerShape {
+  public static let name = "Tea Cup"
 
-  func path(in rect: CGRect) -> Path {
+  public init() {}
+
+  public func path(in rect: CGRect) -> Path {
     var path = Path()
 
     let width = rect.width
@@ -248,10 +256,12 @@ struct TeaCupShape: DrinkContainerShape {
 
 // MARK: - Glass Shape
 
-struct GlassShape: DrinkContainerShape {
-  static let name = "Glass"
+public struct GlassShape: DrinkContainerShape {
+  public static let name = "Glass"
 
-  func path(in rect: CGRect) -> Path {
+  public init() {}
+
+  public func path(in rect: CGRect) -> Path {
     var path = Path()
 
     let width = rect.width
@@ -297,10 +307,12 @@ struct GlassShape: DrinkContainerShape {
 
 // MARK: - Beer Glass Shape (Pint)
 
-struct BeerGlassShape: DrinkContainerShape {
-  static let name = "Beer Glass"
+public struct BeerGlassShape: DrinkContainerShape {
+  public static let name = "Beer Glass"
 
-  func path(in rect: CGRect) -> Path {
+  public init() {}
+
+  public func path(in rect: CGRect) -> Path {
     var path = Path()
 
     let width = rect.width
@@ -362,10 +374,12 @@ struct BeerGlassShape: DrinkContainerShape {
 
 // MARK: - Wine Glass Shape
 
-struct WineGlassShape: DrinkContainerShape {
-  static let name = "Wine Glass"
+public struct WineGlassShape: DrinkContainerShape {
+  public static let name = "Wine Glass"
 
-  func path(in rect: CGRect) -> Path {
+  public init() {}
+
+  public func path(in rect: CGRect) -> Path {
     var path = Path()
 
     let width = rect.width
@@ -435,10 +449,12 @@ struct WineGlassShape: DrinkContainerShape {
 
 // MARK: - Shaker Shape
 
-struct ShakerShape: DrinkContainerShape {
-  static let name = "Shaker"
+public struct ShakerShape: DrinkContainerShape {
+  public static let name = "Shaker"
 
-  func path(in rect: CGRect) -> Path {
+  public init() {}
+
+  public func path(in rect: CGRect) -> Path {
     var path = Path()
 
     let width = rect.width
@@ -514,10 +530,12 @@ struct ShakerShape: DrinkContainerShape {
 
 // MARK: - Can Shape
 
-struct CanShape: DrinkContainerShape {
-  static let name = "Can"
+public struct CanShape: DrinkContainerShape {
+  public static let name = "Can"
 
-  func path(in rect: CGRect) -> Path {
+  public init() {}
+
+  public func path(in rect: CGRect) -> Path {
     var path = Path()
 
     let width = rect.width
@@ -578,10 +596,12 @@ struct CanShape: DrinkContainerShape {
 
 // MARK: - Mug Shape
 
-struct MugShape: DrinkContainerShape {
-  static let name = "Mug"
+public struct MugShape: DrinkContainerShape {
+  public static let name = "Mug"
 
-  func path(in rect: CGRect) -> Path {
+  public init() {}
+
+  public func path(in rect: CGRect) -> Path {
     var path = Path()
 
     let width = rect.width
@@ -661,10 +681,12 @@ struct MugShape: DrinkContainerShape {
 
 // MARK: - Tumbler Shape
 
-struct TumblerShape: DrinkContainerShape {
-  static let name = "Tumbler"
+public struct TumblerShape: DrinkContainerShape {
+  public static let name = "Tumbler"
 
-  func path(in rect: CGRect) -> Path {
+  public init() {}
+
+  public func path(in rect: CGRect) -> Path {
     var path = Path()
 
     let width = rect.width
@@ -722,10 +744,12 @@ struct TumblerShape: DrinkContainerShape {
 
 // MARK: - Shot Glass Shape
 
-struct ShotGlassShape: DrinkContainerShape {
-  static let name = "Shot Glass"
+public struct ShotGlassShape: DrinkContainerShape {
+  public static let name = "Shot Glass"
 
-  func path(in rect: CGRect) -> Path {
+  public init() {}
+
+  public func path(in rect: CGRect) -> Path {
     var path = Path()
 
     let width = rect.width
@@ -784,13 +808,13 @@ struct ShotGlassShape: DrinkContainerShape {
 
 // MARK: - Shape View
 
-struct ContainerShapeView: View {
+public struct ContainerShapeView: View {
   let shapeType: ContainerShapeType
   let fillColor: Color
   let strokeColor: Color
   let strokeWidth: CGFloat
 
-  init(
+  public init(
     shapeType: ContainerShapeType,
     fillColor: Color = .clear,
     strokeColor: Color = .secondary,
@@ -802,7 +826,7 @@ struct ContainerShapeView: View {
     self.strokeWidth = strokeWidth
   }
 
-  var body: some View {
+  public var body: some View {
     switch shapeType {
     case .waterBottle:
       WaterBottleShape()
@@ -853,28 +877,5 @@ struct ContainerShapeView: View {
         .fill(fillColor)
         .overlay { ShotGlassShape().stroke(strokeColor, lineWidth: strokeWidth) }
     }
-  }
-}
-
-// MARK: - Preview
-
-#Preview("Container Shapes") {
-  ScrollView {
-    LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 20) {
-      ForEach(ContainerShapeType.allCases, id: \.self) { shapeType in
-        VStack {
-          ContainerShapeView(
-            shapeType: shapeType,
-            fillColor: .blue.opacity(0.3),
-            strokeColor: .blue
-          )
-          .frame(width: 80, height: 120)
-
-          Text(shapeType.rawValue)
-            .font(.caption)
-        }
-      }
-    }
-    .padding()
   }
 }

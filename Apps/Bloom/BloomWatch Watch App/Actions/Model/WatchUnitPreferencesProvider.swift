@@ -31,6 +31,10 @@ public final class WatchUnitPreferencesProvider {
     didSet { UserDefaults.group.set(heightUnit.unitString, forKey: Self.heightUnitKey) }
   }
 
+  public var useMetricVolume: Bool {
+    liquidVolumeUnit == .literUnit(with: .milli)
+  }
+
   private init() {
     // Default to locale-based units
     if Locale.current.measurementSystem == .metric {

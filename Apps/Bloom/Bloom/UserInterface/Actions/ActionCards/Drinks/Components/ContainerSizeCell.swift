@@ -7,6 +7,7 @@
 
 import SwiftUI
 import BloomUI
+import CoreHealth
 
 struct ContainerSizeCell: View {
   let container: ContainerSizeModel

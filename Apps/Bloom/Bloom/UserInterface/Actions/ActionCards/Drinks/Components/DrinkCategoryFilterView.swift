@@ -8,6 +8,7 @@
 import SwiftUI
 import SFSafeSymbols
 import BloomFoundation
+import CoreHealth
 
 struct DrinkCategoryFilterView: View {
   @Binding var selectedCategory: DrinkCategory?

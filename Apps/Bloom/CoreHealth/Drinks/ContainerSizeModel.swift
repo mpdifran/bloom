@@ -1,6 +1,6 @@
 //
 //  ContainerSizeModel.swift
-//  Bloom
+//  CoreHealth
 //
 //  Created by Claude on 2026-01-23.
 //
@@ -9,14 +9,14 @@ import Foundation
 import HealthKit
 import BloomFoundation
 
-struct ContainerSizeModel: Identifiable, Hashable, Codable, Sendable {
-  let id: UUID
-  var name: String
-  var volumeML: Double
-  var shapeType: ContainerShapeType
-  let isSystemDefault: Bool
+public struct ContainerSizeModel: Identifiable, Hashable, Codable, Sendable {
+  public let id: UUID
+  public var name: String
+  public var volumeML: Double
+  public var shapeType: ContainerShapeType
+  public let isSystemDefault: Bool
 
-  init(
+  public init(
     id: UUID = UUID(),
     name: String,
     volumeML: Double,
@@ -30,12 +30,12 @@ struct ContainerSizeModel: Identifiable, Hashable, Codable, Sendable {
     self.isSystemDefault = isSystemDefault
   }
 
-  var quantity: HKQuantity {
+  public var quantity: HKQuantity {
     HKQuantity(unit: .literUnit(with: .milli), doubleValue: volumeML)
   }
 
   @MainActor
-  func displayValue(useMetric: Bool = true) -> String {
+  public func displayValue(useMetric: Bool = true) -> String {
     if useMetric {
       if volumeML >= 1000 {
         return String(format: "%.1f L", volumeML / 1000)
@@ -51,7 +51,7 @@ struct ContainerSizeModel: Identifiable, Hashable, Codable, Sendable {
 
 // MARK: - Default Containers
 
-extension ContainerSizeModel {
+public extension ContainerSizeModel {
 
   static let defaults: [ContainerSizeModel] = [
     ContainerSizeModel(name: "Shot", volumeML: 30, shapeType: .shotGlass, isSystemDefault: true),
@@ -68,7 +68,7 @@ extension ContainerSizeModel {
 
 // MARK: - Storage
 
-extension ContainerSizeModel {
+public extension ContainerSizeModel {
 
   private static let storageKey = "DrinkTracking.customContainers"
 
