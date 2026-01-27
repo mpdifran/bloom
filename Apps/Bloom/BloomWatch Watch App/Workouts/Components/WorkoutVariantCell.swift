@@ -13,20 +13,32 @@ import BloomFoundation
 
 struct WorkoutVariantCell: View {
   let variant: WorkoutVariant
+  var isPinned: Bool = false
 
   var body: some View {
     HStack(spacing: 10) {
-      WorkoutIcon(symbol: variant.symbol)
+      WorkoutIcon(
+        symbol: variant.symbol,
+        scale: .small
+      )
 
       Text(variant.name)
-        .font(.title3)
+        .font(.caption)
         .bold()
         .fontDesign(.rounded)
         .foregroundStyle(.white)
         .multilineTextAlignment(.leading)
         .lineLimit(4)
+
+      Spacer(minLength: 0)
+
+      if isPinned {
+        Image(systemSymbol: .pinFill)
+          .font(.system(size: 10))
+          .foregroundStyle(.mutedOrange)
+      }
     }
-    .padding(.vertical, 20)
+    .padding(.vertical, 10)
     .foregroundStyle(.mutedGreen)
     .selectable()
   }
@@ -42,9 +54,9 @@ private extension WorkoutVariantCell {
 
 #Preview {
   List {
-    WorkoutVariantCell(variant: .outdoorCycling)
+    WorkoutVariantCell(variant: .outdoorCycling, isPinned: true)
     WorkoutVariantCell(variant: .indoorRunning)
-    WorkoutVariantCell(variant: .simple(.climbing))
+    WorkoutVariantCell(variant: .simple(.climbing), isPinned: true)
     WorkoutVariantCell(variant: .simple(.highIntensityIntervalTraining))
   }
   .listStyle(.carousel)

@@ -149,6 +149,16 @@ extension WorkoutVariant {
     )
   }
 
+  /// All possible workout variants from all categories
+  static var allVariants: [WorkoutVariant] {
+    WorkoutCategory.allCases.flatMap { $0.workoutVariants }
+  }
+
+  /// Resolve a variant ID back to a WorkoutVariant
+  static func from(id: String) -> WorkoutVariant? {
+    allVariants.first { $0.id == id }
+  }
+
   /// Creates a variant from a completed HKWorkout using its metadata to determine location type.
   /// - Parameters:
   ///   - workout: The completed workout from HealthKit

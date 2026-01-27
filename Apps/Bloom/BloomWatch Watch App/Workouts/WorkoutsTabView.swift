@@ -11,6 +11,7 @@ import HealthKit
 
 struct WorkoutsTabView: View {
   @EnvironmentObject var workoutManager: WorkoutManager
+  @ObservedObject private var pinnedWorkoutsManager = PinnedWorkoutsManager.shared
 
   @State private var recentVariants: [WorkoutVariant] = []
   @State private var presentedSheet: AnyView?
@@ -31,14 +32,33 @@ struct WorkoutsTabView: View {
     NavigationStack {
       List {
         ForEach(displayedVariants) { variant in
-          WorkoutVariantCell(variant: variant)
+          WorkoutVariantCell(variant: variant, isPinned: pinnedWorkoutsManager.isPinned(variant))
             .onTapGesture {
               startWorkout(variant: variant)
             }
+            .swipeActions(edge: .leading, allowsFullSwipe: true) {
+              if pinnedWorkoutsManager.isPinned(variant) {
+                Button(role: .destructive) {
+                  pinnedWorkoutsManager.unpin(variant)
+                } label: {
+                  Label("Unpin", systemImage: "pin.slash")
+                    .tint(.mutedOrange)
+                }
+              } else {
+                Button {
+                  pinnedWorkoutsManager.pin(variant)
+                } label: {
+                  Label("Pin", systemImage: "pin")
+                    .tint(.mutedOrange)
+                }
+              }
+            }
         }
+
+        settingsCell
       }
       .listStyle(.carousel)
-      .navigationTitle("Start a Workout")
+      .navigationTitle("Workout")
       .toolbar {
         ToolbarItem(placement: .topBarLeading) {
           Button {
@@ -62,7 +82,37 @@ struct WorkoutsTabView: View {
 private extension WorkoutsTabView {
 
   var displayedVariants: [WorkoutVariant] {
-    recentVariants.isEmpty ? Self.defaultVariants : recentVariants
+    let baseVariants = recentVariants.isEmpty ? Self.defaultVariants : recentVariants
+
+    // Get pinned variants in their stored order
+    let pinnedVariants = pinnedWorkoutsManager.pinnedWorkoutIds
+      .compactMap { WorkoutVariant.from(id: $0) }
+
+    // Filter base variants to exclude pinned ones
+    let unpinnedBaseVariants = baseVariants.filter { base in
+      !pinnedWorkoutsManager.isPinned(base)
+    }
+
+    // Pinned first (in order), then unpinned base variants
+    return pinnedVariants + unpinnedBaseVariants
+  }
+
+  var settingsCell: some View {
+    HStack(spacing: 10) {
+      Image(systemName: "gear")
+        .font(.title2)
+        .foregroundStyle(.secondary)
+      Text("Settings")
+        .font(.caption)
+        .bold()
+        .fontDesign(.rounded)
+      Spacer()
+    }
+    .padding(.vertical, 10)
+    .selectable()
+    .onTapGesture {
+      presentedSheet = WorkoutSettingsView().asAny
+    }
   }
 
   func loadRecentVariants() async {
