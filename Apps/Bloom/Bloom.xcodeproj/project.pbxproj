@@ -3275,7 +3275,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Help identify areas of concern with your health.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "To record routes during workouts. ";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Bloom uses your location to record routes during outdoor workouts.";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "$(BLOOM_APP_BUNDLE_ID)";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -3313,7 +3313,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Help identify areas of concern with your health.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "To record routes during workouts. ";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Bloom uses your location to record routes during outdoor workouts.";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "$(BLOOM_APP_BUNDLE_ID)";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -3351,7 +3351,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Help identify areas of concern with your health.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "To record routes during workouts. ";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Bloom uses your location to record routes during outdoor workouts.";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "$(BLOOM_APP_BUNDLE_ID)";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -3389,7 +3389,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Help identify areas of concern with your health.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "To record routes during workouts. ";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Bloom uses your location to record routes during outdoor workouts.";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "$(BLOOM_APP_BUNDLE_ID)";
 				LD_RUNPATH_SEARCH_PATHS = (

@@ -30,7 +30,7 @@ struct WorkoutSettingsView: View {
         addPinnedWorkoutCell
       }
       .listStyle(.carousel)
-      .navigationTitle("Workout Settings")
+      .navigationTitle("Settings")
     }
     .sheet($presentedSheet)
   }
@@ -47,15 +47,18 @@ private extension WorkoutSettingsView {
 
   var addPinnedWorkoutCell: some View {
     HStack(spacing: 10) {
-      Image(systemSymbol: .plus)
-        .font(.caption)
+      WorkoutIcon(
+        symbol: .plus,
+        scale: .small
+      )
+      .bold()
+
       Text("Pin Workout")
         .font(.caption)
         .bold()
         .fontDesign(.rounded)
     }
-    .padding(.vertical, 20)
-    .foregroundStyle(.green)
+    .padding(.vertical, 10)
     .selectable()
     .onTapGesture {
       presentedSheet = WorkoutPickerView { variant in

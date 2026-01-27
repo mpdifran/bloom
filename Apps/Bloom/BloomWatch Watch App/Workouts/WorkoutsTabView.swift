@@ -12,6 +12,7 @@ import HealthKit
 struct WorkoutsTabView: View {
   @EnvironmentObject var workoutManager: WorkoutManager
   @ObservedObject private var pinnedWorkoutsManager = PinnedWorkoutsManager.shared
+  @ObservedObject private var locationManager = LocationManager.shared
 
   @State private var recentVariants: [WorkoutVariant] = []
   @State private var presentedSheet: AnyView?
@@ -144,6 +145,11 @@ private extension WorkoutsTabView {
   }
 
   func startWorkout(variant: WorkoutVariant) {
+    // Request location permission for outdoor workouts (needed for route recording)
+    if variant.locationType == .outdoor && !locationManager.isAuthorized {
+      locationManager.requestWhenInUseAuthorization()
+    }
+
     let configuration = HKWorkoutConfiguration()
     configuration.activityType = variant.activityType
     configuration.locationType = variant.locationType
