@@ -83,6 +83,29 @@ final actor BiologicalAgeCalculator {
   private func saveLastResult(_ result: BiologicalAgeResult) {
     guard let data = try? JSONEncoder().encode(result) else { return }
     UserDefaults.standard.set(data, forKey: Self.lastResultKey)
+
+    // Sync to watchOS
+    syncToWatch(result)
+  }
+
+  private func syncToWatch(_ result: BiologicalAgeResult) {
+    #if os(iOS)
+    let watchData = WatchBiologicalAgeData(
+      biologicalAge: result.biologicalAge,
+      actualAge: result.actualAge,
+      lastCalculated: result.lastCalculated
+    )
+
+    guard let data = try? JSONEncoder().encode(watchData) else { return }
+
+    // Use Task to cross actor boundary - WatchChannel is an actor
+    Task {
+      try? await WatchChannel.shared.updateApplicationContext(
+        key: WatchChannel.biologicalAgeKey,
+        data: data
+      )
+    }
+    #endif
   }
 
   /// Refresh biological age calculation

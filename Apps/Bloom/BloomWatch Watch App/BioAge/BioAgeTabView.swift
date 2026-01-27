@@ -10,74 +10,61 @@ import CoreHealth
 import BloomUI
 
 struct BioAgeTabView: View {
-  @State private var biologicalAge: Double?
-  @State private var chronologicalAge: Double = 0
-  @State private var lastCalculated: Date?
+  @State private var provider = BiologicalAgeProvider.shared
 
   var body: some View {
     VStack(spacing: 8) {
       BiologicalAgeMeter(
-        chronologicalAge: chronologicalAge,
-        biologicalAge: biologicalAge
+        chronologicalAge: provider.chronologicalAge,
+        biologicalAge: provider.biologicalAge
       )
-      .frame(width: 140, height: 140)
-
-      if let lastCalculated {
-        Text("Updated \(lastCalculated, style: .relative) ago")
-          .font(.caption2)
-          .foregroundStyle(.secondary)
-          .multilineTextAlignment(.center)
-      } else if biologicalAge == nil {
-        Text("Open Bloom on iPhone to calculate")
-          .font(.caption2)
-          .foregroundStyle(.secondary)
-          .multilineTextAlignment(.center)
+      .frame(maxWidth: 250, maxHeight: 250, alignment: .center)
+    }
+    .navigationTitle("Bio Age")
+    .toolbar {
+      ToolbarItem(placement: .bottomBar) {
+        if let lastCalculated = provider.lastCalculated {
+          Text("Updated \(lastCalculated.relativeTimeString) ago")
+            .font(.caption2)
+            .foregroundStyle(.secondary)
+            .multilineTextAlignment(.center)
+        } else if provider.biologicalAge == nil {
+          Text("Open Bloom on iPhone")
+            .font(.caption2)
+            .foregroundStyle(.secondary)
+            .multilineTextAlignment(.center)
+        }
       }
     }
     .task {
-      loadBioAge()
-    }
-  }
-
-  private func loadBioAge() {
-    // Calculate chronological age from HealthDefaults
-    let birthYear = HealthDefaults.shared.getBirthYear()
-    guard birthYear > 0 else { return }
-
-    let birthMonth = HealthDefaults.shared.getBirthMonth()
-    let calendar = Calendar.current
-    let now = Date.now
-    let currentYear = calendar.component(.year, from: now)
-    let currentMonth = calendar.component(.month, from: now)
-    let currentDay = calendar.component(.day, from: now)
-
-    var years = Double(currentYear - birthYear)
-
-    if birthMonth > 0 {
-      let monthsSinceBirthday: Int
-      if currentMonth > birthMonth || (currentMonth == birthMonth && currentDay >= 15) {
-        monthsSinceBirthday = currentMonth - birthMonth + (currentDay >= 15 ? 0 : -1)
-      } else {
-        years -= 1
-        monthsSinceBirthday = 12 - birthMonth + currentMonth + (currentDay >= 15 ? 0 : -1)
-      }
-      chronologicalAge = years + (Double(max(0, monthsSinceBirthday)) / 12.0)
-    } else {
-      let dayOfYear = calendar.ordinality(of: .day, in: .year, for: now) ?? 1
-      let daysInYear = calendar.range(of: .day, in: .year, for: now)?.count ?? 365
-      chronologicalAge = years + (Double(dayOfYear - 1) / Double(daysInYear))
-    }
-
-    // Load cached biological age result from UserDefaults
-    // iOS stores the result that we can read
-    if let data = UserDefaults.standard.data(forKey: "BiologicalAgeCalculator.lastResult"),
-       let result = try? JSONDecoder().decode(BiologicalAgeResult.self, from: data) {
-      biologicalAge = result.biologicalAge
-      lastCalculated = result.lastCalculated
+      provider.loadFromApplicationContext()
     }
   }
 }
 
 #Preview {
-  BioAgeTabView()
+  PreviewEnvironment {
+    NavigationStack {
+      BioAgeTabView()
+    }
+  }
+}
+
+private extension Date {
+  var relativeTimeString: String {
+    let formatter = RelativeDateTimeFormatter()
+    formatter.unitsStyle = .full
+    formatter.dateTimeStyle = .named
+
+    let interval = Date.now.timeIntervalSince(self)
+
+    // For times less than a minute, show "less than a minute"
+    if interval < 60 {
+      return "less than a minute"
+    }
+
+    // Use the formatter for everything else (it won't show seconds for intervals >= 1 minute)
+    return formatter.localizedString(for: self, relativeTo: .now)
+      .replacingOccurrences(of: " ago", with: "")
+  }
 }
