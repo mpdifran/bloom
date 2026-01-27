@@ -14,6 +14,8 @@ public final actor WatchChannel: NSObject {
   public static let unitPreferencesKey = "unitPreferences"
   public static let shared = WatchChannel()
 
+  public static let applicationContextDidUpdate = Notification.Name("WatchChannel.applicationContextDidUpdate")
+
   @AsyncStreamable private(set) public var receivedData: Data?
 
   private override init() {
@@ -57,6 +59,10 @@ private extension WatchChannel {
   func didReceive(_ messageData: Data) async {
     self.receivedData = messageData
   }
+
+  nonisolated func didReceiveApplicationContext() {
+    NotificationCenter.default.post(name: Self.applicationContextDidUpdate, object: nil)
+  }
 }
 
 // MARK: - WatchSessionDelegate
@@ -94,5 +100,9 @@ private final class WatchSessionDelegate: NSObject, WCSessionDelegate {
     Task { [channel] in
       await channel.didReceive(messageData)
     }
+  }
+
+  func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String: Any]) {
+    channel.didReceiveApplicationContext()
   }
 }

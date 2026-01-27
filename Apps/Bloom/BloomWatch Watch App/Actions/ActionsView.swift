@@ -8,6 +8,7 @@
 import SwiftUI
 import AppUI
 import BloomFoundation
+import CoreHealth
 
 struct ActionsView: View {
   let performDismiss: (() -> Void)?
@@ -17,23 +18,12 @@ struct ActionsView: View {
   var body: some View {
     NavigationStack {
       List {
-        HStack(spacing: 10) {
-          Image(systemName: "scalemass")
-            .font(.title2)
-            .foregroundStyle(.mutedIndigo)
-          Text("Weight")
-            .font(.caption)
-            .bold()
-            .fontDesign(.rounded)
-          Spacer()
-        }
-        .padding(.vertical, 10)
-        .selectable()
-        .onTapGesture {
-          presentedSheet = LogWeightView(performDismiss: {
-            performDismiss?()
-          }).asAny
-        }
+        ActionCell(image: .logWeightIcon, title: "Weight")
+          .onTapGesture {
+            presentedSheet = LogWeightView(performDismiss: {
+              performDismiss?()
+            }).asAny
+          }
       }
       .listStyle(.carousel)
       .navigationTitle("Log")

@@ -36,7 +36,7 @@ struct BioAgeTabView: View {
       }
       ToolbarItem(placement: .bottomBar) {
         if let lastCalculated = provider.lastCalculated {
-          Text("Updated \(lastCalculated.relativeTimeString) ago")
+          Text("Updated \(lastCalculated, format: .relative(presentation: .named))")
             .font(.caption2)
             .foregroundStyle(.secondary)
             .multilineTextAlignment(.center)
@@ -59,24 +59,5 @@ struct BioAgeTabView: View {
     NavigationStack {
       BioAgeTabView()
     }
-  }
-}
-
-private extension Date {
-  var relativeTimeString: String {
-    let formatter = RelativeDateTimeFormatter()
-    formatter.unitsStyle = .full
-    formatter.dateTimeStyle = .named
-
-    let interval = Date.now.timeIntervalSince(self)
-
-    // For times less than a minute, show "less than a minute"
-    if interval < 60 {
-      return "less than a minute"
-    }
-
-    // Use the formatter for everything else (it won't show seconds for intervals >= 1 minute)
-    return formatter.localizedString(for: self, relativeTo: .now)
-      .replacingOccurrences(of: " ago", with: "")
   }
 }

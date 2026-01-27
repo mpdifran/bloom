@@ -14,9 +14,19 @@ import BloomFoundation
 public final class BiologicalAgeProvider {
   public static let shared = BiologicalAgeProvider()
 
-  public private(set) var biologicalAge: Double?
-  public private(set) var actualAge: Double?
-  public private(set) var lastCalculated: Date?
+  private static let biologicalAgeKey = "BiologicalAgeProvider.biologicalAge"
+  private static let actualAgeKey = "BiologicalAgeProvider.actualAge"
+  private static let lastCalculatedKey = "BiologicalAgeProvider.lastCalculated"
+
+  public private(set) var biologicalAge: Double? {
+    didSet { saveToUserDefaults() }
+  }
+  public private(set) var actualAge: Double? {
+    didSet { saveToUserDefaults() }
+  }
+  public private(set) var lastCalculated: Date? {
+    didSet { saveToUserDefaults() }
+  }
 
   /// Use synced actualAge - HealthDefaults uses UserDefaults which is not available on watchOS
   public var chronologicalAge: Double {
@@ -24,6 +34,38 @@ public final class BiologicalAgeProvider {
   }
 
   private init() {
+    loadFromUserDefaults()
+    loadFromApplicationContext()
+
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(handleApplicationContextUpdate),
+      name: WatchChannel.applicationContextDidUpdate,
+      object: nil
+    )
+  }
+
+  private func loadFromUserDefaults() {
+    biologicalAge = UserDefaults.standard.object(forKey: Self.biologicalAgeKey) as? Double
+    actualAge = UserDefaults.standard.object(forKey: Self.actualAgeKey) as? Double
+    if let timestamp = UserDefaults.standard.object(forKey: Self.lastCalculatedKey) as? Double {
+      lastCalculated = Date(timeIntervalSince1970: timestamp)
+    }
+  }
+
+  private func saveToUserDefaults() {
+    if let biologicalAge {
+      UserDefaults.standard.set(biologicalAge, forKey: Self.biologicalAgeKey)
+    }
+    if let actualAge {
+      UserDefaults.standard.set(actualAge, forKey: Self.actualAgeKey)
+    }
+    if let lastCalculated {
+      UserDefaults.standard.set(lastCalculated.timeIntervalSince1970, forKey: Self.lastCalculatedKey)
+    }
+  }
+
+  @objc private func handleApplicationContextUpdate() {
     loadFromApplicationContext()
   }
 

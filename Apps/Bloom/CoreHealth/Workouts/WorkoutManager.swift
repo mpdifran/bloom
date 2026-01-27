@@ -11,12 +11,18 @@ import Combine
 import WatchConnectivity
 import BloomFoundation
 
+public enum WorkoutError: Error {
+  case noActiveSession
+}
+
 @MainActor
 public final class WorkoutManager: NSObject, ObservableObject {
   public static let shared = WorkoutManager()
 
   @Published public var workout: HKWorkout?
   @Published public var sessionState: HKWorkoutSessionState = .notStarted
+  @Published public var isSwitchingWorkout = false
+  @Published public var isMirroring = false
   @Published public var heartRate: Double = 0
   @Published public var activeEnergy: Double = 0
   @Published public var speed: Double = 0
@@ -73,6 +79,7 @@ public extension WorkoutManager {
     cadence = 0
     speed = 0
     sessionState = .notStarted
+    isMirroring = false
 
     // Reset zone tracking
     heartRateZones = nil
@@ -82,6 +89,7 @@ public extension WorkoutManager {
   }
 
   func sendData(_ data: Data) async {
+    guard isMirroring else { return }
     do {
       try await session?.sendToRemoteWorkoutSession(data: data)
     } catch {

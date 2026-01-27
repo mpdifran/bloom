@@ -32,6 +32,7 @@ public extension WorkoutManager {
      */
     if shouldMirror {
       try await session?.startMirroringToCompanionDevice()
+      isMirroring = true
     }
     /**
      Start the workout session activity.
@@ -53,6 +54,45 @@ public extension WorkoutManager {
       let waterSample = [HKQuantitySample(type: HKQuantityType(.dietaryWater), quantity: decodedQuantity, start: sampleDate, end: sampleDate)]
       try await builder?.addSamples(waterSample)
     }
+  }
+
+  /// Ends the current workout, saves it, and immediately starts a new one
+  /// - Parameter newConfiguration: Configuration for the new workout
+  /// - Returns: The saved HKWorkout from the ended session (nil if discarded due to short duration)
+  func switchWorkout(to newConfiguration: HKWorkoutConfiguration) async throws -> HKWorkout? {
+    guard let session, let builder else {
+      throw WorkoutError.noActiveSession
+    }
+
+    // Set flag to prevent ActiveWorkoutView from dismissing
+    isSwitchingWorkout = true
+    defer { isSwitchingWorkout = false }
+
+    let endDate = Date()
+    let elapsedTime = builder.elapsedTime(at: endDate)
+
+    // 1. End current collection
+    try await builder.endCollection(at: endDate)
+
+    // 2. Save or discard based on duration
+    let savedWorkout: HKWorkout?
+    if elapsedTime < 10 {
+      builder.discardWorkout()
+      savedWorkout = nil
+    } else {
+      savedWorkout = try await builder.finishWorkout()
+    }
+    session.end()
+
+    // 3. Reset state (partial - keep heart rate zones)
+    let zones = heartRateZones
+    resetWorkout()
+    heartRateZones = zones
+
+    // 4. Start new session
+    try await startWorkout(workoutConfiguration: newConfiguration, shouldMirror: false)
+
+    return savedWorkout
   }
 
   func handleActiveWorkoutRecovery() async throws {

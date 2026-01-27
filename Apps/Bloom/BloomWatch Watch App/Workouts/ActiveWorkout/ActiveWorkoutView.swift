@@ -46,7 +46,7 @@ struct ActiveWorkoutView: View {
       displayMetricsView()
     }
     .onChange(of: workoutManager.sessionState) { _, newValue in
-      if newValue == .ended {
+      if newValue == .ended && !workoutManager.isSwitchingWorkout {
         presentedSheet = ActiveWorkoutSummaryView {
           dismiss()
         }.asAny

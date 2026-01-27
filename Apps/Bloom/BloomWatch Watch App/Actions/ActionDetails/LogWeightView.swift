@@ -56,9 +56,15 @@ struct LogWeightView: View {
     }
     .padding()
     .navigationTitle("Weight")
-    .onAppear {
+    .task {
       unitProvider.loadFromApplicationContext()
-      weight = isMetric ? 70.0 : 150.0
+
+      if let sample = await HealthStoreFetcher.shared.fetchLatestSample(for: .bodyMass) {
+        weight = sample.quantity.doubleValue(for: unitProvider.weightUnit)
+      } else {
+        weight = isMetric ? 70.0 : 150.0
+      }
+
       isFocused = true
     }
   }

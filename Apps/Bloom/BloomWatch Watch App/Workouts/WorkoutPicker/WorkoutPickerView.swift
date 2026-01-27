@@ -15,11 +15,29 @@ import AppUI
 struct WorkoutPickerView: View {
   let pickedWorkout: (WorkoutVariant) -> Void
 
+  @ObservedObject private var pinnedWorkoutsManager = PinnedWorkoutsManager.shared
   @State private var presentedNavigationDestination: AnyView?
+
+  private var starredVariants: [WorkoutVariant] {
+    pinnedWorkoutsManager.pinnedWorkoutIds.compactMap { WorkoutVariant.from(id: $0) }
+  }
 
   var body: some View {
     NavigationStack {
       List {
+        if !starredVariants.isEmpty {
+          WorkoutCategoryCell(
+            title: "Starred Workouts",
+            workoutVariants: starredVariants
+          )
+          .onTapGesture {
+            presentedNavigationDestination = StarredWorkoutsDetailsView(
+              workoutVariants: starredVariants,
+              pickedWorkout: pickedWorkout
+            ).asAny
+          }
+        }
+
         ForEach(WorkoutCategory.allCases) { category in
           WorkoutCategoryCell(
             title: category.rawValue,
