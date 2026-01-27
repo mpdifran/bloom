@@ -11,6 +11,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Testing patterns
 - Code organization principles
 
+For watchOS development, also review `WATCH_ARCHITECTURE.md` which documents:
+- Application context sync patterns (iOS → Watch)
+- Direct messaging patterns (Watch → iOS)
+- Offline queue patterns for unreliable connectivity
+- UserDefaults.group usage
+
 Following these patterns ensures consistency across the codebase and prevents architectural drift.
 
 ## Project Overview

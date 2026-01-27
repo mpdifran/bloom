@@ -11,6 +11,7 @@ import BloomFoundation
 struct ActionCell: View {
   let image: ImageResource
   let title: String
+  let color: Color
 
   var body: some View {
     HStack(spacing: 10) {
@@ -25,6 +26,23 @@ struct ActionCell: View {
       Spacer()
     }
     .padding(.vertical, 10)
+    .foregroundStyle(.white)
+    .listRowBackground(
+      RoundedRectangle(cornerRadius: 24)
+        .fill(color)
+    )
     .selectable()
+  }
+}
+
+#Preview {
+  PreviewEnvironment {
+    List {
+      ActionCell(
+        image: .logWeightIcon,
+        title: "Log Weight",
+        color: .mutedIndigo
+      )
+    }
   }
 }

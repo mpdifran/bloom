@@ -19,16 +19,16 @@ public final class WatchUnitPreferencesProvider {
   private static let heightUnitKey = "WatchUnitPreferencesProvider.heightUnit"
 
   public private(set) var weightUnit: HKUnit {
-    didSet { UserDefaults.standard.set(weightUnit.unitString, forKey: Self.weightUnitKey) }
+    didSet { UserDefaults.group.set(weightUnit.unitString, forKey: Self.weightUnitKey) }
   }
   public private(set) var distanceUnit: HKUnit {
-    didSet { UserDefaults.standard.set(distanceUnit.unitString, forKey: Self.distanceUnitKey) }
+    didSet { UserDefaults.group.set(distanceUnit.unitString, forKey: Self.distanceUnitKey) }
   }
   public private(set) var liquidVolumeUnit: HKUnit {
-    didSet { UserDefaults.standard.set(liquidVolumeUnit.unitString, forKey: Self.liquidVolumeUnitKey) }
+    didSet { UserDefaults.group.set(liquidVolumeUnit.unitString, forKey: Self.liquidVolumeUnitKey) }
   }
   public private(set) var heightUnit: HKUnit {
-    didSet { UserDefaults.standard.set(heightUnit.unitString, forKey: Self.heightUnitKey) }
+    didSet { UserDefaults.group.set(heightUnit.unitString, forKey: Self.heightUnitKey) }
   }
 
   private init() {
@@ -64,16 +64,16 @@ public final class WatchUnitPreferencesProvider {
   }
 
   private func loadFromUserDefaults() {
-    if let unitString = UserDefaults.standard.string(forKey: Self.weightUnitKey) {
+    if let unitString = UserDefaults.group.string(forKey: Self.weightUnitKey) {
       weightUnit = HKUnit(from: unitString)
     }
-    if let unitString = UserDefaults.standard.string(forKey: Self.distanceUnitKey) {
+    if let unitString = UserDefaults.group.string(forKey: Self.distanceUnitKey) {
       distanceUnit = HKUnit(from: unitString)
     }
-    if let unitString = UserDefaults.standard.string(forKey: Self.liquidVolumeUnitKey) {
+    if let unitString = UserDefaults.group.string(forKey: Self.liquidVolumeUnitKey) {
       liquidVolumeUnit = HKUnit(from: unitString)
     }
-    if let unitString = UserDefaults.standard.string(forKey: Self.heightUnitKey) {
+    if let unitString = UserDefaults.group.string(forKey: Self.heightUnitKey) {
       heightUnit = HKUnit(from: unitString)
     }
   }

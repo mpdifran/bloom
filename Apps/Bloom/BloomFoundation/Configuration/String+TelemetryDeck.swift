@@ -9,5 +9,6 @@ import Foundation
 
 public extension String {
   static let telemetryDeckAppID = "764D40B8-F2CE-4372-87D3-0D68F34E08CA"
+  static let telemetryDeckWatchAppID = "20321E9C-E1FE-4845-8B81-1887FA5C747F"
   static let telemetryDeckSalt = "bloom_secret_salt"
 }

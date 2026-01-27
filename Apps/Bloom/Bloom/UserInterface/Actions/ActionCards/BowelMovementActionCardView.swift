@@ -151,7 +151,7 @@ private struct StoolTypeCell: View {
       Text("Type \(stoolType)")
         .font(.subheadline)
         .bold()
-      Image("Type \(stoolType)")
+      Image(bristolStoolTypeImage(for: stoolType))
         .resizable()
         .aspectRatio(contentMode: .fit)
         .frame(height: 50)
@@ -167,6 +167,19 @@ private struct StoolTypeCell: View {
     }
     .frame(width: 130, height: 140)
     .cardContainer(stroke: isSelected ? AnyShapeStyle(.tint) : AnyShapeStyle(.clear))
+  }
+
+  func bristolStoolTypeImage(for type: Int) -> ImageResource {
+    switch type {
+    case 1: .bristolStoolType1
+    case 2: .bristolStoolType2
+    case 3: .bristolStoolType3
+    case 4: .bristolStoolType4
+    case 5: .bristolStoolType5
+    case 6: .bristolStoolType6
+    case 7: .bristolStoolType7
+    default: .bristolStoolType1
+    }
   }
 
   func description(for type: Int) -> String {

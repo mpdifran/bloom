@@ -18,6 +18,10 @@ public final actor WatchChannel: NSObject {
 
   @AsyncStreamable private(set) public var receivedData: Data?
 
+  /// Handler for processing incoming messages that require a reply (iOS only)
+  /// Set this to handle messages from the watch and return response data
+  public var messageHandler: (@Sendable (Data) async -> Data)?
+
   private override init() {
     super.init()
 
@@ -52,12 +56,25 @@ public extension WatchChannel {
   nonisolated func getApplicationContextData(for key: String) -> Data? {
     WCSession.default.receivedApplicationContext[key] as? Data
   }
+
+  /// Sets the handler for processing incoming messages that require a reply
+  func setMessageHandler(_ handler: @escaping @Sendable (Data) async -> Data) {
+    self.messageHandler = handler
+  }
 }
 
 private extension WatchChannel {
 
   func didReceive(_ messageData: Data) async {
     self.receivedData = messageData
+  }
+
+  func handleMessage(_ messageData: Data) async -> Data {
+    if let handler = messageHandler {
+      return await handler(messageData)
+    }
+    // Return empty response if no handler is set
+    return Data()
   }
 
   nonisolated func didReceiveApplicationContext() {
@@ -99,6 +116,17 @@ private final class WatchSessionDelegate: NSObject, WCSessionDelegate {
   func session(_ session: WCSession, didReceiveMessageData messageData: Data) {
     Task { [channel] in
       await channel.didReceive(messageData)
+    }
+  }
+
+  func session(
+    _ session: WCSession,
+    didReceiveMessageData messageData: Data,
+    replyHandler: @escaping (Data) -> Void
+  ) {
+    Task { [channel] in
+      let response = await channel.handleMessage(messageData)
+      replyHandler(response)
     }
   }
 

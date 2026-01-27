@@ -112,7 +112,16 @@ public extension ImageResource {
   static let logPeriodIcon        = ImageResource(name: "LogPeriodIcon", bundle: BundleToken.bundle)
   static let logWaterIcon         = ImageResource(name: "LogWaterIcon", bundle: BundleToken.bundle)
   static let logWeightIcon        = ImageResource(name: "LogWeightIcon", bundle: BundleToken.bundle)
-  
+
+  // Bristol Stool Chart
+  static let bristolStoolType1 = ImageResource(name: "Type 1", bundle: BundleToken.bundle)
+  static let bristolStoolType2 = ImageResource(name: "Type 2", bundle: BundleToken.bundle)
+  static let bristolStoolType3 = ImageResource(name: "Type 3", bundle: BundleToken.bundle)
+  static let bristolStoolType4 = ImageResource(name: "Type 4", bundle: BundleToken.bundle)
+  static let bristolStoolType5 = ImageResource(name: "Type 5", bundle: BundleToken.bundle)
+  static let bristolStoolType6 = ImageResource(name: "Type 6", bundle: BundleToken.bundle)
+  static let bristolStoolType7 = ImageResource(name: "Type 7", bundle: BundleToken.bundle)
+
   // Workout Equipment
   static let barbell         = ImageResource(name: "Barbell", bundle: BundleToken.bundle)
   static let batbell         = ImageResource(name: "Batbell", bundle: BundleToken.bundle)

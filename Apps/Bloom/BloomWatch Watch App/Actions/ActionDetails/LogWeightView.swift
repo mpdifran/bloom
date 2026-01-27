@@ -16,6 +16,7 @@ struct LogWeightView: View {
 
   @State private var weight: Double = 150
   @State private var isSaving = false
+  @State private var showingSaveConfirmation = false
   @State private var unitProvider = WatchUnitPreferencesProvider.shared
   @FocusState private var isFocused: Bool
 
@@ -56,6 +57,13 @@ struct LogWeightView: View {
     }
     .padding()
     .navigationTitle("Weight")
+    .overlay {
+      if isSaving {
+        savingOverlay
+      } else if showingSaveConfirmation {
+        saveConfirmationOverlay
+      }
+    }
     .task {
       unitProvider.loadFromApplicationContext()
 
@@ -74,7 +82,6 @@ private extension LogWeightView {
 
   func save() async {
     isSaving = true
-    defer { isSaving = false }
 
     let quantity = HKQuantity(unit: unitProvider.weightUnit, doubleValue: weight)
     let sample = HKQuantitySample(
@@ -87,11 +94,46 @@ private extension LogWeightView {
 
     do {
       try await HealthStoreModifier.shared.write(sample)
+      isSaving = false
+      SoundPlayer.playLogHealthData()
       TelemetryDeck.signal("Watch Log Weight")
+
+      withAnimation {
+        showingSaveConfirmation = true
+      }
+
+      try? await Task.sleep(for: .seconds(1))
+
       performDismiss?()
     } catch {
+      isSaving = false
       // Handle error silently for now
     }
+  }
+}
+
+// MARK: - Overlays
+
+private extension LogWeightView {
+
+  var savingOverlay: some View {
+    ProgressView()
+      .frame(maxWidth: .infinity, maxHeight: .infinity)
+      .background(.ultraThinMaterial)
+  }
+
+  var saveConfirmationOverlay: some View {
+    VStack {
+      Image(systemName: "checkmark.circle.fill")
+        .font(.system(size: 50))
+        .foregroundStyle(.green)
+
+      Text("Saved")
+        .font(.headline)
+        .bold()
+    }
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .background(.ultraThinMaterial)
   }
 }
 

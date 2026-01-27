@@ -9,6 +9,7 @@ import SwiftUI
 import CoreHealth
 import AppUI
 import BloomUI
+import TelemetryDeck
 
 @main
 struct BloomWatch_Watch_AppApp: App {
@@ -20,11 +21,24 @@ struct BloomWatch_Watch_AppApp: App {
 
   @Environment(\.dismiss) private var dismiss
 
+  init() {
+    TelemetryDeck.initialize(
+      config: TelemetryManagerConfiguration(
+        appID: .telemetryDeckWatchAppID,
+        salt: .telemetryDeckSalt
+      )
+    )
+  }
+
   var body: some Scene {
     WindowGroup {
       RootView()
         .task {
           await HealthPermissionChecker.shared.requestAccessIfNeeded()
+        }
+        .task { @MainActor in
+          // Sync any pending bowel movements that weren't sent while phone was unavailable
+          await PendingBowelMovementManager.shared.syncPendingEntries()
         }
         .onAppear {
           if workoutManager.sessionState.isActive && presentedFullScreen == nil {

@@ -154,6 +154,10 @@ struct BloomApp: App {
         .task { @MainActor in
           ImageResizeMigration.shared.runMigrationIfNeeded()
         }
+        .task { @MainActor in
+          // Initialize watch bowel movement handler to receive messages from watch
+          _ = WatchBowelMovementHandler.shared
+        }
     }
     .modelContainer(ContainerHolder.shared.container)
   }
