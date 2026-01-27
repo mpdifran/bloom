@@ -39,6 +39,17 @@ struct ActionsView: View {
             performDismiss?()
           }).asAny
         }
+
+        ActionCell(
+          image: .logBloodPressureIcon,
+          title: "Blood Pressure",
+          color: .mutedRed
+        )
+        .onTapGesture {
+          presentedSheet = LogBloodPressureView(performDismiss: {
+            performDismiss?()
+          }).asAny
+        }
       }
       .listStyle(.carousel)
       .navigationTitle("Actions")

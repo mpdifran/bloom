@@ -44,18 +44,18 @@ struct ActionsView: View {
               }
           }
 
-          ActionInstanceCell(image: .logBowelIcon, title: "Bowel Movement")
-            .tint(.brown)
-            .onTapGesture {
-              presentedCardSheet = BowelMovementActionCardView {
-                dismiss()
-              }.asAny
-            }
-
           ActionInstanceCell(image: .logWeightIcon, title: "Weight")
             .tint(.mutedIndigo)
             .onTapGesture {
               presentedCardSheet = BodyWeightActionCardView {
+                dismiss()
+              }.asAny
+            }
+
+          ActionInstanceCell(image: .logBowelIcon, title: "Bowel Movement")
+            .tint(.brown)
+            .onTapGesture {
+              presentedCardSheet = BowelMovementActionCardView {
                 dismiss()
               }.asAny
             }
