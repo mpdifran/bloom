@@ -7,6 +7,7 @@
 
 import Foundation
 import HealthKit
+import BloomFoundation
 
 private extension String {
   enum Key {
@@ -25,24 +26,28 @@ public final class HealthUnitPreferences {
     didSet {
       UserDefaults.group.set(distanceUnit.unitString, forKey: .Key.distanceUnit)
       recalculateVitals()
+      Task { await syncToWatch() }
     }
   }
   public var liquidVolumeUnit: HKUnit {
     didSet {
       UserDefaults.group.set(liquidVolumeUnit.unitString, forKey: .Key.liquidVolumeUnit)
       recalculateVitals()
+      Task { await syncToWatch() }
     }
   }
   public var weightUnit: HKUnit {
     didSet {
       UserDefaults.group.set(weightUnit.unitString, forKey: .Key.weightUnit)
       recalculateVitals()
+      Task { await syncToWatch() }
     }
   }
   public var heightUnit: HKUnit {
     didSet {
       UserDefaults.group.set(heightUnit.unitString, forKey: .Key.heightUnit)
       recalculateVitals()
+      Task { await syncToWatch() }
     }
   }
 
@@ -95,6 +100,27 @@ private extension HealthUnitPreferences {
     Task {
       await VitalsCalculator.shared.recalculateVitals()
     }
+  }
+}
+
+public extension HealthUnitPreferences {
+
+  func syncToWatch() async {
+    #if os(iOS)
+    let watchData = WatchUnitPreferencesData(
+      weightUnitString: weightUnit.unitString,
+      distanceUnitString: distanceUnit.unitString,
+      liquidVolumeUnitString: liquidVolumeUnit.unitString,
+      heightUnitString: heightUnit.unitString
+    )
+
+    guard let data = try? JSONEncoder().encode(watchData) else { return }
+
+    try? await WatchChannel.shared.updateApplicationContext(
+      key: WatchChannel.unitPreferencesKey,
+      data: data
+    )
+    #endif
   }
 }
 

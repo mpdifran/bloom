@@ -8,20 +8,32 @@
 import SwiftUI
 import CoreHealth
 import BloomUI
+import AppUI
 
 struct BioAgeTabView: View {
   @State private var provider = BiologicalAgeProvider.shared
+  @State private var presentedSheet: AnyView?
 
   var body: some View {
-    VStack(spacing: 8) {
+    VStack(spacing: 0) {
       BiologicalAgeMeter(
         chronologicalAge: provider.chronologicalAge,
         biologicalAge: provider.biologicalAge
       )
-      .frame(maxWidth: 250, maxHeight: 250, alignment: .center)
     }
     .navigationTitle("Bio Age")
+    .navigationBarTitleDisplayMode(.inline)
+    .sheet($presentedSheet)
     .toolbar {
+      ToolbarItem(placement: .topBarLeading) {
+        Button {
+          presentedSheet = ActionsView(performDismiss: {
+            presentedSheet = nil
+          }).asAny
+        } label: {
+          Image(systemSymbol: .plus)
+        }
+      }
       ToolbarItem(placement: .bottomBar) {
         if let lastCalculated = provider.lastCalculated {
           Text("Updated \(lastCalculated.relativeTimeString) ago")

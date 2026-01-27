@@ -42,14 +42,14 @@ struct WorkoutsTabView: View {
                 Button(role: .destructive) {
                   pinnedWorkoutsManager.unpin(variant)
                 } label: {
-                  Label("Unpin", systemImage: "pin.slash")
+                  Label("Un-Star", systemSymbol: .starSlashFill)
                     .tint(.mutedOrange)
                 }
               } else {
                 Button {
                   pinnedWorkoutsManager.pin(variant)
                 } label: {
-                  Label("Pin", systemImage: "pin")
+                  Label("Star", systemSymbol: .starFill)
                     .tint(.mutedOrange)
                 }
               }

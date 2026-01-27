@@ -108,6 +108,12 @@ final actor BiologicalAgeCalculator {
     #endif
   }
 
+  /// Syncs the current biological age to the watch
+  func syncBiologicalAgeToWatch() {
+    guard let result = biologicalAge else { return }
+    syncToWatch(result)
+  }
+
   /// Refresh biological age calculation
   /// Only recalculates if 4 hours have passed since last calculation
   func refreshBiologicalAge(forceRecalculate: Bool = false) async {

@@ -53,7 +53,7 @@ private extension WorkoutSettingsView {
       )
       .bold()
 
-      Text("Pin Workout")
+      Text("Add Starred Workout")
         .font(.caption)
         .bold()
         .fontDesign(.rounded)

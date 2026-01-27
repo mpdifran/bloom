@@ -115,6 +115,14 @@ private extension WorkoutManager {
     let finishedWorkout: HKWorkout?
     do {
       try await builder.endCollection(at: change.date)
+
+      // Discard workouts shorter than 10 seconds
+      if elapsedTimeInterval < 10 {
+        builder.discardWorkout()
+        session?.end()
+        return
+      }
+
       finishedWorkout = try await builder.finishWorkout()
       session?.end()
     } catch {

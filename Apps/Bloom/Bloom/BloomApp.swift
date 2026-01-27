@@ -109,6 +109,16 @@ struct BloomApp: App {
         .onForegroundTask {
           await SalesManager.shared.refreshSalesIfNeeded()
         }
+        .onForegroundTask {
+          await HealthUnitPreferences.shared.syncToWatch()
+        }
+        .onForegroundTask {
+          // Sync heart rate zones to watch for workout tracking
+          _ = await HealthGoalProvider.shared.heartRateZones()
+        }
+        .onForegroundTask {
+          await BiologicalAgeCalculator.shared.syncBiologicalAgeToWatch()
+        }
         .task {
           await GoalWidgetHealthObserver.shared.startObserving()
         }

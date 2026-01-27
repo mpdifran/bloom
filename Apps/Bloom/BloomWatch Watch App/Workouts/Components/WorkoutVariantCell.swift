@@ -33,7 +33,7 @@ struct WorkoutVariantCell: View {
       Spacer(minLength: 0)
 
       if isPinned {
-        Image(systemSymbol: .pinFill)
+        Image(systemSymbol: .starFill)
           .font(.system(size: 10))
           .foregroundStyle(.mutedOrange)
       }

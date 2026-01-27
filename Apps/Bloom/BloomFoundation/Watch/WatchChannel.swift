@@ -11,6 +11,7 @@ import HealthKit
 public final actor WatchChannel: NSObject {
   public static let heartRateZonesKey = "heartRateZones"
   public static let biologicalAgeKey = "biologicalAge"
+  public static let unitPreferencesKey = "unitPreferences"
   public static let shared = WatchChannel()
 
   @AsyncStreamable private(set) public var receivedData: Data?
