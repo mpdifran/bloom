@@ -43,6 +43,8 @@ struct LogDrinkView: View {
         }
       }
     }
+    .frame(maxWidth: .infinity)
+    .background(.black)
   }
 
   private func handleDrinkTapped(_ drink: DrinkType) {
@@ -59,47 +61,6 @@ struct LogDrinkView: View {
 enum DrinkNavigation: Hashable {
   case subTypes(DrinkType)
   case container(DrinkType)
-}
-
-// MARK: - Drink Cell
-
-private struct DrinkCell: View {
-  let drink: DrinkType
-
-  var body: some View {
-    HStack(spacing: 12) {
-      ZStack {
-        Circle()
-          .fill(drink.liquidColor.opacity(0.2))
-
-        Image(systemName: drink.symbolName)
-          .font(.title3)
-          .foregroundStyle(drink.liquidColor)
-      }
-      .frame(width: 44, height: 44)
-
-      VStack(alignment: .leading, spacing: 2) {
-        Text(drink.name)
-          .font(.headline)
-          .fontDesign(.rounded)
-
-        if drink.hasSubTypes {
-          Text("Tap to choose type")
-            .font(.caption2)
-            .foregroundStyle(.secondary)
-        }
-      }
-
-      Spacer()
-
-      if drink.hasSubTypes {
-        Image(systemName: "chevron.right")
-          .font(.caption)
-          .foregroundStyle(.secondary)
-      }
-    }
-    .padding(.vertical, 4)
-  }
 }
 
 #Preview {

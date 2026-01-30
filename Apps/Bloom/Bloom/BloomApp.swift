@@ -119,6 +119,9 @@ struct BloomApp: App {
         .onForegroundTask {
           await BiologicalAgeCalculator.shared.syncBiologicalAgeToWatch()
         }
+        .onForegroundTask {
+          await WatchTodaySyncer.shared.syncToWatch()
+        }
         .task {
           await GoalWidgetHealthObserver.shared.startObserving()
         }
@@ -155,8 +158,8 @@ struct BloomApp: App {
           ImageResizeMigration.shared.runMigrationIfNeeded()
         }
         .task { @MainActor in
-          // Initialize watch bowel movement handler to receive messages from watch
-          _ = WatchBowelMovementHandler.shared
+          // Initialize watch message router to receive messages from watch
+          _ = WatchMessageRouter.shared
         }
     }
     .modelContainer(ContainerHolder.shared.container)

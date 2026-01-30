@@ -85,10 +85,13 @@ final class RemindersManager: ObservableObject {
     
     // Refresh the reminders list
     await fetchReminders()
-    
+
+    // Sync to watch
+    await WatchTodaySyncer.shared.syncToWatch()
+
     return reminder
   }
-  
+
   /// Updates an existing reminder and reschedules its notifications
   func updateReminder(
     withID id: String,
@@ -112,10 +115,13 @@ final class RemindersManager: ObservableObject {
     
     // Refresh the reminders list
     await fetchReminders()
-    
+
+    // Sync to watch
+    await WatchTodaySyncer.shared.syncToWatch()
+
     return reminder
   }
-  
+
   /// Deletes a reminder and cancels its notifications
   func deleteReminder(withID id: String) async throws {
     // Cancel notifications first
@@ -123,11 +129,14 @@ final class RemindersManager: ObservableObject {
     
     // Delete the reminder
     try await modelActor.deleteReminder(withID: id)
-    
+
     // Refresh the reminders list
     await fetchReminders()
+
+    // Sync to watch
+    await WatchTodaySyncer.shared.syncToWatch()
   }
-  
+
   /// Marks a reminder as completed for today
   func markReminderCompleted(withID id: String, occurrenceID: String? = nil, source: ReminderCompletionSource = .manual) async throws {
     let completionRecord = try await modelActor.markReminderCompleted(reminderID: id, occurrenceID: occurrenceID)
@@ -155,8 +164,11 @@ final class RemindersManager: ObservableObject {
     
     // Refresh to update completion records
     await fetchReminders()
+
+    // Sync to watch
+    await WatchTodaySyncer.shared.syncToWatch()
   }
-  
+
   /// Marks a reminder as uncompleted for today
   func markReminderUncompleted(withID id: String, occurrenceID: String? = nil) async throws {
     let sideEffectResults = try await modelActor.markReminderUncompleted(reminderID: id, occurrenceID: occurrenceID)
@@ -168,8 +180,11 @@ final class RemindersManager: ObservableObject {
     
     // Refresh to update completion records
     await fetchReminders()
+
+    // Sync to watch
+    await WatchTodaySyncer.shared.syncToWatch()
   }
-  
+
   /// Reschedules all reminder notifications (e.g., after app launch)
   func rescheduleAllReminders() async {
     do {

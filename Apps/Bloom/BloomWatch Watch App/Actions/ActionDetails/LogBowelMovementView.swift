@@ -14,6 +14,8 @@ import SFSafeSymbols
 private extension CGFloat {
   static let cellWidth: CGFloat = 60
   static let cellHeight: CGFloat = 60
+  static let cellCornerRadius: CGFloat = 16
+  static let selectedBorderWidth: CGFloat = 4
 }
 
 struct LogBowelMovementView: View {
@@ -37,6 +39,8 @@ struct LogBowelMovementView: View {
       .padding()
     }
     .navigationTitle("Bowel Movement")
+    .frame(maxWidth: .infinity)
+    .background(.black)
     .overlay {
       if isSaving {
         savingOverlay
@@ -56,6 +60,7 @@ private extension LogBowelMovementView {
       Text("Type")
         .font(.caption)
         .foregroundStyle(.secondary)
+        .padding(.horizontal)
 
       ScrollView(.horizontal, showsIndicators: false) {
         HStack(spacing: 8) {
@@ -65,9 +70,12 @@ private extension LogBowelMovementView {
             stoolTypeCell(type: type)
           }
         }
-        .padding(2)
+        .padding(.horizontal)
+        .padding(.vertical, .selectedBorderWidth / 2)
       }
     }
+    .ignoresSafeArea(edges: .horizontal)
+    .sensoryFeedback(.selection, trigger: selectedStoolType)
   }
 
   var unknownTypeCell: some View {
@@ -83,12 +91,12 @@ private extension LogBowelMovementView {
     .foregroundStyle(.black)
     .frame(width: .cellWidth, height: .cellHeight)
     .background(
-      RoundedRectangle(cornerRadius: 8)
+      RoundedRectangle(cornerRadius: .cellCornerRadius)
         .fill(.white)
     )
     .overlay(
-      RoundedRectangle(cornerRadius: 8)
-        .stroke(selectedStoolType == 0 ? Color.brown : Color.clear, lineWidth: 2)
+      RoundedRectangle(cornerRadius: .cellCornerRadius)
+        .stroke(.brown, lineWidth: selectedStoolType == 0 ? .selectedBorderWidth : 0)
     )
     .onTapGesture {
       selectedStoolType = 0
@@ -101,7 +109,7 @@ private extension LogBowelMovementView {
         .resizable()
         .aspectRatio(contentMode: .fit)
         .frame(height: 32)
-        .clipShape(RoundedRectangle(cornerRadius: 4))
+        .padding(.horizontal, .selectedBorderWidth / 2)
 
       Text("\(type)")
         .font(.caption2)
@@ -110,12 +118,12 @@ private extension LogBowelMovementView {
     }
     .frame(width: .cellWidth, height: .cellHeight)
     .background(
-      RoundedRectangle(cornerRadius: 8)
+      RoundedRectangle(cornerRadius: .cellCornerRadius)
         .fill(.white)
     )
     .overlay(
-      RoundedRectangle(cornerRadius: 8)
-        .stroke(selectedStoolType == type ? Color.brown : Color.clear, lineWidth: 2)
+      RoundedRectangle(cornerRadius: .cellCornerRadius)
+        .stroke(.brown, lineWidth: selectedStoolType == type ? .selectedBorderWidth : 0)
     )
     .onTapGesture {
       selectedStoolType = type

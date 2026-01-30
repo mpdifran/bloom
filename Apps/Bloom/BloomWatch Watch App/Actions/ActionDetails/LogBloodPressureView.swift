@@ -45,6 +45,8 @@ struct LogBloodPressureView: View {
     }
     .padding()
     .navigationTitle("Blood Pressure")
+    .frame(maxWidth: .infinity)
+    .background(.black)
     .overlay {
       if isSaving {
         savingOverlay

@@ -59,7 +59,7 @@ struct WorkoutsTabView: View {
         settingsCell
       }
       .listStyle(.carousel)
-      .navigationTitle("Workout")
+      .navigationTitle("Workouts")
       .toolbar {
         ToolbarItem(placement: .topBarLeading) {
           Button {

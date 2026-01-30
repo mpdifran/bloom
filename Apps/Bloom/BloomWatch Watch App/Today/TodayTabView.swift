@@ -6,25 +6,75 @@
 //
 
 import SwiftUI
+import BloomFoundation
+import SFSafeSymbols
+import AppUI
 
 struct TodayTabView: View {
-  var body: some View {
-    VStack(spacing: 8) {
-      Image(systemName: "sun.max.fill")
-        .font(.largeTitle)
-        .foregroundStyle(.yellow)
+  @State private var provider = TodayProvider.shared
 
-      Text("Today")
+  var body: some View {
+    Group {
+      if provider.hasContent {
+        contentView
+      } else {
+        emptyStateView
+      }
+    }
+    .navigationTitle("Reminders")
+    .navigationBarTitleDisplayMode(.inline)
+    .animation(.default, value: provider.reminders)
+    .task {
+      provider.loadFromApplicationContext()
+    }
+  }
+
+  private var contentView: some View {
+    ScrollViewReader { proxy in
+      List {
+        // Today's Advice Section
+//      if let advice = provider.todaysAdvice, !advice.isEmpty {
+//        TodaysAdviceCell(advice: advice)
+//      }
+
+        // Reminders Section
+        if !provider.reminders.isEmpty {
+          ForEach(provider.reminders.reversed()) { reminder in
+            WatchReminderCell(reminder: reminder)
+          }
+        }
+      }
+      .listStyle(.carousel)
+      .onAppear {
+        if let lastReminder = provider.reminders.reversed().last {
+          proxy.scrollTo(lastReminder.id, anchor: .center)
+        }
+      }
+    }
+  }
+
+  private var emptyStateView: some View {
+    VStack(spacing: 8) {
+      Image(systemSymbol: .checkmarkCircleFill)
+        .font(.largeTitle)
+        .foregroundStyle(.white, .mutedRed)
+
+      Text("No Reminders")
         .font(.headline)
         .fontDesign(.rounded)
 
-      Text("Coming Soon")
+      Text("You have no reminders for today.")
         .font(.caption)
         .foregroundStyle(.secondary)
+        .multilineTextAlignment(.center)
     }
   }
 }
 
 #Preview {
-  TodayTabView()
+  PreviewEnvironment {
+    NavigationStack {
+      TodayTabView()
+    }
+  }
 }

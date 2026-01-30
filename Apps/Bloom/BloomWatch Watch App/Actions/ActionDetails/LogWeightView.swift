@@ -57,6 +57,8 @@ struct LogWeightView: View {
     }
     .padding()
     .navigationTitle("Weight")
+    .frame(maxWidth: .infinity)
+    .background(.black)
     .overlay {
       if isSaving {
         savingOverlay
