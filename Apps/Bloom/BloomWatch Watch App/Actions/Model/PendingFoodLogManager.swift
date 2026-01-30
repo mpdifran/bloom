@@ -64,13 +64,13 @@ public final class PendingFoodLogManager {
   private func sendEntry(_ entry: WatchPendingFoodLogEntry) async -> Bool {
     let message = entry.toMessage()
 
-    guard let data = try? JSONEncoder().encode(message) else {
+    guard let data = try? JSONEncoder.watch.encode(message) else {
       return false
     }
 
     do {
       let responseData = try await WatchChannel.shared.send(data: data)
-      let response = try JSONDecoder().decode(WatchFoodLogResponse.self, from: responseData)
+      let response = try JSONDecoder.watch.decode(WatchFoodLogResponse.self, from: responseData)
       return response.success
     } catch {
       print("Failed to send food log: \(error)")
@@ -85,14 +85,14 @@ public final class PendingFoodLogManager {
 
   private func loadFromStorage() {
     guard let data = UserDefaults.group.data(forKey: Self.storageKey),
-          let entries = try? JSONDecoder().decode([WatchPendingFoodLogEntry].self, from: data) else {
+          let entries = try? JSONDecoder.watch.decode([WatchPendingFoodLogEntry].self, from: data) else {
       return
     }
     pendingEntries = entries
   }
 
   private func saveToStorage() {
-    guard let data = try? JSONEncoder().encode(pendingEntries) else { return }
+    guard let data = try? JSONEncoder.watch.encode(pendingEntries) else { return }
     UserDefaults.group.set(data, forKey: Self.storageKey)
   }
 }

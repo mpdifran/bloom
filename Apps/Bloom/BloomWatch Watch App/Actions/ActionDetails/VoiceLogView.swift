@@ -16,85 +16,44 @@ struct VoiceLogView: View {
   @State private var transcribedText = ""
   @State private var isProcessing = false
   @State private var showingSuccess = false
-  @State private var showingDictation = true
 
   var body: some View {
     NavigationStack {
       VStack(spacing: 16) {
-        if !transcribedText.isEmpty {
-          // Show transcribed text
-          ScrollView {
-            Text(transcribedText)
-              .font(.body)
-              .multilineTextAlignment(.leading)
-              .frame(maxWidth: .infinity, alignment: .leading)
-              .contentTransition(.numericText())
-          }
-          .frame(maxHeight: 80)
+        // Text input with dictation
+        TextField("What did you eat?", text: $transcribedText, axis: .vertical)
+          .lineLimit(3...6)
 
-          // Action buttons
-          HStack(spacing: 12) {
-            Button("Retry") {
-              transcribedText = ""
-              showingDictation = true
-            }
-            .buttonStyle(.bordered)
+        Spacer(minLength: 0)
 
-            Button("Log") {
-              sendVoiceLog()
-            }
-            .buttonStyle(.borderedProminent)
-            .disabled(isProcessing)
-          }
-        } else {
-          // Prompt to speak
-          VStack(spacing: 12) {
-            Image(systemName: "mic.circle.fill")
-              .font(.system(size: 50))
-              .foregroundStyle(.accent)
-
-            Text("What did you eat?")
-              .font(.headline)
-              .fontDesign(.rounded)
-
-            Text("Say something like:\n\"chicken breast with rice and broccoli\"")
-              .font(.caption2)
-              .foregroundStyle(.secondary)
-              .multilineTextAlignment(.center)
-              .fixedSize(horizontal: false, vertical: true)
-          }
+        // Action buttons
+        Button("Log") {
+          sendVoiceLog()
         }
+        .buttonStyle(.borderedProminent)
+        .disabled(isProcessing || transcribedText.isEmpty)
       }
-      .padding()
       .navigationTitle(meal.displayName)
       .navigationBarTitleDisplayMode(.inline)
+      .padding(.bottom)
+      .ignoresSafeArea(edges: .bottom)
       .animation(.default, value: transcribedText)
       .overlay {
         if isProcessing {
-          ProgressView()
+          ZStack {
+            Color.black.opacity(0.7)
+            ProgressView()
+          }
+          .ignoresSafeArea()
         } else if showingSuccess {
-          Image(systemName: "checkmark.circle.fill")
-            .font(.system(size: 50))
-            .foregroundStyle(.green)
+          ZStack {
+            Color.black.opacity(0.7)
+            Image(systemName: "checkmark.circle.fill")
+              .font(.system(size: 50))
+              .foregroundStyle(.green)
+          }
+          .ignoresSafeArea()
         }
-      }
-      .onAppear {
-        if showingDictation {
-          presentDictation()
-        }
-      }
-    }
-  }
-
-  private func presentDictation() {
-    showingDictation = false
-
-    WKExtension.shared().visibleInterfaceController?.presentTextInputController(
-      withSuggestions: nil,
-      allowedInputMode: .plain
-    ) { results in
-      if let text = results?.first as? String, !text.isEmpty {
-        transcribedText = text
       }
     }
   }
@@ -110,14 +69,14 @@ struct VoiceLogView: View {
         meal: meal.rawValue
       )
 
-      guard let data = try? JSONEncoder().encode(message) else {
+      guard let data = try? JSONEncoder.watch.encode(message) else {
         isProcessing = false
         return
       }
 
       do {
         let responseData = try await WatchChannel.shared.send(data: data)
-        let response = try JSONDecoder().decode(WatchVoiceFoodLogResponse.self, from: responseData)
+        let response = try JSONDecoder.watch.decode(WatchVoiceFoodLogResponse.self, from: responseData)
 
         isProcessing = false
 
@@ -126,6 +85,8 @@ struct VoiceLogView: View {
           showingSuccess = true
           try? await Task.sleep(for: .seconds(1))
           performDismiss?()
+        } else {
+          WKInterfaceDevice.current().play(.failure)
         }
       } catch {
         isProcessing = false

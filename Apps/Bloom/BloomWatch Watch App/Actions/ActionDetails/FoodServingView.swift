@@ -128,11 +128,19 @@ struct FoodServingView: View {
     .onAppear { isFocused = true }
     .overlay {
       if isSaving {
-        ProgressView()
+        ZStack {
+          Color.black.opacity(0.7)
+          ProgressView()
+        }
+        .ignoresSafeArea()
       } else if showingSaveConfirmation {
-        Image(systemName: "checkmark.circle.fill")
-          .font(.system(size: 50))
-          .foregroundStyle(.green)
+        ZStack {
+          Color.black.opacity(0.7)
+          Image(systemName: "checkmark.circle.fill")
+            .font(.system(size: 50))
+            .foregroundStyle(.green)
+        }
+        .ignoresSafeArea()
       }
     }
   }
@@ -175,11 +183,12 @@ struct FoodServingView: View {
 
       if success {
         WKInterfaceDevice.current().play(.success)
+        showingSaveConfirmation = true
+        try? await Task.sleep(for: .seconds(1))
+        performDismiss?()
+      } else {
+        WKInterfaceDevice.current().play(.failure)
       }
-
-      showingSaveConfirmation = true
-      try? await Task.sleep(for: .seconds(1))
-      performDismiss?()
     }
   }
 }
