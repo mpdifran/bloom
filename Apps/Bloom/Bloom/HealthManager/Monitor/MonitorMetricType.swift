@@ -259,10 +259,12 @@ public enum MonitorMetricType: String, CaseIterable, Sendable, Codable {
   @MainActor
   public func formatValue(_ value: Double) -> String {
     switch self {
-    case .restingHeartRate, .heartRateVariability, .wristTemperature, .respiratoryRate:
+    case .restingHeartRate, .heartRateVariability, .respiratoryRate:
       guard let unit = unit else { return "" }
       let quantity = HKQuantity(unit: unit, doubleValue: value)
       return quantity.displayString(for: unit)
+    case .wristTemperature:
+      return formatLocalizedTemperature(value)
     case .sleepDuration, .deepSleep, .remSleep:
       return formatMinutesAsHoursMinutes(value)
     case .sleepEfficiency:
@@ -279,10 +281,12 @@ public enum MonitorMetricType: String, CaseIterable, Sendable, Codable {
   @MainActor
   public func formatValueShort(_ value: Double) -> String {
     switch self {
-    case .restingHeartRate, .heartRateVariability, .wristTemperature, .respiratoryRate:
+    case .restingHeartRate, .heartRateVariability, .respiratoryRate:
       guard let unit = unit else { return "" }
       let quantity = HKQuantity(unit: unit, doubleValue: value)
       return quantity.displayString(for: unit, showUnits: false)
+    case .wristTemperature:
+      return formatLocalizedTemperature(value, showUnits: false)
     case .sleepDuration, .deepSleep, .remSleep:
       return formatMinutesAsHoursMinutesShort(value)
     case .sleepEfficiency:
@@ -300,10 +304,12 @@ public enum MonitorMetricType: String, CaseIterable, Sendable, Codable {
   public func formatDifference(_ value: Double) -> String {
     let sign = value >= 0 ? "+" : ""
     switch self {
-    case .restingHeartRate, .heartRateVariability, .wristTemperature, .respiratoryRate:
+    case .restingHeartRate, .heartRateVariability, .respiratoryRate:
       guard let unit = unit else { return "" }
       let quantity = HKQuantity(unit: unit, doubleValue: abs(value))
       return "\(sign)\(quantity.displayString(for: unit))"
+    case .wristTemperature:
+      return formatLocalizedTemperatureDifference(value)
     case .sleepDuration, .deepSleep, .remSleep:
       return formatDifferenceAsMinutes(value)
     case .sleepEfficiency:
@@ -372,6 +378,26 @@ public enum MonitorMetricType: String, CaseIterable, Sendable, Codable {
       return "--:--"
     }
     return formatter.string(from: date)
+  }
+
+  private func formatLocalizedTemperature(_ fahrenheitValue: Double, showUnits: Bool = true) -> String {
+    let measurement = Measurement(value: fahrenheitValue, unit: UnitTemperature.fahrenheit)
+    let localizedValue = measurement.localizedValue
+    let formatted = localizedValue.format(using: .oneDecimalPlace)
+    if showUnits {
+      let unit = UnitTemperature(forLocale: .current).symbol
+      return "\(formatted)\(unit)"
+    }
+    return formatted
+  }
+
+  private func formatLocalizedTemperatureDifference(_ fahrenheitValue: Double) -> String {
+    let measurement = Measurement(value: fahrenheitValue, unit: UnitTemperature.fahrenheit)
+    let localizedValue = measurement.localizedValue
+    let sign = localizedValue >= 0 ? "+" : ""
+    let formatted = abs(localizedValue).format(using: .oneDecimalPlace)
+    let unit = UnitTemperature(forLocale: .current).symbol
+    return "\(sign)\(formatted)\(unit)"
   }
 }
 
