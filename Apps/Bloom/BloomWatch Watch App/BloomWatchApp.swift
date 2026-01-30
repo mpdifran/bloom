@@ -44,6 +44,10 @@ struct BloomWatch_Watch_AppApp: App {
           // Sync any pending reminder completions that weren't sent while phone was unavailable
           await PendingReminderCompletionManager.shared.syncPendingCompletions()
         }
+        .task { @MainActor in
+          // Sync any pending food logs that weren't sent while phone was unavailable
+          await PendingFoodLogManager.shared.syncPendingEntries()
+        }
         .onAppear {
           if workoutManager.sessionState.isActive && presentedFullScreen == nil {
             presentedFullScreen = ActiveWorkoutView().asAny

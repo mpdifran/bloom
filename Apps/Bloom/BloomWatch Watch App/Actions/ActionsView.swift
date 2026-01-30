@@ -19,6 +19,17 @@ struct ActionsView: View {
     NavigationStack {
       List {
         ActionCell(
+          systemImage: "fork.knife",
+          title: "Food",
+          color: .mutedGreen
+        )
+        .onTapGesture {
+          presentedSheet = LogFoodView(performDismiss: {
+            performDismiss?()
+          }).asAny
+        }
+
+        ActionCell(
           image: .logWaterIcon,
           title: "Drink",
           color: .mutedBlue

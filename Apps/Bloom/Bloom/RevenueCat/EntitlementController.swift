@@ -9,6 +9,7 @@ import SwiftUI
 import RevenueCat
 import Combine
 import TelemetryDeck
+import BloomFoundation
 
 private extension String {
   enum Entitlements {
@@ -251,5 +252,29 @@ extension EntitlementController {
     }
 
     return nil
+  }
+}
+
+// MARK: - Watch Sync
+
+extension EntitlementController {
+
+  /// Syncs subscription status to the Apple Watch
+  func syncToWatch() async {
+    #if os(iOS)
+    let watchData = WatchSubscriptionData(
+      isSubscribed: hasBloomPro ?? false,
+      lastUpdated: Date()
+    )
+
+    guard let data = try? JSONEncoder().encode(watchData) else {
+      return
+    }
+
+    try? await WatchChannel.shared.updateApplicationContext(
+      key: WatchChannel.subscriptionDataKey,
+      data: data
+    )
+    #endif
   }
 }

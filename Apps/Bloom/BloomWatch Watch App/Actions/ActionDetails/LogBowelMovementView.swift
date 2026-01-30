@@ -36,7 +36,6 @@ struct LogBowelMovementView: View {
         durationPicker
         saveButton
       }
-      .padding()
     }
     .navigationTitle("Bowel Movement")
     .frame(maxWidth: .infinity)
@@ -57,11 +56,6 @@ private extension LogBowelMovementView {
 
   var stoolTypePicker: some View {
     VStack(alignment: .leading, spacing: 8) {
-      Text("Type")
-        .font(.caption)
-        .foregroundStyle(.secondary)
-        .padding(.horizontal)
-
       ScrollView(.horizontal, showsIndicators: false) {
         HStack(spacing: 8) {
           unknownTypeCell

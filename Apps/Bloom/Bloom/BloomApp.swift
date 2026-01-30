@@ -121,6 +121,8 @@ struct BloomApp: App {
         }
         .onForegroundTask {
           await WatchTodaySyncer.shared.syncToWatch()
+          await WatchFoodSyncer.shared.syncToWatch()
+          await EntitlementController.shared.syncToWatch()
         }
         .task {
           await GoalWidgetHealthObserver.shared.startObserving()

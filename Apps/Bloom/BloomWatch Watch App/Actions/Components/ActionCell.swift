@@ -9,15 +9,30 @@ import SwiftUI
 import BloomFoundation
 
 struct ActionCell: View {
-  let image: ImageResource
+  let imageContent: ImageContent
   let title: String
   let color: Color
 
+  enum ImageContent {
+    case resource(ImageResource)
+    case system(String)
+  }
+
+  init(image: ImageResource, title: String, color: Color) {
+    self.imageContent = .resource(image)
+    self.title = title
+    self.color = color
+  }
+
+  init(systemImage: String, title: String, color: Color) {
+    self.imageContent = .system(systemImage)
+    self.title = title
+    self.color = color
+  }
+
   var body: some View {
     HStack(spacing: 10) {
-      Image(image)
-        .resizable()
-        .aspectRatio(contentMode: .fit)
+      imageView
         .frame(width: 24, height: 24)
       Text(title)
         .font(.caption)
@@ -32,6 +47,19 @@ struct ActionCell: View {
         .fill(color)
     )
     .selectable()
+  }
+
+  @ViewBuilder
+  private var imageView: some View {
+    switch imageContent {
+    case .resource(let resource):
+      Image(resource)
+        .resizable()
+        .aspectRatio(contentMode: .fit)
+    case .system(let name):
+      Image(systemName: name)
+        .font(.system(size: 18, weight: .semibold))
+    }
   }
 }
 

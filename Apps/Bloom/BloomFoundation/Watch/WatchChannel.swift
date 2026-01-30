@@ -13,6 +13,8 @@ public final actor WatchChannel: NSObject {
   public static let biologicalAgeKey = "biologicalAge"
   public static let unitPreferencesKey = "unitPreferences"
   public static let todayDataKey = "todayData"
+  public static let foodDataKey = "foodData"
+  public static let subscriptionDataKey = "subscriptionData"
   public static let shared = WatchChannel()
 
   public static let applicationContextDidUpdate = Notification.Name("WatchChannel.applicationContextDidUpdate")

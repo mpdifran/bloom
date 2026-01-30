@@ -7,7 +7,9 @@
 
 import Foundation
 import BloomFoundation
+import BloomModel
 import CoreHealth
+import CoreNetwork
 import DataContainer
 import SwiftData
 
@@ -39,6 +41,18 @@ final class WatchMessageRouter {
     if let message = try? JSONDecoder.watch.decode(WatchReminderCompletionMessage.self, from: data),
        message.type == WatchReminderCompletionMessage.messageType {
       return await handleReminderCompletion(message)
+    }
+
+    // Try food log message
+    if let message = try? JSONDecoder.watch.decode(WatchFoodLogMessage.self, from: data),
+       message.type == WatchFoodLogMessage.messageType {
+      return await handleFoodLog(message)
+    }
+
+    // Try voice food log message
+    if let message = try? JSONDecoder.watch.decode(WatchVoiceFoodLogMessage.self, from: data),
+       message.type == WatchVoiceFoodLogMessage.messageType {
+      return await handleVoiceFoodLog(message)
     }
 
     // Unknown message type
@@ -127,5 +141,116 @@ final class WatchMessageRouter {
       )
       return (try? JSONEncoder.watch.encode(response)) ?? Data()
     }
+  }
+
+  // MARK: - Food Log Handler
+
+  private func handleFoodLog(_ message: WatchFoodLogMessage) async -> Data {
+    do {
+      let meal = FoodItemLog.Meal(rawValue: message.meal) ?? .snack
+      let logID = try await logFoodItem(
+        foodItemID: message.foodItemID,
+        meal: meal,
+        numberOfServings: message.numberOfServings,
+        date: message.date
+      )
+
+      // Sync updated frequent foods back to watch
+      await WatchFoodSyncer.shared.syncToWatch()
+
+      let response = WatchFoodLogResponse(success: true, logID: logID)
+      return (try? JSONEncoder.watch.encode(response)) ?? Data()
+    } catch {
+      let response = WatchFoodLogResponse(success: false, errorMessage: error.localizedDescription)
+      return (try? JSONEncoder.watch.encode(response)) ?? Data()
+    }
+  }
+
+  private func logFoodItem(
+    foodItemID: String,
+    meal: FoodItemLog.Meal,
+    numberOfServings: Double,
+    date: Date
+  ) async throws -> String {
+    let context = ContainerHolder.shared.createContext()
+
+    // Find the food item record
+    let descriptor = FetchDescriptor<FoodItemRecord>(
+      predicate: #Predicate { $0.id == foodItemID }
+    )
+    guard let foodItem = try context.fetch(descriptor).first else {
+      throw NSError(domain: "WatchFoodLog", code: 404, userInfo: [
+        NSLocalizedDescriptionKey: "Food item not found"
+      ])
+    }
+
+    // Create serving
+    let serving = FoodItemServing(numberOfServings: numberOfServings, foodItem: foodItem)
+
+    // Create log
+    let log = FoodItemLog(
+      id: UUID().uuidString,
+      name: foodItem.name,
+      date: date,
+      meal: meal,
+      numberOfServings: numberOfServings,
+      imageData: nil,
+      foodItemServings: [serving]
+    )
+    context.insert(log)
+
+    try context.save()
+
+    // Update HealthKit
+    try await HealthStoreModifier.shared.updateNutrition(for: date)
+
+    return log.id
+  }
+
+  // MARK: - Voice Food Log Handler
+
+  private func handleVoiceFoodLog(_ message: WatchVoiceFoodLogMessage) async -> Data {
+    do {
+      let meal = FoodItemLog.Meal(rawValue: message.meal) ?? .snack
+      let processingIdentifier = try await processVoiceFoodLog(
+        transcribedText: message.transcribedText,
+        meal: meal,
+        date: message.date
+      )
+
+      let response = WatchVoiceFoodLogResponse(success: true, processingIdentifier: processingIdentifier)
+      return (try? JSONEncoder.watch.encode(response)) ?? Data()
+    } catch {
+      let response = WatchVoiceFoodLogResponse(success: false, errorMessage: error.localizedDescription)
+      return (try? JSONEncoder.watch.encode(response)) ?? Data()
+    }
+  }
+
+  private func processVoiceFoodLog(
+    transcribedText: String,
+    meal: FoodItemLog.Meal,
+    date: Date
+  ) async throws -> String {
+    let processingIdentifier = AIFoodProcessingIdentifier()
+
+    // Upload to backend for AI processing
+    _ = try await NetworkRequester.shared.uploadMagicScan(
+      imageData: nil,
+      contextText: transcribedText,
+      processingIdentifier: processingIdentifier,
+      country: LocationManagerViewModel.shared.country ?? "usa"
+    )
+
+    // Log with pending state using NutritionTrackingViewModel
+    let context = ContainerHolder.shared.createContext()
+    NutritionTrackingViewModel.shared.logTextOnlyMagicScan(
+      modelContext: context,
+      processingIdentifier: processingIdentifier,
+      contextText: transcribedText,
+      date: date,
+      meal: meal
+    )
+
+    return processingIdentifier.value
   }
 }
