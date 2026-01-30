@@ -32,7 +32,7 @@ enum StatTimePeriod: String, CaseIterable, Identifiable, Sendable {
   var dateRange: DateRange {
     switch self {
     case .oneDay: .today()
-    case .sevenDays: .trailingDaysFromNow(7)
+    case .sevenDays: .trailingDaysFromNow(6)
     case .oneMonth: .trailingMonthsFromNow(1)
     case .threeMonths: .trailingMonthsFromNow(3)
     case .sixMonths: .trailingMonthsFromNow(6)

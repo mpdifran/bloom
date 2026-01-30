@@ -97,8 +97,8 @@ private extension BloomPlusMonitorCardShowcaseCell {
             MetricZScorePoint(metricType: "hrv", zScore: 1.2),
             MetricZScorePoint(metricType: "temp", zScore: 1.6)
           ],
-          min7DayZScore: 0.3,
-          max7DayZScore: 1.8
+          minZScore: 0.3,
+          maxZScore: 1.8
         )
       )
     }
@@ -126,8 +126,8 @@ private extension BloomPlusMonitorCardShowcaseCell {
             MetricZScorePoint(metricType: "trainingLoad", zScore: 1.8),
             MetricZScorePoint(metricType: "hrRecovery", zScore: 0.5)
           ],
-          min7DayZScore: 0.2,
-          max7DayZScore: 2.0
+          minZScore: 0.2,
+          maxZScore: 2.0
         )
       )
     }
@@ -156,8 +156,8 @@ private extension BloomPlusMonitorCardShowcaseCell {
             MetricZScorePoint(metricType: "deepSleep", zScore: -0.3),
             MetricZScorePoint(metricType: "efficiency", zScore: 0.1)
           ],
-          min7DayZScore: -0.6,
-          max7DayZScore: 0.5
+          minZScore: -0.6,
+          maxZScore: 0.5
         )
       )
     }

@@ -46,7 +46,7 @@ final actor YouStatsCalculator {
 
   func refreshStats() async {
     let sleepAnalyses = await healthStoreFetcher.fetchSleepAnalysis(
-      dateRange: .trailingDaysFromNow(7)
+      dateRange: .trailingDaysFromNow(6)
     )
     bedtimeChartData = calculateBedtimeChartData(from: sleepAnalyses)
     averageSleepDuration = calculateAverageSleepDuration(from: sleepAnalyses)
@@ -661,7 +661,7 @@ private extension YouStatsCalculator {
   }
 
   func calculateFiberChartData() async -> FiberChartData? {
-    let dateRange = DateRange.trailingDaysFromNow(7)
+    let dateRange = DateRange.trailingDaysFromNow(6)
 
     let fiberSamples = await healthStoreFetcher.fetchCollatedQuantity(
       for: .dietaryFiber,
@@ -685,7 +685,7 @@ private extension YouStatsCalculator {
   }
 
   func calculateSugarChartData() async -> SugarChartData? {
-    let dateRange = DateRange.trailingDaysFromNow(7)
+    let dateRange = DateRange.trailingDaysFromNow(6)
 
     let sugarSamples = await healthStoreFetcher.fetchCollatedQuantity(
       for: .dietarySugar,
@@ -713,7 +713,7 @@ private extension YouStatsCalculator {
 
     let details = await healthStoreFetcher.fetchExerciseEffectivenessDetails(
       heartRateZones: heartRateZones,
-      dateRange: .trailingDaysFromNow(7)
+      dateRange: .trailingDaysFromNow(6)
     )
 
     guard !details.workoutReports.isEmpty else { return nil }
@@ -745,7 +745,7 @@ private extension YouStatsCalculator {
 
     let details = await healthStoreFetcher.fetchExerciseEffectivenessDetails(
       heartRateZones: heartRateZones,
-      dateRange: .trailingDaysFromNow(7)
+      dateRange: .trailingDaysFromNow(6)
     )
 
     guard !details.workoutReports.isEmpty else { return nil }
@@ -766,7 +766,7 @@ private extension YouStatsCalculator {
 
     let details = await healthStoreFetcher.fetchExerciseEffectivenessDetails(
       heartRateZones: heartRateZones,
-      dateRange: .trailingDaysFromNow(7)
+      dateRange: .trailingDaysFromNow(6)
     )
 
     guard !details.workoutReports.isEmpty else { return nil }

@@ -85,8 +85,8 @@ struct TrainingLoadRangeRow: View {
       metricZScores: [
         MetricZScorePoint(metricType: "trainingLoad", zScore: currentZScore)
       ],
-      min7DayZScore: minZScore,
-      max7DayZScore: maxZScore
+      minZScore: minZScore,
+      maxZScore: maxZScore
     )
   }
 

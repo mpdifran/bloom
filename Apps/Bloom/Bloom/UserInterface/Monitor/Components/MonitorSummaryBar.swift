@@ -7,7 +7,7 @@ import SwiftUI
 import DataContainer
 import BloomFoundation
 
-/// A horizontal bar showing z-score zones with 7-day range and current metric positions.
+/// A horizontal bar showing z-score zones with today's range and current metric positions.
 /// Displays three zones: Low (z < -1), Normal (-1 to 1), and High (z > 1).
 struct MonitorSummaryBar: View {
 
@@ -35,7 +35,7 @@ struct MonitorSummaryBar: View {
           // Background zones (Low | Normal | High)
           zoneBackground(width: width)
 
-          // 7-day range bar overlay
+          // Today's range bar overlay
           rangeBar(width: width)
 
           // Current value dots for each metric
@@ -94,10 +94,10 @@ private extension MonitorSummaryBar {
     .clipShape(Capsule())
   }
 
-  /// The colored bar showing 7-day z-score range
+  /// The colored bar showing today's z-score range
   func rangeBar(width: CGFloat) -> some View {
-    let startPosition = normalizedPosition(for: data.min7DayZScore)
-    let endPosition = normalizedPosition(for: data.max7DayZScore)
+    let startPosition = normalizedPosition(for: data.minZScore)
+    let endPosition = normalizedPosition(for: data.maxZScore)
     let barWidth = width * (endPosition - startPosition)
     // Offset from center
     let xOffset = width * startPosition + barWidth / 2 - width / 2
@@ -180,8 +180,8 @@ private extension MonitorSummaryBar {
   /// Individual dots for each metric's current z-score
   /// Dots that are close together merge into a capsule shape
   func metricDots(width: CGFloat) -> some View {
-    let startPosition = normalizedPosition(for: data.min7DayZScore)
-    let endPosition = normalizedPosition(for: data.max7DayZScore)
+    let startPosition = normalizedPosition(for: data.minZScore)
+    let endPosition = normalizedPosition(for: data.maxZScore)
 
     // Horizontal inset matches vertical inset: (barHeight - 2 - dotSize) / 2
     let inset = (barHeight - 2 - dotSize) / 2
@@ -293,8 +293,8 @@ private extension MonitorSummaryBar {
               MetricZScorePoint(metricType: "heartRateVariability", zScore: -0.5),
               MetricZScorePoint(metricType: "respiratoryRate", zScore: 0.1)
             ],
-            min7DayZScore: -0.8,
-            max7DayZScore: 0.6
+            minZScore: -0.8,
+            maxZScore: 0.6
           )
         )
       }
@@ -307,10 +307,10 @@ private extension MonitorSummaryBar {
           data: MonitorSummaryBarData(
             metricZScores: [
               MetricZScorePoint(metricType: "activeEnergy", zScore: 1.5),
-              MetricZScorePoint(metricType: "heartRateRecovery", zScore: 0.8)
+              MetricZScorePoint(metricType: "restingHeartRate", zScore: 0.8)
             ],
-            min7DayZScore: 0.2,
-            max7DayZScore: 1.8
+            minZScore: 0.2,
+            maxZScore: 1.8
           )
         )
       }
@@ -326,8 +326,8 @@ private extension MonitorSummaryBar {
               MetricZScorePoint(metricType: "deepSleep", zScore: -1.5),
               MetricZScorePoint(metricType: "sleepEfficiency", zScore: -0.8)
             ],
-            min7DayZScore: -2.3,
-            max7DayZScore: -0.5
+            minZScore: -2.3,
+            maxZScore: -0.5
           )
         )
       }
@@ -343,8 +343,8 @@ private extension MonitorSummaryBar {
               MetricZScorePoint(metricType: "heartRateVariability", zScore: -1.2),
               MetricZScorePoint(metricType: "wristTemperature", zScore: 0.5)
             ],
-            min7DayZScore: -1.5,
-            max7DayZScore: 2.0
+            minZScore: -1.5,
+            maxZScore: 2.0
           )
         )
       }

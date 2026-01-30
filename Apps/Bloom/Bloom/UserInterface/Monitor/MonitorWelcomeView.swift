@@ -74,8 +74,8 @@ private extension MonitorWelcomeView {
       MonitorSummaryBar(
         data: MonitorSummaryBarData(
           metricZScores: metricZScores,
-          min7DayZScore: minZScore,
-          max7DayZScore: maxZScore
+          minZScore: minZScore,
+          maxZScore: maxZScore
         )
       )
 

@@ -229,7 +229,7 @@ struct MetricRangeRowCondensed: View {
           min7DayZScore: 0.5,
           max7DayZScore: 2.3
         ),
-        metricType: .activeEnergy
+        metricType: .remSleep
       )
     }
     .padding()

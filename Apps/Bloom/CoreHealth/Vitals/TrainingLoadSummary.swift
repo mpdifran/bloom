@@ -51,13 +51,13 @@ public enum TrainingLoadStatus: String, CaseIterable, Sendable, Hashable {
   
   public static func from(percentageDifference: Double) -> TrainingLoadStatus {
     switch percentageDifference {
-    case ...(-20):
+    case ...(-50):
       return .wellBelow
-    case -20..<(-5):
+    case -50..<(-10):
       return .below
-    case -5...5:
+    case -10...10:
       return .steady
-    case 5..<20:
+    case 10..<50:
       return .above
     default:
       return .wellAbove

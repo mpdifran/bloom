@@ -100,23 +100,23 @@ public struct MetricRangeData: Sendable, Equatable, Identifiable {
 }
 
 /// Data for MonitorSummaryBar - aggregates z-scores across all metrics for a monitor.
-/// Shows the 7-day z-score range and current z-score positions for each metric.
+/// Shows today's z-score range and current z-score positions for each metric.
 public struct MonitorSummaryBarData: Sendable, Equatable {
   /// Today's z-scores per metric
   public let metricZScores: [MetricZScorePoint]
-  /// 7-day minimum z-score across all metrics
-  public let min7DayZScore: Double
-  /// 7-day maximum z-score across all metrics
-  public let max7DayZScore: Double
+  /// Minimum z-score across all metrics for today
+  public let minZScore: Double
+  /// Maximum z-score across all metrics for today
+  public let maxZScore: Double
 
   public init(
     metricZScores: [MetricZScorePoint],
-    min7DayZScore: Double,
-    max7DayZScore: Double
+    minZScore: Double,
+    maxZScore: Double
   ) {
     self.metricZScores = metricZScores
-    self.min7DayZScore = min7DayZScore
-    self.max7DayZScore = max7DayZScore
+    self.minZScore = minZScore
+    self.maxZScore = maxZScore
   }
 }
 
@@ -150,8 +150,8 @@ public extension MonitorSummaryBarData {
   /// Empty placeholder data - centered bar with no dots
   static let empty = MonitorSummaryBarData(
     metricZScores: [],
-    min7DayZScore: 0,
-    max7DayZScore: 0
+    minZScore: 0,
+    maxZScore: 0
   )
 
   /// Creates summary bar data from a single metric's range data.
@@ -163,8 +163,8 @@ public extension MonitorSummaryBarData {
 
     self.init(
       metricZScores: [MetricZScorePoint(metricType: rangeData.metricType, zScore: zScore)],
-      min7DayZScore: minZ,
-      max7DayZScore: maxZ
+      minZScore: minZ,
+      maxZScore: maxZ
     )
   }
 }

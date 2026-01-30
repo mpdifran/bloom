@@ -33,7 +33,6 @@ actor MonitorCalculator {
     async let hrvResult = fetchHeartRateVariability(for: normalizedDate)
     async let wristTempResult = fetchWristTemperature(for: normalizedDate)
     async let respiratoryResult = fetchRespiratoryRate(for: normalizedDate)
-    async let activeEnergyResult = fetchActiveEnergy(for: normalizedDate)
     async let sleepResult = fetchSleepMetrics(for: normalizedDate)
 
     // Collect results
@@ -50,9 +49,6 @@ actor MonitorCalculator {
     }
     if let respiratory = await respiratoryResult {
       samples.append(respiratory)
-    }
-    if let activeEnergy = await activeEnergyResult {
-      samples.append(activeEnergy)
     }
 
     // Sleep returns multiple metrics
@@ -171,26 +167,6 @@ actor MonitorCalculator {
       date: date,
       metricType: MonitorMetricType.respiratoryRate.rawValue,
       value: avgRespiratoryRate
-    )
-  }
-
-  private func fetchActiveEnergy(for date: Date) async -> DailyMetricSampleInput? {
-    let dateRange = DateRange.duringDay(date)
-    let samples = await healthStoreFetcher.fetchCollatedQuantity(
-      for: .activeEnergyBurned,
-      unit: .largeCalorie(),
-      dateRange: dateRange
-    )
-
-    guard let sample = samples.first else { return nil }
-
-    let quality = determineQuality(sampleCount: samples.count, expected: 1)
-
-    return DailyMetricSampleInput(
-      date: date,
-      metricType: MonitorMetricType.activeEnergy.rawValue,
-      value: sample.quantity.doubleValue(for: .largeCalorie()),
-      quality: quality
     )
   }
 

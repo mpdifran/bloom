@@ -132,15 +132,15 @@ private extension MonitorCard {
       // Expand range to include other metrics data
       return MonitorSummaryBarData(
         metricZScores: metricZScores,
-        min7DayZScore: min(minZScore, metricsData.min7DayZScore),
-        max7DayZScore: max(maxZScore, metricsData.max7DayZScore)
+        minZScore: min(minZScore, metricsData.minZScore),
+        maxZScore: max(maxZScore, metricsData.maxZScore)
       )
     }
 
     return MonitorSummaryBarData(
       metricZScores: metricZScores,
-      min7DayZScore: minZScore,
-      max7DayZScore: maxZScore
+      minZScore: minZScore,
+      maxZScore: maxZScore
     )
   }
 
@@ -229,11 +229,28 @@ private extension MonitorCard {
       return "Ready when you are"
     }
 
-    let confidencePercent = Int(result.confidence * 100)
-    if result.consecutiveDays > 1 {
-      return "\(result.consecutiveDays) days • \(confidencePercent)% confidence"
+    // Get signals with significant deviations (|zScore| > 1.0)
+    let significantSignals = result.signals.filter { abs($0.zScore) > 1.0 }
+
+    if significantSignals.isEmpty {
+      return "All metrics typical"
     }
-    return "\(confidencePercent)% confidence"
+
+    // Format as "HRV low, RHR high"
+    let summaries = significantSignals.prefix(3).map { signal in
+      let directionText: String
+      switch signal.direction {
+      case .higher:
+        directionText = "high"
+      case .lower:
+        directionText = "low"
+      case .variable:
+        directionText = "variable"
+      }
+      return "\(signal.metricType.shortName) \(directionText)"
+    }
+
+    return summaries.joined(separator: ", ")
   }
 }
 
@@ -268,7 +285,7 @@ private extension MonitorCard {
           consecutiveDays: 2,
           signals: [
             Signal(
-              metricType: .activeEnergy,
+              metricType: .remSleep,
               date: Date(),
               zScore: 1.8,
               direction: .higher,
@@ -280,7 +297,7 @@ private extension MonitorCard {
               title: "Training load trending high",
               explanation: "Your recent training load is 25% above your usual. Keep an eye on how you're feeling.",
               confidence: .medium,
-              relatedMetrics: [.activeEnergy]
+              relatedMetrics: [.remSleep]
             )
           ]
         ))

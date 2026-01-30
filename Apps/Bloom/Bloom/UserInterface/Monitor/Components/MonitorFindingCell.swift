@@ -43,7 +43,7 @@ struct MonitorFindingCell: View {
         title: "Training load trending high",
         explanation: "Your recent training load is 25% above your usual. Keep an eye on how you're feeling.",
         confidence: .medium,
-        relatedMetrics: [.activeEnergy]
+        relatedMetrics: [.remSleep]
       ))
 
       MonitorFindingCell(finding: Finding(

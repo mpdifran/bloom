@@ -76,8 +76,9 @@ private extension WorkoutCompletionObserver {
 
     internalLog(.workoutAnalysis, "Processing \(workout.workoutActivityType.name) workout")
 
-    // Check if workout notifications are enabled
-    guard NotificationPreferences.shared.workoutCompletionEnabled else { return }
+    // Check if workout notifications are enabled (must access on main thread)
+    let isEnabled = await MainActor.run { NotificationPreferences.shared.workoutCompletionEnabled }
+    guard isEnabled else { return }
 
     // Calculate bio age change using the optimized method
     let bioAgeDelta = await BiologicalAgeCalculator.shared.calculateWorkoutBioAgeDelta()

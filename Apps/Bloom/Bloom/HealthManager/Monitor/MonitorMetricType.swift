@@ -8,6 +8,7 @@
 import Foundation
 import HealthKit
 import SFSafeSymbols
+import CoreHealth
 
 /// Defines the health metrics tracked by the Monitor feature.
 /// Each metric type maps to a HealthKit quantity type and specifies
@@ -31,11 +32,8 @@ public enum MonitorMetricType: String, CaseIterable, Sendable, Codable {
 
   // MARK: - Stress & Workout Load Monitor Metrics
 
-  /// Active energy burned in kcal (7-day and 28-day for acute:chronic ratio)
-  case activeEnergy = "activeEnergy"
-
-  /// Heart rate recovery after 1 minute in BPM (28-day baseline)
-  case heartRateRecovery = "heartRateRecovery"
+  /// Workout-based training load (7-day vs 28-day ratio)
+  case trainingLoad = "trainingLoad"
 
   // MARK: - Sleep Quality & Rhythm Monitor Metrics
 
@@ -70,12 +68,8 @@ public enum MonitorMetricType: String, CaseIterable, Sendable, Codable {
       return HKQuantityType(.appleSleepingWristTemperature)
     case .respiratoryRate:
       return HKQuantityType(.respiratoryRate)
-    case .activeEnergy:
-      return HKQuantityType(.activeEnergyBurned)
-    case .heartRateRecovery:
-      if #available(iOS 16.0, *) {
-        return HKQuantityType(.heartRateRecoveryOneMinute)
-      }
+    case .trainingLoad:
+      // Derived from workouts, not a direct quantity type
       return nil
     case .sleepDuration, .deepSleep, .remSleep, .sleepEfficiency, .bedtime, .wakeTime:
       // These are derived from sleep analysis, not direct quantity types
@@ -86,7 +80,7 @@ public enum MonitorMetricType: String, CaseIterable, Sendable, Codable {
   /// The HKUnit for this metric
   public var unit: HKUnit? {
     switch self {
-    case .restingHeartRate, .heartRateRecovery:
+    case .restingHeartRate:
       return .count().unitDivided(by: .minute()) // BPM
     case .heartRateVariability:
       return .secondUnit(with: .milli) // milliseconds
@@ -94,25 +88,27 @@ public enum MonitorMetricType: String, CaseIterable, Sendable, Codable {
       return .degreeFahrenheit()
     case .respiratoryRate:
       return .count().unitDivided(by: .minute()) // breaths per minute
-    case .activeEnergy:
-      return .largeCalorie()
     case .sleepDuration, .deepSleep, .remSleep:
       return .minute()
     case .sleepEfficiency:
       return nil // Percentage, no HKUnit
     case .bedtime, .wakeTime:
       return nil // Minutes from midnight, no HKUnit
+    case .trainingLoad:
+      return nil // Percentage, no HKUnit
     }
   }
 
   /// The primary baseline period for this metric (in days)
   public var primaryBaselineDays: Int {
     switch self {
-    case .restingHeartRate, .heartRateVariability, .heartRateRecovery:
+    case .restingHeartRate, .heartRateVariability:
       return 28
     case .wristTemperature, .respiratoryRate:
       return 14
-    case .activeEnergy, .sleepDuration, .deepSleep, .remSleep, .sleepEfficiency, .bedtime, .wakeTime:
+    case .trainingLoad:
+      return 7
+    case .sleepDuration, .deepSleep, .remSleep, .sleepEfficiency, .bedtime, .wakeTime:
       return 7
     }
   }
@@ -120,7 +116,7 @@ public enum MonitorMetricType: String, CaseIterable, Sendable, Codable {
   /// Whether this metric also uses a 28-day baseline (for acute:chronic ratio)
   public var uses28DayBaseline: Bool {
     switch self {
-    case .activeEnergy, .sleepDuration:
+    case .sleepDuration, .trainingLoad:
       return true
     default:
       return primaryBaselineDays == 28
@@ -142,16 +138,13 @@ public enum MonitorMetricType: String, CaseIterable, Sendable, Codable {
     switch self {
     case .restingHeartRate, .heartRateVariability, .wristTemperature, .respiratoryRate:
       return .recovery
-    case .heartRateRecovery:
+    case .trainingLoad:
       return .stress
     case .sleepDuration, .sleepEfficiency, .bedtime, .wakeTime:
       return .sleep
     case .deepSleep, .remSleep:
       // Removed from sleep monitor due to noisy/unreliable data
       // Deep sleep still used in stress monitor for burnout detection
-      return nil
-    case .activeEnergy:
-      // Training load is computed from workouts via TrainingLoadSummary, not active energy samples
       return nil
     }
   }
@@ -167,10 +160,6 @@ public enum MonitorMetricType: String, CaseIterable, Sendable, Codable {
       return "Wrist Temperature"
     case .respiratoryRate:
       return "Respiratory Rate"
-    case .activeEnergy:
-      return "Active Energy"
-    case .heartRateRecovery:
-      return "Heart Rate Recovery"
     case .sleepDuration:
       return "Sleep Duration"
     case .deepSleep:
@@ -183,6 +172,36 @@ public enum MonitorMetricType: String, CaseIterable, Sendable, Codable {
       return "Bedtime"
     case .wakeTime:
       return "Wake Time"
+    case .trainingLoad:
+      return "Training Load"
+    }
+  }
+
+  /// Short name for compact display
+  public var shortName: String {
+    switch self {
+    case .restingHeartRate:
+      return "RHR"
+    case .heartRateVariability:
+      return "HRV"
+    case .wristTemperature:
+      return "Temp"
+    case .respiratoryRate:
+      return "Respiratory rate"
+    case .sleepDuration:
+      return "Sleep"
+    case .deepSleep:
+      return "Deep sleep"
+    case .remSleep:
+      return "REM"
+    case .sleepEfficiency:
+      return "Efficiency"
+    case .bedtime:
+      return "Bedtime"
+    case .wakeTime:
+      return "Wake time"
+    case .trainingLoad:
+      return "Training load"
     }
   }
 
@@ -197,10 +216,6 @@ public enum MonitorMetricType: String, CaseIterable, Sendable, Codable {
       return .thermometerMedium
     case .respiratoryRate:
       return .lungs
-    case .activeEnergy:
-      return .flameFill
-    case .heartRateRecovery:
-      return .arrowDownHeart
     case .sleepDuration:
       return .bedDoubleFill
     case .deepSleep:
@@ -213,13 +228,15 @@ public enum MonitorMetricType: String, CaseIterable, Sendable, Codable {
       return .moonsetFill
     case .wakeTime:
       return .sunriseFill
+    case .trainingLoad:
+      return .flameFill
     }
   }
 
   /// Abbreviated unit string for display
   public var unitAbbreviation: String {
     switch self {
-    case .restingHeartRate, .heartRateRecovery:
+    case .restingHeartRate:
       return "bpm"
     case .heartRateVariability:
       return "ms"
@@ -227,88 +244,75 @@ public enum MonitorMetricType: String, CaseIterable, Sendable, Codable {
       return UnitTemperature(forLocale: .current).symbol
     case .respiratoryRate:
       return "br/min"
-    case .activeEnergy:
-      return "kcal"
     case .sleepDuration, .deepSleep, .remSleep:
       return ""  // Formatted as hours:minutes
     case .sleepEfficiency:
       return "%"
     case .bedtime, .wakeTime:
       return ""  // Formatted as time
+    case .trainingLoad:
+      return "%"
     }
   }
 
   /// Format a value for display with appropriate unit
+  @MainActor
   public func formatValue(_ value: Double) -> String {
     switch self {
-    case .restingHeartRate, .heartRateRecovery:
-      return "\(Int(value)) bpm"
-    case .heartRateVariability:
-      return "\(Int(value)) ms"
-    case .wristTemperature:
-      let measurement = Measurement(value: value, unit: UnitTemperature.fahrenheit)
-      let localizedValue = measurement.localizedValue
-      let unit = UnitTemperature(forLocale: .current).symbol
-      return String(format: "%.1f%@", localizedValue, unit)
-    case .respiratoryRate:
-      return String(format: "%.1f br/min", value)
-    case .activeEnergy:
-      return "\(Int(value)) kcal"
+    case .restingHeartRate, .heartRateVariability, .wristTemperature, .respiratoryRate:
+      guard let unit = unit else { return "" }
+      let quantity = HKQuantity(unit: unit, doubleValue: value)
+      return quantity.displayString(for: unit)
     case .sleepDuration, .deepSleep, .remSleep:
       return formatMinutesAsHoursMinutes(value)
     case .sleepEfficiency:
       return "\(Int(value))%"
     case .bedtime, .wakeTime:
       return formatMinutesFromMidnightAsTime(value)
+    case .trainingLoad:
+      let sign = value >= 0 ? "+" : ""
+      return "\(sign)\(Int(value))%"
     }
   }
 
   /// Format a value with abbreviated unit (for labels)
+  @MainActor
   public func formatValueShort(_ value: Double) -> String {
     switch self {
-    case .restingHeartRate, .heartRateRecovery:
-      return "\(Int(value))"
-    case .heartRateVariability:
-      return "\(Int(value))"
-    case .wristTemperature:
-      let measurement = Measurement(value: value, unit: UnitTemperature.fahrenheit)
-      return String(format: "%.1f", measurement.localizedValue)
-    case .respiratoryRate:
-      return String(format: "%.1f", value)
-    case .activeEnergy:
-      return "\(Int(value))"
+    case .restingHeartRate, .heartRateVariability, .wristTemperature, .respiratoryRate:
+      guard let unit = unit else { return "" }
+      let quantity = HKQuantity(unit: unit, doubleValue: value)
+      return quantity.displayString(for: unit, showUnits: false)
     case .sleepDuration, .deepSleep, .remSleep:
       return formatMinutesAsHoursMinutesShort(value)
     case .sleepEfficiency:
       return "\(Int(value))"
     case .bedtime, .wakeTime:
       return formatMinutesFromMidnightAsTime(value)
+    case .trainingLoad:
+      let sign = value >= 0 ? "+" : ""
+      return "\(sign)\(Int(value))"
     }
   }
 
   /// Format a difference value with sign and unit (e.g., "+10 bpm", "-45 min")
+  @MainActor
   public func formatDifference(_ value: Double) -> String {
     let sign = value >= 0 ? "+" : ""
     switch self {
-    case .restingHeartRate, .heartRateRecovery:
-      return "\(sign)\(Int(value)) bpm"
-    case .heartRateVariability:
-      return "\(sign)\(Int(value)) ms"
-    case .wristTemperature:
-      let measurement = Measurement(value: value, unit: UnitTemperature.fahrenheit)
-      let localizedValue = measurement.localizedValue
-      let unit = UnitTemperature(forLocale: .current).symbol
-      return String(format: "%@%.1f%@", sign, localizedValue, unit)
-    case .respiratoryRate:
-      return String(format: "%@%.1f br/min", sign, value)
-    case .activeEnergy:
-      return "\(sign)\(Int(value)) kcal"
+    case .restingHeartRate, .heartRateVariability, .wristTemperature, .respiratoryRate:
+      guard let unit = unit else { return "" }
+      let quantity = HKQuantity(unit: unit, doubleValue: abs(value))
+      return "\(sign)\(quantity.displayString(for: unit))"
     case .sleepDuration, .deepSleep, .remSleep:
       return formatDifferenceAsMinutes(value)
     case .sleepEfficiency:
       return "\(sign)\(Int(value))%"
     case .bedtime, .wakeTime:
       return formatDifferenceAsMinutes(value)
+    case .trainingLoad:
+      let sign = value >= 0 ? "+" : ""
+      return "\(sign)\(Int(value))%"
     }
   }
 
@@ -402,7 +406,6 @@ public enum MonitorType: String, CaseIterable, Sendable, Codable {
     case .stress:
       // Includes burnout detection metrics from other monitors
       return [
-        .heartRateRecovery,      // Owned - low recovery indicates overtraining
         .heartRateVariability,   // From recovery - HRV trend analysis
         .sleepEfficiency,        // From sleep - burnout signal
         .deepSleep,              // From sleep - burnout signal

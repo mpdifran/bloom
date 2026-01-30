@@ -47,10 +47,11 @@ public actor MonitorNotificationScheduler {
       return
     }
 
-    // Check user preferences
-    guard MonitorNotificationPreferences.shared.shouldNotify(for: result.monitorType) else {
-      return
+    // Check user preferences (must access on main thread)
+    let shouldNotify = await MainActor.run {
+      MonitorNotificationPreferences.shared.shouldNotify(for: result.monitorType)
     }
+    guard shouldNotify else { return }
 
     // Schedule the notification
     await scheduleNotification(for: result)

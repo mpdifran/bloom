@@ -18,7 +18,6 @@ actor StressStateCalculator: MonitorStateCalculator {
   let requiredMetrics: [MonitorMetricType] = []
   let optionalMetrics: [MonitorMetricType] = [
     .heartRateVariability,
-    .heartRateRecovery,
     .sleepEfficiency,
     .deepSleep,
     .restingHeartRate
@@ -102,7 +101,7 @@ actor StressStateCalculator: MonitorStateCalculator {
     switch trainingLoadSummary.status {
     case .wellAbove:
       signals.append(Signal(
-        metricType: .activeEnergy,
+        metricType: .trainingLoad,
         date: date,
         zScore: trainingLoadSummary.percentageDifference / 10, // Normalize to z-score-like value
         direction: .higher,
@@ -110,7 +109,7 @@ actor StressStateCalculator: MonitorStateCalculator {
       ))
     case .above:
       signals.append(Signal(
-        metricType: .activeEnergy,
+        metricType: .trainingLoad,
         date: date,
         zScore: trainingLoadSummary.percentageDifference / 10,
         direction: .higher,
@@ -118,7 +117,7 @@ actor StressStateCalculator: MonitorStateCalculator {
       ))
     case .wellBelow:
       signals.append(Signal(
-        metricType: .activeEnergy,
+        metricType: .trainingLoad,
         date: date,
         zScore: abs(trainingLoadSummary.percentageDifference) / 10,
         direction: .lower,
@@ -126,7 +125,7 @@ actor StressStateCalculator: MonitorStateCalculator {
       ))
     case .below:
       signals.append(Signal(
-        metricType: .activeEnergy,
+        metricType: .trainingLoad,
         date: date,
         zScore: abs(trainingLoadSummary.percentageDifference) / 10,
         direction: .lower,
@@ -377,21 +376,6 @@ actor StressStateCalculator: MonitorStateCalculator {
       ))
     }
 
-    // Heart Rate Recovery Signal (low recovery indicates overtraining/poor fitness)
-    if let hrrSample = mostRecentSample(for: .heartRateRecovery, in: samples, targetDate: date),
-       let zScore = hrrSample.zScore, zScore < -1.0 {
-      let baseline = hrrSample.baseline28Day ?? hrrSample.baseline7Day
-      let difference = baseline.map { hrrSample.value - $0 }
-      signals.append(Signal(
-        metricType: .heartRateRecovery,
-        date: date,
-        zScore: zScore,
-        direction: .lower,
-        description: "Heart Rate Recovery Is Below Your Usual",
-        difference: difference
-      ))
-    }
-
     return signals
   }
 
@@ -514,7 +498,7 @@ actor StressStateCalculator: MonitorStateCalculator {
         title: "Training Load Needs Attention",
         explanation: explanation,
         confidence: hrvTrend.declinePercent != nil ? .high : .medium,
-        relatedMetrics: [.activeEnergy] + (hrvTrend.declinePercent != nil ? [.heartRateVariability] : [])
+        relatedMetrics: [.trainingLoad] + (hrvTrend.declinePercent != nil ? [.heartRateVariability] : [])
       ))
     } else if state == .attention {
       var relatedMetrics: [MonitorMetricType] = []
@@ -522,7 +506,7 @@ actor StressStateCalculator: MonitorStateCalculator {
 
       if !ratioDescription.isEmpty {
         explanation = ratioDescription
-        relatedMetrics.append(.activeEnergy)
+        relatedMetrics.append(.trainingLoad)
       }
 
       if let decline = hrvTrend.declinePercent, decline > 0.05 {
@@ -570,8 +554,6 @@ actor StressStateCalculator: MonitorStateCalculator {
         signalDescriptions.append("deep sleep is below your usual")
       case .restingHeartRate:
         signalDescriptions.append("resting heart rate is elevated")
-      case .heartRateRecovery:
-        signalDescriptions.append("heart rate recovery is reduced")
       default:
         break
       }
@@ -613,7 +595,7 @@ actor StressStateCalculator: MonitorStateCalculator {
 
     // Filter to active energy samples only
     let energySamples = samples
-      .filter { $0.metricType == MonitorMetricType.activeEnergy.rawValue }
+      .filter { $0.metricType == MonitorMetricType.trainingLoad.rawValue }
       .sorted { $0.date < $1.date }
 
     // Need minimum data for meaningful classification
@@ -684,14 +666,14 @@ actor StressStateCalculator: MonitorStateCalculator {
         title: "Ready To Start Your Fitness Journey?",
         explanation: "Starting a workout routine can feel overwhelming, but even small steps count. Try beginning with a 10-15 minute walk or a beginner-friendly workout. Your body will thank you!",
         confidence: .medium,
-        relatedMetrics: [.activeEnergy]
+        relatedMetrics: [.trainingLoad]
       )
     case .returning:
       finding = Finding(
         title: "Time To Get Back In The Game?",
         explanation: "We noticed you've been less active recently. Life happens! When you're ready, start slow and gradually build back up. Your body remembers more than you think.",
         confidence: .medium,
-        relatedMetrics: [.activeEnergy]
+        relatedMetrics: [.trainingLoad]
       )
     case .active:
       // Should not happen, but handle gracefully
@@ -699,7 +681,7 @@ actor StressStateCalculator: MonitorStateCalculator {
         title: "Keep Up The Good Work",
         explanation: "Your activity levels are looking healthy.",
         confidence: .low,
-        relatedMetrics: [.activeEnergy]
+        relatedMetrics: [.trainingLoad]
       )
     }
 

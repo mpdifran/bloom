@@ -258,18 +258,17 @@ public extension DailyMetricSampleModelActor {
   }
 
   /// Fetch summary bar data for a set of metrics.
-  /// Returns min/max z-scores across all metrics over 7 days, plus current z-scores.
+  /// Returns min/max z-scores across all metrics for today, plus current z-scores.
   func fetchSummaryBarData(
     metricTypes: [String],
     for date: Date
   ) throws -> MonitorSummaryBarData? {
     let calendar = Calendar.current
-    let startDate = calendar.date(byAdding: .day, value: -6, to: calendar.startOfDay(for: date)) ?? date
-    let endDate = calendar.startOfDay(for: date)
+    let today = calendar.startOfDay(for: date)
 
     let descriptor = FetchDescriptor<DailyMetricSample>(
       predicate: #Predicate<DailyMetricSample> { sample in
-        sample.date >= startDate && sample.date <= endDate
+        sample.date == today
       },
       sortBy: [SortDescriptor(\DailyMetricSample.date, order: .reverse)]
     )
@@ -279,7 +278,7 @@ public extension DailyMetricSampleModelActor {
 
     guard !allSamples.isEmpty else { return nil }
 
-    // Collect all z-scores (non-nil) for 7-day range
+    // Collect all z-scores (non-nil) for today's range
     let allZScores = allSamples.compactMap { $0.zScore }
     guard !allZScores.isEmpty else { return nil }
 
@@ -299,8 +298,8 @@ public extension DailyMetricSampleModelActor {
 
     return MonitorSummaryBarData(
       metricZScores: metricZScores,
-      min7DayZScore: minZScore,
-      max7DayZScore: maxZScore
+      minZScore: minZScore,
+      maxZScore: maxZScore
     )
   }
 

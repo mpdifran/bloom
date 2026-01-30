@@ -57,17 +57,6 @@ public actor DetectionEngine {
       dateRange: dateRange30
     )
 
-    // Fetch extended active energy samples for stress calculator
-    let extendedEnergySamples = try await modelActor.fetchSamples(
-      metricTypes: [MonitorMetricType.activeEnergy.rawValue],
-      dateRange: dateRange180
-    )
-
-    // Merge for stress: all 30-day samples except active energy, plus all 180-day active energy
-    let stressSamples = samples30.filter {
-      $0.metricType != MonitorMetricType.activeEnergy.rawValue
-    } + extendedEnergySamples
-
     // Calculate each monitor state in parallel
     async let recoveryResult = recoveryCalculator.calculateState(
       for: date,
@@ -77,7 +66,7 @@ public actor DetectionEngine {
 
     async let stressResult = stressCalculator.calculateState(
       for: date,
-      samples: stressSamples,
+      samples: samples30,
       previousResults: previousResults[.stress] ?? []
     )
 

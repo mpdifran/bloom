@@ -123,8 +123,6 @@ struct MonitorView: View {
           }
         }
       }
-
-      MonitorLegend()
     }
   }
 
