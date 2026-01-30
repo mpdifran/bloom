@@ -22,6 +22,9 @@ public final actor WatchChannel: NSObject {
   /// Set this to handle messages from the watch and return response data
   public var messageHandler: (@Sendable (Data) async -> Data)?
 
+  /// Pending context updates to send when session activates
+  private var pendingContextUpdates: [String: Data] = [:]
+
   private override init() {
     super.init()
 
@@ -49,8 +52,32 @@ public extension WatchChannel {
   }
 
   func updateApplicationContext(key: String, data: Data) throws {
-    guard WCSession.default.activationState == .activated else { return }
-    try WCSession.default.updateApplicationContext([key: data])
+    if WCSession.default.activationState == .activated {
+      try WCSession.default.updateApplicationContext([key: data])
+    } else {
+      // Queue for when session activates
+      pendingContextUpdates[key] = data
+    }
+  }
+
+  /// Flushes any pending context updates that were queued before session activation
+  func flushPendingContextUpdates() {
+    guard WCSession.default.activationState == .activated,
+          !pendingContextUpdates.isEmpty else { return }
+
+    // Merge all pending updates into one context update
+    var context: [String: Any] = [:]
+    for (key, data) in pendingContextUpdates {
+      context[key] = data
+    }
+
+    do {
+      try WCSession.default.updateApplicationContext(context)
+      pendingContextUpdates.removeAll()
+    } catch {
+      // Keep queued for next attempt
+      print("Failed to flush pending context updates: \(error)")
+    }
   }
 
   nonisolated func getApplicationContextData(for key: String) -> Data? {
@@ -99,6 +126,13 @@ private final class WatchSessionDelegate: NSObject, WCSessionDelegate {
   ) {
     if let error {
       print(error)
+    }
+
+    // Flush any pending context updates
+    if activationState == .activated {
+      Task { [channel] in
+        await channel.flushPendingContextUpdates()
+      }
     }
   }
 
