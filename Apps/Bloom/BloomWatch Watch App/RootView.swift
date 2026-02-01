@@ -32,22 +32,30 @@ struct RootView: View {
           .tag(Tab.workouts)
       }
       .tabViewStyle(.verticalPage)
-      .onAppear {
-        guard !hasInitialized else { return }
-        hasInitialized = true
-
-        Task { @MainActor in
-          let tabs: [Tab] = [.today, .workouts, .bioAge]
-
-          for tab in tabs {
-            withTransaction(Transaction(animation: nil)) {
-              selectedTab = tab
-            }
-            // Give SwiftUI a chance to render/layout this selection
-            await Task.yield()
-            // On watchOS, a second yield often helps more than a sleep.
-            await Task.yield()
-          }
+//      .onAppear {
+//        guard !hasInitialized else { return }
+//        hasInitialized = true
+//
+//        Task { @MainActor in
+//          let tabs: [Tab] = [.today, .workouts, .bioAge]
+//
+//          for tab in tabs {
+//            withTransaction(Transaction(animation: nil)) {
+//              selectedTab = tab
+//            }
+//            // Give SwiftUI a chance to render/layout this selection
+//            await Task.yield()
+//            // On watchOS, a second yield often helps more than a sleep.
+//            await Task.yield()
+//          }
+//        }
+//      }
+      .onOpenURL { url in
+        guard url.scheme == "bloom" else { return }
+        // Reconstruct path: bloom://watch/workouts -> /watch/workouts
+        let path = "/\(url.host ?? "")\(url.path)"
+        if path == "/watch/workouts" {
+          selectedTab = .workouts
         }
       }
     }
