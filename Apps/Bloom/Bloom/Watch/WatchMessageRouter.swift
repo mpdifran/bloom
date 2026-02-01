@@ -55,6 +55,12 @@ final class WatchMessageRouter {
       return await handleVoiceFoodLog(message)
     }
 
+    // Try sync request message
+    if let message = try? JSONDecoder.watch.decode(WatchSyncRequestMessage.self, from: data),
+       message.type == WatchSyncRequestMessage.messageType {
+      return await handleSyncRequest(message)
+    }
+
     // Unknown message type
     return Data()
   }
@@ -252,5 +258,23 @@ final class WatchMessageRouter {
     )
 
     return processingIdentifier.value
+  }
+
+  // MARK: - Sync Request Handler
+
+  private func handleSyncRequest(_ message: WatchSyncRequestMessage) async -> Data {
+    // Trigger all syncers in parallel
+    async let unitSync: () = HealthUnitPreferences.shared.syncToWatch()
+    async let heartRateSync: HeartRateZones? = HealthGoalProvider.shared.heartRateZones()
+    async let bioAgeSync: () = BiologicalAgeCalculator.shared.syncBiologicalAgeToWatch()
+    async let todaySync: () = WatchTodaySyncer.shared.syncToWatch()
+    async let foodSync: () = WatchFoodSyncer.shared.syncToWatch()
+    async let subscriptionSync: () = EntitlementController.shared.syncToWatch()
+
+    // Await all syncs
+    _ = await (unitSync, heartRateSync, bioAgeSync, todaySync, foodSync, subscriptionSync)
+
+    let response = WatchSyncRequestResponse(success: true)
+    return (try? JSONEncoder.watch.encode(response)) ?? Data()
   }
 }

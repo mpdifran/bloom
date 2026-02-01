@@ -21,6 +21,7 @@
 		FF34FEC72F2E67490039180A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF97C3F42E9C407300FE7A82 /* WidgetKit.framework */; };
 		FF34FEC82F2E67490039180A /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF97C3F62E9C407300FE7A82 /* SwiftUI.framework */; };
 		FF34FED82F2E674B0039180A /* BloomWatchWidgetsExtensionExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FF34FEC62F2E67490039180A /* BloomWatchWidgetsExtensionExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		FF34FEE92F2E71970039180A /* BloomFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96842C0C1F38004DAD2D /* BloomFoundation.framework */; };
 		FF3A8F402C1A8359002DA563 /* ScreenControl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E966D2C0C1A99004DAD2D /* ScreenControl.framework */; };
 		FF4A21BC2C88FA5600278019 /* Bugsnag in Frameworks */ = {isa = PBXBuildFile; productRef = FF4A21BB2C88FA5600278019 /* Bugsnag */; };
 		FF4A21BE2C88FA5600278019 /* BugsnagNetworkRequestPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = FF4A21BD2C88FA5600278019 /* BugsnagNetworkRequestPlugin */; };
@@ -148,6 +149,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = FF34FEC52F2E67490039180A;
 			remoteInfo = BloomWatchWidgetsExtensionExtension;
+		};
+		FF34FEE72F2E71920039180A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FF1E96832C0C1F38004DAD2D;
+			remoteInfo = BloomFoundation;
 		};
 		FF3A8F412C1A835F002DA563 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -697,6 +705,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF34FEE92F2E71970039180A /* BloomFoundation.framework in Frameworks */,
 				FF34FEC82F2E67490039180A /* SwiftUI.framework in Frameworks */,
 				FF34FEC72F2E67490039180A /* WidgetKit.framework in Frameworks */,
 			);
@@ -1101,6 +1110,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				FF34FEE82F2E71920039180A /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				FF34FEC92F2E67490039180A /* BloomWatchWidgetsExtension */,
@@ -1813,6 +1823,11 @@
 			target = FF34FEC52F2E67490039180A /* BloomWatchWidgetsExtensionExtension */;
 			targetProxy = FF34FED52F2E674B0039180A /* PBXContainerItemProxy */;
 		};
+		FF34FEE82F2E71920039180A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FF1E96832C0C1F38004DAD2D /* BloomFoundation */;
+			targetProxy = FF34FEE72F2E71920039180A /* PBXContainerItemProxy */;
+		};
 		FF3A8F422C1A835F002DA563 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = FF1E966C2C0C1A99004DAD2D /* ScreenControl */;
@@ -2378,7 +2393,6 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = GUJ47GUV2Q;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -2391,7 +2405,6 @@
 					"@executable_path/../../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).watchkitapp.BloomWatchWidgetsExtension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -2402,7 +2415,6 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 26.2;
 			};
 			name = Debug;
 		};
@@ -2416,7 +2428,6 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = GUJ47GUV2Q;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -2429,7 +2440,6 @@
 					"@executable_path/../../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).watchkitapp.BloomWatchWidgetsExtension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -2440,7 +2450,6 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 26.2;
 			};
 			name = "Debug [Dev]";
 		};
@@ -2454,7 +2463,6 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = GUJ47GUV2Q;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -2467,7 +2475,6 @@
 					"@executable_path/../../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).watchkitapp.BloomWatchWidgetsExtension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -2478,7 +2485,6 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 26.2;
 			};
 			name = Release;
 		};
@@ -2492,7 +2498,6 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = GUJ47GUV2Q;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -2505,7 +2510,6 @@
 					"@executable_path/../../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).watchkitapp.BloomWatchWidgetsExtension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -2516,7 +2520,6 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 26.2;
 			};
 			name = "Release [Dev]";
 		};

@@ -46,22 +46,22 @@ public final class BiologicalAgeProvider {
   }
 
   private func loadFromUserDefaults() {
-    biologicalAge = UserDefaults.standard.object(forKey: Self.biologicalAgeKey) as? Double
-    actualAge = UserDefaults.standard.object(forKey: Self.actualAgeKey) as? Double
-    if let timestamp = UserDefaults.standard.object(forKey: Self.lastCalculatedKey) as? Double {
+    biologicalAge = UserDefaults.group.object(forKey: Self.biologicalAgeKey) as? Double
+    actualAge = UserDefaults.group.object(forKey: Self.actualAgeKey) as? Double
+    if let timestamp = UserDefaults.group.object(forKey: Self.lastCalculatedKey) as? Double {
       lastCalculated = Date(timeIntervalSince1970: timestamp)
     }
   }
 
   private func saveToUserDefaults() {
     if let biologicalAge {
-      UserDefaults.standard.set(biologicalAge, forKey: Self.biologicalAgeKey)
+      UserDefaults.group.set(biologicalAge, forKey: Self.biologicalAgeKey)
     }
     if let actualAge {
-      UserDefaults.standard.set(actualAge, forKey: Self.actualAgeKey)
+      UserDefaults.group.set(actualAge, forKey: Self.actualAgeKey)
     }
     if let lastCalculated {
-      UserDefaults.standard.set(lastCalculated.timeIntervalSince1970, forKey: Self.lastCalculatedKey)
+      UserDefaults.group.set(lastCalculated.timeIntervalSince1970, forKey: Self.lastCalculatedKey)
     }
   }
 

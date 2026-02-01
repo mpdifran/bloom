@@ -10,8 +10,7 @@ import SwiftUI
 
 @main
 struct BloomWatchWidgetsExtensionBundle: WidgetBundle {
-    var body: some Widget {
-        BloomWatchWidgetsExtension()
-        BloomWatchWidgetsExtensionControl()
-    }
+  var body: some Widget {
+    BiologicalAgeWidget()
+  }
 }
