@@ -36,11 +36,18 @@ struct RootView: View {
         guard !hasInitialized else { return }
         hasInitialized = true
 
-        // Force load all tabs by briefly visiting each one without animation
-        withTransaction(Transaction(animation: nil)) {
-          selectedTab = .today
-          selectedTab = .workouts
-          selectedTab = .bioAge
+        Task { @MainActor in
+          let tabs: [Tab] = [.today, .workouts, .bioAge]
+
+          for tab in tabs {
+            withTransaction(Transaction(animation: nil)) {
+              selectedTab = tab
+            }
+            // Give SwiftUI a chance to render/layout this selection
+            await Task.yield()
+            // On watchOS, a second yield often helps more than a sleep.
+            await Task.yield()
+          }
         }
       }
     }
