@@ -55,7 +55,12 @@ struct RootView: View {
         // Reconstruct path: bloom://watch/workouts -> /watch/workouts
         let path = "/\(url.host ?? "")\(url.path)"
         if path == "/watch/workouts" {
+          NavigationResetController.shared.reset()
           selectedTab = .workouts
+        } else if path == "/watch/bioage/details" {
+          NavigationResetController.shared.reset()
+          NavigationResetController.shared.shouldShowBioAgeDetails = true
+          selectedTab = .bioAge
         }
       }
     }

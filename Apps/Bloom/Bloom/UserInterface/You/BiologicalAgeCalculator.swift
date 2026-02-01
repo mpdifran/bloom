@@ -90,21 +90,63 @@ final actor BiologicalAgeCalculator {
 
   private func syncToWatch(_ result: BiologicalAgeResult) {
     #if os(iOS)
-    let watchData = WatchBiologicalAgeData(
-      biologicalAge: result.biologicalAge,
-      actualAge: result.actualAge,
-      lastCalculated: result.lastCalculated
-    )
+    // Map confidence to watch type
+    let watchConfidence: WatchBioAgeConfidence? = {
+      switch result.confidence {
+      case .high: return .high
+      case .moderate: return .moderate
+      case .low: return .low
+      }
+    }()
 
-    guard let data = try? JSONEncoder().encode(watchData) else { return }
+    // Map metric contributions to simplified watch format
+    let watchContributions: [WatchMetricContribution]? = result.metricContributions?.map { contribution in
+      WatchMetricContribution(
+        metric: contribution.metric.rawValue,
+        category: contribution.metric.category.rawValue,
+        weightedDelta: contribution.weightedDelta
+      )
+    }
 
-    // Use Task to cross actor boundary - WatchChannel is an actor
+    // Fetch chart data asynchronously
     Task {
+      let chartData = await fetchChartDataForWatch()
+
+      let watchData = WatchBiologicalAgeData(
+        biologicalAge: result.biologicalAge,
+        actualAge: result.actualAge,
+        lastCalculated: result.lastCalculated,
+        confidence: watchConfidence,
+        metricContributions: watchContributions,
+        chartData: chartData
+      )
+
+      guard let data = try? JSONEncoder().encode(watchData) else { return }
+
       try? await WatchChannel.shared.updateApplicationContext(
         key: WatchChannel.biologicalAgeKey,
         data: data
       )
     }
+    #endif
+  }
+
+  /// Fetch last 14 days of biological age records for watch chart
+  private func fetchChartDataForWatch() async -> [WatchBioAgeChartPoint]? {
+    #if os(iOS)
+    let modelActor = BiologicalAgeRecordModelActor.standard()
+    let dateRange = DateRange.trailingDaysFromNow(14)
+
+    guard let records = try? await modelActor.fetchRecords(dateRange: dateRange),
+          records.isNotEmpty else {
+      return nil
+    }
+
+    return records.map { record in
+      WatchBioAgeChartPoint(date: record.date, biologicalAge: record.biologicalAge)
+    }
+    #else
+    return nil
     #endif
   }
 

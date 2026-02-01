@@ -79,15 +79,22 @@ struct BiologicalAgeWidgetView: View {
   @Environment(\.widgetFamily) var family
   let entry: BiologicalAgeEntry
 
+  private var deepLinkURL: URL? {
+    URL(string: "bloom://watch/bioage/details")
+  }
+
   var body: some View {
-    switch family {
-    case .accessoryCircular:
-      CircularView(entry: entry)
-    case .accessoryRectangular:
-      RectangularView(entry: entry)
-    default:
-      CircularView(entry: entry)
+    Group {
+      switch family {
+      case .accessoryCircular:
+        CircularView(entry: entry)
+      case .accessoryRectangular:
+        RectangularView(entry: entry)
+      default:
+        CircularView(entry: entry)
+      }
     }
+    .widgetURL(deepLinkURL)
   }
 }
 

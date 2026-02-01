@@ -26,7 +26,7 @@ struct BioAgeConfidenceCard: View {
           .font(.headline)
 
         let metricsCount = result.metricContributions?.count ?? 0
-        Text("\(metricsCount) of 19 metrics considered")
+        Text("\(metricsCount) of \(BiologicalAgeMetric.allCases.count) metrics considered")
           .font(.subheadline)
           .foregroundStyle(.secondary)
           .fontWeight(.bold)

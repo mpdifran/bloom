@@ -13,6 +13,8 @@ import AppUI
 struct BioAgeTabView: View {
   @State private var provider = BiologicalAgeProvider.shared
   @State private var presentedSheet: AnyView?
+  @State private var showDetails = false
+  @State private var resetController = NavigationResetController.shared
 
   var body: some View {
     ZStack {
@@ -20,6 +22,11 @@ struct BioAgeTabView: View {
         chronologicalAge: provider.chronologicalAge,
         biologicalAge: provider.biologicalAge
       )
+      .onTapGesture {
+        if provider.biologicalAge != nil {
+          showDetails = true
+        }
+      }
 
       updatedAtText
         .zStackAlignment(.bottom)
@@ -32,6 +39,9 @@ struct BioAgeTabView: View {
     .ignoresSafeArea()
     .navigationBarTitleDisplayMode(.inline)
     .sheet($presentedSheet)
+    .navigationDestination(isPresented: $showDetails) {
+      BioAgeDetailsView()
+    }
     .toolbar {
       ToolbarItem(placement: .topBarLeading) {
         Button {
@@ -45,6 +55,16 @@ struct BioAgeTabView: View {
     }
     .task {
       provider.loadFromApplicationContext()
+    }
+    .onChange(of: resetController.resetTrigger) {
+      presentedSheet = nil
+      showDetails = false
+    }
+    .onChange(of: resetController.shouldShowBioAgeDetails) {
+      if resetController.shouldShowBioAgeDetails && provider.biologicalAge != nil {
+        showDetails = true
+        resetController.shouldShowBioAgeDetails = false
+      }
     }
   }
 }

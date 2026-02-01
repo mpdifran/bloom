@@ -17,6 +17,7 @@ struct WorkoutsTabView: View {
   @State private var recentVariants: [WorkoutVariant] = []
   @State private var presentedSheet: AnyView?
   @State private var error: Error?
+  @State private var resetController = NavigationResetController.shared
 
   private let healthStoreFetcher = HealthStoreFetcher.shared
 
@@ -77,6 +78,9 @@ struct WorkoutsTabView: View {
     }
     .sheet($presentedSheet)
     .alert(error: $error)
+    .onChange(of: resetController.resetTrigger) {
+      presentedSheet = nil
+    }
   }
 }
 
