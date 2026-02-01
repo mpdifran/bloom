@@ -49,4 +49,11 @@ public final class WidgetRefreshManager {
   public func reloadActionControlWidgets() {
     WidgetCenter.shared.reloadTimelines(ofKind: .WidgetKind.actionControl)
   }
+
+  #if os(watchOS)
+  /// Reload Biological Age widget on watchOS
+  public func reloadBiologicalAgeWidget() {
+    WidgetCenter.shared.reloadTimelines(ofKind: "BiologicalAgeWidget")
+  }
+  #endif
 }

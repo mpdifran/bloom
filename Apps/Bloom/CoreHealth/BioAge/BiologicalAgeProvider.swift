@@ -76,9 +76,16 @@ public final class BiologicalAgeProvider {
       return
     }
 
+    let hasNewData = biologicalAge != watchData.biologicalAge || actualAge != watchData.actualAge
+
     biologicalAge = watchData.biologicalAge
     actualAge = watchData.actualAge
     lastCalculated = watchData.lastCalculated
+
+    // Refresh the widget timeline if data changed
+    if hasNewData {
+      WidgetRefreshManager.shared.reloadBiologicalAgeWidget()
+    }
   }
 }
 #endif

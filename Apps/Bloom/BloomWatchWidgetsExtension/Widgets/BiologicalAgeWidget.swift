@@ -33,8 +33,8 @@ struct BiologicalAgeTimelineProvider: TimelineProvider {
   }
 
   private func loadEntry() -> BiologicalAgeEntry {
-    let bioAge = WidgetUserDefaults.shared.object(forKey: Self.biologicalAgeKey) as? Double
-    let actualAge = WidgetUserDefaults.shared.object(forKey: Self.actualAgeKey) as? Double
+    let bioAge = UserDefaults.group.object(forKey: Self.biologicalAgeKey) as? Double
+    let actualAge = UserDefaults.group.object(forKey: Self.actualAgeKey) as? Double
     return BiologicalAgeEntry(date: .now, biologicalAge: bioAge, actualAge: actualAge)
   }
 }
