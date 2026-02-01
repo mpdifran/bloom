@@ -7,6 +7,9 @@
 
 import WatchConnectivity
 import HealthKit
+#if os(watchOS)
+import WidgetKit
+#endif
 
 public final actor WatchChannel: NSObject {
   public static let heartRateZonesKey = "heartRateZones"
@@ -15,7 +18,11 @@ public final actor WatchChannel: NSObject {
   public static let todayDataKey = "todayData"
   public static let foodDataKey = "foodData"
   public static let subscriptionDataKey = "subscriptionData"
+  public static let goalsDataKey = "goalsData"
   public static let shared = WatchChannel()
+
+  /// Notification posted when complication user info is received (watchOS only)
+  public static let complicationUserInfoDidReceive = Notification.Name("WatchChannel.complicationUserInfoDidReceive")
 
   public static let applicationContextDidUpdate = Notification.Name("WatchChannel.applicationContextDidUpdate")
 
@@ -87,6 +94,47 @@ public extension WatchChannel {
     WCSession.default.receivedApplicationContext[key] as? Data
   }
 
+  #if os(iOS)
+  /// Transfers data to the watch using the priority complication channel.
+  /// This API is specifically designed for keeping complications/widgets up to date.
+  /// - Important: This has a daily budget (~50 transfers). Use for widget-critical data only.
+  /// - Parameters:
+  ///   - key: The key identifying the data type
+  ///   - data: The encoded data to transfer
+  /// - Returns: The number of remaining complication transfers for today
+  @discardableResult
+  func transferComplicationUserInfo(key: String, data: Data) -> Int {
+    guard WCSession.default.activationState == .activated else {
+      print("WCSession not activated, cannot transfer complication user info")
+      return 0
+    }
+
+    #if targetEnvironment(simulator)
+    // Simulator doesn't support complication transfers, fall back to application context
+    try? WCSession.default.updateApplicationContext([key: data])
+    return 50
+    #else
+    guard WCSession.default.isComplicationEnabled else {
+      // Fall back to application context if complications aren't enabled
+      try? WCSession.default.updateApplicationContext([key: data])
+      return 0
+    }
+
+    WCSession.default.transferCurrentComplicationUserInfo([key: data])
+    return WCSession.default.remainingComplicationUserInfoTransfers
+    #endif
+  }
+
+  /// Returns the number of remaining complication user info transfers available today
+  nonisolated var remainingComplicationTransfers: Int {
+    #if targetEnvironment(simulator)
+    return 50
+    #else
+    return WCSession.default.remainingComplicationUserInfoTransfers
+    #endif
+  }
+  #endif
+
   /// Sets the handler for processing incoming messages that require a reply
   func setMessageHandler(_ handler: @escaping @Sendable (Data) async -> Data) {
     self.messageHandler = handler
@@ -109,6 +157,53 @@ private extension WatchChannel {
 
   nonisolated func didReceiveApplicationContext() {
     NotificationCenter.default.post(name: Self.applicationContextDidUpdate, object: nil)
+  }
+
+  func didReceiveUserInfo(_ userInfo: [String: Any]) {
+    // Store received data in UserDefaults.group for widget access
+    for (key, value) in userInfo {
+      if let data = value as? Data {
+        // Store with the same key the widgets expect
+        switch key {
+        case Self.goalsDataKey:
+          // Decode and re-store for widget access
+          if let goalData = try? JSONDecoder().decode(WatchGoalData.self, from: data) {
+            if let goalsData = try? JSONEncoder().encode(goalData.goals) {
+              UserDefaults.group.set(goalsData, forKey: "WatchGoalProvider.goals")
+            }
+          }
+        case Self.biologicalAgeKey:
+          // Decode and store individual values for widget access
+          if let bioAgeData = try? JSONDecoder().decode(WatchBiologicalAgeData.self, from: data) {
+            UserDefaults.group.set(bioAgeData.biologicalAge, forKey: "BiologicalAgeProvider.biologicalAge")
+            UserDefaults.group.set(bioAgeData.actualAge, forKey: "BiologicalAgeProvider.actualAge")
+          }
+        default:
+          break
+        }
+      }
+    }
+
+    // Post notification for any observers
+    NotificationCenter.default.post(
+      name: Self.complicationUserInfoDidReceive,
+      object: nil,
+      userInfo: userInfo
+    )
+
+    #if os(watchOS)
+    // Immediately refresh widget timelines when complication data arrives
+    for key in userInfo.keys {
+      switch key {
+      case Self.goalsDataKey:
+        WidgetCenter.shared.reloadTimelines(ofKind: "WatchGoalWidget")
+      case Self.biologicalAgeKey:
+        WidgetCenter.shared.reloadTimelines(ofKind: "BiologicalAgeWidget")
+      default:
+        break
+      }
+    }
+    #endif
   }
 }
 
@@ -169,5 +264,11 @@ private final class WatchSessionDelegate: NSObject, WCSessionDelegate {
 
   func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String: Any]) {
     channel.didReceiveApplicationContext()
+  }
+
+  func session(_ session: WCSession, didReceiveUserInfo userInfo: [String: Any] = [:]) {
+    Task { [channel] in
+      await channel.didReceiveUserInfo(userInfo)
+    }
   }
 }

@@ -55,5 +55,10 @@ public final class WidgetRefreshManager {
   public func reloadBiologicalAgeWidget() {
     WidgetCenter.shared.reloadTimelines(ofKind: "BiologicalAgeWidget")
   }
+
+  /// Reload Watch Goal widget on watchOS
+  public func reloadWatchGoalWidget() {
+    WidgetCenter.shared.reloadTimelines(ofKind: "WatchGoalWidget")
+  }
   #endif
 }

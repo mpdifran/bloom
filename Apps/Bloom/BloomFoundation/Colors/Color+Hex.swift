@@ -39,4 +39,23 @@ public extension Color {
     }
     self = Color(.displayP3, red: rgba[0], green: rgba[1], blue: rgba[2], opacity: alpha ?? rgba[3])
   }
+
+  #if canImport(UIKit)
+  /// Convert Color to hex string (e.g., "#4CAF50")
+  var hexString: String? {
+    guard let cgColor = UIColor(self).cgColor.converted(
+      to: CGColorSpace(name: CGColorSpace.sRGB)!,
+      intent: .defaultIntent,
+      options: nil
+    ) else { return nil }
+
+    guard let components = cgColor.components, components.count >= 3 else { return nil }
+
+    let r = Int(components[0] * 255)
+    let g = Int(components[1] * 255)
+    let b = Int(components[2] * 255)
+
+    return String(format: "#%02X%02X%02X", r, g, b)
+  }
+  #endif
 }

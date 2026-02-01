@@ -86,6 +86,80 @@ public final class MyDataProvider {
 - Load from application context on init AND when notification fires
 - Cache in UserDefaults.group for offline access
 
+### Complication/Widget Priority Sync (iOS → watchOS)
+
+For data that powers watchOS widgets/complications, use the dedicated complication transfer API for immediate updates.
+
+#### Why Use Complication Transfers?
+
+- **Priority delivery**: Gets through even when watch is in low-power state
+- **Can wake the watch**: Doesn't wait for next sync opportunity
+- **Guaranteed delivery**: Queued until delivered (unlike application context which is last-write-wins)
+- **Daily budget**: ~50 transfers/day (check via `remainingComplicationTransfers`)
+
+#### iOS Side (Sender)
+
+```swift
+func syncToWatch() async {
+  let watchData = WatchMyData(...)
+  guard let data = try? JSONEncoder().encode(watchData) else { return }
+
+  // Use complication transfer for immediate widget update
+  let remainingTransfers = await WatchChannel.shared.transferComplicationUserInfo(
+    key: WatchChannel.myDataKey,
+    data: data
+  )
+
+  if remainingTransfers < 10 {
+    print("Warning: Only \(remainingTransfers) complication transfers remaining today")
+  }
+
+  // Also update application context as a fallback for watch app
+  try? await WatchChannel.shared.updateApplicationContext(
+    key: WatchChannel.myDataKey,
+    data: data
+  )
+}
+```
+
+#### Watch Side (Receiver)
+
+The `WatchChannel` automatically:
+1. Receives data via `session(_:didReceiveUserInfo:)`
+2. Stores in `UserDefaults.group` for widget access
+3. Posts `WatchChannel.complicationUserInfoDidReceive` notification
+4. Calls `WidgetCenter.shared.reloadTimelines(ofKind:)` to refresh widgets
+
+For watch app providers, also listen to the complication notification:
+
+```swift
+private init() {
+  // ... existing setup ...
+
+  // Listen for priority complication updates
+  NotificationCenter.default.addObserver(
+    self,
+    selector: #selector(handleComplicationUserInfo(_:)),
+    name: WatchChannel.complicationUserInfoDidReceive,
+    object: nil
+  )
+}
+
+@objc private func handleComplicationUserInfo(_ notification: Notification) {
+  guard let userInfo = notification.userInfo,
+        userInfo[WatchChannel.myDataKey] != nil else {
+    return
+  }
+  loadFromUserDefaults()
+}
+```
+
+**Key points:**
+- Use for widget-critical data only (limited daily budget)
+- Always also update application context as fallback
+- Watch providers should listen to both notifications
+- Widget timelines are automatically reloaded by WatchChannel
+
 ### Direct Messaging (Watch → iOS)
 
 For sending data from watch to iOS with immediate response:
@@ -183,5 +257,6 @@ WKInterfaceDevice.current().play(.failure)  // Failure haptic + sound
 ## Examples in Codebase
 
 - **Application Context Sync**: `BiologicalAgeProvider`, `WatchUnitPreferencesProvider`
+- **Complication Priority Sync**: `WatchGoalSyncer`, `BiologicalAgeCalculator.syncToWatch()`
 - **Direct Messaging**: `PendingBowelMovementManager`, `WatchBowelMovementHandler`
 - **Offline Queue**: `PendingBowelMovementManager`

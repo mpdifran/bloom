@@ -45,6 +45,9 @@ public final class GoalWidgetCacheManager {
       // Cache all goals
       GoalWidgetCache.cacheGoals(goalWidgetData)
 
+      // Sync goals to watch
+      await WatchGoalSyncer.shared.syncToWatch()
+
     } catch {
       print("Failed to update goal widget cache: \(error)")
     }
@@ -80,7 +83,10 @@ public final class GoalWidgetCacheManager {
       targetValue: goal.value,
       targetUnit: goal.unit.sensibleUnitString,
       timePeriod: goal.timePeriod.rawValue,
-      gridData: gridData
+      gridData: gridData,
+      metricName: goal.targetMetric.name,
+      metricSystemImage: goal.targetMetric.systemImage,
+      metricColorHex: goal.targetMetric.color.hexString
     )
   }
 

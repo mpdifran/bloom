@@ -43,7 +43,7 @@ struct WorkoutWidget: Widget {
         .containerBackground(.background.secondary, for: .widget)
         .widgetURL(URL(string: "bloom://watch/workouts"))
     }
-    .configurationDisplayName("Start Workout")
+    .configurationDisplayName("Workouts")
     .description("Quickly open your workouts.")
     .supportedFamilies([.accessoryCircular])
   }

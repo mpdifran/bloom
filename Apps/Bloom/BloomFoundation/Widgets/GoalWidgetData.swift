@@ -30,6 +30,15 @@ public struct GoalWidgetData: Codable, Sendable {
   /// Grid completion data structure
   public let gridData: GridData
 
+  /// Display name for the metric (e.g., "Steps", "Water Intake")
+  public let metricName: String?
+
+  /// SF Symbol name for the metric icon
+  public let metricSystemImage: String?
+
+  /// Hex color string for the metric (e.g., "#4CAF50")
+  public let metricColorHex: String?
+
   public init(
     id: String,
     targetMetricRawValue: String,
@@ -37,7 +46,10 @@ public struct GoalWidgetData: Codable, Sendable {
     targetValue: Double,
     targetUnit: String,
     timePeriod: String,
-    gridData: GridData
+    gridData: GridData,
+    metricName: String? = nil,
+    metricSystemImage: String? = nil,
+    metricColorHex: String? = nil
   ) {
     self.id = id
     self.targetMetricRawValue = targetMetricRawValue
@@ -46,6 +58,9 @@ public struct GoalWidgetData: Codable, Sendable {
     self.targetUnit = targetUnit
     self.timePeriod = timePeriod
     self.gridData = gridData
+    self.metricName = metricName
+    self.metricSystemImage = metricSystemImage
+    self.metricColorHex = metricColorHex
   }
 }
 

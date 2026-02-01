@@ -32,8 +32,8 @@ public enum GoalWidgetCache {
       UserDefaults.group.set(encoded, forKey: "GoalWidgetCache.AllGoals")
     }
 
-    // Refresh all goal widgets
-    refreshWidgets()
+    // Refresh all goal widgets (iOS and watch)
+    refreshAllWidgets()
   }
 
   /// Remove a cached goal
@@ -51,7 +51,7 @@ public enum GoalWidgetCache {
     }
 
     // Refresh widgets
-    refreshWidgets()
+    refreshAllWidgets()
   }
 
   /// Clear all cached goal data
@@ -69,7 +69,7 @@ public enum GoalWidgetCache {
     UserDefaults.group.removeObject(forKey: "GoalWidgetCache.AllGoals")
 
     // Refresh widgets
-    refreshWidgets()
+    refreshAllWidgets()
   }
 
   /// Load a cached goal by ID
@@ -93,8 +93,35 @@ public enum GoalWidgetCache {
     return goalIds
   }
 
-  /// Request a reload of all goal widgets
+  /// Load all cached goals
+  /// - Returns: Array of all cached goal data
+  public static func loadAllCachedGoals() -> [GoalWidgetData] {
+    loadAllCachedGoalIds().compactMap { loadCachedGoal($0) }
+  }
+
+  /// Load the first available cached goal (useful for placeholders/snapshots)
+  /// - Returns: The first cached goal, or nil if none exist
+  public static func loadFirstCachedGoal() -> GoalWidgetData? {
+    guard let firstId = loadAllCachedGoalIds().first else { return nil }
+    return loadCachedGoal(firstId)
+  }
+
+  /// Request a reload of all goal widgets (iOS)
   public static func refreshWidgets() {
     WidgetCenter.shared.reloadTimelines(ofKind: "GoalWidget")
+  }
+
+  /// Request a reload of watch goal widgets
+  /// Note: This only works when called from watchOS - WidgetCenter can't reload watch widgets from iOS
+  public static func refreshWatchWidgets() {
+    #if os(watchOS)
+    WidgetCenter.shared.reloadTimelines(ofKind: "WatchGoalWidget")
+    #endif
+  }
+
+  /// Request a reload of all goal widgets (both iOS and watch)
+  public static func refreshAllWidgets() {
+    refreshWidgets()
+    refreshWatchWidgets()
   }
 }

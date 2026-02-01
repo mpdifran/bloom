@@ -75,9 +75,9 @@ private extension SleepBedtimeStatCard {
                 .font(.subheadline)
                 .bold()
                 .fontDesign(.rounded)
-                .foregroundStyle(.white)
+                .foregroundStyle(.text)
               Capsule()
-                .fill(.white)
+                .fill(.text)
                 .frame(width: 8, height: 2)
             }
           }

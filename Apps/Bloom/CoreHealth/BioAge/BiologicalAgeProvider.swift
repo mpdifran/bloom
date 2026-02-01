@@ -75,6 +75,24 @@ public final class BiologicalAgeProvider {
       name: WatchChannel.applicationContextDidUpdate,
       object: nil
     )
+
+    // Listen for priority complication updates
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(handleComplicationUserInfo(_:)),
+      name: WatchChannel.complicationUserInfoDidReceive,
+      object: nil
+    )
+  }
+
+  @objc private func handleComplicationUserInfo(_ notification: Notification) {
+    // The WatchChannel already stored the data in UserDefaults and triggered widget refresh,
+    // but we also want to update our in-memory state for the watch app UI
+    guard let userInfo = notification.userInfo,
+          userInfo[WatchChannel.biologicalAgeKey] != nil else {
+      return
+    }
+    loadFromUserDefaults()
   }
 
   private func loadFromUserDefaults() {

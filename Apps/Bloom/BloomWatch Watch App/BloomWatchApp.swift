@@ -10,6 +10,7 @@ import CoreHealth
 import AppUI
 import BloomUI
 import TelemetryDeck
+import BloomFoundation
 
 @main
 struct BloomWatch_Watch_AppApp: App {
@@ -33,6 +34,10 @@ struct BloomWatch_Watch_AppApp: App {
   var body: some Scene {
     WindowGroup {
       RootView()
+        .task {
+          // Initialize WatchChannel to set up WCSession delegate for receiving data from iOS
+          _ = WatchChannel.shared
+        }
         .task {
           await HealthPermissionChecker.shared.requestAccessIfNeeded()
         }

@@ -123,6 +123,17 @@ final actor BiologicalAgeCalculator {
 
       guard let data = try? JSONEncoder().encode(watchData) else { return }
 
+      // Use complication transfer for immediate widget update
+      let remainingTransfers = await WatchChannel.shared.transferComplicationUserInfo(
+        key: WatchChannel.biologicalAgeKey,
+        data: data
+      )
+
+      if remainingTransfers < 10 {
+        print("Warning: Only \(remainingTransfers) complication transfers remaining today")
+      }
+
+      // Also update application context as a fallback for watch app
       try? await WatchChannel.shared.updateApplicationContext(
         key: WatchChannel.biologicalAgeKey,
         data: data
