@@ -122,7 +122,8 @@ private extension MonitorCard {
 
     // Convert training load to z-score (10% = 1 z-score)
     let trainingLoadZScore = summary.percentageDifference / 10.0
-    let (minZScore, maxZScore) = calculateTrainingLoadZScoreRange(summary: summary)
+    let minZScore = trainingLoadZScore
+    let maxZScore = trainingLoadZScore
 
     // Combine with other metrics data if available
     var metricZScores = [MetricZScorePoint(metricType: "trainingLoad", zScore: trainingLoadZScore)]
@@ -142,31 +143,6 @@ private extension MonitorCard {
       minZScore: minZScore,
       maxZScore: maxZScore
     )
-  }
-
-  /// Calculates the min/max z-scores from training load trend data for the past 7 days.
-  func calculateTrainingLoadZScoreRange(summary: TrainingLoadSummary) -> (min: Double, max: Double) {
-    var zScores: [Double] = []
-    let trendCount = summary.sevenDayTrend.count
-    let startIndex = max(0, trendCount - 7)
-
-    for index in startIndex..<trendCount {
-      guard index < summary.twentyEightDayTrend.count else { continue }
-      let sevenDayPoint = summary.sevenDayTrend[index]
-      let twentyEightDayValue = summary.twentyEightDayTrend[index].value
-
-      guard twentyEightDayValue > 0 else { continue }
-
-      let percentDiff = ((sevenDayPoint.value - twentyEightDayValue) / twentyEightDayValue) * 100
-      zScores.append(percentDiff / 10.0)
-    }
-
-    guard !zScores.isEmpty else {
-      let currentZScore = summary.percentageDifference / 10.0
-      return (currentZScore, currentZScore)
-    }
-
-    return (zScores.min() ?? 0, zScores.max() ?? 0)
   }
 
   // MARK: - Header
