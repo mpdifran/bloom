@@ -46,6 +46,7 @@ struct WatchGoalEntry: TimelineEntry {
   let currentValue: Double
   let targetValue: Double
   let unitString: String
+  let timePeriod: String
   let isEmpty: Bool
 
   var progress: Double {
@@ -74,6 +75,7 @@ struct WatchGoalEntry: TimelineEntry {
       currentValue: 7500,
       targetValue: 10000,
       unitString: "steps",
+      timePeriod: "daily",
       isEmpty: false
     )
   }
@@ -88,6 +90,7 @@ struct WatchGoalEntry: TimelineEntry {
       currentValue: 0,
       targetValue: 0,
       unitString: "",
+      timePeriod: "daily",
       isEmpty: true
     )
   }
@@ -115,9 +118,52 @@ struct WatchGoalTimelineProvider: AppIntentTimelineProvider {
   func timeline(for configuration: WatchGoalWidgetIntent, in context: Context) async -> Timeline<WatchGoalEntry> {
     let entry = makeEntry(for: configuration)
 
-    // Refresh every 15 minutes to pick up progress changes
-    let nextUpdate = Calendar.current.date(byAdding: .minute, value: 15, to: .now) ?? .now
-    return Timeline(entries: [entry], policy: .after(nextUpdate))
+    // If empty, just refresh every 15 minutes
+    guard !entry.isEmpty else {
+      let nextUpdate = Calendar.current.date(byAdding: .minute, value: 15, to: .now) ?? .now
+      return Timeline(entries: [entry], policy: .after(nextUpdate))
+    }
+
+    // Calculate next reset time based on time period
+    let calendar = Calendar.current
+    let now = Date.now
+    var entries: [WatchGoalEntry] = [entry]
+
+    if let resetDate = nextResetDate(for: entry.timePeriod, from: now, using: calendar) {
+      // Add a reset entry at the deadline with currentValue = 0
+      let resetEntry = WatchGoalEntry(
+        date: resetDate,
+        goalId: entry.goalId,
+        metricName: entry.metricName,
+        metricSystemImage: entry.metricSystemImage,
+        metricColorHex: entry.metricColorHex,
+        currentValue: 0,
+        targetValue: entry.targetValue,
+        unitString: entry.unitString,
+        timePeriod: entry.timePeriod,
+        isEmpty: false
+      )
+      entries.append(resetEntry)
+    }
+
+    // Refresh at the end of the timeline to get updated data
+    return Timeline(entries: entries, policy: .atEnd)
+  }
+
+  /// Calculates the next reset date for a goal based on its time period
+  private func nextResetDate(for timePeriod: String, from date: Date, using calendar: Calendar) -> Date? {
+    switch timePeriod {
+    case "daily":
+      return calendar.startOfTomorrow(for: date)
+    case "weekly":
+      return calendar.dateInterval(of: .weekOfYear, for: date)?.end
+    case "monthly":
+      return calendar.dateInterval(of: .month, for: date)?.end
+    case "yearly":
+      return calendar.dateInterval(of: .year, for: date)?.end
+    default:
+      return calendar.startOfTomorrow(for: date)
+    }
   }
 
   /// Required for watchOS - provides pre-configured widget options since
@@ -164,6 +210,7 @@ struct WatchGoalTimelineProvider: AppIntentTimelineProvider {
       currentValue: goal.currentValue,
       targetValue: goal.targetValue,
       unitString: goal.targetUnit,
+      timePeriod: goal.timePeriod,
       isEmpty: false
     )
   }
@@ -335,6 +382,7 @@ private struct InlineGoalView: View {
     currentValue: 7500,
     targetValue: 10000,
     unitString: "steps",
+    timePeriod: "daily",
     isEmpty: false
   )
 }
@@ -351,6 +399,7 @@ private struct InlineGoalView: View {
     currentValue: 6,
     targetValue: 8,
     unitString: "cups",
+    timePeriod: "daily",
     isEmpty: false
   )
 }
@@ -373,6 +422,7 @@ private struct InlineGoalView: View {
     currentValue: 7543,
     targetValue: 10000,
     unitString: "steps",
+    timePeriod: "daily",
     isEmpty: false
   )
 }
@@ -389,6 +439,7 @@ private struct InlineGoalView: View {
     currentValue: 1850,
     targetValue: 2200,
     unitString: "kcal",
+    timePeriod: "daily",
     isEmpty: false
   )
 }
@@ -411,6 +462,7 @@ private struct InlineGoalView: View {
     currentValue: 7500,
     targetValue: 10000,
     unitString: "steps",
+    timePeriod: "daily",
     isEmpty: false
   )
 }
@@ -427,6 +479,7 @@ private struct InlineGoalView: View {
     currentValue: 7500,
     targetValue: 10000,
     unitString: "steps",
+    timePeriod: "daily",
     isEmpty: false
   )
 }

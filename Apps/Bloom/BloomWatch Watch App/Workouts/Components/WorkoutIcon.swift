@@ -39,7 +39,7 @@ struct WorkoutIcon: View {
 
   var body: some View {
     Circle()
-      .fill(.green)
+      .fill(.blue.gradient)
       .overlay {
         Image(systemSymbol: symbol)
           .font(.system(size: iconFontSize))
@@ -54,7 +54,7 @@ private extension WorkoutIcon {
   var iconFontSize: CGFloat {
     switch scale {
     case .regular:
-      return 32
+      return 35
     case .small:
       return 20
     }
@@ -63,9 +63,9 @@ private extension WorkoutIcon {
   var circleDimension: CGFloat {
     switch scale {
     case .regular:
-      return 50
+      return 60
     case .small:
-      return 30
+      return 35
     }
   }
 }

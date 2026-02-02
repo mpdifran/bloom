@@ -16,30 +16,32 @@ struct WorkoutVariantCell: View {
   var isPinned: Bool = false
 
   var body: some View {
-    HStack(spacing: 10) {
-      WorkoutIcon(
-        symbol: variant.symbol,
-        scale: .small
-      )
+    VStack(alignment: .leading, spacing: 10) {
+      HStack(alignment: .top) {
+        WorkoutIcon(
+          symbol: variant.symbol,
+          scale: .small
+        )
+
+        Spacer()
+
+        if isPinned {
+          Image(systemSymbol: .starFill)
+            .font(.system(size: 10))
+            .foregroundStyle(.mutedOrange)
+        }
+      }
 
       Text(variant.name)
-        .font(.caption)
+        .font(.title3)
         .bold()
         .fontDesign(.rounded)
         .foregroundStyle(.white)
         .multilineTextAlignment(.leading)
         .lineLimit(4)
-
-      Spacer(minLength: 0)
-
-      if isPinned {
-        Image(systemSymbol: .starFill)
-          .font(.system(size: 10))
-          .foregroundStyle(.mutedOrange)
-      }
     }
-    .padding(.vertical, 10)
-    .foregroundStyle(.mutedGreen)
+    .padding(.vertical, 16)
+    .foregroundStyle(.mutedBlue)
     .selectable()
   }
 }

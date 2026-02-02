@@ -33,7 +33,8 @@ final class WatchGoalSyncer {
         metricColorHex: goalData.metricColorHex,
         currentValue: goalData.currentValue,
         targetValue: goalData.targetValue,
-        targetUnit: goalData.targetUnit
+        targetUnit: goalData.targetUnit,
+        timePeriod: goalData.timePeriod
       )
     }
 

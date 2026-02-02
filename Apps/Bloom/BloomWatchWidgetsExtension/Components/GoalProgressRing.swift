@@ -21,19 +21,23 @@ struct GoalProgressRing: View {
   var body: some View {
     GeometryReader { geometry in
       let size = min(geometry.size.width, geometry.size.height)
-      let lineWidth = size * 0.14
+      let lineWidth = size * 0.1
+      // Inset circle so stroke draws inside the bounds (not centered on the edge)
+      let circleSize = size - lineWidth
       let iconSize = size * 0.4
 
       ZStack {
         // Background track
         Circle()
           .stroke(Color.gray.opacity(0.3), lineWidth: lineWidth)
+          .frame(width: circleSize, height: circleSize)
 
         // Progress arc
         Circle()
           .trim(from: 0, to: clampedProgress)
           .stroke(tintColor, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
           .rotationEffect(.degrees(-90))
+          .frame(width: circleSize, height: circleSize)
 
         // Center icon
         Image(systemName: systemImage)

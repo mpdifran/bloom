@@ -31,6 +31,7 @@ public struct WatchGoal: Codable, Sendable, Identifiable, Equatable {
   public let currentValue: Double
   public let targetValue: Double
   public let targetUnit: String
+  public let timePeriod: String
 
   public init(
     id: String,
@@ -39,7 +40,8 @@ public struct WatchGoal: Codable, Sendable, Identifiable, Equatable {
     metricColorHex: String?,
     currentValue: Double,
     targetValue: Double,
-    targetUnit: String
+    targetUnit: String,
+    timePeriod: String
   ) {
     self.id = id
     self.metricName = metricName
@@ -48,6 +50,7 @@ public struct WatchGoal: Codable, Sendable, Identifiable, Equatable {
     self.currentValue = currentValue
     self.targetValue = targetValue
     self.targetUnit = targetUnit
+    self.timePeriod = timePeriod
   }
 
   /// Progress toward the goal (0.0 to 1.0+)
