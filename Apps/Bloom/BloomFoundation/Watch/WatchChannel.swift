@@ -63,7 +63,10 @@ public extension WatchChannel {
 
   func updateApplicationContext(key: String, data: Data) throws {
     if WCSession.default.activationState == .activated {
-      try WCSession.default.updateApplicationContext([key: data])
+      // Merge with existing context instead of replacing
+      var context = WCSession.default.applicationContext
+      context[key] = data
+      try WCSession.default.updateApplicationContext(context)
     } else {
       // Queue for when session activates
       pendingContextUpdates[key] = data
