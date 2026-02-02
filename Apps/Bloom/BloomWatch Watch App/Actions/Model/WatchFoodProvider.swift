@@ -57,7 +57,7 @@ public final class WatchFoodProvider {
   /// Loads food data from WatchConnectivity application context
   public func loadFromApplicationContext() {
     guard let data = WatchChannel.shared.getApplicationContextData(for: WatchChannel.foodDataKey),
-          let decoded = try? JSONDecoder().decode(WatchFoodData.self, from: data) else {
+          let decoded = try? JSONDecoder.watch.decode(WatchFoodData.self, from: data) else {
       return
     }
 
@@ -67,7 +67,7 @@ public final class WatchFoodProvider {
   private func loadFromUserDefaults() {
     if let data = UserDefaults.group.data(forKey: Self.foodDataKey) {
       do {
-        foodData = try JSONDecoder().decode(WatchFoodData.self, from: data)
+        foodData = try JSONDecoder.watch.decode(WatchFoodData.self, from: data)
       } catch {
         print("Failed to decode food data, clearing cache: \(error)")
         UserDefaults.group.removeObject(forKey: Self.foodDataKey)
@@ -77,7 +77,7 @@ public final class WatchFoodProvider {
   }
 
   private func saveToUserDefaults() {
-    if let foodData, let data = try? JSONEncoder().encode(foodData) {
+    if let foodData, let data = try? JSONEncoder.watch.encode(foodData) {
       UserDefaults.group.set(data, forKey: Self.foodDataKey)
     }
   }

@@ -38,7 +38,7 @@ public final class WatchSubscriptionProvider {
   /// Loads subscription data from WatchConnectivity application context
   public func loadFromApplicationContext() {
     guard let data = WatchChannel.shared.getApplicationContextData(for: WatchChannel.subscriptionDataKey),
-          let subscriptionData = try? JSONDecoder().decode(WatchSubscriptionData.self, from: data) else {
+          let subscriptionData = try? JSONDecoder.watch.decode(WatchSubscriptionData.self, from: data) else {
       return
     }
 

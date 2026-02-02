@@ -65,7 +65,7 @@ public final class WatchGoalProvider {
   /// Loads goal data from WatchConnectivity application context
   public func loadFromApplicationContext() {
     guard let data = WatchChannel.shared.getApplicationContextData(for: WatchChannel.goalsDataKey),
-          let watchData = try? JSONDecoder().decode(WatchGoalData.self, from: data) else {
+          let watchData = try? JSONDecoder.watch.decode(WatchGoalData.self, from: data) else {
       return
     }
 
@@ -84,7 +84,7 @@ public final class WatchGoalProvider {
   private func loadFromUserDefaults() {
     if let goalsData = UserDefaults.group.data(forKey: Self.goalsKey) {
       do {
-        goals = try JSONDecoder().decode([WatchGoal].self, from: goalsData)
+        goals = try JSONDecoder.watch.decode([WatchGoal].self, from: goalsData)
       } catch {
         print("Failed to decode goals, clearing cache: \(error)")
         UserDefaults.group.removeObject(forKey: Self.goalsKey)
@@ -98,7 +98,7 @@ public final class WatchGoalProvider {
   }
 
   private func saveToUserDefaults() {
-    if let data = try? JSONEncoder().encode(goals) {
+    if let data = try? JSONEncoder.watch.encode(goals) {
       UserDefaults.group.set(data, forKey: Self.goalsKey)
     }
 

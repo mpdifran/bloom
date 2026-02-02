@@ -62,7 +62,7 @@ struct WatchGoalEntry: TimelineEntry {
     if let hex = metricColorHex, let color = Color(hex: hex) {
       return color
     }
-    return .accentColor
+    return .secondary
   }
 
   static var placeholder: WatchGoalEntry {
@@ -217,7 +217,7 @@ struct WatchGoalTimelineProvider: AppIntentTimelineProvider {
 
   private func loadCachedGoals() -> [WatchGoal] {
     guard let data = UserDefaults.group.data(forKey: Self.goalsKey),
-          let goals = try? JSONDecoder().decode([WatchGoal].self, from: data) else {
+          let goals = try? JSONDecoder.watch.decode([WatchGoal].self, from: data) else {
       return []
     }
     return goals
@@ -275,47 +275,38 @@ private struct RectangularGoalView: View {
   let entry: WatchGoalEntry
 
   var body: some View {
-    if entry.isEmpty {
+    VStack(alignment: .leading, spacing: 2) {
       HStack {
-        Image(systemName: "target")
-          .font(.title2)
-          .foregroundStyle(.secondary)
-        Text("Set a goal in Bloom")
-          .font(.caption)
-          .foregroundStyle(.secondary)
-      }
-    } else {
-      GeometryReader { proxy in
-        HStack(spacing: 6) {
-          GoalProgressRing(
-            progress: entry.progress,
-            systemImage: entry.metricSystemImage,
-            tintColor: entry.metricColor
-          )
-          .frame(height: proxy.size.height)
-
-          VStack(alignment: .leading, spacing: 2) {
-            Text(entry.metricName)
-              .font(.caption2)
-              .fontWeight(.semibold)
-              .lineLimit(1)
-
-            HStack(spacing: 2) {
-              Text(entry.currentValue.format(using: .noDecimalPlaces))
-                .font(.system(.body, design: .rounded, weight: .bold))
-                .foregroundStyle(entry.metricColor)
-              Text("/")
-                .font(.caption2)
-                .foregroundStyle(.secondary)
-              Text("\(entry.targetValue.format(using: .noDecimalPlaces)) \(entry.unitString)")
-                .font(.caption2)
-                .foregroundStyle(.secondary)
-            }
-            .lineLimit(1)
-          }
-
-          Spacer(minLength: 0)
+        VStack(alignment: .leading) {
+          Image(systemName: entry.metricSystemImage)
+            .foregroundStyle(entry.metricColor)
+          Text(entry.metricName)
         }
+        .font(.caption2)
+        .fontWeight(.semibold)
+        .lineLimit(1)
+        .minimumScaleFactor(0.7)
+        .fixedSize(horizontal: true, vertical: false)
+
+        Spacer()
+
+        Text(entry.currentValue.format(using: .noDecimalPlaces))
+          .font(.system(.title3, design: .rounded, weight: .bold))
+          .lineLimit(1)
+          .minimumScaleFactor(0.5)
+          .foregroundStyle(entry.metricColor)
+      }
+
+      Spacer(minLength: 0)
+
+      HStack(spacing: 4) {
+        Gauge(value: entry.progress) { }
+          .gaugeStyle(.linearCapacity)
+          .tint(entry.metricColor)
+
+        Text(entry.targetValue.format(using: .noDecimalPlaces))
+          .font(.caption2)
+          .foregroundStyle(.secondary)
       }
     }
   }
@@ -327,26 +318,15 @@ private struct CornerGoalView: View {
   let entry: WatchGoalEntry
 
   var body: some View {
-    if entry.isEmpty {
-      Text("--")
-        .font(.system(.title3, design: .rounded, weight: .bold))
-        .foregroundStyle(.secondary)
-        .widgetLabel {
-          Text("No Goal")
-        }
-    } else {
-      Gauge(value: entry.progress) {
-        Image(systemName: entry.metricSystemImage)
-      } currentValueLabel: {
-        Text(entry.currentValue.format(using: .noDecimalPlaces))
-          .font(.system(.title3, design: .rounded, weight: .bold))
-      }
-      .gaugeStyle(.accessoryCircularCapacity)
-      .tint(entry.metricColor)
+    Image(systemName: entry.metricSystemImage)
+      .font(.title)
+      .foregroundStyle(entry.metricColor)
       .widgetLabel {
-        Text(entry.metricName)
+        ProgressView(value: entry.progress) {
+          Text(entry.currentValue.format(using: .noDecimalPlaces))
+        }
+        .tint(entry.metricColor)
       }
-    }
   }
 }
 
@@ -465,6 +445,12 @@ private struct InlineGoalView: View {
     timePeriod: "daily",
     isEmpty: false
   )
+}
+
+#Preview("Corner - Empty", as: .accessoryCorner) {
+  WatchGoalWidget()
+} timeline: {
+  WatchGoalEntry.empty
 }
 
 #Preview("Inline - Steps", as: .accessoryInline) {

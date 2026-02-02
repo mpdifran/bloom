@@ -72,7 +72,7 @@ struct WatchGoalEntityQuery: EntityQuery {
 
   private func loadCachedGoals() -> [WatchGoalEntity] {
     guard let data = UserDefaults.group.data(forKey: Self.goalsKey),
-          let goals = try? JSONDecoder().decode([WatchGoal].self, from: data) else {
+          let goals = try? JSONDecoder.watch.decode([WatchGoal].self, from: data) else {
       return []
     }
 

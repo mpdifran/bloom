@@ -52,7 +52,7 @@ public final class TodayProvider {
   /// Loads today's data from WatchConnectivity application context
   public func loadFromApplicationContext() {
     guard let data = WatchChannel.shared.getApplicationContextData(for: WatchChannel.todayDataKey),
-          let watchData = try? JSONDecoder().decode(WatchTodayData.self, from: data) else {
+          let watchData = try? JSONDecoder.watch.decode(WatchTodayData.self, from: data) else {
       return
     }
 
@@ -66,7 +66,7 @@ public final class TodayProvider {
 
     if let remindersData = UserDefaults.group.data(forKey: Self.remindersKey) {
       do {
-        reminders = try JSONDecoder().decode([WatchReminderData].self, from: remindersData)
+        reminders = try JSONDecoder.watch.decode([WatchReminderData].self, from: remindersData)
       } catch {
         // Clear corrupted data so fresh sync can succeed
         print("Failed to decode reminders, clearing cache: \(error)")
@@ -87,7 +87,7 @@ public final class TodayProvider {
       UserDefaults.group.removeObject(forKey: Self.adviceKey)
     }
 
-    if let data = try? JSONEncoder().encode(reminders) {
+    if let data = try? JSONEncoder.watch.encode(reminders) {
       UserDefaults.group.set(data, forKey: Self.remindersKey)
     }
 

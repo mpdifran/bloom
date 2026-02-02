@@ -167,14 +167,14 @@ private extension WatchChannel {
         switch key {
         case Self.goalsDataKey:
           // Decode and re-store for widget access
-          if let goalData = try? JSONDecoder().decode(WatchGoalData.self, from: data) {
-            if let goalsData = try? JSONEncoder().encode(goalData.goals) {
+          if let goalData = try? JSONDecoder.watch.decode(WatchGoalData.self, from: data) {
+            if let goalsData = try? JSONEncoder.watch.encode(goalData.goals) {
               UserDefaults.group.set(goalsData, forKey: "WatchGoalProvider.goals")
             }
           }
         case Self.biologicalAgeKey:
           // Decode and store individual values for widget access
-          if let bioAgeData = try? JSONDecoder().decode(WatchBiologicalAgeData.self, from: data) {
+          if let bioAgeData = try? JSONDecoder.watch.decode(WatchBiologicalAgeData.self, from: data) {
             UserDefaults.group.set(bioAgeData.biologicalAge, forKey: "BiologicalAgeProvider.biologicalAge")
             UserDefaults.group.set(bioAgeData.actualAge, forKey: "BiologicalAgeProvider.actualAge")
           }

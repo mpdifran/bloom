@@ -88,7 +88,7 @@ public final class WatchUnitPreferencesProvider {
 
   public func loadFromApplicationContext() {
     guard let data = WatchChannel.shared.getApplicationContextData(for: WatchChannel.unitPreferencesKey),
-          let watchData = try? JSONDecoder().decode(WatchUnitPreferencesData.self, from: data) else {
+          let watchData = try? JSONDecoder.watch.decode(WatchUnitPreferencesData.self, from: data) else {
       return
     }
 
