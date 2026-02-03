@@ -63,6 +63,12 @@ struct FoodServingView: View {
         .lineLimit(2)
         .multilineTextAlignment(.center)
 
+      Text(food.servingName)
+        .font(.footnote)
+        .foregroundStyle(.secondary)
+        .lineLimit(1)
+        .minimumScaleFactor(0.8)
+
       Spacer()
 
       HStack {
@@ -100,9 +106,6 @@ struct FoodServingView: View {
             )
           Text("servings")
             .foregroundStyle(.secondary)
-          Text(food.servingName)
-            .font(.footnote)
-            .foregroundStyle(.tertiary)
         }
 
         Spacer()
