@@ -114,7 +114,7 @@ public extension HealthUnitPreferences {
       heightUnitString: heightUnit.unitString
     )
 
-    guard let data = try? JSONEncoder().encode(watchData) else { return }
+    guard let data = try? JSONEncoder.watch.encode(watchData) else { return }
 
     try? await WatchChannel.shared.updateApplicationContext(
       key: WatchChannel.unitPreferencesKey,

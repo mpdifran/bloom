@@ -100,6 +100,9 @@ struct FoodServingView: View {
             )
           Text("servings")
             .foregroundStyle(.secondary)
+          Text(food.servingName)
+            .font(.footnote)
+            .foregroundStyle(.tertiary)
         }
 
         Spacer()

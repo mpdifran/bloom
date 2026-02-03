@@ -121,7 +121,7 @@ final actor BiologicalAgeCalculator {
         chartData: chartData
       )
 
-      guard let data = try? JSONEncoder().encode(watchData) else { return }
+      guard let data = try? JSONEncoder.watch.encode(watchData) else { return }
 
       // Use complication transfer for immediate widget update
       let remainingTransfers = await WatchChannel.shared.transferComplicationUserInfo(

@@ -55,6 +55,12 @@ final class WatchMessageRouter {
       return await handleVoiceFoodLog(message)
     }
 
+    // Try meal log message
+    if let message = try? JSONDecoder.watch.decode(WatchMealLogMessage.self, from: data),
+       message.type == WatchMealLogMessage.messageType {
+      return await handleMealLog(message)
+    }
+
     // Try sync request message
     if let message = try? JSONDecoder.watch.decode(WatchSyncRequestMessage.self, from: data),
        message.type == WatchSyncRequestMessage.messageType {
@@ -258,6 +264,57 @@ final class WatchMessageRouter {
     )
 
     return processingIdentifier.value
+  }
+
+  // MARK: - Meal Log Handler
+
+  private func handleMealLog(_ message: WatchMealLogMessage) async -> Data {
+    do {
+      let meal = FoodItemLog.Meal(rawValue: message.meal) ?? .snack
+      let logID = try await logMealRecord(
+        mealRecordID: message.mealRecordID,
+        meal: meal,
+        date: message.date
+      )
+
+      // Sync updated foods back to watch
+      await WatchFoodSyncer.shared.syncToWatch()
+
+      let response = WatchFoodLogResponse(success: true, logID: logID)
+      return (try? JSONEncoder.watch.encode(response)) ?? Data()
+    } catch {
+      let response = WatchFoodLogResponse(success: false, errorMessage: error.localizedDescription)
+      return (try? JSONEncoder.watch.encode(response)) ?? Data()
+    }
+  }
+
+  private func logMealRecord(
+    mealRecordID: String,
+    meal: FoodItemLog.Meal,
+    date: Date
+  ) async throws -> String {
+    let context = ContainerHolder.shared.createContext()
+
+    // Find the meal record
+    let descriptor = FetchDescriptor<MealRecord>(
+      predicate: #Predicate { $0.id == mealRecordID }
+    )
+    guard let mealRecord = try context.fetch(descriptor).first else {
+      throw NSError(domain: "WatchMealLog", code: 404, userInfo: [
+        NSLocalizedDescriptionKey: "Meal record not found"
+      ])
+    }
+
+    // Use NutritionTrackingViewModel to log the meal
+    try await NutritionTrackingViewModel.shared.log(
+      modelContext: context,
+      mealRecord: mealRecord,
+      numberOfServings: 1,
+      date: date,
+      meal: meal
+    )
+
+    return mealRecord.id
   }
 
   // MARK: - Sync Request Handler

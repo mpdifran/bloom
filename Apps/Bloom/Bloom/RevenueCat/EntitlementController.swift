@@ -122,6 +122,11 @@ private extension EntitlementController {
       saveSubscriptionState(newState)
       previousSubscriptionState = newState
     }
+
+    // Sync updated subscription status to watch
+    Task {
+      await syncToWatch()
+    }
   }
   
   @MainActor
@@ -267,7 +272,7 @@ extension EntitlementController {
       lastUpdated: Date()
     )
 
-    guard let data = try? JSONEncoder().encode(watchData) else {
+    guard let data = try? JSONEncoder.watch.encode(watchData) else {
       return
     }
 

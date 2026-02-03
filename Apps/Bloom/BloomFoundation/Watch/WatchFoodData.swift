@@ -7,6 +7,19 @@
 
 import Foundation
 
+// MARK: - Filter
+
+/// Filter type for watch food list (matches iOS FoodItemHistoryTab)
+public enum WatchFoodFilter: String, Codable, Sendable, CaseIterable {
+  case frequent
+  case recent
+  case meals
+
+  public var displayName: String {
+    rawValue.capitalized
+  }
+}
+
 // MARK: - Meal
 
 /// Meal type for watch food logging (matches iOS FoodItemLog.Meal)
@@ -34,12 +47,23 @@ public enum WatchMeal: String, Codable, Sendable, CaseIterable {
 
 // MARK: - Food Data
 
-/// Data synced from iOS to watch containing frequent foods per meal for quick logging.
+/// Data synced from iOS to watch containing foods per meal for quick logging.
 public struct WatchFoodData: Codable, Sendable {
+  // Frequent foods per meal
   public let breakfastFoods: [WatchFoodItem]
   public let lunchFoods: [WatchFoodItem]
   public let dinnerFoods: [WatchFoodItem]
   public let snackFoods: [WatchFoodItem]
+
+  // Recent foods per meal
+  public var recentBreakfastFoods: [WatchFoodItem]
+  public var recentLunchFoods: [WatchFoodItem]
+  public var recentDinnerFoods: [WatchFoodItem]
+  public var recentSnackFoods: [WatchFoodItem]
+
+  // Saved meals
+  public var meals: [WatchMealItem]
+
   public let lastUpdated: Date
 
   public init(
@@ -47,12 +71,22 @@ public struct WatchFoodData: Codable, Sendable {
     lunchFoods: [WatchFoodItem],
     dinnerFoods: [WatchFoodItem],
     snackFoods: [WatchFoodItem],
+    recentBreakfastFoods: [WatchFoodItem] = [],
+    recentLunchFoods: [WatchFoodItem] = [],
+    recentDinnerFoods: [WatchFoodItem] = [],
+    recentSnackFoods: [WatchFoodItem] = [],
+    meals: [WatchMealItem] = [],
     lastUpdated: Date = Date()
   ) {
     self.breakfastFoods = breakfastFoods
     self.lunchFoods = lunchFoods
     self.dinnerFoods = dinnerFoods
     self.snackFoods = snackFoods
+    self.recentBreakfastFoods = recentBreakfastFoods
+    self.recentLunchFoods = recentLunchFoods
+    self.recentDinnerFoods = recentDinnerFoods
+    self.recentSnackFoods = recentSnackFoods
+    self.meals = meals
     self.lastUpdated = lastUpdated
   }
 
@@ -64,6 +98,44 @@ public struct WatchFoodData: Codable, Sendable {
     case .dinner: return dinnerFoods
     case .snack: return snackFoods
     }
+  }
+
+  /// Returns the recent foods for the specified meal
+  public func recentFoods(for meal: WatchMeal) -> [WatchFoodItem] {
+    switch meal {
+    case .breakfast: return recentBreakfastFoods
+    case .lunch: return recentLunchFoods
+    case .dinner: return recentDinnerFoods
+    case .snack: return recentSnackFoods
+    }
+  }
+}
+
+// MARK: - Meal Item
+
+/// Lightweight saved meal data for watch display
+public struct WatchMealItem: Codable, Sendable, Identifiable, Hashable {
+  public let id: String
+  public let name: String
+  public let calories: Double
+  public let protein: Double
+  public let carbs: Double
+  public let fat: Double
+
+  public init(
+    id: String,
+    name: String,
+    calories: Double,
+    protein: Double,
+    carbs: Double,
+    fat: Double
+  ) {
+    self.id = id
+    self.name = name
+    self.calories = calories
+    self.protein = protein
+    self.carbs = carbs
+    self.fat = fat
   }
 }
 

@@ -32,7 +32,7 @@ final class WatchTodaySyncer {
       lastUpdated: Date()
     )
 
-    guard let data = try? JSONEncoder().encode(watchData) else {
+    guard let data = try? JSONEncoder.watch.encode(watchData) else {
       print("Failed to encode watch data")
       return
     }

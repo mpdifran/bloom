@@ -144,7 +144,7 @@ public final class BiologicalAgeProvider {
   /// Loads biological age data from WatchConnectivity application context
   public func loadFromApplicationContext() {
     guard let data = WatchChannel.shared.getApplicationContextData(for: WatchChannel.biologicalAgeKey),
-          let watchData = try? JSONDecoder().decode(WatchBiologicalAgeData.self, from: data) else {
+          let watchData = try? JSONDecoder.watch.decode(WatchBiologicalAgeData.self, from: data) else {
       return
     }
 

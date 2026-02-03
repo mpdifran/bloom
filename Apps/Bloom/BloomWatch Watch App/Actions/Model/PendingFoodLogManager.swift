@@ -59,6 +59,33 @@ public final class PendingFoodLogManager {
     }
   }
 
+  /// Logs a saved meal (not queued for offline, requires connectivity)
+  @discardableResult
+  func logMeal(
+    mealRecordID: String,
+    meal: String,
+    date: Date = Date()
+  ) async -> Bool {
+    let message = WatchMealLogMessage(
+      mealRecordID: mealRecordID,
+      meal: meal,
+      date: date
+    )
+
+    guard let data = try? JSONEncoder.watch.encode(message) else {
+      return false
+    }
+
+    do {
+      let responseData = try await WatchChannel.shared.send(data: data)
+      let response = try JSONDecoder.watch.decode(WatchFoodLogResponse.self, from: responseData)
+      return response.success
+    } catch {
+      print("Failed to send meal log: \(error)")
+      return false
+    }
+  }
+
   // MARK: - Private Methods
 
   private func sendEntry(_ entry: WatchPendingFoodLogEntry) async -> Bool {

@@ -112,7 +112,7 @@ public extension HealthGoalProvider {
     )
 
     #if os(iOS)
-    if let data = try? JSONEncoder().encode(zones) {
+    if let data = try? JSONEncoder.watch.encode(zones) {
       try? await WatchChannel.shared.updateApplicationContext(
         key: WatchChannel.heartRateZonesKey,
         data: data

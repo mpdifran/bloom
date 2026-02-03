@@ -28,6 +28,18 @@ public final class WatchFoodProvider {
            foodData.snackFoods.isNotEmpty
   }
 
+  /// Returns whether the specified meal has content for the given filter
+  public func hasContent(for meal: WatchMeal, filter: WatchFoodFilter) -> Bool {
+    switch filter {
+    case .frequent:
+      return foods(for: meal).isNotEmpty
+    case .recent:
+      return recentFoods(for: meal).isNotEmpty
+    case .meals:
+      return meals.isNotEmpty
+    }
+  }
+
   /// Returns whether the specified meal has frequent foods
   public func hasContent(for meal: WatchMeal) -> Bool {
     foods(for: meal).isNotEmpty
@@ -36,6 +48,16 @@ public final class WatchFoodProvider {
   /// Returns the frequent foods for the specified meal
   public func foods(for meal: WatchMeal) -> [WatchFoodItem] {
     foodData?.foods(for: meal) ?? []
+  }
+
+  /// Returns the recent foods for the specified meal
+  public func recentFoods(for meal: WatchMeal) -> [WatchFoodItem] {
+    foodData?.recentFoods(for: meal) ?? []
+  }
+
+  /// Returns all saved meals
+  public var meals: [WatchMealItem] {
+    foodData?.meals ?? []
   }
 
   private init() {

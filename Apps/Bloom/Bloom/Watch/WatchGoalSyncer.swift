@@ -43,7 +43,7 @@ final class WatchGoalSyncer {
       lastUpdated: Date()
     )
 
-    guard let data = try? JSONEncoder().encode(watchData) else {
+    guard let data = try? JSONEncoder.watch.encode(watchData) else {
       print("Failed to encode watch goal data")
       return
     }

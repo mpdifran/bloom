@@ -82,6 +82,29 @@ public struct WatchVoiceFoodLogResponse: Codable, Sendable {
   }
 }
 
+// MARK: - Meal Log (Saved Meals)
+
+/// Message sent from watch to iOS to log a saved meal
+public struct WatchMealLogMessage: Codable, Sendable {
+  public static let messageType = "mealLog"
+
+  public let type: String
+  public let mealRecordID: String
+  public let meal: String
+  public let date: Date
+
+  public init(
+    mealRecordID: String,
+    meal: String,
+    date: Date = Date()
+  ) {
+    self.type = Self.messageType
+    self.mealRecordID = mealRecordID
+    self.meal = meal
+    self.date = date
+  }
+}
+
 // MARK: - Pending Food Log Entry (For Offline Queue)
 
 /// Entry stored locally on watch when iOS is unavailable
