@@ -7,6 +7,7 @@
 
 import BloomFoundation
 import SwiftUI
+import WidgetKit
 
 /// Widget version of BiologicalAgeMeter, matching the app's design.
 /// Arc spans from 7:00 to 5:00 position with neutral at 12:00.
@@ -47,6 +48,7 @@ struct BioAgeMeterView: View {
               to: ageDifference < 0 ? centerAngle : normalizedPosition
             )
             .stroke(progressColor, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
+            .widgetAccentable()
             .rotationEffect(.degrees(90))
             .frame(width: radius * 2, height: radius * 2)
         }
@@ -54,6 +56,7 @@ struct BioAgeMeterView: View {
         // Indicator dot
         Circle()
           .fill(.white)
+//          .widgetAccentable()
           .frame(width: size * 0.1, height: size * 0.1)
           .offset(y: -radius)
           .rotationEffect(indicatorAngle)

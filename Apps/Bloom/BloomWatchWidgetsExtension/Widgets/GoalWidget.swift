@@ -7,6 +7,7 @@
 
 import AppIntents
 import BloomFoundation
+import CoreHealth
 import SwiftUI
 import WidgetKit
 
@@ -103,7 +104,6 @@ struct WatchGoalTimelineProvider: AppIntentTimelineProvider {
   typealias Intent = WatchGoalWidgetIntent
 
   private static let goalsKey = "WatchGoalProvider.goals"
-  private static let lastUpdatedKey = "WatchGoalProvider.lastUpdated"
 
   func placeholder(in context: Context) -> WatchGoalEntry {
     .placeholder
@@ -113,11 +113,11 @@ struct WatchGoalTimelineProvider: AppIntentTimelineProvider {
     if context.isPreview {
       return .placeholder
     }
-    return makeEntry(for: configuration)
+    return await makeEntry(for: configuration)
   }
 
   func timeline(for configuration: WatchGoalWidgetIntent, in context: Context) async -> Timeline<WatchGoalEntry> {
-    let entry = makeEntry(for: configuration)
+    let entry = await makeEntry(for: configuration)
 
     // If empty, just refresh every 15 minutes
     guard !entry.isEmpty else {
@@ -125,52 +125,15 @@ struct WatchGoalTimelineProvider: AppIntentTimelineProvider {
       return Timeline(entries: [entry], policy: .after(nextUpdate))
     }
 
-    // Calculate next reset time based on time period
-    let calendar = Calendar.current
-    let now = Date.now
-    var entries: [WatchGoalEntry] = [entry]
-
-    if let resetDate = nextResetDate(for: entry.timePeriod, from: now, using: calendar) {
-      // Add a reset entry at the deadline with currentValue = 0
-      let resetEntry = WatchGoalEntry(
-        date: resetDate,
-        goalId: entry.goalId,
-        metricName: entry.metricName,
-        metricSystemImage: entry.metricSystemImage,
-        metricColorHex: entry.metricColorHex,
-        currentValue: 0,
-        targetValue: entry.targetValue,
-        unitString: entry.unitString,
-        timePeriod: entry.timePeriod,
-        isEmpty: false
-      )
-      entries.append(resetEntry)
-    }
-
-    // Refresh at the end of the timeline to get updated data
-    return Timeline(entries: entries, policy: .atEnd)
-  }
-
-  /// Calculates the next reset date for a goal based on its time period
-  private func nextResetDate(for timePeriod: String, from date: Date, using calendar: Calendar) -> Date? {
-    switch timePeriod {
-    case "daily":
-      return calendar.endOfDay(for: date)
-    case "weekly":
-      return calendar.dateInterval(of: .weekOfYear, for: date)?.end
-    case "monthly":
-      return calendar.dateInterval(of: .month, for: date)?.end
-    case "yearly":
-      return calendar.dateInterval(of: .year, for: date)?.end
-    default:
-      return calendar.endOfDay(for: date)
-    }
+    // Refresh every 5 minutes to get fresh HealthKit data
+    let nextUpdate = Calendar.current.date(byAdding: .minute, value: 5, to: .now) ?? .now
+    return Timeline(entries: [entry], policy: .after(nextUpdate))
   }
 
   /// Required for watchOS - provides pre-configured widget options since
   /// watchOS doesn't have an interactive configuration UI
   func recommendations() -> [AppIntentRecommendation<WatchGoalWidgetIntent>] {
-    let (goals, _) = loadCachedGoals()
+    let goals = loadCachedGoals()
 
     return goals.map { goal in
       let intent = WatchGoalWidgetIntent()
@@ -184,8 +147,8 @@ struct WatchGoalTimelineProvider: AppIntentTimelineProvider {
     }
   }
 
-  private func makeEntry(for configuration: WatchGoalWidgetIntent) -> WatchGoalEntry {
-    let (goals, lastUpdated) = loadCachedGoals()
+  private func makeEntry(for configuration: WatchGoalWidgetIntent) async -> WatchGoalEntry {
+    let goals = loadCachedGoals()
 
     // Get selected goal ID or fall back to first available
     let goalId: String
@@ -197,14 +160,16 @@ struct WatchGoalTimelineProvider: AppIntentTimelineProvider {
       return .empty
     }
 
-    // Find goal data
+    // Find goal data (for metadata like name, icon, target)
     guard let goal = goals.first(where: { $0.id == goalId }) else {
       return .empty
     }
 
-    // Check if data is stale for the current time period
-    let isStale = isDataStale(lastUpdated: lastUpdated, timePeriod: goal.timePeriod)
-    let currentValue = isStale ? 0 : goal.currentValue
+    // Fetch fresh value from HealthKit directly
+    let currentValue = await GoalValueFetcher.shared.fetchCurrentValue(
+      goalId: goal.id,
+      timePeriod: goal.timePeriod
+    )
 
     return WatchGoalEntry(
       date: .now,
@@ -220,35 +185,12 @@ struct WatchGoalTimelineProvider: AppIntentTimelineProvider {
     )
   }
 
-  private func loadCachedGoals() -> (goals: [WatchGoal], lastUpdated: Date?) {
+  private func loadCachedGoals() -> [WatchGoal] {
     guard let data = UserDefaults.group.data(forKey: Self.goalsKey),
           let goals = try? JSONDecoder.watch.decode([WatchGoal].self, from: data) else {
-      return ([], nil)
+      return []
     }
-    let lastUpdated = UserDefaults.group.object(forKey: Self.lastUpdatedKey) as? Date
-    return (goals, lastUpdated)
-  }
-
-  /// Returns true if the cached data is from a previous time period
-  private func isDataStale(lastUpdated: Date?, timePeriod: String) -> Bool {
-    guard let lastUpdated else { return true }
-
-    let calendar = Calendar.current
-    let now = Date.now
-
-    switch timePeriod {
-    case "daily":
-      return !calendar.isDate(lastUpdated, inSameDayAs: now)
-    case "weekly":
-      return calendar.component(.weekOfYear, from: lastUpdated) != calendar.component(.weekOfYear, from: now)
-          || calendar.component(.yearForWeekOfYear, from: lastUpdated) != calendar.component(.yearForWeekOfYear, from: now)
-    case "monthly":
-      return !calendar.isDate(lastUpdated, equalTo: now, toGranularity: .month)
-    case "yearly":
-      return !calendar.isDate(lastUpdated, equalTo: now, toGranularity: .year)
-    default:
-      return !calendar.isDate(lastUpdated, inSameDayAs: now)
-    }
+    return goals
   }
 }
 

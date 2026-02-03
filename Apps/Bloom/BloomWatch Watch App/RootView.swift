@@ -20,6 +20,7 @@ struct RootView: View {
 
   @State private var selectedTab: RootView.Tab = .bioAge
   @State private var hasInitialized = false
+  @State private var presentedActionSheet: AnyView?
 
   var body: some View {
     NavigationStack {
@@ -61,8 +62,38 @@ struct RootView: View {
           NavigationResetController.shared.reset()
           NavigationResetController.shared.shouldShowBioAgeDetails = true
           selectedTab = .bioAge
+        } else if path == "/watch/actions" {
+          presentedActionSheet = ActionsView(performDismiss: {
+            presentedActionSheet = nil
+          }).asAny
+        } else if path.hasPrefix("/watch/actions/") {
+          let actionId = String(path.dropFirst("/watch/actions/".count))
+          handleActionDeepLink(actionId: actionId)
         }
       }
+      .sheet($presentedActionSheet)
+    }
+  }
+
+  private func handleActionDeepLink(actionId: String) {
+    let dismiss = { presentedActionSheet = nil }
+
+    switch actionId {
+    case "food":
+      presentedActionSheet = LogFoodView(performDismiss: dismiss).asAny
+    case "drink":
+      presentedActionSheet = LogDrinkView(performDismiss: dismiss).asAny
+    case "weight":
+      presentedActionSheet = LogWeightView(performDismiss: dismiss).asAny
+    case "bowelMovement":
+      presentedActionSheet = LogBowelMovementView(performDismiss: dismiss).asAny
+    case "bloodPressure":
+      presentedActionSheet = LogBloodPressureView(performDismiss: dismiss).asAny
+    case "voice":
+      presentedActionSheet = VoiceLogView(meal: .suggested, performDismiss: dismiss).asAny
+    default:
+      // Unknown action, show actions list
+      presentedActionSheet = ActionsView(performDismiss: dismiss).asAny
     }
   }
 }

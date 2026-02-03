@@ -53,13 +53,12 @@ struct WorkoutWidget: Widget {
 
 struct WorkoutWidgetView: View {
   var body: some View {
-    Circle()
-      .fill(.background)
-      .overlay {
-        Image(systemName: "figure.run")
-          .font(.system(size: 30))
-          .foregroundStyle(.blue.gradient)
-      }
+    ZStack {
+      AccessoryWidgetBackground()
+      Image(systemName: "figure.run")
+        .font(.system(size: 30))
+        .foregroundStyle(.blue.gradient)
+    }
   }
 }
 

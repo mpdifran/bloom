@@ -19,7 +19,7 @@ struct ActionsView: View {
     NavigationStack {
       List {
         ActionCell(
-          systemImage: "fork.knife",
+          image: .logFoodIcon,
           title: "Food",
           color: .mutedGreen
         )

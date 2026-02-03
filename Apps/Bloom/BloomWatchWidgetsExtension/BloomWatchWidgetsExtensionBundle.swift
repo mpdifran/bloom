@@ -11,6 +11,7 @@ import SwiftUI
 @main
 struct BloomWatchWidgetsExtensionBundle: WidgetBundle {
   var body: some Widget {
+    ActionsWidget()
     BiologicalAgeWidget()
     WorkoutWidget()
     WatchGoalWidget()

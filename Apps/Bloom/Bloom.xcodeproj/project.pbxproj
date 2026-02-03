@@ -93,6 +93,7 @@
 		FFCE85342C99DBD6002C46B1 /* DataContainer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */; };
 		FFCE85352C99DBD6002C46B1 /* DataContainer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FFCE85632C99DCF8002C46B1 /* BloomFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96842C0C1F38004DAD2D /* BloomFoundation.framework */; };
+		FFD014262F32A7D500944077 /* CoreHealth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFECC1CE2DC2C326002F6AAA /* CoreHealth.framework */; };
 		FFD462C02F266CA0002716B9 /* BloomWatch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = FF75772E2DC91A3700E31C86 /* BloomWatch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		FFD462C52F266DC2002716B9 /* CoreNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF97D6922EA16EE300FE7A82 /* CoreNetwork.framework */; };
 		FFD462C62F266DD0002716B9 /* CoreNetwork.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF97D6922EA16EE300FE7A82 /* CoreNetwork.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -296,6 +297,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = FFCE852D2C99DBD6002C46B1;
 			remoteInfo = DataContainer;
+		};
+		FFD014242F32A7CF00944077 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FFECC1CD2DC2C326002F6AAA;
+			remoteInfo = CoreHealth;
 		};
 		FFD462C12F266CAC002716B9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -705,6 +713,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FFD014262F32A7D500944077 /* CoreHealth.framework in Frameworks */,
 				FF34FEE92F2E71970039180A /* BloomFoundation.framework in Frameworks */,
 				FF34FEC82F2E67490039180A /* SwiftUI.framework in Frameworks */,
 				FF34FEC72F2E67490039180A /* WidgetKit.framework in Frameworks */,
@@ -1110,6 +1119,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				FFD014252F32A7CF00944077 /* PBXTargetDependency */,
 				FF34FEE82F2E71920039180A /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
@@ -1943,6 +1953,11 @@
 			isa = PBXTargetDependency;
 			target = FFCE852D2C99DBD6002C46B1 /* DataContainer */;
 			targetProxy = FFCE85322C99DBD6002C46B1 /* PBXContainerItemProxy */;
+		};
+		FFD014252F32A7CF00944077 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FFECC1CD2DC2C326002F6AAA /* CoreHealth */;
+			targetProxy = FFD014242F32A7CF00944077 /* PBXContainerItemProxy */;
 		};
 		FFD462C22F266CAC002716B9 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

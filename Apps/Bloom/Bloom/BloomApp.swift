@@ -104,9 +104,6 @@ struct BloomApp: App {
           await ReEngagementScheduler.shared.scheduleNotificationIfNeeded()
         }
         .onForegroundTask {
-          await GoalWidgetCacheManager.shared.updateCache()
-        }
-        .onForegroundTask {
           await SalesManager.shared.refreshSalesIfNeeded()
         }
         .onForegroundTask {
@@ -123,7 +120,7 @@ struct BloomApp: App {
           await WatchTodaySyncer.shared.syncToWatch()
           await WatchFoodSyncer.shared.syncToWatch()
           await EntitlementController.shared.syncToWatch()
-          await WatchGoalSyncer.shared.syncToWatch()
+          await GoalWidgetCacheManager.shared.updateCache() // Updates cache then syncs goals to watch
         }
         .task {
           await GoalWidgetHealthObserver.shared.startObserving()
