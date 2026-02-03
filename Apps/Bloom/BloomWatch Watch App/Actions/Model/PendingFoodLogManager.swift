@@ -46,7 +46,7 @@ public final class PendingFoodLogManager {
     if success {
       remove(id: entry.id)
     }
-    return success
+    return true  // Entry is queued locally, will sync eventually
   }
 
   /// Syncs all pending entries that haven't been sent yet

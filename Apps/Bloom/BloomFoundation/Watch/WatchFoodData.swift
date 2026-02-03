@@ -170,3 +170,33 @@ public struct WatchFoodItem: Codable, Sendable, Identifiable, Hashable {
     self.servingName = servingName
   }
 }
+
+// MARK: - Food Search Message
+
+/// Message sent from watch to iOS to search for food items
+public struct WatchFoodSearchMessage: Codable, Sendable {
+  public static let messageType = "foodSearch"
+
+  public let type: String
+  public let query: String
+  public let country: String
+
+  public init(query: String, country: String = "usa") {
+    self.type = Self.messageType
+    self.query = query
+    self.country = country
+  }
+}
+
+/// Response from iOS containing food search results
+public struct WatchFoodSearchResponse: Codable, Sendable {
+  public let success: Bool
+  public let foods: [WatchFoodItem]
+  public let errorMessage: String?
+
+  public init(success: Bool, foods: [WatchFoodItem] = [], errorMessage: String? = nil) {
+    self.success = success
+    self.foods = foods
+    self.errorMessage = errorMessage
+  }
+}

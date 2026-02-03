@@ -67,6 +67,12 @@ final class WatchMessageRouter {
       return await handleSyncRequest(message)
     }
 
+    // Try food search message
+    if let message = try? JSONDecoder.watch.decode(WatchFoodSearchMessage.self, from: data),
+       message.type == WatchFoodSearchMessage.messageType {
+      return await handleFoodSearch(message)
+    }
+
     // Unknown message type
     return Data()
   }
@@ -334,5 +340,39 @@ final class WatchMessageRouter {
 
     let response = WatchSyncRequestResponse(success: true)
     return (try? JSONEncoder.watch.encode(response)) ?? Data()
+  }
+
+  // MARK: - Food Search Handler
+
+  private func handleFoodSearch(_ message: WatchFoodSearchMessage) async -> Data {
+    do {
+      let sections = try await NetworkRequester.shared.foodSearch(
+        name: message.query,
+        brand: nil,
+        preferredCountry: message.country
+      )
+
+      // Convert to WatchFoodItem format (limit results for watch)
+      let watchFoods = sections.flatMap { $0.foods }
+        .prefix(20)
+        .map { food in
+          WatchFoodItem(
+            id: food.id.value,
+            name: food.name,
+            brandName: food.brandName,
+            calories: food.calories?.value ?? 0,
+            protein: food.protein?.value ?? 0,
+            carbs: food.carbohydrates?.value ?? 0,
+            fat: food.fat?.value ?? 0,
+            servingName: food.servingName ?? "serving"
+          )
+        }
+
+      let response = WatchFoodSearchResponse(success: true, foods: Array(watchFoods))
+      return (try? JSONEncoder.watch.encode(response)) ?? Data()
+    } catch {
+      let response = WatchFoodSearchResponse(success: false, errorMessage: error.localizedDescription)
+      return (try? JSONEncoder.watch.encode(response)) ?? Data()
+    }
   }
 }

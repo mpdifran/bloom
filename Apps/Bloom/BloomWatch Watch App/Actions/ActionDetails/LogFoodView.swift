@@ -7,6 +7,7 @@
 
 import SwiftUI
 import BloomFoundation
+import SFSafeSymbols
 
 struct LogFoodView: View {
   let performDismiss: (() -> Void)?
@@ -15,7 +16,11 @@ struct LogFoodView: View {
   @State private var selectedMeal: WatchMeal = .suggested
   @State private var selectedFilter: WatchFoodFilter = .frequent
   @State private var selectedFood: WatchFoodItem?
+  @State private var searchText = ""
+  @State private var searchResults: [WatchFoodItem] = []
+  @State private var isSearching = false
   @State private var showingVoiceLog = false
+  @FocusState private var isSearchFieldFocused: Bool
 
   private var isBloomPlusUser: Bool {
     WatchSubscriptionProvider.shared.isSubscribed
@@ -24,18 +29,8 @@ struct LogFoodView: View {
   var body: some View {
     NavigationStack {
       List {
-        // Meal picker
-        mealSection
-
-        // Filter picker
-        filterSection
-
-        // Content based on selected filter
-        if provider.hasContent(for: selectedMeal, filter: selectedFilter) {
-          contentSection
-        } else {
-          emptyStateSection
-        }
+        controlsSection
+        contentSection
       }
       .listStyle(.carousel)
       .navigationTitle("Log Food")
@@ -44,6 +39,9 @@ struct LogFoodView: View {
         FoodServingView(food: food, meal: selectedMeal, performDismiss: performDismiss)
       }
       .toolbar {
+        ToolbarItem(placement: .primaryAction) {
+          searchBarSection
+        }
         if isBloomPlusUser {
           ToolbarItem(placement: .topBarTrailing) {
             voiceLogButton
@@ -52,15 +50,31 @@ struct LogFoodView: View {
       }
       .frame(maxWidth: .infinity)
       .background(.black)
+      .animation(.default, value: searchText)
       .task {
         provider.loadFromApplicationContext()
       }
     }
   }
+}
+
+private extension LogFoodView {
 
   // MARK: - Sections
 
-  private var mealSection: some View {
+  var searchBarSection: some View {
+    TextField("Search", text: $searchText)
+      .focused($isSearchFieldFocused)
+      .onChange(of: searchText) { _, newValue in
+        if newValue.isNotEmpty {
+          performSearch(query: newValue)
+        } else {
+          searchResults = []
+        }
+      }
+  }
+
+  var controlsSection: some View {
     Section {
       Picker("Meal", selection: $selectedMeal) {
         ForEach(WatchMeal.allCases, id: \.self) { meal in
@@ -68,33 +82,112 @@ struct LogFoodView: View {
         }
       }
       .pickerStyle(.navigationLink)
-    }
-  }
 
-  private var filterSection: some View {
-    Section {
-      Picker("Filter", selection: $selectedFilter) {
-        ForEach(WatchFoodFilter.allCases, id: \.self) { filter in
-          Text(filter.displayName).tag(filter)
+      if searchText.isEmpty {
+        Picker("Filter", selection: $selectedFilter) {
+          ForEach(WatchFoodFilter.allCases, id: \.self) { filter in
+            Text(filter.displayName).tag(filter)
+          }
         }
+        .pickerStyle(.navigationLink)
       }
-      .pickerStyle(.navigationLink)
+    } header: {
+      Text("Details")
     }
   }
 
   @ViewBuilder
-  private var contentSection: some View {
-    switch selectedFilter {
-    case .frequent:
-      frequentFoodsSection
-    case .recent:
-      recentFoodsSection
-    case .meals:
-      mealsSection
+  var contentSection: some View {
+    if searchText.isNotEmpty {
+      searchResultsSection
+    } else if provider.hasContent(for: selectedMeal, filter: selectedFilter) {
+      switch selectedFilter {
+      case .frequent:
+        frequentFoodsSection
+      case .recent:
+        recentFoodsSection
+      case .meals:
+        mealsSection
+      }
+    } else {
+      emptyStateSection
     }
   }
 
-  private var voiceLogButton: some View {
+  var searchResultsSection: some View {
+    Section {
+      if isSearching {
+        ProgressView()
+          .frame(maxWidth: .infinity)
+      } else if searchResults.isEmpty {
+        VStack(spacing: 8) {
+          Image(systemName: "magnifyingglass")
+            .font(.title2)
+            .foregroundStyle(.secondary)
+          Text("No results")
+            .font(.footnote)
+            .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 8)
+      } else {
+        ForEach(searchResults) { food in
+          Button {
+            selectedFood = food
+          } label: {
+            FoodCell(food: food)
+          }
+          .buttonStyle(.plain)
+        }
+      }
+    } header: {
+      Text("Results")
+    }
+  }
+
+  func performSearch(query: String) {
+    isSearching = true
+
+    Task {
+      let message = WatchFoodSearchMessage(query: query)
+      guard let data = try? JSONEncoder.watch.encode(message) else {
+        isSearching = false
+        return
+      }
+
+      do {
+        let responseData = try await WatchChannel.shared.send(data: data)
+        let response = try JSONDecoder.watch.decode(WatchFoodSearchResponse.self, from: responseData)
+
+        if response.success {
+          searchResults = response.foods
+        }
+      } catch {
+        // Handle error silently
+      }
+
+      isSearching = false
+    }
+  }
+
+  var searchButton: some View {
+    Button {
+      if searchText.isEmpty {
+        isSearchFieldFocused = true
+      } else {
+        // Clear search
+        searchText = ""
+        searchResults = []
+      }
+    } label: {
+      Label(
+        searchText.isEmpty ? "Search" : "Clear",
+        systemSymbol: searchText.isEmpty ? .magnifyingglass : .xmark
+      )
+    }
+  }
+
+  var voiceLogButton: some View {
     Button {
       showingVoiceLog = true
     } label: {
@@ -109,28 +202,7 @@ struct LogFoodView: View {
     }
   }
 
-  private var voiceLogSection: some View {
-    Section {
-      Button {
-        showingVoiceLog = true
-      } label: {
-        HStack(spacing: 8) {
-          Image(systemName: "mic.fill")
-            .foregroundStyle(.accent)
-          Text("Voice Log")
-          Spacer()
-        }
-      }
-    }
-    .sheet(isPresented: $showingVoiceLog) {
-      VoiceLogView(meal: selectedMeal, performDismiss: {
-        showingVoiceLog = false
-        performDismiss?()
-      })
-    }
-  }
-
-  private var frequentFoodsSection: some View {
+  var frequentFoodsSection: some View {
     Section {
       ForEach(provider.foods(for: selectedMeal)) { food in
         Button {
@@ -141,13 +213,11 @@ struct LogFoodView: View {
         .buttonStyle(.plain)
       }
     } header: {
-      Text("Frequent")
-        .font(.caption2)
-        .foregroundStyle(.secondary)
+      Text("Results")
     }
   }
 
-  private var recentFoodsSection: some View {
+  var recentFoodsSection: some View {
     Section {
       ForEach(provider.recentFoods(for: selectedMeal)) { food in
         Button {
@@ -158,25 +228,21 @@ struct LogFoodView: View {
         .buttonStyle(.plain)
       }
     } header: {
-      Text("Recent")
-        .font(.caption2)
-        .foregroundStyle(.secondary)
+      Text("Results")
     }
   }
 
-  private var mealsSection: some View {
+  var mealsSection: some View {
     Section {
       ForEach(provider.meals) { meal in
         MealCell(meal: meal, selectedMeal: selectedMeal, performDismiss: performDismiss)
       }
     } header: {
-      Text("Meals")
-        .font(.caption2)
-        .foregroundStyle(.secondary)
+      Text("Results")
     }
   }
 
-  private var emptyStateSection: some View {
+  var emptyStateSection: some View {
     Section {
       VStack(spacing: 8) {
         Image(systemName: emptyStateIcon)
@@ -194,17 +260,19 @@ struct LogFoodView: View {
       }
       .frame(maxWidth: .infinity)
       .padding(.vertical, 8)
+    } header: {
+      Text("Results")
     }
   }
 
-  private var emptyStateIcon: String {
+  var emptyStateIcon: String {
     switch selectedFilter {
     case .frequent, .recent: return "fork.knife"
     case .meals: return "square.stack"
     }
   }
 
-  private var emptyStateTitle: String {
+  var emptyStateTitle: String {
     switch selectedFilter {
     case .frequent: return "No frequent foods"
     case .recent: return "No recent foods"
@@ -212,7 +280,7 @@ struct LogFoodView: View {
     }
   }
 
-  private var emptyStateMessage: String {
+  var emptyStateMessage: String {
     switch selectedFilter {
     case .frequent: return "Log foods on your iPhone to see them here."
     case .recent: return "Log foods on your iPhone to see them here."
