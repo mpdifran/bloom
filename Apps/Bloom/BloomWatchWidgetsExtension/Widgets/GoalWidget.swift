@@ -103,6 +103,7 @@ struct WatchGoalTimelineProvider: AppIntentTimelineProvider {
   typealias Intent = WatchGoalWidgetIntent
 
   private static let goalsKey = "WatchGoalProvider.goals"
+  private static let lastUpdatedKey = "WatchGoalProvider.lastUpdated"
 
   func placeholder(in context: Context) -> WatchGoalEntry {
     .placeholder
@@ -154,7 +155,7 @@ struct WatchGoalTimelineProvider: AppIntentTimelineProvider {
   private func nextResetDate(for timePeriod: String, from date: Date, using calendar: Calendar) -> Date? {
     switch timePeriod {
     case "daily":
-      return calendar.startOfTomorrow(for: date)
+      return calendar.endOfDay(for: date)
     case "weekly":
       return calendar.dateInterval(of: .weekOfYear, for: date)?.end
     case "monthly":
@@ -162,14 +163,14 @@ struct WatchGoalTimelineProvider: AppIntentTimelineProvider {
     case "yearly":
       return calendar.dateInterval(of: .year, for: date)?.end
     default:
-      return calendar.startOfTomorrow(for: date)
+      return calendar.endOfDay(for: date)
     }
   }
 
   /// Required for watchOS - provides pre-configured widget options since
   /// watchOS doesn't have an interactive configuration UI
   func recommendations() -> [AppIntentRecommendation<WatchGoalWidgetIntent>] {
-    let goals = loadCachedGoals()
+    let (goals, _) = loadCachedGoals()
 
     return goals.map { goal in
       let intent = WatchGoalWidgetIntent()
@@ -184,7 +185,7 @@ struct WatchGoalTimelineProvider: AppIntentTimelineProvider {
   }
 
   private func makeEntry(for configuration: WatchGoalWidgetIntent) -> WatchGoalEntry {
-    let goals = loadCachedGoals()
+    let (goals, lastUpdated) = loadCachedGoals()
 
     // Get selected goal ID or fall back to first available
     let goalId: String
@@ -201,13 +202,17 @@ struct WatchGoalTimelineProvider: AppIntentTimelineProvider {
       return .empty
     }
 
+    // Check if data is stale for the current time period
+    let isStale = isDataStale(lastUpdated: lastUpdated, timePeriod: goal.timePeriod)
+    let currentValue = isStale ? 0 : goal.currentValue
+
     return WatchGoalEntry(
       date: .now,
       goalId: goal.id,
       metricName: goal.metricName,
       metricSystemImage: goal.metricSystemImage,
       metricColorHex: goal.metricColorHex,
-      currentValue: goal.currentValue,
+      currentValue: currentValue,
       targetValue: goal.targetValue,
       unitString: goal.targetUnit,
       timePeriod: goal.timePeriod,
@@ -215,12 +220,35 @@ struct WatchGoalTimelineProvider: AppIntentTimelineProvider {
     )
   }
 
-  private func loadCachedGoals() -> [WatchGoal] {
+  private func loadCachedGoals() -> (goals: [WatchGoal], lastUpdated: Date?) {
     guard let data = UserDefaults.group.data(forKey: Self.goalsKey),
           let goals = try? JSONDecoder.watch.decode([WatchGoal].self, from: data) else {
-      return []
+      return ([], nil)
     }
-    return goals
+    let lastUpdated = UserDefaults.group.object(forKey: Self.lastUpdatedKey) as? Date
+    return (goals, lastUpdated)
+  }
+
+  /// Returns true if the cached data is from a previous time period
+  private func isDataStale(lastUpdated: Date?, timePeriod: String) -> Bool {
+    guard let lastUpdated else { return true }
+
+    let calendar = Calendar.current
+    let now = Date.now
+
+    switch timePeriod {
+    case "daily":
+      return !calendar.isDate(lastUpdated, inSameDayAs: now)
+    case "weekly":
+      return calendar.component(.weekOfYear, from: lastUpdated) != calendar.component(.weekOfYear, from: now)
+          || calendar.component(.yearForWeekOfYear, from: lastUpdated) != calendar.component(.yearForWeekOfYear, from: now)
+    case "monthly":
+      return !calendar.isDate(lastUpdated, equalTo: now, toGranularity: .month)
+    case "yearly":
+      return !calendar.isDate(lastUpdated, equalTo: now, toGranularity: .year)
+    default:
+      return !calendar.isDate(lastUpdated, inSameDayAs: now)
+    }
   }
 }
 

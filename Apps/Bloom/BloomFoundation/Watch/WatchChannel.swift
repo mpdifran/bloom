@@ -173,6 +173,7 @@ private extension WatchChannel {
           if let goalData = try? JSONDecoder.watch.decode(WatchGoalData.self, from: data) {
             if let goalsData = try? JSONEncoder.watch.encode(goalData.goals) {
               UserDefaults.group.set(goalsData, forKey: "WatchGoalProvider.goals")
+              UserDefaults.group.set(goalData.lastUpdated, forKey: "WatchGoalProvider.lastUpdated")
             }
           }
         case Self.biologicalAgeKey:
