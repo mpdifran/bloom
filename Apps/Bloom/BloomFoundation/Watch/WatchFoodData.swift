@@ -149,6 +149,7 @@ public struct WatchFoodItem: Codable, Sendable, Identifiable, Hashable {
   public let carbs: Double
   public let fat: Double
   public let servingName: String
+  public let isVerified: Bool
 
   public init(
     id: String,
@@ -158,7 +159,8 @@ public struct WatchFoodItem: Codable, Sendable, Identifiable, Hashable {
     protein: Double,
     carbs: Double,
     fat: Double,
-    servingName: String
+    servingName: String,
+    isVerified: Bool = false
   ) {
     self.id = id
     self.name = name
@@ -168,6 +170,7 @@ public struct WatchFoodItem: Codable, Sendable, Identifiable, Hashable {
     self.carbs = carbs
     self.fat = fat
     self.servingName = servingName
+    self.isVerified = isVerified
   }
 }
 

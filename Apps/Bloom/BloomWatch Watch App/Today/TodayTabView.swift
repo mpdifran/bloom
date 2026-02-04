@@ -11,7 +11,7 @@ import SFSafeSymbols
 import AppUI
 
 struct TodayTabView: View {
-  @State private var provider = TodayProvider.shared
+  private let provider = TodayProvider.shared
 
   var body: some View {
     Group {

@@ -192,14 +192,20 @@ final class WatchMessageRouter {
   ) async throws -> String {
     let context = ContainerHolder.shared.createContext()
 
-    // Find the food item record
+    // Try to find existing food item record
     let descriptor = FetchDescriptor<FoodItemRecord>(
       predicate: #Predicate { $0.id == foodItemID }
     )
-    guard let foodItem = try context.fetch(descriptor).first else {
-      throw NSError(domain: "WatchFoodLog", code: 404, userInfo: [
-        NSLocalizedDescriptionKey: "Food item not found"
-      ])
+
+    let foodItem: FoodItemRecord
+    if let existing = try context.fetch(descriptor).first {
+      foodItem = existing
+    } else {
+      // Not found locally - fetch from API and create record
+      // This handles watch search results which use API IDs
+      let apiFoodItem = try await NetworkRequester.shared.getFoodItem(id: foodItemID)
+      foodItem = FoodItemRecord(foodItem: apiFoodItem)
+      context.insert(foodItem)
     }
 
     // Create serving
@@ -364,7 +370,8 @@ final class WatchMessageRouter {
             protein: food.protein?.value ?? 0,
             carbs: food.carbohydrates?.value ?? 0,
             fat: food.fat?.value ?? 0,
-            servingName: food.servingName ?? "serving"
+            servingName: food.servingName ?? "serving",
+            isVerified: food.isVerified
           )
         }
 

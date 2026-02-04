@@ -13,6 +13,12 @@ struct FoodCell: View {
 
   var body: some View {
     HStack(spacing: 8) {
+      if food.isVerified {
+        Image(systemName: "checkmark.shield.fill")
+          .foregroundStyle(.white, .green)
+          .font(.caption2)
+      }
+
       VStack(alignment: .leading, spacing: 2) {
         Text(food.name)
           .font(.footnote)
@@ -49,7 +55,8 @@ struct FoodCell: View {
       protein: 31,
       carbs: 0,
       fat: 3.6,
-      servingName: "100g"
+      servingName: "100g",
+      isVerified: true
     ))
 
     FoodCell(food: WatchFoodItem(
@@ -60,7 +67,8 @@ struct FoodCell: View {
       protein: 17,
       carbs: 6,
       fat: 0,
-      servingName: "1 container"
+      servingName: "1 container",
+      isVerified: false
     ))
   }
 }

@@ -95,7 +95,8 @@ final class WatchFoodSyncer {
           result += " (\(value.formatted()) \(unit))"
         }
         return result
-      }()
+      }(),
+      isVerified: dto.isVerified
     )
   }
 
