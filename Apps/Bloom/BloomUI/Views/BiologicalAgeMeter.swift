@@ -106,8 +106,13 @@ private extension BiologicalAgeMeter {
   }
 
   var ageDifferenceText: String {
+    // Round to 1 decimal place to check for zero
+    let rounded = (ageDifference * 10).rounded() / 10
+    if rounded == 0 {
+      return "0"
+    }
     let formatted = ageDifference.format(using: .oneDecimalPlace)
-    if ageDifference > 0 {
+    if rounded > 0 {
       return "+\(formatted)"
     }
     return formatted

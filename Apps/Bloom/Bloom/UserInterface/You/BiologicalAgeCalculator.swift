@@ -215,6 +215,12 @@ final actor BiologicalAgeCalculator {
     // Calculate new biological age
     let result = await calculateBiologicalAge(actualAge: userAge)
 
+    // Discard calculations with no metrics (likely race condition)
+    guard result.metricContributions.isNotEmpty else {
+      internalLog(.biologicalAge, "Skipping calculation: no metrics available")
+      return
+    }
+
     // Blend with previous day's value (70% previous day + 30% new)
     let blendedAge: Double
     if let previousDayRecord = try? await modelActor.fetchPreviousDayRecord() {
