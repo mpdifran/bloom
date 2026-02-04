@@ -132,7 +132,7 @@ private extension CardioFitnessStoryPage {
       ForEach(monthlyDataWithValues) { data in
         LineMark(
           x: .value("Month", data.date, unit: .month),
-          y: .value("VO2 Max", data.averageVO2Max ?? 0)
+          y: .value("VO₂ Max", data.averageVO2Max ?? 0)
         )
         .foregroundStyle(yearlyAverageColor)
         .interpolationMethod(.catmullRom)
@@ -140,7 +140,7 @@ private extension CardioFitnessStoryPage {
 
         PointMark(
           x: .value("Month", data.date, unit: .month),
-          y: .value("VO2 Max", data.averageVO2Max ?? 0)
+          y: .value("VO₂ Max", data.averageVO2Max ?? 0)
         )
         .symbol {
           Circle()

@@ -118,7 +118,7 @@ public struct MetricContribution: Sendable, Identifiable, Codable {
 // MARK: - BiologicalAgeMetric
 
 public enum BiologicalAgeMetric: String, Sendable, CaseIterable, Codable {
-  case vo2Max = "VO2 Max"
+  case vo2Max = "VO₂ Max"
   case restingHeartRate = "Resting Heart Rate"
   case heartRateRecovery = "Heart Rate Recovery"
   case hrvTrend = "HRV Trend"

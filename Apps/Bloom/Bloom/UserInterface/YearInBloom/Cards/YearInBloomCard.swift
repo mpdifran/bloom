@@ -97,7 +97,7 @@ struct YearInBloomCard<FS, BS, Content>: View where FS: ShapeStyle, BS: ShapeSty
         }
 
       YearInBloomCard(
-        title: "vO2 Max",
+        title: "VO₂ Max",
         focusStat: "38.1",
         focusStatLabel: "ML/KG/min",
         foregroundFill: .mutedRed,

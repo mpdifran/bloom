@@ -44,9 +44,9 @@ public enum WatchBioAgeConfidence: String, Codable, Sendable {
 
   public var displayName: String {
     switch self {
-    case .high: "High"
-    case .moderate: "Moderate"
-    case .low: "Low"
+    case .high: "High Confidence"
+    case .moderate: "Moderate Confidence"
+    case .low: "Low Confidence"
     }
   }
 }

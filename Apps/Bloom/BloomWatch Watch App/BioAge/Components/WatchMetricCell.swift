@@ -81,7 +81,7 @@ struct WatchMetricCell: View {
       Section {
         WatchMetricCell(
           contribution: WatchMetricContribution(
-            metric: "VO2 Max",
+            metric: "VO₂ Max",
             category: "Cardiorespiratory",
             weightedDelta: -1.5
           )

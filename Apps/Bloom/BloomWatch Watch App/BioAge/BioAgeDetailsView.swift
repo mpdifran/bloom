@@ -58,6 +58,17 @@ struct BioAgeDetailsView: View {
           Text("No Effect")
         }
       }
+
+      // No Data section
+      if provider.missingMetrics.isNotEmpty {
+        Section {
+          ForEach(provider.missingMetrics, id: \.self) { metric in
+            WatchMissingMetricCell(metric: metric)
+          }
+        } header: {
+          Text("No Data")
+        }
+      }
     }
     .navigationTitle("Bio Age")
     .navigationBarTitleDisplayMode(.inline)

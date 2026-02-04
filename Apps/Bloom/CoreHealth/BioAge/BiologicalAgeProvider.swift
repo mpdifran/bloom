@@ -65,6 +65,12 @@ public final class BiologicalAgeProvider {
     metricContributions?.count ?? 0
   }
 
+  /// Metrics that have no data available
+  public var missingMetrics: [BiologicalAgeMetric] {
+    let availableMetrics = Set(metricContributions?.map(\.metric) ?? [])
+    return BiologicalAgeMetric.allCases.filter { !availableMetrics.contains($0.rawValue) }
+  }
+
   private init() {
     loadFromUserDefaults()
     loadFromApplicationContext()
