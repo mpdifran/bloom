@@ -31,7 +31,6 @@ final class WatchGoalSyncer {
         metricName: metricName,
         metricSystemImage: goalData.metricSystemImage ?? "target",
         metricColorHex: goalData.metricColorHex,
-        currentValue: goalData.currentValue,
         targetValue: goalData.targetValue,
         targetUnit: goalData.targetUnit,
         timePeriod: goalData.timePeriod

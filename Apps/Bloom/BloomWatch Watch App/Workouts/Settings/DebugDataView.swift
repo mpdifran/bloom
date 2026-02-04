@@ -102,7 +102,7 @@ private extension DebugDataView {
       if goalProvider.goals.isNotEmpty {
         Divider()
         ForEach(goalProvider.goals.prefix(5)) { goal in
-          Text("- \(goal.metricName): \(Int(goal.currentValue))/\(Int(goal.targetValue))")
+          Text("- \(goal.metricName): target \(Int(goal.targetValue))")
             .font(.caption2)
             .foregroundStyle(.secondary)
         }
