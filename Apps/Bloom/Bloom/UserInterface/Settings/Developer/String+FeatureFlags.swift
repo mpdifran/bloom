@@ -15,6 +15,8 @@ extension String {
     static let mockMagicScanner = "FeatureFlag.mockMagicScanner"
     static let reEngagementTestMode = "FeatureFlag.reEngagementTestMode"
     static let showTrendsTab = "FeatureFlag.showTrendsTab"
+    static let mockBioAgeEnabled = "FeatureFlag.mockBioAgeEnabled"
+    static let mockBioAgeDelta = "FeatureFlag.mockBioAgeDelta"
   }
   
   enum ExperimentOverrideKey {

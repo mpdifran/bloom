@@ -73,6 +73,12 @@ final class WatchMessageRouter {
       return await handleFoodSearch(message)
     }
 
+    // Try heart rate zone settings message
+    if let message = try? JSONDecoder.watch.decode(WatchHeartRateZoneSettingsMessage.self, from: data),
+       message.type == WatchHeartRateZoneSettingsMessage.messageType {
+      return await handleHeartRateZoneSettings(message)
+    }
+
     // Unknown message type
     return Data()
   }
@@ -340,9 +346,10 @@ final class WatchMessageRouter {
     async let foodSync: () = WatchFoodSyncer.shared.syncToWatch()
     async let subscriptionSync: () = EntitlementController.shared.syncToWatch()
     async let goalSync: () = WatchGoalSyncer.shared.syncToWatch()
+    async let hrzSettingsSync: () = WatchHeartRateZoneSettingsSyncer.shared.syncToWatch()
 
     // Await all syncs
-    _ = await (unitSync, heartRateSync, bioAgeSync, todaySync, foodSync, subscriptionSync, goalSync)
+    _ = await (unitSync, heartRateSync, bioAgeSync, todaySync, foodSync, subscriptionSync, goalSync, hrzSettingsSync)
 
     let response = WatchSyncRequestResponse(success: true)
     return (try? JSONEncoder.watch.encode(response)) ?? Data()
@@ -381,5 +388,13 @@ final class WatchMessageRouter {
       let response = WatchFoodSearchResponse(success: false, errorMessage: error.localizedDescription)
       return (try? JSONEncoder.watch.encode(response)) ?? Data()
     }
+  }
+
+  // MARK: - Heart Rate Zone Settings Handler
+
+  private func handleHeartRateZoneSettings(_ message: WatchHeartRateZoneSettingsMessage) async -> Data {
+    let success = await WatchHeartRateZoneSettingsSyncer.shared.handleSettingsFromWatch(message)
+    let response = WatchHeartRateZoneSettingsResponse(success: success)
+    return (try? JSONEncoder.watch.encode(response)) ?? Data()
   }
 }

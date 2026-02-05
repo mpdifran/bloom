@@ -39,12 +39,38 @@ final class BiologicalAgeViewModel {
       }
     }
   }
+
+  // MARK: - Mock Support
+
+  private var mockBioAgeEnabled: Bool {
+    UserDefaults.standard.bool(forKey: String.FeatureFlag.mockBioAgeEnabled)
+  }
+
+  private var mockBioAgeDelta: Double {
+    UserDefaults.standard.double(forKey: String.FeatureFlag.mockBioAgeDelta)
+  }
+
+  /// Returns the bio age result with mock applied if enabled in developer settings
+  var displayBiologicalAgeResult: BiologicalAgeResult? {
+    guard let result = biologicalAgeResult else { return nil }
+    guard mockBioAgeEnabled else { return result }
+
+    let mockedBioAge = result.actualAge + mockBioAgeDelta
+    let clamped = max(result.actualAge - 12, min(result.actualAge + 12, mockedBioAge))
+
+    return BiologicalAgeResult(
+      biologicalAge: clamped,
+      actualAge: result.actualAge,
+      lastCalculated: result.lastCalculated,
+      metricContributions: result.metricContributions
+    )
+  }
 }
 
 extension BiologicalAgeViewModel {
 
   var currentBiologicalAge: Double? {
-    biologicalAgeResult?.biologicalAge
+    displayBiologicalAgeResult?.biologicalAge
   }
 
   func calculateBiologicalAgeIfNeeded() async {

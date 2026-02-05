@@ -120,6 +120,7 @@ struct BloomApp: App {
           await WatchTodaySyncer.shared.syncToWatch()
           await WatchFoodSyncer.shared.syncToWatch()
           await EntitlementController.shared.syncToWatch()
+          await WatchHeartRateZoneSettingsSyncer.shared.syncToWatch()
           await GoalWidgetCacheManager.shared.updateCache() // Updates cache then syncs goals to watch
         }
         .task {

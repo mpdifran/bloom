@@ -2700,7 +2700,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Bloom/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
+				INFOPLIST_KEY_CFBundleDisplayName = "Bloom Health";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Scanning barcodes for food tracking";
@@ -3150,7 +3150,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Bloom/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
+				INFOPLIST_KEY_CFBundleDisplayName = "Bloom Health";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Scanning barcodes for food tracking";
@@ -3530,7 +3530,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "BloomWatch-Watch-App-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
+				INFOPLIST_KEY_CFBundleDisplayName = "Bloom Health";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Bloom uses your location to record routes during outdoor workouts.";
@@ -3569,7 +3569,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "BloomWatch-Watch-App-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
+				INFOPLIST_KEY_CFBundleDisplayName = "Bloom Health";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Bloom uses your location to record routes during outdoor workouts.";
@@ -3608,7 +3608,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "BloomWatch-Watch-App-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
+				INFOPLIST_KEY_CFBundleDisplayName = "Bloom Health";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Bloom uses your location to record routes during outdoor workouts.";
@@ -3647,7 +3647,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "BloomWatch-Watch-App-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
+				INFOPLIST_KEY_CFBundleDisplayName = "Bloom Health";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Bloom uses your location to record routes during outdoor workouts.";
@@ -4432,7 +4432,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Bloom/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
+				INFOPLIST_KEY_CFBundleDisplayName = "Bloom Health";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Scanning barcodes for food tracking";
@@ -4480,7 +4480,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Bloom/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
+				INFOPLIST_KEY_CFBundleDisplayName = "Bloom Health";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Scanning barcodes for food tracking";

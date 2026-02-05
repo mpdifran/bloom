@@ -22,6 +22,8 @@ struct DeveloperSettingsView: View {
   @AppStorage(.FeatureFlag.enableOpenAIModelOverride) private var enableOpenAIModelOverride = false
   @AppStorage(.FeatureFlag.bypassPaywall) private var bypassPaywall = false
   @AppStorage(.FeatureFlag.mockMagicScanner) private var mockMagicScanner = false
+  @AppStorage(.FeatureFlag.mockBioAgeEnabled) private var mockBioAgeEnabled = false
+  @AppStorage(.FeatureFlag.mockBioAgeDelta) private var mockBioAgeDelta = 0.0
   @AppStorage(.FeatureFlag.reEngagementTestMode) private var reEngagementTestMode = false
   @AppStorage("OnboardingRootViewTreatment.currentStep") private var onboardingCurrentStep = 0
   @AppStorage("OnboardingRootViewTreatment.wasYesInWarmingStep") private var onboardingWasYesInWarmingStep = false
@@ -238,6 +240,41 @@ extension DeveloperSettingsView {
 
         SettingsCell("Mock Magic Scanner") {
           Toggle("", isOn: $mockMagicScanner)
+        }
+
+        Divider()
+
+        SettingsCell("Mock Bio Age") {
+          Toggle("", isOn: $mockBioAgeEnabled)
+        }
+
+        if mockBioAgeEnabled {
+          Divider()
+
+          VStack(alignment: .leading, spacing: 8) {
+            SettingsCell("Bio Age Delta") {
+              Text(mockBioAgeDelta >= 0 ? "+\(String(format: "%.1f", mockBioAgeDelta))" : String(format: "%.1f", mockBioAgeDelta))
+                .foregroundStyle(.secondary)
+            }
+
+            Slider(
+              value: $mockBioAgeDelta,
+              in: -12...12,
+              step: 0.5
+            )
+            .padding(.horizontal)
+
+            HStack {
+              Text("-12 (younger)")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+              Spacer()
+              Text("+12 (older)")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            }
+            .padding(.horizontal)
+          }
         }
       }
     }
@@ -941,6 +978,8 @@ extension DeveloperSettingsView {
           bypassPaywall = false
           enableOpenAIModelOverride = false
           mockMagicScanner = false
+          mockBioAgeEnabled = false
+          mockBioAgeDelta = 0.0
           todayInsightsManager.budStateOverride = nil
           clearAllExperimentOverrides()
           dismiss()
