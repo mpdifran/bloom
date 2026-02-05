@@ -164,7 +164,7 @@ private extension WorkoutsTabView {
 
     Task {
       do {
-        try await workoutManager.startWorkout(
+        try await workoutManager.prepareWorkout(
           workoutConfiguration: configuration,
           shouldMirror: false
         )

@@ -16,7 +16,7 @@ class AppDelegate: NSObject, WKApplicationDelegate {
     Task {
       do {
         WorkoutManager.shared.resetWorkout()
-        try await WorkoutManager.shared.startWorkout(
+        try await WorkoutManager.shared.prepareWorkout(
           workoutConfiguration: workoutConfiguration,
           shouldMirror: true
         )

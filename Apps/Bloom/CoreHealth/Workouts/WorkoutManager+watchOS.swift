@@ -12,7 +12,9 @@ import BloomFoundation
 #if os(watchOS)
 public extension WorkoutManager {
 
-  func startWorkout(workoutConfiguration: HKWorkoutConfiguration, shouldMirror: Bool) async throws {
+  /// Phase 1: Prepare the workout session without starting data collection.
+  /// Call this first, then show countdown, then call `beginWorkout()`.
+  func prepareWorkout(workoutConfiguration: HKWorkoutConfiguration, shouldMirror: Bool) async throws {
     // Load heart rate zones from application context (synced from iOS)
     if let data = WatchChannel.shared.getApplicationContextData(for: WatchChannel.heartRateZonesKey),
        let zones = try? JSONDecoder.watch.decode(HeartRateZones.self, from: data) {
@@ -25,22 +27,29 @@ public extension WorkoutManager {
     builder?.delegate = self
     builder?.dataSource = HKLiveWorkoutDataSource(healthStore: healthStore, workoutConfiguration: workoutConfiguration)
 
-    try await session?.prepare() // ChatGPT said this is important to do before trying to mirror.
+    try await session?.prepare()
 
-    /**
-     Start mirroring the session to the companion device.
-     */
+    // Start mirroring the session to the companion device.
     if shouldMirror {
       try await session?.startMirroringToCompanionDevice()
       isMirroring = true
     }
-    /**
-     Start the workout session activity.
-     */
+  }
+
+  /// Phase 2: Begin the workout session and start data collection.
+  /// Call this after the countdown completes.
+  func beginWorkout() async throws {
     let startDate = Date()
     session?.startActivity(with: startDate)
     try await builder?.beginCollection(at: startDate)
     print("Started session")
+  }
+
+  /// Convenience method that prepares and immediately begins a workout (skipping countdown).
+  /// Used for workout switching and recovery scenarios.
+  func startWorkout(workoutConfiguration: HKWorkoutConfiguration, shouldMirror: Bool) async throws {
+    try await prepareWorkout(workoutConfiguration: workoutConfiguration, shouldMirror: shouldMirror)
+    try await beginWorkout()
   }
   
   func handleReceivedData(_ data: Data) throws {
