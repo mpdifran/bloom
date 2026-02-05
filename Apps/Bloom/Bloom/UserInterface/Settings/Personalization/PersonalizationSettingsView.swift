@@ -26,6 +26,7 @@ struct PersonalizationSettingsView: View {
       BloomScrollView {
         userDetailsSection
         lifestyleSection
+        fitnessSection
         userFactsSection
       }
       .navigationTitle("Personal Details")
@@ -159,6 +160,24 @@ private extension PersonalizationSettingsView {
             .datePickerStyle(.compact)
           }
         }
+      }
+    }
+  }
+
+  var fitnessSection: some View {
+    VStack {
+      SectionTitleView("Fitness")
+        .padding(.horizontal)
+
+      SettingsSectionContainer {
+        NavigationLink {
+          HeartRateZoneSettingsView()
+        } label: {
+          SettingsCell("Heart Rate Zones", iconType: .disclosure) {
+            EmptyView()
+          }
+        }
+        .buttonStyle(.plain)
       }
     }
   }

@@ -1178,6 +1178,19 @@ public extension HealthStoreFetcher {
 
   /// - note: https://www.mayoclinic.org/healthy-lifestyle/fitness/in-depth/exercise-intensity/art-20046887
   func heartRateZones() async -> HeartRateZones? {
+    let mode = await HealthManager.shared.heartRateZoneMode
+
+    switch mode {
+    case .automatic:
+      return await calculateAutomaticHeartRateZones()
+    case .semiManual:
+      return await calculateSemiManualHeartRateZones()
+    case .manual:
+      return await calculateManualHeartRateZones()
+    }
+  }
+
+  private func calculateAutomaticHeartRateZones() async -> HeartRateZones? {
     // Use age stored in HealthManager (defaults) over HealthKit.
     let age = await HealthManager.shared.age()
     let projectedMax = 208 - (Double(age) * 0.7)
@@ -1202,6 +1215,61 @@ public extension HealthStoreFetcher {
       zone3: (0.7 * heartRateReserve) + restingHeartRate,
       zone4: (0.8 * heartRateReserve) + restingHeartRate,
       zone5: (0.9 * heartRateReserve) + restingHeartRate
+    )
+  }
+
+  private func calculateSemiManualHeartRateZones() async -> HeartRateZones? {
+    let manager = HealthManager.shared
+    let maxHR = await manager.manualMaxHeartRate
+    let restingHR = await manager.manualRestingHeartRate
+
+    // Fall back to automatic if values are invalid
+    guard maxHR > 0, restingHR > 0, maxHR > restingHR else {
+      return await calculateAutomaticHeartRateZones()
+    }
+
+    let heartRateReserve = maxHR - restingHR
+
+    return HeartRateZones(
+      heartRateReserve: heartRateReserve,
+      restingHeartRate: restingHR,
+      maxHeartRate: maxHR,
+      zone1: (0.5 * heartRateReserve) + restingHR,
+      zone2: (0.6 * heartRateReserve) + restingHR,
+      zone3: (0.7 * heartRateReserve) + restingHR,
+      zone4: (0.8 * heartRateReserve) + restingHR,
+      zone5: (0.9 * heartRateReserve) + restingHR
+    )
+  }
+
+  private func calculateManualHeartRateZones() async -> HeartRateZones? {
+    let manager = HealthManager.shared
+    let maxHR = await manager.manualMaxHeartRate
+    let z1 = await manager.manualZone1Threshold
+    let z2 = await manager.manualZone2Threshold
+    let z3 = await manager.manualZone3Threshold
+    let z4 = await manager.manualZone4Threshold
+    let z5 = await manager.manualZone5Threshold
+
+    // Validate that zones are ascending and max HR is greater than zone 5
+    guard maxHR > 0, z1 > 0, z2 > z1, z3 > z2, z4 > z3, z5 > z4, maxHR > z5 else {
+      return await calculateAutomaticHeartRateZones()
+    }
+
+    // For manual mode, calculate an effective resting HR and HRR for display purposes
+    // Using zone 1 as the floor since that's where tracking starts
+    let effectiveResting = z1
+    let heartRateReserve = maxHR - effectiveResting
+
+    return HeartRateZones(
+      heartRateReserve: heartRateReserve,
+      restingHeartRate: effectiveResting,
+      maxHeartRate: maxHR,
+      zone1: z1,
+      zone2: z2,
+      zone3: z3,
+      zone4: z4,
+      zone5: z5
     )
   }
 }

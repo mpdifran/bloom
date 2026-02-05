@@ -16,30 +16,23 @@ struct WorkoutEquipmentView: View {
   @Environment(\.dismiss) private var dismiss
   
   var body: some View {
-    NavigationStack {
-      BloomScrollView(showsChatBar: false) {
-        ForEach(SocketMessage.WorkoutPlan.Equipment.allCases, id: \.self) { equipment in
-          equipmentCell(equipment)
-        }
+    BloomScrollView(showsChatBar: false) {
+      ForEach(SocketMessage.WorkoutPlan.Equipment.allCases, id: \.self) { equipment in
+        equipmentCell(equipment)
       }
-      .sensoryFeedback(.impact, trigger: healthManager.selectedWorkoutEquipment)
-      .navigationTitle("Workout Equipment")
-      .navigationBarTitleDisplayMode(.inline)
-      .toolbar {
-        ToolbarItem(placement: .cancellationAction) {
-          DismissButton()
-        }
+    }
+    .sensoryFeedback(.impact, trigger: healthManager.selectedWorkoutEquipment)
+    .navigationTitle("Workout Equipment")
+    .navigationBarTitleDisplayMode(.inline)
+    .shelf {
+      Button {
+        toggleAllEquipment()
+      } label: {
+        Text(selectAllButtonTitle)
+          .bold()
+          .horizontallyCentered()
       }
-      .shelf {
-        Button {
-          toggleAllEquipment()
-        } label: {
-          Text(selectAllButtonTitle)
-            .bold()
-            .horizontallyCentered()
-        }
-        .buttonStyle(.primary)
-      }
+      .buttonStyle(.primary)
     }
   }
 }

@@ -26,6 +26,14 @@ public extension String {
     case selectedWorkoutEquipment = "HealthManager.selectedWorkoutEquipment"
     case smokingStatus = "HealthManager.smokingStatus"
     case smokingQuitDate = "HealthManager.smokingQuitDate"
+    case heartRateZoneMode = "HealthManager.heartRateZoneMode"
+    case manualMaxHeartRate = "HealthManager.manualMaxHeartRate"
+    case manualRestingHeartRate = "HealthManager.manualRestingHeartRate"
+    case manualZone1Threshold = "HealthManager.manualZone1Threshold"
+    case manualZone2Threshold = "HealthManager.manualZone2Threshold"
+    case manualZone3Threshold = "HealthManager.manualZone3Threshold"
+    case manualZone4Threshold = "HealthManager.manualZone4Threshold"
+    case manualZone5Threshold = "HealthManager.manualZone5Threshold"
 
     public var key: String { rawValue }
   }
@@ -108,6 +116,32 @@ public extension HealthDefaults {
       setValue(nil, for: .smokingQuitDate)
     }
   }
+
+  func setHeartRateZoneMode(_ mode: HeartRateZoneCalculationMode) {
+    setValue(mode.rawValue, for: .heartRateZoneMode)
+  }
+
+  func setManualMaxHeartRate(_ value: Double) {
+    setValue(value, for: .manualMaxHeartRate)
+  }
+
+  func setManualRestingHeartRate(_ value: Double) {
+    setValue(value, for: .manualRestingHeartRate)
+  }
+
+  func setManualZoneThresholds(
+    zone1: Double,
+    zone2: Double,
+    zone3: Double,
+    zone4: Double,
+    zone5: Double
+  ) {
+    setValue(zone1, for: .manualZone1Threshold)
+    setValue(zone2, for: .manualZone2Threshold)
+    setValue(zone3, for: .manualZone3Threshold)
+    setValue(zone4, for: .manualZone4Threshold)
+    setValue(zone5, for: .manualZone5Threshold)
+  }
 }
 
 public extension HealthDefaults {
@@ -174,6 +208,33 @@ public extension HealthDefaults {
       return nil
     }
     return Date(timeIntervalSince1970: timestamp)
+  }
+
+  func getHeartRateZoneMode() -> HeartRateZoneCalculationMode {
+    if let value: String = getValue(for: .heartRateZoneMode),
+       let mode = HeartRateZoneCalculationMode(rawValue: value) {
+      return mode
+    }
+    return .automatic
+  }
+
+  func getManualMaxHeartRate() -> Double? {
+    getValue(for: .manualMaxHeartRate)
+  }
+
+  func getManualRestingHeartRate() -> Double? {
+    getValue(for: .manualRestingHeartRate)
+  }
+
+  func getManualZoneThresholds() -> (zone1: Double, zone2: Double, zone3: Double, zone4: Double, zone5: Double)? {
+    guard let z1: Double = getValue(for: .manualZone1Threshold),
+          let z2: Double = getValue(for: .manualZone2Threshold),
+          let z3: Double = getValue(for: .manualZone3Threshold),
+          let z4: Double = getValue(for: .manualZone4Threshold),
+          let z5: Double = getValue(for: .manualZone5Threshold) else {
+      return nil
+    }
+    return (z1, z2, z3, z4, z5)
   }
 }
 

@@ -63,4 +63,5 @@ extension URL {
   static let aceFitnessCalculators = URL(string: "https://www.acefitness.org/resources/everyone/tools-calculators/")!
   static let walkingSpeed = URL(string: "https://www.researchgate.net/publication/344166318_Walkability_Index_for_Elderly_Health_A_Proposal")!
   static let stairClimbSpeed = URL(string: "https://www.researchgate.net/publication/247771808_Functional_Predictors_of_Stair-Climbing_Speed_in_Older_Adults")!
+  static let mayoClinicHeartRateZones = URL(string: "https://www.mayoclinic.org/healthy-lifestyle/fitness/in-depth/exercise-intensity/art-20046887")!
 }

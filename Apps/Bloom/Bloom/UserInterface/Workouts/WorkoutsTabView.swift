@@ -43,9 +43,9 @@ struct WorkoutsTabView: View {
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
           Button {
-            presentedSheet = WorkoutEquipmentView().asAny
+            presentedSheet = WorkoutSettingsView().asAny
           } label: {
-            Label("Equipment", systemSymbol: .dumbbellFill)
+            Label("Settings", systemSymbol: .sliderHorizontal3)
           }
           .buttonStyle(.plain)
         }

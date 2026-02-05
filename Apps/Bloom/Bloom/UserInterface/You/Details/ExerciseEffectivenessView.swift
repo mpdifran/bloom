@@ -10,6 +10,7 @@ import AppUI
 import Charts
 import TelemetryDeck
 import CoreHealth
+import SFSafeSymbols
 
 struct ZoneMinutesDataPoint: Identifiable {
   var id: Date { date }
@@ -28,6 +29,7 @@ struct ExerciseEffectivenessView: View {
   @State private var exerciseData: ExerciseEffectivenessMonthlySummary.Details?
   @State private var zoneMinutesData: [ZoneMinutesDataPoint] = []
   @State private var isLoading = false
+  @State private var presentedSheet: AnyView?
 
   var body: some View {
     BloomScrollView(spacing: 20) {
@@ -48,6 +50,28 @@ struct ExerciseEffectivenessView: View {
           title: "Exercise Effectiveness",
           subtitle: selectedPeriod.displayName
         )
+      }
+      ToolbarItem(placement: .primaryAction) {
+        Button {
+          presentedSheet =
+          NavigationStack {
+            HeartRateZoneSettingsView()
+              .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                  DismissButton()
+                }
+              }
+          }.asAny
+        } label: {
+          Label("Settings", systemSymbol: .sliderHorizontal3)
+        }
+        .buttonStyle(.plain)
+      }
+    }
+    .sheet($presentedSheet)
+    .onChange(of: presentedSheet == nil) { _, isDismissed in
+      if isDismissed {
+        Task { await loadData() }
       }
     }
     .navigationTitle("Exercise Effectiveness")

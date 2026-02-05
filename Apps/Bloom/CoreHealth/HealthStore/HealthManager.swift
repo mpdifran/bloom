@@ -164,6 +164,21 @@ public final class HealthManager: ObservableObject {
     didSet { healthDefaults.setSmokingQuitDate(smokingQuitDate) }
   }
 
+  @Published public var heartRateZoneMode: HeartRateZoneCalculationMode = .automatic {
+    didSet { healthDefaults.setHeartRateZoneMode(heartRateZoneMode) }
+  }
+  @Published public var manualMaxHeartRate: Double = 0 {
+    didSet { healthDefaults.setManualMaxHeartRate(manualMaxHeartRate) }
+  }
+  @Published public var manualRestingHeartRate: Double = 0 {
+    didSet { healthDefaults.setManualRestingHeartRate(manualRestingHeartRate) }
+  }
+  @Published public var manualZone1Threshold: Double = 0
+  @Published public var manualZone2Threshold: Double = 0
+  @Published public var manualZone3Threshold: Double = 0
+  @Published public var manualZone4Threshold: Double = 0
+  @Published public var manualZone5Threshold: Double = 0
+
   public var healthTargetDetails: HealthTargetDetails {
     HealthTargetDetails(
       targetWeight: targetWeight,
@@ -186,6 +201,17 @@ public final class HealthManager: ObservableObject {
     self.selectedWorkoutEquipment = Set(healthDefaults.getSelectedWorkoutEquipment())
     self.smokingStatus = healthDefaults.getSmokingStatus()
     self.smokingQuitDate = healthDefaults.getSmokingQuitDate()
+    self.heartRateZoneMode = healthDefaults.getHeartRateZoneMode()
+    self.manualMaxHeartRate = healthDefaults.getManualMaxHeartRate() ?? 0
+    self.manualRestingHeartRate = healthDefaults.getManualRestingHeartRate() ?? 0
+
+    if let thresholds = healthDefaults.getManualZoneThresholds() {
+      self.manualZone1Threshold = thresholds.zone1
+      self.manualZone2Threshold = thresholds.zone2
+      self.manualZone3Threshold = thresholds.zone3
+      self.manualZone4Threshold = thresholds.zone4
+      self.manualZone5Threshold = thresholds.zone5
+    }
 
     if let activityLevel = healthDefaults.getActivityLevel() {
       self.userReportedActivityLevel = activityLevel
@@ -194,6 +220,16 @@ public final class HealthManager: ObservableObject {
     Task {
       await checkHeightFromHealthKit()
     }
+  }
+
+  public func saveManualZoneThresholds() {
+    healthDefaults.setManualZoneThresholds(
+      zone1: manualZone1Threshold,
+      zone2: manualZone2Threshold,
+      zone3: manualZone3Threshold,
+      zone4: manualZone4Threshold,
+      zone5: manualZone5Threshold
+    )
   }
 }
 

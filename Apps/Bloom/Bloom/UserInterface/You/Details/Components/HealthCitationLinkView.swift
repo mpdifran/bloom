@@ -16,16 +16,17 @@ struct HealthCitationLinkView: View {
     Link(destination: url) {
       Group {
         Text(title)
-          .foregroundStyle(.text.secondary)
+          .foregroundStyle(.secondary)
         +
         Text(" Source")
+          .bold()
+          .foregroundStyle(.tint)
       }
       .multilineTextAlignment(.leading)
     }
+    .buttonStyle(.plain)
     .horizontalAlignment(.leading)
     .font(.caption)
-    .bold()
-    .fontDesign(.rounded)
   }
 }
 
