@@ -13,24 +13,69 @@ final class PendingBowelMovementManager: ObservableObject {
   static let shared = PendingBowelMovementManager()
 
   private static let storageKey = "PendingBowelMovementManager.pendingEntries"
+  /// Maximum age for pending entries before cleanup (7 days)
+  private static let maxEntryAge: TimeInterval = 7 * 24 * 60 * 60
 
   @Published private(set) var pendingEntries: [WatchBowelMovementEntry] = []
 
   private init() {
     loadFromStorage()
+    cleanupStaleEntries()
+    checkForConfirmations()
+
+    // Listen for application context updates (backup confirmation)
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(handleApplicationContextUpdate),
+      name: WatchChannel.applicationContextDidUpdate,
+      object: nil
+    )
   }
 
-  /// Adds an entry to the pending queue and attempts to sync immediately
-  func add(_ entry: WatchBowelMovementEntry) async -> Bool {
+  @objc private func handleApplicationContextUpdate() {
+    checkForConfirmations()
+  }
+
+  /// Checks for confirmed IDs in application context and removes matching entries
+  private func checkForConfirmations() {
+    guard let data = WatchChannel.shared.getApplicationContextData(for: WatchChannel.confirmationDataKey),
+          let confirmation = try? JSONDecoder.watch.decode(WatchConfirmationData.self, from: data) else {
+      return
+    }
+
+    let confirmedIDs = Set(confirmation.confirmedBowelMovementIDs)
+    let entriesToRemove = pendingEntries.filter { confirmedIDs.contains($0.id) }
+
+    for entry in entriesToRemove {
+      remove(id: entry.id)
+    }
+  }
+
+  /// Cleans up entries older than maxEntryAge to prevent cache bloat
+  private func cleanupStaleEntries() {
+    let cutoffDate = Date().addingTimeInterval(-Self.maxEntryAge)
+    let staleEntries = pendingEntries.filter { $0.date < cutoffDate }
+
+    for entry in staleEntries {
+      remove(id: entry.id)
+    }
+  }
+
+  /// Adds an entry to the pending queue and attempts to sync in the background.
+  /// Returns immediately after queuing locally for instant UI response.
+  func add(_ entry: WatchBowelMovementEntry) {
     pendingEntries.append(entry)
     saveToStorage()
 
-    // Attempt to send immediately
-    let success = await sendEntry(entry)
-    if success {
-      remove(id: entry.id)
+    // Fire-and-forget sync attempt - UI doesn't wait for this
+    Task {
+      let success = await sendEntry(entry)
+      if success {
+        await MainActor.run { [weak self] in
+          self?.remove(id: entry.id)
+        }
+      }
     }
-    return success
   }
 
   /// Removes an entry from the pending queue

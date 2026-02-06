@@ -23,7 +23,6 @@ struct LogBowelMovementView: View {
 
   @State private var selectedStoolType: Int = 0
   @State private var selectedDuration: Int = 1
-  @State private var isSaving = false
   @State private var showingSaveConfirmation = false
   @FocusState private var isFocused: Bool
 
@@ -41,9 +40,7 @@ struct LogBowelMovementView: View {
     .frame(maxWidth: .infinity)
     .background(.black)
     .overlay {
-      if isSaving {
-        savingOverlay
-      } else if showingSaveConfirmation {
+      if showingSaveConfirmation {
         saveConfirmationOverlay
       }
     }
@@ -158,19 +155,18 @@ private extension LogBowelMovementView {
 
   var saveButton: some View {
     Button {
-      Task { await save() }
+      save()
     } label: {
       Text("Save")
         .frame(maxWidth: .infinity)
     }
     .buttonStyle(.borderedProminent)
     .tint(.brown)
-    .disabled(isSaving)
+    .disabled(showingSaveConfirmation)
   }
 
-  func save() async {
-    isSaving = true
-    defer { isSaving = false }
+  func save() {
+    guard !showingSaveConfirmation else { return }
 
     let entry = WatchBowelMovementEntry(
       date: .now,
@@ -178,33 +174,28 @@ private extension LogBowelMovementView {
       rawDuration: selectedDuration
     )
 
-    let success = await pendingManager.add(entry)
+    // Queue locally and sync in background - returns immediately
+    pendingManager.add(entry)
 
-    TelemetryDeck.signal("Watch Log Bowel Movement", parameters: [
-      "synced": success ? "true" : "false"
-    ])
+    TelemetryDeck.signal("Watch Log Bowel Movement")
 
-    // Show confirmation regardless of sync status - data is cached
+    // Show confirmation immediately - data is safely queued
     SoundPlayer.playLogHealthData()
     withAnimation {
       showingSaveConfirmation = true
     }
 
-    try? await Task.sleep(for: .seconds(1))
-
-    performDismiss?()
+    // Dismiss after brief confirmation
+    Task {
+      try? await Task.sleep(for: .seconds(1))
+      performDismiss?()
+    }
   }
 }
 
 // MARK: - Overlays
 
 private extension LogBowelMovementView {
-
-  var savingOverlay: some View {
-    ProgressView()
-      .frame(maxWidth: .infinity, maxHeight: .infinity)
-      .background(.ultraThinMaterial)
-  }
 
   var saveConfirmationOverlay: some View {
     VStack {

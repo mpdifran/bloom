@@ -121,8 +121,12 @@ final class WatchMessageRouter {
       context.insert(bowelMovement)
       try context.save()
 
-      // Refresh vitals to include the new entry
-      await VitalsCalculator.shared.fetchSwiftDataTypes()
+      // Defer expensive work to AFTER response is sent
+      Task.detached { [entryId = entry.id] in
+        // Confirm via application context (backup to direct response)
+        await WatchConfirmationSyncer.shared.confirmBowelMovement(id: entryId)
+        await VitalsCalculator.shared.fetchSwiftDataTypes()
+      }
 
       return true
     } catch {
@@ -148,15 +152,19 @@ final class WatchMessageRouter {
         )
       }
 
-      // Sync updated data back to watch
-      await WatchTodaySyncer.shared.syncToWatch()
-
       let response = WatchReminderCompletionResponse(
         success: true,
         reminderID: message.reminderID,
         isNowCompleted: message.action == .complete
       )
-      return (try? JSONEncoder.watch.encode(response)) ?? Data()
+      let responseData = (try? JSONEncoder.watch.encode(response)) ?? Data()
+
+      // Defer sync to AFTER response is sent
+      Task.detached {
+        await WatchTodaySyncer.shared.syncToWatch()
+      }
+
+      return responseData
     } catch {
       let response = WatchReminderCompletionResponse(
         success: false,
@@ -179,11 +187,19 @@ final class WatchMessageRouter {
         date: message.date
       )
 
-      // Sync updated frequent foods back to watch
-      await WatchFoodSyncer.shared.syncToWatch()
-
       let response = WatchFoodLogResponse(success: true, logID: logID)
-      return (try? JSONEncoder.watch.encode(response)) ?? Data()
+      let responseData = (try? JSONEncoder.watch.encode(response)) ?? Data()
+
+      // Defer sync to AFTER response is sent
+      Task.detached { [entryID = message.entryID] in
+        // Confirm via application context (backup to direct response)
+        if let entryID {
+          await WatchConfirmationSyncer.shared.confirmFoodLog(id: entryID)
+        }
+        await WatchFoodSyncer.shared.syncToWatch()
+      }
+
+      return responseData
     } catch {
       let response = WatchFoodLogResponse(success: false, errorMessage: error.localizedDescription)
       return (try? JSONEncoder.watch.encode(response)) ?? Data()
@@ -295,11 +311,15 @@ final class WatchMessageRouter {
         date: message.date
       )
 
-      // Sync updated foods back to watch
-      await WatchFoodSyncer.shared.syncToWatch()
-
       let response = WatchFoodLogResponse(success: true, logID: logID)
-      return (try? JSONEncoder.watch.encode(response)) ?? Data()
+      let responseData = (try? JSONEncoder.watch.encode(response)) ?? Data()
+
+      // Defer sync to AFTER response is sent
+      Task.detached {
+        await WatchFoodSyncer.shared.syncToWatch()
+      }
+
+      return responseData
     } catch {
       let response = WatchFoodLogResponse(success: false, errorMessage: error.localizedDescription)
       return (try? JSONEncoder.watch.encode(response)) ?? Data()

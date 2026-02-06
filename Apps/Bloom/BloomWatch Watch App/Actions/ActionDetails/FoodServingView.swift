@@ -15,7 +15,6 @@ struct FoodServingView: View {
   let performDismiss: (() -> Void)?
 
   @State private var selectedIndex: Double
-  @State private var isSaving = false
   @State private var showingSaveConfirmation = false
   @FocusState private var isFocused: Bool
 
@@ -121,7 +120,7 @@ struct FoodServingView: View {
           .frame(maxWidth: .infinity)
       }
       .buttonStyle(.borderedProminent)
-      .disabled(isSaving)
+      .disabled(showingSaveConfirmation)
       .horizontallyCentered()
     }
     .navigationTitle(meal.displayName)
@@ -133,13 +132,7 @@ struct FoodServingView: View {
     .tint(.mutedGreen)
     .onAppear { isFocused = true }
     .overlay {
-      if isSaving {
-        ZStack {
-          Color.black.opacity(0.7)
-          ProgressView()
-        }
-        .ignoresSafeArea()
-      } else if showingSaveConfirmation {
+      if showingSaveConfirmation {
         ZStack {
           Color.black.opacity(0.7)
           Image(systemName: "checkmark.circle.fill")
@@ -174,27 +167,23 @@ struct FoodServingView: View {
   }
 
   private func save() {
-    guard !isSaving else { return }
+    guard !showingSaveConfirmation else { return }
 
-    isSaving = true
+    // Queue locally and sync in background - returns immediately
+    PendingFoodLogManager.shared.log(
+      foodItemID: food.id,
+      meal: meal.rawValue,
+      numberOfServings: servings
+    )
 
+    // Show confirmation immediately - data is safely queued
+    WKInterfaceDevice.current().play(.success)
+    showingSaveConfirmation = true
+
+    // Dismiss after brief confirmation
     Task {
-      let success = await PendingFoodLogManager.shared.log(
-        foodItemID: food.id,
-        meal: meal.rawValue,
-        numberOfServings: servings
-      )
-
-      isSaving = false
-
-      if success {
-        WKInterfaceDevice.current().play(.success)
-        showingSaveConfirmation = true
-        try? await Task.sleep(for: .seconds(1))
-        performDismiss?()
-      } else {
-        WKInterfaceDevice.current().play(.failure)
-      }
+      try? await Task.sleep(for: .seconds(1))
+      performDismiss?()
     }
   }
 }

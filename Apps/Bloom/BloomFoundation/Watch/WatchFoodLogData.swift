@@ -14,18 +14,22 @@ public struct WatchFoodLogMessage: Codable, Sendable {
   public static let messageType = "foodLog"
 
   public let type: String
+  /// The unique ID of the pending entry on the watch (for confirmation)
+  public let entryID: String?
   public let foodItemID: String
   public let meal: String
   public let numberOfServings: Double
   public let date: Date
 
   public init(
+    entryID: String? = nil,
     foodItemID: String,
     meal: String,
     numberOfServings: Double,
     date: Date = Date()
   ) {
     self.type = Self.messageType
+    self.entryID = entryID
     self.foodItemID = foodItemID
     self.meal = meal
     self.numberOfServings = numberOfServings
@@ -134,6 +138,7 @@ public struct WatchPendingFoodLogEntry: Codable, Sendable, Identifiable {
 
   public func toMessage() -> WatchFoodLogMessage {
     WatchFoodLogMessage(
+      entryID: id,
       foodItemID: foodItemID,
       meal: meal,
       numberOfServings: numberOfServings,
