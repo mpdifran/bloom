@@ -18,7 +18,6 @@ struct ActiveWorkoutSummaryView: View {
     if let workout = workoutManager.workout {
       ScrollView {
         summaryListView(workout: workout)
-          .scenePadding()
       }
       .navigationTitle("Summary")
       .navigationBarTitleDisplayMode(.inline)
@@ -32,16 +31,22 @@ struct ActiveWorkoutSummaryView: View {
   private func summaryListView(workout: HKWorkout) -> some View {
     VStack(alignment: .leading) {
       SummaryMetricView(title: "Total Time", value: workout.totalTimeString)
-        .foregroundStyle(.yellow)
+        .tint(.mutedYellow)
 
       SummaryMetricView(title: "Total Energy", value: workout.totalEnergyBurned.displayString(for: .largeCalorie()))
-        .foregroundStyle(.pink)
+        .foregroundStyle(.mutedPink)
 
       SummaryMetricView(title: "Avg. Heart Rate", value: workout.averageHeartRate.displayString(for: .bpm()))
-        .foregroundStyle(.red)
+        .foregroundStyle(.mutedRed)
 
-      Group {
-        Text("Activity Rings")
+      SummaryMetricView(title: "Zone Minutes", value: "\(Int(workoutManager.totalZoneMinutes))")
+        .tint(.mutedGreen)
+
+      SummaryMetricView(title: "Heart Rate Zones") {
+        MiniHeartRateZoneDistributionView(distribution: zoneDistribution)
+      }
+
+      SummaryMetricView(title: "Activity Rings") {
         ActivityRingsView(healthStore: workoutManager.healthStore)
           .frame(width: 50, height: 50)
       }
@@ -52,6 +57,20 @@ struct ActiveWorkoutSummaryView: View {
         Text("Done")
       }
     }
+  }
+
+  private var zoneDistribution: WorkoutHeartRateReport.WorkoutHeartZoneDistribution {
+    let durations = workoutManager.zoneDurations
+    let total = durations.reduce(0, +)
+
+    return WorkoutHeartRateReport.WorkoutHeartZoneDistribution(
+      totalDuration: HKQuantity(unit: .second(), doubleValue: total),
+      zone1: HKQuantity(unit: .second(), doubleValue: durations[1]),
+      zone2: HKQuantity(unit: .second(), doubleValue: durations[2]),
+      zone3: HKQuantity(unit: .second(), doubleValue: durations[3]),
+      zone4: HKQuantity(unit: .second(), doubleValue: durations[4]),
+      zone5: HKQuantity(unit: .second(), doubleValue: durations[5])
+    )
   }
 }
 
