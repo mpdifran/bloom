@@ -131,7 +131,7 @@ struct YouView: View {
     case .nutrition:
       NutritionSection(
         presentedNavigationDestination: $presentedNavigationDestination,
-        summary: viewModel.nutritionSummary,
+        macros: viewModel.nutritionMacros,
         fiberChartData: viewModel.fiberChartData,
         sugarChartData: viewModel.sugarChartData
       )

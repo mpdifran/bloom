@@ -42,6 +42,7 @@ final actor YouStatsCalculator {
   @AsyncStreamable var activityLevelSummary: ActivityLevelSummary?
   @AsyncStreamable var averageRestingHeartRate: Double?
   @AsyncStreamable var bodyFatPercentage: HKQuantity?
+  @AsyncStreamable var nutritionMacros: NutritionMonthlySummary.Macros?
 
   private let healthStoreFetcher = HealthStoreFetcher.shared
 
@@ -90,6 +91,9 @@ final actor YouStatsCalculator {
     bodyFatPercentage = await healthStoreFetcher.fetchBodyCompositionSummaryDetails(
       dateRange: .trailingMonthsFromNow(1)
     ).bodyFatPercentage
+    nutritionMacros = await healthStoreFetcher.fetchNutritionMonthlySummaryDetails(
+      dateRange: .trailingDaysFromNow(6)
+    ).macros
   }
 
   func refreshSteps() async {

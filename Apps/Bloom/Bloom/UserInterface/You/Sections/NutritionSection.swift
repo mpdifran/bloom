@@ -7,13 +7,12 @@
 
 import SwiftUI
 import CoreHealth
-import HealthKit
 import SFSafeSymbols
 import DataContainer
 
 struct NutritionSection: View {
   @Binding var presentedNavigationDestination: AnyView?
-  let summary: NutritionMonthlySummary?
+  let macros: NutritionMonthlySummary.Macros?
   let fiberChartData: FiberChartData?
   let sugarChartData: SugarChartData?
 
@@ -34,21 +33,6 @@ struct NutritionSection: View {
 }
 
 private extension NutritionSection {
-
-  var macros: NutritionMonthlySummary.Macros? {
-    guard
-      let protein = summary?.details.averageProtein,
-      let carbs = summary?.details.averageCarbohydrates,
-      let fat = summary?.details.averageFat
-    else { return nil }
-
-    return NutritionMonthlySummary.Macros(
-      protein: protein,
-      carbohydrates: carbs,
-      fat: fat,
-      remainderCalories: 0
-    )
-  }
 
   var macrosCard: some View {
     MacrosStatCard(macros: macros)
@@ -71,7 +55,7 @@ private extension NutritionSection {
     BloomScrollView {
       NutritionSection(
         presentedNavigationDestination: .constant(nil),
-        summary: nil,
+        macros: nil,
         fiberChartData: nil,
         sugarChartData: nil
       )

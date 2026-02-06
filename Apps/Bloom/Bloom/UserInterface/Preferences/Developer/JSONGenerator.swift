@@ -51,15 +51,18 @@ extension JSONGenerator {
       }) ?? []
     )
 
-    let nutrition = await SummaryJSON.NutritionDetails(
-      averageBasalEnergy: calc.nutritionSummary?.details.basalEnergyBurned.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .largeCalorie()), unit: .largeCalorie()) }),
-      averageActiveEnergy: calc.nutritionSummary?.details.activeEnergyBurned.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .largeCalorie()), unit: .largeCalorie()) }),
-      averageDietaryEnergy: calc.nutritionSummary?.details.dietaryEnergy.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .largeCalorie()), unit: .largeCalorie()) }),
-      averageProtein: calc.nutritionSummary?.details.averageProtein.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .gram()), unit: .gram()) }),
-      averageCarbohydrates: calc.nutritionSummary?.details.averageCarbohydrates.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .gram()), unit: .gram()) }),
-      averagFat: calc.nutritionSummary?.details.averageFat.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .gram()), unit: .gram()) }),
-      averageFiber: calc.nutritionSummary?.details.averageFiber.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .gram()), unit: .gram()) }),
-      averageSugar: calc.nutritionSummary?.details.averageSugar.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .gram()), unit: .gram()) })
+    let nutritionDetails = await HealthStoreFetcher.shared.fetchNutritionMonthlySummaryDetails(
+      dateRange: .trailingMonthsFromNow(1)
+    )
+    let nutrition = SummaryJSON.NutritionDetails(
+      averageBasalEnergy: nutritionDetails.basalEnergyBurned.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .largeCalorie()), unit: .largeCalorie()) }),
+      averageActiveEnergy: nutritionDetails.activeEnergyBurned.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .largeCalorie()), unit: .largeCalorie()) }),
+      averageDietaryEnergy: nutritionDetails.dietaryEnergy.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .largeCalorie()), unit: .largeCalorie()) }),
+      averageProtein: nutritionDetails.averageProtein.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .gram()), unit: .gram()) }),
+      averageCarbohydrates: nutritionDetails.averageCarbohydrates.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .gram()), unit: .gram()) }),
+      averagFat: nutritionDetails.averageFat.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .gram()), unit: .gram()) }),
+      averageFiber: nutritionDetails.averageFiber.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .gram()), unit: .gram()) }),
+      averageSugar: nutritionDetails.averageSugar.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .gram()), unit: .gram()) })
     )
 
     let bms = await calc.bowelMovementSummary?.bowelMovements.map({ SummaryJSON.BM(date: $0.date, bristolStoolType: $0.bristolStoolType, duration: $0.duration.name) }) ?? []
