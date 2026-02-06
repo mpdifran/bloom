@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import HealthKit
+import CoreHealth
 
 struct SummaryMetricView<Content: View>: View {
   let title: String
@@ -22,13 +24,13 @@ struct SummaryMetricView<Content: View>: View {
   var body: some View {
     VStack(alignment: .leading) {
       Text(title)
-        .font(.system(.caption2, weight: .bold))
-        .foregroundStyle(.tint)
+        .font(.system(.caption2, weight: .semibold))
 
       contentBuilder()
+        .foregroundStyle(.tint)
     }
     .horizontalAlignment(.leading)
-    .padding(6)
+    .padding(8)
     .background {
       RoundedRectangle(cornerRadius: 12)
         .fill(.background.secondary)
@@ -51,10 +53,30 @@ extension SummaryMetricView where Content == Text {
     ScrollView {
       VStack(alignment: .leading) {
         SummaryMetricView(
-          title: "Duration",
+          title: "Total Time",
           value: "13m4s"
         )
         .tint(.mutedYellow)
+
+        SummaryMetricView(
+          title: "Total Energy",
+          value: "354 Cal"
+        )
+        .tint(.mutedPink)
+
+        SummaryMetricView(title: "Heart Rate Zones") {
+          MiniHeartRateZoneDistributionView(
+            distribution: WorkoutHeartRateReport.WorkoutHeartZoneDistribution(
+              totalDuration: HKQuantity(unit: .second(), doubleValue: 3627),
+              zone1: HKQuantity(unit: .second(), doubleValue: 82),
+              zone2: HKQuantity(unit: .second(), doubleValue: 71),
+              zone3: HKQuantity(unit: .second(), doubleValue: 63),
+              zone4: HKQuantity(unit: .second(), doubleValue: 34),
+              zone5: HKQuantity(unit: .second(), doubleValue: 26)
+            )
+          )
+        }
+        .tint(.white)
       }
     }
     .navigationTitle("Summary")
