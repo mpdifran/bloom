@@ -188,10 +188,10 @@ private extension DayVitalsCalculator {
     let bodyFatQuantity = await HealthStoreFetcher.shared.fetchLatestSample(for: .bodyFatPercentage)?.quantity
     let leanBodyMassQuantity = await HealthStoreFetcher.shared.fetchLatestSample(for: .leanBodyMass)?.quantity
 
-    // Fetch averages from the vitals (using the core VitalsCalculator)
-    let bodyCompositionSummary = await VitalsCalculator.shared.bodyCompositionSummary
+    // Fetch averages from HealthStoreFetcher
+    let bodyCompositionSummary = await HealthStoreFetcher.shared.fetchBodyCompositionSummary()
 
-    guard bodyMassQuantity != nil || bodyFatQuantity != nil || leanBodyMassQuantity != nil || bodyCompositionSummary != nil else {
+    guard bodyMassQuantity != nil || bodyFatQuantity != nil || leanBodyMassQuantity != nil else {
       return nil
     }
     
@@ -202,14 +202,14 @@ private extension DayVitalsCalculator {
       return "\(Int(percent))%"
     }
     
-    let bodyFatPercentageAverageString = bodyCompositionSummary?.details.bodyFatPercentage.map { quantity in
+    let bodyFatPercentageAverageString = bodyCompositionSummary.details.bodyFatPercentage.map { quantity in
       let percent = quantity.doubleValue(for: .percent()) * 100
       return "\(Int(percent))%"
     }
     
     return BodyCompositionData(
       bodyMass: await bodyMassQuantity?.displayString(for: bodyMassUnit, formatter: .oneDecimalPlace),
-      bodyMassAverage: await bodyCompositionSummary?.details.averageBodyMass?.displayString(for: bodyMassUnit, formatter: .oneDecimalPlace),
+      bodyMassAverage: await bodyCompositionSummary.details.averageBodyMass?.displayString(for: bodyMassUnit, formatter: .oneDecimalPlace),
       bodyFatPercentage: bodyFatPercentageString,
       bodyFatPercentageAverage: bodyFatPercentageAverageString,
       leanBodyMass: await leanBodyMassQuantity?.displayString(for: bodyMassUnit, formatter: .oneDecimalPlace),

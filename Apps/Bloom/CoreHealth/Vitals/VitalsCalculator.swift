@@ -15,7 +15,6 @@ public final actor VitalsCalculator {
 
   @AsyncStreamable public var vitals = [VitalModel]()
 
-  @AsyncStreamable public var bodyCompositionSummary: BodyCompositionMonthlySummary?
   @AsyncStreamable public var nutritionSummary: NutritionMonthlySummary?
   @AsyncStreamable public var bowelMovementSummary: BowelMovementSummary?
   @AsyncStreamable public var menstrualSummary: MenstrualSummary?
@@ -54,7 +53,6 @@ public extension VitalsCalculator {
   }
 
   func forceFetchVitals() async {
-    bodyCompositionSummary = await HealthStoreFetcher.shared.fetchBodyCompositionSummary()
     nutritionSummary = await HealthStoreFetcher.shared.fetchNutritionMonthlySummary()
     menstrualSummary = await HealthStoreFetcher.shared.fetchMenstrualSummary()
     bowelMovementSummary = await fetchBowelMovementSummary()
@@ -112,20 +110,6 @@ private extension VitalsCalculator {
 
   func createVitals() async {
     var vitals = [VitalModel]()
-    if let bodyCompositionSummary {
-      await vitals.append(
-        VitalModel(
-          id: .bodyComposition,
-          subtitle: bodyCompositionSummary.subtitle,
-          status: bodyCompositionSummary.details.range?.name,
-          color: bodyCompositionSummary.details.range?.color,
-          barLevel: bodyCompositionSummary.barLevel,
-          hasNoData: bodyCompositionSummary.details.hasNoData
-        )
-      )
-    } else {
-      vitals.append(VitalModel(id: .bodyComposition))
-    }
     if let nutritionSummary {
       vitals.append(
         VitalModel(

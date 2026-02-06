@@ -32,9 +32,10 @@ extension JSONGenerator {
       averageRestingHeartRate: heartHealthDetails.averageRestingHeartRate.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .bpm()), unit: .bpm()) })
     )
 
-    let bodyComp = await SummaryJSON.BodyCompDetails(
-      bodyFatPercentage: calc.bodyCompositionSummary?.details.bodyFatPercentage.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .percent()), unit: .percent()) }),
-      bodyMass: calc.bodyCompositionSummary?.details.averageBodyMass.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .pound()), unit: .pound()) })
+    let bodyCompSummary = await HealthStoreFetcher.shared.fetchBodyCompositionSummary()
+    let bodyComp = SummaryJSON.BodyCompDetails(
+      bodyFatPercentage: bodyCompSummary.details.bodyFatPercentage.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .percent()), unit: .percent()) }),
+      bodyMass: bodyCompSummary.details.averageBodyMass.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .pound()), unit: .pound()) })
     )
 
     let stressSummary = await HealthStoreFetcher.shared.fetchStressMonthlySummary(trailingMonthAnalyses: sleepAnalyses)

@@ -41,6 +41,7 @@ final actor YouStatsCalculator {
   @AsyncStreamable var restingHeartRateChartData: [RestingHeartRateDataPoint]?
   @AsyncStreamable var activityLevelSummary: ActivityLevelSummary?
   @AsyncStreamable var averageRestingHeartRate: Double?
+  @AsyncStreamable var bodyFatPercentage: HKQuantity?
 
   private let healthStoreFetcher = HealthStoreFetcher.shared
 
@@ -86,6 +87,9 @@ final actor YouStatsCalculator {
     averageRestingHeartRate = await healthStoreFetcher.fetchHeartHealthDetails(
       dateRange: .trailingDaysFromNow(6)
     ).averageRestingHeartRate?.doubleValue(for: .bpm())
+    bodyFatPercentage = await healthStoreFetcher.fetchBodyCompositionSummaryDetails(
+      dateRange: .trailingMonthsFromNow(1)
+    ).bodyFatPercentage
   }
 
   func refreshSteps() async {

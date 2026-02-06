@@ -119,7 +119,7 @@ struct YouView: View {
     case .bodyComposition:
       BodyCompositionSection(
         presentedNavigationDestination: $presentedNavigationDestination,
-        summary: viewModel.bodyCompositionSummary,
+        bodyFatPercentage: viewModel.bodyFatPercentage,
         bodyWeightChartData: viewModel.bodyWeightChartData
       )
     case .stressLevels:

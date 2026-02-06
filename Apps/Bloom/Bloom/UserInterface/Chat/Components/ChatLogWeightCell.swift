@@ -104,7 +104,7 @@ private extension ChatLogWeightCell {
 
     TelemetryDeck.signal("Log Weight")
 
-    if await VitalsCalculator.shared.bodyCompositionSummary?.details.hasNoData != false {
+    if await HealthStoreFetcher.shared.fetchBodyCompositionSummaryDetails(dateRange: .trailingMonthsFromNow(1)).hasNoData {
       await VitalsCalculator.shared.forceFetchVitals()
     }
 

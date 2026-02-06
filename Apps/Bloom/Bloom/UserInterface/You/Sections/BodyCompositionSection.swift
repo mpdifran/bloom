@@ -9,10 +9,11 @@ import SwiftUI
 import CoreHealth
 import SFSafeSymbols
 import DataContainer
+import HealthKit
 
 struct BodyCompositionSection: View {
   @Binding var presentedNavigationDestination: AnyView?
-  let summary: BodyCompositionMonthlySummary?
+  let bodyFatPercentage: HKQuantity?
   let bodyWeightChartData: BodyWeightChartData?
 
   var body: some View {
@@ -37,7 +38,7 @@ private extension BodyCompositionSection {
   }
 
   var bodyFatCard: some View {
-    BodyFatStatCard(bodyFatPercentage: summary?.details.bodyFatPercentage)
+    BodyFatStatCard(bodyFatPercentage: bodyFatPercentage)
       .onTapGesture { navigateToDetails() }
   }
 }
@@ -47,7 +48,7 @@ private extension BodyCompositionSection {
     BloomScrollView {
       BodyCompositionSection(
         presentedNavigationDestination: .constant(nil),
-        summary: nil,
+        bodyFatPercentage: nil,
         bodyWeightChartData: nil
       )
     }

@@ -19,7 +19,7 @@ struct BodyCompositionDetailsView: View {
   @State private var bodyMassSamples = [DateQuantitySample]()
   @State private var bodyFatPercentageSamples = [DateQuantitySample]()
 
-  private let viewModel = VitalsViewModel.shared
+  @State private var bodyCompositionSummary: BodyCompositionMonthlySummary?
 
   @State private var presentedSheet: AnyView?
   @State private var selectedRangeIndex = 0
@@ -91,14 +91,17 @@ struct BodyCompositionDetailsView: View {
         self.bodyMassSamples = samples
       }
     }
+    .task {
+      let summary = await HealthStoreFetcher.shared.fetchBodyCompositionSummary()
+      await MainActor.run {
+        self.bodyCompositionSummary = summary
+        if let range = summary.details.range, let index = ranges.firstIndex(of: range) {
+          selectedRangeIndex = index
+        }
+      }
+    }
     .onAppear {
       feedbackGenerator.prepare()
-      if
-        let range = viewModel.bodyCompositionSummary?.details.range,
-        let index = ranges.firstIndex(where: { $0 == range })
-      {
-        self.selectedRangeIndex = index
-      }
       TelemetryDeck.viewScreen("Body Composition Vital Details")
     }
   }
@@ -215,7 +218,7 @@ private extension BodyCompositionDetailsView {
         }
         .cardContainer(includePadding: false)
 
-        if let bodyMassTrendDescription = viewModel.bodyCompositionSummary?.bodyMassTrendDescription {
+        if let bodyMassTrendDescription = bodyCompositionSummary?.bodyMassTrendDescription {
           DetailInfoCardView {
             Text(bodyMassTrendDescription)
           }
@@ -278,7 +281,7 @@ private extension BodyCompositionDetailsView {
 
       Chart {
         if
-          let goals = viewModel.bodyCompositionSummary?.details.goalBodyFatPercentage,
+          let goals = bodyCompositionSummary?.details.goalBodyFatPercentage,
           let goal = range.rangeValues(from: goals)
         {
 
@@ -306,13 +309,13 @@ private extension BodyCompositionDetailsView {
             x: .value("Date", sample.date, unit: .day),
             y: .value("Body Fat Percentage", sample.quantity.doubleValue(for: .percent()))
           )
-          .foregroundStyle(viewModel.bodyCompositionSummary?.details.range?.color ?? .vitalGood)
+          .foregroundStyle(bodyCompositionSummary?.details.range?.color ?? .vitalGood)
 
           PointMark(
             x: .value("Date", sample.date, unit: .day),
             y: .value("Body Fat Percentage", sample.quantity.doubleValue(for: .percent()))
           )
-          .foregroundStyle(viewModel.bodyCompositionSummary?.details.range?.color ?? .vitalGood)
+          .foregroundStyle(bodyCompositionSummary?.details.range?.color ?? .vitalGood)
           .symbolSize(40)
         }
       }

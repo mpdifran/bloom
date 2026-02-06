@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreHealth
+import HealthKit
 
 @Observable @MainActor
 final class YouStatsViewModel: Sendable {
@@ -14,7 +15,7 @@ final class YouStatsViewModel: Sendable {
 
   var activityLevelSummary: ActivityLevelSummary?
   var averageRestingHeartRate: Double?
-  var bodyCompositionSummary: BodyCompositionMonthlySummary?
+  var bodyFatPercentage: HKQuantity?
   var nutritionSummary: NutritionMonthlySummary?
   var bowelMovementSummary: BowelMovementSummary?
   var menstrualSummary: MenstrualSummary?
@@ -75,9 +76,9 @@ private extension YouStatsViewModel {
       }
     })
     tasks.append(Task.detached {
-      for await bodyCompositionSummary in await VitalsCalculator.shared.$bodyCompositionSummary {
+      for await bodyFatPercentage in await YouStatsCalculator.shared.$bodyFatPercentage {
         await MainActor.run {
-          self.bodyCompositionSummary = bodyCompositionSummary
+          self.bodyFatPercentage = bodyFatPercentage
         }
       }
     })
