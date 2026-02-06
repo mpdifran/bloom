@@ -7,6 +7,7 @@
 
 import Foundation
 import BloomFoundation
+import WidgetKit
 
 /// Provides today's advice and reminders data on watchOS by reading from WatchConnectivity application context.
 @Observable @MainActor
@@ -94,6 +95,8 @@ public final class TodayProvider {
     if let lastUpdated {
       UserDefaults.group.set(lastUpdated.timeIntervalSince1970, forKey: Self.lastUpdatedKey)
     }
+
+    WidgetCenter.shared.reloadTimelines(ofKind: String.WidgetKind.watchReminder)
   }
 
   /// Updates a reminder's completion status optimistically (before phone confirms)

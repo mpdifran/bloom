@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/bugsnag/bugsnag-cocoa",
       "state" : {
-        "revision" : "f4348c29cc881ce80e4e22a46f29d7f5a18e924b",
-        "version" : "6.34.1"
+        "revision" : "ae1094f4dfd3f946f00f27e5e6771fd36243a342",
+        "version" : "6.35.0"
       }
     },
     {
@@ -123,8 +123,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/fluent-kit.git",
       "state" : {
-        "revision" : "06dadea2c17b3fa4e671f4a3cdc0840e970939b3",
-        "version" : "1.54.2"
+        "revision" : "f8f38b81009bb84eb2cb017b8914f44d3dde5ed5",
+        "version" : "1.55.0"
       }
     },
     {
@@ -213,8 +213,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/RevenueCat/purchases-ios-spm.git",
       "state" : {
-        "revision" : "f4cef4cd3012c5ddeb10a65f0d76b60115c7d3f7",
-        "version" : "5.55.3"
+        "revision" : "8f5df97653eb361a2097119479332afccf0aa816",
+        "version" : "5.58.0"
       }
     },
     {
@@ -402,8 +402,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-nio.git",
       "state" : {
-        "revision" : "233f61bc2cfbb22d0edeb2594da27a20d2ce514e",
-        "version" : "2.93.0"
+        "revision" : "5e72fc102906ebe75a3487595a653e6f43725552",
+        "version" : "2.94.0"
       }
     },
     {
@@ -411,8 +411,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-nio-extras.git",
       "state" : {
-        "revision" : "cc599775aa85d04340f09b47e5432564f9889ae7",
-        "version" : "1.32.0"
+        "revision" : "3df009d563dc9f21a5c85b33d8c2e34d2e4f8c3b",
+        "version" : "1.32.1"
       }
     },
     {

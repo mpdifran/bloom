@@ -66,6 +66,9 @@ struct RootView: View {
           presentedActionSheet = ActionsView(performDismiss: {
             presentedActionSheet = nil
           }).asAny
+        } else if path == "/watch/today" {
+          NavigationResetController.shared.reset()
+          selectedTab = .today
         } else if path.hasPrefix("/watch/actions/") {
           let actionId = String(path.dropFirst("/watch/actions/".count))
           handleActionDeepLink(actionId: actionId)
