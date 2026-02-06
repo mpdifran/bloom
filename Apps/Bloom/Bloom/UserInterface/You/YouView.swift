@@ -111,7 +111,7 @@ struct YouView: View {
     case .heartHealth:
       HeartHealthSection(
         presentedNavigationDestination: $presentedNavigationDestination,
-        summary: viewModel.heartHealthSummary,
+        averageRestingHeartRate: viewModel.averageRestingHeartRate,
         heartRateReserveChartData: viewModel.heartRateReserveChartData,
         vo2MaxTrendData: viewModel.vo2MaxTrendData,
         heartRateRecoveryData: viewModel.heartRateRecoveryData,

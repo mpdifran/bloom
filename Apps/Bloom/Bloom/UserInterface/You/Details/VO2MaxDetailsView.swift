@@ -16,8 +16,7 @@ struct VO2MaxDetailsView: View {
   @State private var selectedPeriod: StatTimePeriod = .oneMonth
   @State private var selectedFitnessLevelIndex: Int = 0
   @State private var vo2MaxSamples = [DateQuantitySample]()
-
-  private let viewModel = VitalsViewModel.shared
+  @State private var cardioFitnessLevel: HeartHealthMonthlySummary.CardioFitnessLevel?
   private let feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
 
   private let fitnessLevels: [HeartHealthMonthlySummary.CardioFitnessLevel] = [
@@ -52,12 +51,18 @@ struct VO2MaxDetailsView: View {
     .task(id: selectedPeriod) {
       await loadData()
     }
+    .task {
+      let heartHealthSummary = await HealthStoreFetcher.shared.fetchHeartHealthSummary()
+      let level = await heartHealthSummary.details.cardioFitnessLevel
+      await MainActor.run {
+        cardioFitnessLevel = level
+        if let level, let index = fitnessLevels.firstIndex(of: level) {
+          selectedFitnessLevelIndex = index
+        }
+      }
+    }
     .onAppear {
       feedbackGenerator.prepare()
-      if let level = viewModel.heartHealthSummary?.details.cardioFitnessLevel,
-         let index = fitnessLevels.firstIndex(of: level) {
-        selectedFitnessLevelIndex = index
-      }
       TelemetryDeck.viewScreen("VO2 Max Details")
     }
   }
@@ -218,7 +223,7 @@ private extension VO2MaxDetailsView {
   }
 
   var userDataColor: Color {
-    viewModel.heartHealthSummary?.details.cardioFitnessLevel?.color ?? .mutedPink
+    cardioFitnessLevel?.color ?? .mutedPink
   }
 
   var averageVO2MaxDisplayString: String {

@@ -18,8 +18,6 @@ struct HeartHealthDetailsView: View {
   @State private var heartRateReserveData: HeartRateReserveDetailData?
   @State private var heartRateRecoveryData: HeartRateRecoveryDetailData?
 
-  private let viewModel = VitalsViewModel.shared
-
   var body: some View {
     BloomScrollView(spacing: 20) {
       StatTimePeriodPicker(selectedPeriod: $selectedPeriod)

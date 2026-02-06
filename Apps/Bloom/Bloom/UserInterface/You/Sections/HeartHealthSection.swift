@@ -7,13 +7,12 @@
 
 import SwiftUI
 import CoreHealth
-import HealthKit
 import SFSafeSymbols
 import DataContainer
 
 struct HeartHealthSection: View {
   @Binding var presentedNavigationDestination: AnyView?
-  let summary: HeartHealthMonthlySummary?
+  let averageRestingHeartRate: Double?
   let heartRateReserveChartData: HeartRateReserveChartData?
   let vo2MaxTrendData: VO2MaxTrendData?
   let heartRateRecoveryData: HeartRateRecoveryData?
@@ -46,7 +45,7 @@ private extension HeartHealthSection {
 
   var restingHeartRateCard: some View {
     RestingHeartRateStatCard(
-      restingHeartRate: summary?.details.averageRestingHeartRate?.doubleValue(for: .bpm()),
+      restingHeartRate: averageRestingHeartRate,
       chartData: restingHeartRateChartData
     )
     .onTapGesture { navigateToHeartHealthDetails() }
@@ -73,7 +72,7 @@ private extension HeartHealthSection {
     BloomScrollView {
       HeartHealthSection(
         presentedNavigationDestination: .constant(nil),
-        summary: nil,
+        averageRestingHeartRate: nil,
         heartRateReserveChartData: nil,
         vo2MaxTrendData: nil,
         heartRateRecoveryData: nil,

@@ -22,10 +22,11 @@ extension JSONGenerator {
 
     let calc = VitalsCalculator.shared
 
-    let heartDetails = await SummaryJSON.HeartDetails(
-      averageVo2Max: calc.heartHealthSummary?.details.averageVO2Max.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .vo2Max()), unit: .vo2Max()) }),
-      averageHeartRateRecovery: calc.heartHealthSummary?.details.averageHeartRateRecovery.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .bpm()), unit: .bpm()) }),
-      averageRestingHeartRate: calc.heartHealthSummary?.details.averageRestingHeartRate.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .bpm()), unit: .bpm()) })
+    let heartHealthDetails = await HealthStoreFetcher.shared.fetchHeartHealthDetails(dateRange: .trailingDaysFromNow(6))
+    let heartDetails = SummaryJSON.HeartDetails(
+      averageVo2Max: heartHealthDetails.averageVO2Max.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .vo2Max()), unit: .vo2Max()) }),
+      averageHeartRateRecovery: heartHealthDetails.averageHeartRateRecovery.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .bpm()), unit: .bpm()) }),
+      averageRestingHeartRate: heartHealthDetails.averageRestingHeartRate.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .bpm()), unit: .bpm()) })
     )
 
     let bodyComp = await SummaryJSON.BodyCompDetails(

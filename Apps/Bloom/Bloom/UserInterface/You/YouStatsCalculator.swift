@@ -40,6 +40,7 @@ final actor YouStatsCalculator {
   @AsyncStreamable var stairClimbSpeedChartData: StairClimbSpeedChartData?
   @AsyncStreamable var restingHeartRateChartData: [RestingHeartRateDataPoint]?
   @AsyncStreamable var activityLevelSummary: ActivityLevelSummary?
+  @AsyncStreamable var averageRestingHeartRate: Double?
 
   private let healthStoreFetcher = HealthStoreFetcher.shared
 
@@ -82,6 +83,9 @@ final actor YouStatsCalculator {
     activityLevelSummary = ActivityLevelSummary(
       details: await healthStoreFetcher.fetchActivityLevelSummaryDetails(dateRange: .trailingDaysFromNow(6))
     )
+    averageRestingHeartRate = await healthStoreFetcher.fetchHeartHealthDetails(
+      dateRange: .trailingDaysFromNow(6)
+    ).averageRestingHeartRate?.doubleValue(for: .bpm())
   }
 
   func refreshSteps() async {

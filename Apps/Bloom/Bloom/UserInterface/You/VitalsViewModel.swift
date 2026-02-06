@@ -20,7 +20,6 @@ final class VitalsViewModel: Sendable {
     var vitals = [VitalModel]()
     var noDataVitals = [VitalModel]()
     var sleepVitalsSummary: SleepVitalsMonthlySummary?
-    var heartHealthSummary: HeartHealthMonthlySummary?
     var bodyCompositionSummary: BodyCompositionMonthlySummary?
     var stressSummary: StressMonthlySummary?
     var nutritionSummary: NutritionMonthlySummary?
@@ -58,13 +57,6 @@ extension VitalsViewModel {
             for await sleepVitalsSummary in await VitalsCalculator.shared.$sleepVitalsSummary {
                 await MainActor.run {
                     self.sleepVitalsSummary = sleepVitalsSummary
-                }
-            }
-        })
-        tasks.append(Task.detached {
-            for await heartHealthSummary in await VitalsCalculator.shared.$heartHealthSummary {
-                await MainActor.run {
-                    self.heartHealthSummary = heartHealthSummary
                 }
             }
         })
