@@ -64,7 +64,7 @@ private extension YouStatsViewModel {
     tasks.removeAll(keepingCapacity: true)
 
     tasks.append(Task.detached {
-      for await activityLevelSummary in await VitalsCalculator.shared.$activityLevelSummary {
+      for await activityLevelSummary in await YouStatsCalculator.shared.$activityLevelSummary {
         await MainActor.run {
           self.activityLevelSummary = activityLevelSummary
         }

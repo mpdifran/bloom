@@ -59,7 +59,7 @@ extension JSONGenerator {
     let bms = await calc.bowelMovementSummary?.bowelMovements.map({ SummaryJSON.BM(date: $0.date, bristolStoolType: $0.bristolStoolType, duration: $0.duration.name) }) ?? []
 
     let summary = await SummaryJSON(
-      activityLevel: VitalsCalculator.shared.activityLevelSummary?.details,
+      activityLevel: YouStatsCalculator.shared.activityLevelSummary?.details,
       sleep: VitalsCalculator.shared.sleepVitalsSummary?.details,
       heartHealth: heartDetails,
       bodyComposition: bodyComp,

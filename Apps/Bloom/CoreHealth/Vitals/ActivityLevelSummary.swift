@@ -68,11 +68,7 @@ public extension ActivityLevelSummary.ActivityLevel {
   }
 
   var color: Color {
-    switch self {
-    case .sedentary: .vitalWarning
-    case .light, .moderate: .vitalGood
-    case .high, .intense: .vitalGreat
-    }
+    barColor
   }
 
   var barColor: Color {

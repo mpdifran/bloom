@@ -146,6 +146,6 @@ private extension HealthPatternAnalyzer {
   }
   
   func getActivityLevel() async -> ActivityLevelSummary.ActivityLevel? {
-    return await VitalsCalculator.shared.activityLevelSummary?.details.activityLevel
+    return await YouStatsCalculator.shared.activityLevelSummary?.details.activityLevel
   }
 }
