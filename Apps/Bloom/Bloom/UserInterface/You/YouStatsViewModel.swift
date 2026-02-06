@@ -18,7 +18,6 @@ final class YouStatsViewModel: Sendable {
   var bodyCompositionSummary: BodyCompositionMonthlySummary?
   var stressSummary: StressMonthlySummary?
   var nutritionSummary: NutritionMonthlySummary?
-  var exerciseEffectivenessSummary: ExerciseEffectivenessMonthlySummary?
   var bowelMovementSummary: BowelMovementSummary?
   var menstrualSummary: MenstrualSummary?
   var alcoholSummary: AlcoholSummary?
@@ -102,13 +101,6 @@ private extension YouStatsViewModel {
       for await nutritionSummary in await VitalsCalculator.shared.$nutritionSummary {
         await MainActor.run {
           self.nutritionSummary = nutritionSummary
-        }
-      }
-    })
-    tasks.append(Task.detached {
-      for await exerciseEffectivenessSummary in await VitalsCalculator.shared.$exerciseEffectivenessSummary {
-        await MainActor.run {
-          self.exerciseEffectivenessSummary = exerciseEffectivenessSummary
         }
       }
     })

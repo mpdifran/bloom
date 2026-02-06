@@ -20,7 +20,6 @@ public final actor VitalsCalculator {
   @AsyncStreamable public var bodyCompositionSummary: BodyCompositionMonthlySummary?
   @AsyncStreamable public var stressSummary: StressMonthlySummary?
   @AsyncStreamable public var nutritionSummary: NutritionMonthlySummary?
-  @AsyncStreamable public var exerciseEffectivenessSummary: ExerciseEffectivenessMonthlySummary?
   @AsyncStreamable public var bowelMovementSummary: BowelMovementSummary?
   @AsyncStreamable public var menstrualSummary: MenstrualSummary?
   @AsyncStreamable public var alcoholSummary: AlcoholSummary?
@@ -65,7 +64,6 @@ public extension VitalsCalculator {
     sleepVitalsSummary = await HealthStoreFetcher.shared.fetchSleepVitalSummary(trailingMonthAnalyses: sleepAnalyses)
     stressSummary = await HealthStoreFetcher.shared.fetchStressMonthlySummary(trailingMonthAnalyses: sleepAnalyses)
     nutritionSummary = await HealthStoreFetcher.shared.fetchNutritionMonthlySummary()
-    exerciseEffectivenessSummary = await HealthStoreFetcher.shared.fetchExerciseEffectivenessSummary()
     menstrualSummary = await HealthStoreFetcher.shared.fetchMenstrualSummary()
     bowelMovementSummary = await fetchBowelMovementSummary()
     alcoholSummary = await HealthStoreFetcher.shared.fetchAlcoholSummary(
@@ -191,20 +189,6 @@ private extension VitalsCalculator {
       )
     } else {
       vitals.append(VitalModel(id: .nutrition))
-    }
-    if let exerciseEffectivenessSummary {
-      vitals.append(
-        VitalModel(
-          id: .exerciseEffectiveness,
-          subtitle: exerciseEffectivenessSummary.details.subtitle,
-          status: exerciseEffectivenessSummary.details.level.name,
-          color: exerciseEffectivenessSummary.details.level.color,
-          barLevel: exerciseEffectivenessSummary.barLevel,
-          hasNoData: exerciseEffectivenessSummary.details.hasNoData
-        )
-      )
-    } else {
-      vitals.append(VitalModel(id: .exerciseEffectiveness))
     }
     if await HealthManager.shared.sex() == .female {
       if let menstrualSummary {

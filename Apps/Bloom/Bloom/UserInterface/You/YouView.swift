@@ -147,7 +147,6 @@ struct YouView: View {
     case .exerciseEffectiveness:
       ExerciseEffectivenessSection(
         presentedNavigationDestination: $presentedNavigationDestination,
-        summary: viewModel.exerciseEffectivenessSummary,
         zoneMinutesData: viewModel.zoneMinutesData,
         zoneDistributionData: viewModel.zoneDistributionData,
         recentWorkoutsData: viewModel.recentWorkoutsData

@@ -13,7 +13,6 @@ import HealthKit
 
 struct ExerciseEffectivenessSection: View {
   @Binding var presentedNavigationDestination: AnyView?
-  let summary: ExerciseEffectivenessMonthlySummary?
   let zoneMinutesData: ZoneMinutesData?
   let zoneDistributionData: ZoneDistributionData?
   let recentWorkoutsData: RecentWorkoutsData?
@@ -84,7 +83,6 @@ private extension ExerciseEffectivenessSection {
     BloomScrollView {
       ExerciseEffectivenessSection(
         presentedNavigationDestination: .constant(nil),
-        summary: nil,
         zoneMinutesData: ZoneMinutesData(dailyValues: [15, 20, 25, 10, 30, 10, 10], weeklyTotal: 120),
         zoneDistributionData: ZoneDistributionData(
           zone1Percent: 0.1,
