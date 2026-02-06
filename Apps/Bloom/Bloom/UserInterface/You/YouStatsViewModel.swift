@@ -13,7 +13,6 @@ final class YouStatsViewModel: Sendable {
   static let shared = YouStatsViewModel()
 
   var activityLevelSummary: ActivityLevelSummary?
-  var sleepVitalsSummary: SleepVitalsMonthlySummary?
   var averageRestingHeartRate: Double?
   var bodyCompositionSummary: BodyCompositionMonthlySummary?
   var stressSummary: StressMonthlySummary?
@@ -66,13 +65,6 @@ private extension YouStatsViewModel {
       for await activityLevelSummary in await YouStatsCalculator.shared.$activityLevelSummary {
         await MainActor.run {
           self.activityLevelSummary = activityLevelSummary
-        }
-      }
-    })
-    tasks.append(Task.detached {
-      for await sleepVitalsSummary in await VitalsCalculator.shared.$sleepVitalsSummary {
-        await MainActor.run {
-          self.sleepVitalsSummary = sleepVitalsSummary
         }
       }
     })

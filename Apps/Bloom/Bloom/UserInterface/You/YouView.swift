@@ -88,7 +88,6 @@ struct YouView: View {
     case .sleepQuality:
       SleepQualitySection(
         presentedNavigationDestination: $presentedNavigationDestination,
-        summary: viewModel.sleepVitalsSummary,
         bedtimeData: viewModel.bedtimeChartData,
         sleepDurationChartData: viewModel.sleepDurationChartData,
         averageSleepScore: viewModel.averageSleepScore,

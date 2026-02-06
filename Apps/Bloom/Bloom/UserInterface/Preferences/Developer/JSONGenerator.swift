@@ -22,6 +22,9 @@ extension JSONGenerator {
 
     let calc = VitalsCalculator.shared
 
+    let sleepAnalyses = await HealthStoreFetcher.shared.fetchSleepAnalysis(dateRange: .trailingMonthsFromNow(1))
+    let sleepSummary = await HealthStoreFetcher.shared.fetchSleepVitalSummary(trailingMonthAnalyses: sleepAnalyses)
+
     let heartHealthDetails = await HealthStoreFetcher.shared.fetchHeartHealthDetails(dateRange: .trailingDaysFromNow(6))
     let heartDetails = SummaryJSON.HeartDetails(
       averageVo2Max: heartHealthDetails.averageVO2Max.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .vo2Max()), unit: .vo2Max()) }),
@@ -61,7 +64,7 @@ extension JSONGenerator {
 
     let summary = await SummaryJSON(
       activityLevel: YouStatsCalculator.shared.activityLevelSummary?.details,
-      sleep: VitalsCalculator.shared.sleepVitalsSummary?.details,
+      sleep: sleepSummary.details,
       heartHealth: heartDetails,
       bodyComposition: bodyComp,
       stress: stress,

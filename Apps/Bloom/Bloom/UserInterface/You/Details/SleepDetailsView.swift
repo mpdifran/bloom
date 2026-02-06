@@ -14,9 +14,9 @@ import CoreHealth
 struct SleepDetailsView: View {
 
   @ObservedObject private var healthManager = HealthManager.shared
-  private let viewModel = VitalsViewModel.shared
 
   @State private var selectedSleepQualityIndex = 0
+  @State private var sleepVitalsSummary: SleepVitalsMonthlySummary?
   @State private var showTodayView = false
   @State private var sleepAnalyses = [SleepAnalysis]()
 
@@ -24,7 +24,7 @@ struct SleepDetailsView: View {
 
   var body: some View {
     Group {
-      if viewModel.sleepVitalsSummary?.details.hasNoData == false {
+      if sleepVitalsSummary?.details.hasNoData == false {
         contentView
       } else {
         emptyView
@@ -50,9 +50,11 @@ struct SleepDetailsView: View {
     }
     .task {
       let analyses = await HealthStoreFetcher.shared.fetchSleepAnalysis(dateRange: .trailingMonthsFromNow(1))
+      let summary = await HealthStoreFetcher.shared.fetchSleepVitalSummary(trailingMonthAnalyses: analyses)
 
       await MainActor.run {
         self.sleepAnalyses = analyses
+        self.sleepVitalsSummary = summary
       }
     }
   }
@@ -104,7 +106,7 @@ private extension SleepDetailsView {
     VStack(alignment: .leading) {
       VitalDetailChartTitleView(
         title: "Sleep Quality",
-        value: viewModel.sleepVitalsSummary?.details.averageSleepScore?.format(using: .oneDecimalPlace) ?? ""
+        value: sleepVitalsSummary?.details.averageSleepScore?.format(using: .oneDecimalPlace) ?? ""
       )
 
       Chart {
@@ -150,7 +152,7 @@ private extension SleepDetailsView {
   @ViewBuilder
   var sleepDistributionChart: some View {
     if
-      let summary = viewModel.sleepVitalsSummary,
+      let summary = sleepVitalsSummary,
       let averageREMSleepPercent = summary.details.averageREMSleepPercent,
       let averageCoreSleepPercent = summary.details.averageCoreSleepPercent,
       let averageDeepSleepPercent = summary.details.averageDeepSleepPercent,

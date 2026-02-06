@@ -15,7 +15,6 @@ public final actor VitalsCalculator {
 
   @AsyncStreamable public var vitals = [VitalModel]()
 
-  @AsyncStreamable public var sleepVitalsSummary: SleepVitalsMonthlySummary?
   @AsyncStreamable public var bodyCompositionSummary: BodyCompositionMonthlySummary?
   @AsyncStreamable public var stressSummary: StressMonthlySummary?
   @AsyncStreamable public var nutritionSummary: NutritionMonthlySummary?
@@ -59,7 +58,6 @@ public extension VitalsCalculator {
     let sleepAnalyses = await HealthStoreFetcher.shared.fetchSleepAnalysis(dateRange: .trailingMonthsFromNow(1))
 
     bodyCompositionSummary = await HealthStoreFetcher.shared.fetchBodyCompositionSummary()
-    sleepVitalsSummary = await HealthStoreFetcher.shared.fetchSleepVitalSummary(trailingMonthAnalyses: sleepAnalyses)
     stressSummary = await HealthStoreFetcher.shared.fetchStressMonthlySummary(trailingMonthAnalyses: sleepAnalyses)
     nutritionSummary = await HealthStoreFetcher.shared.fetchNutritionMonthlySummary()
     menstrualSummary = await HealthStoreFetcher.shared.fetchMenstrualSummary()
@@ -118,20 +116,6 @@ private extension VitalsCalculator {
 
   func createVitals() async {
     var vitals = [VitalModel]()
-    if let sleepVitalsSummary {
-      vitals.append(
-        VitalModel(
-          id: .sleepQuality,
-          subtitle: sleepVitalsSummary.subtitleText,
-          status: sleepVitalsSummary.details.quality?.name,
-          color: sleepVitalsSummary.details.quality?.color,
-          barLevel: sleepVitalsSummary.barLevel,
-          hasNoData: sleepVitalsSummary.details.hasNoData
-        )
-      )
-    } else {
-      vitals.append(VitalModel(id: .sleepQuality))
-    }
     if let bodyCompositionSummary {
       await vitals.append(
         VitalModel(

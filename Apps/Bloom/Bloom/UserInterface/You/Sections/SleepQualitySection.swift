@@ -13,7 +13,6 @@ import DataContainer
 
 struct SleepQualitySection: View {
   @Binding var presentedNavigationDestination: AnyView?
-  let summary: SleepVitalsMonthlySummary?
   let bedtimeData: BedtimeChartData?
   let sleepDurationChartData: SleepDurationChartData?
   let averageSleepScore: Double?
@@ -74,7 +73,6 @@ struct SleepQualitySection: View {
     BloomScrollView {
       SleepQualitySection(
         presentedNavigationDestination: .constant(nil),
-        summary: nil,
         bedtimeData: nil,
         sleepDurationChartData: nil,
         averageSleepScore: nil,
