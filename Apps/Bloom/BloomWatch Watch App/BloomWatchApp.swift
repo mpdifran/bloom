@@ -21,6 +21,7 @@ struct BloomWatch_Watch_AppApp: App {
   @ObservedObject private var workoutManager = WorkoutManager.shared
 
   @Environment(\.dismiss) private var dismiss
+  @Environment(\.scenePhase) private var scenePhase
 
   init() {
     TelemetryDeck.initialize(
@@ -56,6 +57,16 @@ struct BloomWatch_Watch_AppApp: App {
         .task { @MainActor in
           // Request fresh data from iOS if needed
           await WatchSyncRequester.shared.requestSyncIfNeeded()
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+          guard newPhase == .active else { return }
+          Task { @MainActor in
+            await WatchSyncRequester.shared.requestSyncIfNeeded()
+            await PendingBowelMovementManager.shared.syncPendingEntries()
+            await PendingReminderCompletionManager.shared.syncPendingCompletions()
+            await PendingFoodLogManager.shared.syncPendingEntries()
+            TodayProvider.shared.loadFromApplicationContext()
+          }
         }
         .onAppear {
           if workoutManager.sessionState.isActive && presentedFullScreen == nil {

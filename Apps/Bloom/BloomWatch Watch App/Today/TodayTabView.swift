@@ -24,7 +24,7 @@ struct TodayTabView: View {
     .navigationTitle("Reminders")
     .navigationBarTitleDisplayMode(.inline)
     .animation(.default, value: provider.reminders)
-    .task {
+    .onAppear {
       provider.loadFromApplicationContext()
     }
   }

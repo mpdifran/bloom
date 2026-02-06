@@ -81,7 +81,7 @@ public extension WatchChannel {
           !pendingContextUpdates.isEmpty else { return }
 
     // Merge all pending updates into one context update
-    var context: [String: Any] = [:]
+    var context = WCSession.default.applicationContext
     for (key, data) in pendingContextUpdates {
       context[key] = data
     }
