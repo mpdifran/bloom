@@ -12,7 +12,6 @@ import DataContainer
 
 struct StressLevelsSection: View {
   @Binding var presentedNavigationDestination: AnyView?
-  let summary: StressMonthlySummary?
   let hrvChartData: HRVChartData?
   let bloodPressureData: BloodPressureCardData?
 
@@ -52,7 +51,6 @@ private extension StressLevelsSection {
     BloomScrollView {
       StressLevelsSection(
         presentedNavigationDestination: .constant(nil),
-        summary: nil,
         hrvChartData: nil,
         bloodPressureData: nil
       )

@@ -30,13 +30,12 @@ extension StressDetailsView {
 
 struct StressDetailsView: View {
 
-  private let viewModel = VitalsViewModel.shared
-
+  @State private var stressSummary: StressMonthlySummary?
   @State private var selectedContributor: StressContributor = .all
 
   var body: some View {
     Group {
-      if viewModel.stressSummary?.hasNoData == false {
+      if stressSummary?.hasNoData == false {
         contentView
       } else {
         emptyView
@@ -53,6 +52,13 @@ struct StressDetailsView: View {
     .animation(.easeInOut, value: selectedContributor)
     .navigationTitle("Stress Levels")
     .navigationBarTitleDisplayMode(.inline)
+    .task {
+      let sleepAnalyses = await HealthStoreFetcher.shared.fetchSleepAnalysis(dateRange: .trailingMonthsFromNow(1))
+      let summary = await HealthStoreFetcher.shared.fetchStressMonthlySummary(trailingMonthAnalyses: sleepAnalyses)
+      await MainActor.run {
+        self.stressSummary = summary
+      }
+    }
     .onAppear {
       TelemetryDeck.viewScreen("Stress Vital Details")
     }
@@ -66,14 +72,14 @@ private extension StressDetailsView {
       stressLevelChart
 
       if
-        let systolic = viewModel.stressSummary?.details.averageSystolic,
-        let diastloic = viewModel.stressSummary?.details.averageDiastolic
+        let systolic = stressSummary?.details.averageSystolic,
+        let diastloic = stressSummary?.details.averageDiastolic
       {
         BloodPressureStatusView(
           systolic: systolic,
           diastolic: diastloic,
-          lastMonthSystolic: viewModel.stressSummary?.lastMonthAverageSystolic,
-          lastMonthDiastolic: viewModel.stressSummary?.lastMonthAverageDiastolic
+          lastMonthSystolic: stressSummary?.lastMonthAverageSystolic,
+          lastMonthDiastolic: stressSummary?.lastMonthAverageDiastolic
         )
       }
 
@@ -108,7 +114,7 @@ private extension StressDetailsView {
         }
 
         Chart {
-          ForEach(viewModel.stressSummary?.details.stressLevels ?? []) { stressLevel in
+          ForEach(stressSummary?.details.stressLevels ?? []) { stressLevel in
             switch selectedContributor {
             case .all:
               BarMark(
@@ -167,7 +173,7 @@ private extension StressDetailsView {
   }
 
   var details: StressMonthlySummary.Details? {
-    viewModel.stressSummary?.details
+    stressSummary?.details
   }
 
   var stressLevels: [StressMonthlySummary.DateStressScore] {
@@ -217,7 +223,7 @@ private extension StressDetailsView {
   var sleepChart: some View {
     VStack(alignment: .leading) {
       VStack {
-        if let averageScore = viewModel.stressSummary?.details.averageSleepScore?.format(using: .oneDecimalPlace) {
+        if let averageScore = stressSummary?.details.averageSleepScore?.format(using: .oneDecimalPlace) {
           VitalDetailChartTitleView(
             title: "Sleep",
             value: "\(averageScore)"
@@ -231,7 +237,7 @@ private extension StressDetailsView {
         }
 
         Chart {
-          ForEach(viewModel.stressSummary?.details.sleepAnalyses ?? []) { sleepAnalysis in
+          ForEach(stressSummary?.details.sleepAnalyses ?? []) { sleepAnalysis in
             AreaMark(
               x: .value("Date", sleepAnalysis.endDate),
               y: .value("Sleep Score", sleepAnalysis.overallScoreDouble)
@@ -270,7 +276,7 @@ private extension StressDetailsView {
   var heartRateVariabilityChart: some View {
     VStack(alignment: .leading) {
       VStack {
-        if let hrv = viewModel.stressSummary?.details.averageHeartRateVariability?.format() {
+        if let hrv = stressSummary?.details.averageHeartRateVariability?.format() {
           VitalDetailChartTitleView(
             title: "Heart Rate Variability",
             value: "\(hrv) ms"
@@ -284,7 +290,7 @@ private extension StressDetailsView {
         }
 
         Chart {
-          ForEach(viewModel.stressSummary?.details.heartRateVariability ?? []) { sample in
+          ForEach(stressSummary?.details.heartRateVariability ?? []) { sample in
             LineMark(
               x: .value("Date", sample.date),
               y: .value("Heart Rate Variability", sample.quantity.doubleValue(for: .millisecond()))
@@ -292,7 +298,7 @@ private extension StressDetailsView {
             .foregroundStyle(.mutedRed)
           }
 
-          if let hrv = viewModel.stressSummary?.details.averageHeartRateVariability {
+          if let hrv = stressSummary?.details.averageHeartRateVariability {
             RuleMark(y: .value("Average HRV", hrv))
               .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
               .foregroundStyle(.mutedRed)

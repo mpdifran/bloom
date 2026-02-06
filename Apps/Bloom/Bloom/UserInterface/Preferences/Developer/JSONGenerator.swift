@@ -37,14 +37,15 @@ extension JSONGenerator {
       bodyMass: calc.bodyCompositionSummary?.details.averageBodyMass.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .pound()), unit: .pound()) })
     )
 
-    let stress = await SummaryJSON.StressDetails(
-      heartRateVariability: calc.stressSummary?.details.heartRateVariability.map({
+    let stressSummary = await HealthStoreFetcher.shared.fetchStressMonthlySummary(trailingMonthAnalyses: sleepAnalyses)
+    let stress = SummaryJSON.StressDetails(
+      heartRateVariability: stressSummary?.details.heartRateVariability.map({
         SummaryJSON.DateQuantity(date: $0.date, quantity: SummaryJSON.Quantity(value: $0.quantity.doubleValue(for: .millisecond()), unit: .millisecond()))
       }) ?? [],
-      bloodPressureSystolic: calc.stressSummary?.details.bloodPressureSystolic.map({
+      bloodPressureSystolic: stressSummary?.details.bloodPressureSystolic.map({
         SummaryJSON.DateQuantity(date: $0.date, quantity: SummaryJSON.Quantity(value: $0.quantity.doubleValue(for: .millimeterOfMercury()), unit: .millimeterOfMercury()))
       }) ?? [],
-      bloodPressureDiastolic: calc.stressSummary?.details.bloodPressureDiastolic.map({
+      bloodPressureDiastolic: stressSummary?.details.bloodPressureDiastolic.map({
         SummaryJSON.DateQuantity(date: $0.date, quantity: SummaryJSON.Quantity(value: $0.quantity.doubleValue(for: .millimeterOfMercury()), unit: .millimeterOfMercury()))
       }) ?? []
     )
