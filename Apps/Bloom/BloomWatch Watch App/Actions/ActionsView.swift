@@ -87,7 +87,7 @@ struct ActionsView: View {
         }
       }
       .listStyle(.carousel)
-      .navigationTitle("Actions")
+      .navigationTitle("Log")
     }
     .sheet($presentedSheet)
   }
