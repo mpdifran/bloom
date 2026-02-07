@@ -45,18 +45,20 @@ struct WorkoutWidget: Widget {
     }
     .configurationDisplayName("Workouts")
     .description("Quickly open your workouts.")
-    .supportedFamilies([.accessoryCircular])
+    .supportedFamilies([.accessoryCircular, .accessoryCorner])
   }
 }
 
 // MARK: - Widget View
 
 struct WorkoutWidgetView: View {
+  @Environment(\.widgetFamily) var family
+
   var body: some View {
     ZStack {
       AccessoryWidgetBackground()
       Image(systemName: "figure.run")
-        .font(.system(size: 30))
+        .font(.system(size: family == .accessoryCorner ? 20 : 30))
         .foregroundStyle(.blue.gradient)
     }
   }
@@ -65,6 +67,12 @@ struct WorkoutWidgetView: View {
 // MARK: - Previews
 
 #Preview("Circular", as: .accessoryCircular) {
+  WorkoutWidget()
+} timeline: {
+  WorkoutEntry(date: .now)
+}
+
+#Preview("Corner", as: .accessoryCorner) {
   WorkoutWidget()
 } timeline: {
   WorkoutEntry(date: .now)

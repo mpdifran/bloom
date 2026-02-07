@@ -289,7 +289,7 @@ private struct CornerGoalView: View {
 
   var body: some View {
     Image(systemName: entry.metricSystemImage)
-      .font(.title)
+      .font(.system(size: 25))
       .foregroundStyle(entry.metricColor)
       .widgetLabel {
         ProgressView(value: entry.progress) {

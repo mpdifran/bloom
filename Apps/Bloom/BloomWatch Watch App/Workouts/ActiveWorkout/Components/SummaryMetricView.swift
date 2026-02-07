@@ -81,5 +81,6 @@ extension SummaryMetricView where Content == Text {
     }
     .navigationTitle("Summary")
     .navigationBarTitleDisplayMode(.inline)
+    .scenePadding()
   }
 }

@@ -21,6 +21,7 @@ struct ActiveWorkoutSummaryView: View {
       }
       .navigationTitle("Summary")
       .navigationBarTitleDisplayMode(.inline)
+      .scenePadding()
     } else {
       ProgressView("Saving Workout")
         .navigationBarHidden(true)

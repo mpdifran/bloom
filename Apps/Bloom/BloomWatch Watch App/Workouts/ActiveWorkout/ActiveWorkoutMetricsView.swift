@@ -33,6 +33,7 @@ struct ActiveWorkoutMetricsView: View {
         activeWorkoutContent
       }
     }
+    .scenePadding()
     .animation(.default, value: workoutManager.heartRate)
     .animation(.default, value: workoutManager.totalZoneMinutes)
     .animation(.default, value: workoutManager.currentZone)
@@ -64,20 +65,24 @@ private extension ActiveWorkoutMetricsView {
 
   var countdownView: some View {
     Text(countdownIndex > 0 ? "\(countdownIndex)" : "GO!")
+      .frame(maxWidth: .infinity, maxHeight: .infinity)
       .font(.system(size: 100))
       .fontDesign(.rounded)
       .fontWeight(.heavy)
-      .foregroundStyle(.tint)
+      .foregroundStyle(.blue.gradient)
       .contentTransition(.numericText(value: Double(countdownIndex)))
       .removeCancellationToolbarItem()
   }
 
   var activeWorkoutContent: some View {
     VStack(alignment: .leading, spacing: 0) {
+      HeartRateZoneStatusView(
+        heartRate: workoutManager.heartRate,
+        zones: workoutManager.heartRateZones
+      )
+
       Spacer()
 
-      zoneNameView
-      heartRateComponent
       elapsedTimeView
       caloriesComponent
       zoneMinutesComponent
@@ -88,14 +93,12 @@ private extension ActiveWorkoutMetricsView {
       ToolbarItem(placement: .cancellationAction) {
         HStack {
           workoutTypeView
-          workoutNameView
         }
         .fixedSize(horizontal: true, vertical: false)
       }
       ToolbarItem(placement: .topBarLeading) {
         HStack {
           workoutTypeView
-          workoutNameView
         }
         .fixedSize(horizontal: true, vertical: false)
       }
@@ -148,9 +151,10 @@ private extension ActiveWorkoutMetricsView {
   @ViewBuilder
   var workoutTypeView: some View {
     Image(systemSymbol: workoutManager.session?.workoutConfiguration.activityType.systemSymbol ?? .figureStand)
-      .font(.headline)
+      .font(.title3)
       .bold()
       .fontDesign(.rounded)
+      .foregroundStyle(.blue.gradient)
   }
 
   var workoutNameView: some View {
@@ -159,116 +163,6 @@ private extension ActiveWorkoutMetricsView {
       .bold()
       .fontDesign(.rounded)
       .lineLimit(1)
-  }
-
-  @ViewBuilder
-  var zoneBarComponent: some View {
-    if workoutManager.currentZone < 1 {
-      Text("Warming Up")
-        .foregroundStyle(backgroundColor)
-        .font(.caption2)
-        .bold()
-        .padding(.horizontal, 8)
-        .background {
-          Capsule()
-            .fill(.tint)
-            .frame(height: .zoneBarHeight)
-        }
-    } else {
-      HStack(spacing: 2) {
-        ForEach(1...5, id: \.self) { zone in
-          let isCurrentZone = zone == workoutManager.currentZone
-
-          Capsule()
-            .fill(isCurrentZone ? color(for: zone) : .white)
-            .frame(
-              width: isCurrentZone ? .zoneBarMaxWidth : .zoneBarHeight,
-              height: .zoneBarHeight
-            )
-            .overlay {
-              if isCurrentZone {
-                GeometryReader { geometry in
-                  Circle()
-                    .fill(.black)
-                    .frame(square: .zoneBarHeight - .dotInset * 2)
-                    .position(
-                      x: dotXPosition(in: geometry.size.width),
-                      y: geometry.size.height / 2
-                    )
-                }
-              }
-            }
-        }
-      }
-    }
-  }
-
-  var zoneNameView: some View {
-    Group {
-      if workoutManager.currentZone > 0 {
-        Text("Zone \(workoutManager.currentZone)")
-      } else {
-        Text("Warming Up")
-      }
-    }
-    .foregroundStyle(.black)
-    .font(.system(size: 10))
-    .bold()
-    .fontDesign(.rounded)
-    .lineLimit(1)
-    .padding(.vertical, 2)
-    .padding(.horizontal, 6)
-    .background {
-      RoundedRectangle(cornerRadius: 8)
-        .fill(color(for: workoutManager.currentZone))
-    }
-  }
-
-  var zoneProgress: CGFloat {
-    guard let zones = workoutManager.heartRateZones else { return 0.5 }
-    let hr = workoutManager.heartRate
-    let zone = workoutManager.currentZone
-
-    let (lower, upper): (Double, Double) = switch zone {
-    case 1: (zones.zone1, zones.zone2)
-    case 2: (zones.zone2, zones.zone3)
-    case 3: (zones.zone3, zones.zone4)
-    case 4: (zones.zone4, zones.zone5)
-    case 5: (zones.zone5, zones.maxHeartRate)
-    default: (0, 1)
-    }
-
-    guard upper > lower else { return 0.5 }
-    return CGFloat((hr - lower) / (upper - lower)).clamped(to: 0...1)
-  }
-
-  func dotXPosition(in width: CGFloat) -> CGFloat {
-    let dotRadius: CGFloat = (.zoneBarHeight - 4) / 2
-    let minX = dotRadius + .dotInset
-    let maxX = width - dotRadius - .dotInset
-    return minX + ((maxX - minX) * zoneProgress)
-  }
-
-  var heartRateComponent: some View {
-    HStack {
-      Image(systemSymbol: .heartFill)
-        .font(.caption)
-        .symbolEffect(.bounce, options: .repeating.speed(workoutManager.heartRate / 60.0))
-        .foregroundStyle(.mutedRed)
-
-      HStack(alignment: .firstTextBaseline) {
-        Text(workoutManager.heartRate.format(using: .noDecimalPlaces))
-          .contentTransition(.numericText(value: workoutManager.heartRate))
-
-        Text("BPM")
-          .font(.caption2)
-          .bold()
-          .fontDesign(.rounded)
-      }
-    }
-    .font(.title2)
-    .fontWeight(.bold)
-    .fontDesign(.rounded)
   }
 
   var caloriesComponent: some View {

@@ -90,14 +90,17 @@ struct ActionsWidget: Widget {
     }
     .configurationDisplayName("Actions")
     .description("Quickly open actions or a specific action.")
-    .supportedFamilies([.accessoryCircular])
+    .supportedFamilies([.accessoryCircular, .accessoryCorner])
   }
 }
 
 // MARK: - Widget View
 
 struct ActionsWidgetView: View {
+  @Environment(\.widgetFamily) var family
   let entry: ActionsEntry
+
+  private var isCorner: Bool { family == .accessoryCorner }
 
   var body: some View {
     ZStack {
@@ -110,12 +113,14 @@ struct ActionsWidgetView: View {
   private var content: some View {
     if let action = entry.action {
       actionImage(for: action)
-        .font(.system(size: 24))
+        .resizable()
+        .scaledToFit()
+        .frame(width: 20)
         .fontWeight(.medium)
         .foregroundStyle(entry.actionColor)
     } else {
       Image(systemName: "plus")
-        .font(.system(size: 30))
+        .font(.system(size: isCorner ? 22 : 30))
         .bold()
         .foregroundStyle(.blue)
     }
@@ -183,4 +188,16 @@ private extension Color {
   ActionsWidget()
 } timeline: {
   ActionsEntry(date: .now, action: WatchActionEntity(id: "voice", name: "Voice", systemImage: "microphone.fill", colorHex: "EAAD63"))
+}
+
+#Preview("Corner - Default", as: .accessoryCorner) {
+  ActionsWidget()
+} timeline: {
+  ActionsEntry(date: .now, action: nil)
+}
+
+#Preview("Corner - Food", as: .accessoryCorner) {
+  ActionsWidget()
+} timeline: {
+  ActionsEntry(date: .now, action: WatchActionEntity(id: "food", name: "Food", systemImage: "fork.knife", colorHex: "3EC17D"))
 }
