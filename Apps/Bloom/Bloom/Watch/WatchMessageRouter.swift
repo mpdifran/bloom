@@ -181,6 +181,7 @@ final class WatchMessageRouter {
     do {
       let meal = FoodItemLog.Meal(rawValue: message.meal) ?? .snack
       let logID = try await logFoodItem(
+        entryID: message.entryID,
         foodItemID: message.foodItemID,
         meal: meal,
         numberOfServings: message.numberOfServings,
@@ -193,9 +194,7 @@ final class WatchMessageRouter {
       // Defer sync to AFTER response is sent
       Task.detached { [entryID = message.entryID] in
         // Confirm via application context (backup to direct response)
-        if let entryID {
-          await WatchConfirmationSyncer.shared.confirmFoodLog(id: entryID)
-        }
+        await WatchConfirmationSyncer.shared.confirmFoodLog(id: entryID)
         await WatchFoodSyncer.shared.syncToWatch()
       }
 
@@ -207,12 +206,21 @@ final class WatchMessageRouter {
   }
 
   private func logFoodItem(
+    entryID: String,
     foodItemID: String,
     meal: FoodItemLog.Meal,
     numberOfServings: Double,
     date: Date
   ) async throws -> String {
     let context = ContainerHolder.shared.createContext()
+
+    // Check for existing log with same entryID (idempotency)
+    let existingLogDescriptor = FetchDescriptor<FoodItemLog>(
+      predicate: #Predicate { $0.id == entryID }
+    )
+    if let existingLog = try context.fetch(existingLogDescriptor).first {
+      return existingLog.id
+    }
 
     // Try to find existing food item record
     let descriptor = FetchDescriptor<FoodItemRecord>(
@@ -233,9 +241,9 @@ final class WatchMessageRouter {
     // Create serving
     let serving = FoodItemServing(numberOfServings: numberOfServings, foodItem: foodItem)
 
-    // Create log
+    // Create log using the watch entryID as the log ID for idempotency
     let log = FoodItemLog(
-      id: UUID().uuidString,
+      id: entryID,
       name: foodItem.name,
       date: date,
       meal: meal,
