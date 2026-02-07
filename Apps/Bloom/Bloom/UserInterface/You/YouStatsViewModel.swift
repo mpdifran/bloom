@@ -104,7 +104,7 @@ private extension YouStatsViewModel {
       }
     })
     tasks.append(Task.detached {
-      for await alcoholSummary in await VitalsCalculator.shared.$alcoholSummary {
+      for await alcoholSummary in await YouStatsCalculator.shared.$alcoholSummary {
         await MainActor.run {
           self.alcoholSummary = alcoholSummary
         }

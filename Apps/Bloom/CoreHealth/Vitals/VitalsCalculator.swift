@@ -16,9 +16,6 @@ public final actor VitalsCalculator {
   @AsyncStreamable public var vitals = [VitalModel]()
 
   @AsyncStreamable public var menstrualSummary: MenstrualSummary?
-  @AsyncStreamable public var alcoholSummary: AlcoholSummary?
-
-  private var alcoholObserverHandle: HKObserverQueryHandle?
 
   private init() {
     if let date = UserDefaults.group.object(forKey: "VitalsCalculator.lastVitalFetchDate") as? Date {
@@ -52,10 +49,6 @@ public extension VitalsCalculator {
 
   func forceFetchVitals() async {
     menstrualSummary = await HealthStoreFetcher.shared.fetchMenstrualSummary()
-    alcoholSummary = await HealthStoreFetcher.shared.fetchAlcoholSummary(
-      sex: HealthDefaults.shared.getSexKind()
-    )
-    startObservingAlcoholChanges()
 
     await createVitals()
   }
@@ -70,21 +63,6 @@ public extension VitalsCalculator {
     await createVitals()
   }
 
-  func startObservingAlcoholChanges() {
-    alcoholObserverHandle = HealthManager.shared.healthStore.observeChanges(
-      sampleType: HKQuantityType(.numberOfAlcoholicBeverages),
-      startDate: Calendar.current.date(byAdding: .day, value: -7, to: .now) ?? .now
-    ) {
-      let summary = await HealthStoreFetcher.shared.fetchAlcoholSummary(
-        sex: HealthDefaults.shared.getSexKind()
-      )
-      await self.setAlcoholSummary(summary)
-    }
-  }
-
-  func setAlcoholSummary(_ summary: AlcoholSummary?) {
-    self.alcoholSummary = summary
-  }
 }
 
 private extension VitalsCalculator {

@@ -45,8 +45,11 @@ final actor YouStatsCalculator {
   @AsyncStreamable var bodyFatPercentage: HKQuantity?
   @AsyncStreamable var nutritionMacros: NutritionMonthlySummary.Macros?
   @AsyncStreamable var bowelMovementSummary: BowelMovementSummary?
+  @AsyncStreamable var alcoholSummary: AlcoholSummary?
 
   private let healthStoreFetcher = HealthStoreFetcher.shared
+  private let healthStore = HKHealthStore()
+  private var alcoholObserverHandle: HKObserverQueryHandle?
 
   private init() { }
 
@@ -97,6 +100,10 @@ final actor YouStatsCalculator {
       dateRange: .trailingDaysFromNow(6)
     ).macros
     bowelMovementSummary = await fetchBowelMovementSummary()
+    alcoholSummary = await healthStoreFetcher.fetchAlcoholSummary(
+      sex: HealthDefaults.shared.getSexKind()
+    )
+    startObservingAlcoholChanges()
   }
 
   func refreshSteps() async {
@@ -105,6 +112,22 @@ final actor YouStatsCalculator {
 
   func refreshBowelMovements() async {
     bowelMovementSummary = await fetchBowelMovementSummary()
+  }
+
+  func startObservingAlcoholChanges() {
+    alcoholObserverHandle = healthStore.observeChanges(
+      sampleType: HKQuantityType(.numberOfAlcoholicBeverages),
+      startDate: Calendar.current.date(byAdding: .day, value: -7, to: .now) ?? .now
+    ) {
+      let summary = await HealthStoreFetcher.shared.fetchAlcoholSummary(
+        sex: HealthDefaults.shared.getSexKind()
+      )
+      await self.setAlcoholSummary(summary)
+    }
+  }
+
+  private func setAlcoholSummary(_ summary: AlcoholSummary?) {
+    self.alcoholSummary = summary
   }
 }
 
