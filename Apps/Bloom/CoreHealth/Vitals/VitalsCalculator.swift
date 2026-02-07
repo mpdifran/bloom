@@ -15,8 +15,6 @@ public final actor VitalsCalculator {
 
   @AsyncStreamable public var vitals = [VitalModel]()
 
-  @AsyncStreamable public var menstrualSummary: MenstrualSummary?
-
   private init() {
     if let date = UserDefaults.group.object(forKey: "VitalsCalculator.lastVitalFetchDate") as? Date {
       lastVitalFetchDate = date
@@ -48,14 +46,6 @@ public extension VitalsCalculator {
   }
 
   func forceFetchVitals() async {
-    menstrualSummary = await HealthStoreFetcher.shared.fetchMenstrualSummary()
-
-    await createVitals()
-  }
-
-  func forceFectchMenstrualSummary() async {
-    menstrualSummary = await HealthStoreFetcher.shared.fetchMenstrualSummary()
-
     await createVitals()
   }
 
@@ -68,31 +58,7 @@ public extension VitalsCalculator {
 private extension VitalsCalculator {
 
   func createVitals() async {
-    var vitals = [VitalModel]()
-    if await HealthManager.shared.sex() == .female {
-      if let menstrualSummary {
-        vitals.append(
-          VitalModel(
-            id: .cycleTracking,
-            subtitle: menstrualSummary.subtitle,
-            status: menstrualSummary.phaseName,
-            color: menstrualSummary.color,
-            barLevel: nil,
-            hasNoData: menstrualSummary.hasNoData
-          )
-        )
-      } else {
-        vitals.append(VitalModel(id: .cycleTracking))
-      }
-    }
-
-    vitals.sort(by: { lhs, rhs in
-      guard let lhsLevel = lhs.barLevel else { return false }
-      guard let rhsLevel = rhs.barLevel else { return true }
-
-      return lhsLevel < rhsLevel
-    })
-
+    let vitals = [VitalModel]()
     self.vitals = vitals
   }
 }

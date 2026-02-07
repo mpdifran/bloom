@@ -49,7 +49,7 @@ extension VitalsViewModel {
             }
         })
         tasks.append(Task.detached {
-            for await menstrualSummary in await VitalsCalculator.shared.$menstrualSummary {
+            for await menstrualSummary in await YouStatsCalculator.shared.$menstrualSummary {
                 await MainActor.run {
                     self.menstrualSummary = menstrualSummary
                 }

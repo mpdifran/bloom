@@ -46,6 +46,7 @@ final actor YouStatsCalculator {
   @AsyncStreamable var nutritionMacros: NutritionMonthlySummary.Macros?
   @AsyncStreamable var bowelMovementSummary: BowelMovementSummary?
   @AsyncStreamable var alcoholSummary: AlcoholSummary?
+  @AsyncStreamable var menstrualSummary: MenstrualSummary?
 
   private let healthStoreFetcher = HealthStoreFetcher.shared
   private let healthStore = HKHealthStore()
@@ -103,6 +104,7 @@ final actor YouStatsCalculator {
     alcoholSummary = await healthStoreFetcher.fetchAlcoholSummary(
       sex: HealthDefaults.shared.getSexKind()
     )
+    menstrualSummary = await healthStoreFetcher.fetchMenstrualSummary()
     startObservingAlcoholChanges()
   }
 
@@ -112,6 +114,10 @@ final actor YouStatsCalculator {
 
   func refreshBowelMovements() async {
     bowelMovementSummary = await fetchBowelMovementSummary()
+  }
+
+  func refreshMenstrualSummary() async {
+    menstrualSummary = await healthStoreFetcher.fetchMenstrualSummary()
   }
 
   func startObservingAlcoholChanges() {

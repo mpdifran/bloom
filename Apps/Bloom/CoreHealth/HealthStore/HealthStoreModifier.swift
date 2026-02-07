@@ -195,8 +195,6 @@ public extension HealthStoreModifier {
       uuid = sample.uuid
     }
 
-    await VitalsCalculator.shared.forceFectchMenstrualSummary()
-
     return uuid
   }
 }
@@ -204,9 +202,9 @@ public extension HealthStoreModifier {
 private extension HealthStoreModifier {
 
   func isCurrentPeriod() async -> Bool {
-    await VitalsCalculator.shared.forceFectchMenstrualSummary()
+    let menstrualSummary = await HealthStoreFetcher.shared.fetchMenstrualSummary()
 
-    guard let mostRecentMenstrualCycle = await VitalsCalculator.shared.menstrualSummary?.mostRecentCycle else { return false }
+    guard let mostRecentMenstrualCycle = menstrualSummary.mostRecentCycle else { return false }
 
     let referenceDate = mostRecentMenstrualCycle.endDate ?? mostRecentMenstrualCycle.startDate
 

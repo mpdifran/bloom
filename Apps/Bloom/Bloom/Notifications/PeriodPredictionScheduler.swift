@@ -29,7 +29,7 @@ actor PeriodPredictionScheduler {
     await cancelPeriodPredictionNotifications()
 
     // Get the menstrual summary
-    let menstrualSummary = await VitalsCalculator.shared.menstrualSummary
+    let menstrualSummary = await YouStatsCalculator.shared.menstrualSummary
 
     guard let predictedDate = menstrualSummary?.nextPredictedPeriodDate else {
       print("PeriodPredictionScheduler: No predicted period date available")

@@ -569,8 +569,7 @@ private extension DayVitalsCalculator {
     let isFemale = await HealthManager.shared.sex() == .female
     guard isFemale else { return nil }
 
-    // Use the already-calculated menstrual summary from VitalsCalculator
-    guard let menstrualSummary = await VitalsCalculator.shared.menstrualSummary else { return nil }
+    let menstrualSummary = await HealthStoreFetcher.shared.fetchMenstrualSummary()
     guard !menstrualSummary.hasNoData else { return nil }
     guard let mostRecentCycle = menstrualSummary.mostRecentCycle else { return nil }
 
