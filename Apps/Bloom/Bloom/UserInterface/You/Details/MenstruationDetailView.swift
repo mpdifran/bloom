@@ -22,7 +22,7 @@ struct MenstruationDetailView: View {
   @State private var selectedPhase: MenstrualCyclePhase?
   @State private var presentedSheet: AnyView?
 
-  private let viewModel = VitalsViewModel.shared
+  private let viewModel = YouStatsViewModel.shared
 
   var hasData: Bool {
     menstrualCycles.isNotEmpty || viewModel.menstrualSummary != nil

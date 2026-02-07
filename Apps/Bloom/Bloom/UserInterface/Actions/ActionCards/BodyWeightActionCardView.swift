@@ -91,7 +91,7 @@ private extension BodyWeightActionCardView {
     }
 
     if await HealthStoreFetcher.shared.fetchBodyCompositionSummaryDetails(dateRange: .trailingMonthsFromNow(1)).hasNoData {
-      await VitalsCalculator.shared.forceFetchVitals()
+      await YouStatsCalculator.shared.refreshStats()
     }
 
     return true

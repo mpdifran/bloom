@@ -577,7 +577,7 @@ private extension DayVitalsCalculator {
     let daysSinceLastPeriod = Calendar.current.dateComponents([.day], from: mostRecentCycle.startDate, to: date).day ?? 0
     let dayInCycle = daysSinceLastPeriod + 1
 
-    // Get phase from VitalsCalculator
+    // Get phase from menstrual summary
     let phase = menstrualSummary.currentPhase()
     let cyclePhase: String?
     let dayInCurrentPhase: Int?

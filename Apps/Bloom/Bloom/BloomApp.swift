@@ -71,9 +71,6 @@ struct BloomApp: App {
           await tokenManager.refreshTokenIfNeeded()
         }
         .onForegroundTask {
-          await VitalsCalculator.shared.refreshVitals()
-        }
-        .onForegroundTask {
           await YouStatsCalculator.shared.refreshStats()
         }
         .onForegroundTask {

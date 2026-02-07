@@ -41,7 +41,7 @@ struct TodayView: View {
   @ObservedObject private var remindersManager = RemindersManager.shared
   @ObservedObject private var entitlementController = EntitlementController.shared
   @State private var todayViewModel = ViewModel.shared
-  @State private var vitalsViewModel = VitalsViewModel.shared
+  @State private var vitalsViewModel = YouStatsViewModel.shared
 
   @Environment(ThemeController.self) private var themeController: ThemeController
   @Environment(TabController.self) private var tabController: TabController

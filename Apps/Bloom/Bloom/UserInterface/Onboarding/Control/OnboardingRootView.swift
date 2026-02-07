@@ -36,8 +36,6 @@ struct OnboardingRootView: View {
 
   @State private var step = Step.welcome
 
-  private let vitalsViewModel = VitalsViewModel.shared
-
   @ObservedObject private var healthManager = HealthManager.shared
 
   @Environment(\.dismiss) private var dismiss

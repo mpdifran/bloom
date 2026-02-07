@@ -25,28 +25,24 @@ public final class HealthUnitPreferences {
   public var distanceUnit: HKUnit {
     didSet {
       UserDefaults.group.set(distanceUnit.unitString, forKey: .Key.distanceUnit)
-      recalculateVitals()
       Task { await syncToWatch() }
     }
   }
   public var liquidVolumeUnit: HKUnit {
     didSet {
       UserDefaults.group.set(liquidVolumeUnit.unitString, forKey: .Key.liquidVolumeUnit)
-      recalculateVitals()
       Task { await syncToWatch() }
     }
   }
   public var weightUnit: HKUnit {
     didSet {
       UserDefaults.group.set(weightUnit.unitString, forKey: .Key.weightUnit)
-      recalculateVitals()
       Task { await syncToWatch() }
     }
   }
   public var heightUnit: HKUnit {
     didSet {
       UserDefaults.group.set(heightUnit.unitString, forKey: .Key.heightUnit)
-      recalculateVitals()
       Task { await syncToWatch() }
     }
   }
@@ -90,15 +86,6 @@ public final class HealthUnitPreferences {
       } else {
         heightUnit = .foot()
       }
-    }
-  }
-}
-
-private extension HealthUnitPreferences {
-
-  func recalculateVitals() {
-    Task {
-      await VitalsCalculator.shared.recalculateVitals()
     }
   }
 }

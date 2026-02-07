@@ -45,7 +45,6 @@ struct DeveloperSettingsView: View {
 
   @ObservedObject private var authTokenManager = AuthTokenManager.shared
 
-  private let vitalsViewModel = VitalsViewModel.shared
   private let modelContext = ContainerHolder.shared.createContext()
 
   var body: some View {
@@ -783,7 +782,7 @@ extension DeveloperSettingsView {
 
       SettingsSectionContainer {
         AsyncButton {
-          await VitalsCalculator.shared.forceFetchVitals()
+          await YouStatsCalculator.shared.refreshStats()
           await MainActor.run {
             alertDetails = AlertDetails(title: "Vitals Recalculated", message: "Your Vitals have been recalculated.")
           }

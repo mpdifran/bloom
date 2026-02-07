@@ -172,7 +172,7 @@ private extension OnboardingHealthKitView {
       isAuthorized = authStatus == .unnecessary
 
       if isAuthorized {
-        await VitalsCalculator.shared.forceFetchVitals()
+        await YouStatsCalculator.shared.refreshStats()
         onContinue()
       }
     } catch { }

@@ -25,7 +25,7 @@ struct CycleTrackingActionCardView: View {
   @State private var date: Date
   @State private var flowType: HKCategoryValueVaginalBleeding = .none
 
-  @State private var vitalsViewModel = VitalsViewModel.shared
+  @State private var vitalsViewModel = YouStatsViewModel.shared
 
   @Environment(\.requestReview) private var requestReview
 
