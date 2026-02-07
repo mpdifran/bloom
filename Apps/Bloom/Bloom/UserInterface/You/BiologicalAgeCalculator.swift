@@ -441,7 +441,7 @@ extension BiologicalAgeCalculator {
     let zoneMinutesDelta = newZoneMinutes - previousZoneMinutes
     let activityLevelDelta = newActivityLevel - previousActivityLevel
 
-    let totalDelta = zoneMinutesDelta + activityLevelDelta
+    let totalDelta = (zoneMinutesDelta + activityLevelDelta) * 0.3
 
     // Return nil if no significant change (less than ~1 hour = 0.000114 years)
     guard abs(totalDelta) > 0.0001 else { return nil }
