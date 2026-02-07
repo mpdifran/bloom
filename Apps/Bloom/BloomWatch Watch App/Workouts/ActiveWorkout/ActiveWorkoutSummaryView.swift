@@ -34,10 +34,10 @@ struct ActiveWorkoutSummaryView: View {
         .tint(.mutedYellow)
 
       SummaryMetricView(title: "Total Energy", value: workout.totalEnergyBurned.displayString(for: .largeCalorie()))
-        .foregroundStyle(.mutedPink)
+        .tint(.mutedPink)
 
       SummaryMetricView(title: "Avg. Heart Rate", value: workout.averageHeartRate.displayString(for: .bpm()))
-        .foregroundStyle(.mutedRed)
+        .tint(.mutedRed)
 
       SummaryMetricView(title: "Zone Minutes", value: "\(Int(workoutManager.totalZoneMinutes))")
         .tint(.mutedGreen)
@@ -55,6 +55,7 @@ struct ActiveWorkoutSummaryView: View {
         onDismiss()
       } label: {
         Text("Done")
+          .horizontallyCentered()
       }
     }
   }
