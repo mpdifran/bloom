@@ -162,7 +162,9 @@ private extension WatchChannel {
   }
 
   nonisolated func didReceiveApplicationContext() {
-    NotificationCenter.default.post(name: Self.applicationContextDidUpdate, object: nil)
+    DispatchQueue.main.async {
+      NotificationCenter.default.post(name: Self.applicationContextDidUpdate, object: nil)
+    }
   }
 
   func didReceiveUserInfo(_ userInfo: [String: Any]) {

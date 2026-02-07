@@ -15,7 +15,7 @@ struct TodayTabView: View {
 
   var body: some View {
     Group {
-      if provider.hasContent {
+      if provider.reminders.isNotEmpty {
         contentView
       } else {
         emptyStateView
@@ -32,16 +32,8 @@ struct TodayTabView: View {
   private var contentView: some View {
     ScrollViewReader { proxy in
       List {
-        // Today's Advice Section
-//      if let advice = provider.todaysAdvice, !advice.isEmpty {
-//        TodaysAdviceCell(advice: advice)
-//      }
-
-        // Reminders Section
-        if !provider.reminders.isEmpty {
-          ForEach(provider.reminders.reversed()) { reminder in
-            WatchReminderCell(reminder: reminder)
-          }
+        ForEach(provider.reminders.reversed()) { reminder in
+          WatchReminderCell(reminder: reminder)
         }
       }
       .listStyle(.carousel)

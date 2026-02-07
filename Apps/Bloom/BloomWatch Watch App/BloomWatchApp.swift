@@ -49,6 +49,8 @@ struct BloomWatch_Watch_AppApp: App {
         .task { @MainActor in
           // Sync any pending reminder completions that weren't sent while phone was unavailable
           await PendingReminderCompletionManager.shared.syncPendingCompletions()
+          // Consume any completions queued by the widget extension
+          await PendingReminderCompletionManager.shared.consumeWidgetQueuedCompletions()
         }
         .task { @MainActor in
           // Sync any pending food logs that weren't sent while phone was unavailable
@@ -64,6 +66,7 @@ struct BloomWatch_Watch_AppApp: App {
             await WatchSyncRequester.shared.requestSyncIfNeeded()
             await PendingBowelMovementManager.shared.syncPendingEntries()
             await PendingReminderCompletionManager.shared.syncPendingCompletions()
+            await PendingReminderCompletionManager.shared.consumeWidgetQueuedCompletions()
             await PendingFoodLogManager.shared.syncPendingEntries()
             TodayProvider.shared.loadFromApplicationContext()
           }

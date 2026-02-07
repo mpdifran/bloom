@@ -45,6 +45,34 @@ public final class BiologicalAgeProvider {
     actualAge ?? 0
   }
 
+  // MARK: - Mock Support
+
+  #if DEBUG
+  private static let mockBioAgeEnabledKey = "Debug.mockBioAgeEnabled"
+  private static let mockBioAgeDeltaKey = "Debug.mockBioAgeDelta"
+
+  public var mockBioAgeEnabled: Bool {
+    get { UserDefaults.standard.bool(forKey: Self.mockBioAgeEnabledKey) }
+    set { UserDefaults.standard.set(newValue, forKey: Self.mockBioAgeEnabledKey) }
+  }
+
+  public var mockBioAgeDelta: Double {
+    get { UserDefaults.standard.double(forKey: Self.mockBioAgeDeltaKey) }
+    set { UserDefaults.standard.set(newValue, forKey: Self.mockBioAgeDeltaKey) }
+  }
+
+  /// Returns the bio age with mock delta applied if enabled in debug settings
+  public var displayBiologicalAge: Double? {
+    guard let biologicalAge else { return nil }
+    guard mockBioAgeEnabled, let actualAge else { return biologicalAge }
+
+    let mockedBioAge = actualAge + mockBioAgeDelta
+    return max(actualAge - 12, min(actualAge + 12, mockedBioAge))
+  }
+  #else
+  public var displayBiologicalAge: Double? { biologicalAge }
+  #endif
+
   /// Metrics that are making the user younger (negative weighted delta)
   public var positiveFactors: [WatchMetricContribution] {
     metricContributions?.filter(\.isPositive).sorted { $0.weightedDelta < $1.weightedDelta } ?? []

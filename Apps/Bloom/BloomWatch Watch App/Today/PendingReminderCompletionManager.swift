@@ -14,6 +14,7 @@ final class PendingReminderCompletionManager: ObservableObject {
   static let shared = PendingReminderCompletionManager()
 
   private static let storageKey = "PendingReminderCompletionManager.pendingCompletions"
+  private static let widgetQueueKey = "WidgetPendingReminderCompletions"
 
   @Published private(set) var pendingCompletions: [WatchReminderCompletionMessage] = []
 
@@ -58,6 +59,28 @@ final class PendingReminderCompletionManager: ObservableObject {
     }
 
     return success
+  }
+
+  /// Consumes completions queued by the widget extension and attempts to sync them to the phone
+  func consumeWidgetQueuedCompletions() async {
+    guard let data = UserDefaults.group.data(forKey: Self.widgetQueueKey),
+          let widgetCompletions = try? JSONDecoder.watch.decode(
+            [WatchReminderCompletionMessage].self, from: data
+          ),
+          !widgetCompletions.isEmpty else {
+      return
+    }
+
+    // Clear the widget queue immediately to prevent double-processing
+    UserDefaults.group.removeObject(forKey: Self.widgetQueueKey)
+
+    for completion in widgetCompletions {
+      let success = await sendCompletion(completion)
+      if !success {
+        pendingCompletions.append(completion)
+        saveToStorage()
+      }
+    }
   }
 
   /// Syncs all pending completions to the phone

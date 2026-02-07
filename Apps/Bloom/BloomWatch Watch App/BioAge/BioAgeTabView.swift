@@ -20,10 +20,10 @@ struct BioAgeTabView: View {
     ZStack {
       BiologicalAgeMeter(
         chronologicalAge: provider.chronologicalAge,
-        biologicalAge: provider.biologicalAge
+        biologicalAge: provider.displayBiologicalAge
       )
       .onTapGesture {
-        if provider.biologicalAge != nil {
+        if provider.displayBiologicalAge != nil {
           showDetails = true
         }
       }

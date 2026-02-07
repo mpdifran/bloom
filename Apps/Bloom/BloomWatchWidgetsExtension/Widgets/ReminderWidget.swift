@@ -5,6 +5,7 @@
 //  Created by Claude on 2026-02-06.
 //
 
+import AppIntents
 import BloomFoundation
 import SwiftUI
 import WidgetKit
@@ -185,17 +186,15 @@ struct ReminderWidgetView: View {
   let entry: ReminderEntry
 
   var body: some View {
-    Group {
-      switch family {
-      case .accessoryRectangular:
-        RectangularReminderView(entry: entry)
-      case .accessoryInline:
-        InlineReminderView(entry: entry)
-      default:
-        RectangularReminderView(entry: entry)
-      }
+    switch family {
+    case .accessoryRectangular:
+      RectangularReminderView(entry: entry)
+    case .accessoryInline:
+      InlineReminderView(entry: entry)
+        .widgetURL(URL(string: "bloom://watch/today"))
+    default:
+      RectangularReminderView(entry: entry)
     }
-    .widgetURL(URL(string: "bloom://watch/today"))
   }
 }
 
@@ -205,10 +204,16 @@ private struct RectangularReminderView: View {
   let entry: ReminderEntry
 
   var body: some View {
-    if entry.isEmpty {
-      emptyState
+    if let reminder = entry.reminder {
+      Button(intent: CompleteReminderIntent(
+        reminderID: reminder.reminderID,
+        occurrenceID: reminder.occurrenceID
+      )) {
+        reminderContent
+      }
+      .buttonStyle(.plain)
     } else {
-      reminderContent
+      emptyState
     }
   }
 
@@ -220,26 +225,20 @@ private struct RectangularReminderView: View {
 
       VStack(alignment: .leading, spacing: 2) {
         Text(entry.reminder?.title ?? "")
-          .font(.system(.headline, design: .rounded, weight: .semibold))
-          .lineLimit(1)
-          .minimumScaleFactor(0.7)
+          .font(.system(.caption2, design: .rounded, weight: .semibold))
+          .lineLimit(2)
 
         HStack(spacing: 4) {
           Image(systemName: "clock")
-            .font(.caption2)
           Text(entry.statusText)
-            .font(.caption2)
         }
+        .font(.caption2)
         .foregroundStyle(entry.statusColor)
       }
 
       Spacer(minLength: 0)
     }
-    .padding(6)
-    .background {
-      RoundedRectangle(cornerRadius: 12)
-        .fill(.background.secondary)
-    }
+    .frame(maxHeight: .infinity)
   }
 
   private var emptyState: some View {
@@ -320,7 +319,7 @@ private struct InlineReminderView: View {
     date: .now,
     reminder: WatchReminderData(
       reminderID: "3",
-      title: "Drink Water",
+      title: "Drink More Water Throughout The Day",
       colorHex: "#45B7D1",
       scheduledTime: Date().addingTimeInterval(-3600),
       occurrenceID: "occ3",
