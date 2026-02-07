@@ -1,18 +1,24 @@
 //
 //  MenstrualFlowIndicatorView.swift
-//  Bloom
+//  CoreHealth
 //
 //  Created by Mark DiFranco on 2025-02-03.
 //
 
 import SwiftUI
 import HealthKit
+import BloomFoundation
 
-struct MenstrualFlowIndicatorView: View {
-  let flow: HKCategoryValueVaginalBleeding
-  let isSelected: Bool
+public struct MenstrualFlowIndicatorView: View {
+  public let flow: HKCategoryValueVaginalBleeding
+  public let isSelected: Bool
 
-  var body: some View {
+  public init(flow: HKCategoryValueVaginalBleeding, isSelected: Bool) {
+    self.flow = flow
+    self.isSelected = isSelected
+  }
+
+  public var body: some View {
     VStack {
       Capsule()
         .fill(.background.secondary)

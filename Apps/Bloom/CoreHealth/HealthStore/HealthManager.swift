@@ -141,6 +141,7 @@ public final class HealthManager: ObservableObject {
   @Published public var sexKind: HKBiologicalSex = .notSet {
     didSet {
       healthDefaults.setSexKind(sexKind)
+      Task { await syncBiologicalSexToWatch() }
     }
   }
   @Published public var focus: String {
@@ -299,5 +300,25 @@ public extension HealthManager {
 
   func targetWeightQuantity() -> HKQuantity {
     HKQuantity(unit: .pound(), doubleValue: targetWeight)
+  }
+}
+
+// MARK: - Watch Sync
+
+public extension HealthManager {
+
+  func syncBiologicalSexToWatch() async {
+    #if os(iOS)
+    let watchData = WatchBiologicalSexData(isFemale: sex() == .female)
+
+    guard let data = try? JSONEncoder.watch.encode(watchData) else {
+      return
+    }
+
+    try? await WatchChannel.shared.updateApplicationContext(
+      key: WatchChannel.biologicalSexDataKey,
+      data: data
+    )
+    #endif
   }
 }

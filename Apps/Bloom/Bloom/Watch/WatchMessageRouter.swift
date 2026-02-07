@@ -367,9 +367,10 @@ final class WatchMessageRouter {
     async let subscriptionSync: () = EntitlementController.shared.syncToWatch()
     async let goalSync: () = WatchGoalSyncer.shared.syncToWatch()
     async let hrzSettingsSync: () = WatchHeartRateZoneSettingsSyncer.shared.syncToWatch()
+    async let bioSexSync: () = HealthManager.shared.syncBiologicalSexToWatch()
 
     // Await all syncs
-    _ = await (unitSync, heartRateSync, bioAgeSync, todaySync, foodSync, subscriptionSync, goalSync, hrzSettingsSync)
+    _ = await (unitSync, heartRateSync, bioAgeSync, todaySync, foodSync, subscriptionSync, goalSync, hrzSettingsSync, bioSexSync)
 
     let response = WatchSyncRequestResponse(success: true)
     return (try? JSONEncoder.watch.encode(response)) ?? Data()

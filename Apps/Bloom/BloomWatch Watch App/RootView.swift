@@ -90,6 +90,8 @@ struct RootView: View {
       presentedActionSheet = LogWeightView(performDismiss: dismiss).asAny
     case "bowelMovement":
       presentedActionSheet = LogBowelMovementView(performDismiss: dismiss).asAny
+    case "cycleTracking":
+      presentedActionSheet = LogCycleTrackingView(performDismiss: dismiss).asAny
     case "bloodPressure":
       presentedActionSheet = LogBloodPressureView(performDismiss: dismiss).asAny
     case "voice":

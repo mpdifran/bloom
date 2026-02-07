@@ -40,6 +40,19 @@ struct ActionsView: View {
           }).asAny
         }
 
+        if WatchBiologicalSexProvider.shared.isFemale {
+          ActionCell(
+            image: .logPeriodIcon,
+            title: "Period",
+            color: .mutedPink
+          )
+          .onTapGesture {
+            presentedSheet = LogCycleTrackingView(performDismiss: {
+              performDismiss?()
+            }).asAny
+          }
+        }
+
         ActionCell(
           image: .logWeightIcon,
           title: "Weight",

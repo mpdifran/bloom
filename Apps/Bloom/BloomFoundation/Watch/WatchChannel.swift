@@ -21,6 +21,7 @@ public final actor WatchChannel: NSObject {
   public static let subscriptionDataKey = "subscriptionData"
   public static let goalsDataKey = "goalsData"
   public static let confirmationDataKey = "confirmationData"
+  public static let biologicalSexDataKey = "biologicalSexData"
   public static let shared = WatchChannel()
 
   /// Notification posted when complication user info is received (watchOS only)
