@@ -15,7 +15,6 @@ public final actor VitalsCalculator {
 
   @AsyncStreamable public var vitals = [VitalModel]()
 
-  @AsyncStreamable public var bowelMovementSummary: BowelMovementSummary?
   @AsyncStreamable public var menstrualSummary: MenstrualSummary?
   @AsyncStreamable public var alcoholSummary: AlcoholSummary?
 
@@ -53,7 +52,6 @@ public extension VitalsCalculator {
 
   func forceFetchVitals() async {
     menstrualSummary = await HealthStoreFetcher.shared.fetchMenstrualSummary()
-    bowelMovementSummary = await fetchBowelMovementSummary()
     alcoholSummary = await HealthStoreFetcher.shared.fetchAlcoholSummary(
       sex: HealthDefaults.shared.getSexKind()
     )
@@ -64,12 +62,6 @@ public extension VitalsCalculator {
 
   func forceFectchMenstrualSummary() async {
     menstrualSummary = await HealthStoreFetcher.shared.fetchMenstrualSummary()
-
-    await createVitals()
-  }
-
-  func fetchSwiftDataTypes() async {
-    self.bowelMovementSummary = await fetchBowelMovementSummary()
 
     await createVitals()
   }
@@ -97,15 +89,6 @@ public extension VitalsCalculator {
 
 private extension VitalsCalculator {
 
-  func fetchBowelMovementSummary() async -> BowelMovementSummary? {
-    let modelActor = BowelMovementModelActor.standard()
-    let samples = (try? await modelActor.fetchBowelMovements(dateRange: .trailingDaysFromNow(7))) ?? []
-    return BowelMovementSummary(bowelMovements: samples)
-  }
-}
-
-private extension VitalsCalculator {
-
   func createVitals() async {
     var vitals = [VitalModel]()
     if await HealthManager.shared.sex() == .female {
@@ -123,20 +106,6 @@ private extension VitalsCalculator {
       } else {
         vitals.append(VitalModel(id: .cycleTracking))
       }
-    }
-    if let bowelMovementSummary {
-      vitals.append(
-        VitalModel(
-          id: .bowelMovements,
-          subtitle: bowelMovementSummary.subtitle,
-          status: bowelMovementSummary.rating?.name,
-          color: bowelMovementSummary.rating?.color,
-          barLevel: bowelMovementSummary.barLevel,
-          hasNoData: bowelMovementSummary.hasNoData
-        )
-      )
-    } else {
-      vitals.append(VitalModel(id: .bowelMovements))
     }
 
     vitals.sort(by: { lhs, rhs in

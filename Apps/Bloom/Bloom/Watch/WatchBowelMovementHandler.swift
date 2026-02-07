@@ -71,8 +71,8 @@ final class WatchBowelMovementHandler {
       context.insert(bowelMovement)
       try context.save()
 
-      // Refresh vitals to include the new entry
-      await VitalsCalculator.shared.fetchSwiftDataTypes()
+      // Refresh bowel movement summary to include the new entry
+      await YouStatsCalculator.shared.refreshBowelMovements()
 
       return true
     } catch {

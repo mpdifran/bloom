@@ -90,7 +90,7 @@ private extension YouStatsViewModel {
       }
     })
     tasks.append(Task.detached {
-      for await bowelMovementSummary in await VitalsCalculator.shared.$bowelMovementSummary {
+      for await bowelMovementSummary in await YouStatsCalculator.shared.$bowelMovementSummary {
         await MainActor.run {
           self.bowelMovementSummary = bowelMovementSummary
         }

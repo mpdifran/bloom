@@ -9,6 +9,7 @@ import Foundation
 import CoreHealth
 import BloomFoundation
 import HealthKit
+import DataContainer
 
 final actor YouStatsCalculator {
   static let shared = YouStatsCalculator()
@@ -43,6 +44,7 @@ final actor YouStatsCalculator {
   @AsyncStreamable var averageRestingHeartRate: Double?
   @AsyncStreamable var bodyFatPercentage: HKQuantity?
   @AsyncStreamable var nutritionMacros: NutritionMonthlySummary.Macros?
+  @AsyncStreamable var bowelMovementSummary: BowelMovementSummary?
 
   private let healthStoreFetcher = HealthStoreFetcher.shared
 
@@ -94,14 +96,25 @@ final actor YouStatsCalculator {
     nutritionMacros = await healthStoreFetcher.fetchNutritionMonthlySummaryDetails(
       dateRange: .trailingDaysFromNow(6)
     ).macros
+    bowelMovementSummary = await fetchBowelMovementSummary()
   }
 
   func refreshSteps() async {
     weeklyStepsChartData = await calculateWeeklyStepsChartData()
   }
+
+  func refreshBowelMovements() async {
+    bowelMovementSummary = await fetchBowelMovementSummary()
+  }
 }
 
 private extension YouStatsCalculator {
+
+  func fetchBowelMovementSummary() async -> BowelMovementSummary? {
+    let modelActor = BowelMovementModelActor.standard()
+    let samples = (try? await modelActor.fetchBowelMovements(dateRange: .trailingDaysFromNow(7))) ?? []
+    return BowelMovementSummary(bowelMovements: samples)
+  }
 
   func calculateAverageSleepDuration(from sleepAnalyses: [SleepAnalysis]) -> TimeInterval? {
     guard sleepAnalyses.isNotEmpty else { return nil }

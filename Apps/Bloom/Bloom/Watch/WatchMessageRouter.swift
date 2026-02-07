@@ -125,7 +125,7 @@ final class WatchMessageRouter {
       Task.detached { [entryId = entry.id] in
         // Confirm via application context (backup to direct response)
         await WatchConfirmationSyncer.shared.confirmBowelMovement(id: entryId)
-        await VitalsCalculator.shared.fetchSwiftDataTypes()
+        await YouStatsCalculator.shared.refreshBowelMovements()
       }
 
       return true

@@ -19,7 +19,6 @@ final class VitalsViewModel: Sendable {
 
     var vitals = [VitalModel]()
     var noDataVitals = [VitalModel]()
-    var bowelMovementSummary: BowelMovementSummary?
     var menstrualSummary: MenstrualSummary?
 
     private init() {
@@ -46,13 +45,6 @@ extension VitalsViewModel {
                 await MainActor.run {
                     self.vitals = dataVitals
                     self.noDataVitals = noDataVitals
-                }
-            }
-        })
-        tasks.append(Task.detached {
-            for await bowelMovementSummary in await VitalsCalculator.shared.$bowelMovementSummary {
-                await MainActor.run {
-                    self.bowelMovementSummary = bowelMovementSummary
                 }
             }
         })

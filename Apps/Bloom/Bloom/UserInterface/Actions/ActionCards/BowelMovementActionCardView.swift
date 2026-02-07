@@ -130,7 +130,7 @@ private extension BowelMovementActionCardView {
     context.insert(model)
     try context.save()
 
-    await VitalsCalculator.shared.fetchSwiftDataTypes()
+    await YouStatsCalculator.shared.refreshBowelMovements()
 
     TelemetryDeck.signal("Log Bowel Movement")
 

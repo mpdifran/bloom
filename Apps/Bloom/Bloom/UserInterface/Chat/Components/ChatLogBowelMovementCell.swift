@@ -124,7 +124,7 @@ private extension ChatLogBowelMovementCell {
       modelContext.insert(model)
     }
 
-    await VitalsCalculator.shared.fetchSwiftDataTypes()
+    await YouStatsCalculator.shared.refreshBowelMovements()
 
     TelemetryDeck.signal("Log Bowel Movement")
 

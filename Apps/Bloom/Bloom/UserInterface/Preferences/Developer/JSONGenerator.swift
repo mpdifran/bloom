@@ -8,6 +8,7 @@
 import SwiftUI
 import HealthKit
 import CoreHealth
+import DataContainer
 
 final actor JSONGenerator {
   static let shared = JSONGenerator()
@@ -18,10 +19,6 @@ final actor JSONGenerator {
 extension JSONGenerator {
 
   func generateJSONString() async throws -> String {
-    await VitalsCalculator.shared.forceFetchVitals()
-
-    let calc = VitalsCalculator.shared
-
     let sleepAnalyses = await HealthStoreFetcher.shared.fetchSleepAnalysis(dateRange: .trailingMonthsFromNow(1))
     let sleepSummary = await HealthStoreFetcher.shared.fetchSleepVitalSummary(trailingMonthAnalyses: sleepAnalyses)
 
@@ -65,7 +62,9 @@ extension JSONGenerator {
       averageSugar: nutritionDetails.averageSugar.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .gram()), unit: .gram()) })
     )
 
-    let bms = await calc.bowelMovementSummary?.bowelMovements.map({ SummaryJSON.BM(date: $0.date, bristolStoolType: $0.bristolStoolType, duration: $0.duration.name) }) ?? []
+    let bmModelActor = BowelMovementModelActor.standard()
+    let bmSamples = (try? await bmModelActor.fetchBowelMovements(dateRange: .trailingDaysFromNow(30))) ?? []
+    let bms = bmSamples.map({ SummaryJSON.BM(date: $0.date, bristolStoolType: $0.bristolStoolType, duration: $0.duration.name) })
 
     let summary = await SummaryJSON(
       activityLevel: YouStatsCalculator.shared.activityLevelSummary?.details,
