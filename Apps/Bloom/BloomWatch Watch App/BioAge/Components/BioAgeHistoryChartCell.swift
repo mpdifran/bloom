@@ -41,7 +41,7 @@ private extension BioAgeHistoryChartCell {
             y: .value("Age", actualAge),
             series: .value("Type", "Actual")
           )
-          .foregroundStyle(.fill)
+          .foregroundStyle(.white)
           .lineStyle(StrokeStyle(lineWidth: 4, lineCap: .round))
 
           // Bio age line
@@ -81,7 +81,7 @@ private extension BioAgeHistoryChartCell {
       HStack(spacing: 8) {
         HStack(spacing: 4) {
           Circle()
-            .fill(.fill)
+            .fill(.white)
             .frame(width: 6, height: 6)
           Text("Actual: \(Int(actualAge))")
             .font(.system(size: 9))

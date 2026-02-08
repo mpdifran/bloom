@@ -111,7 +111,7 @@ struct WatchGoalTimelineProvider: AppIntentTimelineProvider {
 
   func snapshot(for configuration: WatchGoalWidgetIntent, in context: Context) async -> WatchGoalEntry {
     if context.isPreview {
-      return .placeholder
+      return makePreviewEntry(for: configuration)
     }
     return await makeEntry(for: configuration)
   }
@@ -145,6 +145,41 @@ struct WatchGoalTimelineProvider: AppIntentTimelineProvider {
 
       return AppIntentRecommendation(intent: intent, description: goal.metricName)
     }
+  }
+
+  private func makePreviewEntry(for configuration: WatchGoalWidgetIntent) -> WatchGoalEntry {
+    guard let goalEntity = configuration.goal else {
+      return .placeholder
+    }
+
+    let goals = loadCachedGoals()
+    if let goal = goals.first(where: { $0.id == goalEntity.id }) {
+      return WatchGoalEntry(
+        date: .now,
+        goalId: goal.id,
+        metricName: goal.metricName,
+        metricSystemImage: goal.metricSystemImage,
+        metricColorHex: goal.metricColorHex,
+        currentValue: goal.targetValue * 0.75,
+        targetValue: goal.targetValue,
+        unitString: goal.targetUnit,
+        timePeriod: goal.timePeriod,
+        isEmpty: false
+      )
+    }
+
+    return WatchGoalEntry(
+      date: .now,
+      goalId: goalEntity.id,
+      metricName: goalEntity.name,
+      metricSystemImage: goalEntity.systemImage,
+      metricColorHex: nil,
+      currentValue: 75,
+      targetValue: 100,
+      unitString: "",
+      timePeriod: "daily",
+      isEmpty: false
+    )
   }
 
   private func makeEntry(for configuration: WatchGoalWidgetIntent) async -> WatchGoalEntry {
