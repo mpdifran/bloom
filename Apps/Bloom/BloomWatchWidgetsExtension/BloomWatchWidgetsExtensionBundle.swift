@@ -11,10 +11,11 @@ import SwiftUI
 @main
 struct BloomWatchWidgetsExtensionBundle: WidgetBundle {
   var body: some Widget {
+    WorkoutWidget()
     ActionsWidget()
     BiologicalAgeWidget()
-    WorkoutWidget()
-    WatchGoalWidget()
+    HeartRateWidget()
     ReminderWidget()
+    WatchGoalWidget()
   }
 }

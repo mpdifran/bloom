@@ -171,6 +171,31 @@ public extension HealthStoreFetcher {
     )
   }
 
+  func fetchDiscreteStatistics(
+    for quantityType: HKQuantityTypeIdentifier,
+    unit: HKUnit,
+    dateRange: DateRange
+  ) async -> (min: Double?, max: Double?) {
+    await withCheckedContinuation { continuation in
+      let predicate = HKQuery.predicateForSamples(
+        withStart: dateRange.start,
+        end: dateRange.end,
+        options: .strictStartDate
+      )
+
+      let query = HKStatisticsQuery(
+        quantityType: HKQuantityType(quantityType),
+        quantitySamplePredicate: predicate,
+        options: [.discreteMin, .discreteMax]
+      ) { _, result, _ in
+        let minValue = result?.minimumQuantity()?.doubleValue(for: unit)
+        let maxValue = result?.maximumQuantity()?.doubleValue(for: unit)
+        continuation.resume(returning: (min: minValue, max: maxValue))
+      }
+      healthStore.execute(query)
+    }
+  }
+
   func fetchSamples(
     for sampleType: HKSampleType,
     dateRange: DateRange,

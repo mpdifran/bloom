@@ -27,6 +27,8 @@ public extension ShapeStyle where Self == Color {
   static var monitorLow: Self          { Color("monitorLow", bundle: BundleToken.bundle) }
   static var monitorTypical: Self      { Color("monitorTypical", bundle: BundleToken.bundle) }
   static var monitorHigh: Self         { Color("monitorHigh", bundle: BundleToken.bundle) }
+  static var softPink: Self            { Color("softPink", bundle: BundleToken.bundle) }
+  static var softRed: Self             { Color("softRed", bundle: BundleToken.bundle) }
 }
 
 public extension Color {
@@ -49,6 +51,8 @@ public extension Color {
   static let monitorLow          = Color("monitorLow", bundle: BundleToken.bundle)
   static let monitorTypical      = Color("monitorTypical", bundle: BundleToken.bundle)
   static let monitorHigh         = Color("monitorHigh", bundle: BundleToken.bundle)
+  static let softPink            = Color("softPink", bundle: BundleToken.bundle)
+  static let softRed             = Color("softRed", bundle: BundleToken.bundle)
 }
 
 private class BundleToken {
