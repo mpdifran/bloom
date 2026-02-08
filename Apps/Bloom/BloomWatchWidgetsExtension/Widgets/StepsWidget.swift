@@ -14,11 +14,12 @@ import WidgetKit
 
 // MARK: - Chart Data
 
-private let slotsPerDay = 96 // 24 hours * 4 (15-minute intervals)
+private let slotMinutes = 30
+private let slotsPerDay = 48 // 24 hours * 2 (30-minute intervals)
 
 struct StepChartPoint: Identifiable {
   var id: Int { slot }
-  let slot: Int // 0–95, representing 15-minute periods from midnight
+  let slot: Int // 0–47, representing 30-minute periods from midnight
   let cumulativeSteps: Int
 }
 
@@ -34,7 +35,7 @@ struct StepsEntry: TimelineEntry {
   static var placeholder: StepsEntry {
     StepsEntry(
       date: .now, steps: 4218, distance: 2.3, distanceUnitString: "km",
-      chartDataPoints: previewChartData(throughSlot: 60, totalSteps: 4218)
+      chartDataPoints: previewChartData(throughSlot: 30, totalSteps: 4218)
     )
   }
 
@@ -119,12 +120,12 @@ struct StepsTimelineProvider: TimelineProvider {
     )
     let distance: Double? = distanceQuantity.map { $0.doubleValue(for: distanceUnit) }
 
-    // Fetch 15-minute interval step data for chart
+    // Fetch 30-minute interval step data for chart
     let startOfDay = calendar.startOfDay(for: now)
     let intervalSamples = await HealthStoreFetcher.shared.fetchCollatedQuantity(
       for: .stepCount,
       unit: .count(),
-      interval: DateComponents(minute: 15),
+      interval: DateComponents(minute: slotMinutes),
       dateRange: todayRange
     )
 
@@ -132,7 +133,7 @@ struct StepsTimelineProvider: TimelineProvider {
     var chartDataPoints = [StepChartPoint(slot: 0, cumulativeSteps: 0)]
     for sample in intervalSamples {
       let minutesFromMidnight = Int(sample.date.timeIntervalSince(startOfDay) / 60)
-      let slot = minutesFromMidnight / 15
+      let slot = minutesFromMidnight / slotMinutes
       guard slot >= 0, slot < slotsPerDay else { continue }
       cumulativeTotal += Int(sample.quantity.doubleValue(for: .count()).rounded())
       chartDataPoints.append(StepChartPoint(slot: slot, cumulativeSteps: cumulativeTotal))
@@ -225,7 +226,7 @@ private struct CircularStepsView: View {
 private struct RectangularStepsView: View {
   let entry: StepsEntry
 
-  private static let noonSlot = 48
+  private static let noonSlot = 24 // 12 hours * 2 (30-minute intervals)
 
   /// Computes y-axis max so the line stays in the lower portion of the chart,
   /// avoiding overlap with the steps label in the top-left.
@@ -327,17 +328,17 @@ private struct RectangularStepsView: View {
 /// sleeping (0-6am), waking/morning commute (7-9am), office (9am-12pm),
 /// lunch walk (12-1pm), afternoon (1-5pm), commute/evening (5-7pm), winding down (7-10pm).
 private func previewChartData(throughSlot lastSlot: Int, totalSteps: Int) -> [StepChartPoint] {
-  // Per-slot weights that shape the daily curve
+  // Per-slot weights that shape the daily curve (30-min slots, 0–47)
   let weights: [(slotRange: Range<Int>, weight: Double)] = [
-    (0..<28, 0.0),   // 12am–7am: sleeping
-    (28..<32, 3.0),  // 7am–8am: waking up, getting ready
-    (32..<36, 8.0),  // 8am–9am: morning commute
-    (36..<48, 2.0),  // 9am–12pm: office/desk work
-    (48..<52, 7.0),  // 12pm–1pm: lunch walk
-    (52..<68, 2.5),  // 1pm–5pm: afternoon
-    (68..<76, 6.0),  // 5pm–7pm: commute/errands
-    (76..<84, 3.0),  // 7pm–9pm: evening activity
-    (84..<96, 0.5),  // 9pm–12am: winding down
+    (0..<14, 0.0),   // 12am–7am: sleeping
+    (14..<16, 3.0),  // 7am–8am: waking up, getting ready
+    (16..<18, 8.0),  // 8am–9am: morning commute
+    (18..<24, 2.0),  // 9am–12pm: office/desk work
+    (24..<26, 7.0),  // 12pm–1pm: lunch walk
+    (26..<34, 2.5),  // 1pm–5pm: afternoon
+    (34..<38, 6.0),  // 5pm–7pm: commute/errands
+    (38..<42, 3.0),  // 7pm–9pm: evening activity
+    (42..<48, 0.5),  // 9pm–12am: winding down
   ]
 
   // Build raw weights for each slot up to lastSlot
@@ -389,7 +390,7 @@ private func previewChartData(throughSlot lastSlot: Int, totalSteps: Int) -> [St
 } timeline: {
   StepsEntry(
     date: .now, steps: 4218, distance: 2.3, distanceUnitString: "km",
-    chartDataPoints: previewChartData(throughSlot: 60, totalSteps: 4218)
+    chartDataPoints: previewChartData(throughSlot: 30, totalSteps: 4218)
   )
 }
 
@@ -398,7 +399,7 @@ private func previewChartData(throughSlot lastSlot: Int, totalSteps: Int) -> [St
 } timeline: {
   StepsEntry(
     date: .now, steps: 15340, distance: 8.7, distanceUnitString: "km",
-    chartDataPoints: previewChartData(throughSlot: 72, totalSteps: 15340)
+    chartDataPoints: previewChartData(throughSlot: 36, totalSteps: 15340)
   )
 }
 
@@ -407,7 +408,7 @@ private func previewChartData(throughSlot lastSlot: Int, totalSteps: Int) -> [St
 } timeline: {
   StepsEntry(
     date: .now, steps: 312, distance: 0.2, distanceUnitString: "mi",
-    chartDataPoints: previewChartData(throughSlot: 34, totalSteps: 312)
+    chartDataPoints: previewChartData(throughSlot: 17, totalSteps: 312)
   )
 }
 
