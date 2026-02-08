@@ -15,6 +15,7 @@ struct BloomWatchWidgetsExtensionBundle: WidgetBundle {
     ActionsWidget()
     BiologicalAgeWidget()
     HeartRateWidget()
+    StepsWidget()
     ReminderWidget()
     WatchGoalWidget()
   }

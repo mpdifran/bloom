@@ -250,11 +250,6 @@ private struct RectangularReminderView: View {
     .frame(maxHeight: .infinity)
     .font(.system(.headline, design: .rounded, weight: .semibold))
     .foregroundStyle(.secondary)
-    .padding(6)
-    .background {
-      RoundedRectangle(cornerRadius: 12)
-        .fill(.background.secondary)
-    }
   }
 }
 
