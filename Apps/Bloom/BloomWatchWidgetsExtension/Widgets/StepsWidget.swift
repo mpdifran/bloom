@@ -119,13 +119,14 @@ struct StepsTimelineProvider: TimelineProvider {
     )
     let distance: Double? = distanceQuantity.map { $0.doubleValue(for: distanceUnit) }
 
-    // Fetch hourly step data for chart
+    // Fetch hourly step data for chart (only up to now, not end of day)
     let startOfDay = calendar.startOfDay(for: now)
+    let chartRange = DateRange(startOfDay, now)
     let intervalSamples = await HealthStoreFetcher.shared.fetchCollatedQuantity(
       for: .stepCount,
       unit: .count(),
       interval: DateComponents(hour: 1),
-      dateRange: todayRange
+      dateRange: chartRange
     )
 
     var cumulativeTotal = 0
