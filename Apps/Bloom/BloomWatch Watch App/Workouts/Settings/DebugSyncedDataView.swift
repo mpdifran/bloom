@@ -8,6 +8,7 @@
 import SwiftUI
 import BloomFoundation
 
+#if DEBUG
 struct DebugSyncedDataView: View {
   private let foodProvider = WatchFoodProvider.shared
   private let todayProvider = TodayProvider.shared
@@ -200,3 +201,4 @@ private extension DebugSyncedDataView {
     }
   }
 }
+#endif

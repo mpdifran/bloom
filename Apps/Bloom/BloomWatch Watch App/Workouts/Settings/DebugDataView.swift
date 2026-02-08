@@ -8,6 +8,7 @@
 import SwiftUI
 import SFSafeSymbols
 
+#if DEBUG
 struct DebugDataView: View {
   @State private var presentedNavigationDestination: AnyView?
 
@@ -84,3 +85,4 @@ private extension DebugDataView {
     DebugDataView()
   }
 }
+#endif

@@ -8,6 +8,7 @@
 import SwiftUI
 import CoreHealth
 
+#if DEBUG
 struct DebugMockBioAgeView: View {
   @State private var provider = BiologicalAgeProvider.shared
 
@@ -74,3 +75,4 @@ private extension DebugMockBioAgeView {
     }
   }
 }
+#endif
