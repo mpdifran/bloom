@@ -406,6 +406,49 @@ extension DeveloperSettingsView {
         Divider()
 
         AsyncButton {
+          let workouts = await HealthStoreFetcher.shared.fetchWorkouts(
+            dateRange: .trailingDaysFromNow(30),
+            limit: 1
+          )
+
+          guard let workout = workouts.first else {
+            await MainActor.run {
+              alertDetails = AlertDetails(
+                title: "No Workout Found",
+                message: "No workouts found in the last 30 days."
+              )
+            }
+            return
+          }
+
+          let workoutName = workout.displayName()
+
+          await NotificationManager.shared.sendWorkoutNotification(
+            title: "\(workoutName) Complete",
+            subtitle: "Tap to see your workout analysis",
+            workoutUUID: workout.uuid.uuidString
+          )
+
+          await MainActor.run {
+            alertDetails = AlertDetails(
+              title: "Notification Sent",
+              message: "Workout notification sent for \(workoutName)."
+            )
+          }
+        } label: {
+          LabeledContent("Test Workout Notification") {
+            Image(systemSymbol: .figureRun)
+          }
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
+          .selectable()
+          .frame(height: 60)
+        }
+
+        Divider()
+
+        AsyncButton {
           do {
             try await NetworkRequester.shared.testPushNotification()
 

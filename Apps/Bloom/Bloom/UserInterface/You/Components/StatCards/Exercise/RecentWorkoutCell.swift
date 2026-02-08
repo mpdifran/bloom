@@ -26,7 +26,7 @@ struct RecentWorkoutCell: View {
         }
 
       VStack(alignment: .leading, spacing: 4) {
-        Text(report.workout.workoutActivityType.name)
+        Text(report.workout.displayName())
           .font(.headline)
           .bold()
 

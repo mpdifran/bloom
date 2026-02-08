@@ -61,12 +61,18 @@ struct WorkoutsTabView: View {
     .task {
       await loadWorkouts()
     }
+    .task {
+      if let workoutUUID = tabController.pendingWorkoutNavigation {
+        tabController.pendingWorkoutNavigation = nil
+        await navigateToWorkout(uuid: workoutUUID)
+      }
+    }
     .onChange(of: tabController.pendingWorkoutNavigation) { _, newValue in
       if let workoutUUID = newValue {
+        tabController.pendingWorkoutNavigation = nil
         Task {
           await navigateToWorkout(uuid: workoutUUID)
         }
-        tabController.pendingWorkoutNavigation = nil
       }
     }
   }
@@ -83,14 +89,12 @@ private extension WorkoutsTabView {
 
     // Fetch recent workouts and find the one with matching UUID
     let recentWorkouts = await HealthStoreFetcher.shared.fetchWorkouts(
-      dateRange: .trailingDaysFromNow(7),
+      dateRange: .trailingDaysFromNow(30),
       limit: 100
     )
 
     if let workout = recentWorkouts.first(where: { $0.uuid == workoutUUID }) {
-      await MainActor.run {
-        presentedSheet = WorkoutDetailsView(workout: workout).asAny
-      }
+      pushedView = WorkoutDetailsView(workout: workout).asAny
     }
   }
 }

@@ -23,9 +23,9 @@ extension Notification.Name {
 @MainActor
 final class NotificationCenterDelegate: NSObject {
 
-  private let onNotificationResponse: @Sendable (UNNotificationResponse) -> Void
+  private let onNotificationResponse: @MainActor (UNNotificationResponse) -> Void
 
-  init(onNotificationResponse: @escaping @Sendable (UNNotificationResponse) -> Void) {
+  init(onNotificationResponse: @escaping @MainActor (UNNotificationResponse) -> Void) {
     self.onNotificationResponse = onNotificationResponse
 
     super.init()
@@ -40,11 +40,12 @@ extension NotificationCenterDelegate: UNUserNotificationCenterDelegate {
     _ center: UNUserNotificationCenter,
     didReceive response: UNNotificationResponse
   ) async {
-    // Handle notification actions
+    await handleDidReceive(response)
+  }
+
+  private func handleDidReceive(_ response: UNNotificationResponse) async {
     await handleNotificationAction(response)
-    await MainActor.run {
-      onNotificationResponse(response)
-    }
+    onNotificationResponse(response)
   }
 
   nonisolated func userNotificationCenter(

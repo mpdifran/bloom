@@ -185,7 +185,13 @@ extension WorkoutVariant {
     case (.skatingSports, .outdoor): return .outdoorSkating
     case (.swimming, .indoor): return .poolSwimming
     case (.swimming, .outdoor): return .openWaterSwimming
-    default: return .simple(activityType)
+    default:
+      return WorkoutVariant(
+        activityType: activityType,
+        locationType: locationType,
+        symbol: activityType.systemSymbol,
+        name: workout.displayName(hasRoute: hasRoute)
+      )
     }
   }
 }

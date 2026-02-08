@@ -41,7 +41,7 @@ struct WorkoutDetailsView: View {
         heartRateChart(heartRateReport: heartRateReport)
       }
     }
-    .navigationTitle(workout.workoutActivityType.name)
+    .navigationTitle(workout.displayName())
     .onChange(of: workoutRoutes) { (_ ,_) in
       updateCamera()
     }

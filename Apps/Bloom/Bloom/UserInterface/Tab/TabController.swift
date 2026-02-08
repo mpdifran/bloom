@@ -99,9 +99,7 @@ final class TabController {
 
   init() {
     self.notificationCenterDelegate = NotificationCenterDelegate { [weak self] response in
-      Task { @MainActor in
-        self?.handle(response: response)
-      }
+      self?.handle(response: response)
     }
   }
 }

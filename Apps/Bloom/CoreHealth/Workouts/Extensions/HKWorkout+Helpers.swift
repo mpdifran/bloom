@@ -103,6 +103,38 @@ public extension HKWorkout {
 //    endDate.timeIntervalSince(startDate)
 //  }
 
+  /// Returns a display name including indoor/outdoor context when available.
+  /// Uses activity-specific names (e.g. "Indoor Run", "Pool Swim") for known combinations,
+  /// and a generic "Indoor/Outdoor" prefix for other types.
+  func displayName(hasRoute: Bool = false) -> String {
+    let locationType = inferredLocationType(hasRoute: hasRoute)
+
+    switch (workoutActivityType, locationType) {
+    case (.cycling, .indoor): return "Indoor Cycle"
+    case (.cycling, .outdoor): return "Outdoor Cycle"
+    case (.walking, .indoor): return "Indoor Walk"
+    case (.walking, .outdoor): return "Outdoor Walk"
+    case (.running, .indoor): return "Indoor Run"
+    case (.running, .outdoor): return "Outdoor Run"
+    case (.rowing, .indoor): return "Indoor Row"
+    case (.rowing, .outdoor): return "Outdoor Row"
+    case (.soccer, .indoor): return "Indoor Soccer"
+    case (.soccer, .outdoor): return "Outdoor Soccer"
+    case (.hockey, .indoor): return "Indoor Hockey"
+    case (.hockey, .outdoor): return "Outdoor Hockey"
+    case (.skatingSports, .indoor): return "Indoor Skating"
+    case (.skatingSports, .outdoor): return "Outdoor Skating"
+    case (.swimming, .indoor): return "Pool Swim"
+    case (.swimming, .outdoor): return "Open Water Swim"
+    default:
+      switch locationType {
+      case .indoor: return "Indoor \(workoutActivityType.name)"
+      case .outdoor: return "Outdoor \(workoutActivityType.name)"
+      default: return workoutActivityType.name
+      }
+    }
+  }
+
   var dateRange: DateRange {
     DateRange(startDate, endDate)
   }
