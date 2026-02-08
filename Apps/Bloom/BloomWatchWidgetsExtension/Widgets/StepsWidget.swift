@@ -132,6 +132,7 @@ struct StepsTimelineProvider: TimelineProvider {
     var cumulativeTotal = 0
     var chartDataPoints = [StepChartPoint(slot: 0, cumulativeSteps: 0)]
     for sample in intervalSamples {
+      guard sample.date < now else { continue }
       let hoursFromMidnight = Int(sample.date.timeIntervalSince(startOfDay) / 3600)
       let slot = hoursFromMidnight
       guard slot >= 0, slot < slotsPerDay else { continue }
