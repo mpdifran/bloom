@@ -21,7 +21,11 @@ struct ActiveWorkoutSummaryView: View {
       }
       .navigationTitle("Summary")
       .navigationBarTitleDisplayMode(.inline)
-      .scenePadding()
+      .toolbar {
+        ToolbarItem(placement: .cancellationAction) {
+          DismissButton(performDismiss: onDismiss)
+        }
+      }
     } else {
       ProgressView("Saving Workout")
         .navigationBarHidden(true)
@@ -30,7 +34,7 @@ struct ActiveWorkoutSummaryView: View {
 
   @ViewBuilder
   private func summaryListView(workout: HKWorkout) -> some View {
-    VStack(alignment: .leading) {
+    VStack {
       SummaryMetricView(title: "Total Time", value: workout.totalTimeString)
         .tint(.mutedYellow)
 
@@ -40,7 +44,7 @@ struct ActiveWorkoutSummaryView: View {
       SummaryMetricView(title: "Avg. Heart Rate", value: workout.averageHeartRate.displayString(for: .bpm()))
         .tint(.mutedRed)
 
-      SummaryMetricView(title: "Zone Minutes", value: "\(Int(workoutManager.totalZoneMinutes))")
+      SummaryMetricView(title: "Zone Minutes", value: "\(Int(workoutManager.totalZoneMinutes)) Min")
         .tint(.mutedGreen)
 
       SummaryMetricView(title: "Heart Rate Zones") {
@@ -78,6 +82,7 @@ struct ActiveWorkoutSummaryView: View {
 
 #Preview {
   PreviewEnvironment {
+
     ActiveWorkoutSummaryView {
 
     }

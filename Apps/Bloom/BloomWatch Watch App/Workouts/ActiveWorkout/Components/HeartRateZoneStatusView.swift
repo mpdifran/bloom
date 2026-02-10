@@ -70,10 +70,8 @@ private extension HeartRateZoneStatusView {
 
         RoundedRectangle(cornerRadius: zoneCornerRadius)
           .fill(.black)
-          .frame(
-            width: isCurrentZone ? .infinity : .zoneBarMinWidth,
-            height: .zoneBarHeight
-          )
+          .frame(width: isCurrentZone ? nil : .zoneBarMinWidth, height: .zoneBarHeight)
+          .frame(maxWidth: isCurrentZone ? .infinity : nil)
           .overlay {
             if isCurrentZone {
               GeometryReader { geometry in
