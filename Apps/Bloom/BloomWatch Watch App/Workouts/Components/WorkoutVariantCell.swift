@@ -42,6 +42,10 @@ struct WorkoutVariantCell: View {
     }
     .padding(.vertical, 16)
     .foregroundStyle(.mutedBlue)
+    .listRowBackground(
+      RoundedRectangle(cornerRadius: 24)
+        .fill(.blue.tertiary)
+    )
     .selectable()
   }
 }
