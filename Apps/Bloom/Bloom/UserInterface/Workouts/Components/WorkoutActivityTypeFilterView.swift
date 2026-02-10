@@ -66,7 +66,7 @@ private struct ActivityTypeCell: View {
       Text(title)
     }
     .bold()
-    .foregroundStyle(isSelected ? .white : .text)
+    .foregroundStyle(isSelected ? .black : .text)
     .padding(.horizontal, 20)
     .frame(minHeight: 50)
     .background {
@@ -87,7 +87,7 @@ private struct ActivityTypeCell: View {
           activityTypes: [.running, .rugby, .climbing, .archery, .badminton],
           selectedActivityType: $selectedActivityType
         )
-        .tint(.green)
+        .tint(.blue)
       }
     }
     .navigationTitle("Activity Type Filter View")

@@ -58,15 +58,7 @@ struct WorkoutDetailsView: View {
 private extension WorkoutDetailsView {
 
   var iconHeader: some View {
-    Circle()
-      .fill(.background)
-      .frame(square: 130)
-      .overlay {
-        Image(systemSymbol: SFSymbol(rawValue: workout.workoutActivityType.systemImage))
-          .font(.system(size: 60))
-          .foregroundStyle(.green)
-      }
-      .compositingGroup()
+    WorkoutIcon(workoutType: workout.workoutActivityType, scale: .large)
   }
 
   var detailsSection: some View {

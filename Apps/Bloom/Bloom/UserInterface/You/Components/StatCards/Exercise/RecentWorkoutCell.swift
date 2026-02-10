@@ -15,15 +15,7 @@ struct RecentWorkoutCell: View {
 
   var body: some View {
     HStack {
-      Circle()
-        .fill(.green)
-        .frame(square: 50)
-        .overlay {
-          Image(systemSymbol: SFSymbol(rawValue: report.workout.workoutActivityType.systemImage))
-            .foregroundStyle(.black)
-            .font(.system(size: 20))
-            .fontWeight(.heavy)
-        }
+      WorkoutIcon(workoutType: report.workout.workoutActivityType, scale: .small)
 
       VStack(alignment: .leading, spacing: 4) {
         Text(report.workout.displayName())

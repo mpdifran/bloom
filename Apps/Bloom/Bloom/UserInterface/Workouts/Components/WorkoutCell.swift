@@ -15,11 +15,7 @@ struct WorkoutCell: View {
 
   var body: some View {
     HStack {
-      Image(systemSymbol: SFSymbol(rawValue: workout.workoutActivityType.systemImage))
-          .font(.largeTitle)
-          .minimumScaleFactor(0.3)
-          .foregroundStyle(.green)
-          .frame(width: 60)
+      WorkoutIcon(workoutType: workout.workoutActivityType)
 
       VStack(alignment: .leading) {
         HStack(alignment: .top) {
@@ -42,15 +38,15 @@ struct WorkoutCell: View {
         HStack {
           if let formattedDuration = DateFormatter.timeIntervalHourMinuteSecondPadded.string(from: workout.duration) {
             WorkoutStatView(stat: "\(formattedDuration)")
-              .tint(.yellow)
+              .tint(.mutedYellow)
           }
 
           WorkoutStatView(stat: "\(workout.totalEnergyBurned.displayString(for: .largeCalorie(), formatter: .noDecimalPlaces))")
-            .tint(.green)
+            .tint(.mutedPink)
 
           if let distance = workout.totalDistanceWalkingRunningCycling {
             WorkoutStatView(stat: "\(distance.displayString(for: .meterUnit(with: .kilo), formatter: .twoDecimalPlaces))")
-              .tint(.blue)
+              .tint(.mutedLightBlue)
           }
 
           Spacer(minLength: 0)
@@ -62,17 +58,19 @@ struct WorkoutCell: View {
 }
 
 #Preview {
-  ScrollView {
-    VStack {
-      WorkoutCell(
-        workout: HKWorkout(
-          activityType: .americanFootball,
-          start: Date().addingTimeInterval(-3000),
-          end: .now
+  PreviewEnvironment {
+    ScrollView {
+      VStack {
+        WorkoutCell(
+          workout: HKWorkout(
+            activityType: .americanFootball,
+            start: Date().addingTimeInterval(-3000),
+            end: .now
+          )
         )
-      )
+      }
+      .padding()
     }
-    .padding()
+    .groupedBackground()
   }
-  .groupedBackground()
 }

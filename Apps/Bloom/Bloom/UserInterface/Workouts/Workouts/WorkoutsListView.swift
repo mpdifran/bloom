@@ -87,7 +87,7 @@ private extension WorkoutsListView {
       Rectangle()
         .fill(.clear)
       CircularSpinnerView()
-        .foregroundStyle(.green)
+        .foregroundStyle(.blue)
     }
     .groupedBackground()
   }
@@ -145,7 +145,7 @@ private extension WorkoutsListView {
           activityTypes: viewModel.activityTypes,
           selectedActivityType: $selectedActivityType
         )
-        .tint(.green)
+        .tint(.blue)
 
         LazyVStack(alignment: .leading) {
           ForEach(viewModel.filteredWorkoutSections) { section in
