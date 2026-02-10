@@ -1217,13 +1217,9 @@ extension YouStatsCalculator {
   ) -> (current: DateRange?, previous: DateRange?, interval: DateComponents) {
     switch period {
     case .oneDay:
-      let todayStart = calendar.startOfDay(for: now)
-      guard let yesterdayStart = calendar.date(byAdding: .day, value: -1, to: todayStart) else {
-        return (nil, nil, DateComponents(hour: 1))
-      }
       return (
-        DateRange(todayStart, now),
-        DateRange(yesterdayStart, todayStart),
+        .startOfDayToNow(),
+        .yesterday(),
         DateComponents(hour: 1)
       )
 
