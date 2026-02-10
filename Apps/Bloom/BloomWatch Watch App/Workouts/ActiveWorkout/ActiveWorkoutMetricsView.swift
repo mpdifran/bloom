@@ -31,9 +31,10 @@ struct ActiveWorkoutMetricsView: View {
         countdownView
       } else {
         activeWorkoutContent
+          .scenePadding(ScenePadding.minimum, edges: .horizontal)
+          .ignoresSafeArea(.all, edges: .bottom)
       }
     }
-    .scenePadding()
     .animation(.default, value: workoutManager.heartRate)
     .animation(.default, value: workoutManager.totalZoneMinutes)
     .animation(.default, value: workoutManager.currentZone)
@@ -81,11 +82,11 @@ private extension ActiveWorkoutMetricsView {
         zones: workoutManager.heartRateZones
       )
 
-      Spacer()
-
-      elapsedTimeView
       caloriesComponent
       zoneMinutesComponent
+      elapsedTimeView
+
+      Spacer()
     }
     .horizontalAlignment(.leading)
     .toolbarVisibility(.hidden, for: .bottomBar)
@@ -150,11 +151,17 @@ private extension ActiveWorkoutMetricsView {
 
   @ViewBuilder
   var workoutTypeView: some View {
-    Image(systemSymbol: workoutManager.session?.workoutConfiguration.activityType.systemSymbol ?? .figureStand)
-      .font(.title3)
-      .bold()
-      .fontDesign(.rounded)
-      .foregroundStyle(.blue.gradient)
+    if let activityType = workoutManager.session?.workoutConfiguration.activityType {
+      WorkoutIcon(workoutType: activityType, scale: .small)
+    } else {
+      EmptyView()
+    }
+
+//    Image(systemSymbol: workoutManager.session?.workoutConfiguration.activityType.systemSymbol ?? .figureStand)
+//      .font(.title3)
+//      .bold()
+//      .fontDesign(.rounded)
+//      .foregroundStyle(.blue.gradient)
   }
 
   var workoutNameView: some View {

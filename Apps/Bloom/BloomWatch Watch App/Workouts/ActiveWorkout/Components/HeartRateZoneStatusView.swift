@@ -11,7 +11,7 @@ import CoreHealth
 private extension CGFloat {
   static let zoneBarHeight: CGFloat = 20
   static let zoneBarMinWidth: CGFloat = 25
-  static let indicatorInset: CGFloat = 3
+  static let indicatorInset: CGFloat = 2
   static let indicatorWidth: CGFloat = 6
   static let containerPadding: CGFloat = 4
 
@@ -37,10 +37,10 @@ struct HeartRateZoneStatusView: View {
     }
     .frame(maxWidth: .infinity)
     .padding(.containerPadding)
-    .background {
-      RoundedRectangle(cornerRadius: containerCornerRadius)
-        .fill(zoneColor)
-    }
+//    .background {
+//      RoundedRectangle(cornerRadius: containerCornerRadius)
+//        .fill(zoneColor)
+//    }
     .animation(.default, value: heartRate)
   }
 }
@@ -52,7 +52,6 @@ private extension HeartRateZoneStatusView {
       .font(.caption)
       .fontWeight(.bold)
       .fontDesign(.rounded)
-      .foregroundStyle(.black)
   }
 
   var noZonesView: some View {
@@ -60,7 +59,7 @@ private extension HeartRateZoneStatusView {
       .font(.caption)
       .fontWeight(.bold)
       .fontDesign(.rounded)
-      .foregroundStyle(.black.secondary)
+      .foregroundStyle(.secondary)
   }
 
   var zoneBarView: some View {
@@ -69,14 +68,15 @@ private extension HeartRateZoneStatusView {
         let isCurrentZone = zone == currentZone
 
         RoundedRectangle(cornerRadius: zoneCornerRadius)
-          .fill(.black)
+          .fill(color(for: zone))
+          .opacity(isCurrentZone ? 1 : 0.5)
           .frame(width: isCurrentZone ? nil : .zoneBarMinWidth, height: .zoneBarHeight)
           .frame(maxWidth: isCurrentZone ? .infinity : nil)
           .overlay {
             if isCurrentZone {
               GeometryReader { geometry in
                 Capsule()
-                  .fill(color(for: zone))
+                  .fill(.black)
                   .frame(width: .indicatorWidth, height: .zoneBarHeight - .indicatorInset * 2)
                   .position(
                     x: dotXPosition(in: geometry.size.width),
@@ -125,16 +125,29 @@ private extension HeartRateZoneStatusView {
         Text("Zone \(currentZone)")
           .contentTransition(.numericText(value: Double(currentZone)))
       }
+      .foregroundStyle(color(for: currentZone))
     }
     .font(.subheadline)
     .fontWeight(.semibold)
     .fontDesign(.rounded)
-    .foregroundStyle(.black)
     .monospacedDigit()
   }
 
   var heartIconColor: Color {
-    currentZone > 0 ? .black : .mutedRed
+    switch currentZone {
+    case 1:
+        .heartRateZone1
+    case 2:
+        .heartRateZone2
+    case 3:
+        .heartRateZone3
+    case 4:
+        .heartRateZone4
+    case 5:
+        .heartRateZone5
+    default:
+        .mutedRed
+    }
   }
 
   var zoneColor: Color {
