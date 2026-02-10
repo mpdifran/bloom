@@ -554,4 +554,7 @@ public extension Array where Element == HKWorkoutActivityType {
   static let highIntensityIntervalTrainingTypes: [HKWorkoutActivityType] = [
     .highIntensityIntervalTraining, .crossTraining, .mixedCardio, .jumpRope, .kickboxing, .boxing, .stepTraining
   ]
+  static let locationAwareTypes: [HKWorkoutActivityType] = [
+    .cycling, .walking, .running, .rowing, .soccer, .hockey, .skatingSports, .swimming
+  ]
 }

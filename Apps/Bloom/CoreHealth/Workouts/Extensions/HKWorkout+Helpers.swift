@@ -85,6 +85,11 @@ public extension HKWorkout {
       return .unknown
     }
 
+    // Only classify indoor/outdoor for workout types that have meaningful variants
+    guard [HKWorkoutActivityType].locationAwareTypes.contains(workoutActivityType) else {
+      return .unknown
+    }
+
     // Check indoor metadata flag
     if let isIndoor = metadata?[HKMetadataKeyIndoorWorkout] as? Bool {
       return isIndoor ? .indoor : .outdoor
