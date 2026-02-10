@@ -98,13 +98,19 @@ private extension MonitorSummaryBar {
   func rangeBar(width: CGFloat) -> some View {
     let startPosition = normalizedPosition(for: data.minZScore)
     let endPosition = normalizedPosition(for: data.maxZScore)
-    let barWidth = width * (endPosition - startPosition)
-    // Offset from center
-    let xOffset = width * startPosition + barWidth / 2 - width / 2
+    let rawBarWidth = width * (endPosition - startPosition)
+    let minWidth = barHeight - 2 // Circle that wraps the dot
+    let actualWidth = max(rawBarWidth, minWidth)
+
+    // Center on the midpoint of the range, clamped to track bounds
+    let centerX = width * startPosition + rawBarWidth / 2
+    let halfWidth = actualWidth / 2
+    let clampedCenterX = max(halfWidth, min(width - halfWidth, centerX))
+    let xOffset = clampedCenterX - width / 2
 
     return Capsule()
       .fill(rangeBarGradient(startPos: startPosition, endPos: endPosition))
-      .frame(width: max(barWidth, 4), height: barHeight - 2)
+      .frame(width: actualWidth, height: barHeight - 2)
       .offset(x: xOffset)
   }
 
@@ -182,13 +188,21 @@ private extension MonitorSummaryBar {
   func metricDots(width: CGFloat) -> some View {
     let startPosition = normalizedPosition(for: data.minZScore)
     let endPosition = normalizedPosition(for: data.maxZScore)
+    let rawBarWidth = width * (endPosition - startPosition)
+    let minWidth = barHeight - 2
+    let actualWidth = max(rawBarWidth, minWidth)
+
+    // Same center calculation as rangeBar to match visual bounds
+    let centerX = width * startPosition + rawBarWidth / 2
+    let halfWidth = actualWidth / 2
+    let clampedCenterX = max(halfWidth, min(width - halfWidth, centerX))
 
     // Horizontal inset matches vertical inset: (barHeight - 2 - dotSize) / 2
     let inset = (barHeight - 2 - dotSize) / 2
 
-    // Min/max x positions for dot centers
-    let barStartX = width * startPosition
-    let barEndX = width * endPosition
+    // Min/max x positions for dot centers based on visual bar bounds
+    let barStartX = clampedCenterX - halfWidth
+    let barEndX = clampedCenterX + halfWidth
     let minDotCenterX = barStartX + inset + dotSize / 2
     let maxDotCenterX = barEndX - inset - dotSize / 2
 
