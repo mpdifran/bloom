@@ -7,7 +7,6 @@
 
 import Foundation
 import HealthKit
-import BloomFoundation
 
 #if os(watchOS)
 public extension WorkoutManager {
@@ -15,12 +14,6 @@ public extension WorkoutManager {
   /// Phase 1: Prepare the workout session without starting data collection.
   /// Call this first, then show countdown, then call `beginWorkout()`.
   func prepareWorkout(workoutConfiguration: HKWorkoutConfiguration, shouldMirror: Bool) async throws {
-    // Load heart rate zones from application context (synced from iOS)
-    if let data = WatchChannel.shared.getApplicationContextData(for: WatchChannel.heartRateZonesKey),
-       let zones = try? JSONDecoder.watch.decode(HeartRateZones.self, from: data) {
-      heartRateZones = zones
-    }
-
     session = try HKWorkoutSession(healthStore: healthStore, configuration: workoutConfiguration)
     builder = session?.associatedWorkoutBuilder()
     session?.delegate = self
@@ -93,10 +86,8 @@ public extension WorkoutManager {
     }
     session.end()
 
-    // 3. Reset state (partial - keep heart rate zones)
-    let zones = heartRateZones
+    // 3. Reset state
     resetWorkout()
-    heartRateZones = zones
 
     // 4. Start new session
     try await startWorkout(workoutConfiguration: newConfiguration, shouldMirror: false)
@@ -105,12 +96,6 @@ public extension WorkoutManager {
   }
 
   func handleActiveWorkoutRecovery() async throws {
-    // Load heart rate zones from application context (synced from iOS)
-    if let data = WatchChannel.shared.getApplicationContextData(for: WatchChannel.heartRateZonesKey),
-       let zones = try? JSONDecoder.watch.decode(HeartRateZones.self, from: data) {
-      heartRateZones = zones
-    }
-
     session = try await healthStore.recoverActiveWorkoutSession()
 
     builder = session?.associatedWorkoutBuilder()

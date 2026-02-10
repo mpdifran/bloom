@@ -42,6 +42,22 @@ public struct HeartRateZones: Hashable, Sendable, Codable {
 
 public extension HeartRateZones {
 
+  init(from settings: WatchHeartRateZoneSettingsData) {
+    self.init(
+      heartRateReserve: settings.maxHeartRate - settings.restingHeartRate,
+      restingHeartRate: settings.restingHeartRate,
+      maxHeartRate: settings.maxHeartRate,
+      zone1: settings.zone1Threshold,
+      zone2: settings.zone2Threshold,
+      zone3: settings.zone3Threshold,
+      zone4: settings.zone4Threshold,
+      zone5: settings.zone5Threshold
+    )
+  }
+}
+
+public extension HeartRateZones {
+
     var zone1RangeString: String {
         "\(zone1.format()) - \(zone2.format()) bpm"
     }

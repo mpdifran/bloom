@@ -6,7 +6,6 @@
 //
 
 import HealthKit
-import BloomFoundation
 
 public final class HealthGoalProvider: Sendable {
   public static let shared = HealthGoalProvider()
@@ -83,44 +82,6 @@ public extension HealthGoalProvider {
       default: return nil
       }
     }
-  }
-
-  /// - note: https://www.mayoclinic.org/healthy-lifestyle/fitness/in-depth/exercise-intensity/art-20046887
-  func heartRateZones() async -> HeartRateZones? {
-    let projectedMax = 208 - (Double(age) * 0.7)
-
-    guard let restingHeartRate = try? await healthStore.fetchDailyAverageQuantity(
-      for: .restingHeartRate,
-      unit: .bpm(),
-      dateRange: .trailingMonthsFromNow(6),
-      option: .discreteAverage
-    ).doubleValue(for: .bpm()).rounded() else {
-      return nil
-    }
-
-    let heartRateReserve = projectedMax - restingHeartRate
-
-    let zones = HeartRateZones(
-      heartRateReserve: heartRateReserve,
-      restingHeartRate: restingHeartRate,
-      maxHeartRate: projectedMax,
-      zone1: (0.5 * heartRateReserve) + restingHeartRate,
-      zone2: (0.6 * heartRateReserve) + restingHeartRate,
-      zone3: (0.7 * heartRateReserve) + restingHeartRate,
-      zone4: (0.8 * heartRateReserve) + restingHeartRate,
-      zone5: (0.9 * heartRateReserve) + restingHeartRate
-    )
-
-    #if os(iOS)
-    if let data = try? JSONEncoder.watch.encode(zones) {
-      try? await WatchChannel.shared.updateApplicationContext(
-        key: WatchChannel.heartRateZonesKey,
-        data: data
-      )
-    }
-    #endif
-
-    return zones
   }
 
   /// - note: https://www.healthline.com/health/exercise-fitness/ideal-body-fat-percentage

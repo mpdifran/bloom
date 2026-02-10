@@ -368,7 +368,6 @@ final class WatchMessageRouter {
   private func handleSyncRequest(_ message: WatchSyncRequestMessage) async -> Data {
     // Trigger all syncers in parallel
     async let unitSync: () = HealthUnitPreferences.shared.syncToWatch()
-    async let heartRateSync: HeartRateZones? = HealthGoalProvider.shared.heartRateZones()
     async let bioAgeSync: () = BiologicalAgeCalculator.shared.syncBiologicalAgeToWatch()
     async let todaySync: () = WatchTodaySyncer.shared.syncToWatch()
     async let foodSync: () = WatchFoodSyncer.shared.syncToWatch()
@@ -378,7 +377,7 @@ final class WatchMessageRouter {
     async let bioSexSync: () = HealthManager.shared.syncBiologicalSexToWatch()
 
     // Await all syncs
-    _ = await (unitSync, heartRateSync, bioAgeSync, todaySync, foodSync, subscriptionSync, goalSync, hrzSettingsSync, bioSexSync)
+    _ = await (unitSync, bioAgeSync, todaySync, foodSync, subscriptionSync, goalSync, hrzSettingsSync, bioSexSync)
 
     let response = WatchSyncRequestResponse(success: true)
     return (try? JSONEncoder.watch.encode(response)) ?? Data()

@@ -7,6 +7,7 @@
 
 import Foundation
 import BloomFoundation
+import CoreHealth
 
 @Observable @MainActor
 public final class HeartRateZoneSettingsProvider {
@@ -91,6 +92,19 @@ public final class HeartRateZoneSettingsProvider {
 
   public var modeDescription: String {
     mode.description
+  }
+
+  public func buildHeartRateZones() -> HeartRateZones {
+    HeartRateZones(
+      heartRateReserve: maxHeartRate - restingHeartRate,
+      restingHeartRate: restingHeartRate,
+      maxHeartRate: maxHeartRate,
+      zone1: zone1Threshold,
+      zone2: zone2Threshold,
+      zone3: zone3Threshold,
+      zone4: zone4Threshold,
+      zone5: zone5Threshold
+    )
   }
 
   // MARK: - Initialization

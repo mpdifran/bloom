@@ -81,8 +81,7 @@ public extension WorkoutManager {
     sessionState = .notStarted
     isMirroring = false
 
-    // Reset zone tracking
-    heartRateZones = nil
+    // Reset zone tracking (preserve heartRateZones — they persist across workouts)
     zoneDurations = [0, 0, 0, 0, 0, 0]
     currentZone = 0
     lastHeartRateDate = nil

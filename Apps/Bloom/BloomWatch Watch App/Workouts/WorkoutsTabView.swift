@@ -162,16 +162,15 @@ private extension WorkoutsTabView {
       configuration.swimmingLocationType = variant.locationType == .indoor ? .pool : .openWater
     }
 
-    Task {
+    Task { @MainActor in
       do {
+        workoutManager.heartRateZones = HeartRateZoneSettingsProvider.shared.buildHeartRateZones()
         try await workoutManager.prepareWorkout(
           workoutConfiguration: configuration,
           shouldMirror: false
         )
       } catch {
-        await MainActor.run {
-          self.error = error
-        }
+        self.error = error
       }
     }
   }
