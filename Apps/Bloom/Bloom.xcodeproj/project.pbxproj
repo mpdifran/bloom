@@ -595,6 +595,8 @@
 				MealOption.swift,
 				OpenActionIntent.swift,
 				OpenVitalIntent.swift,
+				StepsConfigurationIntent.swift,
+				StepsWidgetTimePeriod.swift,
 				TodayInsightConfigurationIntent.swift,
 				VitalType.swift,
 			);
@@ -619,6 +621,8 @@
 				MealOption.swift,
 				OpenActionIntent.swift,
 				OpenVitalIntent.swift,
+				StepsConfigurationIntent.swift,
+				StepsWidgetTimePeriod.swift,
 				TodayInsightConfigurationIntent.swift,
 				VitalType.swift,
 			);

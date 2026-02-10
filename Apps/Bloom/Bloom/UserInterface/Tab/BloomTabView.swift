@@ -22,7 +22,7 @@ struct BloomTabView: View {
           TodayView()
         case .nutrition:
           NutritionView()
-        case .vitals:
+        case .you:
           YouView()
         case .monitor:
           MonitorView()

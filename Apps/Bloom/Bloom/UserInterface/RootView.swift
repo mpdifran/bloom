@@ -226,57 +226,62 @@ private extension RootView {
         presentedSheet = VoiceLoggerView(performDismiss: nil).asAny
       }
     case "/vital/sleep-quality":
-      tabController.activeTab = .vitals
+      tabController.activeTab = .you
       Delay(600) {
         tabController.pendingVitalNavigation = .sleepQuality
       }
     case "/vital/activity-level":
-      tabController.activeTab = .vitals
+      tabController.activeTab = .you
       Delay(600) {
         tabController.pendingVitalNavigation = .activityLevel
       }
     case "/vital/heart-health":
-      tabController.activeTab = .vitals
+      tabController.activeTab = .you
       Delay(600) {
         tabController.pendingVitalNavigation = .heartHealth
       }
     case "/vital/body-composition":
-      tabController.activeTab = .vitals
+      tabController.activeTab = .you
       Delay(600) {
         tabController.pendingVitalNavigation = .bodyComposition
       }
     case "/vital/stress-levels":
-      tabController.activeTab = .vitals
+      tabController.activeTab = .you
       Delay(600) {
         tabController.pendingVitalNavigation = .stressLevels
       }
     case "/vital/nutrition":
-      tabController.activeTab = .vitals
+      tabController.activeTab = .you
       Delay(600) {
         tabController.pendingVitalNavigation = .nutrition
       }
     case "/vital/exercise-effectiveness":
-      tabController.activeTab = .vitals
+      tabController.activeTab = .you
       Delay(600) {
         tabController.pendingVitalNavigation = .exerciseEffectiveness
       }
     case "/vital/cycle-tracking":
-      tabController.activeTab = .vitals
+      tabController.activeTab = .you
       Delay(600) {
         tabController.pendingVitalNavigation = .cycleTracking
       }
     case "/vital/bowel-movements":
-      tabController.activeTab = .vitals
+      tabController.activeTab = .you
       Delay(600) {
         tabController.pendingVitalNavigation = .bowelMovements
       }
     case "/vital/cardio-fitness":
-      tabController.activeTab = .vitals
+      tabController.activeTab = .you
       Delay(600) {
         tabController.pendingVitalNavigation = .cardioFitness
       }
     case "/nutrition":
       tabController.activeTab = .nutrition
+    case "/you/steps":
+      tabController.activeTab = .you
+      Delay(600) {
+        tabController.pendingStepsNavigation = true
+      }
     case "/launch":
       // Just open the app, no specific action needed
       break
@@ -345,7 +350,7 @@ private extension RootView {
       NutritionView()
         .tag(Tab.nutrition)
       YouView()
-        .tag(Tab.vitals)
+        .tag(Tab.you)
       MonitorView()
         .tag(Tab.monitor)
         .badge(MonitorViewModel.shared.badgeCount)
@@ -374,7 +379,7 @@ private extension RootView {
         TodayView()
       case .nutrition:
         NutritionView()
-      case .vitals:
+      case .you:
         YouView()
       case .monitor:
         MonitorView()

@@ -59,9 +59,9 @@ struct BloomTabBar: View {
 
       TabItem(title: "Vitals", image: Image(.vitalsTab))
         .onTapGesture {
-          tabController.activeTab = .vitals
+          tabController.activeTab = .you
         }
-        .if(tabController.activeTab != .vitals) {
+        .if(tabController.activeTab != .you) {
           $0.tint(.secondary)
         }
 

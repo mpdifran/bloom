@@ -76,6 +76,12 @@ struct YouView: View {
           tabController.pendingVitalNavigation = nil
         }
       }
+      .onChange(of: tabController.pendingStepsNavigation) { _, shouldNavigate in
+        if shouldNavigate {
+          tabController.pendingStepsNavigation = false
+          presentedNavigationDestination = MobilityDetailsView().asAny
+        }
+      }
     }
     .tabItem {
       Label("You", systemSymbol: .figure)

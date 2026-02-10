@@ -16,5 +16,6 @@ public extension String {
     public static let actionControl = "com.lotus-labs.bloom.ActionControl"
     public static let budSummary = "com.lotus-labs.bloom.BudSummaryWidget"
     public static let watchReminder = "com.lotus-labs.bloom.WatchReminderWidget"
+    public static let steps = "com.lotus-labs.bloom.StepsWidget"
   }
 }

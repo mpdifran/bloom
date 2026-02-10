@@ -17,7 +17,7 @@ enum Tab: CaseIterable, Identifiable {
 
   case today
   case nutrition
-  case vitals
+  case you
   case monitor
   case workouts
 }
@@ -28,7 +28,7 @@ extension Tab {
     switch self {
     case .today:
       "Today"
-    case .vitals:
+    case .you:
       "You"
     case .nutrition:
       "Nutrition"
@@ -43,7 +43,7 @@ extension Tab {
     switch self {
     case .today:
       Image(.todayTab)
-    case .vitals:
+    case .you:
       Image(systemSymbol: .figure)
     case .nutrition:
       Image(.nutritionTab)
@@ -94,6 +94,7 @@ final class TabController {
   var pendingYearInBloomNavigation: Int?
   var pendingMonitorNavigation: MonitorType?
   var pendingWorkoutNavigation: String?
+  var pendingStepsNavigation = false
 
   private var notificationCenterDelegate: NotificationCenterDelegate!
 

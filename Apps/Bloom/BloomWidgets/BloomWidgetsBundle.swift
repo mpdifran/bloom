@@ -19,5 +19,6 @@ struct BloomWidgetsBundle: WidgetBundle {
     LogMealWidget()
     LogActionsWidget()
     GoalWidget()
+    StepsWidget()
   }
 }

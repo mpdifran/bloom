@@ -50,6 +50,11 @@ public final class WidgetRefreshManager {
     WidgetCenter.shared.reloadTimelines(ofKind: .WidgetKind.actionControl)
   }
 
+  /// Reload Steps widgets
+  public func reloadStepsWidgets() {
+    WidgetCenter.shared.reloadTimelines(ofKind: .WidgetKind.steps)
+  }
+
   #if os(watchOS)
   /// Reload Biological Age widget on watchOS
   public func reloadBiologicalAgeWidget() {
