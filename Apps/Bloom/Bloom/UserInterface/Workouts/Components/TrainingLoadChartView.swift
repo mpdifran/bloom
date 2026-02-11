@@ -41,7 +41,7 @@ private extension TrainingLoadChartView {
   }
 
   func zoneBoundaries(for summary: TrainingLoadSummary) -> [ZoneBoundaries] {
-    summary.twentyEightDayTrend.map { point in
+    var boundaries = summary.twentyEightDayTrend.map { point in
       ZoneBoundaries(
         date: point.date,
         steadyUpper: point.value * 1.25,
@@ -50,6 +50,28 @@ private extension TrainingLoadChartView {
         aboveBelowLower: point.value * 0.40
       )
     }
+
+    // Project ~3 days forward using rest-day decay
+    if let lastPoint = summary.twentyEightDayTrend.last {
+      let alpha = 2.0 / 29.0
+      let decayFactor = 1 - alpha * 0.15
+      var value = lastPoint.value
+
+      for dayOffset in 1...3 {
+        value *= decayFactor
+        if let date = Calendar.current.date(byAdding: .day, value: dayOffset, to: lastPoint.date) {
+          boundaries.append(ZoneBoundaries(
+            date: date,
+            steadyUpper: value * 1.25,
+            steadyLower: value * 0.75,
+            aboveBelowUpper: value * 1.60,
+            aboveBelowLower: value * 0.40
+          ))
+        }
+      }
+    }
+
+    return boundaries
   }
 
   func statusHeader(summary: TrainingLoadSummary) -> some View {
@@ -121,6 +143,23 @@ private extension TrainingLoadChartView {
         .interpolationMethod(.catmullRom)
         .foregroundStyle(.text)
         .lineStyle(StrokeStyle(lineWidth: 3))
+      }
+
+      // Layer 5: Current value point
+      if let currentPoint = summary.sevenDayTrend.last {
+        PointMark(
+          x: .value("Date", currentPoint.date),
+          y: .value("Value", currentPoint.value)
+        )
+        .symbol {
+          Circle()
+            .strokeBorder(.text, lineWidth: 2)
+            .background {
+              Circle()
+                .fill(.invertedText)
+            }
+            .frame(width: 8, height: 8)
+        }
       }
     }
     .chartYScale(domain: 0...maxY)
