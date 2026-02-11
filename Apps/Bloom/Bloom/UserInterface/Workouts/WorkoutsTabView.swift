@@ -57,7 +57,8 @@ struct WorkoutsTabView: View {
             }
           }
           .pickerStyle(.segmented)
-          
+          .padding(.top)
+
           switch selectedTab {
           case .workouts:
             workoutsSection
