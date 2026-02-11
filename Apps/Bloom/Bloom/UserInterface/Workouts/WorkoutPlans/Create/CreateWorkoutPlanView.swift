@@ -109,22 +109,22 @@ private extension CreateWorkoutPlanView {
             .font(.subheadline)
             .bold()
         }
-
-        if viewModel.showShowAllButton {
-          Button {
-            viewModel.toggleShowAll()
-          } label: {
-            Text(viewModel.showAllEquipment ? "Show Owned" : "Show All")
-              .font(.subheadline)
-              .bold()
-          }
-        }
       }
 
       LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
         ForEach(viewModel.visibleEquipment, id: \.self) { equipment in
           equipmentCell(equipment)
         }
+      }
+
+      if viewModel.showShowAllButton {
+        Button {
+          viewModel.toggleShowAll()
+        } label: {
+          Text(viewModel.showAllEquipment ? "Show Owned" : "Show All")
+            .horizontallyCentered()
+        }
+        .buttonStyle(.primaryAlternate)
       }
     }
     .sensoryFeedback(.impact, trigger: viewModel.selectedEquipment)

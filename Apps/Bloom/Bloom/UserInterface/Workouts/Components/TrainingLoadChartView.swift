@@ -8,232 +8,248 @@
 import SwiftUI
 import Charts
 import CoreHealth
-
-extension Color {
-  var components: (red: Double, green: Double, blue: Double, alpha: Double) {
-    #if canImport(UIKit)
-    typealias NativeColor = UIColor
-    #elseif canImport(AppKit)
-    typealias NativeColor = NSColor
-    #endif
-    
-    var r: CGFloat = 0
-    var g: CGFloat = 0
-    var b: CGFloat = 0
-    var a: CGFloat = 0
-    
-    guard NativeColor(self).getRed(&r, green: &g, blue: &b, alpha: &a) else {
-      return (0, 0, 0, 0)
-    }
-    
-    return (Double(r), Double(g), Double(b), Double(a))
-  }
-}
+import BloomFoundation
 
 struct TrainingLoadChartView: View {
-  @State private var trainingLoadSummary: TrainingLoadSummary?
-  @State private var isLoading = true
+  let summary: TrainingLoadSummary?
 
   var body: some View {
     Group {
-      if let summary = trainingLoadSummary, hasTrainingLoadData(summary) {
-        contentView(summary: summary)
-      } else if isLoading {
-        loadingView
-      } else {
+      if let summary {
         VStack {
-          statusHeader(summary: nil)
-          Spacer()
-          Text("No Data")
-            .font(.title3)
-            .bold()
-            .fontDesign(.rounded)
-            .foregroundStyle(.white.secondary)
-          Spacer()
+          chart(summary: summary)
+          statusHeader(summary: summary)
         }
-        .horizontallyCentered()
+      } else {
+        ProgressView()
+          .horizontallyCentered()
       }
     }
-    .frame(height: 160)
-    .cardContainer(fill: .mutedIndigo.gradient)
-    .task {
-      await loadTrainingLoadData()
-    }
+    .frame(height: 250)
   }
 }
 
 private extension TrainingLoadChartView {
 
-  func statusHeader(summary: TrainingLoadSummary?) -> some View {
+  struct ZoneBoundaries: Identifiable {
+    var id: Date { date }
+    let date: Date
+    let steadyUpper: Double
+    let steadyLower: Double
+    let aboveBelowUpper: Double
+    let aboveBelowLower: Double
+  }
+
+  func zoneBoundaries(for summary: TrainingLoadSummary) -> [ZoneBoundaries] {
+    summary.twentyEightDayTrend.map { point in
+      ZoneBoundaries(
+        date: point.date,
+        steadyUpper: point.value * 1.25,
+        steadyLower: point.value * 0.75,
+        aboveBelowUpper: point.value * 1.60,
+        aboveBelowLower: point.value * 0.40
+      )
+    }
+  }
+
+  func statusHeader(summary: TrainingLoadSummary) -> some View {
     HStack {
-      Image(systemSymbol: .gaugeOpenWithLinesNeedle33percent)
-        .font(.title3)
-        .foregroundStyle(.mutedIndigo)
-        .frame(square: 30)
-        .padding(6)
-        .background {
-          RoundedRectangle(cornerRadius: 13)
-            .fill(.white)
-        }
-
-      VStack(alignment: .leading) {
-        Text("Training Load")
-          .font(.title3)
-          .bold()
-
-        Text("7-DAY vs. 28-DAY LOAD")
-          .font(.caption)
-      }
-      .foregroundStyle(.white)
-
       Spacer()
 
-      if let summary {
-        VStack(alignment: .trailing) {
-          Text(summary.status.rawValue)
+      VStack(alignment: .trailing) {
+        Text(summary.status.rawValue)
+          .foregroundStyle(.blue)
 
-          Text(String(format: "%+.0f%%", summary.percentageDifference))
-        }
-        .font(.title3)
-        .bold()
-        .foregroundStyle(.white)
+        Text(String(format: "%+.0f%%", summary.percentageDifference))
+          .foregroundStyle(.secondary)
       }
     }
+    .font(.title3)
+    .bold()
     .fontDesign(.rounded)
+    .padding(.horizontal)
   }
 
-  private func contentView(summary: TrainingLoadSummary) -> some View {
-    VStack(alignment: .leading, spacing: 16) {
-      // Status header
-      statusHeader(summary: summary)
-      
-      // Chart
-      Chart {
-        // 28-day trend line (background line)
-        ForEach(summary.twentyEightDayTrend, id: \.date) { point in
-          LineMark(
-            x: .value("Date", point.date),
-            y: .value("28-day Average", point.value),
-            series: .value("28-day", "28-day Average")
-          )
-          .interpolationMethod(.catmullRom)
-        }
-        .foregroundStyle(.white.opacity(0.5))
-        .lineStyle(StrokeStyle(lineWidth: 6))
+  func chart(summary: TrainingLoadSummary) -> some View {
+    let boundaries = zoneBoundaries(for: summary)
+    let maxY = maxYValue(for: summary)
 
-        // 7-day trend line (primary colored line)
-        ForEach(Array(summary.sevenDayTrend.enumerated()), id: \.offset) {
-          index,
-          point in
-          let twentyEightDayValue = index < summary.twentyEightDayTrend.count ? summary.twentyEightDayTrend[index].value : 0
-          
-          LineMark(
-            x: .value("Date", point.date),
-            y: .value("7-day Average", point.value),
-            series: .value("7-day", "7-day Average")
-          )
-          .interpolationMethod(.catmullRom)
-          .foregroundStyle(.white)
-          .lineStyle(StrokeStyle(lineWidth: 6))
-
-          PointMark(
-            x: .value("Date", point.date),
-            y: .value("7-day Average", point.value)
-          )
-          .symbol {
-            Circle()
-              .fill(colorForTrainingLoadDifference(
-                sevenDayValue: point.value,
-                twentyEightDayValue: twentyEightDayValue,
-                summary: summary
-              ))
-              .strokeBorder(.white, lineWidth: 0.5)
-              .frame(width: 6, height: 6)
-          }
-        }
+    return Chart {
+      // Layer 2a: Above zone
+      ForEach(boundaries) { boundary in
+        AreaMark(
+          x: .value("Date", boundary.date),
+          yStart: .value("Value", boundary.steadyUpper),
+          yEnd: .value("Value", boundary.aboveBelowUpper),
+          series: .value("Series", "Above")
+        )
+        .interpolationMethod(.catmullRom)
+        .foregroundStyle(.blue.opacity(0.6))
       }
-      .chartYScale(domain: 0...maxYValue(summary: summary))
-      .chartXAxis {
-        AxisMarks(values: .stride(by: .day, count: 7)) { value in
-          AxisGridLine()
-          AxisTick()
-          AxisValueLabel(format: .dateTime.month(.abbreviated).day())
-        }
-      }
-      .chartYAxis(.hidden)
-    }
-  }
-  
-  private var loadingView: some View {
-    VStack(alignment: .leading, spacing: 16) {
-      statusHeader(summary: nil)
 
-      Spacer()
-      ProgressView()
-        .foregroundStyle(.white)
-        .horizontallyCentered()
-      Spacer()
+      // Layer 2b: Below zone
+      ForEach(boundaries) { boundary in
+        AreaMark(
+          x: .value("Date", boundary.date),
+          yStart: .value("Value", boundary.aboveBelowLower),
+          yEnd: .value("Value", boundary.steadyLower),
+          series: .value("Series", "Below")
+        )
+        .interpolationMethod(.catmullRom)
+        .foregroundStyle(.blue.opacity(0.6))
+      }
+
+      // Layer 3: Steady zone (innermost)
+      ForEach(boundaries) { boundary in
+        AreaMark(
+          x: .value("Date", boundary.date),
+          yStart: .value("Value", boundary.steadyLower),
+          yEnd: .value("Value", boundary.steadyUpper),
+          series: .value("Series", "Steady")
+        )
+        .interpolationMethod(.catmullRom)
+        .foregroundStyle(.blue)
+      }
+
+      // Layer 4: 7-day trend line
+      ForEach(summary.sevenDayTrend, id: \.date) { point in
+        LineMark(
+          x: .value("Date", point.date),
+          y: .value("Value", point.value),
+          series: .value("Series", "7-day")
+        )
+        .interpolationMethod(.catmullRom)
+        .foregroundStyle(.text)
+        .lineStyle(StrokeStyle(lineWidth: 3))
+      }
     }
+    .chartYScale(domain: 0...maxY)
+    .chartXAxis(.hidden)
+    .chartYAxis(.hidden)
+    .chartLegend(.hidden)
   }
-  
-  private func loadTrainingLoadData() async {
-    // Ensure data is calculated first
-    await TrainingLoadCalculator.shared.refreshTrainingLoad()
-    
-    // Now get the summary
-    let summary = await TrainingLoadCalculator.shared.trainingLoadSummary
-    
-    await MainActor.run {
-      self.trainingLoadSummary = summary
-      self.isLoading = false
-    }
-  }
-  
-  private func hasTrainingLoadData(_ summary: TrainingLoadSummary) -> Bool {
-    !summary.sevenDayTrend.isEmpty && summary.sevenDayTrend.contains { $0.value > 0 }
-  }
-  
-  private func colorForTrainingLoadDifference(sevenDayValue: Double, twentyEightDayValue: Double, summary: TrainingLoadSummary) -> Color {
-    let difference = abs(sevenDayValue - twentyEightDayValue)
-    
-    // Calculate maximum possible difference in the dataset for scaling
-    let allSevenDayValues = summary.sevenDayTrend.map(\.value)
-    let allTwentyEightDayValues = summary.twentyEightDayTrend.map(\.value)
-    
-    let maxSevenDay = allSevenDayValues.max() ?? 0
-    let minSevenDay = allSevenDayValues.min() ?? 0
-    let maxTwentyEightDay = allTwentyEightDayValues.max() ?? 0
-    let minTwentyEightDay = allTwentyEightDayValues.min() ?? 0
-    
-    // Estimate maximum reasonable difference for normalization
-    let maxPossibleDifference = max(abs(maxSevenDay - minTwentyEightDay), abs(minSevenDay - maxTwentyEightDay))
-    
-    // Calculate ratio (0.0 = no difference, 1.0 = maximum difference)
-    let ratio = maxPossibleDifference > 0 ? min(difference / maxPossibleDifference, 1.0) : 0.0
-    
-    // Interpolate between blue (close to 28-day line) and pink (far from 28-day line)
-    let blue = Color.blue
-    let pink = Color.pink
-    
-    return Color(
-      red: blue.components.red + (pink.components.red - blue.components.red) * ratio,
-      green: blue.components.green + (pink.components.green - blue.components.green) * ratio,
-      blue: blue.components.blue + (pink.components.blue - blue.components.blue) * ratio
-    )
-  }
-  
-  private func maxYValue(summary: TrainingLoadSummary) -> Double {
-    let allValues = summary.sevenDayTrend.map(\.value) +
-                   summary.twentyEightDayTrend.map(\.value)
-    let maxValue = allValues.max() ?? 100
-    return maxValue * 1.1 // Add 10% padding
+
+  func maxYValue(for summary: TrainingLoadSummary) -> Double {
+    let sevenDayMax = summary.sevenDayTrend.map(\.value).max() ?? 0
+    let zoneMax = summary.twentyEightDayTrend.map { $0.value * 1.5 }.max() ?? 0
+    return max(sevenDayMax, zoneMax) * 1.1
   }
 }
 
-#Preview {
+// MARK: - Mock Data
+
+extension TrainingLoadSummary {
+  static var mockSteady: TrainingLoadSummary {
+    let calendar = Calendar.current
+    let today = calendar.startOfDay(for: .now)
+
+    let sevenDayTrend = (0..<28).map { dayOffset in
+      let date = calendar.date(byAdding: .day, value: -27 + dayOffset, to: today)!
+      let base = 50.0 + sin(Double(dayOffset) * 0.3) * 5
+      return DateValueSample(date: date, value: base)
+    }
+
+    let twentyEightDayTrend = (0..<28).map { dayOffset in
+      let date = calendar.date(byAdding: .day, value: -27 + dayOffset, to: today)!
+      return DateValueSample(date: date, value: 48.0 + Double(dayOffset) * 0.1)
+    }
+
+    return TrainingLoadSummary(
+      dateRange: DateRange(
+        calendar.date(byAdding: .day, value: -27, to: today)!,
+        today
+      ),
+      currentSevenDayAverage: 50,
+      currentTwentyEightDayAverage: 49,
+      percentageDifference: 2.0,
+      status: .steady,
+      sevenDayTrend: sevenDayTrend,
+      twentyEightDayTrend: twentyEightDayTrend,
+      dailyLoads: sevenDayTrend
+    )
+  }
+
+  static var mockAbove: TrainingLoadSummary {
+    let calendar = Calendar.current
+    let today = calendar.startOfDay(for: .now)
+
+    let sevenDayTrend = (0..<28).map { dayOffset in
+      let date = calendar.date(byAdding: .day, value: -27 + dayOffset, to: today)!
+      let base = 45.0 + Double(dayOffset) * 1.2 + sin(Double(dayOffset) * 0.4) * 4
+      return DateValueSample(date: date, value: base)
+    }
+
+    let twentyEightDayTrend = (0..<28).map { dayOffset in
+      let date = calendar.date(byAdding: .day, value: -27 + dayOffset, to: today)!
+      return DateValueSample(date: date, value: 50.0 + Double(dayOffset) * 0.3)
+    }
+
+    return TrainingLoadSummary(
+      dateRange: DateRange(
+        calendar.date(byAdding: .day, value: -27, to: today)!,
+        today
+      ),
+      currentSevenDayAverage: 72,
+      currentTwentyEightDayAverage: 55,
+      percentageDifference: 30.9,
+      status: .above,
+      sevenDayTrend: sevenDayTrend,
+      twentyEightDayTrend: twentyEightDayTrend,
+      dailyLoads: sevenDayTrend
+    )
+  }
+
+  static var mockWellAbove: TrainingLoadSummary {
+    let calendar = Calendar.current
+    let today = calendar.startOfDay(for: .now)
+
+    let sevenDayTrend = (0..<28).map { dayOffset in
+      let date = calendar.date(byAdding: .day, value: -27 + dayOffset, to: today)!
+      let base = 40.0 + Double(dayOffset) * 2.5 + sin(Double(dayOffset) * 0.5) * 6
+      return DateValueSample(date: date, value: base)
+    }
+
+    let twentyEightDayTrend = (0..<28).map { dayOffset in
+      let date = calendar.date(byAdding: .day, value: -27 + dayOffset, to: today)!
+      return DateValueSample(date: date, value: 45.0 + Double(dayOffset) * 0.4)
+    }
+
+    return TrainingLoadSummary(
+      dateRange: DateRange(
+        calendar.date(byAdding: .day, value: -27, to: today)!,
+        today
+      ),
+      currentSevenDayAverage: 100,
+      currentTwentyEightDayAverage: 55,
+      percentageDifference: 81.8,
+      status: .wellAbove,
+      sevenDayTrend: sevenDayTrend,
+      twentyEightDayTrend: twentyEightDayTrend,
+      dailyLoads: sevenDayTrend
+    )
+  }
+}
+
+#Preview("Steady") {
   PreviewEnvironment {
-    BloomScrollView {
-      TrainingLoadChartView()
+    BloomScrollView(padding: .vertical) {
+      TrainingLoadChartView(summary: .mockSteady)
+    }
+  }
+}
+
+#Preview("Above") {
+  PreviewEnvironment {
+    BloomScrollView(padding: .vertical) {
+      TrainingLoadChartView(summary: .mockAbove)
+    }
+  }
+}
+
+#Preview("Well Above") {
+  PreviewEnvironment {
+    BloomScrollView(padding: .vertical) {
+      TrainingLoadChartView(summary: .mockWellAbove)
     }
   }
 }

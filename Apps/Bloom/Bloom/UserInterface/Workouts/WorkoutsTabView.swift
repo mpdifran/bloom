@@ -30,6 +30,7 @@ struct WorkoutsTabView: View {
   @State private var presentedSheet: AnyView?
   @State private var pushedView: AnyView?
   @State private var workoutSections = [WorkoutDaySection]()
+  @State private var trainingLoadSummary: TrainingLoadSummary?
   @State private var error: Error?
 
   @Query
@@ -46,22 +47,26 @@ struct WorkoutsTabView: View {
 
   var body: some View {
     NavigationStack {
-      BloomScrollView {
-        TrainingLoadChartView()
+      BloomScrollView(padding: .vertical) {
+        TrainingLoadChartView(summary: trainingLoadSummary)
 
-        Picker("Section", selection: $selectedTab) {
-          ForEach(WorkoutsTab.allCases, id: \.self) { tab in
-            Text(tab.title).tag(tab)
+        Group {
+          Picker("Section", selection: $selectedTab) {
+            ForEach(WorkoutsTab.allCases, id: \.self) { tab in
+              Text(tab.title).tag(tab)
+            }
+          }
+          .pickerStyle(.segmented)
+          .padding(.horizontal)
+          
+          switch selectedTab {
+          case .workouts:
+            workoutsSection
+          case .workoutPlans:
+            workoutTemplatesSection
           }
         }
-        .pickerStyle(.segmented)
-
-        switch selectedTab {
-        case .workouts:
-          workoutsSection
-        case .workoutPlans:
-          workoutTemplatesSection
-        }
+        .padding(.horizontal)
       }
       .animation(.easeInOut, value: selectedTab)
       .navigationTitle("Workouts")
@@ -87,6 +92,9 @@ struct WorkoutsTabView: View {
       await loadWorkouts()
     }
     .task {
+      await loadTrainingLoad()
+    }
+    .task {
       if let workoutUUID = tabController.pendingWorkoutNavigation {
         tabController.pendingWorkoutNavigation = nil
         await navigateToWorkout(uuid: workoutUUID)
@@ -104,6 +112,11 @@ struct WorkoutsTabView: View {
 }
 
 private extension WorkoutsTabView {
+
+  func loadTrainingLoad() async {
+    await TrainingLoadCalculator.shared.refreshTrainingLoad()
+    trainingLoadSummary = await TrainingLoadCalculator.shared.trainingLoadSummary
+  }
 
   func loadWorkouts() async {
     let workouts = await HealthStoreFetcher.shared.fetchWorkouts(dateRange: .trailingDaysFromNow(7))
@@ -134,6 +147,18 @@ private extension WorkoutsTabView {
 
   var workoutTemplatesSection: some View {
     VStack {
+      Button {
+        EntitledPresent(presentedSheet: $presentedSheet) {
+          CreateWorkoutPlanView()
+        }
+      } label: {
+        Label("Create A Plan", systemSymbol: .sparkles)
+          .horizontallyCentered()
+      }
+      .buttonStyle(.primary)
+      .tint(.blue)
+      .padding(.top)
+
       LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
         ForEach(workoutPlans) { workoutPlan in
           WorkoutPlanCell(workoutPlan: workoutPlan)
@@ -152,18 +177,6 @@ private extension WorkoutsTabView {
             }
         }
       }
-
-      Button {
-        EntitledPresent(presentedSheet: $presentedSheet) {
-          CreateWorkoutPlanView()
-        }
-      } label: {
-        Label("Create A Plan", systemSymbol: .sparkles)
-          .horizontallyCentered()
-      }
-      .buttonStyle(.primary)
-      .tint(.blue)
-      .padding(.top)
     }
   }
 
