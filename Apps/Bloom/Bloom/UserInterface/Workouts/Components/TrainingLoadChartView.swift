@@ -9,9 +9,12 @@ import SwiftUI
 import Charts
 import CoreHealth
 import BloomFoundation
+import SFSafeSymbols
 
 struct TrainingLoadChartView: View {
   let summary: TrainingLoadSummary?
+
+  @State private var presentedSheet: AnyView?
 
   var body: some View {
     Group {
@@ -26,6 +29,7 @@ struct TrainingLoadChartView: View {
       }
     }
     .frame(height: 250)
+    .sheet($presentedSheet)
   }
 }
 
@@ -78,13 +82,22 @@ private extension TrainingLoadChartView {
     HStack {
       Spacer()
 
-      VStack(alignment: .trailing) {
-        Text(summary.status.rawValue)
+      Button {
+        presentedSheet = TrainingLoadLegendView().asAny
+      } label: {
+        VStack(alignment: .trailing) {
+          HStack(spacing: 4) {
+            Text(summary.status.rawValue)
+            Image(systemSymbol: .infoCircle)
+              .font(.body)
+          }
           .foregroundStyle(.blue)
 
-        Text(String(format: "%+.0f%%", summary.percentageDifference))
-          .foregroundStyle(.secondary)
+          Text(String(format: "%+.0f%%", summary.percentageDifference))
+            .foregroundStyle(.text.secondary)
+        }
       }
+      .buttonStyle(.plain)
     }
     .font(.title3)
     .bold()
