@@ -57,7 +57,6 @@ struct WorkoutsTabView: View {
             }
           }
           .pickerStyle(.segmented)
-          .padding(.horizontal)
           
           switch selectedTab {
           case .workouts:
@@ -157,7 +156,7 @@ private extension WorkoutsTabView {
       }
       .buttonStyle(.primary)
       .tint(.blue)
-      .padding(.top)
+      .padding(.vertical)
 
       LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
         ForEach(workoutPlans) { workoutPlan in

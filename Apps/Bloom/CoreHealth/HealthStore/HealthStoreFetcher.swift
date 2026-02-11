@@ -1059,8 +1059,12 @@ public extension HealthStoreFetcher {
       if isFirst {
         ewma = load
         isFirst = false
-      } else {
+      } else if load > 0 {
+        // Training day: normal EWMA update
         ewma = alpha * load + (1 - alpha) * ewma
+      } else {
+        // Rest day: gentle decay preserving momentum
+        ewma *= (1 - alpha * 0.15)
       }
     }
     return ewma
