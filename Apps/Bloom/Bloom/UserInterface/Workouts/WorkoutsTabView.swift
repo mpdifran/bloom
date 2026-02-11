@@ -154,7 +154,9 @@ private extension WorkoutsTabView {
       }
 
       Button {
-        presentedSheet = CreateWorkoutPlanView().asAny
+        EntitledPresent(presentedSheet: $presentedSheet) {
+          CreateWorkoutPlanView()
+        }
       } label: {
         Label("Create A Plan", systemSymbol: .sparkles)
           .horizontallyCentered()
