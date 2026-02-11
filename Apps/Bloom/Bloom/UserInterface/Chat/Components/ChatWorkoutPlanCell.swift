@@ -33,33 +33,21 @@ struct ChatWorkoutPlanCell: View {
 
   var body: some View {
     HStack {
-      VStack(alignment: .leading) {
-        HStack(alignment: .top) {
-          WorkoutPlanIconView(
-            workoutType: workoutPlan.representativeAppleWorkoutType,
-            dimension: 50
-          )
+      VStack {
+        WorkoutPlanIconView(workoutTypes: workoutPlan.displayWorkoutTypes)
 
-          VStack(alignment: .leading) {
-            Text(workoutPlan.title)
-              .font(.title3)
-              .bold()
-              .fontDesign(.rounded)
-              .lineLimit(2)
-              .fixedSize(horizontal: false, vertical: true)
-
-            Text(subtitle)
-              .font(.caption)
-              .foregroundStyle(.secondary)
-              .fixedSize(horizontal: false, vertical: true)
-              .lineLimit(3)
-          }
+        Text(workoutPlan.title)
+          .font(.title3)
+          .bold()
+          .fontDesign(.rounded)
+          .fixedSize(horizontal: false, vertical: true)
           .multilineTextAlignment(.leading)
+          .lineLimit(2)
 
-          Spacer(minLength: 0)
-
-          DisclosureIndicator()
-        }
+        Text(subtitle)
+          .foregroundStyle(.secondary)
+          .font(.subheadline)
+          .lineLimit(2)
 
         Text(workoutPlan.summary)
           .font(.subheadline)
@@ -75,6 +63,10 @@ struct ChatWorkoutPlanCell: View {
         .buttonStyle(.primary)
         .sensoryFeedback(.success, trigger: saveComplete)
         .disabled(hasSavedWorkout)
+      }
+      .overlay {
+        DisclosureIndicator()
+          .zStackAlignment(.topTrailing)
       }
       .chatCardContainer()
       .onTapGesture {

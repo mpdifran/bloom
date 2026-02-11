@@ -59,7 +59,7 @@ private extension ChatWorkoutPlanDetailsView {
 
   var titleSection: some View {
     HStack(spacing: 20) {
-      WorkoutPlanIconView(workoutType: workoutPlan.representativeAppleWorkoutType, dimension: 90)
+      WorkoutPlanIconView(workoutTypes: workoutPlan.displayWorkoutTypes)
 
       VStack(alignment: .leading) {
         Text(workoutPlan.title)

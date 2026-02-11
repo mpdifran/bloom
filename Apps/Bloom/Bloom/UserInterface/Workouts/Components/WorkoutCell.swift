@@ -20,7 +20,7 @@ struct WorkoutCell: View {
       VStack(alignment: .leading) {
         HStack(alignment: .top) {
           Text(workout.displayName())
-            .font(.title3)
+            .font(.headline)
             .bold()
             .fontDesign(.rounded)
             .multilineTextAlignment(.leading)

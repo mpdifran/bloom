@@ -47,6 +47,7 @@ struct WorkoutIcon: View {
           .foregroundStyle(.black)
       }
       .frame(square: circleDimension)
+      .compositingGroup()
   }
 }
 

@@ -6,41 +6,73 @@
 //
 
 import SwiftUI
-import DataContainer
-import SFSafeSymbols
 import HealthKit
 
 struct WorkoutPlanIconView: View {
-  let workoutType: HKWorkoutActivityType
-  let dimension: CGFloat
-
-  init(
-    workoutType: HKWorkoutActivityType,
-    dimension: CGFloat = 64
-  ) {
-    self.workoutType = workoutType
-    self.dimension = dimension
-  }
+  let workoutTypes: [HKWorkoutActivityType]
 
   var body: some View {
-    Circle()
-      .fill(.green)
-      .frame(square: dimension)
-      .overlay {
-        Image(systemSymbol: SFSymbol(rawValue: workoutType.systemImage))
-          .font(.system(size: dimension / 2))
-          .minimumScaleFactor(0.05)
-          .foregroundStyle(.background)
-      }
+    switch workoutTypes.count {
+    case 3:
+      threeIconLayout
+    case 2:
+      twoIconLayout
+    default:
+      WorkoutIcon(workoutType: workoutTypes.first ?? .other, scale: .regular)
+    }
+  }
+}
+
+private extension WorkoutPlanIconView {
+
+  var threeIconLayout: some View {
+    ZStack {
+      WorkoutIcon(workoutType: workoutTypes[0], scale: .small)
+        .offset(x: -34)
+
+      WorkoutIcon(workoutType: workoutTypes[2], scale: .small)
+        .offset(x: 34)
+
+      WorkoutIcon(workoutType: workoutTypes[1], scale: .regular)
+        .shadow(radius: 4)
+    }
+  }
+
+  var twoIconLayout: some View {
+    ZStack {
+      WorkoutIcon(workoutType: workoutTypes[0], scale: .regular)
+        .offset(x: -20)
+
+      WorkoutIcon(workoutType: workoutTypes[1], scale: .regular)
+        .shadow(radius: 4)
+        .offset(x: 20)
+    }
   }
 }
 
 #Preview {
   PreviewEnvironment {
-    WorkoutPlanIconView(workoutType: .traditionalStrengthTraining)
-    WorkoutPlanIconView(
-      workoutType: .running,
-      dimension: 180
-    )
+    BloomScrollView {
+      WorkoutPlanIconView(workoutTypes: [
+        .traditionalStrengthTraining,
+        .running,
+        .cycling
+      ])
+
+      WorkoutPlanIconView(workoutTypes: [
+        .running,
+        .cycling
+      ])
+
+      WorkoutPlanIconView(workoutTypes: [
+        .traditionalStrengthTraining
+      ])
+
+      WorkoutPlanIconView(workoutTypes: [
+        .running,
+        .running,
+        .running
+      ])
+    }
   }
 }

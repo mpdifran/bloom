@@ -13,28 +13,23 @@ struct WorkoutPlanCell: View {
   let workoutPlan: WorkoutPlan
 
   var body: some View {
-    HStack(spacing: 20) {
-      WorkoutPlanIconView(workoutType: workoutPlan.representativeAppleWorkoutType)
+    VStack {
+      WorkoutPlanIconView(workoutTypes: workoutPlan.displayWorkoutTypes)
 
-      VStack(alignment: .leading) {
-        Text(workoutPlan.title)
-          .font(.title3)
-          .bold()
-          .fontDesign(.rounded)
-          .fixedSize(horizontal: false, vertical: true)
-          .multilineTextAlignment(.leading)
-          .lineLimit(2)
+      Text(workoutPlan.title)
+        .font(.subheadline)
+        .bold()
+        .fontDesign(.rounded)
+        .fixedSize(horizontal: false, vertical: true)
+        .multilineTextAlignment(.center)
+        .lineLimit(2)
 
-        Text(workoutPlan.durationDescription)
-          .foregroundStyle(.secondary)
-          .font(.subheadline)
-          .lineLimit(2)
-      }
-
-      Spacer()
-
-      DisclosureIndicator()
+      Text(workoutPlan.durationDescription)
+        .foregroundStyle(.secondary)
+        .font(.caption)
+        .lineLimit(2)
     }
+    .frame(maxWidth: .infinity)
     .cardContainer()
   }
 }

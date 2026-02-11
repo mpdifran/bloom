@@ -10,12 +10,26 @@ import DataContainer
 import SwiftData
 import HealthKit
 import CoreHealth
+import AppUI
 
 struct WorkoutsTabView: View {
 
+  enum WorkoutsTab: CaseIterable, Hashable {
+    case workouts
+    case workoutPlans
+
+    var title: String {
+      switch self {
+      case .workouts: "Workouts"
+      case .workoutPlans: "Plans"
+      }
+    }
+  }
+
+  @State private var selectedTab: WorkoutsTab = .workouts
   @State private var presentedSheet: AnyView?
   @State private var pushedView: AnyView?
-  @State private var workouts = [HKWorkout]()
+  @State private var workoutSections = [WorkoutDaySection]()
   @State private var error: Error?
 
   @Query
@@ -27,7 +41,6 @@ struct WorkoutsTabView: View {
   init() {
     var fetchDescriptor = FetchDescriptor<WorkoutPlan>()
     fetchDescriptor.sortBy = [SortDescriptor(\WorkoutPlan.creationDate, order: .reverse)]
-    fetchDescriptor.fetchLimit = 3
     self._workoutPlans = Query(fetchDescriptor)
   }
 
@@ -35,10 +48,22 @@ struct WorkoutsTabView: View {
     NavigationStack {
       BloomScrollView {
         TrainingLoadChartView()
-        
-        workoutTemplatesSection
-        workoutsSection
+
+        Picker("Section", selection: $selectedTab) {
+          ForEach(WorkoutsTab.allCases, id: \.self) { tab in
+            Text(tab.title).tag(tab)
+          }
+        }
+        .pickerStyle(.segmented)
+
+        switch selectedTab {
+        case .workouts:
+          workoutsSection
+        case .workoutPlans:
+          workoutTemplatesSection
+        }
       }
+      .animation(.easeInOut, value: selectedTab)
       .navigationTitle("Workouts")
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
@@ -81,7 +106,13 @@ struct WorkoutsTabView: View {
 private extension WorkoutsTabView {
 
   func loadWorkouts() async {
-    self.workouts = await HealthStoreFetcher.shared.fetchWorkouts(dateRange: .trailingMonthsFromNow(1000), limit: 3)
+    let workouts = await HealthStoreFetcher.shared.fetchWorkouts(dateRange: .trailingDaysFromNow(7))
+    let grouped = Dictionary(grouping: workouts) { workout in
+      Calendar.current.startOfDay(for: workout.startDate)
+    }
+    self.workoutSections = grouped
+      .map { WorkoutDaySection(date: $0.key, workouts: $0.value.sorted { $0.startDate > $1.startDate }) }
+      .sorted { $0.date > $1.date }
   }
 
   func navigateToWorkout(uuid: String) async {
@@ -101,53 +132,40 @@ private extension WorkoutsTabView {
 
 private extension WorkoutsTabView {
 
-  @ViewBuilder
   var workoutTemplatesSection: some View {
-    if workoutPlans.isNotEmpty {
-      VStack {
-        SectionTitleView("Workout Plans")
-          .padding(.horizontal)
-
-        ForEach(workoutPlans) { workoutPlan in
-          WorkoutPlanCell(workoutPlan: workoutPlan)
-            .onTapGesture {
-              pushedView = WorkoutPlanDetailsView(workoutPlan: workoutPlan).asAny
+    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
+      ForEach(workoutPlans) { workoutPlan in
+        WorkoutPlanCell(workoutPlan: workoutPlan)
+          .onTapGesture {
+            pushedView = WorkoutPlanDetailsView(workoutPlan: workoutPlan).asAny
+          }
+          .contextMenu {
+            Button("Delete", systemSymbol: .trash, role: .destructive) {
+              do {
+                try modelContext.savingTransaction {
+                  modelContext.delete(workoutPlan)
+                }
+              } catch { self.error = error }
             }
-            .contextMenu {
-              Button("Delete", systemSymbol: .trash, role: .destructive) {
-                do {
-                  try modelContext.savingTransaction {
-                    modelContext.delete(workoutPlan)
-                  }
-                } catch { self.error = error }
-              }
-              .tint(.red)
-            }
-        }
-
-        Button {
-          pushedView = WorkoutPlansListView().asAny
-        } label: {
-          Text("Show All")
-            .bold()
-            .horizontallyCentered()
-            .cardContainer()
-        }
+            .tint(.red)
+          }
       }
     }
   }
 
   var workoutsSection: some View {
     VStack {
-      SectionTitleView("Workouts")
-        .padding(.horizontal)
+      ForEach(workoutSections) { section in
+        WorkoutDaySectionHeaderView(date: section.date)
+          .padding(.horizontal)
 
-      ForEach(workouts, id: \.hashValue) { workout in
-        WorkoutCell(workout: workout)
-          .onTapGesture {
-            pushedView = WorkoutDetailsView(workout: workout)
-              .asAny
-          }
+        ForEach(section.workouts, id: \.hashValue) { workout in
+          WorkoutCell(workout: workout)
+            .onTapGesture {
+              pushedView = WorkoutDetailsView(workout: workout)
+                .asAny
+            }
+        }
       }
 
       Button {
@@ -158,7 +176,34 @@ private extension WorkoutsTabView {
           .horizontallyCentered()
           .cardContainer()
       }
+      .padding(.top)
     }
+  }
+}
+
+private struct WorkoutDaySection: Identifiable {
+  var id: Date { date }
+
+  let date: Date
+  let workouts: [HKWorkout]
+}
+
+private struct WorkoutDaySectionHeaderView: View {
+  let date: Date
+
+  var body: some View {
+    VStack(alignment: .leading) {
+      Text(DateFormatter.justRelativeDayOfWeek(date: date))
+        .font(.title)
+        .bold()
+      Text(date, formatter: DateFormatter.justDateMedium)
+        .foregroundStyle(.secondary)
+        .font(.headline)
+        .bold()
+    }
+    .fontDesign(.rounded)
+    .padding(.top)
+    .horizontalAlignment(.leading)
   }
 }
 
