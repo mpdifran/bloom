@@ -133,23 +133,35 @@ private extension WorkoutsTabView {
 private extension WorkoutsTabView {
 
   var workoutTemplatesSection: some View {
-    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
-      ForEach(workoutPlans) { workoutPlan in
-        WorkoutPlanCell(workoutPlan: workoutPlan)
-          .onTapGesture {
-            pushedView = WorkoutPlanDetailsView(workoutPlan: workoutPlan).asAny
-          }
-          .contextMenu {
-            Button("Delete", systemSymbol: .trash, role: .destructive) {
-              do {
-                try modelContext.savingTransaction {
-                  modelContext.delete(workoutPlan)
-                }
-              } catch { self.error = error }
+    VStack {
+      LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
+        ForEach(workoutPlans) { workoutPlan in
+          WorkoutPlanCell(workoutPlan: workoutPlan)
+            .onTapGesture {
+              pushedView = WorkoutPlanDetailsView(workoutPlan: workoutPlan).asAny
             }
-            .tint(.red)
-          }
+            .contextMenu {
+              Button("Delete", systemSymbol: .trash, role: .destructive) {
+                do {
+                  try modelContext.savingTransaction {
+                    modelContext.delete(workoutPlan)
+                  }
+                } catch { self.error = error }
+              }
+              .tint(.red)
+            }
+        }
       }
+
+      Button {
+        presentedSheet = CreateWorkoutPlanView().asAny
+      } label: {
+        Label("Create A Plan", systemSymbol: .sparkles)
+          .horizontallyCentered()
+      }
+      .buttonStyle(.primary)
+      .tint(.blue)
+      .padding(.top)
     }
   }
 

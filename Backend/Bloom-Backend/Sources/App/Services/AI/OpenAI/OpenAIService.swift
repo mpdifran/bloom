@@ -748,3 +748,38 @@ extension OpenAIService {
     )
   }
 }
+
+extension OpenAIService {
+
+  func generateWorkoutPlan(
+    equipment: [String],
+    description: String
+  ) async throws -> SocketMessage.WorkoutPlan {
+    let equipmentText = equipment.isEmpty
+      ? "No equipment available (bodyweight only)"
+      : "Available equipment: \(equipment.joined(separator: ", "))"
+
+    let messages: [Chat.Message] = [
+      Chat.Message(
+        role: .system,
+        content: [.text(.Prompt.generateWorkoutPlan)]
+      ),
+      Chat.Message(
+        role: .user,
+        content: [.text("\(equipmentText)\n\nWorkout request: \(description)")]
+      )
+    ]
+
+    let chat = try await openAI.chats.create(
+      model: .GPT4.gpt_4o_mini,
+      messages: messages,
+      responseFormat: ResponseFormat(type: .jsonSchema(.generateWorkoutPlan))
+    )
+
+    guard let response = try chat.parse(OpenAIGenerateWorkoutPlanResponse.self) else {
+      throw Abort(.internalServerError)
+    }
+
+    return response.toWorkoutPlan()
+  }
+}

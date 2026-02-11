@@ -206,7 +206,7 @@ extension Schema.Object {
                         type: .string,
                         description: "The title for the exercise"
                       ),
-                      "description": Schema.Parameter(
+                      "instructions": Schema.Parameter(
                         type: .string,
                         description: "A short description of the exercise"
                       ),

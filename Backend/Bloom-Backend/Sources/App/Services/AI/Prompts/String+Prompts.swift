@@ -51,6 +51,24 @@ extension String.Prompt {
     return "Your response must be in JSON, and use the following JSON format exactly. Note: you do not need to escape single quotes.\n\n\(schema)"
   }
 
+  static let generateWorkoutPlan: String = """
+  You are a certified personal trainer creating a personalized workout plan.
+  Create a workout plan based on the user's available equipment and description of what they want.
+
+  Rules:
+  - The workout must start with a warm up set and end with a cool down set.
+  - Only include exercises that can be performed with the specified equipment, or with no equipment (bodyweight).
+  - If no equipment is specified, create a bodyweight-only workout.
+  - Choose appropriate Apple workout types for each set based on the exercises.
+  - Use a variety of set formats (standard, AMRAP, EMOM, tabata) where appropriate.
+  - Each set should have 1-4 exercises.
+  - Include rest between exercises where appropriate.
+  - Keep the workout practical and safe.
+  - Give the plan a concise, descriptive title.
+  - Write a brief summary explaining the workout's focus and benefits.
+  NEVER use em-dashes (—) in responses. Use regular hyphens (-) or rewrite to avoid dashes.
+  """
+
   static let suggestGoals: String = """
   Perform the following steps:
   

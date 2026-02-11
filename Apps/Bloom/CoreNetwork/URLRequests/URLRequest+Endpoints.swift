@@ -140,6 +140,14 @@ public extension URLRequest {
 }
 
 public extension URLRequest {
+  enum Workouts {
+    public static func generatePlan(body: GenerateWorkoutPlanRequest) async throws -> URLRequest {
+      try await URLRequest.post("v1/workouts/generate-plan", body: body)
+    }
+  }
+}
+
+public extension URLRequest {
   enum Reports {
     static func getMorningHealthReport(body: MorningHealthReportRequest) async throws -> URLRequest {
       try await URLRequest.post("v1/morning-report/generate", body: body)

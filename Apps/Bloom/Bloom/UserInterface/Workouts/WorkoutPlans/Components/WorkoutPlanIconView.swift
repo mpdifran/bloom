@@ -40,12 +40,12 @@ private extension WorkoutPlanIconView {
 
   var twoIconLayout: some View {
     ZStack {
-      WorkoutIcon(workoutType: workoutTypes[0], scale: .regular)
-        .offset(x: -20)
-
       WorkoutIcon(workoutType: workoutTypes[1], scale: .regular)
-        .shadow(radius: 4)
         .offset(x: 20)
+
+      WorkoutIcon(workoutType: workoutTypes[0], scale: .regular)
+        .shadow(radius: 4)
+        .offset(x: -20)
     }
   }
 }

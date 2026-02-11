@@ -76,3 +76,5 @@ extension MonitorSummaryRequest: @retroactive Content { }
 extension MonitorSummaryResponse: @retroactive Content { }
 extension MonitorInsightRequest: @retroactive Content { }
 extension MonitorInsightResponse: @retroactive Content { }
+extension GenerateWorkoutPlanRequest: @retroactive Content { }
+extension GenerateWorkoutPlanResponse: @retroactive Content { }

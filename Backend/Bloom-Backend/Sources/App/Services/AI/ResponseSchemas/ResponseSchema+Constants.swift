@@ -177,6 +177,15 @@ extension Schema.Object.AIEstimate {
   )
 }
 
+// MARK: - Workouts
+
+extension ResponseSchema {
+  static let generateWorkoutPlan = ResponseSchema(
+    name: "generateWorkoutPlan",
+    schema: .createWorkoutPlan
+  )
+}
+
 // MARK: - Goals
 
 extension ResponseSchema {
