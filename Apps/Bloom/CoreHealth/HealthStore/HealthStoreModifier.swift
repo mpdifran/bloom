@@ -54,6 +54,26 @@ public extension HealthStoreModifier {
   }
 }
 
+// MARK: Workout Effort
+
+public extension HealthStoreModifier {
+
+  func logWorkoutEffort(effortScore: Double, for workout: HKWorkout) async throws {
+    let effortSample = HKQuantitySample(
+      type: HKQuantityType(.workoutEffortScore),
+      quantity: HKQuantity(unit: .appleEffortScore(), doubleValue: effortScore),
+      start: workout.startDate,
+      end: workout.endDate,
+      metadata: [HKMetadataKeyWasUserEntered: true]
+    )
+
+    try await healthStore.save(effortSample)
+    try await healthStore.relateWorkoutEffortSample(effortSample, with: workout, activity: nil)
+
+    TelemetryDeck.signal("Log Workout Effort")
+  }
+}
+
 // MARK: Nutrition
 
 public extension HealthStoreModifier {

@@ -153,6 +153,10 @@ public final class HealthPermissionChecker: Sendable {
     HKQuantityType(.stairDescentSpeed)
   ]
 
+  public let writeActivityTypes: Set<HKSampleType> = [
+    HKQuantityType(.workoutEffortScore)
+  ]
+
   public let writeOtherTypes: Set<HKSampleType> = [
     HKQuantityType(.bodyMass)
   ]
@@ -164,13 +168,16 @@ public final class HealthPermissionChecker: Sendable {
     HKQuantityType(.bodyMass),
     HKQuantityType.workoutType(),
     HKObjectType.activitySummaryType(),
-    HKCategoryType(.menstrualFlow)
+    HKCategoryType(.menstrualFlow),
+    HKQuantityType(.workoutEffortScore),
+    HKQuantityType(.estimatedWorkoutEffortScore)
   ]
 
   public let writeWatchTypes: Set<HKSampleType> = [
     HKQuantityType(.bodyMass),
     HKQuantityType.workoutType(),
-    HKCategoryType(.menstrualFlow)
+    HKCategoryType(.menstrualFlow),
+    HKQuantityType(.workoutEffortScore)
   ]
 }
 
@@ -184,6 +191,7 @@ public extension HealthPermissionChecker {
     writeHeartTypes.forEach { set.insert($0) }
     writeMenstrualTypes.forEach { set.insert($0) }
     writeOtherTypes.forEach { set.insert($0) }
+    writeActivityTypes.forEach { set.insert($0) }
     #elseif os(watchOS)
     writeWatchTypes.forEach { set.insert($0) }
     #endif

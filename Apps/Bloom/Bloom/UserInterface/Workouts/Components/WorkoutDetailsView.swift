@@ -21,7 +21,9 @@ struct WorkoutDetailsView: View {
   }
 
   @State private var heartRateReport: WorkoutHeartRateReport?
+  @State private var effortScore: Double?
   @State private var workoutRoutes = [WorkoutRoute]()
+  @State private var presentedSheet: AnyView?
 
   @State private var mapCameraPosition: MapCameraPosition = .camera(
     MapCamera(centerCoordinate: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194), distance: 1000)
@@ -35,6 +37,7 @@ struct WorkoutDetailsView: View {
     BloomScrollView {
       iconHeader
       detailsSection
+      effortSection
 
       if let heartRateReport {
         heartRateReportSection(heartRateReport: heartRateReport)
@@ -42,11 +45,14 @@ struct WorkoutDetailsView: View {
       }
     }
     .navigationTitle(workout.displayName())
+    .sheet($presentedSheet)
     .onChange(of: workoutRoutes) { (_ ,_) in
       updateCamera()
     }
     .task {
-      await fetchHeartRateReport()
+      async let heartRate: () = fetchHeartRateReport()
+      async let effort: () = fetchEffortScore()
+      _ = await (heartRate, effort)
     }
     // TODO: Get map working
 //    .task {
@@ -135,6 +141,52 @@ private extension WorkoutDetailsView {
           .padding(.vertical, 10)
         }
       }
+      .cardContainer()
+    }
+  }
+
+  var effortSection: some View {
+    VStack {
+      SectionTitleView("Effort")
+        .padding(.horizontal)
+
+      Button {
+        presentedSheet = WorkoutEffortPickerCard(
+          workout: workout,
+          performDismiss: {
+            presentedSheet = nil
+            Task { await fetchEffortScore() }
+          }
+        ).asAny
+      } label: {
+        HStack {
+          if let effortScore {
+            let category = WorkoutEffortCategory(effortScore: effortScore)
+            Text("\(Int(effortScore.rounded()))")
+              .font(.title2)
+              .bold()
+              .fontDesign(.rounded)
+              .foregroundStyle(category.color)
+
+            Text(category.rawValue)
+              .bold()
+              .fontDesign(.rounded)
+              .foregroundStyle(category.color)
+          } else {
+            Text("Rate Your Effort")
+              .bold()
+              .fontDesign(.rounded)
+              .foregroundStyle(.secondary)
+          }
+
+          Spacer()
+
+          Image(systemSymbol: .chevronRight)
+            .font(.caption)
+            .foregroundStyle(.secondary)
+        }
+      }
+      .buttonStyle(.plain)
       .cardContainer()
     }
   }
@@ -346,6 +398,10 @@ private extension WorkoutDetailsView {
 
   func fetchHeartRateReport() async {
     self.heartRateReport = await HealthStoreFetcher.shared.fetchWorkoutHeartRateReport(workout: workout)
+  }
+
+  func fetchEffortScore() async {
+    self.effortScore = await HealthStoreFetcher.shared.fetchWorkoutEffortScore(for: workout)
   }
 
   func observeWorkoutRoutes() {

@@ -13,6 +13,8 @@ import CoreHealth
 struct WorkoutCell: View {
   let workout: HKWorkout
 
+  @State private var effortScore: Double?
+
   var body: some View {
     HStack {
       WorkoutIcon(workoutType: workout.workoutActivityType)
@@ -51,9 +53,31 @@ struct WorkoutCell: View {
 
           Spacer(minLength: 0)
         }
+
+        if let effortScore {
+          let category = WorkoutEffortCategory(effortScore: effortScore)
+          HStack(spacing: 4) {
+            Text("\(Int(effortScore.rounded()))")
+              .font(.caption2)
+              .bold()
+              .fontDesign(.rounded)
+              .foregroundStyle(.white)
+              .frame(width: 20, height: 20)
+              .background(category.color, in: Circle())
+
+            Text(category.rawValue)
+              .font(.caption)
+              .bold()
+              .fontDesign(.rounded)
+              .foregroundStyle(category.color)
+          }
+        }
       }
     }
     .cardContainer()
+    .task {
+      effortScore = await HealthStoreFetcher.shared.fetchWorkoutEffortScore(for: workout)
+    }
   }
 }
 

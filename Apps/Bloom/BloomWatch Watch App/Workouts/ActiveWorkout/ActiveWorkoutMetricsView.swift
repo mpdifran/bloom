@@ -82,9 +82,9 @@ private extension ActiveWorkoutMetricsView {
         zones: workoutManager.heartRateZones
       )
 
+      elapsedTimeView
       caloriesComponent
       zoneMinutesComponent
-      elapsedTimeView
 
       Spacer()
     }

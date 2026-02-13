@@ -13,6 +13,7 @@ struct ActiveWorkoutSummaryView: View {
   let onDismiss: () -> Void
 
   @EnvironmentObject var workoutManager: WorkoutManager
+  @State private var effortScore: Int?
 
   var body: some View {
     if let workout = workoutManager.workout {
@@ -35,6 +36,21 @@ struct ActiveWorkoutSummaryView: View {
   @ViewBuilder
   private func summaryListView(workout: HKWorkout) -> some View {
     VStack {
+      NavigationLink {
+        WorkoutEffortPickerView(workout: workout) { score in
+          effortScore = score
+        }
+      } label: {
+        SummaryMetricView(
+          title: "Effort",
+          value: effortScore.map {
+            "\($0) \(WorkoutEffortCategory(effortScore: Double($0)).rawValue)"
+          } ?? "Rate"
+        )
+        .tint(effortScore.map { WorkoutEffortCategory(effortScore: Double($0)).color } ?? .gray)
+      }
+      .buttonStyle(.plain)
+
       SummaryMetricView(title: "Total Time", value: workout.totalTimeString)
         .tint(.mutedYellow)
 

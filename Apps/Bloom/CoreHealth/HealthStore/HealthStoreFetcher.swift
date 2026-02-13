@@ -274,6 +274,26 @@ public extension HealthStoreFetcher {
     )) ?? []
   }
 
+  /// Fetches the effort score for a specific workout.
+  /// Returns the user-entered score if available, otherwise the estimated score.
+  func fetchWorkoutEffortScore(for workout: HKWorkout) async -> Double? {
+    let dateRange = DateRange(workout.startDate, workout.endDate)
+
+    let userEffortSamples = try? await fetchSamples(
+      for: HKQuantityType(.workoutEffortScore),
+      dateRange: dateRange
+    ) as? [HKQuantitySample]
+    let userEffortScore = userEffortSamples?.first?.quantity.doubleValue(for: .appleEffortScore())
+
+    let estimatedEffortSamples = try? await fetchSamples(
+      for: HKQuantityType(.estimatedWorkoutEffortScore),
+      dateRange: dateRange
+    ) as? [HKQuantitySample]
+    let estimatedEffortScore = estimatedEffortSamples?.first?.quantity.doubleValue(for: .appleEffortScore())
+
+    return userEffortScore ?? estimatedEffortScore
+  }
+
   func fetchWorkoutSummations(dateRange: DateRange) async -> [WorkoutSummation] {
     (try? await healthStore.fetchWorkoutSummation(dateRange: dateRange)) ?? []
   }

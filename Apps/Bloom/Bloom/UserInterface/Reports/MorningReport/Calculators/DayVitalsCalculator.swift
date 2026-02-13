@@ -480,19 +480,11 @@ private extension DayVitalsCalculator {
         for: HKQuantityType(.estimatedWorkoutEffortScore),
         dateRange: DateRange(workout.startDate, workout.endDate)
       )) as? [HKQuantitySample])?.first?.quantity.doubleValue(for: .appleEffortScore())
-      
+
       // Use user score if available, otherwise estimated score
       let effortScore = userEffortScore ?? estimatedEffortScore
-      
-      let effortLevel = effortScore.map { score in
-        switch score {
-        case 0...3: return "Easy"
-        case 4...6: return "Moderate" 
-        case 7...8: return "Hard"
-        case 9...10: return "All Out"
-        default: return "Unknown"
-        }
-      }
+
+      let effortLevel = effortScore.map { WorkoutEffortCategory(effortScore: $0).rawValue }
       
       let workoutEffortDataItem = WorkoutEffortData(
         workoutType: workout.workoutActivityType.name,
