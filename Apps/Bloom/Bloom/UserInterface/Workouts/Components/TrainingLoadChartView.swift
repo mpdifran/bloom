@@ -58,7 +58,7 @@ private extension TrainingLoadChartView {
     // Project ~3 days forward using rest-day decay
     if let lastPoint = summary.twentyEightDayTrend.last {
       let alpha = 2.0 / 29.0
-      let decayFactor = 1 - alpha * 0.15
+      let decayFactor = 1 - alpha
       var value = lastPoint.value
 
       for dayOffset in 1...3 {
