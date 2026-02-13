@@ -75,7 +75,7 @@ public struct BiologicalAgeResult: Sendable, Codable {
   /// The percentage of available health metrics by weight (0-100)
   public var availableWeightPercentage: Double {
     let totalWeight = metricContributions?.reduce(0.0) { $0 + $1.weight } ?? 0
-    return totalWeight * 100
+    return min(totalWeight * 100, 100)
   }
 
   /// The confidence level based on available metric weight coverage

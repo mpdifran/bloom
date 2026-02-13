@@ -559,7 +559,7 @@ private extension BiologicalAgeCalculator {
     let dataPoints = healthGoalProvider.vo2MaxAgeDataPoints()
     let equivalentAge = interpolateEquivalentAge(value: vo2Max, dataPoints: dataPoints, isHigherBetter: true)
     let ageDelta = equivalentAge - actualAge
-    let weight = 0.18
+    let weight = BiologicalAgeMetric.vo2Max.weight
 
     return MetricContribution(
       metric: .vo2Max,
@@ -582,7 +582,7 @@ private extension BiologicalAgeCalculator {
     let dataPoints = healthGoalProvider.restingHeartRateAgeDataPoints()
     let equivalentAge = interpolateEquivalentAge(value: avgRHR, dataPoints: dataPoints, isHigherBetter: false)
     let ageDelta = equivalentAge - actualAge
-    let weight = 0.06
+    let weight = BiologicalAgeMetric.restingHeartRate.weight
 
     return MetricContribution(
       metric: .restingHeartRate,
@@ -606,7 +606,7 @@ private extension BiologicalAgeCalculator {
     let dataPoints = healthGoalProvider.heartRateRecoveryAgeDataPoints()
     let equivalentAge = interpolateEquivalentAge(value: hrr, dataPoints: dataPoints, isHigherBetter: true)
     let ageDelta = equivalentAge - actualAge
-    let weight = 0.06
+    let weight = BiologicalAgeMetric.heartRateRecovery.weight
 
     return MetricContribution(
       metric: .heartRateRecovery,
@@ -643,7 +643,7 @@ private extension BiologicalAgeCalculator {
     let percentChange = ((sevenDayAvg - thirtyDayAvg) / thirtyDayAvg) * 100
     let dataPoints = healthGoalProvider.hrvTrendAgeDeltaDataPoints()
     let ageDelta = interpolateAgeDelta(value: percentChange, dataPoints: dataPoints)
-    let weight = 0.06
+    let weight = BiologicalAgeMetric.hrvTrend.weight
 
     return MetricContribution(
       metric: .hrvTrend,
@@ -684,7 +684,7 @@ private extension BiologicalAgeCalculator {
     let dataPoints = healthGoalProvider.heartRateReserveAgeDataPoints()
     let equivalentAge = interpolateEquivalentAge(value: hrr, dataPoints: dataPoints, isHigherBetter: true)
     let ageDelta = equivalentAge - actualAge
-    let weight = 0.04
+    let weight = BiologicalAgeMetric.heartRateReserve.weight
 
     return MetricContribution(
       metric: .heartRateReserve,
@@ -718,7 +718,7 @@ private extension BiologicalAgeCalculator {
 
     let dataPoints = healthGoalProvider.zoneMinutesAgeDeltaDataPoints()
     let ageDelta = interpolateAgeDelta(value: totalZoneMinutes, dataPoints: dataPoints)
-    let weight = 0.08
+    let weight = BiologicalAgeMetric.zoneMinutes.weight
 
     return MetricContribution(
       metric: .zoneMinutes,
@@ -757,7 +757,7 @@ private extension BiologicalAgeCalculator {
     let ratio = (totalActive + totalBasal) / totalBasal
     let dataPoints = healthGoalProvider.activityLevelAgeDeltaDataPoints()
     let ageDelta = interpolateAgeDelta(value: ratio, dataPoints: dataPoints)
-    let weight = 0.06
+    let weight = BiologicalAgeMetric.activityLevel.weight
 
     return MetricContribution(
       metric: .activityLevel,
@@ -780,7 +780,7 @@ private extension BiologicalAgeCalculator {
     let dataPoints = healthGoalProvider.walkingSpeedAgeDataPoints()
     let equivalentAge = interpolateEquivalentAge(value: avgWalkingSpeed, dataPoints: dataPoints, isHigherBetter: true)
     let ageDelta = equivalentAge - actualAge
-    let weight = 0.03
+    let weight = BiologicalAgeMetric.walkingSpeed.weight
 
     return MetricContribution(
       metric: .walkingSpeed,
@@ -804,7 +804,7 @@ private extension BiologicalAgeCalculator {
     let dataPoints = healthGoalProvider.stairClimbSpeedAgeDataPoints()
     let equivalentAge = interpolateEquivalentAge(value: avgStairSpeed, dataPoints: dataPoints, isHigherBetter: true)
     let ageDelta = equivalentAge - actualAge
-    let weight = 0.03
+    let weight = BiologicalAgeMetric.stairClimbSpeed.weight
 
     return MetricContribution(
       metric: .stairClimbSpeed,
@@ -832,7 +832,7 @@ private extension BiologicalAgeCalculator {
     let avgScore = sleepAnalyses.map(\.overallScoreDouble).reduce(0, +) / Double(sleepAnalyses.count)
     let dataPoints = healthGoalProvider.sleepScoreAgeDeltaDataPoints()
     let ageDelta = interpolateAgeDelta(value: avgScore, dataPoints: dataPoints)
-    let weight = 0.08
+    let weight = BiologicalAgeMetric.sleepScore.weight
 
     return MetricContribution(
       metric: .sleepScore,
@@ -860,7 +860,7 @@ private extension BiologicalAgeCalculator {
 
     let dataPoints = healthGoalProvider.sleepDurationVariabilityAgeDeltaDataPoints()
     let ageDelta = interpolateAgeDelta(value: stdDev, dataPoints: dataPoints)
-    let weight = 0.04
+    let weight = BiologicalAgeMetric.sleepDurationVariability.weight
 
     return MetricContribution(
       metric: .sleepDurationVariability,
@@ -898,7 +898,7 @@ private extension BiologicalAgeCalculator {
 
     let dataPoints = healthGoalProvider.bedtimeConsistencyAgeDeltaDataPoints()
     let ageDelta = interpolateAgeDelta(value: stdDev, dataPoints: dataPoints)
-    let weight = 0.03
+    let weight = BiologicalAgeMetric.bedtimeConsistency.weight
 
     return MetricContribution(
       metric: .bedtimeConsistency,
@@ -923,7 +923,7 @@ private extension BiologicalAgeCalculator {
     let dataPoints = healthGoalProvider.sleepHeartRateAgeDataPoints()
     let equivalentAge = interpolateEquivalentAge(value: avgSleepHR, dataPoints: dataPoints, isHigherBetter: false)
     let ageDelta = equivalentAge - actualAge
-    let weight = 0.03
+    let weight = BiologicalAgeMetric.sleepHeartRate.weight
 
     return MetricContribution(
       metric: .sleepHeartRate,
@@ -951,7 +951,7 @@ private extension BiologicalAgeCalculator {
     let dataPoints = healthGoalProvider.sleepRespiratoryRateAgeDataPoints()
     let equivalentAge = interpolateEquivalentAge(value: avgRespRate, dataPoints: dataPoints, isHigherBetter: false)
     let ageDelta = equivalentAge - actualAge
-    let weight = 0.02
+    let weight = BiologicalAgeMetric.sleepRespiratoryRate.weight
 
     return MetricContribution(
       metric: .sleepRespiratoryRate,
@@ -980,7 +980,7 @@ private extension BiologicalAgeCalculator {
     let bodyFatPercent = sample.quantity.doubleValue(for: .percent())
     let dataPoints = healthGoalProvider.bodyFatPercentageAgeDeltaDataPoints()
     let ageDelta = interpolateAgeDelta(value: bodyFatPercent, dataPoints: dataPoints)
-    let weight = 0.07
+    let weight = BiologicalAgeMetric.bodyFatPercentage.weight
 
     return MetricContribution(
       metric: .bodyFatPercentage,
@@ -1005,7 +1005,7 @@ private extension BiologicalAgeCalculator {
 
     let category = healthGoalProvider.bloodPressureCategory(systolic: systolic, diastolic: diastolic)
     let ageDelta = healthGoalProvider.bloodPressureAgeDelta(for: category)
-    let weight = 0.08
+    let weight = BiologicalAgeMetric.bloodPressure.weight
 
     return MetricContribution(
       metric: .bloodPressure,
@@ -1051,7 +1051,7 @@ private extension BiologicalAgeCalculator {
       return nil
     }
 
-    let weight = 0.07
+    let weight = BiologicalAgeMetric.smoking.weight
 
     return MetricContribution(
       metric: .smoking,
@@ -1090,7 +1090,7 @@ private extension BiologicalAgeCalculator {
     let risk = min(1.0, max(0.0, 0.6 * bingeComponent + 0.2 * heavyComponent + 0.2 * totalComponent))
     let ageDelta = 6.0 * risk  // 0 to +6 years
 
-    let weight = 0.03
+    let weight = BiologicalAgeMetric.alcohol.weight
 
     return MetricContribution(
       metric: .alcohol,
