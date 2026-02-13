@@ -7,6 +7,7 @@
 
 import SFSafeSymbols
 import AppUI
+import BloomModel
 import DataContainer
 import SwiftUI
 import CoreHealth
@@ -50,7 +51,8 @@ struct NutritionMealView: View {
         totalProtein: foodItemLogs.totalProtein,
         totalCarbs: foodItemLogs.totalCarbs,
         totalFat: foodItemLogs.totalFat,
-        onLogTapped: onLogTapped
+        onLogTapped: onLogTapped,
+        onSaveAsMeal: foodItemLogs.isEmpty ? nil : { saveAsMeal() }
       )
 
       VStack(spacing: 8) {
@@ -92,6 +94,25 @@ private extension NutritionMealView {
     } catch {
       self.error = error
     }
+  }
+
+  func saveAsMeal() {
+    var foodItems = [FoodItem]()
+    var servings = [FoodItemIdentifier: Double]()
+
+    for log in foodItemLogs {
+      for serving in log.foodItemServings ?? [] {
+        guard let foodItemRecord = serving.foodItem else { continue }
+        let foodItem = foodItemRecord.asNetworkFoodItem()
+        foodItems.append(foodItem)
+        servings[foodItem.id] = serving.numberOfServings
+      }
+    }
+
+    presentedSheet = CreateEditMealView(
+      prefillFoodItems: foodItems,
+      prefillServings: servings
+    ).asAny
   }
 }
 

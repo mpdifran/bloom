@@ -15,6 +15,7 @@ struct MealHeaderView: View {
   let totalCarbs: Double
   let totalFat: Double
   let onLogTapped: (() -> Void)?
+  let onSaveAsMeal: (() -> Void)?
 
   init(
     mealName: String,
@@ -22,7 +23,8 @@ struct MealHeaderView: View {
     totalProtein: Double,
     totalCarbs: Double,
     totalFat: Double,
-    onLogTapped: (() -> Void)?
+    onLogTapped: (() -> Void)?,
+    onSaveAsMeal: (() -> Void)? = nil
   ) {
     self.mealName = mealName
     self.totalCalories = totalCalories
@@ -30,6 +32,7 @@ struct MealHeaderView: View {
     self.totalCarbs = totalCarbs
     self.totalFat = totalFat
     self.onLogTapped = onLogTapped
+    self.onSaveAsMeal = onSaveAsMeal
   }
 
   var body: some View {
@@ -62,6 +65,22 @@ struct MealHeaderView: View {
       }
 
       Spacer()
+
+      if let onSaveAsMeal {
+        Menu {
+          Button("Save as Meal", systemSymbol: .forkKnife) {
+            onSaveAsMeal()
+          }
+        } label: {
+          Image(systemSymbol: .ellipsis)
+            .foregroundStyle(.tint)
+            .font(.subheadline)
+            .bold()
+            .frame(width: 34, height: 34)
+            .background(.background)
+            .clipShape(Circle())
+        }
+      }
 
       if let onLogTapped {
         Button {

@@ -39,6 +39,11 @@ struct CreateEditMealView: View {
     initialFoodItemsServings = foodItemsServings
   }
 
+  init(prefillFoodItems: [FoodItem], prefillServings: [FoodItemIdentifier: Double]) {
+    self._foodItems = State(initialValue: prefillFoodItems)
+    self._foodItemsServings = State(initialValue: prefillServings)
+  }
+
   private var initialFoodItems = [FoodItem]()
   private var initialFoodItemsServings = [FoodItemIdentifier: Double]()
 
