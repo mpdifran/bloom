@@ -15,12 +15,17 @@ class AppDelegate: NSObject, WKApplicationDelegate {
   func handle(_ workoutConfiguration: HKWorkoutConfiguration) {
     Task { @MainActor in
       do {
+        WorkoutRouteRecorder.shared.cancelRecording()
         WorkoutManager.shared.resetWorkout()
         WorkoutManager.shared.heartRateZones = HeartRateZoneSettingsProvider.shared.buildHeartRateZones()
         try await WorkoutManager.shared.prepareWorkout(
           workoutConfiguration: workoutConfiguration,
           shouldMirror: true
         )
+
+        if workoutConfiguration.locationType == .outdoor && LocationManager.shared.isAuthorized {
+          WorkoutRouteRecorder.shared.startRecording()
+        }
       } catch {
         print(error)
       }

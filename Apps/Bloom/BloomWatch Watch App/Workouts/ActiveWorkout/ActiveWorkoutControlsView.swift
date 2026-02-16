@@ -115,7 +115,19 @@ private extension ActiveWorkoutControlsView {
 
     Task {
       do {
-        _ = try await workoutManager.switchWorkout(to: configuration)
+        let savedWorkout = try await workoutManager.switchWorkout(to: configuration)
+
+        // Finish route for the ended workout and start recording for new one if outdoor
+        if let savedWorkout, WorkoutRouteRecorder.shared.isRecording {
+          await WorkoutRouteRecorder.shared.stopRecording(workout: savedWorkout)
+        } else {
+          WorkoutRouteRecorder.shared.cancelRecording()
+        }
+
+        if variant.locationType == .outdoor && LocationManager.shared.isAuthorized {
+          WorkoutRouteRecorder.shared.startRecording()
+        }
+
         await MainActor.run {
           dismiss()
         }

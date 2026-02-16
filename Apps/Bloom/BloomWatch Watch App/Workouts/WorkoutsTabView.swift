@@ -169,6 +169,10 @@ private extension WorkoutsTabView {
           workoutConfiguration: configuration,
           shouldMirror: false
         )
+
+        if variant.locationType == .outdoor && locationManager.isAuthorized {
+          WorkoutRouteRecorder.shared.startRecording()
+        }
       } catch {
         self.error = error
       }

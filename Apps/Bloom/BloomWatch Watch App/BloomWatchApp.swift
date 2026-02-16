@@ -81,6 +81,18 @@ struct BloomWatch_Watch_AppApp: App {
             presentedFullScreen = ActiveWorkoutView().asAny
           }
         }
+        .onChange(of: workoutManager.workout) { (_, workout) in
+          guard let workout, WorkoutRouteRecorder.shared.isRecording else { return }
+          Task {
+            await WorkoutRouteRecorder.shared.stopRecording(workout: workout)
+          }
+        }
+        .onChange(of: workoutManager.sessionState) {
+          guard workoutManager.sessionState == .ended,
+                WorkoutRouteRecorder.shared.isRecording else { return }
+          // Workout was discarded (e.g. too short) — no HKWorkout to associate the route with
+          WorkoutRouteRecorder.shared.cancelRecording()
+        }
         .fullScreenCover($presentedFullScreen)
         .environmentObject(workoutManager)
     }

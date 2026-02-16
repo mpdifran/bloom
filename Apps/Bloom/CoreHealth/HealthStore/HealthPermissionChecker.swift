@@ -176,6 +176,7 @@ public final class HealthPermissionChecker: Sendable {
   public let writeWatchTypes: Set<HKSampleType> = [
     HKQuantityType(.bodyMass),
     HKQuantityType.workoutType(),
+    HKSeriesType.workoutRoute(),
     HKCategoryType(.menstrualFlow),
     HKQuantityType(.workoutEffortScore)
   ]
