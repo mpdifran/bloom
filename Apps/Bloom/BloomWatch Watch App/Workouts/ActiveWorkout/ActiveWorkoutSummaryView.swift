@@ -16,20 +16,22 @@ struct ActiveWorkoutSummaryView: View {
   @State private var effortScore: Int?
 
   var body: some View {
-    if let workout = workoutManager.workout {
-      ScrollView {
-        summaryListView(workout: workout)
-      }
-      .navigationTitle("Summary")
-      .navigationBarTitleDisplayMode(.inline)
-      .toolbar {
-        ToolbarItem(placement: .cancellationAction) {
-          DismissButton(performDismiss: onDismiss)
+    NavigationStack {
+      if let workout = workoutManager.workout {
+        ScrollView {
+          summaryListView(workout: workout)
         }
+        .navigationTitle("Summary")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+          ToolbarItem(placement: .cancellationAction) {
+            DismissButton(performDismiss: onDismiss)
+          }
+        }
+      } else {
+        ProgressView("Saving Workout")
+          .navigationBarHidden(true)
       }
-    } else {
-      ProgressView("Saving Workout")
-        .navigationBarHidden(true)
     }
   }
 
