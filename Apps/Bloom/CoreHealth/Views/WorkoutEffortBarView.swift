@@ -85,7 +85,7 @@ private extension WorkoutEffortBarView {
 
     return ZStack(alignment: .bottomLeading) {
       EffortBarShape(capsuleWidth: capsuleWidth)
-        .fill(.regularMaterial)
+        .fill(Color.white.opacity(0.15))
         .frame(width: barWidth, height: barHeight)
 
       if fillWidth > 0 {
@@ -289,6 +289,7 @@ struct EffortBarShape: Shape {
   VStack {
     WorkoutEffortBarView(selectedEffort: .constant(7))
       .padding(.horizontal, 32)
+    Spacer()
   }
   .padding()
 }
