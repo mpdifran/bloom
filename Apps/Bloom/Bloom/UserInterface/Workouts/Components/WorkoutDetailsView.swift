@@ -185,9 +185,9 @@ private extension WorkoutDetailsView {
             .font(.caption)
             .foregroundStyle(.secondary)
         }
+        .cardContainer()
       }
       .buttonStyle(.plain)
-      .cardContainer()
     }
   }
 
