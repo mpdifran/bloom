@@ -771,11 +771,14 @@ private extension BiologicalAgeCalculator {
 
   // 8. Walking Speed (3%)
   func calculateWalkingSpeedContribution(actualAge: Double, referenceDate: Date) async -> MetricContribution? {
-    guard let avgWalkingSpeed = await healthStoreFetcher.fetchDailyAverage(
+    let unit = HKUnit.meter().unitDivided(by: .second())
+    let samples = await healthStoreFetcher.fetchQuantitySampleValues(
       for: .walkingSpeed,
-      unit: .meter().unitDivided(by: .second()),
+      unit: unit,
       dateRange: .trailingDays(from: referenceDate, numberOfDays: 7)
-    )?.doubleValue(for: .meter().unitDivided(by: .second())) else { return nil }
+    )
+    guard samples.isNotEmpty else { return nil }
+    let avgWalkingSpeed = samples.trimmedMean(fraction: 0.05, keyPath: \.self)
 
     let dataPoints = healthGoalProvider.walkingSpeedAgeDataPoints()
     let equivalentAge = interpolateEquivalentAge(value: avgWalkingSpeed, dataPoints: dataPoints, isHigherBetter: true)

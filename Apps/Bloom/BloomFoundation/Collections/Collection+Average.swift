@@ -91,6 +91,22 @@ public extension Collection {
     }
   }
 
+  func trimmedMean(fraction: Double, keyPath: KeyPath<Element, Double>) -> Double {
+    let items = Array(self)
+    guard items.isNotEmpty else { return 0 }
+
+    let sorted = items.sorted { $0[keyPath: keyPath] < $1[keyPath: keyPath] }
+    let trimCount = Int(Double(sorted.count) * fraction)
+
+    guard trimCount > 0, sorted.count > trimCount * 2 else {
+      return average(keyPath: keyPath)
+    }
+
+    let trimmed = sorted.dropFirst(trimCount).dropLast(trimCount)
+    let sum = trimmed.reduce(0.0) { $0 + $1[keyPath: keyPath] }
+    return sum / Double(trimmed.count)
+  }
+
   func group(by matcher: (Element, Element) -> Bool) -> [[Element]] {
     guard isNotEmpty else { return [] }
 

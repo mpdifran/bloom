@@ -210,6 +210,18 @@ public extension HealthStoreFetcher {
     )
   }
 
+  func fetchQuantitySampleValues(
+    for quantityType: HKQuantityTypeIdentifier,
+    unit: HKUnit,
+    dateRange: DateRange
+  ) async -> [Double] {
+    let sampleType = HKQuantityType(quantityType)
+    guard let samples = try? await healthStore.fetchSamples(for: sampleType, dateRange: dateRange) else {
+      return []
+    }
+    return samples.compactMap { ($0 as? HKQuantitySample)?.quantity.doubleValue(for: unit) }
+  }
+
   func fetchNetEnergy(dateRange: DateRange) async -> [DateQuantitySample] {
 
     let basal = try? await healthStore.fetchCollatedQuantity(
