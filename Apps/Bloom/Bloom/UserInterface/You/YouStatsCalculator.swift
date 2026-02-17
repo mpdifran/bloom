@@ -564,24 +564,16 @@ private extension YouStatsCalculator {
   }
 
   func calculateHeartRateRecoveryData() async -> HeartRateRecoveryData? {
-    var calendar = Calendar.current
-    calendar.firstWeekday = 1  // Sunday
+    // Use trailing 7-day windows (consistent with detail view)
+    let thisWeekRange = DateRange.trailingDaysFromNow(6)
 
-    let now = Date()
-    let todayWeekday = calendar.component(.weekday, from: now)
-
-    // Find start of this week (Sunday)
-    guard let thisWeekStart = calendar.date(
-      byAdding: .day,
-      value: -(todayWeekday - 1),
-      to: calendar.startOfDay(for: now)
-    ) else { return nil }
-
-    // Find start of last week
-    guard let lastWeekStart = calendar.date(byAdding: .day, value: -7, to: thisWeekStart) else { return nil }
+    guard let lastWeekEnd = Calendar.current.date(byAdding: .second, value: -1, to: thisWeekRange.start),
+          let lastWeekStart = Calendar.current.date(byAdding: .day, value: -7, to: lastWeekEnd) else {
+      return nil
+    }
+    let lastWeekRange = DateRange(lastWeekStart, lastWeekEnd)
 
     // Fetch this week's average
-    let thisWeekRange = DateRange(thisWeekStart, now)
     let thisWeekAvg = await healthStoreFetcher.fetchDailyAverage(
       for: .heartRateRecoveryOneMinute,
       unit: .bpm(),
@@ -589,7 +581,6 @@ private extension YouStatsCalculator {
     )
 
     // Fetch last week's average
-    let lastWeekRange = DateRange(lastWeekStart, thisWeekStart)
     let lastWeekAvg = await healthStoreFetcher.fetchDailyAverage(
       for: .heartRateRecoveryOneMinute,
       unit: .bpm(),
