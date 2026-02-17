@@ -28,7 +28,7 @@ struct NutritionView: View {
         topBar
 
         Group {
-          NutrientsWidgetView()
+          NutrientsWidgetView(date: nutritionViewModel.date)
             .transition(.blurReplace)
             .padding(.vertical)
             .onTapGesture {

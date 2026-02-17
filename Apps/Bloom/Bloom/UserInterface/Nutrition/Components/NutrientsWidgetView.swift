@@ -10,11 +10,61 @@ import SwiftUI
 import DataContainer
 import BloomFoundation
 import CoreHealth
+import SwiftData
 
 struct NutrientsWidgetView: View {
 
   @StateObject private var viewModel = NutrientsWidgetViewModel()
-  @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
+
+  @Query private var foodItemLogs: [FoodItemLog]
+
+  init(date: Date = .now) {
+    let startOfDay = Calendar.current.startOfDay(for: date)
+    let endOfDay = Calendar.current.endOfDay(for: date)
+
+    self._foodItemLogs = Query(
+      filter: #Predicate<FoodItemLog> { log in
+        log.date >= startOfDay &&
+        log.date <= endOfDay
+      },
+      sort: \FoodItemLog.date,
+      order: .forward
+    )
+  }
+
+  // MARK: - Computed Macros from Food Items
+
+  private var caloriesValue: Double {
+    foodItemLogs.totalCalories
+  }
+
+  private var proteinValue: Double {
+    foodItemLogs.totalProtein
+  }
+
+  private var carbsValue: Double {
+    foodItemLogs.totalCarbs
+  }
+
+  private var fatsValue: Double {
+    foodItemLogs.totalFat
+  }
+
+  private var caloriesString: String {
+    caloriesValue.format()
+  }
+
+  private var proteinString: String {
+    "\(proteinValue.format()) g"
+  }
+
+  private var carbsString: String {
+    "\(carbsValue.format()) g"
+  }
+
+  private var fatsString: String {
+    "\(fatsValue.format()) g"
+  }
 
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {
@@ -23,10 +73,7 @@ struct NutrientsWidgetView: View {
       cardView
     }
     .task {
-      viewModel.observeChanges(for: .duringDay(.now))
-    }
-    .onChange(of: nutritionViewModel.date) { _, newValue in
-      viewModel.observeChanges(for: .duringDay(newValue))
+      await viewModel.fetchGoals()
     }
   }
 }
@@ -47,7 +94,7 @@ private extension NutrientsWidgetView {
     HStack {
       HStack(alignment: .bottom) {
         VStack(alignment: .leading) {
-          Text(viewModel.caloriesString)
+          Text(caloriesString)
             .font(
               .system(
                 .title3,
@@ -67,25 +114,25 @@ private extension NutrientsWidgetView {
         HStack(alignment: .bottom) {
           Group {
             NutrientLabel(
-              value: viewModel.proteinValue,
+              value: proteinValue,
               target: viewModel.proteinTarget,
-              displayAmount: viewModel.proteinString,
+              displayAmount: proteinString,
               label: "Protein"
             )
             .tint(.protein)
 
             NutrientLabel(
-              value: viewModel.carbsValue,
+              value: carbsValue,
               target: viewModel.carbsTarget,
-              displayAmount: viewModel.carbsString,
+              displayAmount: carbsString,
               label: "Carbs"
             )
             .tint(.carbohydrates)
 
             NutrientLabel(
-              value: viewModel.fatsValue,
+              value: fatsValue,
               target: viewModel.fatsTarget,
-              displayAmount: viewModel.fatsString,
+              displayAmount: fatsString,
               label: "Fats"
             )
             .tint(.fat)
