@@ -32,6 +32,17 @@ struct FoodItemLogDetailsView: View {
   @State private var foodItemNumberOfServings: [String: Double]
   @State private var date: Date
   @State private var meal: FoodItemLog.Meal
+  
+  // Mass vs Servings picker
+  @State private var inputMode: InputMode = .servings
+  @State private var massInput: Double = 0.0
+  
+  private enum InputMode: String, CaseIterable, Identifiable {
+    case servings = "Servings"
+    case mass = "Mass"
+    
+    var id: String { rawValue }
+  }
 
   init(
     foodItemLog: FoodItemLog
@@ -47,6 +58,14 @@ struct FoodItemLogDetailsView: View {
     self._foodItemNumberOfServings = State(initialValue: foodItemServings)
     self._date = State(initialValue: foodItemLog.date)
     self._meal = State(initialValue: foodItemLog.meal)
+    
+    // Calculate initial mass input based on current servings and serving quantity
+    let primaryServingValue = foodItemLog.foodItemServings?.first?.foodItem?.servingValue
+    let initialMass = Self.calculateMassFromServings(
+      servings: foodItemLog.numberOfServings,
+      servingValue: primaryServingValue
+    )
+    self._massInput = State(initialValue: initialMass)
   }
 
   var body: some View {
@@ -181,19 +200,66 @@ private extension FoodItemLogDetailsView {
 
       Divider()
 
-      Divider()
+      if !primaryServingDisplay.isEmpty {
+        LabeledContent("Serving Size", value: primaryServingDisplay)
+          .frame(minHeight: 60)
 
-      LabeledContent("Number of Servings") {
-        TextField("", value: $numberOfServings, formatter: NumberFormatter.threeDecimalPlaces)
-          .textFieldStyle(.roundedBorder)
-          .multilineTextAlignment(.trailing)
-          .frame(width: 70)
-          .fontDesign(.rounded)
-          .keyboardType(.decimalPad)
-          .focused($isFocused)
-          .selectAllTextOnBeginEditing()
+        Divider()
+      }
+
+      Group {
+        if inputMode == .servings || !canShowMassInput {
+          LabeledContent("Number of Servings") {
+            TextField("", value: $numberOfServings, formatter: NumberFormatter.threeDecimalPlaces)
+              .textFieldStyle(.roundedBorder)
+              .multilineTextAlignment(.trailing)
+              .frame(width: 70)
+              .fontDesign(.rounded)
+              .keyboardType(.decimalPad)
+              .focused($isFocused)
+              .selectAllTextOnBeginEditing()
+          }
+        } else {
+          LabeledContent("Amount (\(massUnit))") {
+            TextField("", value: $massInput, formatter: NumberFormatter.threeDecimalPlaces)
+              .textFieldStyle(.roundedBorder)
+              .multilineTextAlignment(.trailing)
+              .frame(width: 70)
+              .fontDesign(.rounded)
+              .keyboardType(.decimalPad)
+              .focused($isFocused)
+              .selectAllTextOnBeginEditing()
+              .onChange(of: massInput) { _, newValue in
+                numberOfServings = Self.calculateServingsFromMass(
+                  mass: newValue,
+                  servingValue: primaryServingValue
+                )
+              }
+          }
+        }
       }
       .frame(minHeight: 60)
+      .onChange(of: numberOfServings) { _, newValue in
+        if inputMode == .servings {
+          massInput = Self.calculateMassFromServings(
+            servings: newValue,
+            servingValue: primaryServingValue
+          )
+        }
+      }
+
+      if canShowMassInput {
+        Divider()
+
+        Picker("Input Mode", selection: $inputMode) {
+          ForEach(InputMode.allCases) { mode in
+            Text(mode.rawValue)
+              .tag(mode)
+          }
+        }
+        .pickerStyle(.segmented)
+        .padding(.vertical, 12)
+      }
     }
     .padding(.horizontal)
     .cardContainer(includePadding: false)
@@ -305,6 +371,43 @@ private extension FoodItemLogDetailsView {
 }
 
 private extension FoodItemLogDetailsView {
+
+  // MARK: - Mass/Servings Conversion
+
+  static func calculateMassFromServings(servings: Double, servingValue: Double?) -> Double {
+    guard let servingValue else { return 0.0 }
+    return servings * servingValue
+  }
+
+  static func calculateServingsFromMass(mass: Double, servingValue: Double?) -> Double {
+    guard let servingValue, servingValue > 0 else { return 0.0 }
+    return mass / servingValue
+  }
+
+  var primaryServingValue: Double? {
+    foodItemLog.foodItemServings?.first?.foodItem?.servingValue
+  }
+
+  var primaryServingUnit: String? {
+    foodItemLog.foodItemServings?.first?.foodItem?.servingUnitString
+  }
+
+  var primaryServingDisplay: String {
+    let primary = foodItemLog.foodItemServings?.first?.foodItem
+    var result = primary?.servingName ?? ""
+    if let value = primary?.servingValue, let unit = primary?.servingUnitString {
+      result += result.isEmpty ? "\(value.formatted()) \(unit)" : " (\(value.formatted()) \(unit))"
+    }
+    return result
+  }
+
+  var massUnit: String {
+    primaryServingUnit ?? "g"
+  }
+
+  var canShowMassInput: Bool {
+    primaryServingValue != nil
+  }
 
   var canSave: Bool {
     guard

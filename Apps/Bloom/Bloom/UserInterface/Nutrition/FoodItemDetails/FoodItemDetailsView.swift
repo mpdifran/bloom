@@ -33,19 +33,25 @@ struct FoodItemDetailsView: View {
     self.existingFoodItemLog = existingFoodItemLog
     self.mode = mode
 
+    let initialServings: Double
     if let existingFoodItemLog {
       if let serving = existingFoodItemLog.serving(for: foodItem.id.value) {
-        self._numberOfServings = State(initialValue: serving.numberOfServings)
+        initialServings = serving.numberOfServings
       } else {
-        self._numberOfServings = State(initialValue: 1)
+        initialServings = 1
       }
       self._date = State(initialValue: existingFoodItemLog.date)
       self._meal = State(initialValue: existingFoodItemLog.meal)
     } else {
-      self._numberOfServings = State(initialValue: 1)
+      initialServings = 1
       self._date = State(initialValue: NutritionTrackingViewModel.shared.date)
       self._meal = State(initialValue: NutritionTrackingViewModel.shared.suggestedMeal)
     }
+    self._numberOfServings = State(initialValue: initialServings)
+    self._massInput = State(initialValue: Self.calculateMassFromServings(
+      servings: initialServings,
+      servingQuantity: foodItem.servingQuantity
+    ))
   }
 
   @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
@@ -59,6 +65,17 @@ struct FoodItemDetailsView: View {
   @State private var presentedSheet: AnyView?
   @State private var alertDetails: AlertDetails?
   @State private var error: Error?
+
+  // Mass vs Servings picker
+  @State private var inputMode: InputMode = .servings
+  @State private var massInput: Double = 0.0
+
+  private enum InputMode: String, CaseIterable, Identifiable {
+    case servings = "Servings"
+    case mass = "Mass"
+
+    var id: String { rawValue }
+  }
 
   @FocusState private var isFocused: Bool
 
@@ -132,6 +149,7 @@ struct FoodItemDetailsView: View {
       .navigationBarTitleDisplayMode(.inline)
       .sensoryFeedback(.success, trigger: hasMarkedAsInaccurate)
       .animation(.easeInOut, value: numberOfServings)
+      .animation(.easeInOut, value: inputMode)
       .sheet($presentedSheet)
       .alert(error: $error)
       .alert(alertDetails: $alertDetails)
@@ -279,17 +297,59 @@ private extension FoodItemDetailsView {
       if mode == .editAndView {
         Divider()
 
-        LabeledContent("Number of Servings") {
-          TextField("", value: $numberOfServings, formatter: NumberFormatter.threeDecimalPlaces)
-            .textFieldStyle(.roundedBorder)
-            .multilineTextAlignment(.trailing)
-            .frame(width: 70)
-            .fontDesign(.rounded)
-            .keyboardType(.decimalPad)
-            .focused($isFocused)
-            .selectAllTextOnBeginEditing()
+        Group {
+          if inputMode == .servings || !canShowMassInput {
+            LabeledContent("Number of Servings") {
+              TextField("", value: $numberOfServings, formatter: NumberFormatter.threeDecimalPlaces)
+                .textFieldStyle(.roundedBorder)
+                .multilineTextAlignment(.trailing)
+                .frame(width: 70)
+                .fontDesign(.rounded)
+                .keyboardType(.decimalPad)
+                .focused($isFocused)
+                .selectAllTextOnBeginEditing()
+            }
+          } else {
+            LabeledContent("Amount (\(massUnit))") {
+              TextField("", value: $massInput, formatter: NumberFormatter.threeDecimalPlaces)
+                .textFieldStyle(.roundedBorder)
+                .multilineTextAlignment(.trailing)
+                .frame(width: 70)
+                .fontDesign(.rounded)
+                .keyboardType(.decimalPad)
+                .focused($isFocused)
+                .selectAllTextOnBeginEditing()
+                .onChange(of: massInput) { _, newValue in
+                  numberOfServings = Self.calculateServingsFromMass(
+                    mass: newValue,
+                    servingQuantity: foodItem.servingQuantity
+                  )
+                }
+            }
+          }
         }
         .frame(minHeight: 60)
+        .onChange(of: numberOfServings) { _, newValue in
+          if inputMode == .servings {
+            massInput = Self.calculateMassFromServings(
+              servings: newValue,
+              servingQuantity: foodItem.servingQuantity
+            )
+          }
+        }
+
+        if canShowMassInput {
+          Divider()
+
+          Picker("Input Mode", selection: $inputMode) {
+            ForEach(InputMode.allCases) { mode in
+              Text(mode.rawValue)
+                .tag(mode)
+            }
+          }
+          .pickerStyle(.segmented)
+          .padding(.vertical, 12)
+        }
       }
     }
     .padding(.horizontal)
@@ -363,6 +423,29 @@ private extension FoodItemDetailsView {
         }
       }
     }
+  }
+}
+
+private extension FoodItemDetailsView {
+
+  // MARK: - Mass/Servings Conversion
+
+  static func calculateMassFromServings(servings: Double, servingQuantity: BloomModel.FoodItem.Quantity?) -> Double {
+    guard let servingQuantity else { return 0.0 }
+    return servings * servingQuantity.value
+  }
+
+  static func calculateServingsFromMass(mass: Double, servingQuantity: BloomModel.FoodItem.Quantity?) -> Double {
+    guard let servingQuantity, servingQuantity.value > 0 else { return 0.0 }
+    return mass / servingQuantity.value
+  }
+
+  var massUnit: String {
+    foodItem.servingQuantity?.unit ?? "g"
+  }
+
+  var canShowMassInput: Bool {
+    foodItem.servingQuantity != nil
   }
 }
 
