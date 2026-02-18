@@ -47,6 +47,31 @@ public struct ContainerSizeModel: Identifiable, Hashable, Codable, Sendable {
       return String(format: "%.1f fl oz", flOz)
     }
   }
+  
+  @MainActor
+  public func displayValue(unit: HKUnit? = nil) -> String {
+    let liquidUnit = unit ?? HealthUnitPreferences.shared.liquidVolumeUnit
+    let mlQuantity = HKQuantity(unit: .literUnit(with: .milli), doubleValue: volumeML)
+    let displayValue = mlQuantity.doubleValue(for: liquidUnit)
+    
+    if liquidUnit == .literUnit(with: .milli) {
+      if displayValue >= 1000 {
+        return String(format: "%.1f L", displayValue / 1000)
+      } else {
+        return String(format: "%.0f mL", displayValue)
+      }
+    } else if liquidUnit == .fluidOunceUS() {
+      if displayValue < 10 {
+        return String(format: "%.1f fl oz", displayValue)
+      } else {
+        return String(format: "%.0f fl oz", displayValue)
+      }
+    } else if liquidUnit == .liter() {
+      return String(format: "%.2f L", displayValue)
+    } else {
+      return String(format: "%.1f %@", displayValue, liquidUnit.sensibleUnitString)
+    }
+  }
 }
 
 // MARK: - Default Containers

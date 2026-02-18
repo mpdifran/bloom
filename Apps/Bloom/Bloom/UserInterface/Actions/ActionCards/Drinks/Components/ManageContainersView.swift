@@ -142,7 +142,7 @@ struct EditContainerView: View {
 
   @State private var name: String
   @State private var volumeML: Double
-  @State private var useMetric = true
+  @State private var useMetric = HealthUnitPreferences.shared.liquidVolumeUnit == .literUnit(with: .milli)
 
   @Environment(\.dismiss) private var dismiss
 
@@ -159,10 +159,18 @@ struct EditContainerView: View {
 
   private var displayVolume: String {
     if useMetric {
-      return "\(Int(volumeML)) mL"
+      if volumeML >= 1000 {
+        return String(format: "%.1f L", volumeML / 1000)
+      } else {
+        return "\(Int(volumeML)) mL"
+      }
     } else {
       let flOz = volumeML / 29.5735
-      return String(format: "%.1f fl oz", flOz)
+      if flOz < 10 {
+        return String(format: "%.1f fl oz", flOz)
+      } else {
+        return String(format: "%.0f fl oz", flOz)
+      }
     }
   }
 
