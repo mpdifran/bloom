@@ -94,7 +94,7 @@ private extension WorkoutCompletionObserver {
     workout: HKWorkout,
     bioAgeDelta: Double?
   ) async {
-    let title = "Workout Complete"
+    let title = "\(workout.workoutActivityType.name) Workout Analysis Complete"
     let subtitle: String
 
     if let delta = bioAgeDelta {
