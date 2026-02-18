@@ -60,10 +60,10 @@ struct FoodItemLogDetailsView: View {
     self._meal = State(initialValue: foodItemLog.meal)
     
     // Calculate initial mass input based on current servings and serving quantity
-    let primaryServingQuantity = foodItemLog.foodItemServings?.first?.foodItem?.servingQuantity
+    let primaryServingValue = foodItemLog.foodItemServings?.first?.foodItem?.servingValue
     let initialMass = Self.calculateMassFromServings(
       servings: foodItemLog.numberOfServings,
-      servingQuantity: primaryServingQuantity
+      servingValue: primaryServingValue
     )
     self._massInput = State(initialValue: initialMass)
   }
@@ -199,18 +199,11 @@ private extension FoodItemLogDetailsView {
       dateMealPickers
 
       Divider()
-      
-      if canShowMassInput {
-        Picker("Input Mode", selection: $inputMode) {
-          ForEach(InputMode.allCases) { mode in
-            Text(mode.rawValue)
-              .tag(mode)
-          }
-        }
-        .pickerStyle(.segmented)
-        .padding(.horizontal)
-        .padding(.vertical, 12)
-        
+
+      if !primaryServingDisplay.isEmpty {
+        LabeledContent("Serving Size", value: primaryServingDisplay)
+          .frame(minHeight: 60)
+
         Divider()
       }
 
@@ -239,7 +232,7 @@ private extension FoodItemLogDetailsView {
               .onChange(of: massInput) { _, newValue in
                 numberOfServings = Self.calculateServingsFromMass(
                   mass: newValue,
-                  servingQuantity: primaryServingQuantity
+                  servingValue: primaryServingValue
                 )
               }
           }
@@ -250,9 +243,22 @@ private extension FoodItemLogDetailsView {
         if inputMode == .servings {
           massInput = Self.calculateMassFromServings(
             servings: newValue,
-            servingQuantity: primaryServingQuantity
+            servingValue: primaryServingValue
           )
         }
+      }
+
+      if canShowMassInput {
+        Divider()
+
+        Picker("Input Mode", selection: $inputMode) {
+          ForEach(InputMode.allCases) { mode in
+            Text(mode.rawValue)
+              .tag(mode)
+          }
+        }
+        .pickerStyle(.segmented)
+        .padding(.vertical, 12)
       }
     }
     .padding(.horizontal)
@@ -368,28 +374,39 @@ private extension FoodItemLogDetailsView {
 
   // MARK: - Mass/Servings Conversion
 
-  static func calculateMassFromServings(servings: Double, servingQuantity: FoodItem.Quantity?) -> Double {
-    guard let servingQuantity = servingQuantity else { return 0.0 }
-    return servings * servingQuantity.value
+  static func calculateMassFromServings(servings: Double, servingValue: Double?) -> Double {
+    guard let servingValue else { return 0.0 }
+    return servings * servingValue
   }
-  
-  static func calculateServingsFromMass(mass: Double, servingQuantity: FoodItem.Quantity?) -> Double {
-    guard let servingQuantity = servingQuantity, servingQuantity.value > 0 else { return 0.0 }
-    return mass / servingQuantity.value
+
+  static func calculateServingsFromMass(mass: Double, servingValue: Double?) -> Double {
+    guard let servingValue, servingValue > 0 else { return 0.0 }
+    return mass / servingValue
   }
-  
-  var primaryServingQuantity: FoodItem.Quantity? {
-    // For multi-item meals, we use the first item's serving quantity
-    // This is a simplification - in practice, you might want more sophisticated logic
-    return foodItemLog.foodItemServings?.first?.foodItem?.servingQuantity
+
+  var primaryServingValue: Double? {
+    foodItemLog.foodItemServings?.first?.foodItem?.servingValue
   }
-  
+
+  var primaryServingUnit: String? {
+    foodItemLog.foodItemServings?.first?.foodItem?.servingUnitString
+  }
+
+  var primaryServingDisplay: String {
+    let primary = foodItemLog.foodItemServings?.first?.foodItem
+    var result = primary?.servingName ?? ""
+    if let value = primary?.servingValue, let unit = primary?.servingUnitString {
+      result += result.isEmpty ? "\(value.formatted()) \(unit)" : " (\(value.formatted()) \(unit))"
+    }
+    return result
+  }
+
   var massUnit: String {
-    primaryServingQuantity?.unit ?? "g"
+    primaryServingUnit ?? "g"
   }
-  
+
   var canShowMassInput: Bool {
-    primaryServingQuantity != nil
+    primaryServingValue != nil
   }
 
   var canSave: Bool {
