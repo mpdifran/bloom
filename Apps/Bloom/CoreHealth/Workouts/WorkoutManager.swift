@@ -123,8 +123,8 @@ private extension WorkoutManager {
     do {
       try await builder.endCollection(at: change.date)
 
-      // Discard workouts shorter than 10 seconds
-      if elapsedTimeInterval < 10 {
+      // Discard workouts shorter than 15 seconds
+      if elapsedTimeInterval < 15 {
         builder.discardWorkout()
         session?.end()
         return

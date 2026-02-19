@@ -6,29 +6,22 @@
 //
 
 import WatchKit
-import AudioToolbox
+import AVFoundation
 
 enum SoundPlayer {
+
+  private static var audioPlayer: AVAudioPlayer?
 
   static func playLogHealthData() {
     WKInterfaceDevice.current().play(.success)
   }
-  
-  /// Plays the Apple Watch workout countdown beep (for 3, 2, 1)
-  /// This matches the native Apple Workout app countdown beeps
-  static func playWorkoutCountdownBeep() {
-    // System sound for workout countdown beeps
-    // Based on iOS system sounds research, 1253-1255 are workout-related
-    AudioServicesPlaySystemSound(1254)
-  }
-  
-  /// Plays the Apple Watch workout start sound (for GO!)
-  /// Higher pitched sound to indicate workout has begun
-  static func playWorkoutStart() {
-    // Use a different system sound for the "GO!" moment
-    // System sound 1255 is often the workout start sound
-    AudioServicesPlaySystemSound(1255)
-    // Also provide haptic feedback for the start
-    WKInterfaceDevice.current().play(.start)
+
+  /// Plays the Apple Watch workout countdown sound (3, 2, 1, GO!)
+  /// This matches the native Apple Workout app countdown sound
+  static func playWorkoutCountdown(delay: TimeInterval = 0.3) {
+    guard let url = Bundle.main.url(forResource: "WorkoutCountdown_Haptic", withExtension: "caf") else { return }
+    guard let player = try? AVAudioPlayer(contentsOf: url) else { return }
+    audioPlayer = player
+    player.play(atTime: player.deviceCurrentTime + delay)
   }
 }
