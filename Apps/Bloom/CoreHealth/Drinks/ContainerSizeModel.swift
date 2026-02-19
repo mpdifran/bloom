@@ -35,41 +35,27 @@ public struct ContainerSizeModel: Identifiable, Hashable, Codable, Sendable {
   }
 
   @MainActor
-  public func displayValue(useMetric: Bool = true) -> String {
-    if useMetric {
-      if volumeML >= 1000 {
-        return String(format: "%.1f L", volumeML / 1000)
-      } else {
-        return String(format: "%.0f mL", volumeML)
-      }
-    } else {
-      let flOz = volumeML / 29.5735
-      return String(format: "%.1f fl oz", flOz)
-    }
-  }
-  
-  @MainActor
   public func displayValue(unit: HKUnit? = nil) -> String {
     let liquidUnit = unit ?? HealthUnitPreferences.shared.liquidVolumeUnit
     let mlQuantity = HKQuantity(unit: .literUnit(with: .milli), doubleValue: volumeML)
-    let displayValue = mlQuantity.doubleValue(for: liquidUnit)
-    
+    let convertedValue = mlQuantity.doubleValue(for: liquidUnit)
+
     if liquidUnit == .literUnit(with: .milli) {
-      if displayValue >= 1000 {
-        return String(format: "%.1f L", displayValue / 1000)
+      if convertedValue >= 1000 {
+        return String(format: "%.1f L", convertedValue / 1000)
       } else {
-        return String(format: "%.0f mL", displayValue)
+        return String(format: "%.0f mL", convertedValue)
       }
     } else if liquidUnit == .fluidOunceUS() {
-      if displayValue < 10 {
-        return String(format: "%.1f fl oz", displayValue)
+      if convertedValue < 10 {
+        return String(format: "%.1f fl oz", convertedValue)
       } else {
-        return String(format: "%.0f fl oz", displayValue)
+        return String(format: "%.0f fl oz", convertedValue)
       }
     } else if liquidUnit == .liter() {
-      return String(format: "%.2f L", displayValue)
+      return String(format: "%.2f L", convertedValue)
     } else {
-      return String(format: "%.1f %@", displayValue, liquidUnit.sensibleUnitString)
+      return String(format: "%.1f %@", convertedValue, liquidUnit.sensibleUnitString)
     }
   }
 }
