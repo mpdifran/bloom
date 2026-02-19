@@ -47,9 +47,14 @@ struct ActiveWorkoutView: View {
     }
     .onChange(of: workoutManager.sessionState) { _, newValue in
       if newValue == .ended && !workoutManager.isSwitchingWorkout {
-        presentedSheet = ActiveWorkoutSummaryView {
+        if workoutManager.workout == nil {
+          // Workout was discarded (too short) — skip summary
           dismiss()
-        }.asAny
+        } else {
+          presentedSheet = ActiveWorkoutSummaryView {
+            dismiss()
+          }.asAny
+        }
       } else if newValue == .running || newValue == .paused {
         displayMetricsView()
       }

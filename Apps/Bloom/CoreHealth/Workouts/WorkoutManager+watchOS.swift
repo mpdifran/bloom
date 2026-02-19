@@ -78,7 +78,7 @@ public extension WorkoutManager {
 
     // 2. Save or discard based on duration
     let savedWorkout: HKWorkout?
-    if elapsedTime < 10 {
+    if elapsedTime < 15 {
       builder.discardWorkout()
       savedWorkout = nil
     } else {
