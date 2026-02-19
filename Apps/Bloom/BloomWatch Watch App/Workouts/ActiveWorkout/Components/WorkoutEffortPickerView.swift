@@ -17,6 +17,7 @@ struct WorkoutEffortPickerView: View {
   @State private var isSaving = false
   @State private var showingSaveConfirmation = false
   @FocusState private var isFocused: Bool
+  @Environment(\.dismiss) private var dismiss
 
   private var effortBinding: Binding<Int> {
     Binding(
@@ -111,6 +112,7 @@ private extension WorkoutEffortPickerView {
       }
 
       try? await Task.sleep(for: .seconds(1))
+      dismiss()
     } catch {
       isSaving = false
     }
