@@ -10,6 +10,7 @@ import SFSafeSymbols
 import BloomUI
 import AppUI
 import CoreHealth
+import HealthKit
 
 struct DrinkAmountSelectionView: View {
   let drink: DrinkType
@@ -18,6 +19,7 @@ struct DrinkAmountSelectionView: View {
   let onTrack: (Double) -> Void
 
   @State private var fillPercentage: Double = 1.0
+  @Bindable private var unitPreferences = HealthUnitPreferences.shared
 
   private var effectiveAmountML: Double {
     container.volumeML * fillPercentage
@@ -25,6 +27,46 @@ struct DrinkAmountSelectionView: View {
 
   private var hydratedAmountML: Double {
     effectiveAmountML * drink.hydrationCoefficient
+  }
+  
+  // Unit conversion helpers
+  private var userLiquidUnit: HKUnit {
+    unitPreferences.liquidVolumeUnit
+  }
+  
+  private var effectiveAmountInUserUnit: Double {
+    let mlQuantity = HKQuantity(unit: .literUnit(with: .milli), doubleValue: effectiveAmountML)
+    return mlQuantity.doubleValue(for: userLiquidUnit)
+  }
+  
+  private var hydratedAmountInUserUnit: Double {
+    let mlQuantity = HKQuantity(unit: .literUnit(with: .milli), doubleValue: hydratedAmountML)
+    return mlQuantity.doubleValue(for: userLiquidUnit)
+  }
+  
+  private var userUnitString: String {
+    userLiquidUnit.sensibleUnitString
+  }
+  
+  private func formatAmount(_ amount: Double) -> String {
+    // Use appropriate precision based on unit
+    if userLiquidUnit == .literUnit(with: .milli) {
+      // mL - show as integer
+      return "\(Int(amount))"
+    } else if userLiquidUnit == .fluidOunceUS() {
+      // fl oz - show 1 decimal place for small amounts, integer for larger
+      if amount < 10 {
+        return String(format: "%.1f", amount)
+      } else {
+        return "\(Int(amount))"
+      }
+    } else if userLiquidUnit == .liter() {
+      // Liters - show 1-2 decimal places
+      return String(format: "%.1f", amount)
+    } else {
+      // Default - show 1 decimal place
+      return String(format: "%.1f", amount)
+    }
   }
 
   var body: some View {
@@ -63,11 +105,11 @@ struct DrinkAmountSelectionView: View {
     VStack(spacing: 4) {
       // Main amount
       HStack(alignment: .firstTextBaseline, spacing: 4) {
-        Text("\(Int(effectiveAmountML))")
+        Text(formatAmount(effectiveAmountInUserUnit))
           .font(.system(size: 48, weight: .heavy, design: .rounded))
           .foregroundStyle(drink.liquidColor)
 
-        Text("mL")
+        Text(userUnitString)
           .font(.title2)
           .fontWeight(.medium)
           .foregroundStyle(.secondary)
@@ -75,7 +117,7 @@ struct DrinkAmountSelectionView: View {
 
       // Hydration info for alcoholic drinks
       if drink.hydrationCoefficient < 1.0 {
-        Text("≈ \(Int(hydratedAmountML)) mL hydration")
+        Text("≈ \(formatAmount(hydratedAmountInUserUnit)) \(userUnitString) hydration")
           .font(.subheadline)
           .foregroundStyle(.secondary)
       }

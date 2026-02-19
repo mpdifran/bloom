@@ -1,5 +1,5 @@
 {
-  "originHash" : "655ed973aadc78606b2ba251ba76cce1bded1c909b3cac090626d9e847b77f81",
+  "originHash" : "3201e0ce72f1bc0bfb0882fd0f8600da82bd31726fb6321473a961c8407cbd37",
   "pins" : [
     {
       "identity" : "appfoundations",
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mpdifran/AppUI",
       "state" : {
-        "revision" : "5cf918eadbbcbe728ca922864b86c8daf29d74f1",
-        "version" : "1.1.0"
+        "revision" : "b0240228ffe0d2a0c834e3e26b5848d41638645a",
+        "version" : "2.0.3"
       }
     },
     {
@@ -78,8 +78,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SFSafeSymbols/SFSafeSymbols",
       "state" : {
-        "revision" : "3dd282d3269b061853a3b3bcd23a509d2aa166ce",
-        "version" : "6.2.0"
+        "revision" : "e01b3d4f861412f8dcee8d93c417d2c2b0cdfd77",
+        "version" : "7.0.0"
       }
     },
     {

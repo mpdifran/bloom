@@ -26,7 +26,7 @@ struct ContainerListView: View {
         ContainerCell(
           container: container,
           drinkColor: drink.liquidColor,
-          useMetric: unitProvider.useMetricVolume
+          liquidUnit: unitProvider.liquidVolumeUnit
         )
         .onTapGesture {
           Task { await save(container: container) }
@@ -53,7 +53,7 @@ struct ContainerListView: View {
 private struct ContainerCell: View {
   let container: ContainerSizeModel
   let drinkColor: Color
-  let useMetric: Bool
+  let liquidUnit: HKUnit
 
   var body: some View {
     HStack(spacing: 12) {
@@ -70,7 +70,7 @@ private struct ContainerCell: View {
           .font(.headline)
           .fontDesign(.rounded)
 
-        Text(container.displayValue(useMetric: useMetric))
+        Text(container.displayValue(unit: liquidUnit))
           .font(.caption)
           .foregroundStyle(.secondary)
       }
