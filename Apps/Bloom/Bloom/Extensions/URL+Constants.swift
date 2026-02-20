@@ -42,6 +42,12 @@ extension URL {
   }
 }
 
+// MARK: - App Store
+
+extension URL {
+  static let writeReview = URL(string: "https://apps.apple.com/app/id6739955926?action=write-review")!
+}
+
 // MARK: - Apple
 
 extension URL {

@@ -19,6 +19,7 @@ extension OnboardingRootView {
     case goalSetup
     case notifications
     case otherPermissions
+    case rating
     case login
     case finish
   }
@@ -89,6 +90,10 @@ struct OnboardingRootView: View {
         }
       case .otherPermissions:
         OnboardingCalendarWeatherView {
+          setStep(.rating)
+        }
+      case .rating:
+        OnboardingRatingView {
           setStep(.login)
         }
       case .login:

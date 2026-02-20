@@ -18,6 +18,7 @@ extension OnboardingRootViewTreatment {
     case goalSetup
     case notifications
     case otherPermissions
+    case rating
     case login
     case finish
 
@@ -29,12 +30,13 @@ extension OnboardingRootViewTreatment {
       case .personalDetails: return 4
       case .goalSetup: return 5
       case .notifications, .otherPermissions: return 6
-      case .login: return 7
+      case .rating: return 7
+      case .login: return 8
       case .finish: return nil
       }
     }
 
-    static let stepCount = 7
+    static let stepCount = 8
   }
 }
 
@@ -89,6 +91,10 @@ struct OnboardingRootViewTreatment: View {
         }
       case .otherPermissions:
         OnboardingCalendarWeatherView {
+          setStep(.rating)
+        }
+      case .rating:
+        OnboardingRatingView {
           setStep(.login)
         }
       case .login:
