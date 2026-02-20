@@ -111,14 +111,7 @@ private extension WorkoutCompletionObserver {
           subtitle = hours == 1 ? "You're now 1 hour younger!" : "You're now \(hours) hours younger!"
         }
       } else {
-        // Positive delta means they got older (rare, but possible)
-        if hoursChange >= 24 {
-          let days = Int(hoursChange / 24)
-          subtitle = "Your biological age increased by \(days) day\(days == 1 ? "" : "s")."
-        } else {
-          let hours = Int(hoursChange)
-          subtitle = "Your biological age increased by \(hours) hour\(hours == 1 ? "" : "s")."
-        }
+        subtitle = "Tap to see your workout analysis"
       }
     } else {
       // No significant change or couldn't calculate
