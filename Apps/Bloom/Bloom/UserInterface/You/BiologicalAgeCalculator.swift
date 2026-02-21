@@ -438,8 +438,8 @@ extension BiologicalAgeCalculator {
     let newActivityLevel = await calculateActivityLevelContribution(referenceDate: .now)?.weightedDelta ?? 0
 
     // Calculate the delta (improvements should result in negative values = younger)
-    let zoneMinutesDelta = previousZoneMinutes - newZoneMinutes
-    let activityLevelDelta = previousActivityLevel - newActivityLevel
+    let zoneMinutesDelta = newZoneMinutes - previousZoneMinutes
+    let activityLevelDelta = newActivityLevel - previousActivityLevel 
 
     let totalDelta = (zoneMinutesDelta + activityLevelDelta) * 0.3
 
