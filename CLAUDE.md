@@ -118,6 +118,13 @@ swift run   # Requires Redis: brew install redis && brew services start redis
 ### List View Development
 - Whenever you're building a cell in a list, use .cardContainer() to wrap it properly. You don't need to add padding, the view modifier will take care of that.
 
+## Release Notes
+
+When asked to generate or publish release notes, follow the process in `RELEASE_NOTES.md`. This covers:
+- Writing "What's New" text in Bud's voice
+- Publishing to App Store Connect via the `asc` CLI
+- The app ID, platform, and locale to use
+
 ## Documentation Guidelines
 
 When you discover new patterns, conventions, or important details about the codebase:
