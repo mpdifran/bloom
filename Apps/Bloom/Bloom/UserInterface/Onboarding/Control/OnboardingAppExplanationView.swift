@@ -37,11 +37,17 @@ struct OnboardingAppExplanationView: View {
           }
 
           if index >= 2 {
-            Text("You can ask me anything, and I'll answer using your personal data.")
+            Text("You can ask me about your health trends, and I’ll generate insights using your Apple Health data.")
               .font(.title3)
               .fixedSize(horizontal: false, vertical: true)
               .transition(.blurReplace)
               .foregroundStyle(.secondary)
+
+            Text("Bud is an AI-powered health assistant. Responses are AI-generated and not medical advice.")
+              .font(.subheadline)
+              .fixedSize(horizontal: false, vertical: true)
+              .transition(.blurReplace)
+              .foregroundStyle(.tertiary)
           }
         }
         .padding()

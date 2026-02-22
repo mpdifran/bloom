@@ -541,6 +541,10 @@ private extension SettingsView {
       Text("Bloom is not a substitute for professional medical advice. Always consult your physician first.")
         .foregroundStyle(.secondary)
         .multilineTextAlignment(.center)
+
+      Text("Bud is an AI-powered health assistant. Responses are AI-generated and not medical advice.")
+        .foregroundStyle(.secondary)
+        .multilineTextAlignment(.center)
     }
     .font(.caption)
     .bold()
