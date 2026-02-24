@@ -21,13 +21,14 @@ struct RootView: View {
   @State private var selectedTab: RootView.Tab = .bioAge
   @State private var hasInitialized = false
   @State private var presentedActionSheet: AnyView?
+  @State private var showBioAgeDetails = false
 
   var body: some View {
     NavigationStack {
       TabView(selection: $selectedTab) {
         TodayTabView()
           .tag(Tab.today)
-        BioAgeTabView()
+        BioAgeTabView(showDetails: $showBioAgeDetails)
           .tag(Tab.bioAge)
         WorkoutsTabView()
           .tag(Tab.workouts)
@@ -75,6 +76,9 @@ struct RootView: View {
         }
       }
       .sheet($presentedActionSheet)
+      .navigationDestination(isPresented: $showBioAgeDetails) {
+        BioAgeDetailsView()
+      }
     }
   }
 

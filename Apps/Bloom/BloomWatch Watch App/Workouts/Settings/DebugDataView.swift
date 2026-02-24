@@ -16,6 +16,7 @@ struct DebugDataView: View {
     List {
       mockBioAgeCell
       syncedDataCell
+      soundsCell
     }
     .listStyle(.carousel)
     .navigationTitle("Debug")
@@ -76,6 +77,32 @@ private extension DebugDataView {
     .selectable()
     .onTapGesture {
       presentedNavigationDestination = DebugSyncedDataView().asAny
+    }
+  }
+
+  var soundsCell: some View {
+    HStack(spacing: 10) {
+      Circle()
+        .fill(.orange.gradient)
+        .overlay {
+          Image(systemSymbol: .speakerWave2Fill)
+            .font(.system(size: 16))
+            .foregroundStyle(.black)
+        }
+        .frame(square: 35)
+
+      Text("Sounds")
+        .font(.caption)
+        .bold()
+        .fontDesign(.rounded)
+        .foregroundStyle(.white)
+
+      Spacer()
+    }
+    .padding(.vertical, 10)
+    .selectable()
+    .onTapGesture {
+      presentedNavigationDestination = DebugSoundsView().asAny
     }
   }
 }

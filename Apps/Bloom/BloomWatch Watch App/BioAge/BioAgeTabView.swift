@@ -13,7 +13,7 @@ import AppUI
 struct BioAgeTabView: View {
   @State private var provider = BiologicalAgeProvider.shared
   @State private var presentedSheet: AnyView?
-  @State private var showDetails = false
+  @Binding var showDetails: Bool
   @State private var resetController = NavigationResetController.shared
 
   var body: some View {
@@ -39,9 +39,6 @@ struct BioAgeTabView: View {
     .ignoresSafeArea()
     .navigationBarTitleDisplayMode(.inline)
     .sheet($presentedSheet)
-    .navigationDestination(isPresented: $showDetails) {
-      BioAgeDetailsView()
-    }
     .toolbar {
       ToolbarItem(placement: .topBarLeading) {
         Button {
@@ -89,7 +86,7 @@ private extension BioAgeTabView {
 #Preview {
   PreviewEnvironment {
     NavigationStack {
-      BioAgeTabView()
+      BioAgeTabView(showDetails: .constant(false))
     }
   }
 }

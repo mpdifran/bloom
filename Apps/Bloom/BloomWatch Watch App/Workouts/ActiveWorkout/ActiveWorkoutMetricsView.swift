@@ -52,6 +52,7 @@ struct ActiveWorkoutMetricsView: View {
       SoundPlayer.playWorkoutCountdown()
 
       // Visual countdown: 3 → 2 → 1 → 0 (GO!) → -1 (active content)
+      guard countdownIndex > 0 else { return }
       for i in (0...countdownIndex).reversed() {
         try? await Task.sleep(for: .seconds(1))
         countdownIndex = i - 1

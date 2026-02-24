@@ -18,10 +18,18 @@ enum SoundPlayer {
 
   /// Plays the Apple Watch workout countdown sound (3, 2, 1, GO!)
   /// This matches the native Apple Workout app countdown sound
-  static func playWorkoutCountdown(delay: TimeInterval = 0.3) {
-    guard let url = Bundle.main.url(forResource: "WorkoutCountdown_Haptic", withExtension: "caf") else { return }
-    guard let player = try? AVAudioPlayer(contentsOf: url) else { return }
+  static func playWorkoutCountdown() {
+    let audioSession = AVAudioSession.sharedInstance()
+    do {
+      try audioSession.setCategory(.playback, mode: .default, policy: .default, options: .mixWithOthers)
+      try audioSession.setActive(true)
+    } catch { return }
+
+    guard let url = Bundle.main.url(forResource: "WorkoutCountdown_Haptic", withExtension: "caf"),
+          let player = try? AVAudioPlayer(contentsOf: url) else { return }
+
     audioPlayer = player
-    player.play(atTime: player.deviceCurrentTime + delay)
+    player.prepareToPlay()
+    player.play()
   }
 }
