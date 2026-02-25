@@ -41,11 +41,11 @@ struct OnboardingGoalSetupView: View {
         BudImage(.budStrengthTraining)
 
         Group {
-          Text("Let's set some goals!")
+          Text("Let’s set goals that actually fit you.")
             .transition(.opacity)
             .appear(with: 1, currentIndex: index, secondaryIfNotCurrentIndex: false)
 
-          Text("Goals are a great way to help improve specific aspects of your health, and keep track of the progress.")
+          Text("We analyzed your personal data and suggested goals tailored to your habits, trends, and opportunities.")
             .font(.title3)
             .foregroundStyle(.secondary)
             .transition(.opacity)
