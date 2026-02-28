@@ -32,6 +32,19 @@ enum CelebrationKind: Equatable {
 
 extension CelebrationKind {
 
+  var achievementIdentifier: String {
+    switch self {
+    case .biologicalAge(let yearsYounger):
+      return "biologicalAge.\(yearsYounger)"
+    case .goalStreak(let metricName, let days):
+      return "goalStreak.\(metricName).\(days)"
+    case .zoneMinutes(let minutes):
+      return "zoneMinutes.\(minutes)"
+    case .perfectSleep:
+      return "perfectSleep"
+    }
+  }
+
   var title: String {
     switch self {
     case .biologicalAge(let yearsYounger):

@@ -85,6 +85,7 @@ struct CelebrationModalView: View {
     .presentationBackground(Color(uiColor: UIColor.secondarySystemBackground))
     .task {
       chartData = await loadChartData()
+      saveAchievement()
     }
     .sheet(isPresented: $isSharing) {
       if let url = renderShareImage() {
@@ -164,6 +165,17 @@ private extension CelebrationModalView {
 
   func shareImage() {
     isSharing = true
+  }
+
+  func saveAchievement() {
+    let view = CelebrationCardView(kind: kind, chartData: chartData)
+      .frame(width: UIScreen.main.bounds.width)
+
+    let renderer = ImageRenderer(content: view)
+    renderer.scale = 2.0
+
+    guard let image = renderer.uiImage else { return }
+    AchievementStore.shared.save(kind: kind, image: image)
   }
 
   @MainActor

@@ -122,20 +122,32 @@ struct TodayView: View {
       .toolbar {
         SettingsProfileViewToolbarButton()
 
-        ToolbarItem(placement: .cancellationAction) {
+        ToolbarItemGroup(placement: .topBarLeading) {
           Button {
             presentedSheet = TodaySettingsView().asAny
           } label: {
             if #available(iOS 26.0, *) {
               Image(systemSymbol: .sliderHorizontal3)
-                .bold()
             } else {
               Image(systemSymbol: .sliderHorizontal3)
                 .foregroundStyle(configureButtonTint)
-                .bold()
             }
           }
           .buttonStyle(.plain)
+          .bold()
+
+          Button {
+            presentedFullScreen = AchievementsView().asAny
+          } label: {
+            if #available(iOS 26.0, *) {
+              Image(systemSymbol: .trophy)
+            } else {
+              Image(systemSymbol: .trophy)
+                .foregroundStyle(configureButtonTint)
+            }
+          }
+          .buttonStyle(.plain)
+          .bold()
         }
       }
       .sheet($presentedSheet)
