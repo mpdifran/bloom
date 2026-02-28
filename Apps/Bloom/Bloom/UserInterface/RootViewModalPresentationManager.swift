@@ -13,6 +13,7 @@ extension RootViewModalPresentationManager {
   enum SheetKind {
     case privacyUnknownSheet([ConsentManager.ConsentType])
     case sale(SaleDetails, UIImage?)
+    case celebration(CelebrationKind)
   }
 }
 
@@ -35,6 +36,9 @@ extension RootViewModalPresentationManager {
     }
     if let (sale, image) = await SalesManager.shared.shouldShowSale() {
       return .sale(sale, image)
+    }
+    if let celebration = await CelebrationManager.shared.checkForCelebration() {
+      return .celebration(celebration)
     }
 
     return nil

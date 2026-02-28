@@ -18,6 +18,7 @@ private extension Int {
 extension String {
   static let nextRatingDate = "nextRatingDate"
   static let positiveEventCount = "positiveEventCount"
+  static let lastReviewPromptVersion = "lastReviewPromptVersion"
 }
 
 @MainActor
@@ -26,6 +27,7 @@ final class RatingPromptTracker {
 
   @Storage(key: .positiveEventCount, defaultValue: 0) var positiveEventCount: Int
   @Storage(key: .nextRatingDate, defaultValue: nil) var nextRatingDate: Date?
+  @Storage(key: .lastReviewPromptVersion, defaultValue: nil) var lastReviewPromptVersion: String?
 
   private let networkMonitor = NetworkMonitor()
 
@@ -38,6 +40,24 @@ extension RatingPromptTracker {
   func incrementEventCount() {
     guard canTrackRatingCount() else { return }
     positiveEventCount += 1
+  }
+
+  /// Returns `true` if the rating prompt should be shown after a celebration share.
+  /// Skips event counting but respects cooldown and version gating.
+  func shouldRequestReviewAfterCelebration() -> Bool {
+    guard canTrackRatingCount() else { return false }
+    guard networkMonitor.isNetworkReachable else { return false }
+
+    let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
+    guard currentVersion != lastReviewPromptVersion else { return false }
+
+    lastReviewPromptVersion = currentVersion
+    nextRatingDate = Calendar.current.date(byAdding: .month, value: .monthsOfPauseAfterShowingRatingPrompt, to: .now)
+    positiveEventCount = 0
+
+    TelemetryDeck.signal("Show App Rating Prompt", parameters: ["source": "celebration"])
+
+    return true
   }
 
   /// Returns `true` if the rating prompt should be shown to the user.

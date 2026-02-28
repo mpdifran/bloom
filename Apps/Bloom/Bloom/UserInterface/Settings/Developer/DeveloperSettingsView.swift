@@ -60,6 +60,9 @@ struct DeveloperSettingsView: View {
           healthActionsSection
           paywallSection
           salesSection
+          #if DEBUG
+          celebrationsSection
+          #endif
           migrationSection
           debugSection
           logsSection
@@ -673,6 +676,63 @@ extension DeveloperSettingsView {
 
   var salesSection: some View {
     SalesDebugView()
+  }
+
+  var celebrationsSection: some View {
+    VStack {
+      SectionTitleView("Celebrations")
+        .padding(.horizontal)
+
+      VStack(spacing: 12) {
+        Text("Select a celebration to show on next app foreground.")
+          .font(.caption)
+          .foregroundStyle(.secondary)
+
+        Picker("Celebration", selection: Binding<Int>(
+          get: { celebrationPickerIndex },
+          set: { setCelebrationOverride(index: $0) }
+        )) {
+          Text("None").tag(0)
+          Text("Biological Age").tag(1)
+          Text("Goal Streak").tag(2)
+          Text("Zone Minutes — 150").tag(3)
+          Text("Zone Minutes — 300").tag(4)
+          Text("Perfect Sleep").tag(5)
+        }
+        .pickerStyle(.menu)
+      }
+      .cardContainer()
+    }
+  }
+
+  private var celebrationPickerIndex: Int {
+    guard let override = CelebrationManager.shared.debugOverrideCelebration else { return 0 }
+    switch override {
+    case .biologicalAge: return 1
+    case .goalStreak: return 2
+    case .zoneMinutes(let minutes): return minutes >= 300 ? 4 : 3
+    case .perfectSleep: return 5
+    }
+  }
+
+  private func setCelebrationOverride(index: Int) {
+    switch index {
+    case 1:
+      CelebrationManager.shared.debugOverrideCelebration = .biologicalAge(yearsYounger: 3)
+    case 2:
+      CelebrationManager.shared.debugOverrideCelebration = .goalStreak(metricName: "Steps", days: 7)
+    case 3:
+      CelebrationManager.shared.debugOverrideCelebration = .zoneMinutes(minutes: 150)
+    case 4:
+      CelebrationManager.shared.debugOverrideCelebration = .zoneMinutes(minutes: 300)
+    case 5:
+      Task {
+        let realSleep = await HealthSleepObserver.shared.lastSleepAnalysis
+        CelebrationManager.shared.debugOverrideCelebration = .perfectSleep(realSleep ?? .previewData[0])
+      }
+    default:
+      CelebrationManager.shared.debugOverrideCelebration = nil
+    }
   }
 
   var migrationSection: some View {

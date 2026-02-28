@@ -65,9 +65,19 @@ private extension CGFloat {
 @MainActor
 struct AppleSleepStageChartView: View {
   let sleepAnalysis: SleepAnalysis
+  private let preloadedSegments: [AppleSleepSegment]?
 
   @State private var segments: [AppleSleepSegment] = []
   @State private var timeRange: ClosedRange<Date>?
+
+  init(sleepAnalysis: SleepAnalysis, segments: [AppleSleepSegment]? = nil) {
+    self.sleepAnalysis = sleepAnalysis
+    self.preloadedSegments = segments
+    if let segments, let first = segments.first, let last = segments.last {
+      self._segments = State(initialValue: segments)
+      self._timeRange = State(initialValue: first.startDate...last.endDate)
+    }
+  }
 
   var body: some View {
     VStack(spacing: 0) {
@@ -105,26 +115,32 @@ struct AppleSleepStageChartView: View {
 private extension AppleSleepStageChartView {
 
   func loadSegments() async {
-    let samples = await Task {
-      (try? await HealthStoreFetcher.shared.fetchSamples(
-        for: HKCategoryType(.sleepAnalysis),
-        dateRange: DateRange(sleepAnalysis.startDate, sleepAnalysis.endDate)
-      )) ?? []
-    }.value
+    let newSegments: [AppleSleepSegment]
 
-    let newSegments = samples.compactMap { sample -> AppleSleepSegment? in
-      guard
-        let categorySample = sample as? HKCategorySample,
-        let category = categorySample.sleepCategory,
-        let stage = AppleSleepStage(from: category)
-      else { return nil }
+    if let preloadedSegments {
+      newSegments = preloadedSegments
+    } else {
+      let samples = await Task {
+        (try? await HealthStoreFetcher.shared.fetchSamples(
+          for: HKCategoryType(.sleepAnalysis),
+          dateRange: DateRange(sleepAnalysis.startDate, sleepAnalysis.endDate)
+        )) ?? []
+      }.value
 
-      return AppleSleepSegment(
-        stage: stage,
-        startDate: sample.startDate,
-        endDate: sample.endDate
-      )
-    }.sorted { $0.startDate < $1.startDate }
+      newSegments = samples.compactMap { sample -> AppleSleepSegment? in
+        guard
+          let categorySample = sample as? HKCategorySample,
+          let category = categorySample.sleepCategory,
+          let stage = AppleSleepStage(from: category)
+        else { return nil }
+
+        return AppleSleepSegment(
+          stage: stage,
+          startDate: sample.startDate,
+          endDate: sample.endDate
+        )
+      }.sorted { $0.startDate < $1.startDate }
+    }
 
     await MainActor.run {
       self.segments = newSegments

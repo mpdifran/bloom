@@ -21,7 +21,7 @@ public final actor HealthSleepObserver {
 
   private let healthStore = HKHealthStore()
 
-  private var lastSleepAnalysis: SleepAnalysis?
+  public private(set) var lastSleepAnalysis: SleepAnalysis?
 
   private init() { }
 }

@@ -151,6 +151,8 @@ private extension RootView {
       presentedSheet = ExistingUserConsentContainerView(missingConsentTypes: missingConsentTypes).asAny
     case .sale(let saleDetails, let preloadedImage):
       presentedSheet = SaleModalView(sale: saleDetails, preloadedImage: preloadedImage).asAny
+    case .celebration(let kind):
+      presentedSheet = CelebrationModalView(kind: kind).asAny
     case nil:
       break
     }

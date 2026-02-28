@@ -14,12 +14,14 @@ struct NotificationSettingsView: View {
 
   @ObservedObject private var preferences = NotificationPreferences.shared
   @ObservedObject private var monitorPreferences = MonitorNotificationPreferences.shared
+  @ObservedObject private var celebrationPreferences = CelebrationPreferences.shared
 
   var body: some View {
     NavigationStack {
       BloomScrollView(showsChatBar: false) {
         workoutSection
         goalSection
+        celebrationSection
         monitorSection
       }
       .navigationTitle("Notifications")
@@ -81,6 +83,34 @@ struct NotificationSettingsView: View {
         Spacer()
 
         Toggle("", isOn: $preferences.goalAchievementsEnabled)
+          .labelsHidden()
+      }
+      .cardContainer()
+    }
+    .padding(.top, 16)
+  }
+
+  // MARK: - Celebration Section
+
+  private var celebrationSection: some View {
+    VStack {
+      SectionTitleView("Celebrations")
+        .padding(.horizontal)
+
+      HStack {
+        VStack(alignment: .leading, spacing: 2) {
+          Text("Milestone Celebrations")
+            .font(.body)
+            .fontWeight(.medium)
+
+          Text("Show celebration cards when you hit milestones")
+            .font(.caption)
+            .foregroundStyle(.secondary)
+        }
+
+        Spacer()
+
+        Toggle("", isOn: $celebrationPreferences.celebrationsEnabled)
           .labelsHidden()
       }
       .cardContainer()
