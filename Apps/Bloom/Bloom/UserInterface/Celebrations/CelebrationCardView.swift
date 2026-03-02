@@ -48,6 +48,7 @@ struct CelebrationCardView: View {
 
 enum CelebrationChartData {
   case bioAge([BiologicalAgeRecordDTO])
+  case goalStreak(habit: HabitDTO?, gridModel: GoalGridModel?)
   case zoneMinutes([ZoneMinutesDataPoint])
   case sleep([AppleSleepSegment])
 }
@@ -113,8 +114,13 @@ private extension CelebrationCardView {
       )
       .frame(height: 180)
     case .goalStreak(let metricName, let days):
-      GoalStreakChartCard(metricName: metricName, days: days)
-        .padding(.vertical)
+      if case .goalStreak(let habit, let gridModel) = chartData {
+        GoalStreakChartCard(metricName: metricName, days: days, habit: habit, gridModel: gridModel)
+          .padding(.vertical)
+      } else {
+        GoalStreakChartCard(metricName: metricName, days: days)
+          .padding(.vertical)
+      }
     case .zoneMinutes:
       if case .zoneMinutes(let data) = chartData {
         ZoneMinutesChartCard(zoneData: data)
@@ -154,6 +160,13 @@ struct GoalStreakChartCard: View {
 
   private var useWeeklyGrid: Bool { days >= 30 }
 
+  init(metricName: String, days: Int, habit: HabitDTO? = nil, gridModel: GoalGridModel? = nil) {
+    self.metricName = metricName
+    self.days = days
+    self._habit = State(initialValue: habit)
+    self._gridModel = State(initialValue: gridModel)
+  }
+
   var body: some View {
     Group {
       if useWeeklyGrid, let gridModel {
@@ -174,6 +187,7 @@ struct GoalStreakChartCard: View {
     }
     .tint(habit?.targetMetric.color ?? .accentColor)
     .task {
+      guard self.habit == nil else { return }
       await loadData()
     }
   }
@@ -189,11 +203,20 @@ struct GoalStreakChartCard: View {
     }
 
     if useWeeklyGrid {
-      gridModel = buildGridModel(startDate: startDate, endDate: endDate, calendar: calendar)
+      gridModel = Self.buildGridModel(days: days)
     }
   }
 
-  private func buildGridModel(
+  static func buildGridModel(days: Int) -> GoalGridModel {
+    let calendar = Calendar.current
+    let endDate = calendar.startOfDay(for: Date())
+    guard let startDate = calendar.date(byAdding: .day, value: -days, to: endDate) else {
+      return GoalGridModel(weeks: [])
+    }
+    return buildGridModel(startDate: startDate, endDate: endDate, calendar: calendar)
+  }
+
+  private static func buildGridModel(
     startDate: Date,
     endDate: Date,
     calendar: Calendar

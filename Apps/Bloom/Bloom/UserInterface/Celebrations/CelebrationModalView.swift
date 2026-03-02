@@ -129,8 +129,13 @@ private extension CelebrationModalView {
       )
       .frame(height: 180)
     case .goalStreak(let metricName, let days):
-      GoalStreakChartCard(metricName: metricName, days: days)
-        .padding(.vertical)
+      if case .goalStreak(let habit, let gridModel) = chartData {
+        GoalStreakChartCard(metricName: metricName, days: days, habit: habit, gridModel: gridModel)
+          .padding(.vertical)
+      } else {
+        GoalStreakChartCard(metricName: metricName, days: days)
+          .padding(.vertical)
+      }
     case .zoneMinutes:
       if case .zoneMinutes(let data) = chartData {
         ZoneMinutesChartCard(zoneData: data)
@@ -213,8 +218,16 @@ private extension CelebrationModalView {
         return AppleSleepSegment(stage: stage, startDate: sample.startDate, endDate: sample.endDate)
       }.sorted { $0.startDate < $1.startDate }
       return .sleep(segments)
-    case .goalStreak:
-      return nil
+    case .goalStreak(let metricName, let days):
+      let modelActor = HabitModelActor.standard()
+      let activeHabits = (try? await modelActor.fetchActiveHabits()) ?? []
+      let habit = activeHabits.first(where: { $0.targetMetric.name == metricName })
+
+      var gridModel: GoalGridModel?
+      if days >= 30 {
+        gridModel = GoalStreakChartCard.buildGridModel(days: days)
+      }
+      return .goalStreak(habit: habit, gridModel: gridModel)
     }
   }
 
