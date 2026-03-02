@@ -11,6 +11,7 @@ import BloomUI
 import BloomFoundation
 import CoreHealth
 import DataContainer
+import TelemetryDeck
 @preconcurrency import HealthKit
 
 struct CelebrationModalView: View {
@@ -84,6 +85,7 @@ struct CelebrationModalView: View {
     }
     .presentationBackground(Color(uiColor: UIColor.secondarySystemBackground))
     .task {
+      TelemetryDeck.signal("View Celebration", parameters: ["kind": kind.telemetryName])
       chartData = await loadChartData()
       saveAchievement()
     }
@@ -94,6 +96,7 @@ struct CelebrationModalView: View {
           "\(kind.shareMessage())"
         ]) { completed in
           guard completed else { return }
+          TelemetryDeck.signal("Share Celebration", parameters: ["kind": kind.telemetryName])
           if RatingPromptTracker.shared.shouldRequestReviewAfterCelebration() {
             requestReview()
           }

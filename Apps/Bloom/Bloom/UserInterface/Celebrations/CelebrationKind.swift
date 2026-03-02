@@ -32,6 +32,15 @@ enum CelebrationKind: Equatable {
 
 extension CelebrationKind {
 
+  var telemetryName: String {
+    switch self {
+    case .biologicalAge: "biologicalAge"
+    case .goalStreak(let metricName, let days): "goalStreak.\(metricName).\(days)days"
+    case .zoneMinutes(let minutes): "zoneMinutes.\(minutes)"
+    case .perfectSleep: "perfectSleep"
+    }
+  }
+
   var achievementIdentifier: String {
     switch self {
     case .biologicalAge(let yearsYounger):
