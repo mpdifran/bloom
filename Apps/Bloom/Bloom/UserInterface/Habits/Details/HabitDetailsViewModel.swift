@@ -102,12 +102,7 @@ private extension HabitDetailsView.ViewModel {
 extension HabitDetailsView.ViewModel {
 
   func sampleMeetsGoal(_ sample: DateQuantitySample) -> Bool {
-    let oldestHabit = habitHistory.min(by: { $0.startDate < $1.startDate })
-    let matchingHabit = habitHistory.first(where: { $0.isDateWithinHabit(date: sample.date) })
-
-    guard let habit = matchingHabit ?? oldestHabit else { return false }
-
-    return habit.quantityMeetsGoal(sample.quantity)
+    habitHistory.habit(for: sample.date)?.quantityMeetsGoal(sample.quantity) ?? false
   }
 
   func habitUnit() -> HKUnit {
@@ -234,21 +229,11 @@ extension HabitDetailsView.ViewModel {
       return
     }
 
-    let oldestHabit = habitHistory.first
-
     var weeks = await weekQuantitySamples.map { weekSamples in
       let todayIndex = weekSamples.samples.firstIndex(where: { Calendar.current.isDateInToday($0.date) })
 
       let isCompleteArray = weekSamples.samples.map { sample in
-        let referenceHabit: HabitDTO
-        if let habit = habitHistory.first(where: { $0.isDateWithinHabit(date: sample.date) }) {
-          referenceHabit = habit
-        } else if let oldestHabit, sample.date < oldestHabit.startDate {
-          referenceHabit = oldestHabit
-        } else {
-          return false
-        }
-        return referenceHabit.quantityMeetsGoal(sample.quantity)
+        habitHistory.habit(for: sample.date)?.quantityMeetsGoal(sample.quantity) ?? false
       }
 
       return GoalGridModel.Week(
@@ -290,30 +275,19 @@ extension HabitDetailsView.ViewModel {
       return
     }
     
-    let oldestHabit = habitHistory.first
     let calendar = Calendar.current
-    
+
     var weeks = await weekQuantitySamples.map { weekSamples in
       // Check if this is the current week
       let isCurrentWeek = weekSamples.samples.contains { calendar.isDateInToday($0.date) }
-      
+
       // Calculate total for the week
       let weekTotal = weekSamples.samples.reduce(0) { total, sample in
         total + sample.quantity.doubleValue(for: unit)
       }
       let weekQuantity = HKQuantity(unit: unit, doubleValue: weekTotal)
-      
-      // Find the matching habit for this week and check if goal was met
-      let referenceHabit: HabitDTO?
-      if let habit = habitHistory.first(where: { $0.isDateWithinHabit(date: weekSamples.referenceDate) }) {
-        referenceHabit = habit
-      } else if let oldestHabit, weekSamples.referenceDate < oldestHabit.startDate {
-        referenceHabit = oldestHabit
-      } else {
-        referenceHabit = nil
-      }
-      
-      let isComplete = referenceHabit?.quantityMeetsGoal(weekQuantity) ?? false
+
+      let isComplete = habitHistory.habit(for: weekSamples.referenceDate)?.quantityMeetsGoal(weekQuantity) ?? false
       
       // Check if this week contains the 1st of a month
       var monthLabel: String? = nil
@@ -374,46 +348,35 @@ extension HabitDetailsView.ViewModel {
       return
     }
     
-    let oldestHabit = habitHistory.first
     let calendar = Calendar.current
-    
+
     // Group daily samples by month
     let allSamples = await weekQuantitySamples.flatMap { $0.samples }
     let monthlyGroupedSamples = Dictionary(grouping: allSamples) { sample in
       calendar.dateInterval(of: .month, for: sample.date)?.start ?? sample.date
     }
-    
+
     // Create month samples with IDs
     let currentMonth = calendar.dateInterval(of: .month, for: .now)?.start ?? .now
     var monthSamples: [(id: Int, referenceDate: Date, samples: [DateQuantitySample])] = []
-    
+
     for (monthStart, samples) in monthlyGroupedSamples.sorted(by: { $0.key < $1.key }) {
       let monthsFromCurrent = calendar.dateComponents([.month], from: monthStart, to: currentMonth).month ?? 0
       let id = monthsFromCurrent
       monthSamples.append((id: id, referenceDate: monthStart, samples: samples))
     }
-    
+
     var months = monthSamples.map { monthSample in
       // Check if this is the current month
       let isCurrentMonth = calendar.isDate(monthSample.referenceDate, equalTo: .now, toGranularity: .month)
-      
+
       // Calculate total for the month
       let monthTotal = monthSample.samples.reduce(0) { total, sample in
         total + sample.quantity.doubleValue(for: unit)
       }
       let monthQuantity = HKQuantity(unit: unit, doubleValue: monthTotal)
-      
-      // Find the matching habit for this month and check if goal was met
-      let referenceHabit: HabitDTO?
-      if let habit = habitHistory.first(where: { $0.isDateWithinHabit(date: monthSample.referenceDate) }) {
-        referenceHabit = habit
-      } else if let oldestHabit, monthSample.referenceDate < oldestHabit.startDate {
-        referenceHabit = oldestHabit
-      } else {
-        referenceHabit = nil
-      }
-      
-      let isComplete = referenceHabit?.quantityMeetsGoal(monthQuantity) ?? false
+
+      let isComplete = habitHistory.habit(for: monthSample.referenceDate)?.quantityMeetsGoal(monthQuantity) ?? false
       
       // Generate month label
       let formatter = DateFormatter()
@@ -468,43 +431,15 @@ extension HabitDetailsView.ViewModel {
       return
     }
     
-    let oldestHabit = habitHistory.first
     let calendar = Calendar.current
     let currentYear = calendar.component(.year, from: .now)
     let yearlySamples = await yearlyQuantitySamples
-    
+
     var years = yearlySamples.map { yearSample in
       // Check if this is the current year
       let isCurrentYear = yearSample.year == currentYear
-      
-      // Find the matching habit for this year and check if goal was met
-      let referenceHabit: HabitDTO?
-      
-      // First try to find active habits (no end date) that started in or before this year
-      let activeHabits = habitHistory.filter { habit in
-        let habitStartYear = calendar.component(.year, from: habit.startDate)
-        return habit.endDate == nil && habitStartYear <= yearSample.year
-      }
-      
-      if let latestActiveHabit = activeHabits.max(by: { $0.startDate < $1.startDate }) {
-        referenceHabit = latestActiveHabit
-      } else {
-        // No active habits, find habits that started in the matching year
-        let yearHabits = habitHistory.filter { habit in
-          let habitStartYear = calendar.component(.year, from: habit.startDate)
-          return habitStartYear == yearSample.year
-        }
-        
-        if let latestYearHabit = yearHabits.max(by: { $0.startDate < $1.startDate }) {
-          referenceHabit = latestYearHabit
-        } else if let oldestHabit, yearSample.referenceDate < oldestHabit.startDate {
-          referenceHabit = oldestHabit
-        } else {
-          referenceHabit = nil
-        }
-      }
-      
-      let isComplete = referenceHabit?.quantityMeetsGoal(yearSample.total) ?? false
+
+      let isComplete = habitHistory.habit(for: yearSample.referenceDate)?.quantityMeetsGoal(yearSample.total) ?? false
       
       // Generate year label
       let yearLabel = String(yearSample.year)

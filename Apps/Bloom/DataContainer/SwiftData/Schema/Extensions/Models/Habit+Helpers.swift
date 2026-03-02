@@ -95,6 +95,21 @@ public extension Habit {
   }
 }
 
+public extension Array where Element == Habit {
+
+  /// Finds the habit that was active on the given date, falling back to the oldest habit
+  /// for dates before any habit existed. Assumes the array is sorted by startDate.
+  func habit(for date: Date) -> Habit? {
+    if let match = first(where: { $0.isDateWithinHabit(date: date) }) {
+      return match
+    }
+    if let oldest = first, date < oldest.startDate {
+      return oldest
+    }
+    return nil
+  }
+}
+
 public extension Habit {
 
   func isDateWithinHabit(date: Date) -> Bool {

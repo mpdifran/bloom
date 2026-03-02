@@ -27,16 +27,20 @@ extension GoalStreakCalculator {
   func calculateStreak(for habit: HabitDTO) async -> Int {
     guard habit.timePeriod == .daily else { return 0 }
 
+    let habitHistory = (try? await modelActor.fetchHabits(for: habit.targetMetric)) ?? []
+
     let calendar = Calendar.current
     var streakCount = 0
     var currentDate = DateRange.yesterday().start
 
     // Check up to 365 days back, starting from yesterday
     for _ in 0..<365 {
+      guard let referenceHabit = habitHistory.habit(for: currentDate) else { break }
+
       let dateRange = DateRange.duringDay(currentDate)
       let quantity = await habit.targetMetric.fetchTotalQuantity(for: dateRange)
 
-      if habit.quantityMeetsGoal(quantity) {
+      if referenceHabit.quantityMeetsGoal(quantity) {
         streakCount += 1
       } else {
         break
