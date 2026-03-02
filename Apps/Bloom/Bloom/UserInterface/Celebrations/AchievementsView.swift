@@ -8,6 +8,7 @@
 import SwiftUI
 import AppUI
 import BloomUI
+import TelemetryDeck
 
 struct AchievementsView: View {
 
@@ -65,7 +66,10 @@ struct AchievementsView: View {
         set: { if !$0 { sharingRecord = nil } }
       )) {
         if let record = sharingRecord, let url = store.imageURL(for: record) {
-          ShareSheet(items: [url, record.shareMessage])
+          ShareSheet(items: [url, record.shareMessage]) { completed in
+            guard completed else { return }
+            TelemetryDeck.signal("Share Achievement", parameters: ["kind": record.kindIdentifier])
+          }
         }
       }
     }
