@@ -89,24 +89,7 @@ private extension AchievementsView {
     Button {
       sharingRecord = record
     } label: {
-      VStack(spacing: 8) {
-        if let url = store.imageURL(for: record) {
-          AsyncImage(url: url) { image in
-            image
-              .resizable()
-              .scaledToFit()
-          } placeholder: {
-            RoundedRectangle(cornerRadius: 12)
-              .fill(.quaternary)
-              .aspectRatio(0.7, contentMode: .fit)
-          }
-          .clipShape(RoundedRectangle(cornerRadius: 12))
-        }
-
-        Text(record.dateAchieved.formatted(.dateTime.month(.abbreviated).day().year()))
-          .font(.caption)
-          .foregroundStyle(.secondary)
-      }
+      AchievementCell(record: record, imageURL: store.imageURL(for: record))
     }
     .buttonStyle(.plain)
   }
