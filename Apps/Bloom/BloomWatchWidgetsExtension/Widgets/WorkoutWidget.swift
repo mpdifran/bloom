@@ -60,6 +60,7 @@ struct WorkoutWidgetView: View {
       Image(systemName: "figure.run")
         .font(.system(size: family == .accessoryCorner ? 20 : 30))
         .foregroundStyle(.blue.gradient)
+        .widgetAccentable()
     }
   }
 }

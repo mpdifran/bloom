@@ -159,6 +159,7 @@ private struct CircularHeartRateView: View {
       }
       .gaugeStyle(.accessoryCircular)
       .tint(gradient)
+      .widgetAccentable()
     } else {
       Gauge(value: 0) {
         Image(systemName: "heart.fill")
@@ -167,6 +168,7 @@ private struct CircularHeartRateView: View {
       }
       .gaugeStyle(.accessoryCircular)
       .tint(gradient)
+      .widgetAccentable()
     }
   }
 }
@@ -195,6 +197,7 @@ private struct CornerHeartRateView: View {
           .lineLimit(1)
           .minimumScaleFactor(0.5)
       }
+      .widgetAccentable()
       .widgetLabel {
         Gauge(value: Double(latest), in: Double(minHR)...Double(maxHR)) {
           Image(systemName: "heart.fill")

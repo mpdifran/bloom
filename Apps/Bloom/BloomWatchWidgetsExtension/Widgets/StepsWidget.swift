@@ -197,6 +197,7 @@ private struct CircularStepsView: View {
         Text(formatStepsCompact(steps))
           .font(.system(.body, design: .rounded, weight: .bold))
           .foregroundStyle(.mutedYellow)
+          .widgetAccentable()
           .lineLimit(1)
           .minimumScaleFactor(0.5)
       } else {
@@ -294,6 +295,7 @@ private struct RectangularStepsView: View {
           }
           .font(.system(.headline, design: .rounded, weight: .bold))
           .foregroundStyle(.mutedYellow)
+          .widgetAccentable()
           .lineLimit(1)
           .minimumScaleFactor(0.5)
 

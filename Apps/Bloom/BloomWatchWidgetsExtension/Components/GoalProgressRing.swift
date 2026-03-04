@@ -7,6 +7,7 @@
 
 import BloomFoundation
 import SwiftUI
+import WidgetKit
 
 /// Circular progress ring for goal widgets with SF Symbol icon in center.
 struct GoalProgressRing: View {
@@ -36,6 +37,7 @@ struct GoalProgressRing: View {
         Circle()
           .trim(from: 0, to: clampedProgress)
           .stroke(tintColor, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
+          .widgetAccentable()
           .rotationEffect(.degrees(-90))
           .frame(width: circleSize, height: circleSize)
 
@@ -43,6 +45,7 @@ struct GoalProgressRing: View {
         Image(systemName: systemImage)
           .font(.system(size: iconSize, weight: .medium))
           .foregroundStyle(tintColor)
+          .widgetAccentable()
       }
       .frame(width: size, height: size)
       .frame(width: geometry.size.width, height: geometry.size.height)

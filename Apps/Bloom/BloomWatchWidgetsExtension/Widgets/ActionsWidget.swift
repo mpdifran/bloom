@@ -118,11 +118,13 @@ struct ActionsWidgetView: View {
         .frame(width: 20)
         .fontWeight(.medium)
         .foregroundStyle(entry.actionColor)
+        .widgetAccentable()
     } else {
       Image(systemName: "plus")
         .font(.system(size: isCorner ? 22 : 30))
         .bold()
         .foregroundStyle(.blue)
+        .widgetAccentable()
     }
   }
 

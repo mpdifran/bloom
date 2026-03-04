@@ -221,6 +221,7 @@ private struct RectangularReminderView: View {
     HStack(spacing: 8) {
       Circle()
         .stroke(entry.reminderColor, lineWidth: 2)
+        .widgetAccentable()
         .frame(width: 20, height: 20)
 
       VStack(alignment: .leading, spacing: 2) {

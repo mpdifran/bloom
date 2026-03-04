@@ -134,6 +134,7 @@ private struct RectangularView: View {
                 .font(.system(.caption2, design: .rounded, weight: .semibold))
             }
             .foregroundStyle(entry.isYounger ? Color.mutedGreen : Color.mutedPink)
+            .widgetAccentable()
           }
         }
 

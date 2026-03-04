@@ -285,6 +285,7 @@ private struct RectangularGoalView: View {
         VStack(alignment: .leading) {
           Image(systemName: entry.metricSystemImage)
             .foregroundStyle(entry.metricColor)
+            .widgetAccentable()
           Text(entry.metricName)
         }
         .font(.caption2)
@@ -300,6 +301,7 @@ private struct RectangularGoalView: View {
           .lineLimit(1)
           .minimumScaleFactor(0.5)
           .foregroundStyle(entry.metricColor)
+          .widgetAccentable()
       }
 
       Spacer(minLength: 0)
@@ -308,6 +310,7 @@ private struct RectangularGoalView: View {
         Gauge(value: entry.progress) { }
           .gaugeStyle(.linearCapacity)
           .tint(entry.metricColor)
+          .widgetAccentable()
 
         Text(entry.targetValue.format(using: .noDecimalPlaces))
           .font(.caption2)
@@ -326,6 +329,7 @@ private struct CornerGoalView: View {
     Image(systemName: entry.metricSystemImage)
       .font(.system(size: 25))
       .foregroundStyle(entry.metricColor)
+      .widgetAccentable()
       .widgetLabel {
         ProgressView(value: entry.progress) {
           Text(entry.currentValue.format(using: .noDecimalPlaces))
