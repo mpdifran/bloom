@@ -21,9 +21,7 @@ final class CelebrationManager {
 
   private let defaults = UserDefaults.standard
 
-  #if DEBUG
   var debugOverrideCelebration: CelebrationKind?
-  #endif
 
   private init() { }
 }
@@ -35,12 +33,10 @@ extension CelebrationManager {
   /// Checks for a celebration to present, returning the highest-priority uncelebrated milestone.
   /// Priority: bio age > goal streak > zone minutes > sleep.
   func checkForCelebration() async -> CelebrationKind? {
-    #if DEBUG
     if let override = debugOverrideCelebration {
       debugOverrideCelebration = nil
       return override
     }
-    #endif
 
     guard CelebrationPreferences.shared.celebrationsEnabled else { return nil }
 
