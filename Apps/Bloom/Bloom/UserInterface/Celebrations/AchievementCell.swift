@@ -20,33 +20,40 @@ struct AchievementCell: View {
             .resizable()
             .scaledToFit()
         } placeholder: {
-          RoundedRectangle(cornerRadius: 12)
-            .fill(.quaternary)
+          Rectangle()
+            .fill(.fill)
             .aspectRatio(0.7, contentMode: .fit)
         }
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+      } else {
+        Rectangle()
+          .fill(.fill)
+          .aspectRatio(0.7, contentMode: .fit)
       }
 
       Spacer(minLength: 0)
 
-      Text(record.title)
-        .font(.subheadline)
-        .bold()
-        .fontDesign(.rounded)
-        .lineLimit(2)
-        .multilineTextAlignment(.center)
+      VStack(spacing: 10) {
+        Text(record.title)
+          .font(.subheadline)
+          .bold()
+          .fontDesign(.rounded)
+          .lineLimit(2)
+          .multilineTextAlignment(.center)
 
-      HStack(spacing: 6) {
-        Image(systemName: "laurel.leading")
-        Text(record.dateAchieved.formatted(.dateTime.month(.abbreviated).day().year()))
-        Image(systemName: "laurel.trailing")
+        HStack(spacing: 6) {
+          Image(systemName: "laurel.leading")
+          Text(record.dateAchieved.formatted(.dateTime.month(.abbreviated).day().year()))
+          Image(systemName: "laurel.trailing")
+        }
+        .font(.caption)
+        .fontWeight(.bold)
+        .fontDesign(.rounded)
+        .foregroundStyle(.secondary)
       }
-      .font(.caption)
-      .fontWeight(.bold)
-      .fontDesign(.rounded)
-      .foregroundStyle(.secondary)
+      .padding(.horizontal)
+      .padding(.bottom)
     }
-    .cardContainer()
+    .cardContainer(includePadding: false)
   }
 }
 
@@ -60,7 +67,7 @@ struct AchievementCell: View {
           id: UUID(),
           dateAchieved: Date(),
           kindIdentifier: "biologicalAge.3",
-          title: "3 Years Younger!",
+          title: "3 Years Younger and You're More Healthy!",
           shareMessage: "My biological age is 3 years younger!",
           imageFileName: "test.jpg"
         ),
