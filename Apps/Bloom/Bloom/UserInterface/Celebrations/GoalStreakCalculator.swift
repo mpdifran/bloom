@@ -31,9 +31,9 @@ extension GoalStreakCalculator {
 
     let calendar = Calendar.current
     var streakCount = 0
-    var currentDate = DateRange.yesterday().start
+    var currentDate = DateRange.today().start
 
-    // Check up to 365 days back, starting from yesterday
+    // Check up to 365 days back, starting from today
     for _ in 0..<365 {
       guard let referenceHabit = habitHistory.habit(for: currentDate) else { break }
 
