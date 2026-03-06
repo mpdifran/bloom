@@ -108,8 +108,9 @@ private extension MonitorWelcomeView {
   }
 
   func runBarLoop() async {
-    while true {
+    while !Task.isCancelled {
       await Delay(3000)
+      guard !Task.isCancelled else { break }
       stateIndex = (stateIndex + 1) % barStates.count
       let state = barStates[stateIndex]
       minZScore = state.min
