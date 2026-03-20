@@ -265,10 +265,12 @@ public extension DailyMetricSampleModelActor {
   ) throws -> MonitorSummaryBarData? {
     let calendar = Calendar.current
     let today = calendar.startOfDay(for: date)
+    // Include yesterday to capture bedtime samples stored under the previous day
+    guard let yesterday = calendar.date(byAdding: .day, value: -1, to: today) else { return nil }
 
     let descriptor = FetchDescriptor<DailyMetricSample>(
       predicate: #Predicate<DailyMetricSample> { sample in
-        sample.date == today
+        sample.date >= yesterday && sample.date <= today
       },
       sortBy: [SortDescriptor(\DailyMetricSample.date, order: .reverse)]
     )
@@ -278,20 +280,28 @@ public extension DailyMetricSampleModelActor {
 
     guard !allSamples.isEmpty else { return nil }
 
-    // Collect all z-scores (non-nil) for today's range
-    let allZScores = allSamples.compactMap { $0.zScore }
+    // Pick the latest sample per metric type (since the wider window may include older samples)
+    var latestByMetric: [String: DailyMetricSample] = [:]
+    for sample in allSamples {
+      if latestByMetric[sample.metricType] == nil {
+        // allSamples is sorted by date descending, so first match is latest
+        latestByMetric[sample.metricType] = sample
+      }
+    }
+    let dedupedSamples = Array(latestByMetric.values)
+
+    // Collect all z-scores (non-nil) for the range
+    let allZScores = dedupedSamples.compactMap { $0.zScore }
     guard !allZScores.isEmpty else { return nil }
 
     let minZScore = allZScores.min() ?? 0
     let maxZScore = allZScores.max() ?? 0
 
-    // Get today's z-score for each metric
+    // Get the latest z-score for each metric
     var metricZScores: [MetricZScorePoint] = []
     for metricType in metricTypes {
-      if let todaySample = allSamples.first(where: {
-        $0.metricType == metricType && calendar.isDate($0.date, inSameDayAs: date)
-      }),
-         let zScore = todaySample.zScore {
+      if let sample = latestByMetric[metricType],
+         let zScore = sample.zScore {
         metricZScores.append(MetricZScorePoint(metricType: metricType, zScore: zScore))
       }
     }

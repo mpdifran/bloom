@@ -215,17 +215,21 @@ actor MonitorCalculator {
     }
 
     // Bedtime (minutes from midnight, adjusted for overnight)
+    // Use the actual date from sleep.startDate (typically the previous evening)
     let bedtimeMinutes = minutesFromMidnight(sleep.startDate)
+    let bedtimeDate = Calendar.current.startOfDay(for: sleep.startDate)
     results.append(DailyMetricSampleInput(
-      date: date,
+      date: bedtimeDate,
       metricType: MonitorMetricType.bedtime.rawValue,
       value: bedtimeMinutes
     ))
 
     // Wake Time (minutes from midnight)
+    // Use the actual date from sleep.endDate
     let wakeMinutes = minutesFromMidnight(sleep.endDate)
+    let wakeDate = Calendar.current.startOfDay(for: sleep.endDate)
     results.append(DailyMetricSampleInput(
-      date: date,
+      date: wakeDate,
       metricType: MonitorMetricType.wakeTime.rawValue,
       value: wakeMinutes
     ))
