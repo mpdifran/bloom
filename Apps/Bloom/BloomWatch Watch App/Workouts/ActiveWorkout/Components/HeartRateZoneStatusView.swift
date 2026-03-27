@@ -24,6 +24,8 @@ struct HeartRateZoneStatusView: View {
   let heartRate: Double
   let zones: HeartRateZones?
 
+  @Environment(\.isLuminanceReduced) private var isLuminanceReduced
+
   var body: some View {
     VStack {
       if currentZone > 0 {
@@ -103,9 +105,9 @@ private extension HeartRateZoneStatusView {
 
   var heartRateView: some View {
     HStack {
-      TimelineView(.periodic(from: .now, by: 0.05)) { timeline in
+      TimelineView(isLuminanceReduced ? .explicit([]) : .periodic(from: .now, by: 0.05)) { timeline in
         let phase = timeline.date.timeIntervalSince1970.truncatingRemainder(dividingBy: beatInterval)
-        let isBeat = phase < beatInterval * 0.15
+        let isBeat = !isLuminanceReduced && phase < beatInterval * 0.15
 
         Image(systemSymbol: .heartFill)
           .font(.caption2)
