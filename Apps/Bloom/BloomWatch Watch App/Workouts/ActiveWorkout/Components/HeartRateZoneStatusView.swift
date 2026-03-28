@@ -105,15 +105,21 @@ private extension HeartRateZoneStatusView {
 
   var heartRateView: some View {
     HStack {
-      TimelineView(isLuminanceReduced ? .explicit([]) : .periodic(from: .now, by: 0.05)) { timeline in
-        let phase = timeline.date.timeIntervalSince1970.truncatingRemainder(dividingBy: beatInterval)
-        let isBeat = !isLuminanceReduced && phase < beatInterval * 0.15
-
+      if isLuminanceReduced {
         Image(systemSymbol: .heartFill)
           .font(.caption2)
           .foregroundStyle(heartIconColor)
-          .scaleEffect(isBeat ? 1.5 : 1.0)
-          .animation(.linear(duration: beatInterval / 2), value: isBeat)
+      } else {
+        TimelineView(PeriodicTimelineSchedule(from: .now, by: 0.05)) { timeline in
+          let phase = timeline.date.timeIntervalSince1970.truncatingRemainder(dividingBy: beatInterval)
+          let isBeat = phase < beatInterval * 0.15
+
+          Image(systemSymbol: .heartFill)
+            .font(.caption2)
+            .foregroundStyle(heartIconColor)
+            .scaleEffect(isBeat ? 1.5 : 1.0)
+            .animation(.linear(duration: beatInterval / 2), value: isBeat)
+        }
       }
 
       HStack(alignment: .firstTextBaseline) {
