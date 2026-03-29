@@ -155,10 +155,7 @@ actor MonitorCalculator {
 
   private func fetchRespiratoryRate(for date: Date) async -> DailyMetricSampleInput? {
     // Respiratory rate is also collected during sleep
-    let dateRange = DateRange.duringDay(date)
-    let sleepAnalyses = await healthStoreFetcher.fetchSleepAnalysis(dateRange: dateRange)
-
-    guard let sleepAnalysis = sleepAnalyses.first else { return nil }
+    guard let sleepAnalysis = await healthStoreFetcher.fetchSleepAnalysis(for: date) else { return nil }
 
     let avgRespiratoryRate = sleepAnalysis.respiratoryRate.average(keyPath: \.averageRespiratoryRate)
     guard avgRespiratoryRate > 0 else { return nil }
@@ -174,10 +171,7 @@ actor MonitorCalculator {
     var results: [DailyMetricSampleInput] = []
 
     // Sleep data for "today" is actually last night's sleep ending today
-    let dateRange = DateRange.duringDay(date)
-    let sleepAnalyses = await healthStoreFetcher.fetchSleepAnalysis(dateRange: dateRange)
-
-    guard let sleep = sleepAnalyses.first else { return results }
+    guard let sleep = await healthStoreFetcher.fetchSleepAnalysis(for: date) else { return results }
 
     // Sleep Duration
     results.append(DailyMetricSampleInput(
