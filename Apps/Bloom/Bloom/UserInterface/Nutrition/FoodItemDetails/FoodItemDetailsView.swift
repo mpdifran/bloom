@@ -90,7 +90,7 @@ struct FoodItemDetailsView: View {
           macrosSection
           editSection
 
-          FoodItemNutritionLabel(foodItem: foodItem)
+          FoodItemNutritionLabel(foodItem: foodItem, numberOfServings: numberOfServings)
             .cardContainer()
 
           accuracySection

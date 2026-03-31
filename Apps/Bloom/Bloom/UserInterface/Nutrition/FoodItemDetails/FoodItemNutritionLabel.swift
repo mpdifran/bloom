@@ -11,21 +11,30 @@ import HealthKit
 
 struct FoodItemNutritionLabel: View {
   let foodItem: FoodItem
+  var numberOfServings: Double = 1
 
   var body: some View {
     VStack(alignment: .leading, spacing: 10) {
-      Text("Nutrition Label")
-        .font(.title2)
-        .fontDesign(.rounded)
-        .bold()
-        .horizontallyCentered()
-        .padding(.bottom)
+      VStack(spacing: 4) {
+        Text("Nutrition Label")
+          .font(.title2)
+          .fontDesign(.rounded)
+          .bold()
+
+        Text("per \(numberOfServings.formatted(.number.precision(.fractionLength(0...2)))) serving\(numberOfServings == 1 ? "" : "s")")
+          .font(.subheadline)
+          .fontDesign(.rounded)
+          .foregroundStyle(.secondary)
+      }
+      .horizontallyCentered()
+      .padding(.bottom)
 
       NutritionLine(
         name: "Calories",
         quantity: foodItem.calories,
         preferredUnit: .largeCalorie(),
-        indentationLevel: 0
+        indentationLevel: 0,
+        numberOfServings: numberOfServings
       )
 
       Divider()
@@ -34,7 +43,8 @@ struct FoodItemNutritionLabel: View {
         name: "Fat",
         quantity: foodItem.fat,
         preferredUnit: .gram(),
-        indentationLevel: 0
+        indentationLevel: 0,
+        numberOfServings: numberOfServings
       )
 
       Group {
@@ -42,27 +52,31 @@ struct FoodItemNutritionLabel: View {
           name: "Saturated Fat",
           quantity: foodItem.saturatedFat,
           preferredUnit: .gram(),
-          indentationLevel: 1
+          indentationLevel: 1,
+          numberOfServings: numberOfServings
         )
         NutritionLine(
           name: "Trans Fat",
           quantity: foodItem.transFat,
           preferredUnit: .gram(),
-          indentationLevel: 1
+          indentationLevel: 1,
+          numberOfServings: numberOfServings
         )
         NutritionLine(
           name: "Polyunsaturated Fat",
           quantity: foodItem.polyunsaturatedFat,
           preferredUnit: .gram(),
           indentationLevel: 1,
-          showIfNil: false
+          showIfNil: false,
+          numberOfServings: numberOfServings
         )
         NutritionLine(
           name: "Monounsaturated Fat",
           quantity: foodItem.monounsaturatedFat,
           preferredUnit: .gram(),
           indentationLevel: 1,
-          showIfNil: false
+          showIfNil: false,
+          numberOfServings: numberOfServings
         )
       }
       .foregroundStyle(.secondary)
@@ -73,13 +87,15 @@ struct FoodItemNutritionLabel: View {
         name: "Cholesterol",
         quantity: foodItem.cholesterol,
         preferredUnit: .gramUnit(with: .milli),
-        indentationLevel: 0
+        indentationLevel: 0,
+        numberOfServings: numberOfServings
       )
       NutritionLine(
         name: "Sodium",
         quantity: foodItem.sodium,
         preferredUnit: .gramUnit(with: .milli),
-        indentationLevel: 0
+        indentationLevel: 0,
+        numberOfServings: numberOfServings
       )
 
       Divider()
@@ -88,7 +104,8 @@ struct FoodItemNutritionLabel: View {
         name: "Carbohydrates",
         quantity: foodItem.carbohydrates,
         preferredUnit: .gram(),
-        indentationLevel: 0
+        indentationLevel: 0,
+        numberOfServings: numberOfServings
       )
 
       Group {
@@ -96,13 +113,15 @@ struct FoodItemNutritionLabel: View {
           name: "Fiber",
           quantity: foodItem.fiber,
           preferredUnit: .gram(),
-          indentationLevel: 1
+          indentationLevel: 1,
+          numberOfServings: numberOfServings
         )
         NutritionLine(
           name: "Sugar",
           quantity: foodItem.sugar,
           preferredUnit: .gram(),
-          indentationLevel: 1
+          indentationLevel: 1,
+          numberOfServings: numberOfServings
         )
       }
       .foregroundStyle(.secondary)
@@ -113,7 +132,8 @@ struct FoodItemNutritionLabel: View {
         name: "Protein",
         quantity: foodItem.protein,
         preferredUnit: .gram(),
-        indentationLevel: 0
+        indentationLevel: 0,
+        numberOfServings: numberOfServings
       )
 
       if hasAtLeastOneMineral {
@@ -124,35 +144,40 @@ struct FoodItemNutritionLabel: View {
           quantity: foodItem.calcium,
           preferredUnit: .gramUnit(with: .milli),
           indentationLevel: 0,
-          showIfNil: false
+          showIfNil: false,
+          numberOfServings: numberOfServings
         )
         NutritionLine(
           name: "Iron",
           quantity: foodItem.iron,
           preferredUnit: .gramUnit(with: .milli),
           indentationLevel: 0,
-          showIfNil: false
+          showIfNil: false,
+          numberOfServings: numberOfServings
         )
         NutritionLine(
           name: "Magnesium",
           quantity: foodItem.magnesium,
           preferredUnit: .gramUnit(with: .milli),
           indentationLevel: 0,
-          showIfNil: false
+          showIfNil: false,
+          numberOfServings: numberOfServings
         )
         NutritionLine(
           name: "Potassium",
           quantity: foodItem.potassium,
           preferredUnit: .gramUnit(with: .milli),
           indentationLevel: 0,
-          showIfNil: false
+          showIfNil: false,
+          numberOfServings: numberOfServings
         )
         NutritionLine(
           name: "Zinc",
           quantity: foodItem.zinc,
           preferredUnit: .gramUnit(with: .milli),
           indentationLevel: 0,
-          showIfNil: false
+          showIfNil: false,
+          numberOfServings: numberOfServings
         )
       }
 
@@ -164,42 +189,48 @@ struct FoodItemNutritionLabel: View {
           quantity: foodItem.vitaminA,
           preferredUnit: .gramUnit(with: .micro),
           indentationLevel: 0,
-          showIfNil: false
+          showIfNil: false,
+          numberOfServings: numberOfServings
         )
         NutritionLine(
           name: "Vitamin B6",
           quantity: foodItem.vitaminB6,
           preferredUnit: .gramUnit(with: .milli),
           indentationLevel: 0,
-          showIfNil: false
+          showIfNil: false,
+          numberOfServings: numberOfServings
         )
         NutritionLine(
           name: "Vitamin B12",
           quantity: foodItem.vitaminB12,
           preferredUnit: .gramUnit(with: .micro),
           indentationLevel: 0,
-          showIfNil: false
+          showIfNil: false,
+          numberOfServings: numberOfServings
         )
         NutritionLine(
           name: "Vitamin C",
           quantity: foodItem.vitaminC,
           preferredUnit: .gramUnit(with: .milli),
           indentationLevel: 0,
-          showIfNil: false
+          showIfNil: false,
+          numberOfServings: numberOfServings
         )
         NutritionLine(
           name: "Vitamin D",
           quantity: foodItem.vitaminD,
           preferredUnit: .gramUnit(with: .micro),
           indentationLevel: 0,
-          showIfNil: false
+          showIfNil: false,
+          numberOfServings: numberOfServings
         )
         NutritionLine(
           name: "Vitamin E",
           quantity: foodItem.vitaminE,
           preferredUnit: .gramUnit(with: .milli),
           indentationLevel: 0,
-          showIfNil: false
+          showIfNil: false,
+          numberOfServings: numberOfServings
         )
       }
     }
@@ -232,19 +263,22 @@ private extension FoodItemNutritionLabel {
     let preferredUnit: HKUnit
     let indentationLevel: Int
     let showIfNil: Bool
+    let numberOfServings: Double
 
     init(
       name: String,
       quantity: FoodItem.Quantity?,
       preferredUnit: HKUnit,
       indentationLevel: Int,
-      showIfNil: Bool = true
+      showIfNil: Bool = true,
+      numberOfServings: Double = 1
     ) {
       self.name = name
       self.quantity = quantity
       self.preferredUnit = preferredUnit
       self.indentationLevel = indentationLevel
       self.showIfNil = showIfNil
+      self.numberOfServings = numberOfServings
     }
 
     var body: some View {
@@ -260,7 +294,8 @@ private extension FoodItemNutritionLabel {
         Text(name)
         Spacer()
         if let quantity {
-          Text(quantity.hkQuantity.displayString(for: preferredUnit, formatter: .threeDecimalPlaces))
+          let scaled = FoodItem.Quantity(value: quantity.value * numberOfServings, unit: quantity.unit)
+          Text(scaled.hkQuantity.displayString(for: preferredUnit, formatter: .threeDecimalPlaces))
             .font(.body)
         } else {
           Text("--")
