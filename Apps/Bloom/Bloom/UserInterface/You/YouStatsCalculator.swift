@@ -230,7 +230,7 @@ private extension YouStatsCalculator {
     let trendDifference = secondHalfAvg - firstHalfAvg
 
     // If standard deviation is low and no significant trend, it's consistent
-    if standardDeviation < 30 && abs(trendDifference) < 20 {
+    if standardDeviation < 60 && abs(trendDifference) < 20 {
       return .consistent
     }
 
@@ -1981,7 +1981,7 @@ extension YouStatsCalculator {
     let trendDifference = secondHalfAvg - firstHalfAvg
 
     // If standard deviation is low and no significant trend, it's consistent
-    if standardDeviation < 30 && abs(trendDifference) < 20 {
+    if standardDeviation < 60 && abs(trendDifference) < 20 {
       return .consistent
     }
 

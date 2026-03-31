@@ -246,21 +246,6 @@ private extension BedtimeSleepDurationDetailsView {
         color: .coreSleep
       )
 
-      if let trend = summaryData?.bedtimeTrend, trend != .consistent {
-        Divider()
-
-        HStack {
-          Image(systemSymbol: trendSymbol(for: trend))
-            .foregroundStyle(trendColor(for: trend), trendColor(for: trend).tertiary)
-            .font(.title3)
-            .bold()
-            .fontDesign(.rounded)
-
-          Text("Your bedtime is \(trend.rawValue.lowercased()).")
-            .font(.subheadline)
-            .foregroundStyle(.secondary)
-        }
-      }
     }
     .cardContainer()
   }
