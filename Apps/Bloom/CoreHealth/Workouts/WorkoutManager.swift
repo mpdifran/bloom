@@ -22,6 +22,7 @@ public final class WorkoutManager: NSObject, ObservableObject {
   @Published public var workout: HKWorkout?
   @Published public var sessionState: HKWorkoutSessionState = .notStarted
   @Published public var isSwitchingWorkout = false
+  @Published public var completedSegments: [CompletedWorkoutSegment] = []
   @Published public var isMirroring = false
   @Published public var heartRate: Double = 0
   @Published public var activeEnergy: Double = 0
@@ -87,6 +88,10 @@ public extension WorkoutManager {
     lastHeartRateDate = nil
   }
 
+  var isMultiWorkoutSession: Bool {
+    completedSegments.count > 1
+  }
+
   func sendData(_ data: Data) async {
     guard isMirroring else { return }
     do {
@@ -137,6 +142,10 @@ private extension WorkoutManager {
       return
     }
     workout = finishedWorkout
+    if let finishedWorkout {
+      let segment = CompletedWorkoutSegment(workout: finishedWorkout, zoneDurations: zoneDurations)
+      completedSegments.append(segment)
+    }
 #endif
   }
 }

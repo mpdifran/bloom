@@ -50,6 +50,11 @@ struct ActiveWorkoutView: View {
         if workoutManager.workout == nil {
           // Workout was discarded (too short) — skip summary
           dismiss()
+        } else if workoutManager.isMultiWorkoutSession {
+          presentedSheet = MultiWorkoutSummaryView(
+            segments: workoutManager.completedSegments,
+            onDismiss: { dismiss() }
+          ).asAny
         } else {
           presentedSheet = ActiveWorkoutSummaryView {
             dismiss()

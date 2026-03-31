@@ -14,6 +14,8 @@ public extension WorkoutManager {
   /// Phase 1: Prepare the workout session without starting data collection.
   /// Call this first, then show countdown, then call `beginWorkout()`.
   func prepareWorkout(workoutConfiguration: HKWorkoutConfiguration, shouldMirror: Bool) async throws {
+    completedSegments = []
+
     session = try HKWorkoutSession(healthStore: healthStore, configuration: workoutConfiguration)
     builder = session?.associatedWorkoutBuilder()
     session?.delegate = self
@@ -86,11 +88,17 @@ public extension WorkoutManager {
     }
     session.end()
 
-    // 3. Reset state
-    resetWorkout()
+    // 3. Capture completed segment before resetting state
+    if let savedWorkout {
+      let segment = CompletedWorkoutSegment(workout: savedWorkout, zoneDurations: zoneDurations)
+      completedSegments.append(segment)
+    }
 
-    // 4. Start new session
+    // 4. Reset state and start new session (preserving completed segments)
+    let savedSegments = completedSegments
+    resetWorkout()
     try await startWorkout(workoutConfiguration: newConfiguration, shouldMirror: false)
+    completedSegments = savedSegments
 
     return savedWorkout
   }
