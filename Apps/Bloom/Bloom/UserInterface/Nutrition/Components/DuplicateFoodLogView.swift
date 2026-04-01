@@ -16,13 +16,13 @@ struct DuplicateFoodLogView: View {
   let foodItemLog: FoodItemLog
   let performDismiss: (() -> Void)?
   
+  @State private var date = NutritionTrackingViewModel.shared.date
+  @State private var meal = NutritionTrackingViewModel.shared.suggestedMeal
   @State private var error: Error?
   @State private var hasCompleted = false
-  
+
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
-  
-  @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
   
   var body: some View {
     CardView {
@@ -51,7 +51,7 @@ struct DuplicateFoodLogView: View {
             LabeledContent("Date") {
               DatePicker(
                 "",
-                selection: $nutritionViewModel.date,
+                selection: $date,
                 displayedComponents: .date
               )
               .datePickerStyle(.compact)
@@ -61,7 +61,7 @@ struct DuplicateFoodLogView: View {
             Divider()
 
             LabeledContent("Meal") {
-              Picker("Meal", selection: $nutritionViewModel.suggestedMeal) {
+              Picker("Meal", selection: $meal) {
                 ForEach(FoodItemLog.Meal.allCases, id: \.self) { meal in
                   Text(meal.name)
                     .tag(meal)
@@ -103,11 +103,11 @@ private extension DuplicateFoodLogView {
   
   func duplicateFoodLog() async {
     do {
-      try await nutritionViewModel.duplicate(
+      try await NutritionTrackingViewModel.shared.duplicate(
         modelContext: modelContext,
         foodItemLog: foodItemLog,
-        toDate: nutritionViewModel.date,
-        toMeal: nutritionViewModel.suggestedMeal
+        toDate: date,
+        toMeal: meal
       )
       
       await MainActor.run {
