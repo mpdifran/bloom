@@ -71,6 +71,14 @@ struct SidebarView: View {
           systemImage: "tag.fill"
         )
       }
+      NavigationLink {
+        MailerLiteSyncView()
+      } label: {
+        createLabel(
+          title: "MailerLite",
+          systemImage: "envelope"
+        )
+      }
     }
     .shelf {
       metadataView

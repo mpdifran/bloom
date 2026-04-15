@@ -17,6 +17,7 @@ func routes(_ app: Application) throws {
   try app.register(collection: SalesController())
   try app.register(collection: AdminSalesController())
 
+  try app.register(collection: AdminMailerLiteController())
   try app.register(collection: RevenueCatWebhookController())
 
   // IMPORTANT: Fallback controller must be registered LAST

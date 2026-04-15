@@ -51,8 +51,8 @@ extension Application {
       }
     }
 
-    // MailerLite email sync - runs daily at 3 AM
-    try cron.schedule("0 3 * * *") { [weak self] in
+    // MailerLite email sync - runs daily at 3 AM ET (7 AM UTC)
+    try cron.schedule("0 7 * * *") { [weak self] in
       guard let self else { return }
 
       self.logger.info("Starting MailerLite email sync job")
@@ -79,6 +79,6 @@ extension Application {
       }
     }
 
-    self.logger.info("Configured cron jobs: duplicate-detection (every 4 hours), magic-scanner-cleanup (daily at 2 AM), mailerlite-sync (daily at 3 AM)")
+    self.logger.info("Configured cron jobs: duplicate-detection (every 4 hours), magic-scanner-cleanup (daily at 2 AM UTC), mailerlite-sync (daily at 3 AM ET / 7 AM UTC)")
   }
 }

@@ -75,7 +75,12 @@ private extension RevenueCatWebhookController {
       apiKey: apiKey
     )
 
-    try await mailerLiteService.addSubscriberToGroup(email: email, groupID: groupID)
+    try await mailerLiteService.addSubscriberToGroup(
+      email: email,
+      groupID: groupID,
+      name: user.givenName,
+      lastName: user.familyName
+    )
     request.logger.info("RevenueCat cancellation: added \(email) to cancelled group in MailerLite")
   }
 }

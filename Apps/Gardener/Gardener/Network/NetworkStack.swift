@@ -555,6 +555,19 @@ extension NetworkStack {
     return try JSONDecoder.bloomModel.decode(AdminUploadSaleImageResponse.self, from: data)
   }
 
+  // MARK: - MailerLite
+
+  func syncMailerLiteSubscribers() async throws {
+    let urlRequest = await createAuthenticatedRequest(
+      path: "v1/admin/mailerlite/sync",
+      method: .post
+    )
+
+    let (data, response) = try await URLSession.shared.data(for: urlRequest)
+
+    try await Self.checkStatusCode(data: data, response: response)
+  }
+
   private static func checkStatusCode(data: Data, response: URLResponse) async throws {
     guard let httpResponse = response as? HTTPURLResponse else {
       throw NetworkError.invalidResponse
