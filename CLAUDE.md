@@ -125,6 +125,13 @@ When asked to generate or publish release notes, follow the process in `RELEASE_
 - Publishing to App Store Connect via the `asc` CLI
 - The app ID, platform, and locale to use
 
+## Release Process
+
+After a new version is live on the App Store, follow the process in `RELEASE_PROCESS.md`. This covers:
+- Creating a GitHub release tied to the release commit
+- Bumping the version (patch increment)
+- Committing and pushing to prevent TestFlight version collisions
+
 ## Documentation Guidelines
 
 When you discover new patterns, conventions, or important details about the codebase:
