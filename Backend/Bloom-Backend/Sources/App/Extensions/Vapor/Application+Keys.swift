@@ -199,12 +199,25 @@ extension Application {
   }
 }
 
+// MARK: - MailerLite Groups
+
+extension Application {
+
+  var mailerLiteFreeUsersGroupID: String? {
+    Environment.get("MAILERLITE_FREE_USERS_GROUP_ID")
+  }
+}
+
 // MARK: - RevenueCat
 
 extension Application {
 
   var revenueCatWebhookSecret: String? {
     Environment.get("REVENUECAT_WEBHOOK_SECRET")
+  }
+
+  var revenueCatAPIKey: String? {
+    Environment.get("REVENUECAT_API_KEY")
   }
 }
 

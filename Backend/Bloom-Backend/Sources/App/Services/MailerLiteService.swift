@@ -81,6 +81,23 @@ extension MailerLiteService {
     logger.info("Added subscriber \(email) to MailerLite group \(groupID)")
   }
 
+  func removeSubscriberFromGroup(email: String, groupID: String) async throws {
+    let uri = URI(string: "\(baseURL)/api/subscribers/\(email)/groups/\(groupID)")
+
+    var headers = HTTPHeaders()
+    headers.add(name: .authorization, value: "Bearer \(apiKey)")
+    headers.add(name: .accept, value: "application/json")
+
+    let response = try await client.delete(uri, headers: headers)
+
+    guard (200..<300).contains(response.status.code) else {
+      let body = response.body.map { String(buffer: $0) } ?? "empty"
+      throw Abort(.internalServerError, reason: "MailerLite API returned \(response.status.code): \(body)")
+    }
+
+    logger.info("Removed subscriber \(email) from MailerLite group \(groupID)")
+  }
+
   func upsertSubscriber(email: String, name: String? = nil, lastName: String? = nil) async throws {
     let uri = URI(string: "\(baseURL)/api/subscribers")
 

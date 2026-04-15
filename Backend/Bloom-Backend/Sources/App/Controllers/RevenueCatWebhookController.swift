@@ -42,6 +42,8 @@ private extension RevenueCatWebhookController {
     switch eventType {
     case "CANCELLATION":
       try await handleCancellation(request: request, appUserID: payload.event.appUserID)
+    case "INITIAL_PURCHASE":
+      try await handlePurchase(request: request, appUserID: payload.event.appUserID)
     default:
       break
     }
@@ -82,6 +84,40 @@ private extension RevenueCatWebhookController {
       lastName: user.familyName
     )
     request.logger.info("RevenueCat cancellation: added \(email) to cancelled group in MailerLite")
+  }
+
+  func handlePurchase(request: Request, appUserID: String) async throws {
+    guard let user = try await User.query(on: request.db)
+      .filter(\.$appUserID == appUserID)
+      .first() else {
+      request.logger.warning("RevenueCat purchase: no user found for appUserID \(appUserID)")
+      return
+    }
+
+    guard let email = user.email else {
+      request.logger.info("RevenueCat purchase: user \(appUserID) has no email, skipping")
+      return
+    }
+
+    guard let apiKey = request.application.mailerLiteAPIKey,
+          let groupID = request.application.mailerLiteFreeUsersGroupID else {
+      request.logger.info("MailerLite free users group not configured, skipping removal")
+      return
+    }
+
+    let mailerLiteService = MailerLiteService(
+      client: request.client,
+      db: request.db,
+      logger: request.logger,
+      apiKey: apiKey
+    )
+
+    do {
+      try await mailerLiteService.removeSubscriberFromGroup(email: email, groupID: groupID)
+      request.logger.info("RevenueCat purchase: removed \(email) from free users group in MailerLite")
+    } catch {
+      request.logger.warning("RevenueCat purchase: failed to remove \(email) from free users group: \(error)")
+    }
   }
 }
 

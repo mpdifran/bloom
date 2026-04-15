@@ -568,6 +568,17 @@ extension NetworkStack {
     try await Self.checkStatusCode(data: data, response: response)
   }
 
+  func segmentFreeUsers() async throws {
+    let urlRequest = await createAuthenticatedRequest(
+      path: "v1/admin/mailerlite/segment-free-users",
+      method: .post
+    )
+
+    let (data, response) = try await URLSession.shared.data(for: urlRequest)
+
+    try await Self.checkStatusCode(data: data, response: response)
+  }
+
   private static func checkStatusCode(data: Data, response: URLResponse) async throws {
     guard let httpResponse = response as? HTTPURLResponse else {
       throw NetworkError.invalidResponse
