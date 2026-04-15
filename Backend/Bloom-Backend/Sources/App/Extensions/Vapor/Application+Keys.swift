@@ -186,6 +186,15 @@ extension Application {
   }
 }
 
+// MARK: - MailerLite
+
+extension Application {
+
+  var mailerLiteAPIKey: String? {
+    Environment.get("MAILERLITE_API_KEY")
+  }
+}
+
 // MARK: - Chat Configuration
 
 extension Application {

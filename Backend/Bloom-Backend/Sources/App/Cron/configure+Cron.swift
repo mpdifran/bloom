@@ -51,6 +51,34 @@ extension Application {
       }
     }
 
-    self.logger.info("Configured cron jobs: duplicate-detection (every 4 hours), magic-scanner-cleanup (daily at 2 AM)")
+    // MailerLite email sync - runs daily at 3 AM
+    try cron.schedule("0 3 * * *") { [weak self] in
+      guard let self else { return }
+
+      self.logger.info("Starting MailerLite email sync job")
+
+      guard let apiKey = self.mailerLiteAPIKey else {
+        self.logger.warning("MAILERLITE_API_KEY not configured, skipping email sync")
+        return
+      }
+
+      let mailerLiteService = MailerLiteService(
+        client: self.client,
+        db: self.db,
+        logger: self.logger,
+        apiKey: apiKey
+      )
+
+      Task {
+        do {
+          try await mailerLiteService.syncAllSubscribers()
+          self.logger.info("MailerLite email sync job completed successfully")
+        } catch {
+          self.logger.error("MailerLite email sync job failed: \(error)")
+        }
+      }
+    }
+
+    self.logger.info("Configured cron jobs: duplicate-detection (every 4 hours), magic-scanner-cleanup (daily at 2 AM), mailerlite-sync (daily at 3 AM)")
   }
 }
