@@ -27,56 +27,32 @@ struct MailerLiteService {
 
     guard !users.isEmpty else { return }
 
-    let subscribers = users.compactMap { user -> Subscriber? in
-      guard let email = user.email else { return nil }
-      return Subscriber(
-        email: email,
-        fields: Fields(
-          name: user.givenName,
-          last_name: user.familyName
-        )
-      )
-    }
-
-    let batches = subscribers.chunked(into: batchSize)
-
     var successCount = 0
     var failureCount = 0
 
+    let batches = users.chunked(into: batchSize)
+
     for (index, batch) in batches.enumerated() {
-      do {
-        try await importBatch(batch)
-        successCount += batch.count
-        logger.info("[\(index + 1)/\(batches.count)] Synced batch of \(batch.count) subscribers")
-      } catch {
-        failureCount += batch.count
-        logger.error("[\(index + 1)/\(batches.count)] Failed to sync batch: \(error)")
+      for user in batch {
+        guard let email = user.email else { continue }
+        do {
+          try await upsertSubscriber(email: email, name: user.givenName, lastName: user.familyName)
+          successCount += 1
+        } catch {
+          failureCount += 1
+          logger.error("Failed to upsert subscriber \(email): \(error)")
+        }
+      }
+
+      logger.info("[\(index + 1)/\(batches.count)] Synced batch of \(batch.count) subscribers")
+
+      // Pause between batches to avoid rate limiting
+      if index < batches.count - 1 {
+        try await Task.sleep(for: .seconds(5))
       }
     }
 
     logger.info("MailerLite sync completed — synced: \(successCount), failed: \(failureCount)")
-  }
-}
-
-// MARK: - API
-
-private extension MailerLiteService {
-
-  func importBatch(_ subscribers: [Subscriber]) async throws {
-    let uri = URI(string: "\(baseURL)/api/subscribers/import")
-    let requestBody = SubscriberImportRequest(subscribers: subscribers)
-
-    var headers = HTTPHeaders()
-    headers.add(name: .authorization, value: "Bearer \(apiKey)")
-    headers.add(name: .contentType, value: "application/json")
-    headers.add(name: .accept, value: "application/json")
-
-    let response = try await client.post(uri, headers: headers, content: requestBody)
-
-    guard (200..<300).contains(response.status.code) else {
-      let body = response.body.map { String(buffer: $0) } ?? "empty"
-      throw Abort(.internalServerError, reason: "MailerLite API returned \(response.status.code): \(body)")
-    }
   }
 }
 
@@ -132,15 +108,6 @@ extension MailerLiteService {
 private extension MailerLiteService {
 
   struct UpsertSubscriberRequest: Content {
-    let email: String
-    let fields: Fields
-  }
-
-  struct SubscriberImportRequest: Content {
-    let subscribers: [Subscriber]
-  }
-
-  struct Subscriber: Content {
     let email: String
     let fields: Fields
   }
