@@ -7,14 +7,11 @@ import SwiftUI
 
 struct MailerLiteSyncView: View {
 
-  @State private var syncResult: String?
   @State private var segmentResult: String?
 
   var body: some View {
     ScrollView {
       VStack(alignment: .leading, spacing: 24) {
-        syncSection
-        Divider()
         segmentSection
       }
       .padding()
@@ -26,35 +23,6 @@ struct MailerLiteSyncView: View {
 // MARK: - Sections
 
 private extension MailerLiteSyncView {
-
-  var syncSection: some View {
-    VStack(alignment: .leading, spacing: 12) {
-      Text("Subscriber Sync")
-        .font(.title2)
-        .bold()
-
-      Text("Sync all user emails from the database to MailerLite. This runs automatically every day at 3 AM ET.")
-        .font(.subheadline)
-        .foregroundColor(.secondary)
-
-      AsyncButton {
-        try await NetworkStack.shared.syncMailerLiteSubscribers()
-        syncResult = "Sync started in background. Check Heroku logs for progress."
-      } label: {
-        Text("Sync Now")
-      }
-      .buttonStyle(.borderedProminent)
-
-      if let syncResult {
-        Text(syncResult)
-          .foregroundColor(.green)
-          .padding()
-          .frame(maxWidth: .infinity, alignment: .leading)
-          .background(Color.green.opacity(0.1))
-          .cornerRadius(8)
-      }
-    }
-  }
 
   var segmentSection: some View {
     VStack(alignment: .leading, spacing: 12) {
