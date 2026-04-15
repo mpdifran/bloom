@@ -193,6 +193,19 @@ extension Application {
   var mailerLiteAPIKey: String? {
     Environment.get("MAILERLITE_API_KEY")
   }
+
+  var mailerLiteCancelledGroupID: String? {
+    Environment.get("MAILERLITE_CANCELLED_GROUP_ID")
+  }
+}
+
+// MARK: - RevenueCat
+
+extension Application {
+
+  var revenueCatWebhookSecret: String? {
+    Environment.get("REVENUECAT_WEBHOOK_SECRET")
+  }
 }
 
 // MARK: - Chat Configuration

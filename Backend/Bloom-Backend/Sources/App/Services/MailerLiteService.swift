@@ -80,6 +80,29 @@ private extension MailerLiteService {
   }
 }
 
+// MARK: - Groups
+
+extension MailerLiteService {
+
+  func addSubscriberToGroup(email: String, groupID: String) async throws {
+    let uri = URI(string: "\(baseURL)/api/subscribers/\(email)/groups/\(groupID)")
+
+    var headers = HTTPHeaders()
+    headers.add(name: .authorization, value: "Bearer \(apiKey)")
+    headers.add(name: .contentType, value: "application/json")
+    headers.add(name: .accept, value: "application/json")
+
+    let response = try await client.post(uri, headers: headers)
+
+    guard (200..<300).contains(response.status.code) else {
+      let body = response.body.map { String(buffer: $0) } ?? "empty"
+      throw Abort(.internalServerError, reason: "MailerLite API returned \(response.status.code): \(body)")
+    }
+
+    logger.info("Added subscriber \(email) to MailerLite group \(groupID)")
+  }
+}
+
 // MARK: - Models
 
 private extension MailerLiteService {
