@@ -36,7 +36,14 @@ private extension AdminMailerLiteController {
       apiKey: apiKey
     )
 
-    try await mailerLiteService.syncAllSubscribers()
+    Task {
+      do {
+        try await mailerLiteService.syncAllSubscribers()
+        request.logger.info("MailerLite sync completed successfully")
+      } catch {
+        request.logger.error("MailerLite sync failed: \(error)")
+      }
+    }
 
     return .ok
   }
