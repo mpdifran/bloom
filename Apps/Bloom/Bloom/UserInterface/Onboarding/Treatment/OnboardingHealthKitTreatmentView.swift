@@ -20,7 +20,7 @@ struct OnboardingHealthKitTreatmentView: View {
 
   @State private var healthPermissionTrigger = false
   @State private var isWaitingForPermissionSheet = false
-  @State private var isAuthorized = false
+  @State private var hasShownPermissionSheet = false
   @State private var didContinue = false
   @State private var index = 0
   @State private var error: Error?
@@ -61,8 +61,14 @@ struct OnboardingHealthKitTreatmentView: View {
 
       AsyncButton {
         didContinue.toggle()
-        await recordOptIn()
-        await showHealthKitPermissionView()
+        if hasShownPermissionSheet {
+          await onContinue()
+        } else {
+          await recordOptIn()
+          hasShownPermissionSheet = true
+          isWaitingForPermissionSheet = true
+          healthPermissionTrigger.toggle()
+        }
       } label: {
         Group {
           if isWaitingForPermissionSheet {
@@ -98,13 +104,7 @@ struct OnboardingHealthKitTreatmentView: View {
 
       switch result {
       case .success:
-        Task { @MainActor in
-          await checkAuth()
-
-          if isAuthorized {
-            await onContinue()
-          }
-        }
+        break
       case .failure(let error):
         MainTask {
           self.error = error
@@ -226,29 +226,6 @@ private extension OnboardingHealthKitTreatmentView {
       healthDataConsentScreenVersion: "OnboardingHealthKitView.v1"
     )
     ConsentManager.shared.markConsentAsChecked()
-  }
-
-  func showHealthKitPermissionView() async {
-    await checkAuth()
-
-    if isAuthorized {
-      await onContinue()
-    } else {
-      isWaitingForPermissionSheet = true
-      healthPermissionTrigger.toggle()
-    }
-  }
-
-  func checkAuth() async {
-    do {
-      let authStatus = try await HealthPermissionChecker.shared.checkAccessForAllTypes()
-
-      isAuthorized = authStatus == .unnecessary
-
-      if isAuthorized {
-        await YouStatsCalculator.shared.refreshStats()
-      }
-    } catch { }
   }
 }
 
