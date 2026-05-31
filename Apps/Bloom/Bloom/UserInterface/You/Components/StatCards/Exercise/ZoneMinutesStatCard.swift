@@ -40,7 +40,7 @@ struct ZoneMinutesStatCard: View {
   private var tintColor: Color {
     guard let data else { return .gray }
     if data.meetsGoal {
-      return .heartRateZone3
+      return .heartRateZone2
     } else if data.weeklyTotal < data.goal / 2 {
       return .heartRateZone5
     } else {
