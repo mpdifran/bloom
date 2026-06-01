@@ -70,7 +70,7 @@ extension Application {
           configuration: .init(
             hostname: "localhost",
             username: localhostUsername ?? "mpdifran",
-            password: "",
+            password: localhostPassword ?? "",
             database: databaseName,
             tls: .disable
           )

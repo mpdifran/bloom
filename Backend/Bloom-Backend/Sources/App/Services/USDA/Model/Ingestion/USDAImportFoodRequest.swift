@@ -13,7 +13,8 @@ struct USDAImportFoodRequest: Content {
 }
 
 extension USDAImportFoodRequest {
-    enum Kind: String, Codable{
+    enum Kind: String, Codable {
         case foundation
+        case srLegacy = "sr_legacy"
     }
 }

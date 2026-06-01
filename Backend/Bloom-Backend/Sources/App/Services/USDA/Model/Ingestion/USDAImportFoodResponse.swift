@@ -10,4 +10,6 @@ import Vapor
 
 struct USDAImportFoodResponse: Content {
     let addedFoodItemsCount: Int
+    let failedFoodItemsCount: Int
+    let skippedFoodItemsCount: Int
 }

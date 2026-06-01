@@ -20,6 +20,7 @@ extension AdminFoodController: RouteCollection {
       $0.auth(using: AdminUserToken.self) {
         $0.group("food") {
           $0.post("usda-ingest", use: ingestUSDA)
+          $0.post("usda-ingest-fetch", use: ingestUSDAFetch)
           $0.get("unverified", use: getUnverifiedFoods)
           $0.post("create", use: createFood)
           $0.patch("update", use: updateFood)
@@ -49,30 +50,120 @@ extension AdminFoodController: RouteCollection {
 
 private extension AdminFoodController {
 
+  static let usdaIngestBatchLimit = 500
+
   @Sendable
   func ingestUSDA(_ request: Request) async throws -> USDAImportFoodResponse {
     let requestBody = try request.content.decode(USDAImportFoodRequest.self)
 
+    if requestBody.foods.count > Self.usdaIngestBatchLimit {
+      throw Abort(
+        .payloadTooLarge,
+        reason: "USDA ingest batch capped at \(Self.usdaIngestBatchLimit) items (got \(requestBody.foods.count))."
+      )
+    }
+
     let category: FoodItemRecord.Category
     switch requestBody.kind {
-    case .foundation:
+    case .foundation, .srLegacy:
       category = .generic
     }
 
-    var count = 0
-    for foodItem in requestBody.foods {
-      guard
-        let foodItemRecord = try await foodItem.asFoodItemRecord(
-          request: request,
-          category: category
-        )
-      else { continue }
+    request.logger.info("USDA ingest start: kind=\(requestBody.kind.rawValue) count=\(requestBody.foods.count)")
 
-      try await foodItemRecord.createOrUpdate(on: request.db)
-      count += 1
+    var added = 0
+    var skipped = 0
+    var failed = 0
+
+    for foodItem in requestBody.foods {
+      do {
+        guard
+          let foodItemRecord = try await foodItem.asFoodItemRecord(
+            request: request,
+            category: category
+          )
+        else {
+          skipped += 1
+          continue
+        }
+        try await foodItemRecord.createOrUpdate(on: request.db)
+        added += 1
+      } catch {
+        failed += 1
+        request.logger.error("USDA ingest item failed fdcId=\(foodItem.fdcId): \(error)")
+      }
     }
 
-    return USDAImportFoodResponse(addedFoodItemsCount: count)
+    request.logger.info("USDA ingest done: added=\(added) skipped=\(skipped) failed=\(failed)")
+
+    return USDAImportFoodResponse(
+      addedFoodItemsCount: added,
+      failedFoodItemsCount: failed,
+      skippedFoodItemsCount: skipped
+    )
+  }
+
+  @Sendable
+  func ingestUSDAFetch(_ request: Request) async throws -> USDAImportFoodResponse {
+    let body = try request.content.decode(USDAIngestFetchRequest.self)
+
+    if body.pageSize > Self.usdaIngestBatchLimit {
+      throw Abort(
+        .payloadTooLarge,
+        reason: "pageSize capped at \(Self.usdaIngestBatchLimit) (got \(body.pageSize))."
+      )
+    }
+
+    let dataType: USDADataType
+    let category: FoodItemRecord.Category
+    switch body.kind {
+    case .foundation:
+      dataType = .foundation
+      category = .generic
+    case .srLegacy:
+      dataType = .srLegacy
+      category = .generic
+    }
+
+    request.logger.info("USDA fetch+ingest start: kind=\(body.kind.rawValue) pageSize=\(body.pageSize) pageNumber=\(body.pageNumber)")
+
+    let foods = try await USDAFoodService().listFullFoods(
+      request: request,
+      dataType: dataType,
+      pageSize: body.pageSize,
+      pageNumber: body.pageNumber
+    )
+
+    var added = 0
+    var skipped = 0
+    var failed = 0
+
+    for foodItem in foods {
+      do {
+        guard
+          let foodItemRecord = try await foodItem.asFoodItemRecord(
+            request: request,
+            category: category
+          )
+        else {
+          skipped += 1
+          continue
+        }
+        try await foodItemRecord.createOrUpdate(on: request.db)
+        added += 1
+      } catch {
+        failed += 1
+        request.logger.error("USDA fetch+ingest item failed fdcId=\(foodItem.fdcId): \(error)")
+      }
+    }
+
+    request.logger.info("USDA fetch+ingest done: fetched=\(foods.count) added=\(added) skipped=\(skipped) failed=\(failed)")
+
+    return USDAImportFoodResponse(
+      addedFoodItemsCount: added,
+      failedFoodItemsCount: failed,
+      skippedFoodItemsCount: skipped
+    )
   }
 
   @Sendable

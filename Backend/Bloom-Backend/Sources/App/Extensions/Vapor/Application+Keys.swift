@@ -161,6 +161,10 @@ extension Application {
   var localhostUsername: String? {
     Environment.get("POSTGRES_LOCALHOST_USERNAME")
   }
+
+  var localhostPassword: String? {
+    Environment.get("POSTGRES_LOCALHOST_PASSWORD")
+  }
 }
 
 // MARK: - Redis
