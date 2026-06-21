@@ -14,11 +14,61 @@ import DataContainer
 
 struct BiologicalAgeDetailsView: View {
 
+  enum HistoryRange: String, CaseIterable, Identifiable {
+    case oneMonth = "1M"
+    case sixMonths = "6M"
+    case oneYear = "1Y"
+    case twoYears = "2Y"
+    case fiveYears = "5Y"
+
+    var id: String { rawValue }
+
+    var months: Int {
+      switch self {
+      case .oneMonth: return 1
+      case .sixMonths: return 6
+      case .oneYear: return 12
+      case .twoYears: return 24
+      case .fiveYears: return 60
+      }
+    }
+  }
+
   @State private var biologicalAgeViewModel = BiologicalAgeViewModel.shared
   @State private var biologicalAgeRecords: [BiologicalAgeRecordDTO] = []
+  @State private var historyRange: HistoryRange = .oneMonth
 
   private let birthMonth = HealthDefaults.shared.getBirthMonth()
   private let birthYear = HealthDefaults.shared.getBirthYear()
+
+  private var filteredRecords: [BiologicalAgeRecordDTO] {
+    guard let cutoff = Calendar.current.date(
+      byAdding: .month,
+      value: -historyRange.months,
+      to: Date()
+    ) else { return biologicalAgeRecords }
+    return biologicalAgeRecords.filter { $0.date >= cutoff }
+  }
+
+  /// Approximate span of stored records in months (now - oldest record).
+  private var recordSpanMonths: Double {
+    guard let oldest = biologicalAgeRecords.first?.date else { return 0 }
+    let seconds = Date().timeIntervalSince(oldest)
+    return seconds / (60 * 60 * 24 * 30.44)
+  }
+
+  /// Ranges to show in the picker: every range smaller than the span, plus the
+  /// first range that fully contains it. Empty when span ≤ 1 month (picker hidden).
+  private var availableRanges: [HistoryRange] {
+    let span = recordSpanMonths
+    guard span > 1 else { return [] }
+    var result: [HistoryRange] = []
+    for range in HistoryRange.allCases {
+      result.append(range)
+      if Double(range.months) >= span { break }
+    }
+    return result
+  }
 
   var body: some View {
     Group {
@@ -55,7 +105,7 @@ private extension BiologicalAgeDetailsView {
       BioAgeConfidenceCard(result: result)
 
       // Chart
-      if biologicalAgeRecords.count >= 2 {
+      if filteredRecords.count >= 2 {
         historyChart(actualAge: result.actualAge)
       }
 
@@ -127,7 +177,7 @@ private extension BiologicalAgeDetailsView {
         .bold()
         .fontDesign(.rounded)
       Chart {
-        ForEach(biologicalAgeRecords) { record in
+        ForEach(filteredRecords) { record in
           // Actual age line
           LineMark(
             x: .value("Date", record.date, unit: .day),
@@ -150,7 +200,7 @@ private extension BiologicalAgeDetailsView {
         }
 
         // Single end-point for biological age (border effect like steps graph)
-        if let lastRecord = biologicalAgeRecords.last {
+        if let lastRecord = filteredRecords.last {
           // Outer border
           PointMark(
             x: .value("Date", lastRecord.date, unit: .day),
@@ -171,10 +221,11 @@ private extension BiologicalAgeDetailsView {
       .chartYScale(domain: chartYMin...chartYMax)
       .frame(height: 150)
       .chartXAxis {
-        AxisMarks(values: .stride(by: .weekOfYear)) { _ in
+        let stride = xAxisStride(for: filteredRecords)
+        AxisMarks(values: .stride(by: stride.component, count: stride.count)) { _ in
           AxisGridLine()
           AxisTick()
-          AxisValueLabel()
+          AxisValueLabel(format: stride.format)
         }
       }
       .chartYAxis {
@@ -208,20 +259,64 @@ private extension BiologicalAgeDetailsView {
             .foregroundStyle(.secondary)
         }
       }
+
+      if availableRanges.count > 1 {
+        Picker("Time Range", selection: $historyRange) {
+          ForEach(availableRanges) { range in
+            Text(range.rawValue).tag(range)
+          }
+        }
+        .pickerStyle(.segmented)
+        .padding(.top, 8)
+        .onChange(of: availableRanges) { _, ranges in
+          if !ranges.contains(historyRange), let first = ranges.first {
+            historyRange = first
+          }
+        }
+      }
     }
     .cardContainer()
   }
 
+  private struct XAxisStride {
+    let component: Calendar.Component
+    let count: Int
+    let format: Date.FormatStyle
+  }
+
+  private func xAxisStride(for records: [BiologicalAgeRecordDTO]) -> XAxisStride {
+    guard
+      let first = records.first?.date,
+      let last = records.last?.date
+    else {
+      return XAxisStride(component: .day, count: 1, format: .dateTime.month(.abbreviated).day())
+    }
+    let days = max(1, Calendar.current.dateComponents([.day], from: first, to: last).day ?? 1)
+
+    switch days {
+    case ...14:
+      return XAxisStride(component: .day, count: 2, format: .dateTime.month(.abbreviated).day())
+    case 15...60:
+      return XAxisStride(component: .weekOfYear, count: 1, format: .dateTime.month(.abbreviated).day())
+    case 61...180:
+      return XAxisStride(component: .month, count: 1, format: .dateTime.month(.abbreviated))
+    case 181...730:
+      return XAxisStride(component: .month, count: 3, format: .dateTime.month(.abbreviated).year(.twoDigits))
+    default:
+      return XAxisStride(component: .year, count: 1, format: .dateTime.year())
+    }
+  }
+
   private var chartYMin: Double {
-    let minBioAge = biologicalAgeRecords.map(\.biologicalAge).min() ?? 0
-    let minActualAge = biologicalAgeRecords.map { fractionalAge(for: $0.date) }.min() ?? 0
+    let minBioAge = filteredRecords.map(\.biologicalAge).min() ?? 0
+    let minActualAge = filteredRecords.map { fractionalAge(for: $0.date) }.min() ?? 0
     let minValue = min(minBioAge, minActualAge)
     return max(0, minValue - 5)
   }
 
   private var chartYMax: Double {
-    let maxBioAge = biologicalAgeRecords.map(\.biologicalAge).max() ?? 100
-    let maxActualAge = biologicalAgeRecords.map { fractionalAge(for: $0.date) }.max() ?? 100
+    let maxBioAge = filteredRecords.map(\.biologicalAge).max() ?? 100
+    let maxActualAge = filteredRecords.map { fractionalAge(for: $0.date) }.max() ?? 100
     let maxValue = max(maxBioAge, maxActualAge)
     return maxValue + 5
   }
