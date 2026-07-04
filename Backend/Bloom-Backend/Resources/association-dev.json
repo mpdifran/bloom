@@ -2,7 +2,7 @@
   "applinks": {
     "details": [
       {
-        "appID": "GUJ47GUV2Q.com.lotus-labs.bloom.dev",
+        "appID": "538R2KUTXD.com.lotus-labs.bloom.dev",
         "paths": [ "/action/*", "/vital/*", "/today", "/paywall", "/nutrition", "/nutrition/*", "/year-in-bloom", "/goals/*" ]
       }
     ]

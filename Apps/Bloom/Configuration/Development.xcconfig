@@ -12,5 +12,5 @@ BLOOM_APP_NAME = Bloom [Dev]
 BLOOM_APP_BUNDLE_ID = com.lotus-labs.bloom.dev
 BLOOM_BASE_URL = https:\/\/bloom-development-2c786f378e64.herokuapp.com
 BLOOM_BASE_WS_URL = wss:\/\/bloom-development-2c786f378e64.herokuapp.com
-BLOOM_APP_GROUP_ID = group.com.lotus-labs.bloom.dev
+BLOOM_APP_GROUP_ID = group.com.mdfprojects.bloom.dev
 OTHER_SWIFT_FLAGS = $(inherited) -DDEVELOPMENT

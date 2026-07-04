@@ -1,4 +1,4 @@
-git_url("git@github.com:LotusLabsInc/bloom-match.git")
+git_url("git@github.com:mpdifran/bloom-match.git")
 
 storage_mode("git")
 
@@ -29,6 +29,6 @@ for_platform(:mac) do
   app_identifier(["com.lotus-labs.gardener"])
 end
 
-username("hello@trybloom.app")
+username("mpdifranco@icloud.com")
 
 # The docs are available on https://docs.fastlane.tools/actions/match

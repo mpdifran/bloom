@@ -12,5 +12,5 @@ BLOOM_APP_NAME = Bloom
 BLOOM_APP_BUNDLE_ID = com.lotus-labs.bloom
 BLOOM_BASE_URL = https:\/\/api.trybloom.app
 BLOOM_BASE_WS_URL = wss:\/\/api.trybloom.app
-BLOOM_APP_GROUP_ID = group.com.lotus-labs.bloom
+BLOOM_APP_GROUP_ID = group.com.mdfprojects.bloom
 OTHER_SWIFT_FLAGS = $(inherited) -DPRODUCTION
