@@ -6,21 +6,9 @@ if [ -x /opt/homebrew/bin/brew ]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-# --- SwiftLint ---
-if ! command -v swiftlint >/dev/null 2>&1; then
-  if command -v brew >/dev/null 2>&1; then
-    echo "SwiftLint not found. Installing via Homebrew…"
-    brew install swiftlint
-  else
-    echo "WARNING: Homebrew not available; skipping SwiftLint install."
-  fi
-fi
-
-if command -v swiftlint >/dev/null 2>&1; then
-  swiftlint version
-else
-  echo "NOTE: swiftlint still not found; continuing without lint."
-fi
+# --- SwiftLint: intentionally not installed on Xcode Cloud ---
+# The build phase (Scripts/swiftlint.sh) skips linting when CI_XCODE_CLOUD=TRUE,
+# so there's no need to install SwiftLint here. Linting runs locally / on PRs.
 
 # --- Metal toolchain ---
 if ! xcrun -f metal >/dev/null 2>&1; then
