@@ -14,6 +14,14 @@ public extension String {
       }
       return suiteName
   }
+
+  /// The App Group identifier without the leading "group." prefix.
+  /// Used to build Valet `SharedGroupIdentifier`s that match the App Group entitlement.
+  static var groupIdentifier: String {
+      let prefix = "group."
+      guard groupSuiteName.hasPrefix(prefix) else { return groupSuiteName }
+      return String(groupSuiteName.dropFirst(prefix.count))
+  }
 }
 
 public extension UserDefaults {

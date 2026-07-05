@@ -24,13 +24,13 @@ enum UserID {
 
   @available(*, deprecated, message: "Use `iCloudSharedValet` instead.")
   private static let sharedValet = Valet.sharedGroupValet(
-    with: SharedGroupIdentifier(groupPrefix: "group", nonEmptyGroup: Bundle.main.bundleIdentifier!)!,
+    with: SharedGroupIdentifier(groupPrefix: "group", nonEmptyGroup: .groupIdentifier)!,
     identifier: Identifier(nonEmpty: "UserID")!,
     accessibility: .afterFirstUnlock
   )
 
   private static let iCloudSharedValet = Valet.iCloudSharedGroupValet(
-    with: SharedGroupIdentifier(groupPrefix: "group", nonEmptyGroup: Bundle.main.bundleIdentifier!)!,
+    with: SharedGroupIdentifier(groupPrefix: "group", nonEmptyGroup: .groupIdentifier)!,
     identifier: Identifier(nonEmpty: "UserID")!,
     accessibility: .afterFirstUnlock
   )

@@ -46,7 +46,7 @@ public final class AuthTokenManager: ObservableObject {
   )
 
   private let sharedValet = Valet.sharedGroupValet(
-    with: SharedGroupIdentifier(groupPrefix: "group", nonEmptyGroup: Bundle.main.bundleIdentifier!)!,
+    with: SharedGroupIdentifier(groupPrefix: "group", nonEmptyGroup: .groupIdentifier)!,
     identifier: Identifier(nonEmpty: "UserController")!,
     accessibility: .afterFirstUnlock
   )
