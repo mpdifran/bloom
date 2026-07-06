@@ -458,12 +458,10 @@ private extension TodayView {
       }
 
     case .goals:
-      if habits.isNotEmpty {
-        Group {
-          habitsSection
-        }
-        .padding(.horizontal)
+      Group {
+        habitsSection
       }
+      .padding(.horizontal)
 
     case .reminders:
       remindersSection
