@@ -18,8 +18,17 @@ struct UserDatabaseService {
 extension UserDatabaseService {
 
   func fetchUser(for userID: UserIdentifier) async throws -> User? {
-    try await User.query(on: db)
+    if let user = try await User.query(on: db)
       .filter(\.$id == userID)
+      .first() {
+      return user
+    }
+
+    // After the SIWA team migration, clients sign in with the new team-scoped
+    // identifier while `id` still holds the legacy one. Fall back to the
+    // migrated identifier so existing accounts are found instead of recreated.
+    return try await User.query(on: db)
+      .filter(\.$newAppleID == userID.value)
       .first()
   }
 

@@ -38,6 +38,9 @@ public func configure(_ app: Application) async throws {
     try await app.autoMigrate()
   }
 
+  // Commands
+  app.asyncCommands.use(SIWAMigrationCommand(), as: "siwa-migrate")
+
   // APNs
   try app.configureAPNs()
   

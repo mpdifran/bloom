@@ -62,4 +62,5 @@ let allMigrations: [Migration] = [
   SaleRecord.ConvertTargetAudiencesToText(),
   UserConsentRecord.AddMonitorConsent(),
   UserConsentRecord.AddLifestyleConsent(),
+  User.AddSIWATransferFields(),
 ]

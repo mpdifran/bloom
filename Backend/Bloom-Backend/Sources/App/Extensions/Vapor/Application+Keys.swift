@@ -88,8 +88,35 @@ extension Application {
     )
   }
 
+  /// The team ID the app belonged to before the transfer to the personal team.
+  /// Only needed while running the SIWA user migration (valid for 60 days post-transfer).
+  var legacyAppleTeamID: String {
+    Environment.get("LEGACY_APPLE_TEAM_ID") ?? ""
+  }
+
+  var legacySiwAJWKId: String {
+    Environment.get("LEGACY_SIWA_JWK_ID") ?? ""
+  }
+
+  var legacySiwAPrivateKey: String {
+    Environment.get("LEGACY_SIWA_PRIVATE_KEY") ?? ""
+  }
+
+  func createLegacySiwAPrivateKey() throws -> ApplePrivateKey {
+    try ApplePrivateKey(
+      kid: JWKIdentifier(string: legacySiwAJWKId),
+      privateKey: legacySiwAPrivateKey
+    )
+  }
+
   var gardenerAppBundleID: String {
     "com.lotus-labs.gardener"
+  }
+
+  /// Gardener was not transferred with the main app, so it can remain on a different
+  /// team than `APPLE_TEAM_ID`. Falls back to the main team ID when unset.
+  var gardenerAppleTeamID: String {
+    Environment.get("GARDENER_APPLE_TEAM_ID") ?? appleTeamID
   }
 
   var gardenerSiwAJWKId: String {

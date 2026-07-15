@@ -36,7 +36,7 @@ private extension AdminAuthenticationController {
     let auth = try request.content.decode(AuthenticationRequest.self)
 
     let details = AppleTokenGenerationDetails(
-      teamIdentifier: request.application.appleTeamID,
+      teamIdentifier: request.application.gardenerAppleTeamID,
       appIdentifier: request.application.gardenerAppBundleID,
       identityToken: auth.identityToken,
       authorizationCode: auth.authorizationCode,

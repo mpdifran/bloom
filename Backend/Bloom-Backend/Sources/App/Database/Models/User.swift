@@ -49,6 +49,17 @@ final class User: Model, Content, @unchecked Sendable {
   @Field(key: "morning_notification_minute")
   var morningNotificationMinute: Int?
 
+  // SIWA team migration (Lotus Labs → personal team). These are parallel columns;
+  // `id` continues to hold the legacy team-scoped identifier until cutover.
+  @Field(key: "transfer_sub")
+  var transferSub: String?
+
+  @Field(key: "new_apple_id")
+  var newAppleID: String?
+
+  @Field(key: "migrated_email")
+  var migratedEmail: String?
+
   @Field(key: "access_token")
   var accessToken: String?
 

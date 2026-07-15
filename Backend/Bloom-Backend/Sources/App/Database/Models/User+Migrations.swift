@@ -166,6 +166,24 @@ extension User {
     }
   }
 
+  struct AddSIWATransferFields: AsyncMigration {
+    func prepare(on database: any Database) async throws {
+      try await database.schema(User.schema)
+        .field("transfer_sub", .string)
+        .field("new_apple_id", .string)
+        .field("migrated_email", .string)
+        .update()
+    }
+
+    func revert(on database: any Database) async throws {
+      try await database.schema(User.schema)
+        .deleteField("transfer_sub")
+        .deleteField("new_apple_id")
+        .deleteField("migrated_email")
+        .update()
+    }
+  }
+
   struct AddConsentTracking: AsyncMigration {
     func prepare(on database: any Database) async throws {
       try await database.schema(User.schema)
