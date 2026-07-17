@@ -4,3 +4,6 @@ screenshots/
 crashreports/
 fastlane/report.xml
 .claude/skills
+.env
+.env.*
+*.p8
