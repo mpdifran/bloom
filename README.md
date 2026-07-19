@@ -1,4 +1,4 @@
-# Bloom
+# Bloom Health
 
 Bloom is a health and wellness companion for iPhone and Apple Watch. It brings nutrition tracking, sleep, workouts, habits, biological age, and an AI health coach (Bud) together in one place, built on HealthKit.
 
