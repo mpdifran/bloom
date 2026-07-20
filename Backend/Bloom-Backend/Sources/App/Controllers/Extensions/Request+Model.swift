@@ -11,9 +11,11 @@ import BloomModel
 
 extension Request {
 
+  /// Client-driven model selection is disabled for security/cost reasons: an
+  /// untrusted client could otherwise force the far more expensive `o3` model
+  /// via the `X-Bloom-OpenAI-Model` header. Always returns nil so callers fall
+  /// back to the server-chosen default. Re-enable only behind an admin gate.
   var openAIModel: ModelID? {
-    guard headers[.Header.openAIModel].first == "o3" else { return nil }
-
-    return ModelID.OSeries.o3
+    nil
   }
 }

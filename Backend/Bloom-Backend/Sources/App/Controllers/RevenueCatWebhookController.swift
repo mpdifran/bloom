@@ -21,6 +21,19 @@ extension RevenueCatWebhookController: RouteCollection {
 
 private extension RevenueCatWebhookController {
 
+  /// Length-then-XOR comparison that does not short-circuit, avoiding a timing
+  /// side channel when comparing the shared webhook secret.
+  static func constantTimeEquals(_ lhs: String, _ rhs: String) -> Bool {
+    let a = Array(lhs.utf8)
+    let b = Array(rhs.utf8)
+    guard a.count == b.count else { return false }
+    var diff: UInt8 = 0
+    for i in 0..<a.count {
+      diff |= a[i] ^ b[i]
+    }
+    return diff == 0
+  }
+
   @Sendable
   func handleWebhook(_ request: Request) async throws -> HTTPStatus {
     guard let secret = request.application.revenueCatWebhookSecret else {
@@ -29,7 +42,8 @@ private extension RevenueCatWebhookController {
     }
 
     let authHeader = request.headers.first(name: .authorization) ?? ""
-    guard authHeader == secret else {
+    // Constant-time comparison to avoid leaking the secret via timing.
+    guard Self.constantTimeEquals(authHeader, secret) else {
       request.logger.warning("RevenueCat webhook received with invalid authorization")
       throw Abort(.unauthorized)
     }
