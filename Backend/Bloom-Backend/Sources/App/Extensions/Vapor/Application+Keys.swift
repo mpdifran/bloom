@@ -136,11 +136,15 @@ extension Application {
 
   func adminEmailAllowList() -> [String] {
     let emails = Environment.get("GARDENER_ADMIN_EMAIL_ALLOWLIST") ?? ""
-    return emails.components(separatedBy: ",").map({
-      $0
-        .trimmingCharacters(in: .whitespacesAndNewlines)
-        .lowercased()
-    })
+    return emails.components(separatedBy: ",")
+      .map {
+        $0
+          .trimmingCharacters(in: .whitespacesAndNewlines)
+          .lowercased()
+      }
+      // Drop empties so an unset/blank allowlist yields [] and fails closed
+      // (never [""], which would match a client sending an empty email).
+      .filter { !$0.isEmpty }
   }
 }
 

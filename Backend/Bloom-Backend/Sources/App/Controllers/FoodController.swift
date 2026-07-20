@@ -213,6 +213,12 @@ extension FoodController {
       throw Abort(.unauthorized, reason: "User ID not found")
     }
 
+    // Bound the number of concurrent scans per user (each fans out to an
+    // expensive OpenAI vision call).
+    guard await request.magicScanJobManager.reserveSlot(userId: userId) else {
+      throw Abort(.tooManyRequests, reason: "Too many scans in progress. Please wait for the current ones to finish.")
+    }
+
     // Store image to S3 if provided
     let imageFileName: String?
     if let foodImage = requestBody.foodImage {
@@ -234,7 +240,7 @@ extension FoodController {
       country: requestBody.country
     )
 
-    // Trigger background processing
+    // Trigger background processing, releasing the concurrency slot when done.
     Task {
       await request.magicScanJobManager.processJob(
         processingIdentifier: requestBody.processingIdentifier,
@@ -245,6 +251,7 @@ extension FoodController {
         db: request.db,
         application: request.application
       )
+      await request.magicScanJobManager.releaseSlot(userId: userId)
     }
 
     return MagicScanUploadResponse(
@@ -255,6 +262,10 @@ extension FoodController {
 
   @Sendable
   func checkMagicScanStatus(_ request: Request) async throws -> MagicScanStatusResponse {
+    let user = try request.auth.require(User.self)
+    guard let userID = user.id else {
+      throw Abort(.unauthorized, reason: "User ID not found")
+    }
     let requestBody = try request.content.decode(MagicScanStatusRequest.self)
 
     var results: [MagicScanStatusResponse.Result] = []
@@ -262,8 +273,9 @@ extension FoodController {
     for processingIdentifier in requestBody.processingIdentifiers {
       guard let job = try await request.magicScanJobManager.getJob(
         processingIdentifier: processingIdentifier
-      ) else {
-        // Job not found - return notFound status so client can re-upload
+      ), job.userId.value == userID.value else {
+        // Job not found, or not owned by this user — return notFound so we never
+        // reveal another user's scan results (client can re-upload).
         let result = MagicScanStatusResponse.Result(
           processingIdentifier: processingIdentifier,
           status: .notFound,
@@ -302,7 +314,18 @@ extension FoodController {
 
   @Sendable
   func cancelMagicScan(_ request: Request) async throws -> Response {
+    let user = try request.auth.require(User.self)
+    guard let userID = user.id else {
+      throw Abort(.unauthorized, reason: "User ID not found")
+    }
     let requestBody = try request.content.decode(MagicScanCancelRequest.self)
+
+    // Only allow cancelling a job the caller owns.
+    guard let job = try await request.magicScanJobManager.getJob(
+      processingIdentifier: requestBody.processingIdentifier
+    ), job.userId.value == userID.value else {
+      throw Abort(.notFound)
+    }
 
     try await request.magicScanJobManager.cancelJob(
       processingIdentifier: requestBody.processingIdentifier

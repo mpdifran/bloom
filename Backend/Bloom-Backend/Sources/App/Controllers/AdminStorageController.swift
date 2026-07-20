@@ -34,6 +34,21 @@ extension AdminStorageController: RouteCollection {
 
 private extension AdminStorageController {
 
+  /// Rejects filenames that could escape their storage path. S3 keys are built
+  /// as "\(path)/\(filename)", and percent-encoding does not encode "/", so a
+  /// filename containing "/" or ".." could target arbitrary bucket keys.
+  static func validateFilename(_ filename: String) throws {
+    guard
+      !filename.isEmpty,
+      !filename.contains("/"),
+      !filename.contains(".."),
+      !filename.hasPrefix(".")
+    else {
+      throw Abort(.badRequest, reason: "Invalid filename")
+    }
+  }
+
+
   // MARK: - Get Storage Stats
 
   @Sendable
@@ -281,6 +296,8 @@ private extension AdminStorageController {
       throw Abort(.badRequest, reason: "Invalid storage path: \(requestBody.path)")
     }
 
+    try Self.validateFilename(requestBody.filename)
+
     guard let url = try await imageStorage.generateImageURL(
       fileName: requestBody.filename,
       path: storagePath,
@@ -308,6 +325,8 @@ private extension AdminStorageController {
     guard let storagePath = StoragePath(rawValue: requestBody.path) else {
       throw Abort(.badRequest, reason: "Invalid storage path: \(requestBody.path)")
     }
+
+    try Self.validateFilename(requestBody.filename)
 
     // Replace the image with new data
     try await imageStorage.replaceImage(

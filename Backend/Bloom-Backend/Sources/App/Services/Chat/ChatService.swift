@@ -120,11 +120,13 @@ private extension ChatService {
 
     var inputs = [OpenAIKit.Response.InputItem]()
 
-    // System Messages
+    // Client-supplied context. Delivered with the `.user` role, NOT `.system`:
+    // this data is untrusted, and giving it system authority would let a client
+    // override the assistant persona or attempt to exfiltrate the system prompt.
     inputs.append(
       .message(
         .init(
-          role: .system,
+          role: .user,
           content: [
             .text(.init(text: "Here are some details about the user's current preferences. Do not record user facts from this data. \n\(message.userInfo)"))
           ]
@@ -136,7 +138,7 @@ private extension ChatService {
       inputs.append(
         .message(
           .init(
-            role: .system,
+            role: .user,
             content: [.text(.init(text: extraSystemContext))]
           )
         )

@@ -8,6 +8,7 @@
 import Foundation
 import Vapor
 import SignInWithApple
+@preconcurrency import JWT
 import Fluent
 import BloomModel
 
@@ -46,6 +47,17 @@ private extension UserController {
   @Sendable
   func signIn(_ request: Request) async throws -> AuthenticationResponse {
     let auth = try request.content.decode(AuthenticationRequest.self)
+
+    // Bind the session to the identity actually proven by the verified Apple
+    // token. Without this, a client can present a valid token for its own Apple
+    // ID but claim any other user's `sub`, taking over that account.
+    let verifiedSubject = try await request.jwt.apple.verify(
+      auth.identityToken,
+      applicationIdentifier: request.application.bloomAppBundleID
+    ).get().subject.value
+    guard verifiedSubject == auth.userIdentifier.value else {
+      throw Abort(.unauthorized, reason: "Identity token does not match the provided user identifier")
+    }
 
     let details = AppleTokenGenerationDetails(
       teamIdentifier: request.application.appleTeamID,

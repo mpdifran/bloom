@@ -34,7 +34,11 @@ extension Application {
       let tls: PostgresConnection.Configuration.TLS
       if requiresSSL {
         logger.info("Detected Heroku database, enabling SSL")
-        // Create SSL context with no certificate verification for Heroku
+        // Traffic is encrypted (.require), but the server certificate is not
+        // verified: Heroku Postgres presents a self-signed cert that does not
+        // chain to a public CA, so full verification fails out of the box. This
+        // is a deliberate, documented Heroku tradeoff — the residual risk is an
+        // active MITM *inside* the Heroku/AWS network boundary (low likelihood).
         var tlsConfig = TLSConfiguration.makeClientConfiguration()
         tlsConfig.certificateVerification = .none
         let sslContext = try NIOSSLContext(configuration: tlsConfig)

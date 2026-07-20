@@ -25,6 +25,10 @@ public func configure(_ app: Application) async throws {
   try app.setupRedis()
 
   // Middleware
+  app.middleware.use(SecurityHeadersMiddleware())
+  // Generous global rate limit: stops runaway abuse of the paid-AI endpoints
+  // without throttling normal use. Tighten if abuse is observed.
+  app.middleware.use(RateLimitMiddleware(limit: 240, window: 60))
   app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
 
   // Routes

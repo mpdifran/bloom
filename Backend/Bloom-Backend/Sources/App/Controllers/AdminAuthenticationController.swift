@@ -8,6 +8,7 @@
 import Foundation
 import Vapor
 import SignInWithApple
+@preconcurrency import JWT
 import BloomModel
 
 struct AdminAuthenticationController { }
@@ -35,6 +36,23 @@ private extension AdminAuthenticationController {
   func signIn(_ request: Request) async throws -> AuthenticationResponse {
     let auth = try request.content.decode(AuthenticationRequest.self)
 
+    // Bind the session to the identity proven by the verified Apple token, and
+    // capture the verified email. Apple only includes `email` on the first
+    // authorization, so it may be nil on re-login (we then trust the email
+    // already persisted from a prior verified token). Both values are extracted
+    // inside the closure so the non-Sendable token never crosses an await.
+    let (verifiedSubject, verifiedEmail): (String, String?) = try await {
+      let token = try await request.jwt.apple.verify(
+        auth.identityToken,
+        applicationIdentifier: request.application.gardenerAppBundleID
+      ).get()
+      return (token.subject.value, token.email)
+    }()
+
+    guard verifiedSubject == auth.userIdentifier.value else {
+      throw Abort(.unauthorized, reason: "Identity token does not match the provided user identifier")
+    }
+
     let details = AppleTokenGenerationDetails(
       teamIdentifier: request.application.gardenerAppleTeamID,
       appIdentifier: request.application.gardenerAppBundleID,
@@ -50,19 +68,24 @@ private extension AdminAuthenticationController {
       tokenResponse: appleTokens
     )
 
-    // Store user details
+    // Store user details. Only ever persist the VERIFIED email (never the
+    // client-supplied one), so a client cannot poison its row with an
+    // allowlisted email to escalate to admin.
     try await request.adminUserDatabaseService.storeUserDetails(
       userID: auth.userIdentifier,
-      email: auth.email,
+      email: verifiedEmail,
       givenName: auth.givenName,
       familyName: auth.familyName,
       rawUserDetectionStatus: auth.userDetectionStatus.rawValue
     )
 
-    // Only let approved people sign in.
+    // Only let approved people sign in. Compare the verified email (or the
+    // previously-verified stored email) against the allowlist, case-insensitively.
+    // Fail closed if the allowlist is unset/empty.
     let emailAllowlist = request.application.adminEmailAllowList()
     guard
-      let email = user.email ?? auth.email,
+      let email = (verifiedEmail ?? user.email)?.lowercased(),
+      !emailAllowlist.isEmpty,
       emailAllowlist.contains(email)
     else {
       throw Abort(.forbidden)

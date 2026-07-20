@@ -50,6 +50,41 @@ final actor MagicScanJobManager {
 
 extension MagicScanJobManager {
 
+  // MARK: - Per-user Concurrency Cap
+
+  /// Max magic-scan jobs a single user may have in flight at once. Each job
+  /// fans out to an expensive OpenAI vision call, so this bounds cost/abuse.
+  private static let maxConcurrentJobsPerUser = 5
+  /// Slot TTL: long enough for a scan, short enough that a crashed job's slot
+  /// is reclaimed quickly rather than leaking against the cap.
+  private static let slotTTL: Int64 = 600 // 10 minutes
+
+  /// Atomically reserves a concurrency slot for the user. Returns false if the
+  /// user is already at the in-flight cap. Fails open if Redis is unavailable.
+  func reserveSlot(userId: UserIdentifier) async -> Bool {
+    let key = RedisKey("magicscan:active:\(userId.value)")
+    do {
+      let count = try await redis.increment(key).get()
+      if count == 1 {
+        _ = try? await redis.expire(key, after: .seconds(Self.slotTTL)).get()
+      }
+      if count > Self.maxConcurrentJobsPerUser {
+        _ = try? await redis.decrement(key).get()
+        return false
+      }
+      return true
+    } catch {
+      logger.warning("Magic scan slot reservation failed, allowing request: \(error)")
+      return true
+    }
+  }
+
+  /// Releases a previously-reserved slot. Safe to call once per reserved slot.
+  func releaseSlot(userId: UserIdentifier) async {
+    let key = RedisKey("magicscan:active:\(userId.value)")
+    _ = try? await redis.decrement(key).get()
+  }
+
   // MARK: - Redis Health Management
 
   private func markRedisUnhealthy(_ error: Error) {
