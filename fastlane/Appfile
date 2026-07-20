@@ -1,6 +1,6 @@
-apple_id("mpdifranco@icloud.com")
+apple_id(ENV["FASTLANE_APPLE_ID"])
 
-team_name "Mark DiFranco"
+team_name(ENV["FASTLANE_TEAM_NAME"] || "Mark DiFranco")
 team_id "538R2KUTXD"
 
 # For more information about the Appfile, see:

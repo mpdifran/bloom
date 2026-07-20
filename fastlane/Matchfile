@@ -29,6 +29,6 @@ for_platform(:mac) do
   app_identifier(["com.lotus-labs.gardener"])
 end
 
-username("mpdifranco@icloud.com")
+username(ENV["FASTLANE_APPLE_ID"])
 
 # The docs are available on https://docs.fastlane.tools/actions/match
