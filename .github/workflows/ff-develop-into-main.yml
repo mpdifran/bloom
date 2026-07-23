@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   ff:
-    runs-on: [self-hosted, macOS]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout main
         uses: actions/checkout@v5
