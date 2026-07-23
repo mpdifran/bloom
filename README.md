@@ -54,7 +54,15 @@ Or without Docker: `brew install redis && brew services start redis`, run Postgr
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). PRs target the `develop` branch.
+See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+### Branching & releases
+
+- **`develop`** is the integration branch. **Open all PRs against `develop`** — it's the default branch and is protected (a PR is required to merge; direct pushes from forks aren't possible).
+- A **nightly automation** ([`.github/workflows/ff-develop-into-main.yml`](.github/workflows/ff-develop-into-main.yml)) fast-forwards **`main`** to `develop`. `main` therefore only ever contains code that already landed on `develop` via PR.
+- **A change to `main` kicks off a TestFlight build**: Xcode Cloud builds the iOS/watchOS app from `main` and uploads it to TestFlight. (The backend also deploys from `main`.)
+
+In short: `feature branch → PR into develop → nightly fast-forward to main → TestFlight build`.
 
 ## License
 
