@@ -18,7 +18,6 @@ struct YouView: View {
   @StateObject private var entitlementController = EntitlementController.shared
   @YouSettingsStorage("YouView.settings") private var youSettings = YouSettings()
 
-  @State private var path = NavigationPath()
   @State private var presentedNavigationDestination: AnyView?
   @State private var presentedSheet: AnyView?
 
@@ -28,7 +27,7 @@ struct YouView: View {
   @ObservedObject private var healthManager = HealthManager.shared
 
   var body: some View {
-    NavigationStack(path: $path) {
+    NavigationStack {
       BloomScrollView {
         bioAgeMeter
 
@@ -40,22 +39,6 @@ struct YouView: View {
         MedicalDisclaimerFooterView()
       }
       .navigationTitle("You")
-      .navigationDestination(for: VitalModel.Kind.self) { vitalKind in
-        switch vitalKind {
-        case .sleepQuality: SleepDetailsView()
-        case .bodyComposition: BodyCompositionDetailsView()
-        case .nutrition: NutritionDetailsView()
-        case .stressLevels: StressDetailsView()
-        case .activityLevel: ActivityLevelDetailsView()
-        case .heartHealth, .cardioFitness: HeartHealthDetailsView()
-        case .exerciseEffectiveness: ExerciseEffectivenessView()
-        case .cycleTracking: MenstruationDetailView()
-        case .bowelMovements: BowelMovementsDetailView()
-        case .lifestyle: AlcoholDetailsView()
-        @unknown default:
-          fatalError("Unknown case")
-        }
-      }
       .navigationDestination($presentedNavigationDestination)
       .sheet($presentedSheet)
       .toolbar {
@@ -72,7 +55,20 @@ struct YouView: View {
       }
       .onChange(of: tabController.pendingVitalNavigation) { oldValue, newValue in
         if let vitalKind = newValue {
-          path.append(vitalKind)
+          switch vitalKind {
+          case .sleepQuality: presentedSheet = SleepDetailsView().asAny
+          case .bodyComposition: presentedSheet = BodyCompositionDetailsView().asAny
+          case .nutrition: presentedSheet = NutritionDetailsView().asAny
+          case .stressLevels: presentedSheet = StressDetailsView().asAny
+          case .activityLevel: presentedSheet = ActivityLevelDetailsView().asAny
+          case .heartHealth, .cardioFitness: presentedSheet = HeartHealthDetailsView().asAny
+          case .exerciseEffectiveness: presentedSheet = ExerciseEffectivenessView().asAny
+          case .cycleTracking: presentedSheet = MenstruationDetailView().asAny
+          case .bowelMovements: presentedSheet = BowelMovementsDetailView().asAny
+          case .lifestyle: presentedSheet = AlcoholDetailsView().asAny
+          @unknown default:
+            break
+          }
           tabController.pendingVitalNavigation = nil
         }
       }

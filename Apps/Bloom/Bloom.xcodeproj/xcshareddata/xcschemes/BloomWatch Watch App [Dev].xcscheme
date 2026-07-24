@@ -60,7 +60,6 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "FF75772D2DC91A3700E31C86"
             BuildableName = "BloomWatch Watch App.app"
-            BlueprintName = "BloomWatch Watch App"
             ReferencedContainer = "container:Bloom.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -77,7 +76,6 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "FF75772D2DC91A3700E31C86"
             BuildableName = "BloomWatch Watch App.app"
-            BlueprintName = "BloomWatch Watch App"
             ReferencedContainer = "container:Bloom.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
