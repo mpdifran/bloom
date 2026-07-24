@@ -31,6 +31,8 @@ struct YouView: View {
       BloomScrollView {
         bioAgeMeter
 
+        MonitorSummarySection(presentedNavigationDestination: $presentedNavigationDestination)
+
         // Stat sections in user-defined order
         ForEach(youSettings.sectionOrder, id: \.self) { section in
           sectionView(for: section)
@@ -56,16 +58,16 @@ struct YouView: View {
       .onChange(of: tabController.pendingVitalNavigation) { oldValue, newValue in
         if let vitalKind = newValue {
           switch vitalKind {
-          case .sleepQuality: presentedSheet = SleepDetailsView().asAny
-          case .bodyComposition: presentedSheet = BodyCompositionDetailsView().asAny
-          case .nutrition: presentedSheet = NutritionDetailsView().asAny
-          case .stressLevels: presentedSheet = StressDetailsView().asAny
-          case .activityLevel: presentedSheet = ActivityLevelDetailsView().asAny
-          case .heartHealth, .cardioFitness: presentedSheet = HeartHealthDetailsView().asAny
-          case .exerciseEffectiveness: presentedSheet = ExerciseEffectivenessView().asAny
-          case .cycleTracking: presentedSheet = MenstruationDetailView().asAny
-          case .bowelMovements: presentedSheet = BowelMovementsDetailView().asAny
-          case .lifestyle: presentedSheet = AlcoholDetailsView().asAny
+          case .sleepQuality: presentedNavigationDestination = SleepDetailsView().asAny
+          case .bodyComposition: presentedNavigationDestination = BodyCompositionDetailsView().asAny
+          case .nutrition: presentedNavigationDestination = NutritionDetailsView().asAny
+          case .stressLevels: presentedNavigationDestination = StressDetailsView().asAny
+          case .activityLevel: presentedNavigationDestination = ActivityLevelDetailsView().asAny
+          case .heartHealth, .cardioFitness: presentedNavigationDestination = HeartHealthDetailsView().asAny
+          case .exerciseEffectiveness: presentedNavigationDestination = ExerciseEffectivenessView().asAny
+          case .cycleTracking: presentedNavigationDestination = MenstruationDetailView().asAny
+          case .bowelMovements: presentedNavigationDestination = BowelMovementsDetailView().asAny
+          case .lifestyle: presentedNavigationDestination = AlcoholDetailsView().asAny
           @unknown default:
             break
           }
@@ -76,6 +78,12 @@ struct YouView: View {
         if shouldNavigate {
           tabController.pendingStepsNavigation = false
           presentedNavigationDestination = MobilityDetailsView().asAny
+        }
+      }
+      .onChange(of: tabController.pendingMonitorNavigation) { _, newValue in
+        if let monitorType = newValue {
+          presentedNavigationDestination = MonitorView(initialDetail: monitorType).asAny
+          tabController.pendingMonitorNavigation = nil
         }
       }
     }

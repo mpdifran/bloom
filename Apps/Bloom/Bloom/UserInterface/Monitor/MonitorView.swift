@@ -9,23 +9,28 @@ import SwiftUI
 import SFSafeSymbols
 import TelemetryDeck
 
-/// Main view for the Monitor tab, displaying health monitor states.
+/// Displays health monitor states. Pushed onto the You tab's navigation stack.
 struct MonitorView: View {
+
+  /// When set, the view auto-navigates to this monitor's detail on appear (used for notification deep links).
+  let initialDetail: MonitorType?
 
   @State private var viewModel = MonitorViewModel.shared
   @State private var presentedNavigationDestination: AnyView?
   @State private var presentedSheet: AnyView?
 
   @ObservedObject private var entitlementController = EntitlementController.shared
-  @Environment(TabController.self) private var tabController
+
+  init(initialDetail: MonitorType? = nil) {
+    self.initialDetail = initialDetail
+  }
 
   var body: some View {
-    NavigationStack {
-      contentView
+    contentView
       .navigationTitle("Monitor")
       .toolbar {
         if entitlementController.hasBloomPro == true {
-          ToolbarItem(placement: .cancellationAction) {
+          ToolbarItem(placement: .primaryAction) {
             Button {
               presentedSheet = MonitorSettingsView().asAny
             } label: {
@@ -35,43 +40,30 @@ struct MonitorView: View {
             .buttonStyle(.plain)
           }
         }
-        SettingsProfileViewToolbarButton()
       }
       .navigationDestination($presentedNavigationDestination)
       .sheet($presentedSheet)
-    }
-    .tabItem {
-      Label("Monitor", systemSymbol: .waveformPathEcg)
-    }
-    .task {
-      // Load cached data first for instant display
-      await viewModel.loadCached()
-      viewModel.markAlertsAsSeen()
+      .task {
+        // Load cached data first for instant display
+        await viewModel.loadCached()
+        viewModel.markAlertsAsSeen()
 
-      // Only refresh if data is stale
-      await viewModel.refreshIfNeeded()
-      viewModel.markAlertsAsSeen()
-    }
-    .onAppear {
-      TelemetryDeck.signal("View Monitor Tab")
-    }
-    .onChange(of: tabController.activeTab) { _, newTab in
-      if newTab == .monitor {
+        // Only refresh if data is stale
+        await viewModel.refreshIfNeeded()
+        viewModel.markAlertsAsSeen()
+
+        // Deep-link: forward to the requested monitor's detail
+        if let initialDetail {
+          navigateToDetails(for: initialDetail)
+        }
+      }
+      .onAppear {
+        TelemetryDeck.signal("View Monitor Tab")
+      }
+      .onForegroundTask {
+        await viewModel.refreshIfNeeded()
         viewModel.markAlertsAsSeen()
       }
-    }
-    .onForegroundTask {
-      await viewModel.refreshIfNeeded()
-      if tabController.activeTab == .monitor {
-        viewModel.markAlertsAsSeen()
-      }
-    }
-    .onChange(of: tabController.pendingMonitorNavigation) { _, newValue in
-      if let monitorType = newValue {
-        navigateToDetails(for: monitorType)
-        tabController.pendingMonitorNavigation = nil
-      }
-    }
   }
 
   // MARK: - Content View
@@ -145,6 +137,8 @@ struct MonitorView: View {
 
 #Preview {
   PreviewEnvironment {
-    MonitorView()
+    NavigationStack {
+      MonitorView()
+    }
   }
 }

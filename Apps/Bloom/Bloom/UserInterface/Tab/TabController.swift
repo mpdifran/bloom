@@ -18,7 +18,6 @@ enum Tab: CaseIterable, Identifiable {
   case today
   case nutrition
   case you
-  case monitor
   case workouts
 }
 
@@ -32,8 +31,6 @@ extension Tab {
       "You"
     case .nutrition:
       "Nutrition"
-    case .monitor:
-      "Monitor"
     case .workouts:
       "Workouts"
     }
@@ -47,8 +44,6 @@ extension Tab {
       Image(systemSymbol: .figure)
     case .nutrition:
       Image(.nutritionTab)
-    case .monitor:
-      Image(systemSymbol: .waveformPathEcg)
     case .workouts:
       Image(.workoutsTab)
     }
@@ -81,7 +76,6 @@ struct ChatContext: Identifiable, Hashable, Sendable, Codable {
 final class TabController {
   var activeTab = Tab.today
   var isShowingChat = false
-  var monitorBadgeCount: Int = 0
   var chatContexts = [ChatContext]()
   var chatLauncherSafeAreaInset: CGFloat = 0
 
@@ -138,7 +132,7 @@ private extension TabController {
       }
     case .CategoryID.monitorAlert:
       dismiss()
-      select(.monitor)
+      select(.you)
       if let monitorTypeRaw = response.notification.request.content.userInfo["monitorType"] as? String,
          let monitorType = MonitorType(rawValue: monitorTypeRaw) {
         pendingMonitorNavigation = monitorType

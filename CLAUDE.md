@@ -118,6 +118,9 @@ swift run   # Requires Redis: brew install redis && brew services start redis
 ### List View Development
 - Whenever you're building a cell in a list, use .cardContainer() to wrap it properly. You don't need to add padding, the view modifier will take care of that.
 
+### Navigation
+- Present and push via the type-erased `AnyView?` pattern: a `@State ... : AnyView?` binding + `.asAny`, using AppUI's `.sheet($)`, `.fullScreenCover($)`, and `.navigationDestination($)` overloads. Push with `binding = SomeView().asAny`, pop by setting it to `nil`. Don't hand-roll `NavigationLink`. For multi-level pushes, each pushed view owns its own binding + `.navigationDestination($)`. See the "Navigation & Presentation" section in ARCHITECTURE.md.
+
 ## Release Notes
 
 When asked to generate or publish release notes, follow the process in `RELEASE_NOTES.md`. This covers:

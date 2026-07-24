@@ -353,9 +353,6 @@ private extension RootView {
         .tag(Tab.nutrition)
       YouView()
         .tag(Tab.you)
-      MonitorView()
-        .tag(Tab.monitor)
-        .badge(MonitorViewModel.shared.badgeCount)
       WorkoutsTabView()
         .tag(Tab.workouts)
     }
@@ -383,8 +380,6 @@ private extension RootView {
         NutritionView()
       case .you:
         YouView()
-      case .monitor:
-        MonitorView()
       case .workouts:
         WorkoutsTabView()
       }

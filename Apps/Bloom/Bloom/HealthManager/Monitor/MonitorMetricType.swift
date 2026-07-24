@@ -402,7 +402,7 @@ public enum MonitorMetricType: String, CaseIterable, Sendable, Codable {
 }
 
 /// The three monitor types in the Monitor feature
-public enum MonitorType: String, CaseIterable, Sendable, Codable {
+public enum MonitorType: String, Equatable, CaseIterable, Sendable, Codable {
   case recovery = "recovery"
   case stress = "stress"
   case sleep = "sleep"

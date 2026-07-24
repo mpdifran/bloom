@@ -109,6 +109,48 @@ struct MyView: View {
 - Consistent pattern across the codebase
 - Works seamlessly with the `.sheet($presentedSheet)` modifier
 
+### Navigation & Presentation (`AnyView?` binding pattern)
+All presentation in the app — sheets, full-screen covers, and **navigation pushes** — uses the same
+type-erased idiom: an `@State … : AnyView?` binding, `.asAny` to erase the destination, and a convenience
+`View` overload from the external **AppUI** package (`Sources/AppUI/Extensions/View/`):
+
+| Modifier | Effect |
+| --- | --- |
+| `.sheet($presented)` | Modal sheet |
+| `.fullScreenCover($presented)` | Full-screen cover (falls back to a sheet on macOS) |
+| `.navigationDestination($presented)` | Push onto the enclosing `NavigationStack` |
+| `.popover($presented)` / `.inspector($presented)` | Popover / inspector |
+
+Each overload is implemented as `.<presenter>(isPresented: Binding(isNotNil: view, …)) { view.wrappedValue }`.
+
+```swift
+struct MyView: View {
+  @State private var presentedNavigationDestination: AnyView?
+
+  var body: some View {
+    NavigationStack {
+      content
+        .onTapGesture { presentedNavigationDestination = DetailView().asAny } // push
+        .navigationDestination($presentedNavigationDestination)
+    }
+  }
+}
+```
+
+**Multi-level navigation:** because these overloads key off an *`isPresented` flag* (not the `AnyView`
+type), multiple can coexist in one `NavigationStack`. A pushed view declares its **own**
+`@State presentedNavigationDestination` + `.navigationDestination($…)` to push the next level, giving true
+multi-level navigation with working back buttons. Example in the tree: `YouView` → `MonitorView` →
+a monitor detail, and `YouView` → `BowelMovementsDetailView` → a further push — each level owns its binding.
+
+**Conventions:**
+- Push with `presentedNavigationDestination = SomeView().asAny`; pop by setting it back to `nil`.
+- Don't hand-roll `NavigationLink`. Reserve typed `.navigationDestination(for:)` / `NavigationPath` for
+  value-routed flows (e.g. `YouView`'s `VitalModel.Kind`).
+- Cross-tab / notification routing: set a `TabController.pending…Navigation` property and `select(_:)` the
+  destination tab; the tab's root view observes it via `.onChange` and performs the push (see
+  `pendingVitalNavigation`, `pendingMonitorNavigation`).
+
 ## Data Flow Patterns
 
 ### SwiftData with DTOs

@@ -13,13 +13,14 @@ struct MonitorSummaryBar: View {
 
   let data: MonitorSummaryBarData
   var hasData: Bool = true
+  var showsLabels: Bool = true
   var lowLabel: String = "Low"
   var normalLabel: String = "Typical"
   var highLabel: String = "High"
 
   // Layout constants
-  private let barHeight: CGFloat = 20
-  private let dotSize: CGFloat = 12
+  var barHeight: CGFloat = 20
+  var dotSize: CGFloat = 12
 
   // Z-score boundaries
   private let lowThreshold: Double = -1.0
@@ -44,7 +45,9 @@ struct MonitorSummaryBar: View {
       }
       .frame(height: barHeight)
 
-      zoneLabels
+      if showsLabels {
+        zoneLabels
+      }
     }
   }
 }
@@ -214,8 +217,11 @@ private extension MonitorSummaryBar {
       return DotPosition(id: point.metricType, xPosition: clampedX)
     }.sorted { $0.xPosition < $1.xPosition }
 
-    // Group close positions while preserving identity
-    let groups = groupClosePositions(dotPositions, threshold: dotSize * 3)
+    // Group close positions while preserving identity.
+    // Threshold is proportional to bar width so merging depends on z-score proximity, not
+    // absolute pixels — otherwise narrow (mini) bars would clump dots that a full-width bar separates.
+    // (dotSize floor keeps visually-overlapping dots merged at very small widths.)
+    let groups = groupClosePositions(dotPositions, threshold: max(dotSize, width * 0.1))
 
     return ForEach(groups) { group in
       if group.positions.count == 1 {
