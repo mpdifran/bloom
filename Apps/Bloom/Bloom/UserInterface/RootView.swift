@@ -70,11 +70,7 @@ struct RootView: View {
       } else if !userController.isAuthenticated {
         OnboardingLoginView { }
       } else {
-        if #available(iOS 26, *) {
-          newContentView
-        } else {
-          legacyContentView
-        }
+        newContentView
       }
     }
     .sheet($presentedSheet)
@@ -344,7 +340,6 @@ private extension RootView {
     )
   }
 
-  @available(iOS 26.0, *)
   var newContentView: some View {
     TabView(selection: $tabController.activeTab) {
       Tab(value: TabKind.today) {
@@ -410,25 +405,6 @@ private extension RootView {
       )
       .ignoresSafeArea()
     }
-  }
-
-  var legacyContentView: some View {
-    Group {
-      switch tabController.activeTab {
-      case .today:
-        TodayView()
-      case .nutrition:
-        NutritionView()
-      case .you:
-        YouView()
-      case .workouts:
-        WorkoutsTabView()
-      case .actions:
-        ActionsTabView()
-      }
-    }
-    .chatLauncher()
-    .transition(.blurReplace)
   }
 }
 

@@ -26,8 +26,6 @@ struct BloomScrollView<Content>: View where Content: View {
     self.contentBuilder = contentBuilder
   }
 
-  @Environment(TabController.self) private var tabController: TabController
-
   var body: some View {
     ScrollView(.vertical) {
       VStack(spacing: spacing) {
@@ -37,17 +35,6 @@ struct BloomScrollView<Content>: View where Content: View {
       .padding(padding)
     }
     .groupedBackground()
-    .safeAreaPadding(.bottom, bottomPadding)
-  }
-}
-
-private extension BloomScrollView {
-
-  var bottomPadding: CGFloat {
-    if #available(iOS 26, *) {
-      return 0
-    }
-    return showsChatBar ? tabController.chatLauncherSafeAreaInset : 0
   }
 }
 

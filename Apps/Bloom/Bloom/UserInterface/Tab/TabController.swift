@@ -84,7 +84,6 @@ final class TabController {
   /// When opening chat, focus the new-message bar immediately (e.g. from the Chat with Bud accessory).
   var shouldFocusNewChatOnOpen = false
   var chatContexts = [ChatContext]()
-  var chatLauncherSafeAreaInset: CGFloat = 0
 
   var toggleToDismiss = false
   var pendingVitalNavigation: VitalModel.Kind?
