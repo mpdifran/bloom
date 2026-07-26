@@ -18,7 +18,7 @@ struct CreateWorkoutPlanView: View {
 
   var body: some View {
     NavigationStack {
-      BloomScrollView(showsChatBar: false) {
+      BloomScrollView {
         descriptionSection
         durationSection
         equipmentSection

@@ -48,36 +48,21 @@ struct YearInBloomStoriesView: View {
       }
       .safeAreaInset(edge: .bottom) {
         if availablePages.isNotEmpty {
-          if #available(iOS 26.0, *) {
-            Button {
-              TelemetryDeck.signal(
-                "Share Year In Bloom",
-                parameters: ["page": metricName(for: availablePages[currentPage])]
-              )
-              isSharePresented = true
-            } label: {
-              Label("Share", systemSymbol: .squareAndArrowUp)
-                .bold()
-                .foregroundStyle(.text)
-                .padding()
-            }
-            .glassEffect()
-            .horizontalAlignment(.trailing)
-            .padding()
-          } else {
-            Button {
-              TelemetryDeck.signal(
-                "Share Year In Bloom",
-                parameters: ["page": metricName(for: availablePages[currentPage])]
-              )
-              isSharePresented = true
-            } label: {
-              Label("Share", systemSymbol: .squareAndArrowUp)
-            }
-            .buttonStyle(.primary)
-            .horizontalAlignment(.trailing)
-            .padding()
+          Button {
+            TelemetryDeck.signal(
+              "Share Year In Bloom",
+              parameters: ["page": metricName(for: availablePages[currentPage])]
+            )
+            isSharePresented = true
+          } label: {
+            Label("Share", systemSymbol: .squareAndArrowUp)
+              .bold()
+              .foregroundStyle(.text)
+              .padding()
           }
+          .glassEffect()
+          .horizontalAlignment(.trailing)
+          .padding()
         }
       }
       .sheet(isPresented: $isSharePresented) {

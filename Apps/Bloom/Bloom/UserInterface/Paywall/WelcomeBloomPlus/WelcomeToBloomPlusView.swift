@@ -28,7 +28,7 @@ struct WelcomeToBloomPlusView: View {
   @State private var confettiIndex = 0
 
   var body: some View {
-    BloomScrollView(showsChatBar: false, padding: .bottom) {
+    BloomScrollView(padding: .bottom) {
       Image(.budClub)
         .resizable()
         .scaledToFit()

@@ -13,7 +13,7 @@ struct TestFlightThankYouView: View {
   @Environment(\.openURL) private var openURL
 
   var body: some View {
-    BloomScrollView(showsChatBar: false, padding: .bottom) {
+    BloomScrollView(padding: .bottom) {
       ZStack {
         Image(.budLounging)
           .resizable()

@@ -104,17 +104,9 @@ struct TodayView: View {
           currentTimeMode = TimeMode.current(for: newDate, settings: todaySettings)
         }
         .onScrollGeometryChange(for: Bool.self) { geometry in
-          if #available(iOS 26.0, *) {
-            return geometry.contentOffset.y < 100
-          } else {
-            return geometry.contentOffset.y > 2
-          }
+          return geometry.contentOffset.y < 100
         } action: { oldValue, newValue in
-          if #available(iOS 26.0, *) {
-            self.hideScrollEdge = newValue
-          } else {
-            self.configureButtonTint = newValue ? themeController.theme.color : .white
-          }
+          self.hideScrollEdge = newValue
         }
       }
       .navigationTitle("Today")
@@ -126,12 +118,7 @@ struct TodayView: View {
           Button {
             presentedSheet = TodaySettingsView().asAny
           } label: {
-            if #available(iOS 26.0, *) {
-              Image(systemSymbol: .sliderHorizontal3)
-            } else {
-              Image(systemSymbol: .sliderHorizontal3)
-                .foregroundStyle(configureButtonTint)
-            }
+            Image(systemSymbol: .sliderHorizontal3)
           }
           .buttonStyle(.plain)
           .bold()
@@ -139,12 +126,7 @@ struct TodayView: View {
           Button {
             presentedFullScreen = AchievementsView().asAny
           } label: {
-            if #available(iOS 26.0, *) {
-              Image(systemSymbol: .trophy)
-            } else {
-              Image(systemSymbol: .trophy)
-                .foregroundStyle(configureButtonTint)
-            }
+            Image(systemSymbol: .trophy)
           }
           .buttonStyle(.plain)
           .bold()
@@ -381,7 +363,7 @@ private extension TodayView {
           .padding(.horizontal)
         SleepSummaryTodayCell(summary: details)
           .onTapGesture {
-            presentedNavPush = SleepDayView(showsChatBar: true).asAny
+            presentedNavPush = SleepDayView().asAny
           }
           .padding(.horizontal)
       }

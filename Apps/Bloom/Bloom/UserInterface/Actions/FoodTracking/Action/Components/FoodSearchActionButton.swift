@@ -24,7 +24,6 @@ struct FoodSearchActionButton: View {
   }
 
   var body: some View {
-    if #available(iOS 26.0, *) {
       Button {
         action()
       } label: {
@@ -43,32 +42,6 @@ struct FoodSearchActionButton: View {
         .padding()
       }
       .glassEffect(in: Capsule())
-    } else {
-      Button {
-        action()
-      } label: {
-        VStack {
-          Image(systemSymbol: symbol)
-            .font(.title2)
-            .foregroundStyle(.tint)
-            .frame(height: 25)
-          Text(title)
-            .foregroundStyle(.primary)
-            .bold()
-            .fontDesign(.rounded)
-        }
-        .lineLimit(1)
-        .font(.caption)
-        .horizontallyCentered()
-        .padding(6)
-        .cardContainer(
-          stroke: .fill,
-          lineWidth: 0.5,
-          includePadding: false
-        )
-      }
-      .buttonStyle(.plain)
-    }
   }
 }
 

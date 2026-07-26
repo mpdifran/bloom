@@ -83,7 +83,7 @@ struct LogsListView: View {
   }
 
   private var logsList: some View {
-    BloomScrollView(showsChatBar: false) {
+    BloomScrollView {
       LazyVStack(spacing: 12) {
         ForEach(filteredLogs) { log in
           LogRow(log: log)

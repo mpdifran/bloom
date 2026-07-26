@@ -22,7 +22,7 @@ struct OnboardingWarmOpeningView: View {
   @State private var continueToggle = false
 
   var body: some View {
-    BloomScrollView(showsChatBar: false, padding: .bottom) {
+    BloomScrollView(padding: .bottom) {
       ZStack {
         Image(.morningScenery)
           .resizable()

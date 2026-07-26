@@ -23,7 +23,7 @@ struct CreateWorkoutPlanPreviewView: View {
   @Environment(\.dismiss) private var dismiss
 
   var body: some View {
-    BloomScrollView(showsChatBar: false) {
+    BloomScrollView {
       titleSection
       aboutSection
       setsSection

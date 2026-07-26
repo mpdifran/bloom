@@ -18,7 +18,7 @@ struct YouSettingsView: View {
 
   var body: some View {
     NavigationStack {
-      BloomScrollView(showsChatBar: false) {
+      BloomScrollView {
         personalDetailsSection
         sectionOrderSection
       }

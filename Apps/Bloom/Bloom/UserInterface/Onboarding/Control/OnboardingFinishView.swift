@@ -23,7 +23,7 @@ struct OnboardingFinishView: View {
   @Environment(ThemeController.self) private var themeController
 
   var body: some View {
-    BloomScrollView(showsChatBar: false, padding: .bottom) {
+    BloomScrollView(padding: .bottom) {
       ZStack {
         Image(.morningScenery)
           .resizable()

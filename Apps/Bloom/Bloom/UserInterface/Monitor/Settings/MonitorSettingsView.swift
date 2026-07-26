@@ -21,7 +21,7 @@ struct MonitorSettingsView: View {
 
   var body: some View {
     NavigationStack {
-      BloomScrollView(showsChatBar: false) {
+      BloomScrollView {
         healthPermissionSection
         notificationSection
         badgeSection

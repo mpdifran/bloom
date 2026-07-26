@@ -26,7 +26,7 @@ struct TodaySettingsView: View {
 
   var body: some View {
     NavigationStack {
-      BloomScrollView(showsChatBar: false) {
+      BloomScrollView {
         if entitlementController.hasBloomPro == true {
           aiInsightsSection
         }

@@ -18,7 +18,7 @@ struct NotificationSettingsView: View {
 
   var body: some View {
     NavigationStack {
-      BloomScrollView(showsChatBar: false) {
+      BloomScrollView {
         workoutSection
         goalSection
         celebrationSection

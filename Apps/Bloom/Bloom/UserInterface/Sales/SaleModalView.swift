@@ -313,27 +313,15 @@ private struct GradientButtonStyle: ButtonStyle {
   let hexColors: [String]
 
   func makeBody(configuration: ButtonStyle.Configuration) -> some View {
-    if #available(iOS 26.0, *) {
-      HStack {
-        configuration.label
-      }
-      .bold()
-      .padding(.vertical, 16)
-      .padding(.horizontal)
-      .background(gradientBackground)
-      .foregroundStyle(.white)
-      .clipShape(Capsule())
-    } else {
-      HStack {
-        configuration.label
-      }
-      .bold()
-      .padding(.vertical, 16)
-      .padding(.horizontal)
-      .background(gradientBackground)
-      .foregroundStyle(.white)
-      .clipShape(RoundedRectangle(cornerRadius: 17))
+    HStack {
+      configuration.label
     }
+    .bold()
+    .padding(.vertical, 16)
+    .padding(.horizontal)
+    .background(gradientBackground)
+    .foregroundStyle(.white)
+    .clipShape(Capsule())
   }
 
   @ViewBuilder

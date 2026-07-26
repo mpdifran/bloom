@@ -16,7 +16,7 @@ struct WorkoutEquipmentView: View {
   @Environment(\.dismiss) private var dismiss
   
   var body: some View {
-    BloomScrollView(showsChatBar: false) {
+    BloomScrollView {
       ForEach(SocketMessage.WorkoutPlan.Equipment.allCases, id: \.self) { equipment in
         equipmentCell(equipment)
       }

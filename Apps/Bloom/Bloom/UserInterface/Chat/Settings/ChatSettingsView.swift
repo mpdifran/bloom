@@ -17,7 +17,7 @@ struct ChatSettingsView: View {
 
   var body: some View {
     NavigationStack {
-      BloomScrollView(showsChatBar: false) {
+      BloomScrollView {
         featureSection
       }
       .navigationTitle("Preferences")

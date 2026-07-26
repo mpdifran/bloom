@@ -25,7 +25,7 @@ struct AchievementsView: View {
 
   var body: some View {
     NavigationStack {
-      BloomScrollView(showsChatBar: false) {
+      BloomScrollView {
         if store.records.isEmpty {
           emptyState
         } else {

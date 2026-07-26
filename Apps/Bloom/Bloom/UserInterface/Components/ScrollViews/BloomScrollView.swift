@@ -9,18 +9,15 @@ import SwiftUI
 
 struct BloomScrollView<Content>: View where Content: View {
 
-  let showsChatBar: Bool
   let spacing: CGFloat?
   let padding: Edge.Set
   let contentBuilder: () -> Content
 
   init(
-    showsChatBar: Bool = true,
     spacing: CGFloat? = nil,
     padding: Edge.Set = .all,
     @ViewBuilder contentBuilder: @escaping () -> Content
   ) {
-    self.showsChatBar = showsChatBar
     self.spacing = spacing
     self.padding = padding
     self.contentBuilder = contentBuilder

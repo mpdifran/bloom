@@ -11,8 +11,6 @@ struct CardView<Content>: View where Content: View {
   let cornerRadius: CGFloat
   let contentBuilder: () -> Content
 
-  @Environment(ThemeController.self) private var themeController
-
   init(
     cornerRadius: CGFloat = 60,
     @ViewBuilder contentBuilder: @escaping () -> Content
@@ -22,7 +20,6 @@ struct CardView<Content>: View where Content: View {
   }
 
   var body: some View {
-    if #available(iOS 26.0, *) {
       VStack {
         contentBuilder()
       }
@@ -30,16 +27,6 @@ struct CardView<Content>: View where Content: View {
       .presentationDetentSelfSizing()
       .presentationCornerRadius(cornerRadius)
       .presentationDragIndicator(.visible)
-    } else {
-      VStack {
-        contentBuilder()
-      }
-      .horizontallyCentered()
-      .presentationDetentSelfSizing()
-      .presentationCornerRadius(cornerRadius)
-      .presentationDragIndicator(.visible)
-      .presentationBackground(themeController.theme.backgroundColor)
-    }
   }
 }
 

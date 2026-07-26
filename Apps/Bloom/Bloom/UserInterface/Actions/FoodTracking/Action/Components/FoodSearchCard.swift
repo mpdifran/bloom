@@ -54,23 +54,9 @@ struct FoodSearchCard: View {
 
   var body: some View {
     Group {
-      if #available(iOS 26.0, *) {
         GlassEffectContainer {
           glassContentView
         }
-      } else {
-        coreContentView
-          .background {
-            RoundedRectangle(cornerRadius: 40)
-              .fill(.background.secondary)
-              .ignoresSafeArea(edges: .bottom)
-              .overlay {
-                RoundedRectangle(cornerRadius: 40)
-                  .stroke(.fill)
-                  .ignoresSafeArea(edges: .bottom)
-              }
-          }
-      }
     }
     .sheet($presentedSheet)
     .sensoryFeedback(.selection, trigger: isFocused)
@@ -84,7 +70,6 @@ struct FoodSearchCard: View {
 
 private extension FoodSearchCard {
 
-  @available(iOS 26.0, *)
   var glassContentView: some View {
     VStack(spacing: 8) {
       if !isFocused {
@@ -203,18 +188,10 @@ private extension FoodSearchCard {
             onSearch("")
           }
         } label: {
-          if #available(iOS 26.0, *) {
             Image(systemSymbol: .xmarkCircleFill)
               .font(.system(size: 22))
               .fontDesign(.rounded)
               .foregroundStyle(.white, .fill)
-          } else {
-            Image(systemSymbol: .xmarkCircleFill)
-              .font(.title3)
-              .fontDesign(.rounded)
-              .bold()
-              .foregroundStyle(.white, .gray)
-          }
         }
         .frame(square: 50)
         .buttonStyle(.plain)
@@ -226,19 +203,11 @@ private extension FoodSearchCard {
             isFocused = false
           }
         } label: {
-          if #available(iOS 26.0, *) {
             Image(systemSymbol: .chevronDownCircleFill)
               .font(.system(size: 22))
               .fontDesign(.rounded)
               .bold()
               .foregroundStyle(.white, .fill)
-          } else {
-            Image(systemSymbol: .chevronDownCircleFill)
-              .font(.title3)
-              .fontDesign(.rounded)
-              .bold()
-              .foregroundStyle(.white, .gray)
-          }
 
         }
         .frame(square: 50)

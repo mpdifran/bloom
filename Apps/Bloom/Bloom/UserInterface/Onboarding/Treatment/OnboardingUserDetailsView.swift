@@ -23,7 +23,7 @@ struct OnboardingUserDetailsView: View {
   @ObservedObject private var healthManager = HealthManager.shared
 
   var body: some View {
-    BloomScrollView(showsChatBar: false, padding: .vertical) {
+    BloomScrollView(padding: .vertical) {
       VStack(alignment: .leading) {
         if index >= 1{
           BudImage(.budThinking, dimension: 120)

@@ -10,13 +10,11 @@ import CoreHealth
 
 struct SleepDayView: View {
 
-  let showsChatBar: Bool
   let initialDate: Date?
 
   @State private var date = Date.now
 
-  init(showsChatBar: Bool, initialDate: Date? = nil) {
-    self.showsChatBar = showsChatBar
+  init(initialDate: Date? = nil) {
     self.initialDate = initialDate
     if let initialDate {
       _date = State(initialValue: initialDate)
@@ -30,7 +28,7 @@ struct SleepDayView: View {
   var body: some View {
     Group {
       if let sleepAnalysis {
-        BloomScrollView(showsChatBar: showsChatBar) {
+        BloomScrollView {
           VStack(spacing: 16) {
             AppleSleepStageChartView(sleepAnalysis: sleepAnalysis)
               .frame(height: 200)
@@ -105,6 +103,6 @@ private extension SleepDayView {
 
 #Preview {
   PreviewEnvironment {
-    SleepDayView(showsChatBar: false)
+    SleepDayView()
   }
 }

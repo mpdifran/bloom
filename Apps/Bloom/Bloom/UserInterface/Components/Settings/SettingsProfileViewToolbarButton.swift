@@ -17,7 +17,6 @@ struct SettingsProfileViewToolbarButton: ToolbarContent {
   @Namespace private var namespace
 
   var body: some ToolbarContent {
-    if #available(iOS 26.0, *) {
       ToolbarItem(placement: .primaryAction) {
         Button {
           presentedSheet = SettingsView()
@@ -31,16 +30,6 @@ struct SettingsProfileViewToolbarButton: ToolbarContent {
       }
       .matchedTransitionSource(id: "settings-view", in: namespace)
 //      .sharedBackgroundVisibility(.hidden)
-    } else {
-      ToolbarItem(placement: .primaryAction) {
-        Button {
-          presentedSheet = SettingsView().asAny
-        } label: {
-          UserProfilePhotoView(dimension: 32)
-        }
-        .sheet($presentedSheet)
-      }
-    }
   }
 }
 

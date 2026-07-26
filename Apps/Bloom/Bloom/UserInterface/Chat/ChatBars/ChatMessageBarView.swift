@@ -75,13 +75,6 @@ class ChatMessageBarView: UIView {
     addSubview(containerView)
     containerView.constrainToParent()
 
-    if #available(iOS 26.0, *) {
-
-    } else {
-      // Legacy: Blur effect setup
-      setupViewsLegacy()
-    }
-
     // Main stack view
     mainStackView.translatesAutoresizingMaskIntoConstraints = false
     mainStackView.axis = .vertical
@@ -141,28 +134,18 @@ class ChatMessageBarView: UIView {
     // Action button setup
     setupActionButton()
 
-    if #available(iOS 26.0, *) {
-      cardContainerView.backgroundColor = .clear
+    cardContainerView.backgroundColor = .clear
 
-      let glassEffectView = UIVisualEffectView(effect: UIGlassEffect())
-      glassEffectView.translatesAutoresizingMaskIntoConstraints = false
-      glassEffectView.layer.cornerRadius = 24
-      glassEffectView.clipsToBounds = true
-      cardContainerView.addSubview(glassEffectView)
-      glassEffectView.constrainToParent()
+    let glassEffectView = UIVisualEffectView(effect: UIGlassEffect())
+    glassEffectView.translatesAutoresizingMaskIntoConstraints = false
+    glassEffectView.layer.cornerRadius = 24
+    glassEffectView.clipsToBounds = true
+    cardContainerView.addSubview(glassEffectView)
+    glassEffectView.constrainToParent()
 
-      NSLayoutConstraint.activate([
-        glassEffectView.heightAnchor.constraint(greaterThanOrEqualToConstant: 48)
-      ])
-    } else {
-      // Legacy: Standard appearance
-      cardContainerView.backgroundColor = .systemBackground
-      cardContainerView.layer.cornerRadius = 26
-      cardContainerView.layer.shadowColor = UIColor.black.cgColor
-      cardContainerView.layer.shadowOpacity = 0.05
-      cardContainerView.layer.shadowOffset = CGSize(width: 0, height: 1)
-      cardContainerView.layer.shadowRadius = 2
-    }
+    NSLayoutConstraint.activate([
+      glassEffectView.heightAnchor.constraint(greaterThanOrEqualToConstant: 48)
+    ])
 
     // Add to stack
     inputStackView.addArrangedSubview(plusButton)
@@ -178,45 +161,25 @@ class ChatMessageBarView: UIView {
   private func setupPlusButton() {
     plusButton.translatesAutoresizingMaskIntoConstraints = false
     
-    if #available(iOS 26.0, *) {
-      // iOS 26+: Match ChatLauncherTabAccessoryView styling
-      var config = UIButton.Configuration.filled()
-      let bodyFont = UIFont.preferredFont(forTextStyle: .body)
-      let roundedDescriptor = bodyFont.fontDescriptor.withDesign(.rounded) ?? bodyFont.fontDescriptor
-      let roundedFont = UIFont(descriptor: roundedDescriptor, size: bodyFont.pointSize)
-      let symbolConfig = UIImage.SymbolConfiguration(font: roundedFont, scale: .default).applying(UIImage.SymbolConfiguration(weight: .bold))
-      config.image = UIImage(systemSymbol: .plus, withConfiguration: symbolConfig)
-      config.baseForegroundColor = .white
-      config.baseBackgroundColor = .tintColor
-      config.cornerStyle = .capsule
-      config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-      
-      plusButton.configuration = config
-      
-      NSLayoutConstraint.activate([
-        plusButton.widthAnchor.constraint(equalToConstant: 30),
-        plusButton.heightAnchor.constraint(equalToConstant: 30)
-      ])
-    } else {
-      // Legacy: Keep existing filled circle icon
-      let config = UIImage.SymbolConfiguration(pointSize: 24, weight: .regular)
-      let image = UIImage(systemSymbol: .plusCircleFill, withConfiguration: config)
-      plusButton.setImage(image, for: .normal)
-      
-      // Use tint color for the filled background
-      plusButton.tintColor = .tintColor
-      
-      // Configure symbol rendering mode for hierarchical coloring (white foreground on tinted background)
-      plusButton.imageView?.preferredSymbolConfiguration = UIImage.SymbolConfiguration(hierarchicalColor: .white)
-      plusButton.configuration = UIButton.Configuration.plain()
-      plusButton.configuration?.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(paletteColors: [.white, .tintColor])
-      
-      NSLayoutConstraint.activate([
-        plusButton.widthAnchor.constraint(equalToConstant: 24),
-        plusButton.heightAnchor.constraint(equalToConstant: 24)
-      ])
-    }
-    
+    // iOS 26+: Match ChatLauncherTabAccessoryView styling
+    var config = UIButton.Configuration.filled()
+    let bodyFont = UIFont.preferredFont(forTextStyle: .body)
+    let roundedDescriptor = bodyFont.fontDescriptor.withDesign(.rounded) ?? bodyFont.fontDescriptor
+    let roundedFont = UIFont(descriptor: roundedDescriptor, size: bodyFont.pointSize)
+    let symbolConfig = UIImage.SymbolConfiguration(font: roundedFont, scale: .default).applying(UIImage.SymbolConfiguration(weight: .bold))
+    config.image = UIImage(systemSymbol: .plus, withConfiguration: symbolConfig)
+    config.baseForegroundColor = .white
+    config.baseBackgroundColor = .tintColor
+    config.cornerStyle = .capsule
+    config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+
+    plusButton.configuration = config
+
+    NSLayoutConstraint.activate([
+      plusButton.widthAnchor.constraint(equalToConstant: 30),
+      plusButton.heightAnchor.constraint(equalToConstant: 30)
+    ])
+
     // Setup menu for image source selection
     setupPlusButtonMenu()
   }
@@ -284,21 +247,12 @@ class ChatMessageBarView: UIView {
     actionButton.translatesAutoresizingMaskIntoConstraints = false
     actionButton.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
 
-    if #available(iOS 26.0, *) {
-      // iOS 26+: Capsule style
-      // Configuration will be set in updateActionButton
-      NSLayoutConstraint.activate([
-        actionButton.widthAnchor.constraint(equalToConstant: 44),
-        actionButton.heightAnchor.constraint(equalToConstant: 30)
-      ])
-    } else {
-      // Legacy: Keep existing configuration
-      actionButton.configuration = UIButton.Configuration.plain()
-      NSLayoutConstraint.activate([
-        actionButton.widthAnchor.constraint(equalToConstant: 24),
-        actionButton.heightAnchor.constraint(equalToConstant: 24)
-      ])
-    }
+    // iOS 26+: Capsule style
+    // Configuration will be set in updateActionButton
+    NSLayoutConstraint.activate([
+      actionButton.widthAnchor.constraint(equalToConstant: 44),
+      actionButton.heightAnchor.constraint(equalToConstant: 30)
+    ])
 
     updateActionButton()
   }
@@ -315,23 +269,13 @@ class ChatMessageBarView: UIView {
       imageContextStackView.heightAnchor.constraint(equalTo: imageContextScrollView.heightAnchor, constant: -4)
     ])
 
-    if #available(iOS 26.0, *) {
-      NSLayoutConstraint.activate([
-        // Main stack constraints
-        mainStackView.topAnchor.constraint(equalTo: containerView.topAnchor),
-        mainStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 8),
-        mainStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -8),
-        // No bottom constraint for the mainStackView since it'll constrain to the bottom of the keyboard, setup in the view controller.
-      ])
-    } else {
-      NSLayoutConstraint.activate([
-        // Main stack constraints
-        mainStackView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
-        mainStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
-        mainStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
-        // No bottom constraint for the mainStackView since it'll constrain to the bottom of the keyboard, setup in the view controller.
-      ])
-    }
+    NSLayoutConstraint.activate([
+      // Main stack constraints
+      mainStackView.topAnchor.constraint(equalTo: containerView.topAnchor),
+      mainStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 8),
+      mainStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -8),
+      // No bottom constraint for the mainStackView since it'll constrain to the bottom of the keyboard, setup in the view controller.
+    ])
   }
 
 
@@ -361,56 +305,31 @@ class ChatMessageBarView: UIView {
   private func updateActionButton() {
     let isEmpty = textView.text.isEmpty
 
-    if #available(iOS 26.0, *) {
-      // iOS 26+: Capsule style buttons with configuration
-      var config = UIButton.Configuration.filled()
-      config.cornerStyle = .capsule
-      config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-      
-      let bodyFont = UIFont.preferredFont(forTextStyle: .body)
-      let roundedDescriptor = bodyFont.fontDescriptor.withDesign(.rounded) ?? bodyFont.fontDescriptor
-      let roundedFont = UIFont(descriptor: roundedDescriptor, size: bodyFont.pointSize)
-      let symbolConfig = UIImage.SymbolConfiguration(font: roundedFont, scale: .default).applying(UIImage.SymbolConfiguration(weight: .bold))
-      
-      if isEmpty {
-        // Show keyboard toggle - label color on tertiarySystemFill background
-        let isKeyboardVisible = textView.isFirstResponder
-        let symbolName: SFSymbol = isKeyboardVisible ? .chevronDown : .chevronUp
-        config.image = UIImage(systemSymbol: symbolName, withConfiguration: symbolConfig)
-        config.baseForegroundColor = .label
-        config.baseBackgroundColor = .tertiarySystemFill
-      } else {
-        // Show send button - white arrow on tinted background
-        config.image = UIImage(systemSymbol: .arrowUp, withConfiguration: symbolConfig)
-        config.baseForegroundColor = .white
-        config.baseBackgroundColor = .tintColor
-      }
-      
-      actionButton.configuration = config
+    // iOS 26+: Capsule style buttons with configuration
+    var config = UIButton.Configuration.filled()
+    config.cornerStyle = .capsule
+    config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+
+    let bodyFont = UIFont.preferredFont(forTextStyle: .body)
+    let roundedDescriptor = bodyFont.fontDescriptor.withDesign(.rounded) ?? bodyFont.fontDescriptor
+    let roundedFont = UIFont(descriptor: roundedDescriptor, size: bodyFont.pointSize)
+    let symbolConfig = UIImage.SymbolConfiguration(font: roundedFont, scale: .default).applying(UIImage.SymbolConfiguration(weight: .bold))
+
+    if isEmpty {
+      // Show keyboard toggle - label color on tertiarySystemFill background
+      let isKeyboardVisible = textView.isFirstResponder
+      let symbolName: SFSymbol = isKeyboardVisible ? .chevronDown : .chevronUp
+      config.image = UIImage(systemSymbol: symbolName, withConfiguration: symbolConfig)
+      config.baseForegroundColor = .label
+      config.baseBackgroundColor = .tertiarySystemFill
     } else {
-      // Legacy: Keep existing filled circle icons
-      let config = UIImage.SymbolConfiguration(pointSize: 24, weight: .regular)
-      
-      if isEmpty {
-        // Show keyboard toggle - text color on filled background
-        let isKeyboardVisible = textView.isFirstResponder
-        let symbolName: SFSymbol = isKeyboardVisible ? .chevronDownCircleFill : .chevronUpCircleFill
-        let image = UIImage(systemSymbol: symbolName, withConfiguration: config)
-        actionButton.setImage(image, for: .normal)
-
-        // Use label color for chevron, secondary fill for background
-        actionButton.tintColor = .tertiarySystemFill
-        actionButton.configuration?.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(paletteColors: [.label, .tertiarySystemFill])
-      } else {
-        // Show send button - white arrow on tinted background
-        let image = UIImage(systemSymbol: .arrowUpCircleFill, withConfiguration: config)
-        actionButton.setImage(image, for: .normal)
-
-        // Use tint color for background with white foreground
-        actionButton.tintColor = .tintColor
-        actionButton.configuration?.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(paletteColors: [.white, .tintColor])
-      }
+      // Show send button - white arrow on tinted background
+      config.image = UIImage(systemSymbol: .arrowUp, withConfiguration: symbolConfig)
+      config.baseForegroundColor = .white
+      config.baseBackgroundColor = .tintColor
     }
+
+    actionButton.configuration = config
   }
 
   private func updateImageContextVisibility() {
@@ -711,12 +630,7 @@ class ChatMessageBarView: UIView {
     let textViewHeight = textViewHeightConstraint?.constant ?? minTextViewHeight
     let imageContextHeight: CGFloat = (selectedImage != nil || !tabController.chatContexts.isEmpty) ? 60 : 0
 
-    let basePadding: CGFloat
-    if #available(iOS 26.0, *) {
-      basePadding = 24 // 12pt card padding top + 12pt card padding bottom
-    } else {
-      basePadding = 40 // 16pt mainStackView top + 12pt card padding top + 12pt card padding bottom
-    }
+    let basePadding: CGFloat = 24 // 12pt card padding top + 12pt card padding bottom
 
     let totalHeight = textViewHeight + basePadding + imageContextHeight
 

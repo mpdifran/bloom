@@ -14,13 +14,9 @@ struct MealPicker: View {
   @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
 
   var body: some View {
-    if #available(iOS 26, *) {
       content
         .menuStyle(.button)
         .buttonStyle(.plain)
-    } else {
-      content
-    }
   }
 }
 

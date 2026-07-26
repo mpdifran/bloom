@@ -22,7 +22,7 @@ struct ManageContainersView: View {
 
   var body: some View {
     NavigationStack {
-      BloomScrollView(showsChatBar: false) {
+      BloomScrollView {
         ForEach(containers) { container in
           containerRow(container)
         }
@@ -176,7 +176,7 @@ struct EditContainerView: View {
 
   var body: some View {
     NavigationStack {
-      BloomScrollView(showsChatBar: false) {
+      BloomScrollView {
         VStack(spacing: 16) {
           // Name
           VStack(alignment: .leading, spacing: 8) {

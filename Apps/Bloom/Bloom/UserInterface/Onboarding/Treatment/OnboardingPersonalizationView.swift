@@ -85,7 +85,7 @@ struct OnboardingPersonalizationView: View {
   ]
 
   var body: some View {
-    BloomScrollView(showsChatBar: false, padding: .bottom) {
+    BloomScrollView(padding: .bottom) {
       ZStack {
         Image(.afternoonScenery)
           .resizable()

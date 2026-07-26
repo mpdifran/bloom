@@ -17,7 +17,7 @@ struct HeartRateZoneSettingsView: View {
   @Environment(\.dismiss) private var dismiss
 
   var body: some View {
-    BloomScrollView(showsChatBar: false) {
+    BloomScrollView {
       modePickerSection
 
       switch healthManager.heartRateZoneMode {

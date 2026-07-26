@@ -56,7 +56,7 @@ struct AddCustomContainerView: View {
 
   var body: some View {
     NavigationStack {
-      BloomScrollView(showsChatBar: false) {
+      BloomScrollView {
         previewSection
           .padding(.bottom)
           .padding(.bottom)

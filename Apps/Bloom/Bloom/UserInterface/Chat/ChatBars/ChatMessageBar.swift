@@ -26,11 +26,7 @@ struct ChatMessageBar: View {
 
   var body: some View {
     Group {
-      if #available(iOS 26, *) {
-        content
-      } else {
-        legacyContent
-      }
+      content
     }
     .animation(.bouncy, value: image)
     .animation(.bouncy, value: tabController.chatContexts)
@@ -45,7 +41,6 @@ struct ChatMessageBar: View {
 
 private extension ChatMessageBar {
 
-  @available(iOS 26.0, *)
   var content: some View {
     VStack {
       if image != nil || tabController.chatContexts.isNotEmpty {

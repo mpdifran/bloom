@@ -71,13 +71,9 @@ struct MagicScannerCameraView: View {
           DismissButton()
         }
         ToolbarItem(placement: .principal) {
-          if #available(iOS 26, *) {
-            FoodItemLogPickerHeader()
+          FoodItemLogPickerHeader()
               .padding(.horizontal, 20)
               .glassEffect()
-          } else {
-            FoodItemLogPickerHeader()
-          }
         }
         ToolbarItem(placement: .primaryAction) {
           galleryButton
@@ -221,7 +217,6 @@ private extension MagicScannerCameraView {
         }
       }
     } label: {
-      if #available(iOS 26, *) {
         Circle()
           .frame(width: 80, height: 80, alignment: .center)
           .glassEffect(.clear, in: Circle())
@@ -230,16 +225,6 @@ private extension MagicScannerCameraView {
               .stroke(Color.white.opacity(0.8), lineWidth: 2)
               .frame(width: 69, height: 69, alignment: .center)
           )
-      } else {
-        Circle()
-          .foregroundColor(.white)
-          .frame(width: 80, height: 80, alignment: .center)
-          .overlay(
-            Circle()
-              .stroke(Color.black.opacity(0.8), lineWidth: 2)
-              .frame(width: 69, height: 69, alignment: .center)
-          )
-      }
     }
     .buttonStyle(.plain)
     .sensoryFeedback(.impact, trigger: cameraCaptureToggle)

@@ -176,7 +176,7 @@ private extension SleepScoreHistoryView {
 
       ForEach(sleepAnalyses) { analysis in
         NavigationLink {
-          SleepDayView(showsChatBar: false, initialDate: analysis.endDate)
+          SleepDayView(initialDate: analysis.endDate)
         } label: {
           sleepAnalysisCell(analysis)
         }

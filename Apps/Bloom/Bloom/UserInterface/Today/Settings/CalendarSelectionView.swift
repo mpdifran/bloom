@@ -19,7 +19,7 @@ struct CalendarSelectionView: View {
   @Environment(\.dismiss) private var dismiss
   
   var body: some View {
-    BloomScrollView(showsChatBar: false) {
+    BloomScrollView {
       if calendarManager.authStatus != .fullAccess {
         noPermissionView
       } else if calendars.isEmpty {

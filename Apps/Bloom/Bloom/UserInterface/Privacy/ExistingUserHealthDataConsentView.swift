@@ -17,7 +17,7 @@ struct ExistingUserHealthDataConsentView: View {
   @State private var error: Error?
 
   var body: some View {
-    BloomScrollView(showsChatBar: false, padding: .bottom) {
+    BloomScrollView(padding: .bottom) {
       ZStack {
         Image(.afternoonScenery)
           .resizable()

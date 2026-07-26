@@ -26,11 +26,7 @@ struct NewConversationChatMessageBar: View {
 
   var body: some View {
     Group {
-      if #available(iOS 26, *) {
-        content
-      } else {
-        legacyContent
-      }
+      content
     }
     .animation(.bouncy, value: image)
     .animation(.bouncy, value: tabController.chatContexts)
@@ -39,7 +35,6 @@ struct NewConversationChatMessageBar: View {
     .sheet($presentedSheet)
   }
 
-  @available(iOS 26.0, *)
   private var content: some View {
     VStack {
       if image != nil || tabController.chatContexts.isNotEmpty {
@@ -217,7 +212,7 @@ struct NewConversationChatMessageBar: View {
 
 #Preview {
   PreviewEnvironment {
-    BloomScrollView(showsChatBar: false) {
+    BloomScrollView {
       Text("Chat Content")
     }
     .safeAreaInset(edge: .bottom) {

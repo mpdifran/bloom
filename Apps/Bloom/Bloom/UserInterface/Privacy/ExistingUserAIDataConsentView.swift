@@ -27,7 +27,7 @@ struct ExistingUserAIDataConsentView: View {
   @Environment(\.openURL) private var openURL
 
   var body: some View {
-    BloomScrollView(showsChatBar: false, padding: .bottom) {
+    BloomScrollView(padding: .bottom) {
       Image(.budFridge)
         .resizable()
         .scaledToFit()

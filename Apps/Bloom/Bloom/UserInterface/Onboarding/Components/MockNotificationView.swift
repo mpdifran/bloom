@@ -13,16 +13,8 @@ struct MockNotificationView: View {
   let timestamp: String
 
   var body: some View {
-    if #available(iOS 26, *) {
       content
         .glassEffect(.clear, in: .rect(cornerRadius: 20))
-    } else {
-      content
-        .background {
-          RoundedRectangle(cornerRadius: 20)
-            .fill(.regularMaterial)
-        }
-    }
   }
 }
 

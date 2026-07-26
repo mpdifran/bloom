@@ -32,15 +32,11 @@ struct ChatTitleView: View {
   }
 
   var body: some View {
-    if #available(iOS 26.0, *) {
-      contentView
-        .padding(.vertical, 6)
-        .padding(.leading, 10)
-        .padding(.trailing, 20)
-        .glassEffect(.regular.interactive())
-    } else {
-      contentView
-    }
+    contentView
+      .padding(.vertical, 6)
+      .padding(.leading, 10)
+      .padding(.trailing, 20)
+      .glassEffect(.regular.interactive())
   }
 }
 

@@ -253,7 +253,7 @@ private extension SaleDetailsCell {
 
 #Preview {
   PreviewEnvironment {
-    BloomScrollView(showsChatBar: false) {
+    BloomScrollView {
       SaleDetailsCell(
         sale: SaleDetails(
           id: "sale_123",

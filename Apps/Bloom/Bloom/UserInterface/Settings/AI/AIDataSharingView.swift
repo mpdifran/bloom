@@ -19,7 +19,7 @@ struct AIDataSharingView: View {
 
   var body: some View {
     NavigationStack {
-      BloomScrollView(showsChatBar: false) {
+      BloomScrollView {
         explanationSection
         healthDataSection
         otherDataSection

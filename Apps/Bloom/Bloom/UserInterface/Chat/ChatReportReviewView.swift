@@ -27,7 +27,7 @@ struct ChatReportReviewView: View {
   var body: some View {
     NavigationStack {
       VStack(spacing: 0) {
-        BloomScrollView(showsChatBar: false, padding: .vertical) {
+        BloomScrollView(padding: .vertical) {
           warningSection
             .padding(.horizontal)
 

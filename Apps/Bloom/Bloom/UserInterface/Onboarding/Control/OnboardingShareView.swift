@@ -20,7 +20,7 @@ struct OnboardingShareView: View {
   private let shareURL = URL(string: "https://apps.apple.com/app/apple-store/id6739955926?pt=127532637&ct=bloom-onboarding-share&mt=8")!
 
   var body: some View {
-    BloomScrollView(showsChatBar: false, padding: .bottom) {
+    BloomScrollView(padding: .bottom) {
       VStack(alignment: .leading, spacing: 20) {
         BudImage(.budSuperhero, dimension: 260)
           .horizontallyCentered()

@@ -16,20 +16,10 @@ struct ContrastingPillLabel: View {
 
   var body: some View {
     Group {
-      if #available(iOS 26.0, *) {
         Text(text)
           .padding(.vertical, 4)
           .padding(.horizontal, 12)
           .glassEffect()
-      } else {
-        Text(text)
-          .padding(.vertical, 4)
-          .padding(.horizontal, 12)
-          .background {
-            Capsule()
-              .fill(.ultraThickMaterial)
-          }
-      }
     }
     .font(.caption)
     .bold()

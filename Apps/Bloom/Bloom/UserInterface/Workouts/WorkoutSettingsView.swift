@@ -17,7 +17,7 @@ struct WorkoutSettingsView: View {
 
   var body: some View {
     NavigationStack {
-      BloomScrollView(showsChatBar: false) {
+      BloomScrollView {
         NavigationLink {
           WorkoutEquipmentView()
         } label: {
