@@ -191,6 +191,8 @@ private extension SmokingDetailsView {
             }
           }
           .transition(.opacity)
+        @unknown default:
+          EmptyView()
         }
       }
     }
@@ -235,6 +237,7 @@ private extension SmokingDetailsView {
     case .never: .checkmarkCircleFill
     case .former: .clockArrowCirclepath
     case .current: .exclamationmarkTriangleFill
+    @unknown default: .questionmarkCircleFill
     }
   }
 
@@ -244,6 +247,7 @@ private extension SmokingDetailsView {
     case .never: .vitalGreat
     case .former: .vitalGood
     case .current: .vitalSevere
+    @unknown default: .secondary
     }
   }
 

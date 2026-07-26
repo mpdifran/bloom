@@ -36,6 +36,8 @@ private extension SmokingStatCard {
       .clockArrowCirclepath
     case .current:
       .exclamationmarkTriangleFill
+    @unknown default:
+      .questionmarkCircleFill
     }
   }
 
@@ -49,6 +51,8 @@ private extension SmokingStatCard {
       .vitalGood
     case .current:
       .vitalSevere
+    @unknown default:
+      .secondary
     }
   }
 
@@ -62,6 +66,8 @@ private extension SmokingStatCard {
       quitDateSubtitle
     case .current:
       nil
+    @unknown default:
+      "Tap to set"
     }
   }
 

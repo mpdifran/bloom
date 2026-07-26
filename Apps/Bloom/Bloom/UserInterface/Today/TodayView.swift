@@ -188,6 +188,8 @@ private extension TodayView {
       return Image(.eveningScenery)
     case .night:
       return Image(.nightScenery)
+    @unknown default:
+      return Image(.morningScenery)
     }
   }
 

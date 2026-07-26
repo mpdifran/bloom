@@ -38,6 +38,8 @@ struct MagicScannerProcessingCell: View {
               errorView
             case .completed:
               EmptyView() // Shouldn't happen
+            @unknown default:
+              EmptyView()
             }
           }
         }
@@ -53,6 +55,8 @@ struct MagicScannerProcessingCell: View {
           case .failed:
             errorActions
           case .completed:
+            EmptyView()
+          @unknown default:
             EmptyView()
           }
         }

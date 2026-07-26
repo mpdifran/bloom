@@ -92,6 +92,8 @@ struct DrinkFillContainerView: View {
       TumblerShape().fill(style)
     case .shotGlass:
       ShotGlassShape().fill(style)
+    @unknown default:
+      GlassShape().fill(style)
     }
   }
 
@@ -122,6 +124,8 @@ struct DrinkFillContainerView: View {
       TumblerShape().stroke(Color.secondary.opacity(0.3), lineWidth: 3)
     case .shotGlass:
       ShotGlassShape().stroke(Color.secondary.opacity(0.3), lineWidth: 3)
+    @unknown default:
+      GlassShape().stroke(Color.secondary.opacity(0.3), lineWidth: 3)
     }
   }
 }

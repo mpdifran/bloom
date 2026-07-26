@@ -354,6 +354,8 @@ private extension TodaySettingsView {
           }
         }
       }
+    @unknown default:
+      break
     }
 
     // Assign the modified copy back to trigger persistence

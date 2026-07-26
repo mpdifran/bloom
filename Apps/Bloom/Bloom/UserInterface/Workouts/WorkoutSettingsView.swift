@@ -114,6 +114,8 @@ private extension WorkoutSettingsView {
       return "Custom heart rate"
     case .manual:
       return "Custom zones"
+    @unknown default:
+      return "Automatic"
     }
   }
 }

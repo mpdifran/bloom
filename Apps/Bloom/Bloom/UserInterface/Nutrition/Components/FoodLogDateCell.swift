@@ -95,6 +95,8 @@ private extension FoodLogDateCell {
       Image(systemSymbol: .chevronUpCircleFill)
         .foregroundStyle(.white, .mutedRed)
         .font(.title2)
+    @unknown default:
+      EmptyView()
     }
   }
 }

@@ -29,6 +29,7 @@ struct BloodPressureStatCard: View {
     case .normal: return .ok
     case .low, .elevated: return .warning
     case .hypertensionStage1, .hypertensionStage2, .hypertensiveCrisis: return .critical
+    @unknown default: return nil
     }
   }
 

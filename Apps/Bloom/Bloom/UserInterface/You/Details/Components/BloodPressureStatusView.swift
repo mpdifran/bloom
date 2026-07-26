@@ -141,6 +141,7 @@ private extension BloodPressureStatusView {
     case .hypertensionStage1: [RectangleFrame(40, 100, 140, 160), RectangleFrame(90, 100, 70, 140)]
     case .hypertensionStage2: [RectangleFrame(40, 110, 160, 180), RectangleFrame(100, 110, 70, 160)]
     case .hypertensiveCrisis: [RectangleFrame(40, 120, 180, 200), RectangleFrame(110, 120, 70, 180)]
+    @unknown default: []
     }
   }
 }

@@ -108,6 +108,8 @@ private extension DrinkCategory {
       .wineglassFill
     case .custom:
       .plusCircle
+    @unknown default:
+      nil
     }
   }
 }

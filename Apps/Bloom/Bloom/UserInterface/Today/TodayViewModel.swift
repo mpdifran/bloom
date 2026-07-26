@@ -182,6 +182,8 @@ extension TodayView.ViewModel {
     case .todaysWeather, .tomorrowsWeather:
       // These will be handled by weather integration
       return .local
+    @unknown default:
+      return nil
     }
   }
   

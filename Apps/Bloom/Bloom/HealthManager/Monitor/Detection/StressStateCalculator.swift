@@ -133,6 +133,8 @@ actor StressStateCalculator: MonitorStateCalculator {
       ))
     case .steady:
       break // No signal for steady state
+    @unknown default:
+      break
     }
 
     // HRV multi-day trend analysis

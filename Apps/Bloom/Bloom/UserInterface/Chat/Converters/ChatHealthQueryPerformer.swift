@@ -832,6 +832,8 @@ private extension ChatHealthQueryPerformer {
       return "\(formatter.string(for: value) ?? "") years since quit"
     case .alcohol:
       return "\(NumberFormatter.noDecimalPlaces.string(for: value) ?? "") drinks/week"
+    @unknown default:
+      return ""
     }
   }
 

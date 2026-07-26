@@ -111,6 +111,8 @@ private extension TodayHeroCell {
       return "Good Evening\(userName)!"
     case .night:
       return "Good Night\(userName)!"
+    @unknown default:
+      return "Hello\(userName)!"
     }
   }
 

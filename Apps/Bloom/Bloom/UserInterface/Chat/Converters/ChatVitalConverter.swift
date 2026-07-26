@@ -673,6 +673,8 @@ extension ChatVitalConverter {
       return .sleep
     case .smoking, .alcohol:
       return .lifestyle
+    @unknown default:
+      return .bodyMetrics
     }
   }
 
@@ -709,6 +711,8 @@ extension ChatVitalConverter {
       return "\(formatter.string(for: value) ?? "") years since quit"
     case .alcohol:
       return "\(NumberFormatter.noDecimalPlaces.string(for: value) ?? "") drinks/week"
+    @unknown default:
+      return ""
     }
   }
 
@@ -751,6 +755,8 @@ extension MenstrualCycle.MenstrualFlow {
       return .medium
     case .heavy:
       return .heavy
+    @unknown default:
+      return .none
     }
   }
 }
