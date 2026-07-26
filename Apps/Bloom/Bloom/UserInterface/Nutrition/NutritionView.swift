@@ -108,9 +108,6 @@ struct NutritionView: View {
         }
       }
     }
-    .tabItem {
-      Label("Nutrition", image: .nutritionTab)
-    }
   }
 }
 

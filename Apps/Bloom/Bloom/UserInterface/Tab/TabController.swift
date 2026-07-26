@@ -12,16 +12,17 @@ import TelemetryDeck
 import SFSafeSymbols
 import DataContainer
 
-enum Tab: CaseIterable, Identifiable {
+enum TabKind: CaseIterable, Identifiable {
   var id: Self { self }
 
   case today
   case nutrition
   case you
   case workouts
+  case actions
 }
 
-extension Tab {
+extension TabKind {
 
   var name: String {
     switch self {
@@ -33,6 +34,8 @@ extension Tab {
       "Nutrition"
     case .workouts:
       "Workouts"
+    case .actions:
+      "Actions"
     }
   }
 
@@ -46,6 +49,8 @@ extension Tab {
       Image(.nutritionTab)
     case .workouts:
       Image(.workoutsTab)
+    case .actions:
+      Image(systemSymbol: .plus)
     }
   }
 }
@@ -74,8 +79,10 @@ struct ChatContext: Identifiable, Hashable, Sendable, Codable {
 
 @Observable @MainActor
 final class TabController {
-  var activeTab = Tab.today
+  var activeTab = TabKind.today
   var isShowingChat = false
+  /// When opening chat, focus the new-message bar immediately (e.g. from the Chat with Bud accessory).
+  var shouldFocusNewChatOnOpen = false
   var chatContexts = [ChatContext]()
   var chatLauncherSafeAreaInset: CGFloat = 0
 
@@ -101,7 +108,7 @@ final class TabController {
 
 extension TabController {
 
-  func select(_ tab: Tab) {
+  func select(_ tab: TabKind) {
     activeTab = tab
   }
 

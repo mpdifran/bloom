@@ -98,7 +98,7 @@ private extension ChatLauncherView {
 
   var tabPickerButton: some View {
     Menu {
-      ForEach(Tab.allCases.reversed()) { tab in
+      ForEach(TabKind.allCases.reversed()) { tab in
         Button {
           tabController.activeTab = tab
           selectionToggle.toggle()

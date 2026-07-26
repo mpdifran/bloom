@@ -26,6 +26,8 @@ struct BloomTabView: View {
           YouView()
         case .workouts:
           WorkoutsTabView()
+        case .actions:
+          ActionsTabView()
         }
       }
       .overlay {

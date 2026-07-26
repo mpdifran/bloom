@@ -87,9 +87,6 @@ struct YouView: View {
         }
       }
     }
-    .tabItem {
-      Label("You", systemSymbol: .figure)
-    }
   }
 
   @ViewBuilder

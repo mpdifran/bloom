@@ -95,6 +95,13 @@ struct ChatConversationView: View {
       }
     }
     .onAppear {
+      // Opened from the Chat with Bud accessory: focus immediately regardless of existing chats.
+      if tabController.shouldFocusNewChatOnOpen {
+        tabController.shouldFocusNewChatOnOpen = false
+        isFocused = true
+        return
+      }
+
       guard pinnedConversations.isEmpty && unpinnedConversations.isEmpty else {
         return
       }

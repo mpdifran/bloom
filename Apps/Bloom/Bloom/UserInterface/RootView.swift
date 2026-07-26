@@ -347,17 +347,58 @@ private extension RootView {
   @available(iOS 26.0, *)
   var newContentView: some View {
     TabView(selection: $tabController.activeTab) {
-      TodayView()
-        .tag(Tab.today)
-      NutritionView()
-        .tag(Tab.nutrition)
-      YouView()
-        .tag(Tab.you)
-      WorkoutsTabView()
-        .tag(Tab.workouts)
+      Tab(value: TabKind.today) {
+        TodayView()
+      } label: {
+        Label("Today", image: .todayTab)
+      }
+      Tab(value: TabKind.nutrition) {
+        NutritionView()
+      } label: {
+        Label("Nutrition", image: .nutritionTab)
+      }
+      Tab(value: TabKind.you) {
+        YouView()
+      } label: {
+        Label("You", systemSymbol: .figure)
+      }
+      Tab(value: TabKind.workouts) {
+        WorkoutsTabView()
+      } label: {
+        Label("Workouts", image: .workoutsTab)
+      }
+      // Prominent, separated "Actions" tab. iOS 27 reintegrates the .search tab into the main bar,
+      // so use the new .prominent role there; on iOS 26 .search still renders separated.
+      // `.prominent` only exists in the iOS 27 SDK (Xcode 27 / Swift 6.4+). The #if keeps this
+      // compiling on Xcode 26 (Swift 6.3) — which is required for App Store submission until
+      // Xcode 27 is GM — by falling back to `.search` there. Same source auto-upgrades on Xcode 27.
+      #if compiler(>=6.4)
+      if #available(iOS 27.0, *) {
+        Tab("Actions", systemImage: "plus", value: TabKind.actions, role: .prominent) {
+          ActionsTabView()
+        }
+      } else {
+        Tab("Actions", systemImage: "plus", value: TabKind.actions, role: .search) {
+          ActionsTabView()
+        }
+      }
+      #else
+      Tab("Actions", systemImage: "plus", value: TabKind.actions, role: .search) {
+        ActionsTabView()
+      }
+      #endif
     }
     .tabBarMinimizeBehavior(.onScrollDown)
-    .tabViewBottomAccessory { tabViewAccessoryView }
+    .tabViewBottomAccessory {
+      ChatBudAccessoryView()
+        .onTapGesture {
+          EntitledAction(presentedSheet: $presentedSheet) {
+            tabController.shouldFocusNewChatOnOpen = true
+            tabController.isShowingChat = true
+            selectionToggle.toggle()
+          }
+        }
+    }
     .sensoryFeedback(.selection, trigger: selectionToggle)
     .fullScreenCover(isPresented: Binding(
       get: { tabController.isShowingChat },
@@ -382,22 +423,12 @@ private extension RootView {
         YouView()
       case .workouts:
         WorkoutsTabView()
+      case .actions:
+        ActionsTabView()
       }
     }
     .chatLauncher()
     .transition(.blurReplace)
-  }
-
-  var tabViewAccessoryView: some View {
-    ChatLauncherTabAccessoryView(presentedSheet: $presentedSheet)
-      .onTapGesture {
-        EntitledAction(
-          presentedSheet: $presentedSheet
-        ) {
-          tabController.isShowingChat = true
-          selectionToggle.toggle()
-        }
-      }
   }
 }
 
