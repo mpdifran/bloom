@@ -51,26 +51,6 @@ struct NewConversationChatMessageBar: View {
     }
   }
 
-  private var legacyContent: some View {
-    VStack {
-      if image != nil || tabController.chatContexts.isNotEmpty {
-        imageAndContextSection
-      }
-
-      chatBar
-        .cardContainer(fill: .background, includePadding: false)
-        .onTapGesture {
-          isFocused = true
-        }
-    }
-    .padding()
-    .background {
-      RoundedRectangle(cornerRadius: 40)
-        .fill(.ultraThinMaterial)
-        .ignoresSafeArea(edges: .bottom)
-    }
-  }
-
   private var imageAndContextSection: some View {
     ScrollView(.horizontal) {
       HStack {

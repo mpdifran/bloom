@@ -106,35 +106,6 @@ private extension FoodSearchCard {
     .animation(.default, value: isFocused)
   }
 
-  var coreContentView: some View {
-    VStack {
-      if !isFocused {
-        switch toolbarMode {
-        case .logTools:
-          HStack {
-            barcodeScanButton
-            magicScanButton
-            textFoodButton
-          }
-        case .pickerTools:
-          HStack {
-            barcodeScannerPickerButton
-            Spacer()
-          }
-        case .noTools:
-          EmptyView()
-        }
-      }
-      searchTextField
-        .cardContainer(
-          stroke: .fill,
-          lineWidth: 0.5,
-          includePadding: false
-        )
-    }
-    .padding()
-  }
-
   var barcodeScanButton: some View {
     FoodSearchActionButton(symbol: .barcodeViewfinder, title: "Barcode Scan") {
       showBarcodeScanner()

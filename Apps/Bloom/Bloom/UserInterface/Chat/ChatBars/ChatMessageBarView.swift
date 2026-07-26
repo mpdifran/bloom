@@ -27,7 +27,6 @@ class ChatMessageBarView: UIView {
   weak var scrollDelegate: ChatMessageBarScrollDelegate?
 
   private let containerView = UIView()
-  private let blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
   private let cardContainerView = UIView()
   let mainStackView = UIStackView()
 
@@ -89,16 +88,6 @@ class ChatMessageBarView: UIView {
 
     // Update visibility
     updateImageContextVisibility()
-  }
-
-  private func setupViewsLegacy() {
-    // Blur effect setup for older iOS versions
-    blurEffectView.translatesAutoresizingMaskIntoConstraints = false
-    blurEffectView.layer.cornerRadius = 40
-    blurEffectView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-    blurEffectView.clipsToBounds = true
-    containerView.addSubview(blurEffectView)
-    blurEffectView.constrainToParent()
   }
 
   private func setupImageContextScrollView() {
