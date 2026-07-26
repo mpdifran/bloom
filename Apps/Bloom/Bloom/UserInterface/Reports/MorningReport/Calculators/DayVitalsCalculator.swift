@@ -598,6 +598,9 @@ private extension DayVitalsCalculator {
     case .unknown, .none:
       cyclePhase = nil
       dayInCurrentPhase = nil
+    @unknown default:
+      cyclePhase = nil
+      dayInCurrentPhase = nil
     }
 
     // Calculate average cycle length with trend

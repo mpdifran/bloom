@@ -139,6 +139,7 @@ final class WatchTodaySyncer {
     case .dueNow: return 1
     case .upcoming: return 2
     case .completed: return 3
+    @unknown default: return 4
     }
   }
 }

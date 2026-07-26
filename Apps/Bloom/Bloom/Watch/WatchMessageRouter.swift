@@ -150,6 +150,8 @@ final class WatchMessageRouter {
           withID: message.reminderID,
           occurrenceID: message.occurrenceID
         )
+      @unknown default:
+        break
       }
 
       let response = WatchReminderCompletionResponse(

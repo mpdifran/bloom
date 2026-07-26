@@ -96,6 +96,7 @@ final actor BiologicalAgeCalculator {
       case .high: return .high
       case .moderate: return .moderate
       case .low: return .low
+      @unknown default: return nil
       }
     }()
 
@@ -1051,6 +1052,8 @@ private extension BiologicalAgeCalculator {
       ageDelta = 0.0
       rawValue = 0.0
     case .unknown:
+      return nil
+    @unknown default:
       return nil
     }
 

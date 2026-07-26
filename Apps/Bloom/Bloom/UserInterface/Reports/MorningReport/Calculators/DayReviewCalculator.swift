@@ -193,6 +193,8 @@ private extension DayReviewCalculator {
       return .sleep
     case .smoking, .alcohol:
       return .lifestyle
+    @unknown default:
+      return .bodyMetrics
     }
   }
 
@@ -229,6 +231,8 @@ private extension DayReviewCalculator {
       return "\(formatter.string(for: value) ?? "") years since quit"
     case .alcohol:
       return "\(NumberFormatter.noDecimalPlaces.string(for: value) ?? "") drinks/week"
+    @unknown default:
+      return formatter.string(for: value) ?? ""
     }
   }
 

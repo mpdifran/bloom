@@ -48,6 +48,8 @@ struct TimeConfigurationCell: View {
       return todaySettings.nightStartHour
     case .night:
       return todaySettings.morningStartHour
+    @unknown default:
+      return todaySettings.morningStartHour
     }
   }
 
@@ -60,6 +62,8 @@ struct TimeConfigurationCell: View {
     case .evening:
       return todaySettings.nightStartMinute
     case .night:
+      return todaySettings.morningStartMinute
+    @unknown default:
       return todaySettings.morningStartMinute
     }
   }

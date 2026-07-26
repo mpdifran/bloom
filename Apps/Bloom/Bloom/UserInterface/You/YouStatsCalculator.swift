@@ -1970,8 +1970,6 @@ extension YouStatsCalculator {
     guard dataPoints.count >= 3 else { return .consistent }
 
     let bedtimes = dataPoints.map(\.bedtimeMinutesFromNoon)
-    let average = bedtimes.reduce(0, +) / Double(bedtimes.count)
-
     let standardDeviation = calculateStandardDeviation(bedtimes)
 
     // Check for trending by comparing first half to second half

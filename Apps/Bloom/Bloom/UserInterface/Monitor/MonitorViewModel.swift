@@ -8,6 +8,7 @@
 import Foundation
 import BloomModel
 import UIKit
+import UserNotifications
 
 /// ViewModel for the Monitor tab that manages health monitor states.
 @Observable @MainActor
@@ -97,7 +98,7 @@ final class MonitorViewModel {
 
   /// Updates badge count on tab and app icon based on current results
   func updateBadges() {
-    UIApplication.shared.applicationIconBadgeNumber = badgeCount
+    UNUserNotificationCenter.current().setBadgeCount(badgeCount)
   }
 
   /// Call when user views the Monitor tab to mark current alerts as "seen"
