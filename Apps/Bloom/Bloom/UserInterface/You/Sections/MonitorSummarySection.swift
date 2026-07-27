@@ -20,9 +20,9 @@ struct MonitorSummarySection: View {
     HStack(spacing: 12) {
       MiniMonitorCard(type: .recovery, state: viewModel.result(for: .recovery)?.state ?? .unavailable)
       Divider()
-      MiniMonitorCard(type: .sleep, state: viewModel.result(for: .sleep)?.state ?? .unavailable)
-      Divider()
       MiniMonitorCard(type: .stress, state: viewModel.result(for: .stress)?.state ?? .unavailable)
+      Divider()
+      MiniMonitorCard(type: .sleep, state: viewModel.result(for: .sleep)?.state ?? .unavailable)
     }
     .cardContainer()
     .selectable()
