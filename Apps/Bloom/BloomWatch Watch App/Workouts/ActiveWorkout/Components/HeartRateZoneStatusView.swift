@@ -100,7 +100,10 @@ private extension HeartRateZoneStatusView {
   }
 
   var beatInterval: TimeInterval {
-    60.0 / heartRate
+    // Guard against heartRate == 0 (before the first sample lands) — 60.0/0 is +Infinity,
+    // which feeds an infinite truncatingRemainder divisor and animation duration into the
+    // TimelineView every 0.05s.
+    heartRate > 0 ? 60.0 / heartRate : 1.0
   }
 
   var heartRateView: some View {

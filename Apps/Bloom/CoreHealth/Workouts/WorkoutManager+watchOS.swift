@@ -110,6 +110,14 @@ public extension WorkoutManager {
     session?.delegate = self
     builder?.delegate = self
     builder?.dataSource = HKLiveWorkoutDataSource(healthStore: healthStore, workoutConfiguration: session?.workoutConfiguration)
+
+    // A recovered session is already running, so no `didChangeTo` state-change callback
+    // fires. Publish the current state directly so the UI (gated on `sessionState.isActive`)
+    // re-presents ActiveWorkoutView; the metrics view then skips the countdown for a
+    // running session and shows live metrics instead of restarting collection.
+    if let state = session?.state {
+      sessionState = state
+    }
   }
 }
 
@@ -120,22 +128,28 @@ public extension WorkoutManager {
 extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
   nonisolated public func workoutBuilder(_ workoutBuilder: HKLiveWorkoutBuilder, didCollectDataOf collectedTypes: Set<HKSampleType>) {
     /**
-     HealthKit calls this method on an anonymous serial background queue.
-     Use Task to provide an asynchronous context so MainActor can come to play.
+     HealthKit calls this method on an anonymous serial background queue and mutates the
+     builder on that same queue. Read the statistics snapshots HERE (synchronously, on the
+     delegate queue) — reading `workoutBuilder.statistics(for:)` from a hopped `@MainActor`
+     Task races with HealthKit writing new samples into the builder and crashes intermittently
+     once real sample data starts flowing. Only the published updates need the main actor.
      */
-    Task { @MainActor in
-      var allStatistics: [HKStatistics] = []
-      
-      for type in collectedTypes {
-        if let quantityType = type as? HKQuantityType, let statistics = workoutBuilder.statistics(for: quantityType) {
-          updateForStatistics(statistics)
-          allStatistics.append(statistics)
-        }
+    var collectedStatistics: [HKStatistics] = []
+    for type in collectedTypes {
+      if let quantityType = type as? HKQuantityType, let statistics = workoutBuilder.statistics(for: quantityType) {
+        collectedStatistics.append(statistics)
       }
-      
-      let archivedData = try? NSKeyedArchiver.archivedData(withRootObject: allStatistics, requiringSecureCoding: true)
-      guard let archivedData = archivedData, !archivedData.isEmpty else {
-        print("Encoded cycling data is empty")
+    }
+
+    guard !collectedStatistics.isEmpty else { return }
+
+    Task { @MainActor in
+      for statistics in collectedStatistics {
+        updateForStatistics(statistics)
+      }
+
+      let archivedData = try? NSKeyedArchiver.archivedData(withRootObject: collectedStatistics, requiringSecureCoding: true)
+      guard let archivedData, !archivedData.isEmpty else {
         return
       }
       /**
