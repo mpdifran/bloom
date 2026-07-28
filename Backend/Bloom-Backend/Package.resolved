@@ -132,8 +132,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mpdifran/openai-kit.git",
       "state" : {
-        "revision" : "d51b1372822193b02b8a2070dccc35324867e86c",
-        "version" : "1.6.24"
+        "revision" : "91801087755375cd911ef9eb0076d12c2d6e1471",
+        "version" : "1.6.25"
       }
     },
     {
