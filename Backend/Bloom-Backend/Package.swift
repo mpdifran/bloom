@@ -17,7 +17,7 @@ let package = Package(
         .package(url: "https://github.com/MihaelIsaev/VaporCron.git", from: "2.6.0"),
         .package(url: "https://github.com/apple/swift-nio.git", from: "2.65.0"),
         .package(url: "https://github.com/soto-project/soto.git", from: "7.0.0"),
-        .package(url: "https://github.com/mpdifran/openai-kit.git", from: "1.6.24"),
+        .package(url: "https://github.com/mpdifran/openai-kit.git", from: "1.6.27"),
         .package(url: "https://github.com/mpdifran/vapor-sign-in-with-apple.git", from: "1.1.0"),
         .package(url: "https://github.com/mpdifran/AppFoundations.git", from: "0.1.6"),
         .package(name: "bloom-model", path: "../../Shared/BloomModel"),
