@@ -263,6 +263,9 @@ private extension ChatService {
 
     let selectedModel = modelOverride ?? modelID
 
+    // Enforce the per-user AI token budget before spending on a new request.
+    try await application.aiUsageLimiter.checkBudget(for: userID)
+
     logger.debug("Streaming with model \(selectedModel.id)")
     let stream = try await openAIService.openAI.responses.createAndStreamResponse(
       input: fortifiedInputs,
@@ -308,6 +311,7 @@ private extension ChatService {
         case .inProgress:
           try await sendIsAssistantTyping(isTyping: true, userID: userID, conversationID: conversationID)
         case .completed(let event):
+          await application.aiUsageLimiter.record(tokens: event.response.usage?.totalTokens ?? 0, for: userID)
           if toolCalls.isNotEmpty {
             try await send(toolCalls: toolCalls, userID: userID, db: db, conversationID: conversationID, lastMessageID: event.response.id)
           }
