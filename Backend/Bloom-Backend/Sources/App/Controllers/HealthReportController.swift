@@ -103,6 +103,8 @@ private extension HealthReportController {
       throw Abort(.unauthorized)
     }
 
+    try await request.aiUsageLimiter.checkBudget(for: userID)
+
     // Check if a job already exists for this user
     if let existingJob = try await request.biologicalAgeJobManager.getJob(userId: userID) {
       // If job is pending or processing, return that status

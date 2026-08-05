@@ -417,6 +417,13 @@ private extension FoodController {
         if sections.isNotEmpty {
           return sections
         } else {
+          // Inserting an unknown barcode parses the product via OpenAI — gate it on the user's budget.
+          let user = try request.auth.require(User.self)
+          guard let userID = user.id else {
+            throw Abort(.unauthorized)
+          }
+          try await request.aiUsageLimiter.checkBudget(for: userID)
+
           let foodItems = try await request.openFoodFactsService.insertProduct(barcode: barcode)
           return [
             FoodSearchResponse.Section(
