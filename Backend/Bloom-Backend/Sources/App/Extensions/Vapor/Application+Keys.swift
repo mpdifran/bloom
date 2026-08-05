@@ -204,6 +204,21 @@ extension Application {
   }
 }
 
+// MARK: - AI usage limits
+
+extension Application {
+
+  /// Max AI tokens a single user may consume per rolling day. Configure via `AI_TOKEN_DAILY_LIMIT`.
+  var aiTokenDailyLimit: Int {
+    Environment.get("AI_TOKEN_DAILY_LIMIT").flatMap(Int.init) ?? 1_000_000
+  }
+
+  /// Max AI tokens a single user may consume per rolling month. Configure via `AI_TOKEN_MONTHLY_LIMIT`.
+  var aiTokenMonthlyLimit: Int {
+    Environment.get("AI_TOKEN_MONTHLY_LIMIT").flatMap(Int.init) ?? 15_000_000
+  }
+}
+
 // MARK: - MailerLite
 
 extension Application {

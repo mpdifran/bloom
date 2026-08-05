@@ -17,23 +17,32 @@ struct OpenAIService: Sendable {
   let gemini: OpenAIKit.Client
   let imageStorage: ImageStorage
   let logger: Logger
+  let aiUsageLimiter: AIUsageLimiter
 
   init(
     openAI: OpenAIKit.Client,
     gemini: OpenAIKit.Client,
     imageStorage: ImageStorage,
-    logger: Logger
+    logger: Logger,
+    aiUsageLimiter: AIUsageLimiter
   ) {
     self.openAI = openAI
     self.gemini = gemini
     self.imageStorage = imageStorage
     self.logger = logger
+    self.aiUsageLimiter = aiUsageLimiter
+  }
+
+  private func recordUsage(totalTokens: Int, userID: UserIdentifier?) async {
+    if let userID {
+      await aiUsageLimiter.record(tokens: totalTokens, for: userID)
+    }
   }
 }
 
 extension OpenAIService {
 
-  func generateConversationTitle(userMessage: String) async -> String? {
+  func generateConversationTitle(userMessage: String, userID: UserIdentifier? = nil) async -> String? {
     do {
       let model = ModelID.GPT5.gpt5Mini
 
@@ -75,6 +84,8 @@ extension OpenAIService {
         messages: messages
       )
 
+      await recordUsage(totalTokens: response.usage.totalTokens, userID: userID)
+
       guard let text = response.choices.first?.message.content.first?.text else {
         return nil
       }
@@ -90,16 +101,19 @@ extension OpenAIService {
     barCode: String,
     country: String,
     nutritionLabelMetadata: ImageFileMetadata,
-    packagingMetadata: ImageFileMetadata
+    packagingMetadata: ImageFileMetadata,
+    userID: UserIdentifier? = nil
   ) async throws -> (FoodItemRecord?, UploadNewFoodResponse.Result) {
 
     let (nutritionData, packagingData) = await asyncParallelize {
       await parseNutritionLabel(
-        nutritionLabelMetadata: nutritionLabelMetadata
+        nutritionLabelMetadata: nutritionLabelMetadata,
+        userID: userID
       )
     } task2: {
       await parsePackaging(
-        packagingMetadata: packagingMetadata
+        packagingMetadata: packagingMetadata,
+        userID: userID
       )
     }
 
@@ -152,7 +166,8 @@ extension OpenAIService {
 
   func estimateCalories(
     foodImageFile: ImageFile,
-    foodDescription: String?
+    foodDescription: String?,
+    userID: UserIdentifier? = nil
   ) async -> OpenAIEstimateCaloriesResponse? {
     do {
       let model = ModelID.GPT5.gpt5Mini
@@ -190,6 +205,8 @@ extension OpenAIService {
         responseFormat: ResponseFormat(type: .jsonSchema(.aiEstimate))
       )
 
+      await recordUsage(totalTokens: response.usage.totalTokens, userID: userID)
+
       return try response.parse(OpenAIEstimateCaloriesResponse.self)
     } catch {
       logger.error(error)
@@ -199,7 +216,8 @@ extension OpenAIService {
 
   func estimateCaloriesV2(
     foodImageFile: ImageFile,
-    foodDescription: String?
+    foodDescription: String?,
+    userID: UserIdentifier? = nil
   ) async -> OpenAIEstimateCaloriesResponse? {
     do {
       let file = try await openAI.files.upload(
@@ -221,6 +239,8 @@ extension OpenAIService {
         text: Text(format: .init(type: .jsonSchema(.aiEstimate)))
       )
 
+      await recordUsage(totalTokens: response.usage?.totalTokens ?? 0, userID: userID)
+
       return try response.parse(OpenAIEstimateCaloriesResponse.self)
     } catch {
       logger.error(error)
@@ -228,7 +248,7 @@ extension OpenAIService {
     }
   }
 
-  func estimateCalories(textDescription: String) async -> OpenAIEstimateCaloriesResponse? {
+  func estimateCalories(textDescription: String, userID: UserIdentifier? = nil) async -> OpenAIEstimateCaloriesResponse? {
     do {
       let model = ModelID.GPT5.gpt5Mini
 
@@ -255,6 +275,8 @@ extension OpenAIService {
         responseFormat: ResponseFormat(type: .jsonSchema(.textAIEstimate))
       )
 
+      await recordUsage(totalTokens: response.usage.totalTokens, userID: userID)
+
       return try response.parse(OpenAIEstimateCaloriesResponse.self)
     } catch {
       logger.error(error)
@@ -262,7 +284,7 @@ extension OpenAIService {
     }
   }
 
-  func estimateCaloriesV2(textDescription: String) async -> OpenAIEstimateCaloriesResponse? {
+  func estimateCaloriesV2(textDescription: String, userID: UserIdentifier? = nil) async -> OpenAIEstimateCaloriesResponse? {
     do {
       var inputs = [OpenAIKit.Response.InputItem]()
       inputs.append(.message(.init(role: .user, content: [.text(.init(text: textDescription))])))
@@ -274,6 +296,8 @@ extension OpenAIService {
         text: Text(format: .init(type: .jsonSchema(.textAIEstimate)))
       )
 
+      await recordUsage(totalTokens: response.usage?.totalTokens ?? 0, userID: userID)
+
       return try response.parse(OpenAIEstimateCaloriesResponse.self)
     } catch {
       logger.error(error)
@@ -284,7 +308,8 @@ extension OpenAIService {
   func evaluateFoodItemAccuracy(
     foodItemRecord: FoodItemRecord,
     totalNumberOfIssueReports: Int,
-    sampleIssueReports: [FoodItemIssueReport]
+    sampleIssueReports: [FoodItemIssueReport],
+    userID: UserIdentifier? = nil
   ) async throws -> (score: Int, notes: String, recommendations: [String: String]) {
     var messages: [Chat.Message] = [
       Chat.Message(
@@ -396,6 +421,8 @@ extension OpenAIService {
       messages: messages
     )
 
+    await recordUsage(totalTokens: response.usage.totalTokens, userID: userID)
+
     struct EvaluationResponse: Codable {
       let accuracyScore: Int
       let evaluationNotes: String
@@ -417,7 +444,8 @@ extension OpenAIService {
 private extension OpenAIService {
 
   func parseNutritionLabel(
-    nutritionLabelMetadata: ImageFileMetadata
+    nutritionLabelMetadata: ImageFileMetadata,
+    userID: UserIdentifier? = nil
   ) async -> OpenAINutritionLabelParseResponse? {
     do {
       guard let imageFileExtension = nutritionLabelMetadata.fileExtension else {
@@ -447,6 +475,8 @@ private extension OpenAIService {
         responseFormat: ResponseFormat(type: .jsonSchema(.nutritionLabelParse))
       )
 
+      await recordUsage(totalTokens: response.usage.totalTokens, userID: userID)
+
       return try response.parse(OpenAINutritionLabelParseResponse.self)
     } catch {
       logger.error("Failed to parse nutrition label: \(error.localizedDescription)")
@@ -459,7 +489,8 @@ private extension OpenAIService {
   }
 
   func parsePackaging(
-    packagingMetadata: ImageFileMetadata
+    packagingMetadata: ImageFileMetadata,
+    userID: UserIdentifier? = nil
   ) async -> OpenAIPackagingParseResponse? {
     do {
       guard let fileExtension = packagingMetadata.fileExtension else {
@@ -489,6 +520,8 @@ private extension OpenAIService {
         responseFormat: ResponseFormat(type: .jsonSchema(.packagingParse))
       )
 
+      await recordUsage(totalTokens: response.usage.totalTokens, userID: userID)
+
       return try response.parse(OpenAIPackagingParseResponse.self)
     } catch {
       logger.error(error)
@@ -505,7 +538,8 @@ extension OpenAIService {
 
   func estimateCaloriesMagicScan(
     image: Data?,
-    contextText: String?
+    contextText: String?,
+    userID: UserIdentifier? = nil
   ) async throws -> [MagicScanStatusResponse.Serving] {
     let model = ModelID.GPT5.gpt5Mini
 
@@ -569,6 +603,8 @@ extension OpenAIService {
       responseFormat: ResponseFormat(type: .jsonSchema(.magicScanEstimate))
     )
 
+    await recordUsage(totalTokens: response.usage.totalTokens, userID: userID)
+
     guard let parsedResponse = try response.parse(OpenAIEstimateCaloriesResponse.self) else {
       throw Abort(.internalServerError, reason: "Failed to parse OpenAI response")
     }
@@ -587,7 +623,8 @@ extension OpenAIService {
   /// Prioritizes main dishes over condiments and uses enhanced prompts for better accuracy.
   func detectAndEstimateFoodsMagicScan(
     image: Data?,
-    contextText: String?
+    contextText: String?,
+    userID: UserIdentifier? = nil
   ) async throws -> [MagicScanStatusResponse.Serving] {
     // Use GPT-5 for better vision capabilities
     let model = ModelID.GPT5.gpt5
@@ -688,6 +725,8 @@ extension OpenAIService {
       responseFormat: ResponseFormat(type: .jsonSchema(.magicScanEstimate))
     )
 
+    await recordUsage(totalTokens: response.usage.totalTokens, userID: userID)
+
     guard let parsedResponse = try response.parse(OpenAIEstimateCaloriesResponse.self) else {
       throw Abort(.internalServerError, reason: "Failed to parse OpenAI response")
     }
@@ -706,7 +745,8 @@ extension OpenAIService {
 
   func suggestGoals(
     healthData: String,
-    currentGoals: String
+    currentGoals: String,
+    userID: UserIdentifier? = nil
   ) async throws -> SuggestGoalsResponse {
     let messages: [Chat.Message] = [
       Chat.Message(
@@ -733,6 +773,8 @@ extension OpenAIService {
       responseFormat: ResponseFormat(type: .jsonSchema(.suggestedGoals))
     )
 
+    await recordUsage(totalTokens: chat.usage.totalTokens, userID: userID)
+
     guard let response = try chat.parse(OpenAISuggestGoalsResponse.self) else {
       throw Abort(.internalServerError)
     }
@@ -753,7 +795,8 @@ extension OpenAIService {
 
   func generateWorkoutPlan(
     equipment: [String],
-    description: String
+    description: String,
+    userID: UserIdentifier? = nil
   ) async throws -> SocketMessage.WorkoutPlan {
     let equipmentText = equipment.isEmpty
       ? "No equipment available (bodyweight only)"
@@ -775,6 +818,8 @@ extension OpenAIService {
       messages: messages,
       responseFormat: ResponseFormat(type: .jsonSchema(.generateWorkoutPlan))
     )
+
+    await recordUsage(totalTokens: chat.usage.totalTokens, userID: userID)
 
     guard let response = try chat.parse(OpenAIGenerateWorkoutPlanResponse.self) else {
       throw Abort(.internalServerError)
