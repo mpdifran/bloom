@@ -134,7 +134,11 @@ private extension WebSocketService {
       try await block()
     } catch {
       logger.report(error: error)
-      let errorMessage = SocketMessage.Error(errorMessage: error.localizedDescription)
+      // Prefer an Abort's `reason` (a clean, user-facing sentence) over
+      // `localizedDescription`, which Vapor prefixes with the status identifier
+      // (e.g. "429: ...").
+      let clientMessage = (error as? AbortError)?.reason ?? error.localizedDescription
+      let errorMessage = SocketMessage.Error(errorMessage: clientMessage)
       do {
         try socket.sendContent(errorMessage)
       } catch {
