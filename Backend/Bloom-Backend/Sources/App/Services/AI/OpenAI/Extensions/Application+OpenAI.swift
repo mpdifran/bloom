@@ -85,7 +85,8 @@ extension Application {
       openAI: openAI,
       gemini: gemini,
       imageStorage: imageStorage,
-      logger: logger
+      logger: logger,
+      aiUsageLimiter: aiUsageLimiter
     )
     storage[OpenAIServiceKey.self] = service
     return service

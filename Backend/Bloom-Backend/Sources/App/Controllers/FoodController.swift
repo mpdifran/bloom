@@ -61,6 +61,13 @@ extension FoodController {
   @Sendable
   func uploadNewFood(_ request: Request) async throws -> UploadNewFoodResponse {
     let requestBody = try request.content.decode(UploadNewFoodRequest.self)
+    let user = try request.auth.require(User.self)
+
+    guard let userID = user.id else {
+      throw Abort(.unauthorized)
+    }
+
+    try await request.aiUsageLimiter.checkBudget(for: userID)
 
     let existingFoodItems = try await request.foodDatabaseService.searchFoods(barcode: requestBody.barcode)
 
@@ -97,7 +104,8 @@ extension FoodController {
         barCode: requestBody.barcode,
         country: requestBody.country,
         nutritionLabelMetadata: nutritionLabelMetadata,
-        packagingMetadata: packagingMetadata
+        packagingMetadata: packagingMetadata,
+        userID: userID
       )
 
       try await foodItemRecord?.save(on: request.db)
@@ -120,11 +128,19 @@ extension FoodController {
   @Sendable
   func estimateFoodCalories(_ request: Request) async throws -> EstimateFoodCaloriesResponse {
     let requestBody = try request.content.decode(EstimateFoodCaloriesRequest.self)
+    let user = try request.auth.require(User.self)
+
+    guard let userID = user.id else {
+      throw Abort(.unauthorized)
+    }
+
+    try await request.aiUsageLimiter.checkBudget(for: userID)
 
     if let foodImage = requestBody.foodImage {
       guard let foodEstimate = await request.openAIService.estimateCalories(
         foodImageFile: foodImage,
-        foodDescription: requestBody.foodDescription
+        foodDescription: requestBody.foodDescription,
+        userID: userID
       ) else {
         throw Abort(.internalServerError)
       }
@@ -138,7 +154,7 @@ extension FoodController {
         suggestedServings: suggestedServings
       )
     } else if let textDescription = requestBody.foodDescription {
-      guard let foodEstimate = await request.openAIService.estimateCalories(textDescription: textDescription) else {
+      guard let foodEstimate = await request.openAIService.estimateCalories(textDescription: textDescription, userID: userID) else {
         throw Abort(.internalServerError)
       }
 
@@ -212,6 +228,8 @@ extension FoodController {
     guard let userId = user.id else {
       throw Abort(.unauthorized, reason: "User ID not found")
     }
+
+    try await request.aiUsageLimiter.checkBudget(for: userId)
 
     // Bound the number of concurrent scans per user (each fans out to an
     // expensive OpenAI vision call).
@@ -342,11 +360,19 @@ extension FoodController {
   @Sendable
   func estimateFoodCaloriesV2(_ request: Request) async throws -> EstimateFoodCaloriesResponse {
     let requestBody = try request.content.decode(EstimateFoodCaloriesRequest.self)
+    let user = try request.auth.require(User.self)
+
+    guard let userID = user.id else {
+      throw Abort(.unauthorized)
+    }
+
+    try await request.aiUsageLimiter.checkBudget(for: userID)
 
     if let foodImage = requestBody.foodImage {
       guard let foodEstimate = await request.openAIService.estimateCaloriesV2(
         foodImageFile: foodImage,
-        foodDescription: requestBody.foodDescription
+        foodDescription: requestBody.foodDescription,
+        userID: userID
       ) else {
         throw Abort(.internalServerError)
       }
@@ -360,7 +386,7 @@ extension FoodController {
         suggestedServings: suggestedServings
       )
     } else if let textDescription = requestBody.foodDescription {
-      guard let foodEstimate = await request.openAIService.estimateCaloriesV2(textDescription: textDescription) else {
+      guard let foodEstimate = await request.openAIService.estimateCaloriesV2(textDescription: textDescription, userID: userID) else {
         throw Abort(.internalServerError)
       }
 

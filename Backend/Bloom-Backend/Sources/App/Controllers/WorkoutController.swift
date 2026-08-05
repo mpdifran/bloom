@@ -29,10 +29,18 @@ private extension WorkoutController {
   @Sendable
   func generatePlan(_ request: Request) async throws -> GenerateWorkoutPlanResponse {
     let body = try request.content.decode(GenerateWorkoutPlanRequest.self)
+    let user = try request.auth.require(User.self)
+
+    guard let userID = user.id else {
+      throw Abort(.unauthorized)
+    }
+
+    try await request.aiUsageLimiter.checkBudget(for: userID)
 
     let workoutPlan = try await request.openAIService.generateWorkoutPlan(
       equipment: body.equipment,
-      description: body.description
+      description: body.description,
+      userID: userID
     )
 
     return GenerateWorkoutPlanResponse(workoutPlan: workoutPlan)

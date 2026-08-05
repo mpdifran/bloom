@@ -13,10 +13,12 @@ import OpenAIKit
 final class HealthReportService: Sendable {
   private let openAIService: OpenAIService
   private let todayInsightsHistory: TodayInsightsHistory
+  private let aiUsageLimiter: AIUsageLimiter
 
-  init(openAIService: OpenAIService, todayInsightsHistory: TodayInsightsHistory) {
+  init(openAIService: OpenAIService, todayInsightsHistory: TodayInsightsHistory, aiUsageLimiter: AIUsageLimiter) {
     self.openAIService = openAIService
     self.todayInsightsHistory = todayInsightsHistory
+    self.aiUsageLimiter = aiUsageLimiter
   }
 
   private let modelID = ModelID.GPT5.gpt5Mini
@@ -56,6 +58,8 @@ extension HealthReportService {
       truncation: .auto,
       user: userID.value
     )
+
+    await aiUsageLimiter.record(tokens: response.usage?.totalTokens ?? 0, for: userID)
 
     guard let report = try response.parse(MorningHealthReportResponse.self) else {
       throw Abort(.internalServerError, reason: "Failed to parse morning health report response")
@@ -105,6 +109,8 @@ extension HealthReportService {
       user: userID.value
     )
 
+    await aiUsageLimiter.record(tokens: response.usage?.totalTokens ?? 0, for: userID)
+
     guard let todayResponse = try response.parse(TodayReportResponse.self) else {
       throw Abort(.internalServerError, reason: "Failed to parse today report response")
     }
@@ -152,6 +158,8 @@ extension HealthReportService {
       truncation: .auto,
       user: userID.value
     )
+
+    await aiUsageLimiter.record(tokens: response.usage?.totalTokens ?? 0, for: userID)
 
     guard let biologicalAgeResponse = try response.parse(BiologicalAgeResponse.self) else {
       throw Abort(.internalServerError, reason: "Failed to parse biological age response")
@@ -211,6 +219,8 @@ extension HealthReportService {
       truncation: .auto,
       user: userID.value
     )
+
+    await aiUsageLimiter.record(tokens: response.usage?.totalTokens ?? 0, for: userID)
 
     guard let monitorSummary = try response.parse(MonitorSummaryResponse.self) else {
       throw Abort(.internalServerError, reason: "Failed to parse monitor summary response")
@@ -282,6 +292,8 @@ extension HealthReportService {
       truncation: .auto,
       user: userID.value
     )
+
+    await aiUsageLimiter.record(tokens: response.usage?.totalTokens ?? 0, for: userID)
 
     guard let monitorInsight = try response.parse(MonitorInsightResponse.self) else {
       throw Abort(.internalServerError, reason: "Failed to parse monitor insight response")

@@ -47,6 +47,8 @@ private extension HealthReportController {
       throw Abort(.unauthorized)
     }
 
+    try await request.aiUsageLimiter.checkBudget(for: userID)
+
     return try await request.healthReportService.generateMorningHealthReport(
       from: body.healthContext,
       userID: userID
@@ -61,6 +63,8 @@ private extension HealthReportController {
     guard let userID = user.id else {
       throw Abort(.unauthorized)
     }
+
+    try await request.aiUsageLimiter.checkBudget(for: userID)
 
     // Generate the today view response
     return try await request.healthReportService.generateTodayView(
@@ -79,6 +83,8 @@ private extension HealthReportController {
     guard let userID = user.id else {
       throw Abort(.unauthorized)
     }
+
+    try await request.aiUsageLimiter.checkBudget(for: userID)
 
     return try await request.healthReportService.calculateBiologicalAge(
       healthContext: body.healthContext,
@@ -180,6 +186,8 @@ private extension HealthReportController {
       throw Abort(.unauthorized)
     }
 
+    try await request.aiUsageLimiter.checkBudget(for: userID)
+
     return try await request.healthReportService.generateMonitorSummary(
       monitorContext: body.monitorContext,
       healthContext: body.healthContext,
@@ -196,6 +204,8 @@ private extension HealthReportController {
     guard let userID = user.id else {
       throw Abort(.unauthorized)
     }
+
+    try await request.aiUsageLimiter.checkBudget(for: userID)
 
     return try await request.healthReportService.generateMonitorInsight(
       monitorType: body.monitorType,

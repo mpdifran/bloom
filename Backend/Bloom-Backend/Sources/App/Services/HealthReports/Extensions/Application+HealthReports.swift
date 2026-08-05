@@ -38,7 +38,8 @@ extension Application {
 
     let service = HealthReportService(
       openAIService: openAIService,
-      todayInsightsHistory: todayInsightsHistory
+      todayInsightsHistory: todayInsightsHistory,
+      aiUsageLimiter: aiUsageLimiter
     )
 
     storage[HealthReportServiceKey.self] = service

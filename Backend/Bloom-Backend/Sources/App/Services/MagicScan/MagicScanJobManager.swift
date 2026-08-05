@@ -334,7 +334,8 @@ extension MagicScanJobManager {
       logger.info("Starting AI-first magic scan detection and nutrition estimation")
       let allServings = try await openAIService.detectAndEstimateFoodsMagicScan(
         image: imageData,
-        contextText: job.contextText
+        contextText: job.contextText,
+        userID: job.userId
       )
 
       logger.info("Magic scan completed: \(allServings.count) food items detected and estimated by AI")

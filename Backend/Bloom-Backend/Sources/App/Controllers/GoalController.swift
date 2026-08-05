@@ -30,10 +30,18 @@ private extension GoalController {
   @Sendable
   func suggestGoals(_ request: Request) async throws -> SuggestGoalsResponse {
     let body = try request.content.decode(SuggestGoalsRequest.self)
+    let user = try request.auth.require(User.self)
+
+    guard let userID = user.id else {
+      throw Abort(.unauthorized)
+    }
+
+    try await request.aiUsageLimiter.checkBudget(for: userID)
 
     return try await request.openAIService.suggestGoals(
       healthData: body.healthData,
-      currentGoals: body.currentGoals
+      currentGoals: body.currentGoals,
+      userID: userID
     )
   }
 }
