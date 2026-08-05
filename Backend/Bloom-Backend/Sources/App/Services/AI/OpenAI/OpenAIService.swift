@@ -44,7 +44,7 @@ extension OpenAIService {
 
   func generateConversationTitle(userMessage: String, userID: UserIdentifier? = nil) async -> String? {
     do {
-      let model = ModelID.GPT5.gpt5Mini
+      let model = ModelID.GPT5_6.luna
 
       let messages: [Chat.Message] = [
         Chat.Message(
@@ -170,7 +170,7 @@ extension OpenAIService {
     userID: UserIdentifier? = nil
   ) async -> OpenAIEstimateCaloriesResponse? {
     do {
-      let model = ModelID.GPT5.gpt5Mini
+      let model = ModelID.GPT5_6.luna
 
       var messages: [Chat.Message] = [
         Chat.Message(
@@ -234,7 +234,7 @@ extension OpenAIService {
 
       let response = try await openAI.responses.createResponse(
         input: inputs,
-        model: .GPT4.gpt_4o_mini,
+        model: .GPT5_6.luna,
         instructions: .Prompt.estimateCalories,
         text: Text(format: .init(type: .jsonSchema(.aiEstimate)))
       )
@@ -250,7 +250,7 @@ extension OpenAIService {
 
   func estimateCalories(textDescription: String, userID: UserIdentifier? = nil) async -> OpenAIEstimateCaloriesResponse? {
     do {
-      let model = ModelID.GPT5.gpt5Mini
+      let model = ModelID.GPT5_6.luna
 
       let messages: [Chat.Message] = [
         Chat.Message(
@@ -291,7 +291,7 @@ extension OpenAIService {
 
       let response = try await openAI.responses.createResponse(
         input: inputs,
-        model: .GPT4.gpt_4o_mini,
+        model: .GPT5_6.luna,
         instructions: .Prompt.estimateCaloriesByText,
         text: Text(format: .init(type: .jsonSchema(.textAIEstimate)))
       )
@@ -417,7 +417,7 @@ extension OpenAIService {
     }
 
     let response = try await openAI.chats.create(
-      model: .GPT4.gpt_4o_mini,
+      model: .GPT5_6.luna,
       messages: messages
     )
 
@@ -470,7 +470,7 @@ private extension OpenAIService {
       ]
 
       let response = try await openAI.chats.create(
-        model: .GPT4.gpt_4o_mini,
+        model: .GPT5_6.luna,
         messages: messages,
         responseFormat: ResponseFormat(type: .jsonSchema(.nutritionLabelParse))
       )
@@ -515,7 +515,7 @@ private extension OpenAIService {
       ]
 
       let response = try await openAI.chats.create(
-        model: .GPT4.gpt_4o_mini,
+        model: .GPT5_6.luna,
         messages: messages,
         responseFormat: ResponseFormat(type: .jsonSchema(.packagingParse))
       )
@@ -541,7 +541,7 @@ extension OpenAIService {
     contextText: String?,
     userID: UserIdentifier? = nil
   ) async throws -> [MagicScanStatusResponse.Serving] {
-    let model = ModelID.GPT5.gpt5Mini
+    let model = ModelID.GPT5_6.luna
 
     var messages: [Chat.Message] = []
 
@@ -627,7 +627,7 @@ extension OpenAIService {
     userID: UserIdentifier? = nil
   ) async throws -> [MagicScanStatusResponse.Serving] {
     // Use GPT-5 for better vision capabilities
-    let model = ModelID.GPT5.gpt5
+    let model = ModelID.GPT5_6.terra
 
     var messages: [Chat.Message] = []
 
@@ -768,7 +768,7 @@ extension OpenAIService {
     ]
 
     let chat = try await openAI.chats.create(
-      model: .GPT4.gpt_4o_mini,
+      model: .GPT5_6.terra,
       messages: messages,
       responseFormat: ResponseFormat(type: .jsonSchema(.suggestedGoals))
     )
@@ -814,7 +814,7 @@ extension OpenAIService {
     ]
 
     let chat = try await openAI.chats.create(
-      model: .GPT4.gpt_4o_mini,
+      model: .GPT5_6.terra,
       messages: messages,
       responseFormat: ResponseFormat(type: .jsonSchema(.generateWorkoutPlan))
     )
