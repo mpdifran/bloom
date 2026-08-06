@@ -18,10 +18,10 @@ extension AdminAuthenticationController: RouteCollection {
   func boot(routes: any RoutesBuilder) throws {
     routes.group("v1", "admin") {
       $0.group("auth") {
-        $0.post("sign-in", use: signIn)
+        $0.on(.POST, "sign-in", body: .collect(maxSize: "64kb"), use: signIn)
       }
 
-      $0.auth(using: AdminUserToken.self) {
+      $0.adminAuth {
         $0.group("user") {
           $0.get("logout", use: logout)
         }

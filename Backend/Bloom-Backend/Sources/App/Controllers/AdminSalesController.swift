@@ -17,7 +17,7 @@ extension AdminSalesController: RouteCollection {
 
   func boot(routes: any RoutesBuilder) throws {
     routes.group("v1", "admin") {
-      $0.auth(using: AdminUserToken.self) {
+      $0.adminAuth {
         $0.group("sales") {
           $0.get(use: getAllSales)
           $0.post("create", use: createSale)

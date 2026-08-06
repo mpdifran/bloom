@@ -17,7 +17,7 @@ extension AdminFoodController: RouteCollection {
 
   func boot(routes: any RoutesBuilder) throws {
     routes.group("v1", "admin") {
-      $0.auth(using: AdminUserToken.self) {
+      $0.adminAuth {
         $0.group("food") {
           $0.post("usda-ingest", use: ingestUSDA)
           $0.post("usda-ingest-fetch", use: ingestUSDAFetch)

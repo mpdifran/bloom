@@ -72,9 +72,34 @@ extension ChatController {
     return Response(status: .internalServerError)
   }
 
+  /// Max images accepted in a single chat upload request.
+  static let maxImageUploadCount = 10
+  /// Max size per uploaded image (bytes).
+  static let maxImageUploadBytes = 5 * 1024 * 1024
+
   @Sendable
   func uploadImage(_ request: Request) async throws -> ChatUploadFileResponse {
+    let user = try request.auth.require(User.self)
+    guard let userID = user.id else {
+      throw Abort(.internalServerError, reason: "User ID unexpectedly nil after authentication.")
+    }
+
+    // Each image is uploaded to OpenAI — gate on the user's AI budget so this can't be used to
+    // fan out unbounded, un-metered uploads.
+    try await request.aiUsageLimiter.checkBudget(for: userID)
+
     let body = try request.content.decode(ChatUploadFileRequest.self)
+
+    guard !body.images.isEmpty else {
+      throw Abort(.badRequest, reason: "No images provided.")
+    }
+    guard body.images.count <= Self.maxImageUploadCount else {
+      throw Abort(.badRequest, reason: "Too many images. Please upload at most \(Self.maxImageUploadCount) at a time.")
+    }
+    guard body.images.allSatisfy({ $0.count <= Self.maxImageUploadBytes }) else {
+      throw Abort(.badRequest, reason: "One or more images exceed the size limit.")
+    }
+
     let fileIDs = try await request.chatService.uploadImages(imageData: body.images)
     return ChatUploadFileResponse(fileIDs: fileIDs)
   }

@@ -13,7 +13,7 @@ extension RevenueCatWebhookController: RouteCollection {
   func boot(routes: any RoutesBuilder) throws {
     routes.group("v1") {
       $0.group("webhook") {
-        $0.post("revenuecat", use: handleWebhook)
+        $0.on(.POST, "revenuecat", body: .collect(maxSize: "64kb"), use: handleWebhook)
       }
     }
   }

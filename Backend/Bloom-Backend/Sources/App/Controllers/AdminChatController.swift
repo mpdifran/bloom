@@ -17,7 +17,7 @@ extension AdminChatController: RouteCollection {
   
   func boot(routes: any RoutesBuilder) throws {
     routes.group("v1", "admin") {
-      $0.auth(using: AdminUserToken.self) {
+      $0.adminAuth {
         $0.group("chat") {
           $0.get("issue-reports", use: getIssueReports)
           $0.get("issue-reports", ":reportID", "messages", use: getIssueReportMessages)

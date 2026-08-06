@@ -18,7 +18,7 @@ extension AdminStorageController: RouteCollection {
 
   func boot(routes: any RoutesBuilder) throws {
     routes.group("v1", "admin") {
-      $0.auth(using: AdminUserToken.self) {
+      $0.adminAuth {
         $0.group("storage") {
           $0.get("stats", use: getStorageStats)
           $0.get("orphaned-images", use: getOrphanedImages)

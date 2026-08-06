@@ -13,7 +13,7 @@ struct AdminOpenAIController: RouteCollection {
 
   func boot(routes: any RoutesBuilder) throws {
     routes.group("v1", "admin") {
-      $0.auth(using: AdminUserToken.self) {
+      $0.adminAuth {
         $0.get("list-models", use: listModels)
       }
     }
