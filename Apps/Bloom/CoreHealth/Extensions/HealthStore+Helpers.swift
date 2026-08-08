@@ -585,23 +585,22 @@ public extension HKHealthStore {
       try await withCheckedThrowingContinuation { continuation in
         let buffer = LocationBuffer()
 
-        let query = HKWorkoutRouteQuery(route: workoutRoute) { (query, locations, done, error) in
+        let query = HKWorkoutRouteQuery(route: workoutRoute) { (_, locations, done, error) in
           if let error {
             continuation.resume(throwing: error)
             return
           }
 
-          if let locations = locations {
-            Task {
-              await buffer.append(locations)
-            }
+          // HKWorkoutRouteQuery delivers batches serially on its own queue, so append
+          // synchronously. (Previously this used fire-and-forget Tasks, which raced with the
+          // `done` read — a single-batch route, e.g. a short/indoor workout, could resume with
+          // zero locations before its one batch was appended.)
+          if let locations {
+            buffer.append(locations)
           }
 
           if done {
-            Task {
-              let allLocations = await buffer.locations
-              continuation.resume(returning: allLocations)
-            }
+            continuation.resume(returning: buffer.locations)
           }
         }
 
@@ -657,11 +656,20 @@ public extension HKHealthStore {
   }
 }
 
-private actor LocationBuffer {
-  private(set) var locations = [CLLocation]()
+private final class LocationBuffer: @unchecked Sendable {
+  private let lock = NSLock()
+  private var storage = [CLLocation]()
 
   func append(_ newLocations: [CLLocation]) {
-      locations.append(contentsOf: newLocations)
+    lock.lock()
+    storage.append(contentsOf: newLocations)
+    lock.unlock()
+  }
+
+  var locations: [CLLocation] {
+    lock.lock()
+    defer { lock.unlock() }
+    return storage
   }
 }
 

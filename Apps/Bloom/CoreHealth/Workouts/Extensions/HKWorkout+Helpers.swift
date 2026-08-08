@@ -143,4 +143,10 @@ public extension HKWorkout {
   var dateRange: DateRange {
     DateRange(startDate, endDate)
   }
+
+  /// The recording device/app name (e.g. "Apple Watch"), preferring the hardware device name
+  /// and falling back to the data source name.
+  var sourceName: String {
+    device?.name ?? sourceRevision.source.name
+  }
 }
