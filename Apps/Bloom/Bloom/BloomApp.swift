@@ -39,6 +39,9 @@ struct BloomApp: App {
     Purchases.configure()
     Purchases.logLevel = .warn
 
+    // Standard Apple Ads attribution (AdServices token collection) until RevenueCat is fully wired up.
+    Purchases.shared.attribution.enableAdServicesAttributionTokenCollection()
+
     // Link TelemetryDeck with RevenueCat
     Purchases.shared.attribution.setAttributes([
       "$telemetryDeckUserId": TelemetryManager.shared.hashedDefaultUser,
