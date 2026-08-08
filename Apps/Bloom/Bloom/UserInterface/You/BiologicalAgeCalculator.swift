@@ -550,11 +550,12 @@ private extension BiologicalAgeCalculator {
 
   // 1. VO2 Max (18%)
   func calculateVO2MaxContribution(actualAge: Double, referenceDate: Date) async -> MetricContribution? {
-    let sampleType = HKQuantityType(.vo2Max)
-    guard let sample = try? await healthStoreFetcher.fetchSamples(
-      for: sampleType,
-      dateRange: .trailingMonths(from: referenceDate, numberOfMonths: 3)
-    ).first as? HKQuantitySample else { return nil }
+    // VO2 max is sampled infrequently (~weekly). Take the most recent reading within the last
+    // 30 days so the contribution reflects current fitness rather than a months-old sample.
+    guard let sample = await healthStoreFetcher.fetchMostRecentSample(
+      for: .vo2Max,
+      dateRange: .trailingDays(from: referenceDate, numberOfDays: 30)
+    ) else { return nil }
 
     let vo2Max = sample.quantity.doubleValue(for: .vo2Max())
     let dataPoints = healthGoalProvider.vo2MaxAgeDataPoints()
