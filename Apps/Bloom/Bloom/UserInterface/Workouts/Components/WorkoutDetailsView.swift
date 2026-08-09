@@ -20,6 +20,14 @@ struct WorkoutDetailsView: View {
     self.workout = workout
   }
 
+  /// Fixed heart-rate bar width, and the slot (bar + gap) used to derive the bucket count from the
+  /// chart width so bar width and spacing stay constant across screen sizes.
+  static let heartRateBarWidth: CGFloat = 7
+  static let heartRateBucketSlotWidth: CGFloat = 14
+
+  /// Number of time buckets the heart-rate chart is divided into — derived from the chart width.
+  @State private var heartRateBuckets = 20
+
   @State private var heartRateReport: WorkoutHeartRateReport?
   @State private var effortScore: Double?
   @State private var presentedSheet: AnyView?
@@ -449,10 +457,10 @@ private extension WorkoutDetailsView {
       Chart {
         ForEach(heartRateBars) { bar in
           BarMark(
-            x: .value("Bucket", bar.bucket),
+            x: .value("Bucket", Double(bar.id)),
             yStart: .value("Min", bar.minHR),
             yEnd: .value("Max", bar.maxHR),
-            width: .ratio(0.7)
+            width: .fixed(Self.heartRateBarWidth)
           )
           .foregroundStyle(
             .linearGradient(
@@ -461,7 +469,7 @@ private extension WorkoutDetailsView {
               endPoint: .top
             )
           )
-          .cornerRadius(4)
+          .cornerRadius(3)
         }
 
         if let range = selectedHeartRateZoneRange {
@@ -473,8 +481,15 @@ private extension WorkoutDetailsView {
         }
       }
       .chartYScale(domain: minHeartRate...maxHeartRate)
+      // Fixed full-range x domain so empty time buckets keep their proportional space (no bar).
+      .chartXScale(domain: -0.5...(Double(heartRateBuckets) - 0.5))
       .chartXAxis(.hidden)
       .frame(height: 220)
+      .onGeometryChange(for: CGFloat.self) { proxy in
+        proxy.size.width
+      } action: { width in
+        updateHeartRateBuckets(forWidth: width)
+      }
       .cardContainer()
       .animation(.easeInOut, value: selectedZone)
 
@@ -607,9 +622,8 @@ extension WorkoutDetailsView {
   }
 
   struct HeartRateBar: Identifiable {
+    /// Bucket index (0..<heartRateBucketCount); also its x position, so empty buckets leave a gap.
     let id: Int
-    /// Zero-padded so the categorical x-axis keeps chronological order.
-    let bucket: String
     let minHR: Double
     let maxHR: Double
     let stops: [Gradient.Stop]
@@ -807,14 +821,13 @@ private extension WorkoutDetailsView {
 
   /// Buckets heart-rate samples into ~20 time groups, each carrying its low/high BPM and a
   /// precomputed zone gradient.
-  func makeHeartRateBars(report: WorkoutHeartRateReport) -> [HeartRateBar] {
+  func makeHeartRateBars(report: WorkoutHeartRateReport, bucketCount: Int) -> [HeartRateBar] {
     let samples = report.heartRateSamples
-    guard !samples.isEmpty else { return [] }
+    guard !samples.isEmpty, bucketCount > 0 else { return [] }
 
     let start = workout.startDate.timeIntervalSince1970
     let end = workout.endDate.timeIntervalSince1970
     let span = max(end - start, 1)
-    let bucketCount = 20
 
     var buckets = Array(repeating: [Double](), count: bucketCount)
     for sample in samples {
@@ -832,11 +845,22 @@ private extension WorkoutDetailsView {
       let maxHR = high - low < 2 ? high + 1 : high
       return HeartRateBar(
         id: index,
-        bucket: String(format: "%02d", index),
         minHR: minHR,
         maxHR: maxHR,
         stops: heartRateZoneStops(minHR: minHR, maxHR: maxHR, report: report)
       )
+    }
+  }
+
+  /// Derives the bucket count from the chart width so bar width + spacing stay constant, and
+  /// rebuilds the bars when it changes.
+  func updateHeartRateBuckets(forWidth width: CGFloat) {
+    guard width > 0 else { return }
+    let count = max(4, Int((width / Self.heartRateBucketSlotWidth).rounded()))
+    guard count != heartRateBuckets else { return }
+    heartRateBuckets = count
+    if let report = heartRateReport {
+      heartRateBars = makeHeartRateBars(report: report, bucketCount: count)
     }
   }
 
@@ -888,7 +912,7 @@ private extension WorkoutDetailsView {
     let report = await HealthStoreFetcher.shared.fetchWorkoutHeartRateReport(workout: workout)
     heartRateReport = report
     if let report {
-      heartRateBars = makeHeartRateBars(report: report)
+      heartRateBars = makeHeartRateBars(report: report, bucketCount: heartRateBuckets)
     }
   }
 
