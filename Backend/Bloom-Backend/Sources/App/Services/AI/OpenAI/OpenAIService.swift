@@ -33,10 +33,26 @@ struct OpenAIService: Sendable {
     self.aiUsageLimiter = aiUsageLimiter
   }
 
-  private func recordUsage(totalTokens: Int, userID: UserIdentifier?) async {
-    if let userID {
-      await aiUsageLimiter.record(tokens: totalTokens, for: userID)
-    }
+  /// Prices a Chat Completions call and records it against the user's spend budget.
+  private func recordUsage(model: ModelID, usage: Usage, userID: UserIdentifier?) async {
+    guard let userID else { return }
+    await aiUsageLimiter.record(
+      model: model,
+      inputTokens: usage.promptTokens,
+      outputTokens: usage.completionTokens ?? 0,
+      for: userID
+    )
+  }
+
+  /// Prices a Responses API call and records it against the user's spend budget.
+  private func recordUsage(model: ModelID, usage: OpenAIKit.Response.Usage?, userID: UserIdentifier?) async {
+    guard let userID, let usage else { return }
+    await aiUsageLimiter.record(
+      model: model,
+      inputTokens: usage.inputTokens,
+      outputTokens: usage.outputTokens,
+      for: userID
+    )
   }
 }
 
@@ -44,7 +60,7 @@ extension OpenAIService {
 
   func generateConversationTitle(userMessage: String, userID: UserIdentifier? = nil) async -> String? {
     do {
-      let model = ModelID.GPT5.gpt5Mini
+      let model = ModelID.GPT5.gpt5Nano
 
       let messages: [Chat.Message] = [
         Chat.Message(
@@ -84,7 +100,7 @@ extension OpenAIService {
         messages: messages
       )
 
-      await recordUsage(totalTokens: response.usage.totalTokens, userID: userID)
+      await recordUsage(model: model, usage: response.usage, userID: userID)
 
       guard let text = response.choices.first?.message.content.first?.text else {
         return nil
@@ -170,7 +186,7 @@ extension OpenAIService {
     userID: UserIdentifier? = nil
   ) async -> OpenAIEstimateCaloriesResponse? {
     do {
-      let model = ModelID.GPT5.gpt5Mini
+      let model = ModelID.GPT5_6.luna
 
       var messages: [Chat.Message] = [
         Chat.Message(
@@ -205,7 +221,7 @@ extension OpenAIService {
         responseFormat: ResponseFormat(type: .jsonSchema(.aiEstimate))
       )
 
-      await recordUsage(totalTokens: response.usage.totalTokens, userID: userID)
+      await recordUsage(model: model, usage: response.usage, userID: userID)
 
       return try response.parse(OpenAIEstimateCaloriesResponse.self)
     } catch {
@@ -234,12 +250,12 @@ extension OpenAIService {
 
       let response = try await openAI.responses.createResponse(
         input: inputs,
-        model: .GPT4.gpt_4o_mini,
+        model: .GPT5_6.luna,
         instructions: .Prompt.estimateCalories,
         text: Text(format: .init(type: .jsonSchema(.aiEstimate)))
       )
 
-      await recordUsage(totalTokens: response.usage?.totalTokens ?? 0, userID: userID)
+      await recordUsage(model: .GPT5_6.luna, usage: response.usage, userID: userID)
 
       return try response.parse(OpenAIEstimateCaloriesResponse.self)
     } catch {
@@ -250,7 +266,7 @@ extension OpenAIService {
 
   func estimateCalories(textDescription: String, userID: UserIdentifier? = nil) async -> OpenAIEstimateCaloriesResponse? {
     do {
-      let model = ModelID.GPT5.gpt5Mini
+      let model = ModelID.GPT5_6.luna
 
       let messages: [Chat.Message] = [
         Chat.Message(
@@ -275,7 +291,7 @@ extension OpenAIService {
         responseFormat: ResponseFormat(type: .jsonSchema(.textAIEstimate))
       )
 
-      await recordUsage(totalTokens: response.usage.totalTokens, userID: userID)
+      await recordUsage(model: model, usage: response.usage, userID: userID)
 
       return try response.parse(OpenAIEstimateCaloriesResponse.self)
     } catch {
@@ -291,12 +307,12 @@ extension OpenAIService {
 
       let response = try await openAI.responses.createResponse(
         input: inputs,
-        model: .GPT4.gpt_4o_mini,
+        model: .GPT5_6.luna,
         instructions: .Prompt.estimateCaloriesByText,
         text: Text(format: .init(type: .jsonSchema(.textAIEstimate)))
       )
 
-      await recordUsage(totalTokens: response.usage?.totalTokens ?? 0, userID: userID)
+      await recordUsage(model: .GPT5_6.luna, usage: response.usage, userID: userID)
 
       return try response.parse(OpenAIEstimateCaloriesResponse.self)
     } catch {
@@ -417,11 +433,11 @@ extension OpenAIService {
     }
 
     let response = try await openAI.chats.create(
-      model: .GPT4.gpt_4o_mini,
+      model: .GPT5_6.luna,
       messages: messages
     )
 
-    await recordUsage(totalTokens: response.usage.totalTokens, userID: userID)
+    await recordUsage(model: .GPT5_6.luna, usage: response.usage, userID: userID)
 
     struct EvaluationResponse: Codable {
       let accuracyScore: Int
@@ -470,12 +486,12 @@ private extension OpenAIService {
       ]
 
       let response = try await openAI.chats.create(
-        model: .GPT4.gpt_4o_mini,
+        model: .GPT5_6.luna,
         messages: messages,
         responseFormat: ResponseFormat(type: .jsonSchema(.nutritionLabelParse))
       )
 
-      await recordUsage(totalTokens: response.usage.totalTokens, userID: userID)
+      await recordUsage(model: .GPT5_6.luna, usage: response.usage, userID: userID)
 
       return try response.parse(OpenAINutritionLabelParseResponse.self)
     } catch {
@@ -515,12 +531,12 @@ private extension OpenAIService {
       ]
 
       let response = try await openAI.chats.create(
-        model: .GPT4.gpt_4o_mini,
+        model: .GPT5_6.luna,
         messages: messages,
         responseFormat: ResponseFormat(type: .jsonSchema(.packagingParse))
       )
 
-      await recordUsage(totalTokens: response.usage.totalTokens, userID: userID)
+      await recordUsage(model: .GPT5_6.luna, usage: response.usage, userID: userID)
 
       return try response.parse(OpenAIPackagingParseResponse.self)
     } catch {
@@ -541,7 +557,7 @@ extension OpenAIService {
     contextText: String?,
     userID: UserIdentifier? = nil
   ) async throws -> [MagicScanStatusResponse.Serving] {
-    let model = ModelID.GPT5.gpt5Mini
+    let model = ModelID.GPT5_6.luna
 
     var messages: [Chat.Message] = []
 
@@ -603,7 +619,7 @@ extension OpenAIService {
       responseFormat: ResponseFormat(type: .jsonSchema(.magicScanEstimate))
     )
 
-    await recordUsage(totalTokens: response.usage.totalTokens, userID: userID)
+    await recordUsage(model: model, usage: response.usage, userID: userID)
 
     guard let parsedResponse = try response.parse(OpenAIEstimateCaloriesResponse.self) else {
       throw Abort(.internalServerError, reason: "Failed to parse OpenAI response")
@@ -626,8 +642,8 @@ extension OpenAIService {
     contextText: String?,
     userID: UserIdentifier? = nil
   ) async throws -> [MagicScanStatusResponse.Serving] {
-    // Use GPT-5 for better vision capabilities
-    let model = ModelID.GPT5.gpt5
+    // Cheapest tier that handles vision; revisit if scan accuracy regresses.
+    let model = ModelID.GPT5_6.luna
 
     var messages: [Chat.Message] = []
 
@@ -725,7 +741,7 @@ extension OpenAIService {
       responseFormat: ResponseFormat(type: .jsonSchema(.magicScanEstimate))
     )
 
-    await recordUsage(totalTokens: response.usage.totalTokens, userID: userID)
+    await recordUsage(model: model, usage: response.usage, userID: userID)
 
     guard let parsedResponse = try response.parse(OpenAIEstimateCaloriesResponse.self) else {
       throw Abort(.internalServerError, reason: "Failed to parse OpenAI response")
@@ -738,56 +754,6 @@ extension OpenAIService {
         item: item.asFoodItem()
       )
     }
-  }
-}
-
-extension OpenAIService {
-
-  func suggestGoals(
-    healthData: String,
-    currentGoals: String,
-    userID: UserIdentifier? = nil
-  ) async throws -> SuggestGoalsResponse {
-    let messages: [Chat.Message] = [
-      Chat.Message(
-        role: .system,
-        content: [.text(.Prompt.suggestGoals)]
-      ),
-      Chat.Message(
-        role: .system,
-        content: [.text(SuggestedGoal.Metric.validUnitDescription)]
-      ),
-      Chat.Message(
-        role: .user,
-        content: [.text("Here is my health data:\n\n```json\n\(healthData)\n```\n")]
-      ),
-      Chat.Message(
-        role: .user,
-        content: [.text("Here are my current goals:\n\n```json\n\(currentGoals)\n```\n")]
-      )
-    ]
-
-    let chat = try await openAI.chats.create(
-      model: .GPT4.gpt_4o_mini,
-      messages: messages,
-      responseFormat: ResponseFormat(type: .jsonSchema(.suggestedGoals))
-    )
-
-    await recordUsage(totalTokens: chat.usage.totalTokens, userID: userID)
-
-    guard let response = try chat.parse(OpenAISuggestGoalsResponse.self) else {
-      throw Abort(.internalServerError)
-    }
-
-    logger.info("AI Goal Thought Process")
-    for (index, step) in response.thoughtProcess.enumerated() {
-      logger.info("\(index + 1). \(step.step)")
-    }
-
-    return SuggestGoalsResponse(
-      goals: response.suggestedGoals,
-      reminders: response.suggestedReminders
-    )
   }
 }
 
@@ -814,12 +780,12 @@ extension OpenAIService {
     ]
 
     let chat = try await openAI.chats.create(
-      model: .GPT4.gpt_4o_mini,
+      model: .GPT5_6.luna,
       messages: messages,
       responseFormat: ResponseFormat(type: .jsonSchema(.generateWorkoutPlan))
     )
 
-    await recordUsage(totalTokens: chat.usage.totalTokens, userID: userID)
+    await recordUsage(model: .GPT5_6.luna, usage: chat.usage, userID: userID)
 
     guard let response = try chat.parse(OpenAIGenerateWorkoutPlanResponse.self) else {
       throw Abort(.internalServerError)

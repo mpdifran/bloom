@@ -845,6 +845,42 @@ enum ChatCellType: Equatable {
 }
 ```
 
+## AI Model Selection & Cost Control
+
+Bloom is open source with limited funding, so model choice is a budget decision first. Pick the
+cheapest tier that clears the quality bar for that endpoint, and justify anything more expensive.
+
+### Model map
+
+| Endpoint | Model | Rationale |
+|---|---|---|
+| Chat (`ChatService`), goal-setter assistant | `gpt-5-mini` | Long threads; `gpt-5.6-luna` scores 41.3% on long-context recall vs 89.6% for terra, so the cheapest tier is unsafe here |
+| Today insights, monitor insight (`HealthReportService`) | `gpt-5.6-luna` | Single-shot summarization, not recall-heavy |
+| Food estimation, nutrition label / packaging parse, magic scan (text + vision), workout plans | `gpt-5.6-luna` | High volume, short context |
+| Conversation titles | `gpt-5-nano` | No reasoning required; 4x cheaper than luna |
+
+`gpt-5.6-terra` ($2/$12 per 1M) and `gpt-5.6-sol` are ~8x the input cost of `gpt-5-mini`. Don't
+reach for them without an eval showing the cheaper tier actually fails.
+
+Keep `reasoning: .init(effort: .low, ...)` on Responses API calls — reasoning tokens bill as output.
+
+### Cost-weighted usage limiting
+
+`AIUsageLimiter` caps per-user spend in **micro-dollars (µ$)**, not tokens — the model map spans a
+100x price range, so a token cap buys wildly different amounts of spend per endpoint. Rates live in
+`ModelPricing.table`, keyed by `ModelID.id`.
+
+When adding or switching a model:
+1. Add its rates to `ModelPricing.table` (unpriced models fall back to the most expensive known rate).
+2. Pass the model plus the input/output token split to `aiUsageLimiter.record(model:inputTokens:outputTokens:for:)`.
+   Never record `totalTokens` — input and output rates differ by 6-10x.
+
+Cached input isn't modelled (the API's usage payloads don't report cached counts), so recorded cost
+over-estimates whenever prompt caching hits. That's the safe direction for a cap.
+
+Limits are configured via `AI_COST_DAILY_LIMIT_MICRODOLLARS` (default $0.25) and
+`AI_COST_MONTHLY_LIMIT_MICRODOLLARS` (default $2.00).
+
 ## AI Chat Integration Patterns
 
 ### Adding New AI Capabilities

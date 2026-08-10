@@ -132,14 +132,6 @@ public extension URLRequest {
 }
 
 public extension URLRequest {
-  enum Goals {
-    static func suggestGoals(body: SuggestGoalsRequest) async throws -> URLRequest {
-      try await URLRequest.post("v1/goals/suggest", body: body)
-    }
-  }
-}
-
-public extension URLRequest {
   enum Workouts {
     public static func generatePlan(body: GenerateWorkoutPlanRequest) async throws -> URLRequest {
       try await URLRequest.post("v1/workouts/generate-plan", body: body)
@@ -148,29 +140,9 @@ public extension URLRequest {
 }
 
 public extension URLRequest {
-  enum Reports {
-    static func getMorningHealthReport(body: MorningHealthReportRequest) async throws -> URLRequest {
-      try await URLRequest.post("v1/morning-report/generate", body: body)
-    }
-  }
-}
-
-public extension URLRequest {
   enum AI {
     static func getTodayView(body: TodayReportRequest) async throws -> URLRequest {
       try await URLRequest.post("v1/today/insights", body: body)
-    }
-  }
-}
-
-public extension URLRequest {
-  enum BiologicalAge {
-    static func request(body: BiologicalAgeUploadRequest) async throws -> URLRequest {
-      try await URLRequest.post("v1/biological-age/request", body: body)
-    }
-
-    static func checkStatus() async throws -> URLRequest {
-      try await URLRequest.post("v1/biological-age/status")
     }
   }
 }
@@ -185,10 +157,6 @@ public extension URLRequest {
 
 public extension URLRequest {
   enum Monitor {
-    public static func getSummary(body: MonitorSummaryRequest) async throws -> URLRequest {
-      try await URLRequest.post("v1/monitor/summary", body: body)
-    }
-
     public static func getInsight(body: MonitorInsightRequest) async throws -> URLRequest {
       try await URLRequest.post("v1/monitor/insight", body: body)
     }

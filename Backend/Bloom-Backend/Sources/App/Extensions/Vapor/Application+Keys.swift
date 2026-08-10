@@ -208,14 +208,17 @@ extension Application {
 
 extension Application {
 
-  /// Max AI tokens a single user may consume per rolling day. Configure via `AI_TOKEN_DAILY_LIMIT`.
-  var aiTokenDailyLimit: Int {
-    Environment.get("AI_TOKEN_DAILY_LIMIT").flatMap(Int.init) ?? 1_000_000
+  /// Max AI spend for a single user per rolling day, in µ$. Configure via `AI_COST_DAILY_LIMIT_MICRODOLLARS`.
+  /// Default is $0.25/day, which covers a heavy day (a Today report plus ~100 chat messages) on the
+  /// current model map with headroom.
+  var aiCostDailyLimit: Int {
+    Environment.get("AI_COST_DAILY_LIMIT_MICRODOLLARS").flatMap(Int.init) ?? 250_000
   }
 
-  /// Max AI tokens a single user may consume per rolling month. Configure via `AI_TOKEN_MONTHLY_LIMIT`.
-  var aiTokenMonthlyLimit: Int {
-    Environment.get("AI_TOKEN_MONTHLY_LIMIT").flatMap(Int.init) ?? 15_000_000
+  /// Max AI spend for a single user per rolling month, in µ$. Configure via `AI_COST_MONTHLY_LIMIT_MICRODOLLARS`.
+  /// Default is $2.00/month — roughly 5x a typical active user, so it only catches runaway usage.
+  var aiCostMonthlyLimit: Int {
+    Environment.get("AI_COST_MONTHLY_LIMIT_MICRODOLLARS").flatMap(Int.init) ?? 2_000_000
   }
 }
 
