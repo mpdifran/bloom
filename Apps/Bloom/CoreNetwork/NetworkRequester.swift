@@ -270,27 +270,6 @@ public extension NetworkRequester {
   }
 }
 
-// MARK: - Biological Age
-
-public extension NetworkRequester {
-
-  func requestBiologicalAge(request: BiologicalAgeUploadRequest) async throws -> BiologicalAgeUploadResponse {
-    let urlRequest = try await URLRequest.BiologicalAge.request(body: request)
-    return try await URLSession.shared.authenticatedBloomRequestWithResponse(
-      request: urlRequest,
-      responseType: BiologicalAgeUploadResponse.self
-    )
-  }
-
-  func checkBiologicalAgeStatus() async throws -> BiologicalAgeStatusResponse {
-    let urlRequest = try await URLRequest.BiologicalAge.checkStatus()
-    return try await URLSession.shared.authenticatedBloomRequestWithResponse(
-      request: urlRequest,
-      responseType: BiologicalAgeStatusResponse.self
-    )
-  }
-}
-
 // MARK: - Chat
 
 public extension NetworkRequester {
@@ -328,37 +307,6 @@ public extension NetworkRequester {
   func submitChatMessageIssueReport(request: SubmitChatMessageIssueRequest) async throws {
     let urlRequest = try await URLRequest.Chat.reportIssue(body: request)
     try await URLSession.shared.authenticatedBloomRequest(request: urlRequest)
-  }
-}
-
-// MARK: - Goals
-
-public extension NetworkRequester {
-
-  func suggestGoals(healthData: String, currentGoals: String) async throws -> SuggestGoalsResponse {
-    let body = SuggestGoalsRequest(
-      healthData: healthData,
-      currentGoals: currentGoals,
-      isConversation: false
-    )
-    let request = try await URLRequest.Goals.suggestGoals(body: body)
-    return try await URLSession.shared.authenticatedBloomRequestWithResponse(
-      request: request,
-      responseType: SuggestGoalsResponse.self
-    )
-  }
-}
-
-// MARK: - Reports
-
-public extension NetworkRequester {
-
-  func getMorningHealthReport(request: MorningHealthReportRequest) async throws -> MorningHealthReportResponse {
-    let urlRequest = try await URLRequest.Reports.getMorningHealthReport(body: request)
-    return try await URLSession.shared.authenticatedBloomRequestWithResponse(
-      request: urlRequest,
-      responseType: MorningHealthReportResponse.self
-    )
   }
 }
 

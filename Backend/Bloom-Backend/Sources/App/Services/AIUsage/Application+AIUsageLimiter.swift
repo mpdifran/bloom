@@ -21,8 +21,8 @@ extension Application {
     let limiter = AIUsageLimiter(
       redis: redis,
       logger: logger,
-      dailyLimit: aiTokenDailyLimit,
-      monthlyLimit: aiTokenMonthlyLimit
+      dailyLimit: aiCostDailyLimit,
+      monthlyLimit: aiCostMonthlyLimit
     )
 
     storage[AIUsageLimiterKey.self] = limiter

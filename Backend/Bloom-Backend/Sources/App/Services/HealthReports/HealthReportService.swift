@@ -21,7 +21,7 @@ final class HealthReportService: Sendable {
     self.aiUsageLimiter = aiUsageLimiter
   }
 
-  private let modelID = ModelID.GPT5_6.terra
+  private let modelID = ModelID.GPT5_6.luna
 
   private let encoder = JSONEncoder.bloomModel
   private let decoder = JSONDecoder.bloomModel
@@ -30,43 +30,6 @@ final class HealthReportService: Sendable {
 // MARK: - Public Methods
 
 extension HealthReportService {
-
-  func generateMorningHealthReport(
-    from healthContext: String,
-    userID: UserIdentifier
-  ) async throws -> MorningHealthReportResponse {
-
-    var inputItems = [OpenAIKit.Response.InputItem]()
-
-    inputItems.append(
-      .message(
-        .init(
-          role: .system,
-          content: [
-            .text(.init(text: "Here is the user's health data from yesterday:\n\(healthContext)"))
-          ]
-        )
-      )
-    )
-
-    let response = try await openAIService.openAI.responses.createResponse(
-      input: inputItems,
-      model: modelID,
-      instructions: .Prompt.morningHealthReport,
-      reasoning: .init(effort: .low, summary: .auto),
-      text: OpenAIKit.Text(format: Format(type: .jsonSchema(.morningHealthReport))),
-      truncation: .auto,
-      user: userID.value
-    )
-
-    await aiUsageLimiter.record(tokens: response.usage?.totalTokens ?? 0, for: userID)
-
-    guard let report = try response.parse(MorningHealthReportResponse.self) else {
-      throw Abort(.internalServerError, reason: "Failed to parse morning health report response")
-    }
-
-    return report
-  }
 
   func generateTodayView(
     healthContext: String,
@@ -109,124 +72,18 @@ extension HealthReportService {
       user: userID.value
     )
 
-    await aiUsageLimiter.record(tokens: response.usage?.totalTokens ?? 0, for: userID)
+    await aiUsageLimiter.record(
+      model: modelID,
+      inputTokens: response.usage?.inputTokens ?? 0,
+      outputTokens: response.usage?.outputTokens ?? 0,
+      for: userID
+    )
 
     guard let todayResponse = try response.parse(TodayReportResponse.self) else {
       throw Abort(.internalServerError, reason: "Failed to parse today report response")
     }
 
     return todayResponse
-  }
-
-  func calculateBiologicalAge(
-    healthContext: String,
-    currentAge: Int?,
-    lastBiologicalAge: Double?,
-    userID: UserIdentifier
-  ) async throws -> BiologicalAgeResponse {
-
-    var inputItems = [OpenAIKit.Response.InputItem]()
-
-    // Build context message with health data and age information
-    var contextMessage = "Here is the user's health data from the last 7 days:\n\(healthContext)"
-
-    if let currentAge = currentAge {
-      contextMessage += "\n\nThe user's current chronological age is \(currentAge) years old."
-    }
-
-    if let lastBioAge = lastBiologicalAge {
-      contextMessage += "\n\nThe user's last calculated biological age was \(String(format: "%.1f", lastBioAge)) years old. Use this as a reference point to maintain consistency between calculations."
-    }
-
-    inputItems.append(
-      .message(
-        .init(
-          role: .system,
-          content: [
-            .text(.init(text: contextMessage))
-          ]
-        )
-      )
-    )
-
-    let response = try await openAIService.openAI.responses.createResponse(
-      input: inputItems,
-      model: modelID,
-      instructions: .Prompt.biologicalAge,
-      reasoning: .init(effort: .medium, summary: .auto),
-      text: OpenAIKit.Text(format: Format(type: .jsonSchema(.biologicalAge))),
-      truncation: .auto,
-      user: userID.value
-    )
-
-    await aiUsageLimiter.record(tokens: response.usage?.totalTokens ?? 0, for: userID)
-
-    guard let biologicalAgeResponse = try response.parse(BiologicalAgeResponse.self) else {
-      throw Abort(.internalServerError, reason: "Failed to parse biological age response")
-    }
-
-    return biologicalAgeResponse
-  }
-
-  func generateMonitorSummary(
-    monitorContext: String,
-    healthContext: String,
-    timezone: String,
-    userID: UserIdentifier
-  ) async throws -> MonitorSummaryResponse {
-
-    var inputItems = [OpenAIKit.Response.InputItem]()
-
-    inputItems.append(
-      .message(
-        .init(
-          role: .system,
-          content: [
-            .text(.init(text: "Here is the monitor detection data showing current health monitor states:\n\(monitorContext)"))
-          ]
-        )
-      )
-    )
-
-    inputItems.append(
-      .message(
-        .init(
-          role: .system,
-          content: [
-            .text(.init(text: "Here is the user's health baseline data for context:\n\(healthContext)"))
-          ]
-        )
-      )
-    )
-
-    inputItems.append(
-      .message(
-        .init(
-          role: .system,
-          content: [
-            .text(.init(text: "User's timezone: \(timezone)"))
-          ]
-        )
-      )
-    )
-
-    let response = try await openAIService.openAI.responses.createResponse(
-      input: inputItems,
-      model: modelID,
-      instructions: .Prompt.monitorSummary,
-      reasoning: .init(effort: .low, summary: .auto),
-      text: OpenAIKit.Text(format: Format(type: .jsonSchema(.monitorSummary))),
-      truncation: .auto,
-      user: userID.value
-    )
-
-    await aiUsageLimiter.record(tokens: response.usage?.totalTokens ?? 0, for: userID)
-
-    guard let monitorSummary = try response.parse(MonitorSummaryResponse.self) else {
-      throw Abort(.internalServerError, reason: "Failed to parse monitor summary response")
-    }
-
-    return monitorSummary
   }
 
   func generateMonitorInsight(
@@ -293,7 +150,12 @@ extension HealthReportService {
       user: userID.value
     )
 
-    await aiUsageLimiter.record(tokens: response.usage?.totalTokens ?? 0, for: userID)
+    await aiUsageLimiter.record(
+      model: modelID,
+      inputTokens: response.usage?.inputTokens ?? 0,
+      outputTokens: response.usage?.outputTokens ?? 0,
+      for: userID
+    )
 
     guard let monitorInsight = try response.parse(MonitorInsightResponse.self) else {
       throw Abort(.internalServerError, reason: "Failed to parse monitor insight response")

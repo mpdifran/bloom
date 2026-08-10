@@ -35,7 +35,7 @@ final class ChatService: Sendable {
     self.logger = logger
   }
 
-  private let modelID = ModelID.GPT5_6.terra
+  private let modelID = ModelID.GPT5.gpt5Mini
 
   private let encoder = JSONEncoder.bloomModel
   private let decoder = JSONDecoder.bloomModel
@@ -311,7 +311,12 @@ private extension ChatService {
         case .inProgress:
           try await sendIsAssistantTyping(isTyping: true, userID: userID, conversationID: conversationID)
         case .completed(let event):
-          await application.aiUsageLimiter.record(tokens: event.response.usage?.totalTokens ?? 0, for: userID)
+          await application.aiUsageLimiter.record(
+            model: modelID,
+            inputTokens: event.response.usage?.inputTokens ?? 0,
+            outputTokens: event.response.usage?.outputTokens ?? 0,
+            for: userID
+          )
           if toolCalls.isNotEmpty {
             try await send(toolCalls: toolCalls, userID: userID, db: db, conversationID: conversationID, lastMessageID: event.response.id)
           }

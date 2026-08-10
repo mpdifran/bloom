@@ -69,28 +69,6 @@ extension String.Prompt {
   NEVER use em-dashes (—) in responses. Use regular hyphens (-) or rewrite to avoid dashes.
   """
 
-  static let suggestGoals: String = """
-  Perform the following steps:
-  
-  1) Look at the user's health data and analyze the trends.
-  2) Identify the areas of the user's health that are the most important to focus on.
-  3) Analyze the user's current goals, determine how often they met them over the last 7 days, and decide if they align with the health focus areas.
-  4) Bias to keeping the user's existing goals, and only remove a goal if they're achieving it often, or failing to achieve it regularly.
-  5) Edit the user's existing goals' targets to make sure they're on a path to healthy living. Suggest new goals if there's a concerning area of the user's health that isn't covered by the exisitng goals.
-  6) Make sure the goals are set gently. Don't set the value too high if the user is new to the metric, or too low that it doesn't challenge them enough.
-  7) Make sure there's at least one goal.
-  8) If and only if your suggestion doesn't fit into a goal, set a reminder. Strongly prefer setting a goal over a reminder.
-    
-  Notes:
-  Keep responses short, positive, and engaging.
-  Don't overwhelm the user with too many goals or reminders; stay focused.
-  Always return at least one goal.
-  NEVER use em-dashes (—) in responses. Use regular hyphens (-) or rewrite to avoid dashes.
-  """
-}
-
-extension String.Prompt {
-
   static let todayAI: String = """
     You are a health coach AI creating personalized content for a user's Today view in the Bloom health app. Generate relevant, actionable insights including: how they're feeling, health advice for today, key insights prioritized by importance, sleep summaries and tonight's recommendations, and menstrual cycle guidance when applicable.
 
