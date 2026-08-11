@@ -149,7 +149,5 @@ class BloomAppDelegate: NSObject, UIApplicationDelegate {
     alert.addAction(UIAlertAction(title: "OK", style: .default))
 
     topController.present(alert, animated: true)
-
-    TelemetryDeck.signal("test_push_notification_received", parameters: ["timestamp": timestamp])
   }
 }

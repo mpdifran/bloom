@@ -28,12 +28,16 @@ struct BloomApp: App {
     BugsnagPerformance.start()
 
     // Setup TelemetryDeck
-    TelemetryDeck.initialize(
-      config: TelemetryManagerConfiguration(
-        appID: .telemetryDeckAppID,
-        salt: .telemetryDeckSalt
-      )
+    let telemetryConfiguration = TelemetryManagerConfiguration(
+      appID: .telemetryDeckAppID,
+      salt: .telemetryDeckSalt
     )
+    // The health goal is a property of the user, not an event. Sending it with every signal lets
+    // any query break down by goal without a separate per-foreground signal.
+    telemetryConfiguration.defaultParameters = {
+      ["healthGoal": HealthDefaults.shared.getFocus()]
+    }
+    TelemetryDeck.initialize(config: telemetryConfiguration)
 
     // Setup RevenueCat
     Purchases.configure()
@@ -93,12 +97,6 @@ struct BloomApp: App {
         }
         .onForegroundTask {
           await PeriodPredictionScheduler.shared.schedulePeriodPredictionNotifications()
-        }
-        .onForegroundTask {
-          TelemetryDeck.signal(
-            "Health Goal",
-            parameters: ["healthGoal": HealthDefaults.shared.getFocus()]
-          )
         }
         .onForegroundTask { @MainActor in
           await ReEngagementScheduler.shared.scheduleNotificationIfNeeded()

@@ -744,6 +744,24 @@ TelemetryDeck.signal("Event Name", parameters: ["key": "value"])
 TelemetryDeck.errorOccurred(id: "Error ID", category: .thrownException)
 ```
 
+**Events vs. user properties.** Signal names are Title Case and describe something the user *did*.
+Anything that describes who the user *is* (health goal, cohort, persistent preference) belongs in
+`defaultParameters` on the TelemetryDeck config in `BloomApp.init()`, not in a signal fired on
+foreground:
+
+```swift
+telemetryConfiguration.defaultParameters = {
+  ["healthGoal": HealthDefaults.shared.getFocus()]
+}
+```
+
+Default parameters ride along with every signal, so any query can break down by them. A per-foreground
+"property" signal duplicates `TelemetryDeck.Session.started` 1:1 and adds no information — the
+`Health Goal` signal did exactly this and accounted for roughly half of all events sent.
+
+Fire each event from exactly one place. If a value is worth attaching, add it as a parameter to the
+existing signal rather than sending a second signal from the caller.
+
 ## Performance Patterns
 
 ### Lazy Loading

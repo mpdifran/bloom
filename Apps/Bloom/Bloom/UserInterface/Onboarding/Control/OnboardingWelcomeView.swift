@@ -63,7 +63,6 @@ struct OnboardingWelcomeView: View {
     .onAppear {
       TelemetryDeck.signal("OB Welcome")
       TelemetryDeck.startDurationSignal("Onboarding")
-      TelemetryDeck.signal("AB: Onboarding Revamp v2 - Control")
     }
   }
 }

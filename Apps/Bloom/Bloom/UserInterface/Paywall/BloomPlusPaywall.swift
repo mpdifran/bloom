@@ -104,7 +104,6 @@ struct BloomPlusPaywall: View {
       guard entitlementController.hasBloomPro == true else { return }
 
       TelemetryDeck.signal("Paywall Purchase Complete")
-      TelemetryDeck.signal("AB: Periodic Paywall v3 - Success")
 
       dismiss()
       onPurchase()

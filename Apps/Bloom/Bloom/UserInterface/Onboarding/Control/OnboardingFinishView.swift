@@ -75,7 +75,6 @@ private extension OnboardingFinishView {
   func performFinish() async {
     didContinue.toggle()
     TelemetryDeck.signal("OB Finish")
-    TelemetryDeck.signal("AB: Onboarding Revamp v2 - Success")
     TelemetryDeck.stopAndSendDurationSignal("Onboarding")
     TelemetryDeck.stopAndSendDurationSignal("Onboarding V2")
 

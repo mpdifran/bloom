@@ -8,7 +8,6 @@
 import Foundation
 import CoreHealth
 import BloomFoundation
-import TelemetryDeck
 
 @MainActor @Observable
 final class BiologicalAgeViewModel {
@@ -79,16 +78,9 @@ extension BiologicalAgeViewModel {
     isCalculatingAge = true
     defer { isCalculatingAge = false }
 
+    // The "Bio Age Calculated" signal is sent by BiologicalAgeCalculator when a calculation
+    // actually runs. Don't signal here, since this also fires when the cached result is reused.
     await BiologicalAgeCalculator.shared.refreshBiologicalAge()
-
-    if let result = await BiologicalAgeCalculator.shared.biologicalAge {
-      TelemetryDeck.signal(
-        "Biological Age Calculated",
-        parameters: [
-          "biologicalAge": String(result.biologicalAge)
-        ]
-      )
-    }
   }
 
   func forceCalculateBiologicalAge() async {
@@ -98,14 +90,5 @@ extension BiologicalAgeViewModel {
     defer { isCalculatingAge = false }
 
     await BiologicalAgeCalculator.shared.refreshBiologicalAge(forceRecalculate: true)
-
-    if let result = await BiologicalAgeCalculator.shared.biologicalAge {
-      TelemetryDeck.signal(
-        "Biological Age Calculated",
-        parameters: [
-          "biologicalAge": String(result.biologicalAge)
-        ]
-      )
-    }
   }
 }

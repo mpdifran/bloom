@@ -257,7 +257,11 @@ final actor BiologicalAgeCalculator {
     internalLog(.biologicalAge, "Calculated: \(String(format: "%.1f", clampedAge)) (actual: \(String(format: "%.1f", userAge)))")
 
     let ageDiff = clampedAge - userAge
-    TelemetryDeck.signal("Bio Age Calculated", floatValue: ageDiff)
+    TelemetryDeck.signal(
+      "Bio Age Calculated",
+      parameters: ["biologicalAge": String(clampedAge)],
+      floatValue: ageDiff
+    )
   }
 
   private func getUserAge() -> Double {
