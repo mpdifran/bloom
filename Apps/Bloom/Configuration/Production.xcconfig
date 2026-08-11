@@ -14,3 +14,8 @@ BLOOM_BASE_URL = https:\/\/api.trybloom.app
 BLOOM_BASE_WS_URL = wss:\/\/api.trybloom.app
 BLOOM_APP_GROUP_ID = group.com.lotus-labs.bloom
 OTHER_SWIFT_FLAGS = $(inherited) -DPRODUCTION
+
+// Localization: extract Swift string literals (Text, LocalizedStringResource, String(localized:))
+// into each target's Localizable.xcstrings at build time.
+SWIFT_EMIT_LOC_STRINGS = YES
+LOCALIZATION_PREFERS_STRING_CATALOGS = YES
