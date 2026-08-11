@@ -8,12 +8,16 @@
 import SwiftUI
 
 struct CameraPicker: UIViewControllerRepresentable {
-  @Binding var image: UIImage?
+  @Binding var images: [UIImage]
 
   @Environment(\.dismiss) private var dismiss
 
+  init(images: Binding<[UIImage]>) {
+    self._images = images
+  }
+
   func makeCoordinator() -> Coordinator {
-    Coordinator(image: $image) {
+    Coordinator(images: $images) {
       dismiss()
     }
   }
@@ -30,16 +34,18 @@ struct CameraPicker: UIViewControllerRepresentable {
   }
 
   class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    @Binding var image: UIImage?
+    @Binding var images: [UIImage]
     let dismiss: () -> Void
 
-    init(image: Binding<UIImage?>, dismiss: @escaping () -> Void) {
-      self._image = image
+    init(images: Binding<[UIImage]>, dismiss: @escaping () -> Void) {
+      self._images = images
       self.dismiss = dismiss
     }
 
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-      self.image = info[.originalImage] as? UIImage
+      if let image = info[.originalImage] as? UIImage {
+        images.append(image)
+      }
       dismiss()
     }
 
@@ -50,9 +56,9 @@ struct CameraPicker: UIViewControllerRepresentable {
 }
 
 #Preview {
-  @Previewable @State var image: UIImage?
+  @Previewable @State var images = [UIImage]()
 
   PreviewEnvironment {
-    CameraPicker(image: $image)
+    CameraPicker(images: $images)
   }
 }

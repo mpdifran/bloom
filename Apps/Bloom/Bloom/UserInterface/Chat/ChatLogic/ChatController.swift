@@ -42,6 +42,9 @@ extension ChatController {
 final actor ChatController: ObservableObject {
   static let shared = ChatController()
 
+  /// Max images that can be attached to a single message. Matches the backend upload limit.
+  static let maxImageCount = 10
+
   @AsyncStreamable var assistantTypingStatus: [String: String?] = [:]
   @AsyncStreamable var assistantIsTyping: [String: Bool] = [:]
   @AsyncStreamable var inProgressMessages: [String: [InProgressMessage]] = [:]
@@ -152,7 +155,7 @@ extension ChatController {
     _ = await createOrGetWebSocketHandle()
   }
 
-  func send(message: String, image: UIImage?, chatContexts: [ChatContext], conversationID: String?, lastMessageID: String?) async throws {
+  func send(message: String, images: [UIImage], chatContexts: [ChatContext], conversationID: String?, lastMessageID: String?) async throws {
     // Send any pending telemetry before starting a new message
     sendToolCallCountTelemetry()
     sendToolRequestCountTelemetry()
@@ -173,10 +176,13 @@ extension ChatController {
     // Fetch the conversation for message relationship
     let conversationModel = try getConversationModel(id: resolvedConversationID)
 
-    let imageData = image?.resized(toWidth: 800)?.jpegData(compressionQuality: 0.75)
+    let imageDatas = images
+      .prefix(Self.maxImageCount)
+      .compactMap { $0.resized(toWidth: 800)?.jpegData(compressionQuality: 0.75) }
     let trimmedMessage = message.trimmingCharacters(in: .whitespacesAndNewlines)
 
-    if let imageData {
+    // Each image is saved as its own message so they render in the order they were attached.
+    for imageData in imageDatas {
       let imageMessage = ChatMessage(
         isCurrentUser: true,
         imageData: imageData,
@@ -214,8 +220,8 @@ extension ChatController {
     let stringData = try encoder.encodeToString(chatContext) ?? ""
 
     let fileIDs: [String]
-    if let imageData {
-      fileIDs = try await NetworkRequester.shared.uploadChatImages(images: [imageData]).fileIDs
+    if imageDatas.isNotEmpty {
+      fileIDs = try await NetworkRequester.shared.uploadChatImages(images: imageDatas).fileIDs
     } else {
       fileIDs = []
     }

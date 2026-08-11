@@ -9,12 +9,20 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct FilesImagePicker: UIViewControllerRepresentable {
-  @Binding var image: UIImage?
+  @Binding var images: [UIImage]
+
+  /// The maximum number of images that can be picked in one presentation. Zero means no limit.
+  let selectionLimit: Int
 
   @Environment(\.dismiss) private var dismiss
 
+  init(images: Binding<[UIImage]>, selectionLimit: Int = 1) {
+    self._images = images
+    self.selectionLimit = selectionLimit
+  }
+
   func makeCoordinator() -> Coordinator {
-    Coordinator(image: $image) {
+    Coordinator(images: $images, selectionLimit: selectionLimit) {
       dismiss()
     }
   }
@@ -22,7 +30,7 @@ struct FilesImagePicker: UIViewControllerRepresentable {
   func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
     let controller = UIDocumentPickerViewController(forOpeningContentTypes: [UTType.image], asCopy: true)
     controller.delegate = context.coordinator
-    controller.allowsMultipleSelection = false
+    controller.allowsMultipleSelection = selectionLimit != 1
     return controller
   }
 
@@ -31,21 +39,24 @@ struct FilesImagePicker: UIViewControllerRepresentable {
   }
 
   class Coordinator: NSObject, UIDocumentPickerDelegate {
-    @Binding var image: UIImage?
+    @Binding var images: [UIImage]
+    let selectionLimit: Int
     let dismiss: () -> Void
 
-    init(image: Binding<UIImage?>, dismiss: @escaping () -> Void) {
-      self._image = image
+    init(images: Binding<[UIImage]>, selectionLimit: Int, dismiss: @escaping () -> Void) {
+      self._images = images
+      self.selectionLimit = selectionLimit
       self.dismiss = dismiss
     }
 
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-      guard let url = urls.first else { return }
+      let limitedURLs = selectionLimit > 0 ? Array(urls.prefix(selectionLimit)) : urls
 
-      // Attempt to load an image from the selected file
-      if let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
-        self.image = image
-      }
+      // Attempt to load an image from each selected file
+      images.append(contentsOf: limitedURLs.compactMap { url in
+        guard let data = try? Data(contentsOf: url) else { return nil }
+        return UIImage(data: data)
+      })
       dismiss()
     }
 
@@ -56,9 +67,9 @@ struct FilesImagePicker: UIViewControllerRepresentable {
 }
 
 #Preview {
-  @Previewable @State var image: UIImage?
+  @Previewable @State var images = [UIImage]()
 
   PreviewEnvironment {
-    FilesImagePicker(image: $image)
+    FilesImagePicker(images: $images, selectionLimit: 0)
   }
 }

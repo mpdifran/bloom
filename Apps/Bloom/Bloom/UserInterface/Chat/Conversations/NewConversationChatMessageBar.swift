@@ -17,7 +17,7 @@ struct NewConversationChatMessageBar: View {
   let onSelectConversation: (ChatConversation, Bool) -> Void
 
   @State private var text = ""
-  @State private var image: UIImage?
+  @State private var images = [UIImage]()
   @State private var presentedSheet: AnyView?
   @State private var didSendToggle = false
   @State private var error: Error?
@@ -28,7 +28,7 @@ struct NewConversationChatMessageBar: View {
     Group {
       content
     }
-    .animation(.bouncy, value: image)
+    .animation(.bouncy, value: images)
     .animation(.bouncy, value: tabController.chatContexts)
     .sensoryFeedback(.impact, trigger: didSendToggle)
     .alert(error: $error)
@@ -37,7 +37,7 @@ struct NewConversationChatMessageBar: View {
 
   private var content: some View {
     VStack {
-      if image != nil || tabController.chatContexts.isNotEmpty {
+      if images.isNotEmpty || tabController.chatContexts.isNotEmpty {
         imageAndContextSection
       }
 
@@ -54,9 +54,9 @@ struct NewConversationChatMessageBar: View {
   private var imageAndContextSection: some View {
     ScrollView(.horizontal) {
       HStack {
-        if let image {
+        ForEachEnumeratedNoID(images) { index, image in
           EditableChatImageView(image: image) {
-            self.image = nil
+            images.remove(at: index)
           }
           .transition(.scale)
         }
@@ -75,7 +75,11 @@ struct NewConversationChatMessageBar: View {
 
   private var chatBar: some View {
     HStack(alignment: .bottom, spacing: 12) {
-      ImagePicker(image: $image, presentedSheet: $presentedSheet) {
+      ImagePicker(
+        images: $images,
+        presentedSheet: $presentedSheet,
+        maxImageCount: ChatController.maxImageCount
+      ) {
         Image(systemSymbol: .plus)
           .foregroundStyle(.white, .tint)
           .font(.body)
@@ -149,16 +153,16 @@ struct NewConversationChatMessageBar: View {
   }
 
   private func submit() async {
-    guard text.isNotEmpty || image != nil else { return }
+    guard text.isNotEmpty || images.isNotEmpty else { return }
 
     didSendToggle.toggle()
 
     let textToSend = text
-    let imageToSend = image
+    let imagesToSend = images
     let chatContextsToSend = tabController.chatContexts
 
     text = ""
-    image = nil
+    images = []
     tabController.chatContexts = []
     isFocused = false
 
@@ -174,7 +178,7 @@ struct NewConversationChatMessageBar: View {
       // Send the message to the new conversation
       try await ChatController.shared.send(
         message: textToSend,
-        image: imageToSend,
+        images: imagesToSend,
         chatContexts: chatContextsToSend,
         conversationID: conversation.id,
         lastMessageID: nil

@@ -44,7 +44,7 @@ class ChatMessageBarView: UIView {
   private let minTextViewHeight: CGFloat = 24
   private let maxTextViewHeight: CGFloat = 120
 
-  private var selectedImage: UIImage?
+  private var selectedImages = [UIImage]()
 
   // MARK: - Initialization
 
@@ -199,6 +199,12 @@ class ChatMessageBarView: UIView {
       self?.presentFilesPicker()
     }
 
+    if isAtImageCapacity {
+      for action in [cameraAction, photoLibraryAction, filesAction] {
+        action.attributes = .disabled
+      }
+    }
+
     let menu = UIMenu(children: [cameraAction, photoLibraryAction, filesAction])
     plusButton.menu = menu
     plusButton.showsMenuAsPrimaryAction = true
@@ -321,8 +327,26 @@ class ChatMessageBarView: UIView {
     actionButton.configuration = config
   }
 
+  private var isAtImageCapacity: Bool {
+    selectedImages.count >= ChatController.maxImageCount
+  }
+
+  /// How many more images may be attached to this message.
+  private var remainingImageCount: Int {
+    max(0, ChatController.maxImageCount - selectedImages.count)
+  }
+
+  private func addImages(_ images: [UIImage]) {
+    guard remainingImageCount > 0 else { return }
+
+    selectedImages.append(contentsOf: images.prefix(remainingImageCount))
+    updateImageContextVisibility()
+  }
+
   private func updateImageContextVisibility() {
-    let hasContent = selectedImage != nil || !tabController.chatContexts.isEmpty
+    let hasContent = !selectedImages.isEmpty || !tabController.chatContexts.isEmpty
+
+    setupPlusButtonMenu()
 
     UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseOut]) {
       self.imageContextScrollView.isHidden = !hasContent
@@ -339,9 +363,9 @@ class ChatMessageBarView: UIView {
       view.removeFromSuperview()
     }
 
-    // Add image if present
-    if let image = selectedImage {
-      let imageView = createEditableImageView(image: image)
+    // Add images if present
+    for (index, image) in selectedImages.enumerated() {
+      let imageView = createEditableImageView(image: image, index: index)
       imageContextStackView.addArrangedSubview(imageView)
     }
 
@@ -352,7 +376,7 @@ class ChatMessageBarView: UIView {
     }
   }
 
-  private func createEditableImageView(image: UIImage) -> UIView {
+  private func createEditableImageView(image: UIImage, index: Int) -> UIView {
     let containerView = UIView()
     containerView.translatesAutoresizingMaskIntoConstraints = false
     containerView.backgroundColor = .systemBackground
@@ -374,7 +398,8 @@ class ChatMessageBarView: UIView {
     removeButton.tintColor = .systemRed
     removeButton.backgroundColor = .systemBackground
     removeButton.layer.cornerRadius = 10
-    removeButton.addTarget(self, action: #selector(removeImageTapped), for: .touchUpInside)
+    removeButton.tag = index // Store index for removal
+    removeButton.addTarget(self, action: #selector(removeImageTapped(_:)), for: .touchUpInside)
 
     containerView.addSubview(imageView)
     containerView.addSubview(removeButton)
@@ -446,8 +471,11 @@ class ChatMessageBarView: UIView {
     return containerView
   }
 
-  @objc private func removeImageTapped() {
-    selectedImage = nil
+  @objc private func removeImageTapped(_ sender: UIButton) {
+    let index = sender.tag
+    guard index < selectedImages.count else { return }
+
+    selectedImages.remove(at: index)
     updateImageContextVisibility()
   }
 
@@ -491,7 +519,7 @@ class ChatMessageBarView: UIView {
     if #available(iOS 14.0, *) {
       var configuration = PHPickerConfiguration()
       configuration.filter = .images
-      configuration.selectionLimit = 1
+      configuration.selectionLimit = remainingImageCount
 
       let picker = PHPickerViewController(configuration: configuration)
       picker.delegate = self
@@ -527,24 +555,24 @@ class ChatMessageBarView: UIView {
       asCopy: true
     )
     documentPicker.delegate = self
-    documentPicker.allowsMultipleSelection = false
+    documentPicker.allowsMultipleSelection = true
     parentViewController.present(documentPicker, animated: true)
   }
 
   // MARK: - Message Submission
 
   private func submit() async {
-    guard !textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || selectedImage != nil else { return }
+    guard !textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || !selectedImages.isEmpty else { return }
 
     provideFeedback()
 
     let textToSend = textView.text.trimmingCharacters(in: .whitespacesAndNewlines)
-    let imageToSend = selectedImage
+    let imagesToSend = selectedImages
     let chatContextsToSend = tabController.chatContexts
 
     // Clear inputs
     textView.text = ""
-    selectedImage = nil
+    selectedImages = []
     tabController.chatContexts = []
 
     // Dismiss keyboard
@@ -561,7 +589,7 @@ class ChatMessageBarView: UIView {
 
       try await ChatController.shared.send(
         message: textToSend,
-        image: imageToSend,
+        images: imagesToSend,
         chatContexts: chatContextsToSend,
         conversationID: conversationID,
         lastMessageID: conversation?.lastMessageID
@@ -617,7 +645,7 @@ class ChatMessageBarView: UIView {
   override var intrinsicContentSize: CGSize {
     // Calculate height based on text view content + padding
     let textViewHeight = textViewHeightConstraint?.constant ?? minTextViewHeight
-    let imageContextHeight: CGFloat = (selectedImage != nil || !tabController.chatContexts.isEmpty) ? 60 : 0
+    let imageContextHeight: CGFloat = (!selectedImages.isEmpty || !tabController.chatContexts.isEmpty) ? 60 : 0
 
     let basePadding: CGFloat = 24 // 12pt card padding top + 12pt card padding bottom
 
@@ -683,15 +711,17 @@ extension ChatMessageBarView: PHPickerViewControllerDelegate {
   func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
     picker.dismiss(animated: true)
 
-    guard let result = results.first else { return }
+    guard !results.isEmpty else { return }
 
-    result.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
-      DispatchQueue.main.async {
-        if let image = image as? UIImage {
-          self?.selectedImage = image
-          self?.updateImageContextVisibility()
+    Task { @MainActor [weak self] in
+      // Loaded in order so the previews match the order they were picked in.
+      var pickedImages = [UIImage]()
+      for result in results {
+        if let image = await result.itemProvider.loadImage() {
+          pickedImages.append(image)
         }
       }
+      self?.addImages(pickedImages)
     }
   }
 }
@@ -703,8 +733,7 @@ extension ChatMessageBarView: UIImagePickerControllerDelegate, UINavigationContr
     picker.dismiss(animated: true)
 
     if let image = info[.originalImage] as? UIImage {
-      selectedImage = image
-      updateImageContextVisibility()
+      addImages([image])
     }
   }
 
@@ -717,14 +746,11 @@ extension ChatMessageBarView: UIImagePickerControllerDelegate, UINavigationContr
 
 extension ChatMessageBarView: UIDocumentPickerDelegate {
   func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-    guard let url = urls.first else { return }
-
-    // Load the image from the selected file
-    if let data = try? Data(contentsOf: url),
-       let image = UIImage(data: data) {
-      selectedImage = image
-      updateImageContextVisibility()
-    }
+    // Load the images from the selected files
+    addImages(urls.compactMap { url in
+      guard let data = try? Data(contentsOf: url) else { return nil }
+      return UIImage(data: data)
+    })
   }
 
   func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {

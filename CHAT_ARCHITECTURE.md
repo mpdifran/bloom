@@ -202,19 +202,20 @@ struct ChatMessageDTO: Sendable {
 #### 1. User Input (ChatViewModel)
 **Location:** `Apps/Bloom/Bloom/UserInterface/Chat/ChatViewModel.swift:120`
 
-- User types message or uploads image
+- User types message or uploads images (up to `ChatController.maxImageCount`, currently 10, matching the backend upload limit)
 - Can include "chat contexts" (insights from Today View)
-- Image resized to 800px width, JPEG 75% quality
+- Each image resized to 800px width, JPEG 75% quality
 
 #### 2. Pre-Processing (ChatController.send)
 **Location:** `Apps/Bloom/Bloom/UserInterface/Chat/ChatLogic/ChatController.swift:180`
 
 ```swift
 func send(
-    _ text: String,
-    image: UIImage?,
-    context: ChatContext?,
-    conversation: ChatConversation
+    message: String,
+    images: [UIImage],
+    chatContexts: [ChatContext],
+    conversationID: String?,
+    lastMessageID: String?
 ) async throws
 ```
 
@@ -222,7 +223,7 @@ Steps:
 1. Generate unique `requestID` (format: "request_UUID")
 2. Create/fetch conversation via ConversationModelActor
 3. Save user message to SwiftData immediately
-4. Save image message separately (if provided)
+4. Save one image message per attached image (`ChatMessage.imageData` holds a single image, so N images become N messages sharing the `requestID`)
 5. Save context message as rich content (if provided)
 
 #### 3. Health Context Generation (ChatVitalConverter)
@@ -236,9 +237,9 @@ Generates health context for AI:
 #### 4. Image Upload (if applicable)
 **Location:** `Apps/Bloom/Bloom/UserInterface/Chat/ChatLogic/ChatController.swift:250`
 
-- POST to `/v1/chat/upload-image`
-- Backend uploads to OpenAI Files API
-- Returns array of `fileIDs`
+- POST to `/v1/chat/upload-image` with every attached image in one request
+- Backend uploads them to the OpenAI Files API in parallel (max 10 images, 5 MB each)
+- Returns array of `fileIDs`, sent as `MessageRequest.imageFileIDs`
 
 #### 5. WebSocket Message Construction
 **Location:** `Apps/Bloom/Bloom/UserInterface/Chat/ChatLogic/ChatController.swift:280`
@@ -990,9 +991,9 @@ func uploadImage(req: Request) async throws -> [String] {
 **Client Side:**
 **Location:** `Apps/Bloom/Bloom/UserInterface/Chat/ChatLogic/ChatController.swift:250`
 
-1. User selects image
-2. Resize to 800px width, JPEG 75% quality
-3. Save to SwiftData immediately (user message with imageData)
+1. User selects one or more images (capped at `ChatController.maxImageCount`)
+2. Resize each to 800px width, JPEG 75% quality
+3. Save to SwiftData immediately (one user message per image)
 4. Upload to backend in parallel (non-blocking)
 5. Backend uploads to OpenAI Files API
 6. FileIDs included in `SocketMessage.MessageRequest`

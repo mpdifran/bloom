@@ -7,6 +7,7 @@
 
 import SFSafeSymbols
 import SwiftUI
+import AppUI
 
 private extension Double {
   static let animationSpeed: Double = 1.5
@@ -14,14 +15,14 @@ private extension Double {
 
 struct ChatBar: View {
 
-  let onSubmit: (String, UIImage?) -> Void
+  let onSubmit: (String, [UIImage]) -> Void
 
-  init(_ onSubmit: @escaping (String, UIImage?) -> Void) {
+  init(_ onSubmit: @escaping (String, [UIImage]) -> Void) {
     self.onSubmit = onSubmit
   }
 
   @State private var text: String = ""
-  @State private var image: UIImage?
+  @State private var images = [UIImage]()
   @State private var didSendToggle = false
   @State private var presentedSheet: AnyView?
 
@@ -29,7 +30,7 @@ struct ChatBar: View {
 
   var body: some View {
     VStack {
-      if image != nil {
+      if images.isNotEmpty {
         imageSection
       }
       chatTextField
@@ -47,7 +48,7 @@ struct ChatBar: View {
     }
     .sensoryFeedback(.selection, trigger: isFocused)
     .animation(.easeInOut, value: text.isEmpty)
-    .animation(.easeInOut, value: image)
+    .animation(.easeInOut, value: images)
     .sheet($presentedSheet)
   }
 }
@@ -57,9 +58,9 @@ private extension ChatBar {
   var imageSection: some View {
     ScrollView(.horizontal) {
       HStack {
-        if let image {
+        ForEachEnumeratedNoID(images) { index, image in
           EditableChatImageView(image: image) {
-            self.image = nil
+            images.remove(at: index)
           }
         }
       }
@@ -69,7 +70,11 @@ private extension ChatBar {
 
   var chatTextField: some View {
     HStack(alignment: .bottom, spacing: 16) {
-      ImagePicker(image: $image, presentedSheet: $presentedSheet) {
+      ImagePicker(
+        images: $images,
+        presentedSheet: $presentedSheet,
+        maxImageCount: ChatController.maxImageCount
+      ) {
         Image(systemSymbol: .plusCircleFill)
           .foregroundStyle(.white, .tint)
           .font(.title)
@@ -116,9 +121,9 @@ private extension ChatBar {
   func submit() {
     didSendToggle.toggle()
     isFocused = false
-    onSubmit(text, image)
+    onSubmit(text, images)
     text = ""
-    image = nil
+    images = []
   }
 
 //  var computedGradientColors: [Color] {
@@ -147,7 +152,7 @@ private extension ChatBar {
       .groupedBackground()
       .navigationTitle("Chat")
       .safeAreaInset(edge: .bottom) {
-        ChatBar { (text, image) in
+        ChatBar { (text, images) in
 
         }
       }

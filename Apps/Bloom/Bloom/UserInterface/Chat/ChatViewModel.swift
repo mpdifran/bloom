@@ -39,14 +39,14 @@ extension ChatViewModel {
 
   func sendMessage(
     _ message: String,
-    image: UIImage?,
+    images: [UIImage],
     chatContexts: [ChatContext]
   ) async {
     do {
       let conversation = try await conversationActor.fetchConversation(by: conversationID)
       try await ChatController.shared.send(
         message: message,
-        image: image,
+        images: images,
         chatContexts: chatContexts,
         conversationID: conversationID,
         lastMessageID: conversation?.lastMessageID

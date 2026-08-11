@@ -44,7 +44,7 @@ struct ChatPromptsView: View {
     do {
       try await ChatController.shared.send(
         message: message,
-        image: nil,
+        images: [],
         chatContexts: [],
         conversationID: nil,
         lastMessageID: nil
