@@ -9,7 +9,7 @@ When asked to "generate release notes for the latest version of Bloom":
 1. Identify the version number from `asc versions list --app "6739955926"` (find the version in `PREPARE_FOR_SUBMISSION` state)
 2. Review changes since the last release using `git log` between the current and previous version tags/commits
 3. Write release notes in Bud's voice (see Voice & Tone below)
-4. Publish using `asc app-info set` (see Commands below)
+4. Publish using `asc localizations update` (see Commands below)
 
 ## Voice & Tone
 
@@ -57,11 +57,12 @@ asc versions list --app "6739955926" --version "3.1.2"
 
 ### Publish Release Notes
 
+Release notes live on the version's `en-US` localization, addressed by **version ID** (not version
+string). Get the ID from `asc versions list` above.
+
 ```bash
-asc app-info set \
-  --app "6739955926" \
-  --version "<VERSION>" \
-  --platform IOS \
+asc localizations update \
+  --version "<VERSION_ID>" \
   --locale "en-US" \
   --whats-new "<RELEASE_NOTES_TEXT>"
 ```
@@ -69,10 +70,8 @@ asc app-info set \
 Use a heredoc for multiline text:
 
 ```bash
-asc app-info set \
-  --app "6739955926" \
-  --version "<VERSION>" \
-  --platform IOS \
+asc localizations update \
+  --version "<VERSION_ID>" \
   --locale "en-US" \
   --whats-new "$(cat <<'EOF'
 Your release notes here...
@@ -80,10 +79,30 @@ EOF
 )"
 ```
 
+`localizations update` only writes the fields you pass — description, keywords, and URLs are left
+alone.
+
 ### Verify
 
 ```bash
-asc app-info get --app "6739955926" --version "<VERSION>" --platform IOS --locale "en-US" --pretty
+asc localizations list --version "<VERSION_ID>" --output table
+```
+
+Or print just the published text:
+
+```bash
+asc localizations list --version "<VERSION_ID>" --pretty \
+  | python3 -c "import json,sys; print(json.load(sys.stdin)['data'][0]['attributes']['whatsNew'])"
+```
+
+### Copyright
+
+Copyright is a version-level field, carried forward automatically when a version is created. Check
+and update it with:
+
+```bash
+asc versions list --app "6739955926" --version "<VERSION>" --pretty   # shows current copyright
+asc versions update --version-id "<VERSION_ID>" --copyright "© 2025-2026 Mark DiFranco"
 ```
 
 ## Example: Version 3.1.2
