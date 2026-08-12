@@ -1415,3 +1415,69 @@ final actor MagicScanJobManager {
 - **Push Notifications**: Silent notifications alert user when processing completes
 - **Automatic Cleanup**: Images and jobs expire after 48 hours
 - **Simplified UX**: Less user interaction required, more automated
+## Localization
+
+The app localizes through **String Catalogs** (`Localizable.xcstrings`), one per target that owns
+user-facing text: the iOS app, the watch app, both widget extensions, the Device Activity report and
+Shield configuration extensions, and the CoreHealth, BloomUI and DataContainer frameworks. All
+targets use synchronized folder groups, so a catalog dropped into the target's folder is picked up
+automatically.
+
+`SWIFT_EMIT_LOC_STRINGS = YES` is set in both xcconfigs, so the compiler extracts strings on every
+build. Never hand-edit the English entries in a catalog — write the string in code and let the build
+put it there.
+
+### Which strings need work
+
+| Code | Extracted automatically? | What to do |
+|---|---|---|
+| `Text("Log Water")`, `Button("Save")`, `.navigationTitle("Today")` | Yes — these take `LocalizedStringKey` | Nothing |
+| `Text("You logged \(count) meals")` | Yes | Nothing |
+| `Text(someString)` | **No** — this is the verbatim `StringProtocol` overload | Localize where the string is produced |
+| `let title = "Log Water"` | **No** | `String(localized:)` |
+| UIKit (`label.text`, `UIAlertAction(title:)`) | **No** | `String(localized:)` |
+| App Intents `title:` / `LocalizedStringResource` | Yes | Nothing |
+
+### Display names
+
+Display text that isn't a SwiftUI literal is produced with `String(localized:comment:)`. The property
+keeps its `String` type, so call sites don't change:
+
+```swift
+public var name: String {
+  switch self {
+  case .low: String(localized: "Low", comment: "Blood pressure category")
+  case .normal: String(localized: "Normal", comment: "Blood pressure category")
+  }
+}
+```
+
+**From a framework, pass the bundle.** `String(localized:)` defaults to `Bundle.main`, which is the
+host app — the framework's own catalog is a different bundle. Use the handles in each framework
+(`Bundle.coreHealth`, `Bundle.bloomUI`, `Bundle.dataContainer`), spelled out rather than as `.coreHealth`:
+
+```swift
+String(localized: "Cross Training", bundle: Bundle.coreHealth)
+```
+
+### Never localize values that leave the device
+
+A localized display name must not end up in analytics, backend payloads, persisted records or logs —
+it would fragment the data by language. Where a name is needed for both, the type exposes two
+properties: `name` (localized, for display) and `canonicalName` (stable English, for everything
+else). `HKWorkoutActivityType` and `HKBiologicalSex` follow this pattern. If the type has a `String`
+raw value, use `rawValue` at the wire/analytics site instead.
+
+Before localizing a display property, grep its call sites for `TelemetryDeck.signal`, network request
+bodies, chat/AI payloads and SwiftData writes.
+
+### Known gaps
+
+- `DrinkType`'s built-in names are stored `String` properties that are also persisted and sent as
+  telemetry, so they're still English. They need a display/identifier split first.
+- Interpolated string literals assigned to `String` (rather than passed to `Text`) are not all
+  converted yet — `String(localized: "Reading \(list)...")` is the pattern to follow.
+- Plurals still read as `"\(count) meals"` in places. Those want a plural variation in the catalog
+  (edit the entry in Xcode's String Catalog editor), not a hand-rolled `if count == 1` branch.
+- Dates, measurements and numbers should go through `Date.FormatStyle` / `Measurement` formatters
+  rather than interpolated strings, so they follow the reader's locale.

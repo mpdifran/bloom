@@ -108,6 +108,14 @@ swift run   # Requires Redis: brew install redis && brew services start redis
 - Watch connectivity requires proper session handling
 - Family Controls APIs have strict entitlement requirements
 
+### Localization
+- User-facing text ships through String Catalogs (`Localizable.xcstrings`), one per target
+- SwiftUI literals (`Text("…")`, `Button("…")`, `.navigationTitle("…")`) are extracted automatically - leave them alone
+- Anything else - `String` display names, UIKit strings - uses `String(localized:comment:)`
+- From a framework, pass its bundle: `String(localized: "…", bundle: Bundle.coreHealth)`
+- Never let a localized string reach analytics, the backend, or persistence - use `canonicalName`/`rawValue` there
+- See the "Localization" section in ARCHITECTURE.md before adding strings
+
 ### Preview Development
 - ALWAYS wrap #Preview content in PreviewEnvironment {}. This exposes all the environment objects to the preview.
 - This is required for any preview in the app - don't forget it!
