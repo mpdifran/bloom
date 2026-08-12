@@ -25,27 +25,27 @@ public extension VitalModel {
       switch self {
         // TODO: Get rid of the cardioFitness case
       case .cardioFitness:
-        "Cardio Fitness"
+        String(localized: "Cardio Fitness", bundle: Bundle.dataContainer)
       case .sleepQuality:
-        "Sleep Quality"
+        String(localized: "Sleep Quality", bundle: Bundle.dataContainer)
       case .activityLevel:
-        "Activity Level"
+        String(localized: "Activity Level", bundle: Bundle.dataContainer)
       case .heartHealth:
-        "Heart Health"
+        String(localized: "Heart Health", bundle: Bundle.dataContainer)
       case .bodyComposition:
-        "Body Composition"
+        String(localized: "Body Composition", bundle: Bundle.dataContainer)
       case .stressLevels:
-        "Stress Levels"
+        String(localized: "Stress Levels", bundle: Bundle.dataContainer)
       case .nutrition:
-        "Nutrition"
+        String(localized: "Nutrition", bundle: Bundle.dataContainer)
       case .lifestyle:
-        "Lifestyle"
+        String(localized: "Lifestyle", bundle: Bundle.dataContainer)
       case .exerciseEffectiveness:
-        "Exercise Effectiveness"
+        String(localized: "Exercise Effectiveness", bundle: Bundle.dataContainer)
       case .cycleTracking:
-        "Cycle Tracking"
+        String(localized: "Cycle Tracking", bundle: Bundle.dataContainer)
       case .bowelMovements:
-        "Bowel Movements"
+        String(localized: "Bowel Movements", bundle: Bundle.dataContainer)
       }
     }
 

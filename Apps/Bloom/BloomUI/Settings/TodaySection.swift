@@ -27,29 +27,29 @@ public enum TodaySection: String, CaseIterable, Identifiable, Codable {
   public var displayName: String {
     switch self {
     case .todaysAdvice:
-      return "Today's Advice"
+      return String(localized: "Today's Advice", bundle: Bundle.bloomUI)
     case .insights:
-      return "Insights"
+      return String(localized: "Insights", bundle: Bundle.bloomUI)
     case .sleepDetails:
-      return "Sleep Details"
+      return String(localized: "Sleep Details", bundle: Bundle.bloomUI)
     case .tonightsSleep:
-      return "Tonight's Sleep"
+      return String(localized: "Tonight's Sleep", bundle: Bundle.bloomUI)
     case .phaseTip:
-      return "Cycle Phase Tip"
+      return String(localized: "Cycle Phase Tip", bundle: Bundle.bloomUI)
     case .periodForecast:
-      return "Period Forecast"
+      return String(localized: "Period Forecast", bundle: Bundle.bloomUI)
     case .goals:
-      return "Goals"
+      return String(localized: "Goals", bundle: Bundle.bloomUI)
     case .reminders:
-      return "Reminders"
+      return String(localized: "Reminders", bundle: Bundle.bloomUI)
     case .todaysEvents:
-      return "Today's Events"
+      return String(localized: "Today's Events", bundle: Bundle.bloomUI)
     case .tomorrowsEvents:
-      return "Tomorrow's Events"
+      return String(localized: "Tomorrow's Events", bundle: Bundle.bloomUI)
     case .todaysWeather:
-      return "Today's Weather"
+      return String(localized: "Today's Weather", bundle: Bundle.bloomUI)
     case .tomorrowsWeather:
-      return "Tomorrow's Weather"
+      return String(localized: "Tomorrow's Weather", bundle: Bundle.bloomUI)
     }
   }
 

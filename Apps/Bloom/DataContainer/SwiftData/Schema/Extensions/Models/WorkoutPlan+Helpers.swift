@@ -112,33 +112,33 @@ public extension WorkoutPlan.Equipment {
   var name: String {
     switch self {
     case .dumbbells:
-      "Dumbbells"
+      String(localized: "Dumbbells", bundle: Bundle.dataContainer)
     case .barbell:
-      "Barbell"
+      String(localized: "Barbell", bundle: Bundle.dataContainer)
     case .kettlebell:
-      "Kettlebell"
+      String(localized: "Kettlebell", bundle: Bundle.dataContainer)
     case .batBell:
-      "Batbell"
+      String(localized: "Batbell", bundle: Bundle.dataContainer)
     case .chinUpBar:
-      "Chin-up Bar"
+      String(localized: "Chin-up Bar", bundle: Bundle.dataContainer)
     case .treadmill:
-      "Treadmill"
+      String(localized: "Treadmill", bundle: Bundle.dataContainer)
     case .stationaryBike:
-      "Stationary Bike"
+      String(localized: "Stationary Bike", bundle: Bundle.dataContainer)
     case .bike:
-      "Bike"
+      String(localized: "Bike", bundle: Bundle.dataContainer)
     case .elliptical:
-      "Elliptical"
+      String(localized: "Elliptical", bundle: Bundle.dataContainer)
     case .rowingMachine:
-      "Rowing Machine"
+      String(localized: "Rowing Machine", bundle: Bundle.dataContainer)
     case .skiMachine:
-      "Ski Machine"
+      String(localized: "Ski Machine", bundle: Bundle.dataContainer)
     case .yogaMat:
-      "Yoga Mat"
+      String(localized: "Yoga Mat", bundle: Bundle.dataContainer)
     case .resistanceBand:
-      "Resistance Band"
+      String(localized: "Resistance Band", bundle: Bundle.dataContainer)
     case .weightedVest:
-      "Weighted Vest"
+      String(localized: "Weighted Vest", bundle: Bundle.dataContainer)
     }
   }
 }

@@ -15,9 +15,9 @@ public enum SideEffectType: String, Codable, CaseIterable, Sendable {
   public var displayName: String {
     switch self {
     case .logFood:
-      return "Log Food"
+      return String(localized: "Log Food", bundle: Bundle.dataContainer)
     case .logWater:
-      return "Log Water"
+      return String(localized: "Log Water", bundle: Bundle.dataContainer)
     }
   }
 }

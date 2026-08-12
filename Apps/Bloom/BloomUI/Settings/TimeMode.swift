@@ -21,13 +21,13 @@ public enum TimeMode: String, CaseIterable, Identifiable, Codable {
   public var displayName: String {
     switch self {
     case .morning:
-      return "Morning"
+      return String(localized: "Morning", bundle: Bundle.bloomUI)
     case .afternoon:
-      return "Afternoon"
+      return String(localized: "Afternoon", bundle: Bundle.bloomUI)
     case .evening:
-      return "Evening"
+      return String(localized: "Evening", bundle: Bundle.bloomUI)
     case .night:
-      return "Night"
+      return String(localized: "Night", bundle: Bundle.bloomUI)
     }
   }
 
