@@ -11,34 +11,34 @@ extension SocketMessage.QueryDataType {
 
   var name: String {
     switch self {
-    case .nutrition: "nutrition"
-    case .goals: "goals"
-    case .activityLevel: "activity level"
-    case .bodyWeight: "body weight"
-    case .bowelMovements: "bowel movements"
-    case .heart: "heart health"
-    case .menstruation: "cycle tracking"
-    case .sleep: "sleep"
-    case .stress: "stress"
-    case .workouts: "workouts"
-    case .targetHeartRateZoneMinutes: "target heart rate zones"
-    case .caloricIntake: "caloric intake"
-    case .proteinIntake: "protein intake"
-    case .waterIntake: "water intake"
-    case .fiberIntake: "fiber intake"
-    case .meditationMinutes: "meditation minutes"
-    case .exerciseMinutes: "exercise minutes"
-    case .stepCount: "step count"
-    case .walkingRunningDistance: "walking running distance"
-    case .runDistance: "run distance"
-    case .runDuration: "run duration"
-    case .bikeDistance: "bike distance"
-    case .bikeDuration: "bike duration"
-    case .mobilityAndFlexibilityDuration: "mobility and flexibility duration"
-    case .strengthTrainingDuration: "strength training duration"
-    case .cardioDuration: "cardio duration"
-    case .highIntensityIntervalTrainingDuration: "high intensity interval training duration"
-    case .reminders: "reminders"
+    case .nutrition: String(localized: "nutrition")
+    case .goals: String(localized: "goals")
+    case .activityLevel: String(localized: "activity level")
+    case .bodyWeight: String(localized: "body weight")
+    case .bowelMovements: String(localized: "bowel movements")
+    case .heart: String(localized: "heart health")
+    case .menstruation: String(localized: "cycle tracking")
+    case .sleep: String(localized: "sleep")
+    case .stress: String(localized: "stress")
+    case .workouts: String(localized: "workouts")
+    case .targetHeartRateZoneMinutes: String(localized: "target heart rate zones")
+    case .caloricIntake: String(localized: "caloric intake")
+    case .proteinIntake: String(localized: "protein intake")
+    case .waterIntake: String(localized: "water intake")
+    case .fiberIntake: String(localized: "fiber intake")
+    case .meditationMinutes: String(localized: "meditation minutes")
+    case .exerciseMinutes: String(localized: "exercise minutes")
+    case .stepCount: String(localized: "step count")
+    case .walkingRunningDistance: String(localized: "walking running distance")
+    case .runDistance: String(localized: "run distance")
+    case .runDuration: String(localized: "run duration")
+    case .bikeDistance: String(localized: "bike distance")
+    case .bikeDuration: String(localized: "bike duration")
+    case .mobilityAndFlexibilityDuration: String(localized: "mobility and flexibility duration")
+    case .strengthTrainingDuration: String(localized: "strength training duration")
+    case .cardioDuration: String(localized: "cardio duration")
+    case .highIntensityIntervalTrainingDuration: String(localized: "high intensity interval training duration")
+    case .reminders: String(localized: "reminders")
     }
   }
 }

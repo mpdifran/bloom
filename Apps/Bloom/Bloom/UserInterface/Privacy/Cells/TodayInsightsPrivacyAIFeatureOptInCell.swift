@@ -35,7 +35,7 @@ private extension TodayInsightsPrivacyAIFeatureOptInCell {
     if let extraContext {
       return "Personalized daily insights. \(extraContext)"
     }
-    return "Personalized daily insights based on your Personal Data."
+    return String(localized: "Personalized daily insights based on your Personal Data.")
   }
 }
 

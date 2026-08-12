@@ -25,7 +25,7 @@ struct PhaseTipTodayCell: View {
     if let phaseName = phase?.name {
       return "\(phaseName) Tip"
     }
-    return "Cycle Phase Tip"
+    return String(localized: "Cycle Phase Tip")
   }
 }
 

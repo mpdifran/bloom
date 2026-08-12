@@ -146,7 +146,7 @@ class BloomAppDelegate: NSObject, UIApplicationDelegate {
       preferredStyle: .alert
     )
 
-    alert.addAction(UIAlertAction(title: "OK", style: .default))
+    alert.addAction(UIAlertAction(title: String(localized: "OK"), style: .default))
 
     topController.present(alert, animated: true)
   }

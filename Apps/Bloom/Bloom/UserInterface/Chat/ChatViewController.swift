@@ -411,11 +411,11 @@ class ChatViewController: UICollectionViewController {
 
   private func showError(_ error: Error) {
     let alert = UIAlertController(
-      title: "Error",
+      title: String(localized: "Error", comment: "Title of the alert shown when a chat action fails"),
       message: error.localizedDescription,
       preferredStyle: .alert
     )
-    alert.addAction(UIAlertAction(title: "OK", style: .default))
+    alert.addAction(UIAlertAction(title: String(localized: "OK"), style: .default))
     present(alert, animated: true)
   }
 }

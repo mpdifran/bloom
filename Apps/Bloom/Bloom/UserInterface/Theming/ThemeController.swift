@@ -28,11 +28,11 @@ extension ThemeController.Theme {
   var name: String {
     switch self {
     case .purple:
-      "Dragonfruit"
+      String(localized: "Dragonfruit")
     case .blue:
-      "Blueberry"
+      String(localized: "Blueberry")
     case .orange:
-      "Mango"
+      String(localized: "Mango")
     }
   }
 
@@ -128,7 +128,8 @@ final class ThemeController {
 
     await updateAppIconForTheme()
 
-    TelemetryDeck.signal("Updated Theme", parameters: ["selectedTheme": theme.name])
+    // rawValue, not name: the display name is localized and would fragment the analytics.
+    TelemetryDeck.signal("Updated Theme", parameters: ["selectedTheme": theme.rawValue])
   }
 
   func updateAppIconForTheme() async {

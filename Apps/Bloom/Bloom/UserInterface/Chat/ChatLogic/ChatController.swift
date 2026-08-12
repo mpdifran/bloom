@@ -70,7 +70,10 @@ final actor ChatController: ObservableObject {
           assistantTypingStatus[conversationID] = nil
         } else {
           if let listContent = listFormatter.string(from: areas) {
-            assistantTypingStatus[conversationID] = "Reading \(listContent)..."
+            assistantTypingStatus[conversationID] = String(
+              localized: "Reading \(listContent)...",
+              comment: "Chat typing status. The placeholder is a list of health data areas, e.g. \"sleep, nutrition and workouts\"."
+            )
           } else {
             assistantTypingStatus[conversationID] = nil
           }

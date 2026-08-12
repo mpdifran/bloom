@@ -43,9 +43,9 @@ private extension MiniMonitorCard {
 
   var title: String {
     switch type {
-    case .recovery: "Recovery & Sickness"
-    case .stress: "Stress & Workout Load"
-    case .sleep: "Sleep Quality & Rhythm"
+    case .recovery: String(localized: "Recovery & Sickness")
+    case .stress: String(localized: "Stress & Workout Load")
+    case .sleep: String(localized: "Sleep Quality & Rhythm")
     }
   }
 

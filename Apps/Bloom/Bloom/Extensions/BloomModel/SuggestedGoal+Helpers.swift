@@ -40,28 +40,28 @@ extension SuggestedGoal.Metric {
 
   var name: String {
     switch self {
-    case .calories: "caloric intake"
-    case .proteinIntake: "protein intake"
-    case .waterIntake: "water intake"
-    case .fiberIntake: "fiber intake"
-    case .meditationMinutes: "meditation minutes"
-    case .exerciseMinutes: "exercise minutes"
-    case .workoutMinutes: "workout minutes"
-    case .stepCount: "steps"
-    case .walkingRunningDistance: "walking-running distance"
-    case .runDistance: "running distance"
-    case .runDuration: "running duration"
-    case .bikeDistance: "biking distance"
-    case .bikeDuration: "biking duration"
-    case .mobilityAndFlexibilityDuration: "mobility and flexibility workouts"
-    case .strengthTrainingDuration: "strength training workouts"
-    case .cardioDuration: "cardio workouts"
-    case .highIntensityIntervalTrainingDuration: "HIIT workouts"
-    case .targetHeartRateZone1Minutes: "target heart rate zone 1 minutes"
-    case .targetHeartRateZone2Minutes: "target heart rate zone 2 minutes"
-    case .targetHeartRateZone3Minutes: "target heart rate zone 3 minutes"
-    case .targetHeartRateZone4Minutes: "target heart rate zone 4 minutes"
-    case .targetHeartRateZone5Minutes: "target heart rate zone 5 minutes"
+    case .calories: String(localized: "caloric intake")
+    case .proteinIntake: String(localized: "protein intake")
+    case .waterIntake: String(localized: "water intake")
+    case .fiberIntake: String(localized: "fiber intake")
+    case .meditationMinutes: String(localized: "meditation minutes")
+    case .exerciseMinutes: String(localized: "exercise minutes")
+    case .workoutMinutes: String(localized: "workout minutes")
+    case .stepCount: String(localized: "steps")
+    case .walkingRunningDistance: String(localized: "walking-running distance")
+    case .runDistance: String(localized: "running distance")
+    case .runDuration: String(localized: "running duration")
+    case .bikeDistance: String(localized: "biking distance")
+    case .bikeDuration: String(localized: "biking duration")
+    case .mobilityAndFlexibilityDuration: String(localized: "mobility and flexibility workouts")
+    case .strengthTrainingDuration: String(localized: "strength training workouts")
+    case .cardioDuration: String(localized: "cardio workouts")
+    case .highIntensityIntervalTrainingDuration: String(localized: "HIIT workouts")
+    case .targetHeartRateZone1Minutes: String(localized: "target heart rate zone 1 minutes")
+    case .targetHeartRateZone2Minutes: String(localized: "target heart rate zone 2 minutes")
+    case .targetHeartRateZone3Minutes: String(localized: "target heart rate zone 3 minutes")
+    case .targetHeartRateZone4Minutes: String(localized: "target heart rate zone 4 minutes")
+    case .targetHeartRateZone5Minutes: String(localized: "target heart rate zone 5 minutes")
     }
   }
 }

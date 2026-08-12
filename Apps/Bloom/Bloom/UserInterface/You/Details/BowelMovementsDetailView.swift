@@ -133,11 +133,11 @@ private extension BowelMovementsDetailView {
 
     var label: String {
       switch self {
-      case .veryFrequent: "< 8 Hours"
-      case .optimal: "8-24 Hours"
-      case .good: "24-48 Hours"
-      case .concerning: "48-72 Hours"
-      case .tooInfrequent: "> 72 Hours"
+      case .veryFrequent: String(localized: "< 8 Hours")
+      case .optimal: String(localized: "8-24 Hours")
+      case .good: String(localized: "24-48 Hours")
+      case .concerning: String(localized: "48-72 Hours")
+      case .tooInfrequent: String(localized: "> 72 Hours")
       }
     }
 

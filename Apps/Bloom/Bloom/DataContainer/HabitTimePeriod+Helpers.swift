@@ -28,13 +28,13 @@ extension GoalTimePeriod {
   var name: String {
     switch self {
     case .daily:
-      "Daily"
+      String(localized: "Daily")
     case .weekly:
-      "Weekly"
+      String(localized: "Weekly")
     case .monthly:
-      "Monthly"
+      String(localized: "Monthly")
     case .yearly:
-      "Yearly"
+      String(localized: "Yearly")
     @unknown default:
       ""
     }

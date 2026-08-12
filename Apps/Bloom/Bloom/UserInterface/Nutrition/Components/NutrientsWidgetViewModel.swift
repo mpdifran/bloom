@@ -14,7 +14,7 @@ import CoreHealth
 @MainActor
 final class NutrientsWidgetViewModel: ObservableObject {
   var title: String {
-    "Macros"
+    String(localized: "Macros")
   }
 
   // MARK: - Goal Quantities

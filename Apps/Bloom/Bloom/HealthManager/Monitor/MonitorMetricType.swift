@@ -153,27 +153,27 @@ public enum MonitorMetricType: String, CaseIterable, Sendable, Codable {
   public var displayName: String {
     switch self {
     case .restingHeartRate:
-      return "Resting Heart Rate"
+      return String(localized: "Resting Heart Rate")
     case .heartRateVariability:
-      return "Heart Rate Variability"
+      return String(localized: "Heart Rate Variability")
     case .wristTemperature:
-      return "Wrist Temperature"
+      return String(localized: "Wrist Temperature")
     case .respiratoryRate:
-      return "Respiratory Rate"
+      return String(localized: "Respiratory Rate")
     case .sleepDuration:
-      return "Sleep Duration"
+      return String(localized: "Sleep Duration")
     case .deepSleep:
-      return "Deep Sleep"
+      return String(localized: "Deep Sleep")
     case .remSleep:
-      return "REM Sleep"
+      return String(localized: "REM Sleep")
     case .sleepEfficiency:
-      return "Sleep Efficiency"
+      return String(localized: "Sleep Efficiency")
     case .bedtime:
-      return "Bedtime"
+      return String(localized: "Bedtime")
     case .wakeTime:
-      return "Wake Time"
+      return String(localized: "Wake Time")
     case .trainingLoad:
-      return "Training Load"
+      return String(localized: "Training Load")
     }
   }
 
@@ -181,27 +181,27 @@ public enum MonitorMetricType: String, CaseIterable, Sendable, Codable {
   public var shortName: String {
     switch self {
     case .restingHeartRate:
-      return "RHR"
+      return String(localized: "RHR")
     case .heartRateVariability:
-      return "HRV"
+      return String(localized: "HRV")
     case .wristTemperature:
-      return "Temp"
+      return String(localized: "Temp")
     case .respiratoryRate:
-      return "Respiratory rate"
+      return String(localized: "Respiratory rate")
     case .sleepDuration:
-      return "Sleep"
+      return String(localized: "Sleep")
     case .deepSleep:
-      return "Deep sleep"
+      return String(localized: "Deep sleep")
     case .remSleep:
-      return "REM"
+      return String(localized: "REM")
     case .sleepEfficiency:
-      return "Efficiency"
+      return String(localized: "Efficiency")
     case .bedtime:
-      return "Bedtime"
+      return String(localized: "Bedtime")
     case .wakeTime:
-      return "Wake time"
+      return String(localized: "Wake time")
     case .trainingLoad:
-      return "Training load"
+      return String(localized: "Training load")
     }
   }
 
@@ -410,11 +410,11 @@ public enum MonitorType: String, Equatable, CaseIterable, Sendable, Codable {
   public var displayName: String {
     switch self {
     case .recovery:
-      return "Recovery & Sickness"
+      return String(localized: "Recovery & Sickness")
     case .stress:
-      return "Stress & Workout Load"
+      return String(localized: "Stress & Workout Load")
     case .sleep:
-      return "Sleep Quality & Rhythm"
+      return String(localized: "Sleep Quality & Rhythm")
     }
   }
 

@@ -31,6 +31,6 @@ struct GoalConfigurationIntent: WidgetConfigurationIntent {
   }
 
   var displayName: String {
-    goal?.name ?? "Choose Goal"
+    goal?.name ?? String(localized: "Choose Goal")
   }
 }

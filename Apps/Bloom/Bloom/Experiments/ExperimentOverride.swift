@@ -15,11 +15,11 @@ enum ExperimentOverride: String, CaseIterable {
     var displayName: String {
         switch self {
         case .original:
-            return "Original"
+            return String(localized: "Original")
         case .control:
-            return "Control"
+            return String(localized: "Control")
         case .treatment:
-            return "Treatment"
+            return String(localized: "Treatment")
         }
     }
 }

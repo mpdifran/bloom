@@ -56,17 +56,17 @@ extension SocketMessage.WorkoutSet.Format {
   var name: String {
     switch self {
     case .warmup:
-      "Warm-Up"
+      String(localized: "Warm-Up")
     case .standard:
-      "Standard"
+      String(localized: "Standard")
     case .amrap:
-      "AMRAP"
+      String(localized: "AMRAP")
     case .emom:
-      "EMOM"
+      String(localized: "EMOM")
     case .tabata:
-      "Tabata"
+      String(localized: "Tabata")
     case .cooldown:
-      "Cool-Down"
+      String(localized: "Cool-Down")
     }
   }
 }

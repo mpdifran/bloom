@@ -29,10 +29,10 @@ enum AppleSleepStage: Int, CaseIterable {
 
   var name: String {
     switch self {
-    case .awake: "Awake"
-    case .rem: "REM"
-    case .core: "Core"
-    case .deep: "Deep"
+    case .awake: String(localized: "Awake")
+    case .rem: String(localized: "REM")
+    case .core: String(localized: "Core")
+    case .deep: String(localized: "Deep")
     }
   }
 

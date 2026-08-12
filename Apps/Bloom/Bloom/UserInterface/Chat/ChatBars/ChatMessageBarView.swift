@@ -223,7 +223,7 @@ class ChatMessageBarView: UIView {
 
     // Placeholder
     placeholderLabel.translatesAutoresizingMaskIntoConstraints = false
-    placeholderLabel.text = "Message"
+    placeholderLabel.text = String(localized: "Message", comment: "Placeholder in the chat input field")
     placeholderLabel.font = .preferredFont(forTextStyle: .body, compatibleWith: nil)
     placeholderLabel.textColor = .placeholderText
     textView.addSubview(placeholderLabel)
@@ -606,11 +606,11 @@ class ChatMessageBarView: UIView {
     guard let parentViewController = findParentViewController() else { return }
 
     let alert = UIAlertController(
-      title: "Error",
+      title: String(localized: "Error", comment: "Title of the alert shown when sending a chat message fails"),
       message: error.localizedDescription,
       preferredStyle: .alert
     )
-    alert.addAction(UIAlertAction(title: "OK", style: .default))
+    alert.addAction(UIAlertAction(title: String(localized: "OK"), style: .default))
     parentViewController.present(alert, animated: true)
   }
 

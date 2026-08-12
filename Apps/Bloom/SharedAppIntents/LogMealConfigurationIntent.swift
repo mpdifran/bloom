@@ -76,9 +76,9 @@ struct LogMealConfigurationIntent: WidgetConfigurationIntent {
 
     switch type {
     case .singleFoodItem:
-      return foodItem?.name ?? "Choose Food Item"
+      return foodItem?.name ?? String(localized: "Choose Food Item")
     case .savedMeal:
-      return savedMeal?.name ?? "Choose Saved Meal"
+      return savedMeal?.name ?? String(localized: "Choose Saved Meal")
     }
   }
 }

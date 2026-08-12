@@ -58,7 +58,7 @@ extension CelebrationKind {
     switch self {
     case .biologicalAge(let yearsYounger):
       if yearsYounger == 1 {
-        return "1 Year Younger!"
+        return String(localized: "1 Year Younger!")
       }
       return "\(yearsYounger) Years Younger!"
     case .goalStreak(let metricName, let days):
@@ -66,7 +66,7 @@ extension CelebrationKind {
     case .zoneMinutes(let minutes):
       return "\(minutes) Zone Minutes!"
     case .perfectSleep:
-      return "Perfect Sleep Score!"
+      return String(localized: "Perfect Sleep Score!")
     }
   }
 
@@ -74,7 +74,7 @@ extension CelebrationKind {
     switch self {
     case .biologicalAge(let yearsYounger):
       if yearsYounger == 1 {
-        return "Your biological age is 1 year younger than your actual age. Keep it up!"
+        return String(localized: "Your biological age is 1 year younger than your actual age. Keep it up!")
       }
       return "Your biological age is \(yearsYounger) years younger than your actual age. Amazing!"
     case .goalStreak(_, let days):
@@ -85,7 +85,7 @@ extension CelebrationKind {
       }
       return "You hit the weekly recommended \(minutes) zone minutes. Great work staying active!"
     case .perfectSleep:
-      return "You scored a perfect 100 on your sleep score. That's as good as it gets!"
+      return String(localized: "You scored a perfect 100 on your sleep score. That's as good as it gets!")
     }
   }
 

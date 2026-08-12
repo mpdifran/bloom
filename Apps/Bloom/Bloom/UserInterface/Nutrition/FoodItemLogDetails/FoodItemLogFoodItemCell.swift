@@ -79,7 +79,7 @@ private extension FoodItemLogFoodItemCell {
       components.append(formattedServingQuantity)
     }
 
-    return components.joined(separator: " • ")
+    return components.joined(separator: String(localized: " • "))
   }
 
   var totalCalories: Double {

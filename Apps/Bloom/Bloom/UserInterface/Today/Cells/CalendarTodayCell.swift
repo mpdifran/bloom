@@ -16,8 +16,8 @@ enum CalendarDay: CaseIterable {
   
   var displayName: String {
     switch self {
-    case .today: return "Today"
-    case .tomorrow: return "Tomorrow"
+    case .today: return String(localized: "Today")
+    case .tomorrow: return String(localized: "Tomorrow")
     }
   }
 }

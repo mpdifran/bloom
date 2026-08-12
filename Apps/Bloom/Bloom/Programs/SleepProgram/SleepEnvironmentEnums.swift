@@ -24,11 +24,11 @@ enum SleepEnvironmentSound: String, Identifiable, Hashable, CaseIterable {
     var name: String {
         switch self {
         case .quiet:
-            "Quiet"
+            String(localized: "Quiet")
         case .intermittentSounds:
-            "Intermittent Sounds"
+            String(localized: "Intermittent Sounds")
         case .regularSounds:
-            "Regular Sounds"
+            String(localized: "Regular Sounds")
         }
     }
     var id: String { rawValue }
@@ -42,11 +42,11 @@ enum SleepEnvironmentDarkness: String, Identifiable, Hashable, CaseIterable {
     var name: String {
         switch self {
         case .dark:
-            "Dark"
+            String(localized: "Dark")
         case .someLight:
-            "Some Light"
+            String(localized: "Some Light")
         case .bright:
-            "Bright"
+            String(localized: "Bright")
         }
     }
     var id: String { rawValue }

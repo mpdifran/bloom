@@ -19,10 +19,10 @@ extension StressDetailsView {
 
     var name: String {
       switch self {
-      case .all: "All"
-      case .bloodPressure: "Blood Pressure"
-      case .heartRateVariability: "Heart Rate Variability"
-      case .sleep: "Sleep"
+      case .all: String(localized: "All")
+      case .bloodPressure: String(localized: "Blood Pressure")
+      case .heartRateVariability: String(localized: "Heart Rate Variability")
+      case .sleep: String(localized: "Sleep")
       }
     }
   }

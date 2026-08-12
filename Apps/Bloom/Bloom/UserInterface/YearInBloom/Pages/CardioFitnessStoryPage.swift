@@ -28,9 +28,9 @@ enum VO2MaxTrend {
 
   var label: String {
     switch self {
-    case .improving: "Improving"
-    case .stable: "Stable"
-    case .declining: "Declining"
+    case .improving: String(localized: "Improving")
+    case .stable: String(localized: "Stable")
+    case .declining: String(localized: "Declining")
     }
   }
 }

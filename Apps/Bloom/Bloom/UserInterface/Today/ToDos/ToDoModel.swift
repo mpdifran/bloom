@@ -37,23 +37,23 @@ extension ToDoModel {
     var name: String {
       switch self {
       case .everySunday:
-        "Every Sunday"
+        String(localized: "Every Sunday")
       case .everyMonday:
-        "Every Monday"
+        String(localized: "Every Monday")
       case .everyTuesday:
-        "Every Tuesday"
+        String(localized: "Every Tuesday")
       case .everyWednesday:
-        "Every Wednesday"
+        String(localized: "Every Wednesday")
       case .everyThursday:
-        "Every Thursday"
+        String(localized: "Every Thursday")
       case .everyFriday:
-        "Every Friday"
+        String(localized: "Every Friday")
       case .everySaturday:
-        "Every Saturday"
+        String(localized: "Every Saturday")
       case .everyThreeDays:
-        "Every 3 Days"
+        String(localized: "Every 3 Days")
       case .everySevenDays:
-        "Every 7 Days"
+        String(localized: "Every 7 Days")
       default:
         rawValue.capitalized
       }
@@ -68,10 +68,10 @@ extension ToDoModel {
 
     var name: String {
       switch self {
-      case .logWeight: "Log Weight"
-      case .logBloodPressure: "Log Blood Pressure"
-      case .logFood: "Log Food"
-      case .logProtein: "Log Protein"
+      case .logWeight: String(localized: "Log Weight")
+      case .logBloodPressure: String(localized: "Log Blood Pressure")
+      case .logFood: String(localized: "Log Food")
+      case .logProtein: String(localized: "Log Protein")
       }
     }
 

@@ -32,7 +32,7 @@ struct MonitorPrivacyAIFeatureOptInCell: View {
 private extension MonitorPrivacyAIFeatureOptInCell {
 
   var subtitle: String {
-    let description = "AI insights into your monitor results. Monitor calculations run entirely on-device."
+    let description = String(localized: "AI insights into your monitor results. Monitor calculations run entirely on-device.")
     if let extraContext {
       return description + extraContext
     }

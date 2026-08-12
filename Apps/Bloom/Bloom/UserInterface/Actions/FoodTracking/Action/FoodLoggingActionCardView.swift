@@ -22,11 +22,11 @@ extension FoodLoggingActionCardView {
     var name: String {
       switch self {
       case .frequent:
-        "Frequent"
+        String(localized: "Frequent")
       case .recent:
-        "Recent"
+        String(localized: "Recent")
       case .meals:
-        "Meals"
+        String(localized: "Meals")
       }
     }
   }

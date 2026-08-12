@@ -67,7 +67,7 @@ private extension FoodItemPickerCell {
       components.append(formattedServingQuantity)
     }
 
-    return components.joined(separator: " • ")
+    return components.joined(separator: String(localized: " • "))
   }
 
   var formattedServingQuantity: String? {

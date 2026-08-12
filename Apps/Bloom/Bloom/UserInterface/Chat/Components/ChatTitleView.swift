@@ -47,7 +47,7 @@ private extension ChatTitleView {
   }
 
   var title: String {
-    conversation?.name ?? "New Chat"
+    conversation?.name ?? String(localized: "New Chat")
   }
 
   var contentView: some View {

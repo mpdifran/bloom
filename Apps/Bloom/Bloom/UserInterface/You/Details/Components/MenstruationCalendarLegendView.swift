@@ -83,11 +83,11 @@ private extension MenstruationCalendarLegendView.LegendLabel {
 
   var title: String {
     switch kind {
-    case .none: "No Period"
-    case .full: "Period"
-    case .ring: "Predicted Ovulation"
-    case .partial: "Likely Next Period"
-    case .fadedPartial: "Less Likely Next Period"
+    case .none: String(localized: "No Period")
+    case .full: String(localized: "Period")
+    case .ring: String(localized: "Predicted Ovulation")
+    case .partial: String(localized: "Likely Next Period")
+    case .fadedPartial: String(localized: "Less Likely Next Period")
     }
   }
 }
