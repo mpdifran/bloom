@@ -12,31 +12,31 @@ public extension TargetMetric {
 
   var name: String {
     switch self {
-    case .none: "None"
-    case .calories: "Dietary Calories"
-    case .proteinIntake: "Protein Intake"
-    case .waterIntake: "Water Intake"
-    case .fiberIntake: "Fiber Intake"
-    case .timeInDaylight: "Time in Daylight"
-    case .meditationMinutes: "Meditation Minutes"
-    case .exerciseMinutes: "Apple Watch Exercise Minutes"
-    case .workoutMinutes: "Workout Duration"
-    case .stepCount: "Steps"
-    case .walkingRunningDistance: "Walking + Running Distance"
-    case .runDistance: "Running Distance"
-    case .runDuration: "Running Duration"
-    case .bikeDistance: "Bike Distance"
-    case .bikeDuration: "Bike Duration"
-    case .mobilityAndFlexibilityDuration: "Mobility & Flexibility"
-    case .strengthTrainingDuration: "Strength Training"
-    case .cardioDuration: "Cardio Workouts"
-    case .highIntensityIntervalTrainingDuration: "HIIT Workouts"
-    case .targetHeartRateZone1: "Target Heart Rate Zone 1"
-    case .targetHeartRateZone2: "Target Heart Rate Zone 2"
-    case .targetHeartRateZone3: "Target Heart Rate Zone 3"
-    case .targetHeartRateZone4: "Target Heart Rate Zone 4"
-    case .targetHeartRateZone5: "Target Heart Rate Zone 5"
-    @unknown default: "Unknown"
+    case .none: String(localized: "None", bundle: Bundle.coreHealth)
+    case .calories: String(localized: "Dietary Calories", bundle: Bundle.coreHealth)
+    case .proteinIntake: String(localized: "Protein Intake", bundle: Bundle.coreHealth)
+    case .waterIntake: String(localized: "Water Intake", bundle: Bundle.coreHealth)
+    case .fiberIntake: String(localized: "Fiber Intake", bundle: Bundle.coreHealth)
+    case .timeInDaylight: String(localized: "Time in Daylight", bundle: Bundle.coreHealth)
+    case .meditationMinutes: String(localized: "Meditation Minutes", bundle: Bundle.coreHealth)
+    case .exerciseMinutes: String(localized: "Apple Watch Exercise Minutes", bundle: Bundle.coreHealth)
+    case .workoutMinutes: String(localized: "Workout Duration", bundle: Bundle.coreHealth)
+    case .stepCount: String(localized: "Steps", bundle: Bundle.coreHealth)
+    case .walkingRunningDistance: String(localized: "Walking + Running Distance", bundle: Bundle.coreHealth)
+    case .runDistance: String(localized: "Running Distance", bundle: Bundle.coreHealth)
+    case .runDuration: String(localized: "Running Duration", bundle: Bundle.coreHealth)
+    case .bikeDistance: String(localized: "Bike Distance", bundle: Bundle.coreHealth)
+    case .bikeDuration: String(localized: "Bike Duration", bundle: Bundle.coreHealth)
+    case .mobilityAndFlexibilityDuration: String(localized: "Mobility & Flexibility", bundle: Bundle.coreHealth)
+    case .strengthTrainingDuration: String(localized: "Strength Training", bundle: Bundle.coreHealth)
+    case .cardioDuration: String(localized: "Cardio Workouts", bundle: Bundle.coreHealth)
+    case .highIntensityIntervalTrainingDuration: String(localized: "HIIT Workouts", bundle: Bundle.coreHealth)
+    case .targetHeartRateZone1: String(localized: "Target Heart Rate Zone 1", bundle: Bundle.coreHealth)
+    case .targetHeartRateZone2: String(localized: "Target Heart Rate Zone 2", bundle: Bundle.coreHealth)
+    case .targetHeartRateZone3: String(localized: "Target Heart Rate Zone 3", bundle: Bundle.coreHealth)
+    case .targetHeartRateZone4: String(localized: "Target Heart Rate Zone 4", bundle: Bundle.coreHealth)
+    case .targetHeartRateZone5: String(localized: "Target Heart Rate Zone 5", bundle: Bundle.coreHealth)
+    @unknown default: String(localized: "Unknown", bundle: Bundle.coreHealth)
     }
   }
 

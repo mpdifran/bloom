@@ -18,20 +18,20 @@ public enum BiologicalAgeConfidence: String, Sendable, Codable {
 
   public var displayName: String {
     switch self {
-    case .high: "High Confidence"
-    case .moderate: "Moderate Confidence"
-    case .low: "Low Confidence"
+    case .high: String(localized: "High Confidence", bundle: Bundle.coreHealth)
+    case .moderate: String(localized: "Moderate Confidence", bundle: Bundle.coreHealth)
+    case .low: String(localized: "Low Confidence", bundle: Bundle.coreHealth)
     }
   }
 
   public var description: String {
     switch self {
     case .high:
-      "Your biological age is calculated using most of your available health metrics."
+      String(localized: "Your biological age is calculated using most of your available health metrics.", bundle: Bundle.coreHealth)
     case .moderate:
-      "Your biological age is based on a moderate amount of health data. Adding more metrics will improve accuracy."
+      String(localized: "Your biological age is based on a moderate amount of health data. Adding more metrics will improve accuracy.", bundle: Bundle.coreHealth)
     case .low:
-      "Limited health data is available. Track more health metrics to get a more accurate biological age."
+      String(localized: "Limited health data is available. Track more health metrics to get a more accurate biological age.", bundle: Bundle.coreHealth)
     }
   }
 

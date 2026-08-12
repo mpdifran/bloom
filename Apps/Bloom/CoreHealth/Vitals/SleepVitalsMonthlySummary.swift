@@ -29,10 +29,10 @@ public extension SleepVitalsMonthlySummary {
 
     public var name: String {
       switch self {
-      case .poor: "Poor"
-      case .low: "Low"
-      case .good: "Good"
-      case .great: "Great"
+      case .poor: String(localized: "Poor", bundle: Bundle.coreHealth)
+      case .low: String(localized: "Low", bundle: Bundle.coreHealth)
+      case .good: String(localized: "Good", bundle: Bundle.coreHealth)
+      case .great: String(localized: "Great", bundle: Bundle.coreHealth)
       }
     }
 

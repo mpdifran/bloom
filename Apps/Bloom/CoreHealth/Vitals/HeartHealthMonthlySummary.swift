@@ -23,10 +23,10 @@ public extension HeartHealthMonthlySummary {
 
     public var name: String {
       switch self {
-      case .atRisk: "At Risk"
-      case .moderate: "Moderate"
-      case .healthy: "Healthy"
-      case .optimal: "Optimal"
+      case .atRisk: String(localized: "At Risk", bundle: Bundle.coreHealth)
+      case .moderate: String(localized: "Moderate", bundle: Bundle.coreHealth)
+      case .healthy: String(localized: "Healthy", bundle: Bundle.coreHealth)
+      case .optimal: String(localized: "Optimal", bundle: Bundle.coreHealth)
       }
     }
 
@@ -48,10 +48,10 @@ public extension HeartHealthMonthlySummary {
 
     public var name: String {
       switch self {
-      case .low: "Poor"
-      case .belowAverage: "Fair"
-      case .aboveAverage: "Good"
-      case .high: "Excellent"
+      case .low: String(localized: "Poor", bundle: Bundle.coreHealth)
+      case .belowAverage: String(localized: "Fair", bundle: Bundle.coreHealth)
+      case .aboveAverage: String(localized: "Good", bundle: Bundle.coreHealth)
+      case .high: String(localized: "Excellent", bundle: Bundle.coreHealth)
       }
     }
 
@@ -67,13 +67,13 @@ public extension HeartHealthMonthlySummary {
     public var summary: String {
       switch self {
       case .low:
-        "This level indicates poor cardiovascular fitness and is associated with a higher risk of cardiovascular diseases and other health issues."
+        String(localized: "This level indicates poor cardiovascular fitness and is associated with a higher risk of cardiovascular diseases and other health issues.", bundle: Bundle.coreHealth)
       case .belowAverage:
-        "Individuals in this category have cardiovascular fitness below the median but are not in the lowest fitness category."
+        String(localized: "Individuals in this category have cardiovascular fitness below the median but are not in the lowest fitness category.", bundle: Bundle.coreHealth)
       case .aboveAverage:
-        "This level represents better-than-average cardiovascular fitness and suggests a lower risk of cardiovascular diseases."
+        String(localized: "This level represents better-than-average cardiovascular fitness and suggests a lower risk of cardiovascular diseases.", bundle: Bundle.coreHealth)
       case .high:
-        "This top level is characterized by superior cardiovascular fitness, often indicating excellent overall health and a lower risk of heart-related conditions."
+        String(localized: "This top level is characterized by superior cardiovascular fitness, often indicating excellent overall health and a lower risk of heart-related conditions.", bundle: Bundle.coreHealth)
       }
     }
   }

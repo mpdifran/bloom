@@ -94,7 +94,7 @@ extension ChatVitalConverter {
 
     if shouldFetchDemographics {
       age = await HealthManager.shared.age()
-      sex = await HealthManager.shared.sex().name
+      sex = await HealthManager.shared.sex().canonicalName
       let height = await HealthManager.shared.height()
       focus = await HealthManager.shared.focus
       workoutEquipment = Array(await HealthManager.shared.selectedWorkoutEquipment)
@@ -275,7 +275,7 @@ extension ChatVitalConverter {
       HealthVitalData.HeartRateZoneWorkoutSample(
         start: $0.workout.startDate,
         end: $0.workout.endDate,
-        workout: $0.workout.workoutActivityType.name,
+        workout: $0.workout.workoutActivityType.canonicalName,
         workoutDuration: $0.heartZoneDistribution.totalDuration.chatQuantity(for: .minute(), numberFormatter: .noDecimalPlaces),
         zone1Duration: $0.heartZoneDistribution.zone1.chatQuantity(for: .minute(), numberFormatter: .noDecimalPlaces),
         zone2Duration: $0.heartZoneDistribution.zone2.chatQuantity(for: .minute(), numberFormatter: .noDecimalPlaces),

@@ -39,21 +39,21 @@ public extension ActivityLevelSummary.ActivityLevel {
 
   var name: String {
     switch self {
-    case .sedentary: "Sedentary"
-    case .light: "Light"
-    case .moderate: "Moderate"
-    case .high: "High"
-    case .intense: "Intense"
+    case .sedentary: String(localized: "Sedentary", bundle: Bundle.coreHealth)
+    case .light: String(localized: "Light", bundle: Bundle.coreHealth)
+    case .moderate: String(localized: "Moderate", bundle: Bundle.coreHealth)
+    case .high: String(localized: "High", bundle: Bundle.coreHealth)
+    case .intense: String(localized: "Intense", bundle: Bundle.coreHealth)
     }
   }
 
   var summary: String {
     switch self {
-    case .sedentary: "Little to no exercise"
-    case .light: "Exercise a couple times a week"
-    case .moderate: "Exercise half the week"
-    case .high: "Exercise almost every day"
-    case .intense: "Intense exercise most days"
+    case .sedentary: String(localized: "Little to no exercise", bundle: Bundle.coreHealth)
+    case .light: String(localized: "Exercise a couple times a week", bundle: Bundle.coreHealth)
+    case .moderate: String(localized: "Exercise half the week", bundle: Bundle.coreHealth)
+    case .high: String(localized: "Exercise almost every day", bundle: Bundle.coreHealth)
+    case .intense: String(localized: "Intense exercise most days", bundle: Bundle.coreHealth)
     }
   }
 
@@ -197,9 +197,9 @@ public extension ActivityLevelSummary {
     let basal = details.averageBasalEnergyBurned
     let active = details.averageActiveEnergyBurned
 
-    guard basal > 1 else { return "No Data" }
+    guard basal > 1 else { return String(localized: "No Data", bundle: Bundle.coreHealth) }
 
-    return "\(String(format: "%.0f", basal)) Cal Basal\n\(String(format: "%.0f", active)) Cal Active"
+    return "\(String(format: "%.0f", basal)) Cal Basal\n\(String(format: "%.0fString(localized: ", active)) Cal Active", bundle: Bundle.coreHealth)
   }
 }
 

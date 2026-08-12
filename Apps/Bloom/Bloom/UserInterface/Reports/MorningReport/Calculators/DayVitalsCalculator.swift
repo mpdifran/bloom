@@ -435,7 +435,7 @@ private extension DayVitalsCalculator {
       }
       
       let workoutDataItem = WorkoutData(
-        activityType: workout.workoutActivityType.name,
+        activityType: workout.workoutActivityType.canonicalName,
         startTime: workout.startDate,
         duration: await HKQuantity(unit: .minute(), doubleValue: duration).displayString(for: .minute(), formatter: .noDecimalPlaces),
         caloriesBurned: "\(Int(calories)) cal",
@@ -487,7 +487,7 @@ private extension DayVitalsCalculator {
       let effortLevel = effortScore.map { WorkoutEffortCategory(effortScore: $0).rawValue }
       
       let workoutEffortDataItem = WorkoutEffortData(
-        workoutType: workout.workoutActivityType.name,
+        workoutType: workout.workoutActivityType.canonicalName,
         startTime: workout.startDate,
         duration: await HKQuantity(unit: .minute(), doubleValue: duration).displayString(for: .minute(), formatter: .noDecimalPlaces),
         userEffortScore: userEffortScore.map { String(format: "%.1f", $0) },

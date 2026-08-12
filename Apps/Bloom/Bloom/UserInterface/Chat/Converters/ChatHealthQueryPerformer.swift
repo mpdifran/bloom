@@ -588,7 +588,7 @@ private extension ChatHealthQueryPerformer {
       }
       
       let data = await HealthVitalData.Workout(
-        name: workout.workoutActivityType.name,
+        name: workout.workoutActivityType.canonicalName,
         start: workout.startDate,
         end: workout.endDate,
         duration: DateFormatter.timeIntervalHourMinuteSecondShort.string(from: workout.duration) ?? "00:00",
@@ -626,7 +626,7 @@ private extension ChatHealthQueryPerformer {
       HealthVitalData.HeartRateZoneWorkoutSample(
         start: $0.workout.startDate,
         end: $0.workout.endDate,
-        workout: $0.workout.workoutActivityType.name,
+        workout: $0.workout.workoutActivityType.canonicalName,
         workoutDuration: $0.heartZoneDistribution.totalDuration.chatQuantity(for: .minute(), numberFormatter: .noDecimalPlaces),
         zone1Duration: $0.heartZoneDistribution.zone1.chatQuantity(for: .minute(), numberFormatter: .noDecimalPlaces),
         zone2Duration: $0.heartZoneDistribution.zone2.chatQuantity(for: .minute(), numberFormatter: .noDecimalPlaces),

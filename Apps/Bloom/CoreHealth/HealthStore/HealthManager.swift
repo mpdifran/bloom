@@ -61,13 +61,13 @@ public extension HealthGoal {
   var name: String {
     switch self {
     case .none:
-      "Monitor Health"
+      String(localized: "Monitor Health", bundle: Bundle.coreHealth)
     case .gainWeight:
-      "Gain Weight"
+      String(localized: "Gain Weight", bundle: Bundle.coreHealth)
     case .maintainWeight:
-      "Maintain Weight"
+      String(localized: "Maintain Weight", bundle: Bundle.coreHealth)
     case .loseWeight:
-      "Lose Weight"
+      String(localized: "Lose Weight", bundle: Bundle.coreHealth)
     }
   }
 

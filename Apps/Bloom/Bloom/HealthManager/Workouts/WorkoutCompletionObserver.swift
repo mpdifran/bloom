@@ -74,7 +74,7 @@ private extension WorkoutCompletionObserver {
     // Mark as notified immediately to prevent duplicates
     markWorkoutAsNotified(workout.uuid.uuidString)
 
-    internalLog(.workoutAnalysis, "Processing \(workout.workoutActivityType.name) workout")
+    internalLog(.workoutAnalysis, "Processing \(workout.workoutActivityType.canonicalName) workout")
 
     // Check if workout notifications are enabled (must access on main thread)
     let isEnabled = await MainActor.run { NotificationPreferences.shared.workoutCompletionEnabled }

@@ -15,7 +15,9 @@ extension HKBiologicalSex: CaseIterable {
 
 public extension HKBiologicalSex {
 
-  var name: String {
+  /// Stable English name, used for logging, analytics and anything sent to the backend.
+  /// Never localized — `name` is the display-facing counterpart.
+  var canonicalName: String {
     switch self {
     case .notSet:
       "Prefer not to say"
@@ -27,6 +29,21 @@ public extension HKBiologicalSex {
       "Other"
     @unknown default:
       "Unknown"
+    }
+  }
+
+  var name: String {
+    switch self {
+    case .notSet:
+      String(localized: "Prefer not to say", bundle: Bundle.coreHealth)
+    case .female:
+      String(localized: "Female", bundle: Bundle.coreHealth)
+    case .male:
+      String(localized: "Male", bundle: Bundle.coreHealth)
+    case .other:
+      String(localized: "Other", bundle: Bundle.coreHealth)
+    @unknown default:
+      String(localized: "Unknown", bundle: Bundle.coreHealth)
     }
   }
 }

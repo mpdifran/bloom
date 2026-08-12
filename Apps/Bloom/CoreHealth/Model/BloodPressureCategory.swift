@@ -20,17 +20,17 @@ public enum BloodPressureCategory: CaseIterable, Identifiable {
   public var name: String {
     switch self {
     case .low:
-      "Low"
+      String(localized: "Low", bundle: Bundle.coreHealth)
     case .normal:
-      "Normal"
+      String(localized: "Normal", bundle: Bundle.coreHealth)
     case .elevated:
-      "Elevated"
+      String(localized: "Elevated", bundle: Bundle.coreHealth)
     case .hypertensionStage1:
-      "Hypertension Stage 1"
+      String(localized: "Hypertension Stage 1", bundle: Bundle.coreHealth)
     case .hypertensionStage2:
-      "Hypertension Stage 2"
+      String(localized: "Hypertension Stage 2", bundle: Bundle.coreHealth)
     case .hypertensiveCrisis:
-      "Hypertensive Crisis"
+      String(localized: "Hypertensive Crisis", bundle: Bundle.coreHealth)
     }
   }
 
@@ -46,17 +46,17 @@ public enum BloodPressureCategory: CaseIterable, Identifiable {
   public var description: String {
     switch self {
     case .low:
-      "Low blood pressure can be normal for some people, especially if they have no symptoms. However, when blood pressure drops too low, it can cause inadequate blood flow to the organs, leading to symptoms like dizziness, fainting, and in severe cases, shock."
+      String(localized: "Low blood pressure can be normal for some people, especially if they have no symptoms. However, when blood pressure drops too low, it can cause inadequate blood flow to the organs, leading to symptoms like dizziness, fainting, and in severe cases, shock.", bundle: Bundle.coreHealth)
     case .normal:
-      "This range is considered optimal and indicates that the heart is functioning well without excessive strain on the blood vessels."
+      String(localized: "This range is considered optimal and indicates that the heart is functioning well without excessive strain on the blood vessels.", bundle: Bundle.coreHealth)
     case .elevated:
-      "Blood pressure in this range is higher than normal but not yet in the high blood pressure range. It suggests that there may be an increased risk of developing hypertension."
+      String(localized: "Blood pressure in this range is higher than normal but not yet in the high blood pressure range. It suggests that there may be an increased risk of developing hypertension.", bundle: Bundle.coreHealth)
     case .hypertensionStage1:
-      "This stage indicates the beginning of high blood pressure, where there’s increased force on the arteries, potentially leading to health issues if not managed."
+      String(localized: "This stage indicates the beginning of high blood pressure, where there’s increased force on the arteries, potentially leading to health issues if not managed.", bundle: Bundle.coreHealth)
     case .hypertensionStage2:
-      "Blood pressure at this stage is significantly high, posing a greater risk for heart disease, stroke, and other complications. It often requires medication and lifestyle changes to control."
+      String(localized: "Blood pressure at this stage is significantly high, posing a greater risk for heart disease, stroke, and other complications. It often requires medication and lifestyle changes to control.", bundle: Bundle.coreHealth)
     case .hypertensiveCrisis:
-      "This is a critical condition where blood pressure is dangerously high, requiring immediate medical attention to prevent severe damage to organs."
+      String(localized: "This is a critical condition where blood pressure is dangerously high, requiring immediate medical attention to prevent severe damage to organs.", bundle: Bundle.coreHealth)
     }
   }
 }

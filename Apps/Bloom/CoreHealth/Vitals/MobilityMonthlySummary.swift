@@ -27,11 +27,11 @@ public extension MobilityMonthlySummary {
 
     public var name: String {
       switch self {
-      case .unknown: "Unknown"
-      case .poor: "Poor"
-      case .concern: "Concern"
-      case .good: "Good"
-      case .excellent: "Excellent"
+      case .unknown: String(localized: "Unknown", bundle: Bundle.coreHealth)
+      case .poor: String(localized: "Poor", bundle: Bundle.coreHealth)
+      case .concern: String(localized: "Concern", bundle: Bundle.coreHealth)
+      case .good: String(localized: "Good", bundle: Bundle.coreHealth)
+      case .excellent: String(localized: "Excellent", bundle: Bundle.coreHealth)
       }
     }
 
@@ -127,9 +127,9 @@ public extension MobilityMonthlySummary {
   }
 
   var subtitle: String {
-    let doubleSupport = "Double Support: \(String(format: "%.0f", doubleSupportTimePercent * 100))%"
-    let sixMinuteWalk = "6 Min Walk: \(String(format: "%.0f", sixMinuteWalkDistance))m"
-    return [doubleSupport, sixMinuteWalk].joined(separator: "\n")
+    let doubleSupport = "Double Support: \(String(format: "%.0fString(localized: ", doubleSupportTimePercent * 100))%", bundle: Bundle.coreHealth)
+    let sixMinuteWalk = "6 Min Walk: \(String(format: "%.0fString(localized: ", sixMinuteWalkDistance))m", bundle: Bundle.coreHealth)
+    return [doubleSupport, sixMinuteWalk].joined(separator: String(localized: "\n", bundle: Bundle.coreHealth))
   }
 
   var status: Status {

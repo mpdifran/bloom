@@ -12,17 +12,17 @@ public extension HKCategoryValueVaginalBleeding {
   var name: String {
     switch self {
     case .unspecified:
-      "Unspecified"
+      String(localized: "Unspecified", bundle: Bundle.coreHealth)
     case .light:
-      "Light"
+      String(localized: "Light", bundle: Bundle.coreHealth)
     case .medium:
-      "Medium"
+      String(localized: "Medium", bundle: Bundle.coreHealth)
     case .heavy:
-      "Heavy"
+      String(localized: "Heavy", bundle: Bundle.coreHealth)
     case .none:
-      "None"
+      String(localized: "None", bundle: Bundle.coreHealth)
     @unknown default:
-      "Unknown"
+      String(localized: "Unknown", bundle: Bundle.coreHealth)
     }
   }
 

@@ -40,18 +40,18 @@ public enum ContainerShapeType: String, Codable, Sendable, CaseIterable {
 
   public var displayName: String {
     switch self {
-    case .waterBottle: "Water Bottle"
-    case .coffeeCup: "Coffee Cup"
-    case .espressoCup: "Espresso Cup"
-    case .teaCup: "Tea Cup"
-    case .glass: "Glass"
-    case .beerGlass: "Beer Glass"
-    case .wineGlass: "Wine Glass"
-    case .shaker: "Shaker"
-    case .can: "Can"
-    case .mug: "Mug"
-    case .tumbler: "Tumbler"
-    case .shotGlass: "Shot Glass"
+    case .waterBottle: String(localized: "Water Bottle", bundle: Bundle.coreHealth)
+    case .coffeeCup: String(localized: "Coffee Cup", bundle: Bundle.coreHealth)
+    case .espressoCup: String(localized: "Espresso Cup", bundle: Bundle.coreHealth)
+    case .teaCup: String(localized: "Tea Cup", bundle: Bundle.coreHealth)
+    case .glass: String(localized: "Glass", bundle: Bundle.coreHealth)
+    case .beerGlass: String(localized: "Beer Glass", bundle: Bundle.coreHealth)
+    case .wineGlass: String(localized: "Wine Glass", bundle: Bundle.coreHealth)
+    case .shaker: String(localized: "Shaker", bundle: Bundle.coreHealth)
+    case .can: String(localized: "Can", bundle: Bundle.coreHealth)
+    case .mug: String(localized: "Mug", bundle: Bundle.coreHealth)
+    case .tumbler: String(localized: "Tumbler", bundle: Bundle.coreHealth)
+    case .shotGlass: String(localized: "Shot Glass", bundle: Bundle.coreHealth)
     }
   }
 }

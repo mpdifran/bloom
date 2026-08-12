@@ -15,22 +15,22 @@ public enum HeartRateZoneCalculationMode: String, CaseIterable, Codable, Sendabl
   public var displayName: String {
     switch self {
     case .automatic:
-      return "Automatic"
+      return String(localized: "Automatic", bundle: Bundle.coreHealth)
     case .semiManual:
-      return "Custom HR"
+      return String(localized: "Custom HR", bundle: Bundle.coreHealth)
     case .manual:
-      return "Custom Zones"
+      return String(localized: "Custom Zones", bundle: Bundle.coreHealth)
     }
   }
 
   public var description: String {
     switch self {
     case .automatic:
-      return "Zones calculated from your age and resting heart rate from HealthKit"
+      return String(localized: "Zones calculated from your age and resting heart rate from HealthKit", bundle: Bundle.coreHealth)
     case .semiManual:
-      return "Set your max and resting heart rate, zones calculated as percentages"
+      return String(localized: "Set your max and resting heart rate, zones calculated as percentages", bundle: Bundle.coreHealth)
     case .manual:
-      return "Set each zone threshold individually"
+      return String(localized: "Set each zone threshold individually", bundle: Bundle.coreHealth)
     }
   }
 }

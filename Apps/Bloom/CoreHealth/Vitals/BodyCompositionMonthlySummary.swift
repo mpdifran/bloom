@@ -20,12 +20,12 @@ public extension BodyCompositionMonthlySummary {
 
     public var name: String {
       switch self {
-      case .unknown: "Unknown"
-      case .essentialFat: "Essential Fat"
-      case .athlete: "Athlete"
-      case .fit: "Fit"
-      case .healthy: "Healthy"
-      case .high: "High"
+      case .unknown: String(localized: "Unknown", bundle: Bundle.coreHealth)
+      case .essentialFat: String(localized: "Essential Fat", bundle: Bundle.coreHealth)
+      case .athlete: String(localized: "Athlete", bundle: Bundle.coreHealth)
+      case .fit: String(localized: "Fit", bundle: Bundle.coreHealth)
+      case .healthy: String(localized: "Healthy", bundle: Bundle.coreHealth)
+      case .high: String(localized: "High", bundle: Bundle.coreHealth)
       }
     }
 

@@ -16,13 +16,13 @@ public enum SmokingStatus: String, CaseIterable, Codable, Sendable {
   public var displayName: String {
     switch self {
     case .unknown:
-      "Not Set"
+      String(localized: "Not Set", bundle: Bundle.coreHealth)
     case .never:
-      "Never Smoked"
+      String(localized: "Never Smoked", bundle: Bundle.coreHealth)
     case .former:
-      "Former Smoker"
+      String(localized: "Former Smoker", bundle: Bundle.coreHealth)
     case .current:
-      "Current Smoker"
+      String(localized: "Current Smoker", bundle: Bundle.coreHealth)
     }
   }
 

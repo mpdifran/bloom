@@ -13,21 +13,21 @@ public extension HKCategoryValueSleepAnalysis {
     var name: String {
         switch self {
         case .inBed:
-            "In Bed"
+            String(localized: "In Bed", bundle: Bundle.coreHealth)
         case .asleepUnspecified:
-            "Asleep"
+            String(localized: "Asleep", bundle: Bundle.coreHealth)
         case .asleep:
-            "Asleep"
+            String(localized: "Asleep", bundle: Bundle.coreHealth)
         case .awake:
-            "Awake"
+            String(localized: "Awake", bundle: Bundle.coreHealth)
         case .asleepCore:
-            "Core Sleep"
+            String(localized: "Core Sleep", bundle: Bundle.coreHealth)
         case .asleepDeep:
-            "Deep Sleep"
+            String(localized: "Deep Sleep", bundle: Bundle.coreHealth)
         case .asleepREM:
-            "REM Sleep"
+            String(localized: "REM Sleep", bundle: Bundle.coreHealth)
         @unknown default:
-            "Unknown"
+            String(localized: "Unknown", bundle: Bundle.coreHealth)
         }
     }
 }
