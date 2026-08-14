@@ -7,52 +7,7 @@
     " " : {
 
     },
-    " %@" : {
-
-    },
     " • " : {
-
-    },
-    " and burned " : {
-
-    },
-    " Cals" : {
-
-    },
-    " carbs, " : {
-
-    },
-    " fat." : {
-
-    },
-    " for your age!" : {
-
-    },
-    " long." : {
-
-    },
-    " mL/kg/min." : {
-
-    },
-    " of sleep per night." : {
-
-    },
-    " protein, " : {
-
-    },
-    " Source" : {
-
-    },
-    " this year!" : {
-
-    },
-    " this year." : {
-
-    },
-    " while working out this year." : {
-
-    },
-    " zone minutes this year!" : {
 
     },
     "-" : {
@@ -68,9 +23,6 @@
 
     },
     "—-" : {
-
-    },
-    ". " : {
 
     },
     "[%@]" : {
@@ -137,6 +89,7 @@
       }
     },
     "%@ %@" : {
+      "comment" : "Citation line. The first placeholder is the citation title, the second is the word \"Source\" shown as a link.\nEnergy value with its unit. The placeholders are an amount and the unit \"Cals\".\nYear in Bloom distance summary followed by a comparison sentence.",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -152,6 +105,17 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$@ • %2$@"
+          }
+        }
+      }
+    },
+    "%@ • Avg: %@" : {
+      "comment" : "Goal subtitle. Placeholders are the cadence (Daily/Weekly) and the user's average.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ • Avg: %2$@"
           }
         }
       }
@@ -192,6 +156,17 @@
     },
     "%@ zone minutes" : {
 
+    },
+    "%@. %@" : {
+      "comment" : "Year in Bloom heart summary, followed by a sentence of feedback about the value.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@. %2$@"
+          }
+        }
+      }
     },
     "%@%@" : {
       "localizations" : {
@@ -390,13 +365,13 @@
 
     },
     "< 8 Hours" : {
-
+      "comment" : "Label for bowel movements detail view"
     },
     "=" : {
 
     },
     "> 72 Hours" : {
-
+      "comment" : "Label for bowel movements detail view"
     },
     "> 600m Months" : {
 
@@ -421,19 +396,19 @@
 
     },
     "1 Day" : {
-
+      "comment" : "Display name for monitor notification preferences"
     },
     "1 Day Before" : {
 
     },
     "1 Month" : {
-
+      "comment" : "Display name for monitor notification preferences"
     },
     "1 Week" : {
-
+      "comment" : "Display name for monitor notification preferences"
     },
     "1 Year Younger!" : {
-
+      "comment" : "Title for celebration kind"
     },
     "4 Days After" : {
 
@@ -460,13 +435,13 @@
 
     },
     "8-24 Hours" : {
-
+      "comment" : "Label for bowel movements detail view"
     },
     "15 – 45 min" : {
-
+      "comment" : "Subtitle for workout duration"
     },
     "24-48 Hours" : {
-
+      "comment" : "Label for bowel movements detail view"
     },
     "30-Day Avg" : {
 
@@ -478,10 +453,10 @@
 
     },
     "45+ min" : {
-
+      "comment" : "Subtitle for workout duration"
     },
     "48-72 Hours" : {
-
+      "comment" : "Label for bowel movements detail view"
     },
     "75% OFF" : {
 
@@ -527,13 +502,13 @@
 
     },
     "Actions" : {
-
+      "comment" : "Display name for tab kind"
     },
     "Activity" : {
 
     },
     "activity level" : {
-
+      "comment" : "Display name for query data type"
     },
     "Activity Level" : {
 
@@ -599,7 +574,7 @@
 
     },
     "AI insights into your monitor results. Monitor calculations run entirely on-device." : {
-
+      "comment" : "Subtitle for monitor privacy AI feature opt in cell"
     },
     "Alcohol" : {
 
@@ -608,10 +583,10 @@
 
     },
     "Alert" : {
-
+      "comment" : "Display name for monitor state value"
     },
     "All" : {
-
+      "comment" : "Display name for stress details view"
     },
     "All Bowel Movements" : {
 
@@ -662,7 +637,7 @@
 
     },
     "AMRAP" : {
-
+      "comment" : "Display name for format"
     },
     "Analysis data has been copied to your clipboard." : {
 
@@ -695,7 +670,7 @@
 
     },
     "Attention" : {
-
+      "comment" : "Display name for monitor state value"
     },
     "Audience: %@ (You: %@)" : {
       "localizations" : {
@@ -746,11 +721,8 @@
     "Avg Protein" : {
 
     },
-    "Avg: %@" : {
-
-    },
     "Awake" : {
-
+      "comment" : "Display name for apple sleep stage"
     },
     "Awake: %@" : {
 
@@ -768,7 +740,7 @@
 
     },
     "Bedtime" : {
-
+      "comment" : "Display name for monitor metric type\nShort display name for monitor metric type"
     },
     "Bedtime & Duration" : {
 
@@ -783,16 +755,16 @@
 
     },
     "bike distance" : {
-
+      "comment" : "Display name for query data type"
     },
     "bike duration" : {
-
+      "comment" : "Display name for query data type"
     },
     "biking distance" : {
-
+      "comment" : "Display name for metric"
     },
     "biking duration" : {
-
+      "comment" : "Display name for metric"
     },
     "Binge drinking day%@" : {
 
@@ -832,7 +804,7 @@
 
     },
     "Blood Pressure" : {
-
+      "comment" : "Display name for stress details view"
     },
     "Blood pressure is recorded as two numbers: systolic (pressure when heart beats) over diastolic (pressure between beats). Normal blood pressure is below 120/80 mmHg." : {
 
@@ -871,7 +843,7 @@
 
     },
     "Blueberry" : {
-
+      "comment" : "Display name for theme"
     },
     "Body Composition" : {
 
@@ -880,7 +852,7 @@
 
     },
     "body weight" : {
-
+      "comment" : "Display name for query data type"
     },
     "Body Weight" : {
 
@@ -889,7 +861,7 @@
 
     },
     "bowel movements" : {
-
+      "comment" : "Display name for query data type"
     },
     "Bowel Movements" : {
 
@@ -901,13 +873,13 @@
 
     },
     "Branded" : {
-
+      "comment" : "Display name for food item category tab"
     },
     "Breakfast" : {
 
     },
     "Bright" : {
-
+      "comment" : "Display name for sleep environment darkness"
     },
     "Bristol Stool Type" : {
 
@@ -964,7 +936,7 @@
 
     },
     "caloric intake" : {
-
+      "comment" : "Display name for metric\nDisplay name for query data type"
     },
     "Calories" : {
 
@@ -988,13 +960,13 @@
 
     },
     "cardio duration" : {
-
+      "comment" : "Display name for query data type"
     },
     "Cardio Fitness" : {
 
     },
     "cardio workouts" : {
-
+      "comment" : "Display name for metric"
     },
     "Category" : {
 
@@ -1024,7 +996,7 @@
 
     },
     "Chat with Bud about your health and wellness." : {
-
+      "comment" : "Subtitle for chat privacy AI feature opt in cell"
     },
     "Choose %@ type" : {
 
@@ -1033,13 +1005,13 @@
 
     },
     "Choose Food Item" : {
-
+      "comment" : "Display name for log meal configuration intent"
     },
     "Choose Goal" : {
-
+      "comment" : "Display name for goal configuration intent"
     },
     "Choose Saved Meal" : {
-
+      "comment" : "Display name for log meal configuration intent"
     },
     "Choose the time period to display step data for." : {
 
@@ -1084,10 +1056,10 @@
 
     },
     "Configure food item" : {
-
+      "comment" : "Subtitle for side effect cell"
     },
     "Configure water amount" : {
-
+      "comment" : "Subtitle for side effect cell"
     },
     "Configure which insight to display in the widget." : {
 
@@ -1114,13 +1086,13 @@
 
     },
     "Control" : {
-
+      "comment" : "Display name for experiment override"
     },
     "Conversation Name" : {
 
     },
     "Cool-Down" : {
-
+      "comment" : "Display name for format"
     },
     "Copied to Clipboard" : {
 
@@ -1144,7 +1116,7 @@
 
     },
     "Core" : {
-
+      "comment" : "Display name for apple sleep stage"
     },
     "Core: %@" : {
 
@@ -1208,19 +1180,19 @@
 
     },
     "Cycle Phase Tip" : {
-
+      "comment" : "Title for phase tip today cell"
     },
     "Cycle Range" : {
 
     },
     "cycle tracking" : {
-
+      "comment" : "Display name for query data type"
     },
     "Cycle Tracking" : {
 
     },
     "Daily" : {
-
+      "comment" : "Display name for goal time period\nGoal cadence"
     },
     "Daily bowel movements (8-24 hours) are considered optimal for most people, indicating healthy digestive function." : {
 
@@ -1235,7 +1207,7 @@
 
     },
     "Dark" : {
-
+      "comment" : "Display name for sleep environment darkness"
     },
     "DataSet" : {
 
@@ -1268,16 +1240,16 @@
 
     },
     "Declining" : {
-
+      "comment" : "Label for VO2 max trend\nLabel for hrv trend"
     },
     "Deep" : {
-
+      "comment" : "Display name for apple sleep stage"
     },
     "Deep sleep" : {
-
+      "comment" : "Short display name for monitor metric type"
     },
     "Deep Sleep" : {
-
+      "comment" : "Display name for monitor metric type"
     },
     "Deep: %@" : {
 
@@ -1349,7 +1321,7 @@
 
     },
     "Dragonfruit" : {
-
+      "comment" : "Display name for theme"
     },
     "Drink Logged" : {
 
@@ -1388,7 +1360,7 @@
 
     },
     "Efficiency" : {
-
+      "comment" : "Short display name for monitor metric type"
     },
     "Effort" : {
 
@@ -1403,7 +1375,7 @@
 
     },
     "EMOM" : {
-
+      "comment" : "Display name for format"
     },
     "Enable" : {
 
@@ -1454,31 +1426,31 @@
 
     },
     "Every 3 Days" : {
-
+      "comment" : "Display name for to do model"
     },
     "Every 7 Days" : {
-
+      "comment" : "Display name for to do model"
     },
     "Every Friday" : {
-
+      "comment" : "Display name for to do model"
     },
     "Every Monday" : {
-
+      "comment" : "Display name for to do model"
     },
     "Every Saturday" : {
-
+      "comment" : "Display name for to do model"
     },
     "Every Sunday" : {
-
+      "comment" : "Display name for to do model"
     },
     "Every Thursday" : {
-
+      "comment" : "Display name for to do model"
     },
     "Every Tuesday" : {
-
+      "comment" : "Display name for to do model"
     },
     "Every Wednesday" : {
-
+      "comment" : "Display name for to do model"
     },
     "ex: 192.168.1.1" : {
 
@@ -1487,13 +1459,13 @@
 
     },
     "excellent" : {
-
+      "comment" : "Rating of a resting heart rate, used inside \"This is %@ for your age!\""
     },
     "Exercise Effectiveness" : {
 
     },
     "exercise minutes" : {
-
+      "comment" : "Display name for metric\nDisplay name for query data type"
     },
     "Exit Developer Mode" : {
 
@@ -1514,7 +1486,7 @@
 
     },
     "fiber intake" : {
-
+      "comment" : "Display name for metric\nDisplay name for query data type"
     },
     "Files" : {
 
@@ -1554,7 +1526,7 @@
 
     },
     "Food Item" : {
-
+      "comment" : "Display name for food item log"
     },
     "Food Items" : {
 
@@ -1578,7 +1550,7 @@
 
     },
     "Frequent" : {
-
+      "comment" : "Display name for food item picker\nDisplay name for food logging action card view"
     },
     "Frequently Asked Questions" : {
 
@@ -1587,10 +1559,10 @@
 
     },
     "Generic" : {
-
+      "comment" : "Display name for food item category tab"
     },
     "Get Moving" : {
-
+      "comment" : "Display name for monitor state value"
     },
     "Get notified of analysis when workouts finish" : {
 
@@ -1623,7 +1595,7 @@
 
     },
     "goals" : {
-
+      "comment" : "Display name for query data type"
     },
     "Goals Added" : {
 
@@ -1635,7 +1607,7 @@
 
     },
     "great" : {
-
+      "comment" : "Rating of a resting heart rate, used inside \"This is %@ for your age!\""
     },
     "Guidelines" : {
 
@@ -1665,7 +1637,7 @@
 
     },
     "heart health" : {
-
+      "comment" : "Display name for query data type"
     },
     "Heart Health" : {
 
@@ -1680,7 +1652,7 @@
 
     },
     "Heart Rate Variability" : {
-
+      "comment" : "Display name for monitor metric type\nDisplay name for stress details view"
     },
     "Heart Rate Variability (HRV) measures the variation in time between heartbeats. Higher HRV generally indicates better cardiovascular fitness and recovery, while lower HRV may suggest stress or fatigue." : {
 
@@ -1707,7 +1679,7 @@
 
     },
     "high intensity interval training duration" : {
-
+      "comment" : "Display name for query data type"
     },
     "Higher body fat percentages can be associated with an increased risk of health issues such as cardiovascular disease, diabetes, and other metabolic conditions. It may indicate a need for lifestyle changes to improve health." : {
 
@@ -1719,7 +1691,7 @@
 
     },
     "HIIT workouts" : {
-
+      "comment" : "Display name for metric"
     },
     "Historical Analysis" : {
 
@@ -1746,7 +1718,7 @@
 
     },
     "HRV" : {
-
+      "comment" : "Short display name for monitor metric type"
     },
     "HRV is measured during sleep or rest periods with your Apple Watch." : {
 
@@ -1785,7 +1757,7 @@
 
     },
     "Improving" : {
-
+      "comment" : "Label for VO2 max trend\nLabel for hrv trend"
     },
     "Inches" : {
 
@@ -1800,7 +1772,7 @@
 
     },
     "Intermittent Sounds" : {
-
+      "comment" : "Display name for sleep environment sound"
     },
     "Interval" : {
 
@@ -1815,16 +1787,16 @@
 
     },
     "Last 3 Months" : {
-
+      "comment" : "Display name for stat time period"
     },
     "Last 6 Months" : {
-
+      "comment" : "Display name for stat time period"
     },
     "Last 7 Days" : {
-
+      "comment" : "Display name for stat time period"
     },
     "Last 30 Days" : {
-
+      "comment" : "Display name for stat time period"
     },
     "Last Bowel Movement" : {
 
@@ -1842,10 +1814,10 @@
 
     },
     "Last Year" : {
-
+      "comment" : "Display name for stat time period"
     },
     "Late Period" : {
-
+      "comment" : "Title for upcoming period cell"
     },
     "Learn More" : {
 
@@ -1857,7 +1829,7 @@
 
     },
     "Less Likely Next Period" : {
-
+      "comment" : "Title for legend label"
     },
     "Let me keep you on track with helpful reminders and health insights." : {
 
@@ -1893,7 +1865,7 @@
 
     },
     "Likely Next Period" : {
-
+      "comment" : "Title for legend label"
     },
     "Loading notifications..." : {
 
@@ -1921,13 +1893,13 @@
 
     },
     "Log Blood Pressure" : {
-
+      "comment" : "Display name for to do model"
     },
     "Log Bowel Movement" : {
 
     },
     "Log Food" : {
-
+      "comment" : "Display name for to do model\nTitle for side effect cell"
     },
     "Log Meal" : {
 
@@ -1942,13 +1914,13 @@
 
     },
     "Log Protein" : {
-
+      "comment" : "Display name for to do model"
     },
     "Log Water" : {
-
+      "comment" : "Title for side effect cell"
     },
     "Log Weight" : {
-
+      "comment" : "Display name for to do model"
     },
     "Log your bowel movements to learn more about your regularity." : {
 
@@ -1963,7 +1935,7 @@
 
     },
     "Long" : {
-
+      "comment" : "Title for workout duration"
     },
     "Looking up foods..." : {
 
@@ -2002,7 +1974,7 @@
 
     },
     "Macros" : {
-
+      "comment" : "Title for nutrients widget view model"
     },
     "Make sure to get the front of the packaging, including the brand and product name." : {
 
@@ -2011,7 +1983,7 @@
 
     },
     "Mango" : {
-
+      "comment" : "Display name for theme"
     },
     "Max" : {
 
@@ -2053,13 +2025,13 @@
 
     },
     "Meals" : {
-
+      "comment" : "Display name for food logging action card view"
     },
     "meditation minutes" : {
-
+      "comment" : "Display name for metric\nDisplay name for query data type"
     },
     "Medium" : {
-
+      "comment" : "Title for workout duration"
     },
     "Memory" : {
 
@@ -2116,10 +2088,10 @@
 
     },
     "mobility and flexibility duration" : {
-
+      "comment" : "Display name for query data type"
     },
     "mobility and flexibility workouts" : {
-
+      "comment" : "Display name for metric"
     },
     "Monitor" : {
 
@@ -2128,7 +2100,7 @@
 
     },
     "Monthly" : {
-
+      "comment" : "Display name for goal time period"
     },
     "More than 3 days between bowel movements suggests constipation. Consult healthcare provider if this persists." : {
 
@@ -2173,7 +2145,7 @@
 
     },
     "New Chat" : {
-
+      "comment" : "Title for chat title view"
     },
     "New Meal" : {
 
@@ -2269,7 +2241,7 @@
 
     },
     "No Period" : {
-
+      "comment" : "Title for legend label"
     },
     "No Plans" : {
 
@@ -2332,10 +2304,10 @@
 
     },
     "nutrition" : {
-
+      "comment" : "Display name for query data type"
     },
     "Nutrition" : {
-
+      "comment" : "Display name for tab kind"
     },
     "Nutrition Label" : {
 
@@ -2347,16 +2319,16 @@
 
     },
     "Open Barcode Scanner" : {
-
+      "comment" : "Label for action type"
     },
     "Open Blood Pressure Logger" : {
-
+      "comment" : "Label for action type"
     },
     "Open Bowel Movement Logger" : {
-
+      "comment" : "Label for action type"
     },
     "Open Food Logger" : {
-
+      "comment" : "Label for action type"
     },
     "Open Health Action" : {
 
@@ -2365,22 +2337,22 @@
 
     },
     "Open Magic Scanner" : {
-
+      "comment" : "Label for action type"
     },
     "Open Period Logger" : {
-
+      "comment" : "Label for action type"
     },
     "Open Settings" : {
 
     },
     "Open Voice Logger" : {
-
+      "comment" : "Label for action type"
     },
     "Open Water Logger" : {
-
+      "comment" : "Label for action type"
     },
     "Open Weight Logger" : {
-
+      "comment" : "Label for action type"
     },
     "Opens a health action to log data." : {
 
@@ -2392,7 +2364,7 @@
 
     },
     "Original" : {
-
+      "comment" : "Display name for experiment override"
     },
     "Other Monitors" : {
 
@@ -2426,10 +2398,10 @@
 
     },
     "Perfect Sleep Score!" : {
-
+      "comment" : "Title for celebration kind"
     },
     "Period" : {
-
+      "comment" : "Title for legend label"
     },
     "Personal Data Categories" : {
 
@@ -2438,7 +2410,7 @@
 
     },
     "Personalized daily insights based on your Personal Data." : {
-
+      "comment" : "Subtitle for today insights privacy AI feature opt in cell"
     },
     "Phase" : {
 
@@ -2450,7 +2422,7 @@
 
     },
     "Plans" : {
-
+      "comment" : "Title for workouts tab view"
     },
     "Please enter your name" : {
 
@@ -2468,7 +2440,7 @@
 
     },
     "Predicted Ovulation" : {
-
+      "comment" : "Title for legend label"
     },
     "Preferences" : {
 
@@ -2498,7 +2470,7 @@
 
     },
     "protein intake" : {
-
+      "comment" : "Display name for metric\nDisplay name for query data type"
     },
     "Quantity" : {
 
@@ -2507,7 +2479,7 @@
 
     },
     "Quiet" : {
-
+      "comment" : "Display name for sleep environment sound"
     },
     "Quit Date" : {
 
@@ -2549,7 +2521,7 @@
 
     },
     "Recent" : {
-
+      "comment" : "Display name for food item picker\nDisplay name for food logging action card view"
     },
     "Recommended" : {
 
@@ -2564,7 +2536,7 @@
 
     },
     "Recovery & Sickness" : {
-
+      "comment" : "Display name for monitor type\nTitle for mini monitor card"
     },
     "Reduced impact over time" : {
 
@@ -2579,13 +2551,13 @@
 
     },
     "Regular Sounds" : {
-
+      "comment" : "Display name for sleep environment sound"
     },
     "REM" : {
-
+      "comment" : "Display name for apple sleep stage\nShort display name for monitor metric type"
     },
     "REM Sleep" : {
-
+      "comment" : "Display name for monitor metric type"
     },
     "REM: %@" : {
 
@@ -2600,7 +2572,7 @@
 
     },
     "reminders" : {
-
+      "comment" : "Display name for query data type"
     },
     "Reminders" : {
 
@@ -2651,10 +2623,10 @@
 
     },
     "Respiratory rate" : {
-
+      "comment" : "Short display name for monitor metric type"
     },
     "Respiratory Rate" : {
-
+      "comment" : "Display name for monitor metric type"
     },
     "Respiratory rate during sleep typically ranges from 12-20 breaths per minute for adults. Changes in your respiratory rate may indicate illness, stress, or changes in fitness level." : {
 
@@ -2669,7 +2641,7 @@
 
     },
     "Resting Heart Rate" : {
-
+      "comment" : "Display name for monitor metric type"
     },
     "resting HR" : {
 
@@ -2699,7 +2671,7 @@
 
     },
     "RHR" : {
-
+      "comment" : "Short display name for monitor metric type"
     },
     "RHR: %lld" : {
 
@@ -2711,16 +2683,16 @@
 
     },
     "run distance" : {
-
+      "comment" : "Display name for query data type"
     },
     "run duration" : {
-
+      "comment" : "Display name for query data type"
     },
     "running distance" : {
-
+      "comment" : "Display name for metric"
     },
     "running duration" : {
-
+      "comment" : "Display name for metric"
     },
     "Sale Product: %@" : {
 
@@ -2850,7 +2822,7 @@
 
     },
     "Short" : {
-
+      "comment" : "Title for workout duration"
     },
     "Show All" : {
 
@@ -2898,16 +2870,16 @@
 
     },
     "sleep" : {
-
+      "comment" : "Display name for query data type"
     },
     "Sleep" : {
-
+      "comment" : "Display name for stress details view\nShort display name for monitor metric type"
     },
     "Sleep Duration" : {
-
+      "comment" : "Display name for monitor metric type"
     },
     "Sleep Efficiency" : {
-
+      "comment" : "Display name for monitor metric type"
     },
     "Sleep HR" : {
 
@@ -2919,7 +2891,7 @@
 
     },
     "Sleep Quality & Rhythm" : {
-
+      "comment" : "Display name for monitor type\nTitle for mini monitor card"
     },
     "Sleep Score" : {
 
@@ -2952,12 +2924,15 @@
 
     },
     "Some Light" : {
-
+      "comment" : "Display name for sleep environment darkness"
     },
     "Something else..." : {
 
     },
     "Sound Debug" : {
+
+    },
+    "Source" : {
 
     },
     "Source: %@" : {
@@ -2967,7 +2942,7 @@
 
     },
     "Stable" : {
-
+      "comment" : "Label for VO2 max trend\nLabel for hrv trend"
     },
     "Stage" : {
 
@@ -2976,7 +2951,7 @@
 
     },
     "Standard" : {
-
+      "comment" : "Display name for experiment\nDisplay name for format"
     },
     "Start" : {
 
@@ -3003,10 +2978,10 @@
 
     },
     "step count" : {
-
+      "comment" : "Display name for query data type"
     },
     "steps" : {
-
+      "comment" : "Display name for metric"
     },
     "Steps" : {
 
@@ -3027,19 +3002,19 @@
 
     },
     "strength training duration" : {
-
+      "comment" : "Display name for query data type"
     },
     "strength training workouts" : {
-
+      "comment" : "Display name for metric"
     },
     "stress" : {
-
+      "comment" : "Display name for query data type"
     },
     "Stress" : {
 
     },
     "Stress & Workout Load" : {
-
+      "comment" : "Display name for monitor type\nTitle for mini monitor card"
     },
     "Stress Level" : {
 
@@ -3078,7 +3053,7 @@
 
     },
     "Tabata" : {
-
+      "comment" : "Display name for format"
     },
     "Tag" : {
 
@@ -3090,22 +3065,22 @@
 
     },
     "target heart rate zone 1 minutes" : {
-
+      "comment" : "Display name for metric"
     },
     "target heart rate zone 2 minutes" : {
-
+      "comment" : "Display name for metric"
     },
     "target heart rate zone 3 minutes" : {
-
+      "comment" : "Display name for metric"
     },
     "target heart rate zone 4 minutes" : {
-
+      "comment" : "Display name for metric"
     },
     "target heart rate zone 5 minutes" : {
-
+      "comment" : "Display name for metric"
     },
     "target heart rate zones" : {
-
+      "comment" : "Display name for query data type"
     },
     "Target Weight" : {
 
@@ -3120,7 +3095,7 @@
 
     },
     "Temp" : {
-
+      "comment" : "Short display name for monitor metric type"
     },
     "Temperature" : {
 
@@ -3191,8 +3166,8 @@
     "This helps me personalize your insights and make sure Bloom is the right fit." : {
 
     },
-    "This is " : {
-
+    "This is %@ for your age!" : {
+      "comment" : "Year in Bloom resting heart rate feedback. The placeholder is a rating such as \"excellent\"."
     },
     "This monitor tracks early physiological signs that may indicate your body is fighting off illness or needs extra recovery time. It analyzes your resting heart rate, heart rate variability, wrist temperature, and respiratory rate to detect subtle changes from your personal baseline." : {
 
@@ -3270,7 +3245,7 @@
 
     },
     "Today" : {
-
+      "comment" : "Display name for calendar day\nDisplay name for stat time period\nDisplay name for tab kind\nDisplay name for weather day"
     },
     "Today Insight Configuration" : {
 
@@ -3279,7 +3254,7 @@
 
     },
     "Tomorrow" : {
-
+      "comment" : "Display name for calendar day\nDisplay name for weather day"
     },
     "Tonight's Sleep" : {
 
@@ -3321,16 +3296,16 @@
 
     },
     "Training load" : {
-
+      "comment" : "Short display name for monitor metric type"
     },
     "Training Load" : {
-
+      "comment" : "Display name for monitor metric type"
     },
     "Training load +25%" : {
 
     },
     "Treatment" : {
-
+      "comment" : "Display name for experiment override"
     },
     "Trial Ends" : {
 
@@ -3384,7 +3359,7 @@
 
     },
     "Typical" : {
-
+      "comment" : "Display name for monitor state value"
     },
     "Typical Day" : {
 
@@ -3393,10 +3368,10 @@
 
     },
     "Unavailable" : {
-
+      "comment" : "Display name for monitor state value"
     },
     "Under 15 min" : {
-
+      "comment" : "Subtitle for workout duration"
     },
     "Undo" : {
 
@@ -3408,13 +3383,13 @@
 
     },
     "Unknown Action" : {
-
+      "comment" : "Title for side effect cell"
     },
     "Unknown Barcode" : {
 
     },
     "Unknown configuration" : {
-
+      "comment" : "Subtitle for side effect cell"
     },
     "Unknown Content" : {
 
@@ -3435,7 +3410,7 @@
 
     },
     "Upcoming Period" : {
-
+      "comment" : "Title for upcoming period cell"
     },
     "Update" : {
 
@@ -3504,34 +3479,34 @@
 
     },
     "Wake time" : {
-
+      "comment" : "Short display name for monitor metric type"
     },
     "Wake Time" : {
-
+      "comment" : "Display name for monitor metric type"
     },
     "Wake: %@" : {
 
     },
     "walking running distance" : {
-
+      "comment" : "Display name for query data type"
     },
     "Walking speed is a key indicator of mobility and overall health. Reference lines show typical speeds for different ages." : {
 
     },
     "walking-running distance" : {
-
+      "comment" : "Display name for metric"
     },
     "Want me to help you stay focused on what matters most for your health?" : {
 
     },
     "Warm-Up" : {
-
+      "comment" : "Display name for format"
     },
     "Water" : {
 
     },
     "water intake" : {
-
+      "comment" : "Display name for metric\nDisplay name for query data type"
     },
     "Water Logged" : {
 
@@ -3567,7 +3542,7 @@
 
     },
     "Weekly" : {
-
+      "comment" : "Display name for goal time period\nGoal cadence"
     },
     "Weight" : {
 
@@ -3624,7 +3599,7 @@
 
     },
     "workout minutes" : {
-
+      "comment" : "Display name for metric"
     },
     "Workout Saved" : {
 
@@ -3633,16 +3608,16 @@
 
     },
     "workouts" : {
-
+      "comment" : "Display name for query data type"
     },
     "Workouts" : {
-
+      "comment" : "Display name for tab kind\nTitle for workouts tab view"
     },
     "Worst Day" : {
 
     },
     "Wrist Temperature" : {
-
+      "comment" : "Display name for monitor metric type"
     },
     "Wrist temperature is measured during sleep and can vary based on your environment, menstrual cycle, illness, and other factors. Tracking changes over time may help identify patterns in your health." : {
 
@@ -3654,7 +3629,7 @@
 
     },
     "Yearly" : {
-
+      "comment" : "Display name for goal time period"
     },
     "Yes" : {
 
@@ -3663,10 +3638,10 @@
 
     },
     "You" : {
-
+      "comment" : "Display name for tab kind"
     },
-    "You averaged " : {
-
+    "You averaged %@ of sleep per night." : {
+      "comment" : "Year in Bloom sleep summary. The placeholder is an average nightly sleep duration."
     },
     "You can ask me about your health trends, and I’ll generate insights using your Apple Health data." : {
 
@@ -3677,14 +3652,22 @@
     "You can change these settings anytime." : {
 
     },
-    "You earned " : {
-
+    "You earned %@ zone minutes this year!" : {
+      "comment" : "Year in Bloom exercise summary. The placeholder is a number of heart rate zone minutes."
     },
-    "You exercised for " : {
-
+    "You exercised for %@ and burned %@ this year!" : {
+      "comment" : "Year in Bloom workout summary. Placeholders are a duration and a calorie amount.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You exercised for %1$@ and burned %2$@ this year!"
+          }
+        }
+      }
     },
-    "You gained " : {
-
+    "You gained %@ this year." : {
+      "comment" : "Year in Bloom weight summary. The placeholder is an amount of weight gained."
     },
     "You have no calendars." : {
 
@@ -3695,8 +3678,8 @@
     "You haven't saved any meals yet." : {
 
     },
-    "You lost " : {
-
+    "You lost %@ this year." : {
+      "comment" : "Year in Bloom weight summary. The placeholder is an amount of weight lost."
     },
     "You made it, %@!" : {
 
@@ -3705,25 +3688,33 @@
 
     },
     "You scored a perfect 100 on your sleep score. That's as good as it gets!" : {
-
+      "comment" : "Subtitle for celebration kind"
     },
-    "You travelled " : {
-
+    "You travelled %@ while working out this year." : {
+      "comment" : "Year in Bloom distance summary. The placeholder is a total distance."
     },
     "You’ve unlocked deeper insights, smarter guidance, and Bud’s full brainpower." : {
 
     },
-    "Your average cycle was " : {
-
+    "Your average cycle was %@ long." : {
+      "comment" : "Year in Bloom cycle summary. The placeholder is an average cycle length in days."
     },
     "Your biological age is 1 year younger than your actual age. Keep it up!" : {
-
+      "comment" : "Subtitle for celebration kind"
     },
     "Your biological age will appear here once calculated. Check back after using the app for a few days." : {
 
     },
-    "Your cardio fitness is " : {
-
+    "Your cardio fitness is %@%@ mL/kg/min." : {
+      "comment" : "Year in Bloom cardio summary. Placeholders are a fitness level and a VO2 max value.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Your cardio fitness is %1$@%2$@ mL/kg/min."
+          }
+        }
+      }
     },
     "Your data is always safe:" : {
 
@@ -3731,8 +3722,16 @@
     "Your Data, Your Choice" : {
 
     },
-    "Your diet averaged " : {
-
+    "Your diet averaged %@ protein, %@ carbs, %@ fat." : {
+      "comment" : "Year in Bloom macro summary. Placeholders are protein, carbohydrate and fat percentages.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Your diet averaged %1$@ protein, %2$@ carbs, %3$@ fat."
+          }
+        }
+      }
     },
     "Your heart rate during sleep is typically lower than your resting heart rate during the day. A lower sleep heart rate generally indicates better cardiovascular fitness and recovery." : {
 
@@ -3746,8 +3745,8 @@
     "Your personal data is used for:" : {
 
     },
-    "Your resting heart rate averaged " : {
-
+    "Your resting heart rate averaged %@" : {
+      "comment" : "Year in Bloom heart summary. The placeholder is an average resting heart rate."
     },
     "Your selected goal:" : {
 

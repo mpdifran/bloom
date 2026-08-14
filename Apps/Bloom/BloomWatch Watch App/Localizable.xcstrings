@@ -69,7 +69,7 @@
 
     },
     "Automatic" : {
-
+      "comment" : "Display name for heart rate zone mode"
     },
     "Bio Age" : {
 
@@ -105,10 +105,10 @@
 
     },
     "Custom HR" : {
-
+      "comment" : "Display name for heart rate zone mode"
     },
     "Custom Zones" : {
-
+      "comment" : "Display name for heart rate zone mode"
     },
     "Date" : {
 
@@ -228,10 +228,10 @@
 
     },
     "Set each zone threshold individually" : {
-
+      "comment" : "Description for heart rate zone mode"
     },
     "Set your max and resting HR, zones calculated automatically" : {
-
+      "comment" : "Description for heart rate zone mode"
     },
     "Settings" : {
 
@@ -279,7 +279,7 @@
 
     },
     "Workout" : {
-
+      "comment" : "Title for active workout view"
     },
     "Workouts" : {
 
@@ -297,7 +297,7 @@
 
     },
     "Zones calculated from your age and resting heart rate" : {
-
+      "comment" : "Description for heart rate zone mode"
     }
   },
   "version" : "1.0"

@@ -16,637 +16,637 @@
       "comment" : "Mobility subtitle line. The placeholder is a distance in metres."
     },
     "American Football" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Apple Watch Exercise Minutes" : {
-
+      "comment" : "Display name for target metric"
     },
     "Archery" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Asleep" : {
-
+      "comment" : "Display name for category value sleep analysis"
     },
     "At Risk" : {
-
+      "comment" : "Display name for heart health monthly summary"
     },
     "Athlete" : {
-
+      "comment" : "Display name for body composition monthly summary"
     },
     "Australian Football" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Automatic" : {
-
+      "comment" : "Display name for heart rate zone calculation mode"
     },
     "Awake" : {
-
+      "comment" : "Display name for category value sleep analysis"
     },
     "Badminton" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Barre" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Baseball" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Basketball" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Beer Glass" : {
-
+      "comment" : "Display name for container shape type"
     },
     "Bike Distance" : {
-
+      "comment" : "Display name for target metric"
     },
     "Bike Duration" : {
-
+      "comment" : "Display name for target metric"
     },
     "Blood pressure at this stage is significantly high, posing a greater risk for heart disease, stroke, and other complications. It often requires medication and lifestyle changes to control." : {
-
+      "comment" : "Description for blood pressure category"
     },
     "Blood pressure in this range is higher than normal but not yet in the high blood pressure range. It suggests that there may be an increased risk of developing hypertension." : {
-
+      "comment" : "Description for blood pressure category"
     },
     "Bowling" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Boxing" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Can" : {
-
+      "comment" : "Display name for container shape type"
     },
     "Cardio Dance" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Cardio Workouts" : {
-
+      "comment" : "Display name for target metric"
     },
     "Climbing" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Coffee Cup" : {
-
+      "comment" : "Display name for container shape type"
     },
     "Concern" : {
-
+      "comment" : "Display name for mobility monthly summary"
     },
     "Cooldown" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Core Sleep" : {
-
+      "comment" : "Display name for category value sleep analysis"
     },
     "Core Training" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Cricket" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Cross Country Skiing" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Cross Training" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Curling" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Current Smoker" : {
-
+      "comment" : "Display name for smoking status"
     },
     "Custom HR" : {
-
+      "comment" : "Display name for heart rate zone calculation mode"
     },
     "Custom Zones" : {
-
+      "comment" : "Display name for heart rate zone calculation mode"
     },
     "Cycling" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Dance" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Dance Inspired Training" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Deep Sleep" : {
-
+      "comment" : "Display name for category value sleep analysis"
     },
     "Dietary Calories" : {
-
+      "comment" : "Display name for target metric"
     },
     "Disc Sports" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Double Support: %@%%" : {
       "comment" : "Mobility subtitle line. The placeholder is a percentage of time spent in double support."
     },
     "Downhill Skiing" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Elevated" : {
-
+      "comment" : "Display name for alcohol risk level\nDisplay name for blood pressure category"
     },
     "Elliptical" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Ended" : {
-
+      "comment" : "Display name for workout session state"
     },
     "Equestrian Sports" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Espresso Cup" : {
-
+      "comment" : "Display name for container shape type"
     },
     "Essential Fat" : {
-
+      "comment" : "Display name for body composition monthly summary"
     },
     "Excellent" : {
-
+      "comment" : "Display name for bowel movement summary\nDisplay name for heart health monthly summary\nDisplay name for mobility monthly summary"
     },
     "Exercise a couple times a week" : {
-
+      "comment" : "Summary for activity level"
     },
     "Exercise almost every day" : {
-
+      "comment" : "Summary for activity level"
     },
     "Exercise Effective" : {
-
+      "comment" : "Subtitle for details"
     },
     "Exercise half the week" : {
-
+      "comment" : "Summary for activity level"
     },
     "Fair" : {
-
+      "comment" : "Display name for bowel movement summary\nDisplay name for heart health monthly summary"
     },
     "Female" : {
-
+      "comment" : "Display name for biological sex"
     },
     "Fencing" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Fiber Intake" : {
-
+      "comment" : "Display name for target metric"
     },
     "Fishing" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Fit" : {
-
+      "comment" : "Display name for body composition monthly summary"
     },
     "Fitness Gaming" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Flexibility" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Follicular Phase" : {
-
+      "comment" : "Display name for menstrual cycle phase"
     },
     "Former Smoker" : {
-
+      "comment" : "Display name for smoking status"
     },
     "Functional Strength Training" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Gain Weight" : {
-
+      "comment" : "Display name for health goal"
     },
     "Glass" : {
-
+      "comment" : "Display name for container shape type"
     },
     "Golf" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Good" : {
-
+      "comment" : "Display name for bowel movement summary\nDisplay name for heart health monthly summary\nDisplay name for mobility monthly summary\nDisplay name for sleep vitals monthly summary"
     },
     "Great" : {
-
+      "comment" : "Display name for sleep vitals monthly summary"
     },
     "Gymnastics" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Hand Cycling" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Handball" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Healthy" : {
-
+      "comment" : "Display name for body composition monthly summary\nDisplay name for heart health monthly summary"
     },
     "Heavy" : {
-
+      "comment" : "Display name for category value vaginal bleeding"
     },
     "High" : {
-
+      "comment" : "Display name for activity level\nDisplay name for body composition monthly summary\nDisplay name for exercise effectiveness monthly summary\nDisplay name for stress monthly summary"
     },
     "High Confidence" : {
-
+      "comment" : "Display name for biological age confidence"
     },
     "High Intensity Interval Training" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "High Risk" : {
-
+      "comment" : "Display name for alcohol risk level"
     },
     "HIIT Workouts" : {
-
+      "comment" : "Display name for target metric"
     },
     "Hiking" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Hockey" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Hunting" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Hypertension Stage 1" : {
-
+      "comment" : "Display name for blood pressure category"
     },
     "Hypertension Stage 2" : {
-
+      "comment" : "Display name for blood pressure category"
     },
     "Hypertensive Crisis" : {
-
+      "comment" : "Display name for blood pressure category"
     },
     "In Bed" : {
-
+      "comment" : "Display name for category value sleep analysis"
     },
     "Individuals in this category have cardiovascular fitness below the median but are not in the lowest fitness category." : {
-
+      "comment" : "Summary for heart health monthly summary"
     },
     "Intense" : {
-
+      "comment" : "Display name for activity level"
     },
     "Intense exercise most days" : {
-
+      "comment" : "Summary for activity level"
     },
     "Jump Rope" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Kickboxing" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Lacrosse" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Light" : {
-
+      "comment" : "Display name for activity level\nDisplay name for category value vaginal bleeding"
     },
     "Limited health data is available. Track more health metrics to get a more accurate biological age." : {
-
+      "comment" : "Description for biological age confidence"
     },
     "Little to no exercise" : {
-
+      "comment" : "Summary for activity level"
     },
     "Lose Weight" : {
-
+      "comment" : "Display name for health goal"
     },
     "Low" : {
-
+      "comment" : "Display name for blood pressure category\nDisplay name for sleep vitals monthly summary"
     },
     "Low blood pressure can be normal for some people, especially if they have no symptoms. However, when blood pressure drops too low, it can cause inadequate blood flow to the organs, leading to symptoms like dizziness, fainting, and in severe cases, shock." : {
-
+      "comment" : "Description for blood pressure category"
     },
     "Low Confidence" : {
-
+      "comment" : "Display name for biological age confidence"
     },
     "Low Risk" : {
-
+      "comment" : "Display name for alcohol risk level"
     },
     "Luteal Phase" : {
-
+      "comment" : "Display name for menstrual cycle phase"
     },
     "Maintain Weight" : {
-
+      "comment" : "Display name for health goal"
     },
     "Male" : {
-
+      "comment" : "Display name for biological sex"
     },
     "Martial Arts" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Meditation Minutes" : {
-
+      "comment" : "Display name for target metric"
     },
     "Medium" : {
-
+      "comment" : "Display name for category value vaginal bleeding"
     },
     "Menstrual Phase" : {
-
+      "comment" : "Display name for menstrual cycle phase"
     },
     "Mild" : {
-
+      "comment" : "Display name for stress monthly summary"
     },
     "Mind and Body" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Minimal" : {
-
+      "comment" : "Display name for exercise effectiveness monthly summary"
     },
     "Mixed Cardio" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Mixed Metabolic Cardio Training" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Mobility & Flexibility" : {
-
+      "comment" : "Display name for target metric"
     },
     "Moderate" : {
-
+      "comment" : "Display name for activity level\nDisplay name for alcohol risk level\nDisplay name for exercise effectiveness monthly summary\nDisplay name for heart health monthly summary\nDisplay name for stress monthly summary"
     },
     "Moderate Confidence" : {
-
+      "comment" : "Display name for biological age confidence"
     },
     "Monitor Health" : {
-
+      "comment" : "Display name for health goal"
     },
     "Mug" : {
-
+      "comment" : "Display name for container shape type"
     },
     "Never Smoked" : {
-
+      "comment" : "Display name for smoking status"
     },
     "No Data" : {
-
+      "comment" : "Subtitle for activity level summary"
     },
     "None" : {
-
+      "comment" : "Display name for category value vaginal bleeding\nDisplay name for target metric"
     },
     "Normal" : {
-
+      "comment" : "Display name for blood pressure category"
     },
     "Not Set" : {
-
+      "comment" : "Display name for smoking status"
     },
     "Not Started" : {
-
+      "comment" : "Display name for workout session state"
     },
     "Optimal" : {
-
+      "comment" : "Display name for heart health monthly summary"
     },
     "Other" : {
-
+      "comment" : "Display name for biological sex\nDisplay name for workout activity type"
     },
     "Ovulation Phase" : {
-
+      "comment" : "Display name for menstrual cycle phase"
     },
     "Paddling" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Paused" : {
-
+      "comment" : "Display name for workout session state"
     },
     "Picklebal" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Pilates" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Play" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Poor" : {
-
+      "comment" : "Display name for bowel movement summary\nDisplay name for heart health monthly summary\nDisplay name for mobility monthly summary\nDisplay name for sleep vitals monthly summary"
     },
     "Prefer not to say" : {
-
+      "comment" : "Display name for biological sex"
     },
     "Preparation and Recovery" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Prepared" : {
-
+      "comment" : "Display name for workout session state"
     },
     "Protein Intake" : {
-
+      "comment" : "Display name for target metric"
     },
     "Racquetball" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Relaxed" : {
-
+      "comment" : "Display name for stress monthly summary"
     },
     "REM Sleep" : {
-
+      "comment" : "Display name for category value sleep analysis"
     },
     "Rowing" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Rugby" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Run" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Running" : {
-
+      "comment" : "Display name for workout session state"
     },
     "Running Distance" : {
-
+      "comment" : "Display name for target metric"
     },
     "Running Duration" : {
-
+      "comment" : "Display name for target metric"
     },
     "Sailing" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Sedentary" : {
-
+      "comment" : "Display name for activity level"
     },
     "Set each zone threshold individually" : {
-
+      "comment" : "Description for heart rate zone calculation mode"
     },
     "Set your max and resting heart rate, zones calculated as percentages" : {
-
+      "comment" : "Description for heart rate zone calculation mode"
     },
     "Shaker" : {
-
+      "comment" : "Display name for container shape type"
     },
     "Shot Glass" : {
-
+      "comment" : "Display name for container shape type"
     },
     "Skating Sports" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Snow Sports" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Snowboarding" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Soccer" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Social Dance" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Softball" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Squash" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Stair Climbing" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Stairs" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Step Training" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Steps" : {
-
+      "comment" : "Display name for target metric"
     },
     "Stopped" : {
-
+      "comment" : "Display name for workout session state"
     },
     "Strength Training" : {
-
+      "comment" : "Display name for target metric"
     },
     "Sufficient" : {
-
+      "comment" : "Display name for exercise effectiveness monthly summary"
     },
     "Surfing Sports" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Swim Bike Run" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Swimming" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Table Tennis" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Tai Chi" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Target Heart Rate Zone 1" : {
-
+      "comment" : "Display name for target metric"
     },
     "Target Heart Rate Zone 2" : {
-
+      "comment" : "Display name for target metric"
     },
     "Target Heart Rate Zone 3" : {
-
+      "comment" : "Display name for target metric"
     },
     "Target Heart Rate Zone 4" : {
-
+      "comment" : "Display name for target metric"
     },
     "Target Heart Rate Zone 5" : {
-
+      "comment" : "Display name for target metric"
     },
     "Tea Cup" : {
-
+      "comment" : "Display name for container shape type"
     },
     "Tennis" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "This is a critical condition where blood pressure is dangerously high, requiring immediate medical attention to prevent severe damage to organs." : {
-
+      "comment" : "Description for blood pressure category"
     },
     "This level indicates poor cardiovascular fitness and is associated with a higher risk of cardiovascular diseases and other health issues." : {
-
+      "comment" : "Summary for heart health monthly summary"
     },
     "This level represents better-than-average cardiovascular fitness and suggests a lower risk of cardiovascular diseases." : {
-
+      "comment" : "Summary for heart health monthly summary"
     },
     "This range is considered optimal and indicates that the heart is functioning well without excessive strain on the blood vessels." : {
-
+      "comment" : "Description for blood pressure category"
     },
     "This stage indicates the beginning of high blood pressure, where there’s increased force on the arteries, potentially leading to health issues if not managed." : {
-
+      "comment" : "Description for blood pressure category"
     },
     "This top level is characterized by superior cardiovascular fitness, often indicating excellent overall health and a lower risk of heart-related conditions." : {
-
+      "comment" : "Summary for heart health monthly summary"
     },
     "Time in Daylight" : {
-
+      "comment" : "Display name for target metric"
     },
     "Track and Field" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Traditional Strength Training" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Transition" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Tumbler" : {
-
+      "comment" : "Display name for container shape type"
     },
     "Underwater Diving" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Unknown" : {
-
+      "comment" : "Display name for biological sex\nDisplay name for body composition monthly summary\nDisplay name for category value sleep analysis\nDisplay name for category value vaginal bleeding\nDisplay name for menstrual cycle phase\nDisplay name for mobility monthly summary\nDisplay name for target metric\nDisplay name for workout session state"
     },
     "Unspecified" : {
-
+      "comment" : "Display name for category value vaginal bleeding"
     },
     "Very Poor" : {
-
+      "comment" : "Short display name for bowel movement summary"
     },
     "Volleyball" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Walk" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Walking + Running Distance" : {
-
+      "comment" : "Display name for target metric"
     },
     "Water Bottle" : {
-
+      "comment" : "Display name for container shape type"
     },
     "Water Fitness" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Water Intake" : {
-
+      "comment" : "Display name for target metric"
     },
     "Water Polo" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Water Sports" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Wheelchair Run Pace" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Wheelchair Walk Pace" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Wine Glass" : {
-
+      "comment" : "Display name for container shape type"
     },
     "Workout Duration" : {
-
+      "comment" : "Display name for target metric"
     },
     "Wrestling" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Yoga" : {
-
+      "comment" : "Display name for workout activity type"
     },
     "Your biological age is based on a moderate amount of health data. Adding more metrics will improve accuracy." : {
-
+      "comment" : "Description for biological age confidence"
     },
     "Your biological age is calculated using most of your available health metrics." : {
-
+      "comment" : "Description for biological age confidence"
     },
     "Zones calculated from your age and resting heart rate from HealthKit" : {
-
+      "comment" : "Description for heart rate zone calculation mode"
     }
   },
   "version" : "1.0"

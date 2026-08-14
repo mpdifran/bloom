@@ -61,13 +61,13 @@
 
     },
     "Choose Food Item" : {
-
+      "comment" : "Display name for log meal configuration intent"
     },
     "Choose Goal" : {
-
+      "comment" : "Display name for goal configuration intent"
     },
     "Choose Saved Meal" : {
-
+      "comment" : "Display name for log meal configuration intent"
     },
     "Choose the time period to display step data for." : {
 
@@ -175,43 +175,43 @@
 
     },
     "Open Barcode Scanner" : {
-
+      "comment" : "Label for action type"
     },
     "Open Blood Pressure Logger" : {
-
+      "comment" : "Label for action type"
     },
     "Open Bloom to Refresh" : {
 
     },
     "Open Bowel Movement Logger" : {
-
+      "comment" : "Label for action type"
     },
     "Open Data Loggers" : {
 
     },
     "Open Food Logger" : {
-
+      "comment" : "Label for action type"
     },
     "Open Health Action" : {
 
     },
     "Open Magic Scanner" : {
-
+      "comment" : "Label for action type"
     },
     "Open Period Logger" : {
-
+      "comment" : "Label for action type"
     },
     "Open the app to load your personalized summary." : {
 
     },
     "Open Voice Logger" : {
-
+      "comment" : "Label for action type"
     },
     "Open Water Logger" : {
-
+      "comment" : "Label for action type"
     },
     "Open Weight Logger" : {
-
+      "comment" : "Label for action type"
     },
     "Opens a health action to log data." : {
 

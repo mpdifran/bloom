@@ -2,142 +2,142 @@
   "sourceLanguage" : "en",
   "strings" : {
     "Activity Level" : {
-
+      "comment" : "Display name for vital model"
     },
     "AMRAP" : {
-
+      "comment" : "Display name for workout set"
     },
     "Automatically complete the reminder when you log a cardio workout." : {
-
+      "comment" : "Description for reminder trigger type"
     },
     "Automatically complete the reminder when you log a HIIT workout." : {
-
+      "comment" : "Description for reminder trigger type"
     },
     "Automatically complete the reminder when you log a strength training workout." : {
-
+      "comment" : "Description for reminder trigger type"
     },
     "Automatically complete the reminder when you log blood pressure." : {
-
+      "comment" : "Description for reminder trigger type"
     },
     "Automatically complete the reminder when you log water intake." : {
-
+      "comment" : "Description for reminder trigger type"
     },
     "Automatically complete the reminder when you log yoga, pilates, or flexibility." : {
-
+      "comment" : "Description for reminder trigger type"
     },
     "Automatically complete the reminder when you log your body weight." : {
-
+      "comment" : "Description for reminder trigger type"
     },
     "Barbell" : {
-
+      "comment" : "Display name for equipment"
     },
     "Batbell" : {
-
+      "comment" : "Display name for equipment"
     },
     "Bike" : {
-
+      "comment" : "Display name for equipment"
     },
     "Body Composition" : {
-
+      "comment" : "Display name for vital model"
     },
     "Bowel Movements" : {
-
+      "comment" : "Display name for vital model"
     },
     "Cardio Fitness" : {
-
+      "comment" : "Display name for vital model"
     },
     "Chin-up Bar" : {
-
+      "comment" : "Display name for equipment"
     },
     "Cool-Down" : {
-
+      "comment" : "Display name for workout set"
     },
     "Cycle Tracking" : {
-
+      "comment" : "Display name for vital model"
     },
     "Dumbbells" : {
-
+      "comment" : "Display name for equipment"
     },
     "Elliptical" : {
-
+      "comment" : "Display name for equipment"
     },
     "EMOM" : {
-
+      "comment" : "Display name for workout set"
     },
     "Exercise Effectiveness" : {
-
+      "comment" : "Display name for vital model"
     },
     "Heart Health" : {
-
+      "comment" : "Display name for vital model"
     },
     "Kettlebell" : {
-
+      "comment" : "Display name for equipment"
     },
     "Lifestyle" : {
-
+      "comment" : "Display name for vital model"
     },
     "Log Blood Pressure" : {
-
+      "comment" : "Display name for reminder trigger type"
     },
     "Log Cardio Workout" : {
-
+      "comment" : "Display name for reminder trigger type"
     },
     "Log Food" : {
-
+      "comment" : "Display name for side effect type"
     },
     "Log HIIT Workout" : {
-
+      "comment" : "Display name for reminder trigger type"
     },
     "Log Mobility/Flexibility" : {
-
+      "comment" : "Display name for reminder trigger type"
     },
     "Log Strength Training" : {
-
+      "comment" : "Display name for reminder trigger type"
     },
     "Log Water" : {
-
+      "comment" : "Display name for reminder trigger type\nDisplay name for side effect type"
     },
     "Log Weight" : {
-
+      "comment" : "Display name for reminder trigger type"
     },
     "Nutrition" : {
-
+      "comment" : "Display name for vital model"
     },
     "Resistance Band" : {
-
+      "comment" : "Display name for equipment"
     },
     "Rowing Machine" : {
-
+      "comment" : "Display name for equipment"
     },
     "Ski Machine" : {
-
+      "comment" : "Display name for equipment"
     },
     "Sleep Quality" : {
-
+      "comment" : "Display name for vital model"
     },
     "Standard" : {
-
+      "comment" : "Display name for workout set"
     },
     "Stationary Bike" : {
-
+      "comment" : "Display name for equipment"
     },
     "Stress Levels" : {
-
+      "comment" : "Display name for vital model"
     },
     "Tabata" : {
-
+      "comment" : "Display name for workout set"
     },
     "Treadmill" : {
-
+      "comment" : "Display name for equipment"
     },
     "Warm-Up" : {
-
+      "comment" : "Display name for workout set"
     },
     "Weighted Vest" : {
-
+      "comment" : "Display name for equipment"
     },
     "Yoga Mat" : {
-
+      "comment" : "Display name for equipment"
     }
   },
   "version" : "1.0"
