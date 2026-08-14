@@ -37,7 +37,7 @@ struct WorkoutExerciseSetCellAMRAP: View {
           ForEach(exercises) { exercise in
             HStack {
               VStack(alignment: .leading) {
-                Text("\(exercise.title)")
+                Text(verbatim: "\(exercise.title)")
                   .font(.title3)
                   .bold()
                 Text(exercise.summary)

@@ -133,7 +133,7 @@ struct ChatBubble_Previews: PreviewProvider {
           Text("I")
         }
         ChatBubble(position: .trailing, showTail: true, foregroundStyle: .white, backgroundStyle: .blue) {
-          Text("🥳")
+          Text(verbatim: "🥳")
         }
         ChatBubble(position: .leading, showTail: true, shouldFill: false, backgroundStyle: .chatGrey) {
           Text("This is a secret direct message, don't tell anyone!")

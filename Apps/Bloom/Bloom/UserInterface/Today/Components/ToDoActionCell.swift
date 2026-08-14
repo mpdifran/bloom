@@ -50,7 +50,7 @@ struct ToDoActionCell: View {
                     HStack(spacing: 2) {
                         if let vitalKind {
                             Text(vitalKind.name)
-                            Text("•")
+                            Text(verbatim: "•")
                         }
                         Text(subtitle)
                         Spacer(minLength: 0)

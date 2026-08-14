@@ -84,7 +84,7 @@ private extension BowelMovementsStoolTypeStatCard {
 
         HStack(spacing: 2) {
           ForEach(1...7, id: \.self) { stoolType in
-            Text("\(stoolType)")
+            Text(verbatim: "\(stoolType)")
               .font(.caption2)
               .foregroundStyle(.secondary)
               .frame(maxWidth: .infinity)

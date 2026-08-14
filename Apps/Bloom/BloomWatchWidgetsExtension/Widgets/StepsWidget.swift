@@ -201,20 +201,20 @@ private struct CircularStepsView: View {
           .lineLimit(1)
           .minimumScaleFactor(0.5)
       } else {
-        Text("--")
+        Text(verbatim: "--")
           .font(.system(.body, design: .rounded, weight: .bold))
           .foregroundStyle(.gray)
           .lineLimit(1)
       }
 
       if let distance = entry.distance {
-        Text("\(distance.format(using: .oneDecimalPlace)) \(entry.distanceUnitString)")
+        Text(verbatim: "\(distance.format(using: .oneDecimalPlace)) \(entry.distanceUnitString)")
           .font(.system(.caption2, design: .rounded))
           .foregroundStyle(.white)
           .lineLimit(1)
           .minimumScaleFactor(0.5)
       } else {
-        Text("-- \(entry.distanceUnitString)")
+        Text(verbatim: "-- \(entry.distanceUnitString)")
           .font(.system(.caption2, design: .rounded))
           .foregroundStyle(.gray)
           .lineLimit(1)
@@ -290,7 +290,7 @@ private struct RectangularStepsView: View {
             if let steps = entry.steps {
               Text(NumberFormatter.noDecimalPlaces.string(from: steps as NSNumber) ?? "\(steps)")
             } else {
-              Text("--")
+              Text(verbatim: "--")
             }
           }
           .font(.system(.headline, design: .rounded, weight: .bold))
@@ -308,13 +308,13 @@ private struct RectangularStepsView: View {
           Spacer()
 
           if let distance = entry.distance {
-            Text("\(distance.format(using: .twoDecimalPlaces)) \(entry.distanceUnitString)")
+            Text(verbatim: "\(distance.format(using: .twoDecimalPlaces)) \(entry.distanceUnitString)")
               .font(.system(.subheadline, design: .rounded, weight: .semibold))
               .foregroundStyle(.white)
               .lineLimit(1)
               .minimumScaleFactor(0.5)
           } else {
-            Text("-- \(entry.distanceUnitString)")
+            Text(verbatim: "-- \(entry.distanceUnitString)")
               .font(.system(.subheadline, design: .rounded, weight: .semibold))
               .foregroundStyle(.gray)
               .lineLimit(1)

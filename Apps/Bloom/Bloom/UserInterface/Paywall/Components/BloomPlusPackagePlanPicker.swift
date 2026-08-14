@@ -62,7 +62,7 @@ struct BloomPlusPackagePlanPicker: View {
             }
           }
 
-          Text("•")
+          Text(verbatim: "•")
             .foregroundStyle(.tint)
 
           Button("Restore Purchases") {

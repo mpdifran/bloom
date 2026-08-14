@@ -306,7 +306,7 @@ private extension SettingsView {
       SettingsSectionContainer {
         SettingsCell("Reminders") {
           HStack {
-            Text("\(reminders.count)")
+            Text(verbatim: "\(reminders.count)")
               .foregroundStyle(.secondary)
             DisclosureIndicator()
           }

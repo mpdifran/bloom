@@ -19,7 +19,7 @@ struct FoodItemLogDatePicker: View {
             showDatePicker.toggle()
         } label: {
             HStack(spacing: 2) {
-                Text("\(nutritionViewModel.date, formatter: DateFormatter.justRelativeDateMedium)")
+                Text(nutritionViewModel.date, formatter: DateFormatter.justRelativeDateMedium)
               Image(systemSymbol: .chevronUpChevronDown)
                     .font(.caption)
             }
@@ -28,7 +28,7 @@ struct FoodItemLogDatePicker: View {
         }
         .popover(isPresented: $showDatePicker) {
             DatePicker(selection: $nutritionViewModel.date, displayedComponents: .date) {
-                Text("\(nutritionViewModel.date, formatter: DateFormatter.justRelativeDateMedium)")
+                Text(nutritionViewModel.date, formatter: DateFormatter.justRelativeDateMedium)
             }
             .datePickerStyle(.graphical)
             .frame(width: 300)

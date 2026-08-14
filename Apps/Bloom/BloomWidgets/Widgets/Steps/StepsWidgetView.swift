@@ -80,7 +80,7 @@ private extension StepsWidgetView {
           if let steps = entry.steps {
             Text(formatStepsCompact(steps))
           } else {
-            Text("--")
+            Text(verbatim: "--")
           }
         }
         .font(stepsFont)
@@ -104,9 +104,9 @@ private extension StepsWidgetView {
             .foregroundStyle(.secondary)
 
           if let distance = entry.distance {
-            Text("\(distance.format(using: .twoDecimalPlaces)) \(entry.distanceUnitString)")
+            Text(verbatim: "\(distance.format(using: .twoDecimalPlaces)) \(entry.distanceUnitString)")
           } else {
-            Text("-- \(entry.distanceUnitString)")
+            Text(verbatim: "-- \(entry.distanceUnitString)")
           }
         }
       }

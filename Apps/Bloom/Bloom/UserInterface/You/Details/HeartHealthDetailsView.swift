@@ -164,7 +164,7 @@ private extension HeartHealthDetailsView {
               AxisGridLine()
               AxisValueLabel {
                 if let hr = value.as(Double.self) {
-                  Text("\(Int(hr))")
+                  Text(verbatim: "\(Int(hr))")
                 }
               }
             }
@@ -298,7 +298,7 @@ private extension HeartHealthDetailsView {
         AxisGridLine()
         AxisValueLabel {
           if let hr = value.as(Double.self) {
-            Text("\(Int(hr))")
+            Text(verbatim: "\(Int(hr))")
           }
         }
       }

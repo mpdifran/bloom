@@ -73,7 +73,7 @@ struct HabitDailyUpdateCell: View {
                 .contentTransition(.numericText(value: viewModel.dailyValue))
                 .foregroundStyle(.tint)
 
-              Text("/ \(habit.displayQuantity)")
+              Text(verbatim: "/ \(habit.displayQuantity)")
                 .foregroundStyle(.secondary)
             }
             .animation(.default, value: viewModel.dailyValue)

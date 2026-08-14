@@ -378,7 +378,7 @@ private extension MenstruationDetailView {
               }
             }
 
-            Text("\(Int(follicular * 100))%")
+            Text(follicular, format: .percent.precision(.fractionLength(0)))
               .font(.headline)
               .foregroundStyle(.mutedPurple)
           }
@@ -404,7 +404,7 @@ private extension MenstruationDetailView {
               }
             }
 
-            Text("\(Int(luteal * 100))%")
+            Text(luteal, format: .percent.precision(.fractionLength(0)))
               .font(.headline)
               .foregroundStyle(.mutedIndigo)
           }
@@ -455,7 +455,7 @@ private extension MenstruationDetailView {
       Divider()
 
       LabeledContent("Total Cycles") {
-        Text("\(menstrualCycles.count)")
+        Text(verbatim: "\(menstrualCycles.count)")
           .foregroundStyle(.mutedPink)
           .bold()
       }
@@ -484,8 +484,8 @@ private extension MenstruationDetailView {
           Group {
             if let predictionDate = summary.nextPredictedPeriodDate {
               VStack(alignment: .trailing) {
-                Text("\(predictionDate, formatter: DateFormatter.monthAndDay)")
-                Text("\(DateFormatter.relativeTimeIntervalDaysFullFromNow(predictionDate))")
+                Text(predictionDate, formatter: DateFormatter.monthAndDay)
+                Text(verbatim: "\(DateFormatter.relativeTimeIntervalDaysFullFromNow(predictionDate))")
                   .font(.caption)
               }
             } else {

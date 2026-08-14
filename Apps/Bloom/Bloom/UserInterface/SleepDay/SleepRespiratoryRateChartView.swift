@@ -45,7 +45,7 @@ struct SleepRespiratoryRateChartView: View {
                     .foregroundStyle(.secondary.opacity(0.3))
                 if let doubleValue = value.as(Double.self) {
                     AxisValueLabel {
-                        Text("\(Int(doubleValue))")
+                        Text(verbatim: "\(Int(doubleValue))")
                             .font(.caption2)
                     }
                 }

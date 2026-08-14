@@ -174,7 +174,7 @@ private extension MonitorCard {
       Text(subtitleText)
 
       if preferences.isSnoozed(for: result.monitorType) {
-        Text("•")
+        Text(verbatim: "•")
         Image(systemSymbol: .bellSlashFill)
           .foregroundStyle(.mutedYellow)
           .font(.caption)

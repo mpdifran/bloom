@@ -75,7 +75,7 @@ private extension LogBloodPressureView {
           .digitalCrownRotation($systolic, from: 60, through: 250, by: 1, sensitivity: .low)
           .foregroundStyle(focusedField == .systolic ? .mutedPink : .secondary)
 
-        Text("/")
+        Text(verbatim: "/")
           .font(.system(size: 28, weight: .bold, design: .rounded))
           .foregroundStyle(.secondary)
 

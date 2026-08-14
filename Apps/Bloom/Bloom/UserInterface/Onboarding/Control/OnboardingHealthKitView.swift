@@ -98,7 +98,7 @@ struct OnboardingHealthKitView: View {
               .frame(minHeight: 50)
           }
 
-          Text("•")
+          Text(verbatim: "•")
             .bold()
             .foregroundStyle(.tint)
 

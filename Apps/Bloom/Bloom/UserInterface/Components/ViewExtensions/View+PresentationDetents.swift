@@ -39,12 +39,12 @@ private extension SelfSizingPresentationDetentModifier {
   PreviewSheetPresent {
     ScrollView {
       VStack {
-        Text("1")
-        Text("2")
-        Text("3")
-        Text("4")
-        Text("5")
-        Text("6")
+        Text(verbatim: "1")
+        Text(verbatim: "2")
+        Text(verbatim: "3")
+        Text(verbatim: "4")
+        Text(verbatim: "5")
+        Text(verbatim: "6")
       }
       .horizontallyCentered()
       .cardContainer()

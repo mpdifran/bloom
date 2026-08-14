@@ -153,7 +153,7 @@ private extension ChatWorkoutSetDetailsDisclosureCell {
           .bold()
           .fontDesign(.rounded)
 
-        Text("\(set.format.name) • \(set.setsDescription)")
+        Text(verbatim: "\(set.format.name) • \(set.setsDescription)")
           .font(.subheadline)
           .fixedSize(horizontal: false, vertical: true)
 

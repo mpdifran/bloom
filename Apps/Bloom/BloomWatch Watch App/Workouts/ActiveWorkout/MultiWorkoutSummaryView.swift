@@ -132,7 +132,7 @@ private extension MultiWorkoutSummaryView {
     if let score = effortScores[segment.id] {
       let category = WorkoutEffortCategory(effortScore: Double(score))
       HStack(spacing: 6) {
-        Text("\(score)")
+        Text(verbatim: "\(score)")
           .font(.caption2)
           .bold()
           .fontDesign(.rounded)

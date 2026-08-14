@@ -36,8 +36,8 @@ struct DismissButton: View {
   PreviewSheetPresent {
     NavigationStack {
       List {
-        Text("1")
-        Text("2")
+        Text(verbatim: "1")
+        Text(verbatim: "2")
       }
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {

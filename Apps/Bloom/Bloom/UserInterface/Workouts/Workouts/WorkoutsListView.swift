@@ -172,7 +172,7 @@ private struct WorkoutSectionHeaderView: View {
 
   var body: some View {
     VStack(alignment: .leading) {
-      Text("\(section.date, formatter: DateFormatter.fullMonthAndYear)")
+      Text(section.date, formatter: DateFormatter.fullMonthAndYear)
         .font(.title)
         .fontDesign(.rounded)
         .bold()

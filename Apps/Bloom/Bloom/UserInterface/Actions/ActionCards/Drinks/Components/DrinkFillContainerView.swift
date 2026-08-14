@@ -33,7 +33,7 @@ struct DrinkFillContainerView: View {
         VStack {
           Spacer()
 
-          Text("\(Int(fillPercentage * 100))%")
+          Text(fillPercentage, format: .percent.precision(.fractionLength(0)))
             .font(.title2)
             .fontWeight(.bold)
             .fontDesign(.rounded)
@@ -142,7 +142,7 @@ struct DrinkFillContainerView: View {
     .frame(width: 150, height: 250)
     .padding()
 
-    Text("\(Int(fillPercentage * 100))%")
+    Text(fillPercentage, format: .percent.precision(.fractionLength(0)))
       .font(.title)
 
     Slider(value: $fillPercentage, in: 0.05...1.0)

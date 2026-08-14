@@ -284,7 +284,7 @@ private extension BowelMovementsDetailView {
         .cornerRadius(4)
         .annotation(position: .trailing) {
           if count > 0 {
-            Text("\(count)")
+            Text(verbatim: "\(count)")
               .font(.caption2)
               .foregroundStyle(.secondary)
           }
@@ -389,7 +389,7 @@ private extension BowelMovementsDetailView {
 
         Spacer(minLength: 0)
 
-        Text("\(lastBowelMovement.date, formatter: DateFormatter.relativeDateMediumTimeShort)")
+        Text(lastBowelMovement.date, formatter: DateFormatter.relativeDateMediumTimeShort)
           .foregroundStyle(.secondary)
           .multilineTextAlignment(.trailing)
       }
@@ -754,7 +754,7 @@ private extension BowelMovementsDetailView {
         .cornerRadius(4)
         .annotation(position: .trailing) {
           if count > 0 {
-            Text("\(count)")
+            Text(verbatim: "\(count)")
               .font(.caption2)
               .foregroundStyle(.secondary)
           }

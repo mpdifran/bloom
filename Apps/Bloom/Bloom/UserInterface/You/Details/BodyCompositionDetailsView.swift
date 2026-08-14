@@ -192,7 +192,7 @@ private extension BodyCompositionDetailsView {
                 .foregroundStyle(.secondary.opacity(0.3))
               if let doubleValue = value.as(Double.self) {
                 AxisValueLabel {
-                  Text("\(doubleValue.format()) \(HKUnit.pound().localizedUnit())")
+                  Text(verbatim: "\(doubleValue.format()) \(HKUnit.pound().localizedUnit())")
                     .font(.caption2)
                 }
               }

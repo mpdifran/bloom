@@ -150,7 +150,7 @@ private extension YearInBloomExerciseEffectivenessCard {
           HStack {
             Image(systemName: workoutType.activityType.systemImage)
               .frame(width: 24)
-            Text("×\(workoutType.count)")
+            Text(verbatim: "×\(workoutType.count)")
             Spacer(minLength: 0)
             Text("\(Int(workoutType.scaledZoneMinutes)) min")
           }

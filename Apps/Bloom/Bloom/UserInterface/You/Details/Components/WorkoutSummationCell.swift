@@ -34,7 +34,7 @@ struct WorkoutSummationCell: View {
       Spacer()
 
       VStack(alignment: .trailing) {
-        Text("\(workoutSummation.totalCalories.format())")
+        Text(verbatim: "\(workoutSummation.totalCalories.format())")
           .font(.title2)
           .bold()
           .fontDesign(.rounded)

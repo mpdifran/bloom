@@ -208,7 +208,7 @@ private extension ExerciseEffectivenessView {
 
           Spacer()
 
-          Text("-")
+          Text(verbatim: "-")
             .bold()
 
           Spacer()
@@ -224,7 +224,7 @@ private extension ExerciseEffectivenessView {
 
           Spacer()
 
-          Text("=")
+          Text(verbatim: "=")
             .bold()
 
           Spacer()

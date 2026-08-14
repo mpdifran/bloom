@@ -36,7 +36,7 @@ private extension ChatDetectedFoodItemCell {
 
       Group {
         if let serving = food.servingName, let servingQuantity = food.servingQuantity {
-          Text("\(serving) (\(servingQuantity.value.format()) \(servingQuantity.unit))")
+          Text(verbatim: "\(serving) (\(servingQuantity.value.format()) \(servingQuantity.unit))")
         }
         Text("\(NumberFormatter.noDecimalPlaces.string(for: foodItemServing.serving) ?? "") servings")
       }
@@ -50,7 +50,7 @@ private extension ChatDetectedFoodItemCell {
   var caloriesView: some View {
     if let calories = food.calories?.value {
       VStack(spacing: 0) {
-        Text("\(calories.format())")
+        Text(verbatim: "\(calories.format())")
           .bold()
           .font(.title2)
           .foregroundStyle(.tint)

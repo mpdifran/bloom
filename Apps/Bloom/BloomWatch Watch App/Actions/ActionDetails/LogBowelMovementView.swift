@@ -75,7 +75,7 @@ private extension LogBowelMovementView {
         .font(.title2)
 
 
-      Text("?")
+      Text(verbatim: "?")
         .font(.caption2)
         .bold()
     }
@@ -102,7 +102,7 @@ private extension LogBowelMovementView {
         .frame(height: 32)
         .padding(.horizontal, .selectedBorderWidth / 2)
 
-      Text("\(type)")
+      Text(verbatim: "\(type)")
         .font(.caption2)
         .foregroundStyle(.black)
         .bold()

@@ -35,7 +35,7 @@ struct FoodCell: View {
 
       Spacer(minLength: 0)
 
-      Text("\(Int(food.calories))")
+      Text(verbatim: "\(Int(food.calories))")
         .font(.caption)
         .foregroundStyle(.secondary)
       + Text(" cal")

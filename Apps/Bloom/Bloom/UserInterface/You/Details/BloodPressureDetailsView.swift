@@ -146,7 +146,7 @@ private extension BloodPressureDetailsView {
           AxisGridLine()
           AxisValueLabel {
             if let bp = value.as(Double.self) {
-              Text("\(Int(bp))")
+              Text(verbatim: "\(Int(bp))")
             }
           }
         }
@@ -206,7 +206,7 @@ private extension BloodPressureDetailsView {
 
         HStack(spacing: 20) {
           VStack {
-            Text("\(Int(bpData.averageSystolic))")
+            Text(verbatim: "\(Int(bpData.averageSystolic))")
               .font(.largeTitle)
               .bold()
               .fontDesign(.rounded)
@@ -216,12 +216,12 @@ private extension BloodPressureDetailsView {
           }
           .frame(maxWidth: .infinity)
 
-          Text("/")
+          Text(verbatim: "/")
             .font(.title)
             .foregroundStyle(.secondary)
 
           VStack {
-            Text("\(Int(bpData.averageDiastolic))")
+            Text(verbatim: "\(Int(bpData.averageDiastolic))")
               .font(.largeTitle)
               .bold()
               .fontDesign(.rounded)

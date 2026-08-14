@@ -129,7 +129,7 @@ private extension EditReminderOccurrenceView {
     LabeledContent("Day") {
       Picker("Day", selection: $selectedDayOfMonth) {
         ForEach(1...31, id: \.self) { day in
-          Text("\(day)")
+          Text(verbatim: "\(day)")
             .tag(day)
         }
       }
@@ -152,7 +152,7 @@ private extension EditReminderOccurrenceView {
     LabeledContent("Day") {
       Picker("Day", selection: $selectedDayOfYear) {
         ForEach(1...31, id: \.self) { day in
-          Text("\(day)").tag(day)
+          Text(verbatim: "\(day)").tag(day)
         }
       }
     }

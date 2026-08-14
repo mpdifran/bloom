@@ -245,7 +245,7 @@ private extension SleepStagesDetailsView {
 
       Spacer()
 
-      Text("\(Int(percentage))%")
+      Text(percentage / 100, format: .percent.precision(.fractionLength(0)))
         .font(.title3)
         .bold()
         .fontDesign(.rounded)
@@ -382,7 +382,7 @@ private extension SleepStagesDetailsView {
                 .font(.caption)
                 .foregroundStyle(.secondary)
             }
-            Text("\(Int(percentage))%")
+            Text(percentage / 100, format: .percent.precision(.fractionLength(0)))
               .font(.largeTitle)
               .bold()
               .fontDesign(.rounded)

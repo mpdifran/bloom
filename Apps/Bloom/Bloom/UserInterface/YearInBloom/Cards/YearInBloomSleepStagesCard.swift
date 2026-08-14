@@ -250,7 +250,7 @@ private extension YearInBloomSleepStagesCard {
             .foregroundStyle(.awakeSleep)
             .font(.title)
           VStack(alignment: .leading, spacing: 0) {
-            Text("\(lowest.score)")
+            Text(verbatim: "\(lowest.score)")
               .font(.title)
             Text("Lowest Score")
               .font(.caption)
@@ -273,7 +273,7 @@ private extension YearInBloomSleepStagesCard {
             .foregroundStyle(highest.isPerfect ? .white : .coreSleep)
             .font(.title)
           VStack(alignment: .leading, spacing: 0) {
-            Text("\(highest.score)")
+            Text(verbatim: "\(highest.score)")
               .font(.title)
             Text("Highest Score")
               .font(.caption)

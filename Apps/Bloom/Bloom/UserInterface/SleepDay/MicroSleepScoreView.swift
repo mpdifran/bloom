@@ -15,10 +15,10 @@ struct MicroSleepScoreView: View {
     HStack(spacing: 4) {
       Image(systemSymbol: .moonStarsFill)
       if let score {
-        Text("\(score)")
+        Text(verbatim: "\(score)")
           .contentTransition(.numericText(value: Double(score)))
       } else {
-        Text("--")
+        Text(verbatim: "--")
       }
     }
     .font(.title3)

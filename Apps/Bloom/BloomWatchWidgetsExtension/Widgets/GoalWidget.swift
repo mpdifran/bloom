@@ -349,7 +349,7 @@ private struct InlineGoalView: View {
       Label("No Goal", systemImage: "target")
     } else {
       Label {
-        Text("\(entry.currentValue.format(using: .noDecimalPlaces)) / \(entry.targetValue.format(using: .noDecimalPlaces)) \(entry.unitString)")
+        Text(verbatim: "\(entry.currentValue.format(using: .noDecimalPlaces)) / \(entry.targetValue.format(using: .noDecimalPlaces)) \(entry.unitString)")
       } icon: {
         Image(systemName: entry.metricSystemImage)
       }

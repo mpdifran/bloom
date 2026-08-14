@@ -28,7 +28,7 @@ struct SaleDebugCell: View {
         .labelsHidden()
       }
 
-      Text("\(formatDate(sale.startDate)) - \(formatDate(sale.endDate))")
+      Text(verbatim: "\(formatDate(sale.startDate)) - \(formatDate(sale.endDate))")
         .font(.caption)
         .foregroundStyle(.secondary)
 

@@ -136,7 +136,7 @@ private extension HRVDetailsView {
           AxisGridLine()
           AxisValueLabel {
             if let hrv = value.as(Double.self) {
-              Text("\(Int(hrv))")
+              Text(verbatim: "\(Int(hrv))")
             }
           }
         }
@@ -159,7 +159,7 @@ private extension HRVDetailsView {
 
         HStack(spacing: 20) {
           VStack {
-            Text("\(Int(sevenDay))")
+            Text(verbatim: "\(Int(sevenDay))")
               .font(.largeTitle)
               .bold()
               .fontDesign(.rounded)
@@ -173,7 +173,7 @@ private extension HRVDetailsView {
             .frame(height: 40)
 
           VStack {
-            Text("\(Int(thirtyDay))")
+            Text(verbatim: "\(Int(thirtyDay))")
               .font(.largeTitle)
               .bold()
               .fontDesign(.rounded)
@@ -294,7 +294,7 @@ private extension HRVDetailsView {
         AxisGridLine()
         AxisValueLabel {
           if let hrv = value.as(Double.self) {
-            Text("\(Int(hrv))")
+            Text(verbatim: "\(Int(hrv))")
           }
         }
       }

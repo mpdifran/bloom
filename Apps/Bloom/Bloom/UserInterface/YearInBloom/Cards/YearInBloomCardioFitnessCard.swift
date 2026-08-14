@@ -103,7 +103,7 @@ private extension YearInBloomCardioFitnessCard {
           .foregroundStyle(.secondary)
         if let doubleValue = value.as(Double.self) {
           AxisValueLabel {
-            Text("\(Int(doubleValue))")
+            Text(verbatim: "\(Int(doubleValue))")
           }
         }
       }

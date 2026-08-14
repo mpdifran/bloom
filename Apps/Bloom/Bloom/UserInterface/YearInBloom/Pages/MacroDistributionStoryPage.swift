@@ -52,9 +52,9 @@ struct MacroDistributionStoryPage: View {
   private var focusSentence: Text {
     // One sentence rather than concatenated pieces: the fragments were untranslatable on their
     // own, and word order differs by language. The styled values interpolate as Text.
-    let protein = Text("\(yearlyProteinPercent)%").foregroundStyle(.protein)
-    let carbs = Text("\(yearlyCarbsPercent)%").foregroundStyle(.carbohydrates)
-    let fat = Text("\(yearlyFatPercent)%").foregroundStyle(.fat)
+    let protein = Text(Double(yearlyProteinPercent) / 100, format: .percent.precision(.fractionLength(0))).foregroundStyle(.protein)
+    let carbs = Text(Double(yearlyCarbsPercent) / 100, format: .percent.precision(.fractionLength(0))).foregroundStyle(.carbohydrates)
+    let fat = Text(Double(yearlyFatPercent) / 100, format: .percent.precision(.fractionLength(0))).foregroundStyle(.fat)
 
     return Text(
       "Your diet averaged \(protein) protein, \(carbs) carbs, \(fat) fat.",
@@ -176,7 +176,7 @@ private extension MacroDistributionStoryPage {
           .foregroundStyle(.secondary)
           .font(.title2)
         VStack(alignment: .leading, spacing: 0) {
-          Text("\(stats.yearTotals.totalDaysLogged)")
+          Text(verbatim: "\(stats.yearTotals.totalDaysLogged)")
             .font(.title2)
             .bold()
           Text("Days Logged")

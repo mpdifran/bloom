@@ -30,7 +30,7 @@ struct MissingMetricCell: View {
 
       Spacer(minLength: 0)
 
-      Text("--")
+      Text(verbatim: "--")
         .font(.headline)
         .fontWeight(.heavy)
         .fontDesign(.rounded)

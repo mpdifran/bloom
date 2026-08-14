@@ -181,7 +181,7 @@ private extension MenstrualCycleStoryPage {
   @ViewBuilder
   func activityOverlay(for month: MonthlyPhaseActivityData) -> some View {
     VStack(alignment: .leading, spacing: 4) {
-      Text("\(monthName(for: month.date))")
+      Text(verbatim: "\(monthName(for: month.date))")
         .font(.caption)
         .bold()
 
@@ -235,7 +235,7 @@ private extension MenstrualCycleStoryPage {
             .font(.title3)
             .bold()
         } else {
-          Text("—")
+          Text(verbatim: "—")
             .font(.title3)
             .bold()
         }
@@ -259,7 +259,7 @@ private extension MenstrualCycleStoryPage {
             .font(.title3)
             .bold()
         } else {
-          Text("—")
+          Text(verbatim: "—")
             .font(.title3)
             .bold()
         }
@@ -283,7 +283,7 @@ private extension MenstrualCycleStoryPage {
             .font(.title3)
             .bold()
         } else {
-          Text("—")
+          Text(verbatim: "—")
             .font(.title3)
             .bold()
         }
@@ -307,7 +307,7 @@ private extension MenstrualCycleStoryPage {
             .font(.title3)
             .bold()
         } else {
-          Text("—")
+          Text(verbatim: "—")
             .font(.title3)
             .bold()
         }

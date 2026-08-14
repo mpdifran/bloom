@@ -30,7 +30,7 @@ struct WatchMissingMetricCell: View {
       Spacer(minLength: 0)
 
       // No data indicator
-      Text("--")
+      Text(verbatim: "--")
         .font(.caption2)
         .fontWeight(.semibold)
         .foregroundStyle(.secondary)

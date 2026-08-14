@@ -119,7 +119,7 @@ struct LogRow: View {
     VStack(alignment: .leading, spacing: 8) {
       // Header with tag and timestamp
       HStack {
-        Text("[\(log.tag.rawValue)]")
+        Text(verbatim: "[\(log.tag.rawValue)]")
           .font(.caption)
           .fontWeight(.semibold)
           .padding(.horizontal, 8)

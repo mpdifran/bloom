@@ -32,7 +32,7 @@ struct MenstruationCalendarView: View {
         }
         .frame(square: 44)
         Spacer()
-        Text("\(referenceDate, formatter: DateFormatter.fullMonthAndYear)")
+        Text(referenceDate, formatter: DateFormatter.fullMonthAndYear)
         Spacer()
         Button {
           referenceDate = Calendar.current.date(byAdding: .month, value: 1, to: referenceDate) ?? .now

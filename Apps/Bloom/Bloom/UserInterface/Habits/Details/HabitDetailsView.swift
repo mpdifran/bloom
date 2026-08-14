@@ -122,7 +122,7 @@ private extension HabitDetailsView {
 
       HStack {
         Text(viewModel.habit.targetMetric.name)
-        Text("•")
+        Text(verbatim: "•")
         Text(currentPeriodLabel)
       }
       .foregroundStyle(.secondary)

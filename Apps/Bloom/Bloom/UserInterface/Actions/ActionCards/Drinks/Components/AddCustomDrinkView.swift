@@ -112,7 +112,7 @@ struct AddCustomDrinkView: View {
 
         Spacer()
 
-        Text("\(Int(hydrationCoefficient * 100))%")
+        Text(hydrationCoefficient, format: .percent.precision(.fractionLength(0)))
           .font(.subheadline)
           .fontWeight(.semibold)
           .foregroundStyle(.tint)

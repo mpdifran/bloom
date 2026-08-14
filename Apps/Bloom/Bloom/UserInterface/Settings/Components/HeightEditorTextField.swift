@@ -74,7 +74,7 @@ private extension HeightEditorTextField {
     HStack {
       Picker("Feet", selection: $heightFeet) {
         ForEach(1 ..< 9) { feet in
-          Text("\(feet)'")
+          Text(verbatim: "\(feet)'")
             .tag(feet)
         }
       }
@@ -84,7 +84,7 @@ private extension HeightEditorTextField {
 
       Picker("Inches", selection: $heightInches) {
         ForEach(0 ..< 12) { inches in
-          Text("\(inches)\"")
+          Text(verbatim: "\(inches)\"")
             .tag(inches)
         }
       }

@@ -104,7 +104,7 @@ struct MetricRangeRowCondensed: View {
           .foregroundStyle(.secondary)
           .frame(width: 40, alignment: .trailing)
       } else {
-        Text("--")
+        Text(verbatim: "--")
           .font(.caption2)
           .foregroundStyle(.tertiary)
           .frame(width: 40, alignment: .trailing)

@@ -115,7 +115,7 @@ private extension WorkoutsStoryPage {
         .foregroundStyle(.tint)
         .font(.title2)
       VStack(alignment: .leading, spacing: 0) {
-        Text("\(stats.yearTotals.totalWorkouts)")
+        Text(verbatim: "\(stats.yearTotals.totalWorkouts)")
           .font(.title3)
           .bold()
         Text("Workouts")
@@ -151,7 +151,7 @@ private extension WorkoutsStoryPage {
         .foregroundStyle(.tint)
         .font(.title2)
       VStack(alignment: .leading, spacing: 0) {
-        Text("\(stats.yearTotals.uniqueWorkoutTypes)")
+        Text(verbatim: "\(stats.yearTotals.uniqueWorkoutTypes)")
           .font(.title3)
           .bold()
         Text("Types")

@@ -140,7 +140,7 @@ private extension AlcoholDetailsView {
       VStack(alignment: .center, spacing: 8) {
         if summary.bingeDays > 0 {
           VStack {
-            Text("\(summary.bingeDays)")
+            Text(verbatim: "\(summary.bingeDays)")
               .font(.system(size: 60, weight: .heavy, design: .rounded))
               .foregroundStyle(summary.riskLevel.color)
               .contentTransition(.numericText(value: Double(summary.bingeDays)))
@@ -151,7 +151,7 @@ private extension AlcoholDetailsView {
         }
         if summary.heavyDays > 0 {
           VStack {
-            Text("\(summary.bingeDays)")
+            Text(verbatim: "\(summary.bingeDays)")
               .font(.system(size: 60, weight: .heavy, design: .rounded))
               .foregroundStyle(summary.riskLevel.color)
               .contentTransition(.numericText(value: Double(summary.bingeDays)))

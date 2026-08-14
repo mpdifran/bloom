@@ -241,7 +241,7 @@ private extension SleepMetricsDetailsView {
               .foregroundStyle(.secondary.opacity(0.3))
             if let hr = value.as(Double.self) {
               AxisValueLabel {
-                Text("\(Int(hr))")
+                Text(verbatim: "\(Int(hr))")
                   .font(.caption2)
               }
             }
@@ -473,7 +473,7 @@ private extension SleepMetricsDetailsView {
               .foregroundStyle(.secondary.opacity(0.3))
             if let rate = value.as(Double.self) {
               AxisValueLabel {
-                Text("\(Int(rate))")
+                Text(verbatim: "\(Int(rate))")
                   .font(.caption2)
               }
             }

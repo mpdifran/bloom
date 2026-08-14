@@ -55,7 +55,7 @@ struct BloomPlusLegalSectionView: View {
         }
         .frame(minHeight: 44)
 
-        Text("•")
+        Text(verbatim: "•")
           .foregroundStyle(.tint)
 
         Button("Terms of Service") {

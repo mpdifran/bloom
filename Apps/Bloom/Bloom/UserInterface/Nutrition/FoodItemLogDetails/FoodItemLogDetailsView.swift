@@ -165,7 +165,7 @@ private extension FoodItemLogDetailsView {
         showDatePicker.toggle()
       } label: {
         HStack(spacing: 2) {
-          Text("\(date, formatter: DateFormatter.justRelativeDateMedium)")
+          Text(date, formatter: DateFormatter.justRelativeDateMedium)
           Image(systemSymbol: .chevronUpChevronDown)
             .font(.caption)
         }
@@ -173,7 +173,7 @@ private extension FoodItemLogDetailsView {
       }
       .popover(isPresented: $showDatePicker) {
         DatePicker(selection: $date, displayedComponents: .date) {
-          Text("\(date, formatter: DateFormatter.justRelativeDateMedium)")
+          Text(date, formatter: DateFormatter.justRelativeDateMedium)
         }
         .datePickerStyle(.graphical)
         .frame(width: 300)

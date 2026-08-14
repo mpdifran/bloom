@@ -22,10 +22,10 @@ struct AddReminderCell: View {
           .fontDesign(.rounded)
       }
       VStack(alignment: .leading) {
-        Text("1")
+        Text(verbatim: "1")
           .font(.title3)
 
-        Text("1")
+        Text(verbatim: "1")
           .font(.subheadline)
       }
       .bold()

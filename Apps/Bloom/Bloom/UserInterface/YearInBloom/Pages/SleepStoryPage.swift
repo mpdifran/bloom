@@ -223,7 +223,7 @@ private extension SleepStoryPage {
             .foregroundStyle(.awakeSleep)
             .font(.title2)
           VStack(alignment: .leading, spacing: 0) {
-            Text("\(lowest.score)")
+            Text(verbatim: "\(lowest.score)")
               .font(.title2)
               .bold()
             Text("Lowest Score")
@@ -243,7 +243,7 @@ private extension SleepStoryPage {
             .foregroundStyle(highest.isPerfect ? .white : .coreSleep)
             .font(.title2)
           VStack(alignment: .leading, spacing: 0) {
-            Text("\(highest.score)")
+            Text(verbatim: "\(highest.score)")
               .font(.title2)
               .bold()
             Text("Highest Score")

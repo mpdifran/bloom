@@ -124,7 +124,7 @@ private extension ProposedHabitCell {
 
       VStack {
         if let previousQuantity = proposedHabit.displayPreviousQuantity, proposedHabit.shouldShowPreviousQuantity {
-          Text("\(previousQuantity)")
+          Text(verbatim: "\(previousQuantity)")
             .font(.caption)
             .foregroundStyle(.secondary)
             .bold()

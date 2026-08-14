@@ -12,11 +12,11 @@ struct TodaysDateView: View {
     TimelineView(.everyMinute) { _ in
       HStack(spacing: 0) {
         VStack(alignment: .leading) {
-          Text("\(DateFormatter.justDayOfWeek.string(from: .now))")
+          Text(verbatim: "\(DateFormatter.justDayOfWeek.string(from: .now))")
             .bold()
             .fontDesign(.rounded)
             .foregroundStyle(.secondary)
-          Text("\(DateFormatter.justDateLong.string(from: .now))")
+          Text(verbatim: "\(DateFormatter.justDateLong.string(from: .now))")
             .font(.title2)
             .fontDesign(.rounded)
             .bold()

@@ -118,7 +118,7 @@ private extension TodayHeroCell {
 
   var todaysDateView: some View {
     TimelineView(.everyMinute) { _ in
-      Text("\(DateFormatter.weekdayFullMonthDayYear.string(from: .now))")
+      Text(verbatim: "\(DateFormatter.weekdayFullMonthDayYear.string(from: .now))")
         .font(.subheadline)
         .fontDesign(.rounded)
         .bold()

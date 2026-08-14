@@ -15,7 +15,7 @@ struct TitleDatePicker: View {
 
     var body: some View {
         HStack {
-            Text("\(date, formatter: DateFormatter.justRelativeDateMedium)")
+            Text(date, formatter: DateFormatter.justRelativeDateMedium)
           Image(systemSymbol: .chevronDown)
                 .font(.caption)
         }
@@ -26,7 +26,7 @@ struct TitleDatePicker: View {
         }
         .popover(isPresented: $showDatePicker) {
             DatePicker(selection: $date, in: ...Date.now, displayedComponents: .date) {
-                Text("\(date, formatter: DateFormatter.justRelativeDateMedium)")
+                Text(date, formatter: DateFormatter.justRelativeDateMedium)
             }
             .datePickerStyle(.graphical)
             .frame(width: 300)

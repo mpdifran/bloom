@@ -229,7 +229,7 @@ private extension ExerciseEffectivenessStoryPage {
         .foregroundStyle(.mutedYellow)
         .font(.title2)
       VStack(alignment: .leading, spacing: 0) {
-        Text("\(starMonthsCount)")
+        Text(verbatim: "\(starMonthsCount)")
           .font(.title3)
           .bold()
         Text("> 600m Months")
@@ -265,7 +265,7 @@ private extension ExerciseEffectivenessStoryPage {
     HStack {
       Image(systemName: workoutType.activityType.systemImage)
         .frame(width: 24)
-      Text("×\(workoutType.count)")
+      Text(verbatim: "×\(workoutType.count)")
       Spacer(minLength: 0)
       Text("\(Int(workoutType.scaledZoneMinutes)) min")
     }

@@ -62,7 +62,7 @@ struct EventCell: View {
         Spacer()
 
         VStack(alignment: .trailing) {
-          Text("\(event.startDate, formatter: DateFormatter.justTimeShort)")
+          Text(event.startDate, formatter: DateFormatter.justTimeShort)
 
           Text("\(DateFormatter.timeIntervalHourMinuteShort.string(from: event.duration) ?? "")")
             .foregroundStyle(.secondary)

@@ -82,7 +82,7 @@ private extension ProposedGoalCell {
 
       VStack {
         if let previousQuantity = proposedGoal.displayPreviousQuantity, proposedGoal.shouldShowPreviousQuantity {
-          Text("\(previousQuantity)")
+          Text(verbatim: "\(previousQuantity)")
             .font(.caption)
             .foregroundStyle(.secondary)
             .bold()

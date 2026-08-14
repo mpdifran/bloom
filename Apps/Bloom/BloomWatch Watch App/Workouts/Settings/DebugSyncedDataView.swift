@@ -76,7 +76,7 @@ private extension DebugSyncedDataView {
           .font(.caption2)
           .foregroundStyle(.secondary)
         ForEach(todayProvider.reminders.prefix(5)) { reminder in
-          Text("- \(reminder.title) (\(reminder.status.rawValue))")
+          Text(verbatim: "- \(reminder.title) (\(reminder.status.rawValue))")
             .font(.caption2)
             .foregroundStyle(.secondary)
         }

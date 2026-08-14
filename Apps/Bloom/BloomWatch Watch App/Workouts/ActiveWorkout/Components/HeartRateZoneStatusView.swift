@@ -131,7 +131,7 @@ private extension HeartRateZoneStatusView {
 
         Text("BPM")
 
-        Text("•")
+        Text(verbatim: "•")
 
         Text("Zone \(currentZone)")
           .contentTransition(.numericText(value: Double(currentZone)))

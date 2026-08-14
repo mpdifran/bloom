@@ -30,7 +30,7 @@ struct WorkoutCell: View {
           Spacer(minLength: 0)
 
           HStack {
-            Text("\(workout.startDate, formatter: DateFormatter.justRelativeDateMedium)")
+            Text(workout.startDate, formatter: DateFormatter.justRelativeDateMedium)
             DisclosureIndicator()
           }
           .font(.caption)

@@ -48,7 +48,7 @@ struct CapsuleRangeChart: View {
 
           Spacer()
 
-          Text("\(value.format())\(unitString)")
+          Text(verbatim: "\(value.format())\(unitString)")
             .font(.caption)
         }
         .bold()
@@ -127,9 +127,9 @@ private struct MinMaxPopupView: View {
         .foregroundStyle(.secondary)
 
       HStack {
-        Text("\(min.format())\(unitString)")
-        Text("-")
-        Text("\(max.format())\(unitString)")
+        Text(verbatim: "\(min.format())\(unitString)")
+        Text(verbatim: "-")
+        Text(verbatim: "\(max.format())\(unitString)")
       }
     }
     .font(.headline)

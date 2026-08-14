@@ -38,7 +38,7 @@ struct OnboardingHealthKitPrivacyCard: View {
             }
             .frame(minHeight: 44)
 
-            Text("•")
+            Text(verbatim: "•")
 
             Link(destination: .emailBloom) {
               Text("Questions? Email Us!")

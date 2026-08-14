@@ -108,7 +108,7 @@ private struct ExerciseCell: View {
   var body: some View {
     HStack {
       VStack(alignment: .leading) {
-        Text("\(exercise.title)")
+        Text(verbatim: "\(exercise.title)")
           .font(showSummary ? .title2 : .title3)
           .bold()
 

@@ -57,7 +57,7 @@ private extension SleepSummaryTodayCell {
             Text(DateFormatter.weekdayFullMonthDayYear.string(from: sleepAnalysis.endDate))
               .font(.title3)
 
-            Text("\(DateFormatter.justTimeShort.string(from: sleepAnalysis.startDate)) - \(DateFormatter.justTimeShort.string(from: sleepAnalysis.endDate))")
+            Text(verbatim: "\(DateFormatter.justTimeShort.string(from: sleepAnalysis.startDate)) - \(DateFormatter.justTimeShort.string(from: sleepAnalysis.endDate))")
               .font(.subheadline)
               .foregroundStyle(.secondary)
           }

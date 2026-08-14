@@ -74,7 +74,7 @@ struct FoodServingView: View {
         Spacer()
 
         VStack {
-          Text("\(calories)")
+          Text(verbatim: "\(calories)")
             .font(.title2)
             .bold()
             .fontDesign(.rounded)
@@ -84,7 +84,7 @@ struct FoodServingView: View {
         }
         Spacer()
 
-        Text("•")
+        Text(verbatim: "•")
 
         Spacer()
 

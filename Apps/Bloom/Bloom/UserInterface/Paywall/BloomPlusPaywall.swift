@@ -270,7 +270,7 @@ private extension BloomPlusPaywall {
             }
         }
 
-        Text("•")
+        Text(verbatim: "•")
           .foregroundStyle(.tint)
 
         Button("View All Plans") {

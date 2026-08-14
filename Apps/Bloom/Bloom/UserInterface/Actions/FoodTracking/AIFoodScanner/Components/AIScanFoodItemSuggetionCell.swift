@@ -65,7 +65,7 @@ private extension AIScanFoodItemSuggetionCell {
         let serving = food.servingName,
         let servingQuantity = food.servingQuantity
       {
-        Text("\(serving) (\(servingQuantity.value.format()) \(servingQuantity.unit))")
+        Text(verbatim: "\(serving) (\(servingQuantity.value.format()) \(servingQuantity.unit))")
           .font(.caption)
       }
     }

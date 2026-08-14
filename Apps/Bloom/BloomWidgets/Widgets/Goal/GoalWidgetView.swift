@@ -31,7 +31,7 @@ struct GoalWidgetView: View {
               .font(.system(size: 18))
               .bold()
               .lineLimit(1)
-            Text("\(entry.targetValue.format(using: .oneDecimalPlace)) \(entry.targetUnit)")
+            Text(verbatim: "\(entry.targetValue.format(using: .oneDecimalPlace)) \(entry.targetUnit)")
               .font(.system(size: 12))
               .foregroundStyle(.secondary)
               .lineLimit(1)

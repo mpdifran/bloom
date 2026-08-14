@@ -61,10 +61,10 @@ struct PillRangeChart: View {
                 .opacity(isWithinRange ? 0 : 1)
               Spacer()
               HStack {
-                Text("\(minValue.format())\(unitString)")
+                Text(verbatim: "\(minValue.format())\(unitString)")
                   .foregroundStyle(value > minValue ? .white : .primary)
                 Spacer()
-                Text("\(maxValue.format())\(unitString)")
+                Text(verbatim: "\(maxValue.format())\(unitString)")
                   .foregroundStyle(value > minValue && value > maxValue ? .white : .primary)
               }
               Spacer()

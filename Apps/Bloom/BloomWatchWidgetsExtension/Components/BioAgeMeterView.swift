@@ -67,7 +67,7 @@ struct BioAgeMeterView: View {
             Text(bioAge.format(using: .oneDecimalPlace))
               .font(.system(size: size * 0.25, weight: .heavy, design: .rounded))
           } else {
-            Text("--")
+            Text(verbatim: "--")
               .font(.system(size: size * 0.25, weight: .heavy, design: .rounded))
               .foregroundStyle(.secondary)
           }

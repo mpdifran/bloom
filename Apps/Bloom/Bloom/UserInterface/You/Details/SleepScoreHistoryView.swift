@@ -138,7 +138,7 @@ private extension SleepScoreHistoryView {
               .foregroundStyle(.secondary.opacity(0.3))
             if let score = value.as(Int.self) {
               AxisValueLabel {
-                Text("\(score)")
+                Text(verbatim: "\(score)")
                   .font(.caption2)
               }
             }

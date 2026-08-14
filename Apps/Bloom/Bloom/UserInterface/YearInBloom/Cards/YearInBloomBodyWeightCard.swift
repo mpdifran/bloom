@@ -95,7 +95,7 @@ private extension YearInBloomBodyWeightCard {
         .bold()
 
       if let weight = month.averageWeight {
-        Text("\(formattedWeight(weight)) \(unitString)")
+        Text(verbatim: "\(formattedWeight(weight)) \(unitString)")
           .font(.caption2)
       }
     }

@@ -47,12 +47,12 @@ private extension YearInBloomMenstrualCycleCard {
 
       if let shortest = stats.shortestCycle, let longest = stats.longestCycle {
         HStack(alignment: .firstTextBaseline, spacing: 4) {
-          Text("\(shortest.duration)")
+          Text(verbatim: "\(shortest.duration)")
             .font(.title2)
             .bold()
-          Text("-")
+          Text(verbatim: "-")
             .font(.title3)
-          Text("\(longest.duration)")
+          Text(verbatim: "\(longest.duration)")
             .font(.title2)
             .bold()
           Text("days")
@@ -61,7 +61,7 @@ private extension YearInBloomMenstrualCycleCard {
         }
         .fontDesign(.rounded)
       } else {
-        Text("—")
+        Text(verbatim: "—")
           .font(.title2)
           .bold()
       }
@@ -86,7 +86,7 @@ private extension YearInBloomMenstrualCycleCard {
           Text(String(format: "%.1f", increase))
             .font(.title2)
             .bold()
-          Text("%")
+          Text(verbatim: "%")
             .font(.caption)
             .foregroundStyle(.white.opacity(0.8))
         }
@@ -95,7 +95,7 @@ private extension YearInBloomMenstrualCycleCard {
           .font(.caption2)
           .foregroundStyle(.white.opacity(0.6))
       } else {
-        Text("—")
+        Text(verbatim: "—")
           .font(.title2)
           .bold()
       }
@@ -129,7 +129,7 @@ private extension YearInBloomMenstrualCycleCard {
           .font(.caption2)
           .foregroundStyle(.white.opacity(0.6))
       } else {
-        Text("—")
+        Text(verbatim: "—")
           .font(.title2)
           .bold()
       }
@@ -154,7 +154,7 @@ private extension YearInBloomMenstrualCycleCard {
           Text(String(format: "%.1f", change))
             .font(.title2)
             .bold()
-          Text("%")
+          Text(verbatim: "%")
             .font(.caption)
             .foregroundStyle(.white.opacity(0.8))
         }
@@ -163,7 +163,7 @@ private extension YearInBloomMenstrualCycleCard {
           .font(.caption2)
           .foregroundStyle(.white.opacity(0.6))
       } else {
-        Text("—")
+        Text(verbatim: "—")
           .font(.title2)
           .bold()
       }

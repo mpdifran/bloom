@@ -42,7 +42,7 @@ struct NutrientIssueReportCell: View {
           .opacity(amount < 0 ? 0 : 1)
           .overlay {
             if amount < 0 {
-              Text("--")
+              Text(verbatim: "--")
                 .bold()
                 .foregroundStyle(.secondary)
                 .zStackAlignment(.trailing)

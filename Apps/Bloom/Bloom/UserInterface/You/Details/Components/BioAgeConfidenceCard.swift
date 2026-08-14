@@ -34,7 +34,7 @@ struct BioAgeConfidenceCard: View {
 
       Spacer(minLength: 0)
 
-      Text("\(result.availableWeightPercentage.format(using: .noDecimalPlaces))%")
+      Text(verbatim: "\(result.availableWeightPercentage.format(using: .noDecimalPlaces))%")
         .font(.title)
         .fontDesign(.rounded)
     }

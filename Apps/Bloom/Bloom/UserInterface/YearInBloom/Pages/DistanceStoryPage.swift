@@ -136,7 +136,7 @@ private extension DistanceStoryPage {
         if let steps = stats.yearTotals.totalSteps {
           Text(steps.formatted())
         } else {
-          Text("—-")
+          Text(verbatim: "—-")
         }
       }
       .lineLimit(1)

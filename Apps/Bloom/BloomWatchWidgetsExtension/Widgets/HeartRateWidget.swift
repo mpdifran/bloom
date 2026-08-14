@@ -148,14 +148,14 @@ private struct CircularHeartRateView: View {
         HStack(spacing: 0) {
           Image(systemName: "heart.fill")
             .font(.system(size: 10))
-          Text("\(latest)")
+          Text(verbatim: "\(latest)")
             .lineLimit(1)
             .minimumScaleFactor(0.5)
         }
       } minimumValueLabel: {
-        Text("\(minHR)")
+        Text(verbatim: "\(minHR)")
       } maximumValueLabel: {
-        Text("\(maxHR)")
+        Text(verbatim: "\(maxHR)")
       }
       .gaugeStyle(.accessoryCircular)
       .tint(gradient)
@@ -164,7 +164,7 @@ private struct CircularHeartRateView: View {
       Gauge(value: 0) {
         Image(systemName: "heart.fill")
       } currentValueLabel: {
-        Text("--")
+        Text(verbatim: "--")
       }
       .gaugeStyle(.accessoryCircular)
       .tint(gradient)
@@ -189,7 +189,7 @@ private struct CornerHeartRateView: View {
         Image(systemName: "heart.fill")
           .foregroundStyle(.mutedRed)
           .font(.system(size: 10))
-        Text("\(latest)")
+        Text(verbatim: "\(latest)")
           .foregroundStyle(.white)
           .font(.system(size: 40))
           .bold()
@@ -202,11 +202,11 @@ private struct CornerHeartRateView: View {
         Gauge(value: Double(latest), in: Double(minHR)...Double(maxHR)) {
           Image(systemName: "heart.fill")
         } currentValueLabel: {
-          Text("\(latest)")
+          Text(verbatim: "\(latest)")
         } minimumValueLabel: {
-          Text("\(minHR)")
+          Text(verbatim: "\(minHR)")
         } maximumValueLabel: {
-          Text("\(maxHR)")
+          Text(verbatim: "\(maxHR)")
         }
         .tint(gradient)
       }
@@ -215,7 +215,7 @@ private struct CornerHeartRateView: View {
         Image(systemName: "heart.fill")
           .foregroundStyle(.gray)
           .font(.system(size: 10))
-        Text("--")
+        Text(verbatim: "--")
           .foregroundStyle(.gray)
           .font(.system(size: 40))
           .bold()

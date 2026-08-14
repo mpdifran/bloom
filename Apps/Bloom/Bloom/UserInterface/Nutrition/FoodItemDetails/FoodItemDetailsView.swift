@@ -174,7 +174,7 @@ private extension FoodItemDetailsView {
       VStack(alignment: .leading) {
         Group {
           if let brandName = foodItem.brandName {
-            Text(brandName) + Text(" ") + Text(foodItem.name)
+            Text(brandName) + Text(verbatim: " ") + Text(foodItem.name)
           } else {
             Text(foodItem.name)
           }
@@ -235,7 +235,7 @@ private extension FoodItemDetailsView {
         showDatePicker.toggle()
       } label: {
         HStack(spacing: 2) {
-          Text("\(date, formatter: DateFormatter.justRelativeDateMedium)")
+          Text(date, formatter: DateFormatter.justRelativeDateMedium)
           Image(systemSymbol: .chevronUpChevronDown)
             .font(.caption)
         }
@@ -243,7 +243,7 @@ private extension FoodItemDetailsView {
       }
       .popover(isPresented: $showDatePicker) {
         DatePicker(selection: $date, displayedComponents: .date) {
-          Text("\(date, formatter: DateFormatter.justRelativeDateMedium)")
+          Text(date, formatter: DateFormatter.justRelativeDateMedium)
         }
         .datePickerStyle(.graphical)
         .frame(width: 300)

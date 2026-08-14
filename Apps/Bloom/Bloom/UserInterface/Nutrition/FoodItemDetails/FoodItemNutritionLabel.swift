@@ -298,7 +298,7 @@ private extension FoodItemNutritionLabel {
           Text(scaled.hkQuantity.displayString(for: preferredUnit, formatter: .threeDecimalPlaces))
             .font(.body)
         } else {
-          Text("--")
+          Text(verbatim: "--")
             .font(.body)
             .foregroundStyle(.secondary)
         }

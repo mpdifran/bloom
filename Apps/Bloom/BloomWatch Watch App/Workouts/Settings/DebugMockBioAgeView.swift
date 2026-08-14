@@ -55,11 +55,11 @@ private extension DebugMockBioAgeView {
       )
 
       HStack {
-        Text("-12")
+        Text(verbatim: "-12")
           .font(.caption2)
           .foregroundStyle(.secondary)
         Spacer()
-        Text("+12")
+        Text(verbatim: "+12")
           .font(.caption2)
           .foregroundStyle(.secondary)
       }

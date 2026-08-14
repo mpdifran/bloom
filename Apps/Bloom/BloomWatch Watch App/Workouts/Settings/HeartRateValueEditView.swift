@@ -18,7 +18,7 @@ struct HeartRateValueEditView: View {
 
   var body: some View {
     VStack(spacing: 16) {
-      Text("\(Int(localValue))")
+      Text(verbatim: "\(Int(localValue))")
         .font(.system(size: 48, weight: .bold, design: .rounded))
         .monospacedDigit()
         .foregroundStyle(.mutedPink)
