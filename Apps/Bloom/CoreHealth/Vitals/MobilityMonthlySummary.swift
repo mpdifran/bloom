@@ -127,9 +127,21 @@ public extension MobilityMonthlySummary {
   }
 
   var subtitle: String {
-    let doubleSupport = "Double Support: \(String(format: "%.0fString(localized: ", doubleSupportTimePercent * 100))%", bundle: Bundle.coreHealth)
-    let sixMinuteWalk = "6 Min Walk: \(String(format: "%.0fString(localized: ", sixMinuteWalkDistance))m", bundle: Bundle.coreHealth)
-    return [doubleSupport, sixMinuteWalk].joined(separator: String(localized: "\n", bundle: Bundle.coreHealth))
+    let doubleSupportValue = String(format: "%.0f", doubleSupportTimePercent * 100)
+    let sixMinuteWalkValue = String(format: "%.0f", sixMinuteWalkDistance)
+
+    let doubleSupport = String(
+      localized: "Double Support: \(doubleSupportValue)%",
+      bundle: Bundle.coreHealth,
+      comment: "Mobility subtitle line. The placeholder is a percentage of time spent in double support."
+    )
+    let sixMinuteWalk = String(
+      localized: "6 Min Walk: \(sixMinuteWalkValue)m",
+      bundle: Bundle.coreHealth,
+      comment: "Mobility subtitle line. The placeholder is a distance in metres."
+    )
+
+    return [doubleSupport, sixMinuteWalk].joined(separator: "\n")
   }
 
   var status: Status {

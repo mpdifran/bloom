@@ -199,7 +199,14 @@ public extension ActivityLevelSummary {
 
     guard basal > 1 else { return String(localized: "No Data", bundle: Bundle.coreHealth) }
 
-    return "\(String(format: "%.0f", basal)) Cal Basal\n\(String(format: "%.0fString(localized: ", active)) Cal Active", bundle: Bundle.coreHealth)
+    let basalValue = String(format: "%.0f", basal)
+    let activeValue = String(format: "%.0f", active)
+
+    return String(
+      localized: "\(basalValue) Cal Basal\n\(activeValue) Cal Active",
+      bundle: Bundle.coreHealth,
+      comment: "Activity level subtitle. Placeholders are basal and active calorie amounts."
+    )
   }
 }
 
