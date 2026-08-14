@@ -1,7 +1,304 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "" : {
 
+    },
+    " cal" : {
+
+    },
+    "--" : {
+
+    },
+    "?" : {
+
+    },
+    "/" : {
+
+    },
+    "%@ Cal" : {
+
+    },
+    "%lld" : {
+
+    },
+    "%lld bpm" : {
+
+    },
+    "%lld of %lld metrics" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld of %2$lld metrics"
+          }
+        }
+      }
+    },
+    "%lld workouts" : {
+
+    },
+    "%lld Zone Min" : {
+
+    },
+    "%lld%% ABV" : {
+
+    },
+    "•" : {
+
+    },
+    "< 5 min" : {
+
+    },
+    "> 10 min" : {
+
+    },
+    "5-10 min" : {
+
+    },
+    "Actual: %lld" : {
+
+    },
+    "Add Starred Workout" : {
+
+    },
+    "Age" : {
+
+    },
+    "Areas for Improvement" : {
+
+    },
+    "Automatic" : {
+
+    },
+    "Bio Age" : {
+
+    },
+    "Bio Age History" : {
+
+    },
+    "Blood Pressure" : {
+
+    },
+    "Bowel Movement" : {
+
+    },
+    "bpm" : {
+
+    },
+    "BPM" : {
+
+    },
+    "cals" : {
+
+    },
+    "Clear" : {
+
+    },
+    "Coming Soon" : {
+
+    },
+    "Container" : {
+
+    },
+    "Custom Heart Rate" : {
+
+    },
+    "Custom HR" : {
+
+    },
+    "Custom Zones" : {
+
+    },
+    "Date" : {
+
+    },
+    "Details" : {
+
+    },
+    "Diastolic" : {
+
+    },
+    "Done" : {
+
+    },
+    "Duration" : {
+
+    },
+    "Effort" : {
+
+    },
+    "End" : {
+
+    },
+    "Filter" : {
+
+    },
+    "GO!" : {
+
+    },
+    "Heart Rate" : {
+
+    },
+    "HR Zones" : {
+
+    },
+    "Log" : {
+
+    },
+    "Log Drink" : {
+
+    },
+    "Log Food" : {
+
+    },
+    "Log Period" : {
+
+    },
+    "Meal" : {
+
+    },
+    "mmHg" : {
+
+    },
+    "Mode" : {
+
+    },
+    "Monitors" : {
+
+    },
+    "New Workout" : {
+
+    },
+    "No Data" : {
+
+    },
+    "No Effect" : {
+
+    },
+    "No Heart Zones Set" : {
+
+    },
+    "No Reminders" : {
+
+    },
+    "No results" : {
+
+    },
+    "Not enough data" : {
+
+    },
+    "Open Bloom on iPhone" : {
+
+    },
+    "Pause" : {
+
+    },
+    "Period tracking requires access to Health data. Please enable it in the Health app on your iPhone." : {
+
+    },
+    "Positive Factors" : {
+
+    },
+    "Rate Effort" : {
+
+    },
+    "Reminders" : {
+
+    },
+    "Results" : {
+
+    },
+    "Resume" : {
+
+    },
+    "Save" : {
+
+    },
+    "Saved" : {
+
+    },
+    "Saving Workout" : {
+
+    },
+    "Search" : {
+
+    },
+    "servings" : {
+
+    },
+    "Set each zone threshold individually" : {
+
+    },
+    "Set your max and resting HR, zones calculated automatically" : {
+
+    },
+    "Settings" : {
+
+    },
+    "Star" : {
+
+    },
+    "Starred" : {
+
+    },
+    "Starred Workouts" : {
+
+    },
+    "Summary" : {
+
+    },
+    "Switching..." : {
+
+    },
+    "Systolic" : {
+
+    },
+    "Today's Advice" : {
+
+    },
+    "Type" : {
+
+    },
+    "Un-Star" : {
+
+    },
+    "Updated %@" : {
+
+    },
+    "Voice Log" : {
+
+    },
+    "Warming Up" : {
+
+    },
+    "Weight" : {
+
+    },
+    "What did you eat?" : {
+
+    },
+    "Workout" : {
+
+    },
+    "Workouts" : {
+
+    },
+    "You have no reminders for today." : {
+
+    },
+    "Zone %lld" : {
+
+    },
+    "Zone Thresholds" : {
+
+    },
+    "Zones" : {
+
+    },
+    "Zones calculated from your age and resting heart rate" : {
+
+    }
   },
   "version" : "1.0"
 }

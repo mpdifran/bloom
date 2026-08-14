@@ -1,7 +1,320 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "--" : {
 
+    },
+    "-- %@" : {
+
+    },
+    "%@" : {
+
+    },
+    "%@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@"
+          }
+        }
+      }
+    },
+    "%@ • %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ • %2$@"
+          }
+        }
+      }
+    },
+    "Action" : {
+
+    },
+    "Action Type" : {
+
+    },
+    "Actions" : {
+
+    },
+    "Activity Level" : {
+
+    },
+    "Automatic (based on time)" : {
+
+    },
+    "Automatic (Time-based)" : {
+
+    },
+    "Body Composition" : {
+
+    },
+    "Bowel Movements" : {
+
+    },
+    "Breakfast" : {
+
+    },
+    "Bud's Summary" : {
+
+    },
+    "Choose Food Item" : {
+
+    },
+    "Choose Goal" : {
+
+    },
+    "Choose Saved Meal" : {
+
+    },
+    "Choose the time period to display step data for." : {
+
+    },
+    "Choose which goal to display in the widget." : {
+
+    },
+    "Choose which health action to perform." : {
+
+    },
+    "Choose which health actions to display and their order." : {
+
+    },
+    "Configure which insight to display in the widget." : {
+
+    },
+    "Configure which meal to log with the widget." : {
+
+    },
+    "Cycle Tracking" : {
+
+    },
+    "Daily" : {
+
+    },
+    "Daily Insights" : {
+
+    },
+    "Dinner" : {
+
+    },
+    "Display Mode" : {
+
+    },
+    "Error" : {
+
+    },
+    "Exercise Effectiveness" : {
+
+    },
+    "Food Item" : {
+
+    },
+    "Food Items" : {
+
+    },
+    "Food?" : {
+
+    },
+    "Get Bloom Plus Today!" : {
+
+    },
+    "Get personalized insights on what’s boosting (or bumming out) your health. It’s like x-ray vision for your wellness." : {
+
+    },
+    "Goal" : {
+
+    },
+    "Goal Widget Configuration" : {
+
+    },
+    "Goals" : {
+
+    },
+    "Health Action" : {
+
+    },
+    "Health Action Configuration" : {
+
+    },
+    "Health Insights" : {
+
+    },
+    "Heart Health" : {
+
+    },
+    "How many servings?" : {
+
+    },
+    "Log Actions Configuration" : {
+
+    },
+    "Log Data" : {
+
+    },
+    "Log Meal" : {
+
+    },
+    "Log Meal Configuration" : {
+
+    },
+    "Logs a meal with one or more food items." : {
+
+    },
+    "Lunch" : {
+
+    },
+    "Meal" : {
+
+    },
+    "Monthly" : {
+
+    },
+    "Nutrition" : {
+
+    },
+    "Open Barcode Scanner" : {
+
+    },
+    "Open Blood Pressure Logger" : {
+
+    },
+    "Open Bloom to Refresh" : {
+
+    },
+    "Open Bowel Movement Logger" : {
+
+    },
+    "Open Data Loggers" : {
+
+    },
+    "Open Food Logger" : {
+
+    },
+    "Open Health Action" : {
+
+    },
+    "Open Magic Scanner" : {
+
+    },
+    "Open Period Logger" : {
+
+    },
+    "Open the app to load your personalized summary." : {
+
+    },
+    "Open Voice Logger" : {
+
+    },
+    "Open Water Logger" : {
+
+    },
+    "Open Weight Logger" : {
+
+    },
+    "Opens a health action to log data." : {
+
+    },
+    "Opens a specific vital to view your health data." : {
+
+    },
+    "Please select at least one food item to log" : {
+
+    },
+    "Quick access to health data logging actions." : {
+
+    },
+    "Quickly log a meal with one or more food items." : {
+
+    },
+    "Quickly log personal data." : {
+
+    },
+    "Saved Meal" : {
+
+    },
+    "See Bud's daily summary of your health." : {
+
+    },
+    "Servings" : {
+
+    },
+    "Single Food Item" : {
+
+    },
+    "Sleep Quality" : {
+
+    },
+    "Slot" : {
+
+    },
+    "Snack" : {
+
+    },
+    "Steps" : {
+
+    },
+    "Steps Widget Configuration" : {
+
+    },
+    "Stress Levels" : {
+
+    },
+    "Time Period" : {
+
+    },
+    "Today Insight Configuration" : {
+
+    },
+    "Today's Advice" : {
+
+    },
+    "Tonight's Sleep" : {
+
+    },
+    "Track your goal completion visually over time." : {
+
+    },
+    "Track your steps and walking distance." : {
+
+    },
+    "Unable to load insights. Please open the app." : {
+
+    },
+    "Value" : {
+
+    },
+    "View personalized health insights that automatically cycle throughout the day." : {
+
+    },
+    "View Vital" : {
+
+    },
+    "View your personalized today's advice or tonight's sleep recommendations." : {
+
+    },
+    "Vital" : {
+
+    },
+    "Weekly" : {
+
+    },
+    "Which food item?" : {
+
+    },
+    "Which meal?" : {
+
+    },
+    "Whoops, looks like I made a mistake. Please open Bloom to try again." : {
+
+    },
+    "Widget Type" : {
+
+    },
+    "Yearly" : {
+
+    }
   },
   "version" : "1.0"
 }

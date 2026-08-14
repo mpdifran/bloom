@@ -1,7 +1,125 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "" : {
 
+    },
+    "--" : {
+
+    },
+    "-- %@" : {
+
+    },
+    "%@" : {
+
+    },
+    "%@ / %@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ / %2$@ %3$@"
+          }
+        }
+      }
+    },
+    "%@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@"
+          }
+        }
+      }
+    },
+    "%@ yrs" : {
+
+    },
+    "%lld" : {
+
+    },
+    "Action" : {
+
+    },
+    "Actions" : {
+
+    },
+    "Actions Widget" : {
+
+    },
+    "Bio Age" : {
+
+    },
+    "Biological Age" : {
+
+    },
+    "Choose which action to open." : {
+
+    },
+    "Choose which goal to display." : {
+
+    },
+    "Complete Reminder" : {
+
+    },
+    "Goal" : {
+
+    },
+    "Goal Widget" : {
+
+    },
+    "Heart Rate" : {
+
+    },
+    "Marks a reminder as completed." : {
+
+    },
+    "No Goal" : {
+
+    },
+    "No Reminders" : {
+
+    },
+    "Occurrence ID" : {
+
+    },
+    "Quickly open actions or a specific action." : {
+
+    },
+    "Quickly open your workouts." : {
+
+    },
+    "Reminder" : {
+
+    },
+    "Reminder ID" : {
+
+    },
+    "See your biological age at a glance." : {
+
+    },
+    "See your next upcoming reminder." : {
+
+    },
+    "Slot" : {
+
+    },
+    "Steps" : {
+
+    },
+    "Track your goal progress at a glance." : {
+
+    },
+    "View today's steps and distance." : {
+
+    },
+    "View your latest heart rate with today's range." : {
+
+    },
+    "Workouts" : {
+
+    }
   },
   "version" : "1.0"
 }

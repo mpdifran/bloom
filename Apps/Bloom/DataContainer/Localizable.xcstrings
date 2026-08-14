@@ -1,7 +1,144 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Activity Level" : {
 
+    },
+    "AMRAP" : {
+
+    },
+    "Automatically complete the reminder when you log a cardio workout." : {
+
+    },
+    "Automatically complete the reminder when you log a HIIT workout." : {
+
+    },
+    "Automatically complete the reminder when you log a strength training workout." : {
+
+    },
+    "Automatically complete the reminder when you log blood pressure." : {
+
+    },
+    "Automatically complete the reminder when you log water intake." : {
+
+    },
+    "Automatically complete the reminder when you log yoga, pilates, or flexibility." : {
+
+    },
+    "Automatically complete the reminder when you log your body weight." : {
+
+    },
+    "Barbell" : {
+
+    },
+    "Batbell" : {
+
+    },
+    "Bike" : {
+
+    },
+    "Body Composition" : {
+
+    },
+    "Bowel Movements" : {
+
+    },
+    "Cardio Fitness" : {
+
+    },
+    "Chin-up Bar" : {
+
+    },
+    "Cool-Down" : {
+
+    },
+    "Cycle Tracking" : {
+
+    },
+    "Dumbbells" : {
+
+    },
+    "Elliptical" : {
+
+    },
+    "EMOM" : {
+
+    },
+    "Exercise Effectiveness" : {
+
+    },
+    "Heart Health" : {
+
+    },
+    "Kettlebell" : {
+
+    },
+    "Lifestyle" : {
+
+    },
+    "Log Blood Pressure" : {
+
+    },
+    "Log Cardio Workout" : {
+
+    },
+    "Log Food" : {
+
+    },
+    "Log HIIT Workout" : {
+
+    },
+    "Log Mobility/Flexibility" : {
+
+    },
+    "Log Strength Training" : {
+
+    },
+    "Log Water" : {
+
+    },
+    "Log Weight" : {
+
+    },
+    "Nutrition" : {
+
+    },
+    "Resistance Band" : {
+
+    },
+    "Rowing Machine" : {
+
+    },
+    "Ski Machine" : {
+
+    },
+    "Sleep Quality" : {
+
+    },
+    "Standard" : {
+
+    },
+    "Stationary Bike" : {
+
+    },
+    "Stress Levels" : {
+
+    },
+    "Tabata" : {
+
+    },
+    "Treadmill" : {
+
+    },
+    "Warm-Up" : {
+
+    },
+    "Weighted Vest" : {
+
+    },
+    "Yoga Mat" : {
+
+    }
   },
   "version" : "1.0"
 }

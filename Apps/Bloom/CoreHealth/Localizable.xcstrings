@@ -1,7 +1,653 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%@ Cal Basal\n%@ Cal Active" : {
+      "comment" : "Activity level subtitle. Placeholders are basal and active calorie amounts.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ Cal Basal\n%2$@ Cal Active"
+          }
+        }
+      }
+    },
+    "6 Min Walk: %@m" : {
+      "comment" : "Mobility subtitle line. The placeholder is a distance in metres."
+    },
+    "American Football" : {
 
+    },
+    "Apple Watch Exercise Minutes" : {
+
+    },
+    "Archery" : {
+
+    },
+    "Asleep" : {
+
+    },
+    "At Risk" : {
+
+    },
+    "Athlete" : {
+
+    },
+    "Australian Football" : {
+
+    },
+    "Automatic" : {
+
+    },
+    "Awake" : {
+
+    },
+    "Badminton" : {
+
+    },
+    "Barre" : {
+
+    },
+    "Baseball" : {
+
+    },
+    "Basketball" : {
+
+    },
+    "Beer Glass" : {
+
+    },
+    "Bike Distance" : {
+
+    },
+    "Bike Duration" : {
+
+    },
+    "Blood pressure at this stage is significantly high, posing a greater risk for heart disease, stroke, and other complications. It often requires medication and lifestyle changes to control." : {
+
+    },
+    "Blood pressure in this range is higher than normal but not yet in the high blood pressure range. It suggests that there may be an increased risk of developing hypertension." : {
+
+    },
+    "Bowling" : {
+
+    },
+    "Boxing" : {
+
+    },
+    "Can" : {
+
+    },
+    "Cardio Dance" : {
+
+    },
+    "Cardio Workouts" : {
+
+    },
+    "Climbing" : {
+
+    },
+    "Coffee Cup" : {
+
+    },
+    "Concern" : {
+
+    },
+    "Cooldown" : {
+
+    },
+    "Core Sleep" : {
+
+    },
+    "Core Training" : {
+
+    },
+    "Cricket" : {
+
+    },
+    "Cross Country Skiing" : {
+
+    },
+    "Cross Training" : {
+
+    },
+    "Curling" : {
+
+    },
+    "Current Smoker" : {
+
+    },
+    "Custom HR" : {
+
+    },
+    "Custom Zones" : {
+
+    },
+    "Cycling" : {
+
+    },
+    "Dance" : {
+
+    },
+    "Dance Inspired Training" : {
+
+    },
+    "Deep Sleep" : {
+
+    },
+    "Dietary Calories" : {
+
+    },
+    "Disc Sports" : {
+
+    },
+    "Double Support: %@%%" : {
+      "comment" : "Mobility subtitle line. The placeholder is a percentage of time spent in double support."
+    },
+    "Downhill Skiing" : {
+
+    },
+    "Elevated" : {
+
+    },
+    "Elliptical" : {
+
+    },
+    "Ended" : {
+
+    },
+    "Equestrian Sports" : {
+
+    },
+    "Espresso Cup" : {
+
+    },
+    "Essential Fat" : {
+
+    },
+    "Excellent" : {
+
+    },
+    "Exercise a couple times a week" : {
+
+    },
+    "Exercise almost every day" : {
+
+    },
+    "Exercise Effective" : {
+
+    },
+    "Exercise half the week" : {
+
+    },
+    "Fair" : {
+
+    },
+    "Female" : {
+
+    },
+    "Fencing" : {
+
+    },
+    "Fiber Intake" : {
+
+    },
+    "Fishing" : {
+
+    },
+    "Fit" : {
+
+    },
+    "Fitness Gaming" : {
+
+    },
+    "Flexibility" : {
+
+    },
+    "Follicular Phase" : {
+
+    },
+    "Former Smoker" : {
+
+    },
+    "Functional Strength Training" : {
+
+    },
+    "Gain Weight" : {
+
+    },
+    "Glass" : {
+
+    },
+    "Golf" : {
+
+    },
+    "Good" : {
+
+    },
+    "Great" : {
+
+    },
+    "Gymnastics" : {
+
+    },
+    "Hand Cycling" : {
+
+    },
+    "Handball" : {
+
+    },
+    "Healthy" : {
+
+    },
+    "Heavy" : {
+
+    },
+    "High" : {
+
+    },
+    "High Confidence" : {
+
+    },
+    "High Intensity Interval Training" : {
+
+    },
+    "High Risk" : {
+
+    },
+    "HIIT Workouts" : {
+
+    },
+    "Hiking" : {
+
+    },
+    "Hockey" : {
+
+    },
+    "Hunting" : {
+
+    },
+    "Hypertension Stage 1" : {
+
+    },
+    "Hypertension Stage 2" : {
+
+    },
+    "Hypertensive Crisis" : {
+
+    },
+    "In Bed" : {
+
+    },
+    "Individuals in this category have cardiovascular fitness below the median but are not in the lowest fitness category." : {
+
+    },
+    "Intense" : {
+
+    },
+    "Intense exercise most days" : {
+
+    },
+    "Jump Rope" : {
+
+    },
+    "Kickboxing" : {
+
+    },
+    "Lacrosse" : {
+
+    },
+    "Light" : {
+
+    },
+    "Limited health data is available. Track more health metrics to get a more accurate biological age." : {
+
+    },
+    "Little to no exercise" : {
+
+    },
+    "Lose Weight" : {
+
+    },
+    "Low" : {
+
+    },
+    "Low blood pressure can be normal for some people, especially if they have no symptoms. However, when blood pressure drops too low, it can cause inadequate blood flow to the organs, leading to symptoms like dizziness, fainting, and in severe cases, shock." : {
+
+    },
+    "Low Confidence" : {
+
+    },
+    "Low Risk" : {
+
+    },
+    "Luteal Phase" : {
+
+    },
+    "Maintain Weight" : {
+
+    },
+    "Male" : {
+
+    },
+    "Martial Arts" : {
+
+    },
+    "Meditation Minutes" : {
+
+    },
+    "Medium" : {
+
+    },
+    "Menstrual Phase" : {
+
+    },
+    "Mild" : {
+
+    },
+    "Mind and Body" : {
+
+    },
+    "Minimal" : {
+
+    },
+    "Mixed Cardio" : {
+
+    },
+    "Mixed Metabolic Cardio Training" : {
+
+    },
+    "Mobility & Flexibility" : {
+
+    },
+    "Moderate" : {
+
+    },
+    "Moderate Confidence" : {
+
+    },
+    "Monitor Health" : {
+
+    },
+    "Mug" : {
+
+    },
+    "Never Smoked" : {
+
+    },
+    "No Data" : {
+
+    },
+    "None" : {
+
+    },
+    "Normal" : {
+
+    },
+    "Not Set" : {
+
+    },
+    "Not Started" : {
+
+    },
+    "Optimal" : {
+
+    },
+    "Other" : {
+
+    },
+    "Ovulation Phase" : {
+
+    },
+    "Paddling" : {
+
+    },
+    "Paused" : {
+
+    },
+    "Picklebal" : {
+
+    },
+    "Pilates" : {
+
+    },
+    "Play" : {
+
+    },
+    "Poor" : {
+
+    },
+    "Prefer not to say" : {
+
+    },
+    "Preparation and Recovery" : {
+
+    },
+    "Prepared" : {
+
+    },
+    "Protein Intake" : {
+
+    },
+    "Racquetball" : {
+
+    },
+    "Relaxed" : {
+
+    },
+    "REM Sleep" : {
+
+    },
+    "Rowing" : {
+
+    },
+    "Rugby" : {
+
+    },
+    "Run" : {
+
+    },
+    "Running" : {
+
+    },
+    "Running Distance" : {
+
+    },
+    "Running Duration" : {
+
+    },
+    "Sailing" : {
+
+    },
+    "Sedentary" : {
+
+    },
+    "Set each zone threshold individually" : {
+
+    },
+    "Set your max and resting heart rate, zones calculated as percentages" : {
+
+    },
+    "Shaker" : {
+
+    },
+    "Shot Glass" : {
+
+    },
+    "Skating Sports" : {
+
+    },
+    "Snow Sports" : {
+
+    },
+    "Snowboarding" : {
+
+    },
+    "Soccer" : {
+
+    },
+    "Social Dance" : {
+
+    },
+    "Softball" : {
+
+    },
+    "Squash" : {
+
+    },
+    "Stair Climbing" : {
+
+    },
+    "Stairs" : {
+
+    },
+    "Step Training" : {
+
+    },
+    "Steps" : {
+
+    },
+    "Stopped" : {
+
+    },
+    "Strength Training" : {
+
+    },
+    "Sufficient" : {
+
+    },
+    "Surfing Sports" : {
+
+    },
+    "Swim Bike Run" : {
+
+    },
+    "Swimming" : {
+
+    },
+    "Table Tennis" : {
+
+    },
+    "Tai Chi" : {
+
+    },
+    "Target Heart Rate Zone 1" : {
+
+    },
+    "Target Heart Rate Zone 2" : {
+
+    },
+    "Target Heart Rate Zone 3" : {
+
+    },
+    "Target Heart Rate Zone 4" : {
+
+    },
+    "Target Heart Rate Zone 5" : {
+
+    },
+    "Tea Cup" : {
+
+    },
+    "Tennis" : {
+
+    },
+    "This is a critical condition where blood pressure is dangerously high, requiring immediate medical attention to prevent severe damage to organs." : {
+
+    },
+    "This level indicates poor cardiovascular fitness and is associated with a higher risk of cardiovascular diseases and other health issues." : {
+
+    },
+    "This level represents better-than-average cardiovascular fitness and suggests a lower risk of cardiovascular diseases." : {
+
+    },
+    "This range is considered optimal and indicates that the heart is functioning well without excessive strain on the blood vessels." : {
+
+    },
+    "This stage indicates the beginning of high blood pressure, where there’s increased force on the arteries, potentially leading to health issues if not managed." : {
+
+    },
+    "This top level is characterized by superior cardiovascular fitness, often indicating excellent overall health and a lower risk of heart-related conditions." : {
+
+    },
+    "Time in Daylight" : {
+
+    },
+    "Track and Field" : {
+
+    },
+    "Traditional Strength Training" : {
+
+    },
+    "Transition" : {
+
+    },
+    "Tumbler" : {
+
+    },
+    "Underwater Diving" : {
+
+    },
+    "Unknown" : {
+
+    },
+    "Unspecified" : {
+
+    },
+    "Very Poor" : {
+
+    },
+    "Volleyball" : {
+
+    },
+    "Walk" : {
+
+    },
+    "Walking + Running Distance" : {
+
+    },
+    "Water Bottle" : {
+
+    },
+    "Water Fitness" : {
+
+    },
+    "Water Intake" : {
+
+    },
+    "Water Polo" : {
+
+    },
+    "Water Sports" : {
+
+    },
+    "Wheelchair Run Pace" : {
+
+    },
+    "Wheelchair Walk Pace" : {
+
+    },
+    "Wine Glass" : {
+
+    },
+    "Workout Duration" : {
+
+    },
+    "Wrestling" : {
+
+    },
+    "Yoga" : {
+
+    },
+    "Your biological age is based on a moderate amount of health data. Adding more metrics will improve accuracy." : {
+
+    },
+    "Your biological age is calculated using most of your available health metrics." : {
+
+    },
+    "Zones calculated from your age and resting heart rate from HealthKit" : {
+
+    }
   },
   "version" : "1.0"
 }

@@ -1,7 +1,3781 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "" : {
 
+    },
+    " " : {
+
+    },
+    " %@" : {
+
+    },
+    " • " : {
+
+    },
+    " and burned " : {
+
+    },
+    " Cals" : {
+
+    },
+    " carbs, " : {
+
+    },
+    " fat." : {
+
+    },
+    " for your age!" : {
+
+    },
+    " long." : {
+
+    },
+    " mL/kg/min." : {
+
+    },
+    " of sleep per night." : {
+
+    },
+    " protein, " : {
+
+    },
+    " Source" : {
+
+    },
+    " this year!" : {
+
+    },
+    " this year." : {
+
+    },
+    " while working out this year." : {
+
+    },
+    " zone minutes this year!" : {
+
+    },
+    "-" : {
+
+    },
+    "--" : {
+
+    },
+    "-12 (younger)" : {
+
+    },
+    "—" : {
+
+    },
+    "—-" : {
+
+    },
+    ". " : {
+
+    },
+    "[%@]" : {
+
+    },
+    "**Benefits of quitting:**" : {
+
+    },
+    "**Binge drinking** is consuming:" : {
+
+    },
+    "**Low-risk drinking** is defined as:" : {
+
+    },
+    "/" : {
+
+    },
+    "/ %@" : {
+
+    },
+    "/ %@ min" : {
+
+    },
+    "%" : {
+
+    },
+    "%.0f" : {
+
+    },
+    "%.1f" : {
+
+    },
+    "%@" : {
+
+    },
+    "%@ - %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ - %2$@"
+          }
+        }
+      }
+    },
+    "%@ (%@ %@)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ (%2$@ %3$@)"
+          }
+        }
+      }
+    },
+    "%@ / %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ / %2$@"
+          }
+        }
+      }
+    },
+    "%@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@"
+          }
+        }
+      }
+    },
+    "%@ • %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ • %2$@"
+          }
+        }
+      }
+    },
+    "%@ Average" : {
+
+    },
+    "%@ bpm" : {
+
+    },
+    "%@ cals" : {
+
+    },
+    "%@ Cals • %@ g Protein •  %@ g Carbs • %@ g Fats" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ Cals • %2$@ g Protein •  %3$@ g Carbs • %4$@ g Fats"
+          }
+        }
+      }
+    },
+    "%@ g" : {
+
+    },
+    "%@ Goal" : {
+
+    },
+    "%@ min" : {
+
+    },
+    "%@ mm" : {
+
+    },
+    "%@ servings" : {
+
+    },
+    "%@ zone minutes" : {
+
+    },
+    "%@%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@%2$@"
+          }
+        }
+      }
+    },
+    "%@%@ bpm" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@%2$@ bpm"
+          }
+        }
+      }
+    },
+    "%@%@%%" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@%2$@%%"
+          }
+        }
+      }
+    },
+    "%@%%" : {
+
+    },
+    "%lld" : {
+
+    },
+    "%lld %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld %2$@"
+          }
+        }
+      }
+    },
+    "%lld bpm" : {
+
+    },
+    "%lld days" : {
+
+    },
+    "%lld finding(s)" : {
+
+    },
+    "%lld items" : {
+
+    },
+    "%lld mg" : {
+
+    },
+    "%lld min" : {
+
+    },
+    "%lld ms" : {
+
+    },
+    "%lld of %lld metrics considered" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld of %2$lld metrics considered"
+          }
+        }
+      }
+    },
+    "%lld selected" : {
+
+    },
+    "%lld-%lld days" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld-%2$lld days"
+          }
+        }
+      }
+    },
+    "%lld–%lld days" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld–%2$lld days"
+          }
+        }
+      }
+    },
+    "%lld'" : {
+
+    },
+    "%lld\"" : {
+
+    },
+    "%lld%%" : {
+
+    },
+    "%lld%% complete" : {
+
+    },
+    "%lld%% OFF" : {
+
+    },
+    "%lldd" : {
+
+    },
+    "%lldg" : {
+
+    },
+    "%lldm" : {
+
+    },
+    "•" : {
+
+    },
+    "• 4 or more drinks within a few hours" : {
+
+    },
+    "• 5 or more drinks within a few hours" : {
+
+    },
+    "• No more than 3 drinks on any single day" : {
+
+    },
+    "• No more than 4 drinks on any single day" : {
+
+    },
+    "• No more than 7 drinks per week" : {
+
+    },
+    "• No more than 14 drinks per week" : {
+
+    },
+    "• Only visible to you, stored on your device" : {
+
+    },
+    "• Secured by %@ Apple" : {
+
+    },
+    "• Shared with Bud anonymously and never tied to your identity" : {
+
+    },
+    "• Within 1 year: Heart disease risk halves" : {
+
+    },
+    "• Within 1-9 months: Coughing decreases" : {
+
+    },
+    "• Within 2-12 weeks: Circulation improves" : {
+
+    },
+    "• Within 5-15 years: Stroke risk equals non-smoker" : {
+
+    },
+    "• Within 12 hours: Carbon monoxide levels normalize" : {
+
+    },
+    "• Within 20 minutes: Heart rate drops" : {
+
+    },
+    "• You can change permissions anytime in Settings" : {
+
+    },
+    "© 2025 Lotus Labs Inc. All Rights Reserved." : {
+
+    },
+    "+" : {
+
+    },
+    "+ %lld mg caffeine" : {
+
+    },
+    "+%@" : {
+
+    },
+    "+12 (older)" : {
+
+    },
+    "±%lld min variation" : {
+
+    },
+    "×%lld" : {
+
+    },
+    "< 8 Hours" : {
+
+    },
+    "=" : {
+
+    },
+    "> 72 Hours" : {
+
+    },
+    "> 600m Months" : {
+
+    },
+    "≈ %@ %@ hydration" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "≈ %1$@ %2$@ hydration"
+          }
+        }
+      }
+    },
+    "0" : {
+
+    },
+    "0 years" : {
+
+    },
+    "1" : {
+
+    },
+    "1 Day" : {
+
+    },
+    "1 Day Before" : {
+
+    },
+    "1 Month" : {
+
+    },
+    "1 Week" : {
+
+    },
+    "1 Year Younger!" : {
+
+    },
+    "4 Days After" : {
+
+    },
+    "4 Days Before" : {
+
+    },
+    "7 day avg" : {
+
+    },
+    "7 day avg reserve" : {
+
+    },
+    "7-Day Avg" : {
+
+    },
+    "7-Day Range" : {
+
+    },
+    "7-Day Ranges" : {
+
+    },
+    "7D" : {
+
+    },
+    "8-24 Hours" : {
+
+    },
+    "15 – 45 min" : {
+
+    },
+    "24-48 Hours" : {
+
+    },
+    "30-Day Avg" : {
+
+    },
+    "30-Day Ranges" : {
+
+    },
+    "30D" : {
+
+    },
+    "45+ min" : {
+
+    },
+    "48-72 Hours" : {
+
+    },
+    "75% OFF" : {
+
+    },
+    "A poor sleep can have a negative effect on your stress level for the following day. Try to get enough sleep each night to help keep your stress levels low." : {
+
+    },
+    "About Recovery Monitoring" : {
+
+    },
+    "About Sleep Monitoring" : {
+
+    },
+    "About Smoking & Health" : {
+
+    },
+    "About Workout Load Monitoring" : {
+
+    },
+    "Access Granted" : {
+
+    },
+    "According to your data, you're a %lld year old %@. Does that look right?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "According to your data, you're a %1$lld year old %2$@. Does that look right?"
+          }
+        }
+      }
+    },
+    "Achievements" : {
+
+    },
+    "Achievements are earned by reaching health milestones. Keep using Bloom and they'll start appearing here!" : {
+
+    },
+    "Action" : {
+
+    },
+    "Action Type" : {
+
+    },
+    "Actions" : {
+
+    },
+    "Activity" : {
+
+    },
+    "activity level" : {
+
+    },
+    "Activity Level" : {
+
+    },
+    "Actual Age" : {
+
+    },
+    "Actual: %lld" : {
+
+    },
+    "Add" : {
+
+    },
+    "Add a goal" : {
+
+    },
+    "Add a Meal" : {
+
+    },
+    "Add Container" : {
+
+    },
+    "Add Custom Drink" : {
+
+    },
+    "Add Drink" : {
+
+    },
+    "Add extra details about your meal." : {
+
+    },
+    "Add Food" : {
+
+    },
+    "Add Glass Size" : {
+
+    },
+    "Add Goals" : {
+
+    },
+    "Add New Food" : {
+
+    },
+    "Add Reminder" : {
+
+    },
+    "Add Side Effect" : {
+
+    },
+    "Additional Details (optional)" : {
+
+    },
+    "Adds up to +8 years to your bio age" : {
+
+    },
+    "Age" : {
+
+    },
+    "Age Range" : {
+
+    },
+    "Age: %lld" : {
+
+    },
+    "AI insights into your monitor results. Monitor calculations run entirely on-device." : {
+
+    },
+    "Alcohol" : {
+
+    },
+    "Alcohol by Volume (ABV)" : {
+
+    },
+    "Alert" : {
+
+    },
+    "All" : {
+
+    },
+    "All Bowel Movements" : {
+
+    },
+    "All calculations are done on your device" : {
+
+    },
+    "All Data" : {
+
+    },
+    "All Day" : {
+
+    },
+    "All Workouts" : {
+
+    },
+    "All Zones" : {
+
+    },
+    "Allow Access" : {
+
+    },
+    "Allow access in order to filter your calendars here." : {
+
+    },
+    "Allow Access to Workouts" : {
+
+    },
+    "Allow access to your calendar to display events here." : {
+
+    },
+    "Allow access to your location in order to see local weather." : {
+
+    },
+    "Allow Calendar Access" : {
+
+    },
+    "Allow Location Access" : {
+
+    },
+    "Always Show on Foreground" : {
+
+    },
+    "Amount" : {
+
+    },
+    "Amount (%@)" : {
+
+    },
+    "AMRAP" : {
+
+    },
+    "Analysis data has been copied to your clipboard." : {
+
+    },
+    "Analyze Storage" : {
+
+    },
+    "Analyzes each day in the range to find state changes and notification triggers." : {
+
+    },
+    "Analyzing Storage..." : {
+
+    },
+    "Analyzing your personal data..." : {
+
+    },
+    "Analyzing..." : {
+
+    },
+    "App Store" : {
+
+    },
+    "Apply" : {
+
+    },
+    "Are you ready to get started?" : {
+
+    },
+    "At least 3 bowel movements are needed to analyze regularity patterns." : {
+
+    },
+    "Attention" : {
+
+    },
+    "Audience: %@ (You: %@)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Audience: %1$@ (You: %2$@)"
+          }
+        }
+      }
+    },
+    "Automatic (based on time)" : {
+
+    },
+    "Automatic (Time-based)" : {
+
+    },
+    "Average" : {
+
+    },
+    "Average Activity Level" : {
+
+    },
+    "Average Cycle" : {
+
+    },
+    "Average HRV" : {
+
+    },
+    "Average Period" : {
+
+    },
+    "Avg Carbs" : {
+
+    },
+    "Avg Duration" : {
+
+    },
+    "Avg Fat" : {
+
+    },
+    "Avg HRV" : {
+
+    },
+    "Avg Period" : {
+
+    },
+    "Avg Protein" : {
+
+    },
+    "Avg: %@" : {
+
+    },
+    "Awake" : {
+
+    },
+    "Awake: %@" : {
+
+    },
+    "Awesome!" : {
+
+    },
+    "Barcode Scan" : {
+
+    },
+    "Baseline" : {
+
+    },
+    "Baseline: %@" : {
+
+    },
+    "Bedtime" : {
+
+    },
+    "Bedtime & Duration" : {
+
+    },
+    "Bedtime: %@" : {
+
+    },
+    "Best Day" : {
+
+    },
+    "Best Streak" : {
+
+    },
+    "bike distance" : {
+
+    },
+    "bike duration" : {
+
+    },
+    "biking distance" : {
+
+    },
+    "biking duration" : {
+
+    },
+    "Binge drinking day%@" : {
+
+    },
+    "Bio Age History" : {
+
+    },
+    "Bio Age Impact" : {
+
+    },
+    "Bio Age: %@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Bio Age: %1$@ %2$@"
+          }
+        }
+      }
+    },
+    "Bio Age: %lld" : {
+
+    },
+    "Biological Age" : {
+
+    },
+    "Biological Age Records" : {
+
+    },
+    "Biological age records will appear here after calculations." : {
+
+    },
+    "Birth Month (Optional)" : {
+
+    },
+    "Birth Year" : {
+
+    },
+    "Blood Pressure" : {
+
+    },
+    "Blood pressure is recorded as two numbers: systolic (pressure when heart beats) over diastolic (pressure between beats). Normal blood pressure is below 120/80 mmHg." : {
+
+    },
+    "Blood pressure readings can be added manually in the Health app or synced from a compatible blood pressure monitor." : {
+
+    },
+    "Bloom" : {
+
+    },
+    "Bloom estimates your true biological age from your health habits. Spoiler: it might be younger than you think." : {
+
+    },
+    "Bloom Health" : {
+
+    },
+    "Bloom is not a substitute for professional medical advice. Always consult your physician first." : {
+
+    },
+    "Bloom learns your baseline for stress, recovery, and sleep, then alerts you when something's off. It can even detect early signs of illness before you feel it." : {
+
+    },
+    "Bloom learns your baselines for stress, recovery, and sleep, then alerts you when something's off." : {
+
+    },
+    "Bloom Plus Yearly" : {
+
+    },
+    "Bloom requires permission to take photos." : {
+
+    },
+    "Bloom uses the Personal Data categories you turn on to formulate personalized responses to your questions about health and wellness, and to generate personalized insights." : {
+
+    },
+    "Bloom uses your personal data from Apple Health together with AI to create general wellness insights. These insights are for educational purposes only and are not medical advice.\n\nAlways consult a qualified healthcare professional before making medical decisions." : {
+
+    },
+    "Blueberry" : {
+
+    },
+    "Body Composition" : {
+
+    },
+    "Body Fat Percentage" : {
+
+    },
+    "body weight" : {
+
+    },
+    "Body Weight" : {
+
+    },
+    "Bottom" : {
+
+    },
+    "bowel movements" : {
+
+    },
+    "Bowel Movements" : {
+
+    },
+    "bpm" : {
+
+    },
+    "BPM" : {
+
+    },
+    "Branded" : {
+
+    },
+    "Breakfast" : {
+
+    },
+    "Bright" : {
+
+    },
+    "Bristol Stool Type" : {
+
+    },
+    "Bristol Stool Type %lld" : {
+
+    },
+    "Bucket" : {
+
+    },
+    "Bud can’t help right now" : {
+
+    },
+    "Bud is an AI-powered health assistant. Responses are AI-generated and not medical advice." : {
+
+    },
+    "Bud will remember key information about you when you share it." : {
+
+    },
+    "Bud's Insight" : {
+
+    },
+    "Bud's Memory" : {
+
+    },
+    "BURNOUT" : {
+
+    },
+    "Cadence" : {
+
+    },
+    "Caffeine per 250mL" : {
+
+    },
+    "cal" : {
+
+    },
+    "Cal" : {
+
+    },
+    "Calculate Biological Age" : {
+
+    },
+    "Calculated %@" : {
+
+    },
+    "Calculating your Year in Bloom..." : {
+
+    },
+    "Calculating..." : {
+
+    },
+    "Calendars" : {
+
+    },
+    "caloric intake" : {
+
+    },
+    "Calories" : {
+
+    },
+    "Cals" : {
+
+    },
+    "CALS" : {
+
+    },
+    "Camera" : {
+
+    },
+    "Can do!" : {
+
+    },
+    "Cancel" : {
+
+    },
+    "Carbs" : {
+
+    },
+    "cardio duration" : {
+
+    },
+    "Cardio Fitness" : {
+
+    },
+    "cardio workouts" : {
+
+    },
+    "Category" : {
+
+    },
+    "Celebrate when you hit your goals" : {
+
+    },
+    "Celebration" : {
+
+    },
+    "CHANGE" : {
+
+    },
+    "Change Habit" : {
+
+    },
+    "Change Meal" : {
+
+    },
+    "Change Value" : {
+
+    },
+    "Change Vital" : {
+
+    },
+    "Chat with Bud" : {
+
+    },
+    "Chat with Bud about your health and wellness." : {
+
+    },
+    "Choose %@ type" : {
+
+    },
+    "Choose container" : {
+
+    },
+    "Choose Food Item" : {
+
+    },
+    "Choose Goal" : {
+
+    },
+    "Choose Saved Meal" : {
+
+    },
+    "Choose the time period to display step data for." : {
+
+    },
+    "Choose What You Want Bloom To Use" : {
+
+    },
+    "Choose which goal to display in the widget." : {
+
+    },
+    "Choose which health action to perform." : {
+
+    },
+    "Choose which health actions to display and their order." : {
+
+    },
+    "Claim Promo" : {
+
+    },
+    "Clear All Logs" : {
+
+    },
+    "Clear Last Viewed Date" : {
+
+    },
+    "Color" : {
+
+    },
+    "Color Palette" : {
+
+    },
+    "Compare Product: %@" : {
+
+    },
+    "Complete" : {
+
+    },
+    "Completed • %@" : {
+
+    },
+    "Confidence: %lld%%" : {
+
+    },
+    "Configure food item" : {
+
+    },
+    "Configure water amount" : {
+
+    },
+    "Configure which insight to display in the widget." : {
+
+    },
+    "Configure which meal to log with the widget." : {
+
+    },
+    "Consistent this week" : {
+
+    },
+    "Container Name" : {
+
+    },
+    "Contains Alcohol" : {
+
+    },
+    "Contains Caffeine" : {
+
+    },
+    "Continue" : {
+
+    },
+    "Contributor" : {
+
+    },
+    "Control" : {
+
+    },
+    "Conversation Name" : {
+
+    },
+    "Cool-Down" : {
+
+    },
+    "Copied to Clipboard" : {
+
+    },
+    "Copies detailed metric data for each day to clipboard in Markdown format for debugging." : {
+
+    },
+    "Copy" : {
+
+    },
+    "Copy Analysis Data" : {
+
+    },
+    "Copy Log" : {
+
+    },
+    "Copy Monitor Insight Context to Clipboard" : {
+
+    },
+    "Copy Today Insight Data to Clipboard" : {
+
+    },
+    "Core" : {
+
+    },
+    "Core: %@" : {
+
+    },
+    "Count" : {
+
+    },
+    "Country" : {
+
+    },
+    "Create" : {
+
+    },
+    "Create A Plan" : {
+
+    },
+    "Create a workout plan to get started." : {
+
+    },
+    "Create Meal" : {
+
+    },
+    "Create Plan" : {
+
+    },
+    "Create your Bloom account" : {
+
+    },
+    "Crunching the numbers..." : {
+
+    },
+    "Current" : {
+
+    },
+    "Current host: %@\nCurrent WS Host: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Current host: %1$@\nCurrent WS Host: %2$@"
+          }
+        }
+      }
+    },
+    "Current impact: +%.1f years" : {
+
+    },
+    "Current Period Started" : {
+
+    },
+    "Current Phase" : {
+
+    },
+    "Current Value" : {
+
+    },
+    "Current VO₂ Max" : {
+
+    },
+    "Cycle Insights" : {
+
+    },
+    "Cycle Phase Tip" : {
+
+    },
+    "Cycle Range" : {
+
+    },
+    "cycle tracking" : {
+
+    },
+    "Cycle Tracking" : {
+
+    },
+    "Daily" : {
+
+    },
+    "Daily bowel movements (8-24 hours) are considered optimal for most people, indicating healthy digestive function." : {
+
+    },
+    "Daily Cholesterol" : {
+
+    },
+    "Daily Fiber" : {
+
+    },
+    "Daily Sugar" : {
+
+    },
+    "Dark" : {
+
+    },
+    "DataSet" : {
+
+    },
+    "Date" : {
+
+    },
+    "Date Range" : {
+
+    },
+    "Day" : {
+
+    },
+    "days" : {
+
+    },
+    "Days" : {
+
+    },
+    "Days Logged" : {
+
+    },
+    "Debug Food Item Logs" : {
+
+    },
+    "Debug Habits" : {
+
+    },
+    "Debug Logs" : {
+
+    },
+    "Declining" : {
+
+    },
+    "Deep" : {
+
+    },
+    "Deep sleep" : {
+
+    },
+    "Deep Sleep" : {
+
+    },
+    "Deep: %@" : {
+
+    },
+    "Delete" : {
+
+    },
+    "Delete Account" : {
+
+    },
+    "Delete from Meal" : {
+
+    },
+    "Delete Log" : {
+
+    },
+    "Delicious!" : {
+
+    },
+    "Describe what went wrong..." : {
+
+    },
+    "Describe what you ate" : {
+
+    },
+    "Describe your health focus" : {
+
+    },
+    "Describe your Health Focus" : {
+
+    },
+    "Describe your meal" : {
+
+    },
+    "Deselect All" : {
+
+    },
+    "Details" : {
+
+    },
+    "Developer Menu" : {
+
+    },
+    "Developer Tools" : {
+
+    },
+    "Diastolic" : {
+
+    },
+    "Dinner" : {
+
+    },
+    "Disabled" : {
+
+    },
+    "Display count on tab and app icon" : {
+
+    },
+    "Display Mode" : {
+
+    },
+    "Distance" : {
+
+    },
+    "Do you mind providing it?" : {
+
+    },
+    "Done" : {
+
+    },
+    "Dragonfruit" : {
+
+    },
+    "Drink Logged" : {
+
+    },
+    "Drinks" : {
+
+    },
+    "Duration" : {
+
+    },
+    "Duration: %@" : {
+
+    },
+    "e.g. A 30 minute upper body strength workout focusing on chest and back." : {
+
+    },
+    "Edit" : {
+
+    },
+    "Edit Container" : {
+
+    },
+    "Edit Food" : {
+
+    },
+    "Edit Goal" : {
+
+    },
+    "Edit Meal" : {
+
+    },
+    "Edit Reminder" : {
+
+    },
+    "efficiency" : {
+
+    },
+    "Efficiency" : {
+
+    },
+    "Effort" : {
+
+    },
+    "Elevated for 2 days" : {
+
+    },
+    "Elevation" : {
+
+    },
+    "ELIGIBLE" : {
+
+    },
+    "EMOM" : {
+
+    },
+    "Enable" : {
+
+    },
+    "Enable Sleep Focus and wear your Apple watch to bed in order to track your sleep." : {
+
+    },
+    "Enable Sleep Focus and wear your Apple Watch to bed to track your sleep metrics." : {
+
+    },
+    "Enable Sleep Focus and wear your Apple Watch to bed to track your sleep schedule." : {
+
+    },
+    "Enable Sleep Focus and wear your Apple Watch to bed to track your sleep score." : {
+
+    },
+    "Enable Sleep Focus and wear your Apple Watch to bed to track your sleep stages." : {
+
+    },
+    "End" : {
+
+    },
+    "End Date" : {
+
+    },
+    "Ending in %@" : {
+
+    },
+    "Energy Ratio is the ratio between your Basal Energy and TDEE (Total Daily Energy Exertion) for a given day. The higher the ratio, the more active you were." : {
+
+    },
+    "Enjoying Bloom?" : {
+
+    },
+    "Error" : {
+      "comment" : "Title of the alert shown when a chat action fails\nTitle of the alert shown when sending a chat message fails"
+    },
+    "Essential fat is the minimum amount of fat necessary for basic physiological functions. It is crucial for the protection of internal organs, insulation, and reproductive health. It can be difficult on the body to remain in this range." : {
+
+    },
+    "Events (%lld)" : {
+
+    },
+    "Every 1-2 days (24-48 hours) is still within normal range for many people, though daily is generally preferred." : {
+
+    },
+    "Every 2-3 days (48-72 hours) may indicate slower digestion. Consider increasing fiber, water, and physical activity." : {
+
+    },
+    "Every 3 Days" : {
+
+    },
+    "Every 7 Days" : {
+
+    },
+    "Every Friday" : {
+
+    },
+    "Every Monday" : {
+
+    },
+    "Every Saturday" : {
+
+    },
+    "Every Sunday" : {
+
+    },
+    "Every Thursday" : {
+
+    },
+    "Every Tuesday" : {
+
+    },
+    "Every Wednesday" : {
+
+    },
+    "ex: 192.168.1.1" : {
+
+    },
+    "Exceeded goal by %@" : {
+
+    },
+    "excellent" : {
+
+    },
+    "Exercise Effectiveness" : {
+
+    },
+    "exercise minutes" : {
+
+    },
+    "Exit Developer Mode" : {
+
+    },
+    "Fat" : {
+
+    },
+    "Favourite Zone" : {
+
+    },
+    "Feel Better, One Day at a Time" : {
+
+    },
+    "Feeling Sluggish?" : {
+
+    },
+    "Feet" : {
+
+    },
+    "fiber intake" : {
+
+    },
+    "Files" : {
+
+    },
+    "Filter Logs" : {
+
+    },
+    "Fitness Level" : {
+
+    },
+    "Fix Unassigned Chat Messages" : {
+
+    },
+    "fl oz" : {
+
+    },
+    "Follicular" : {
+
+    },
+    "Follicular Activity" : {
+
+    },
+    "Follicular Phase" : {
+
+    },
+    "Follicular phase is %lld%% %@ active than luteal" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Follicular phase is %1$lld%% %2$@ active than luteal"
+          }
+        }
+      }
+    },
+    "Follicular: %@" : {
+
+    },
+    "Food Item" : {
+
+    },
+    "Food Items" : {
+
+    },
+    "Food Logged" : {
+
+    },
+    "Food?" : {
+
+    },
+    "For best results, try and get a clear picture of the entire nutrition label." : {
+
+    },
+    "Force Chat Migration" : {
+
+    },
+    "Force Image Migration" : {
+
+    },
+    "Force PNG to JPEG Migration" : {
+
+    },
+    "Frequent" : {
+
+    },
+    "Frequently Asked Questions" : {
+
+    },
+    "Generate with AI" : {
+
+    },
+    "Generic" : {
+
+    },
+    "Get Moving" : {
+
+    },
+    "Get notified of analysis when workouts finish" : {
+
+    },
+    "Get notified when a health monitor needs your attention." : {
+
+    },
+    "Get notified when a monitor needs your attention. Notifications are only sent when a monitor changes to attention or alert." : {
+
+    },
+    "Get personalized insights on what’s boosting (or bumming out) your health. It’s like x-ray vision for your wellness." : {
+
+    },
+    "Get simple, personalized insights each morning to help you move, rest, and eat with intention." : {
+
+    },
+    "Glad to get to know you better!" : {
+
+    },
+    "Goal" : {
+
+    },
+    "Goal Achievements" : {
+
+    },
+    "Goal Streak" : {
+
+    },
+    "Goal Widget Configuration" : {
+
+    },
+    "goals" : {
+
+    },
+    "Goals Added" : {
+
+    },
+    "Good job!" : {
+
+    },
+    "Got it" : {
+
+    },
+    "great" : {
+
+    },
+    "Guidelines" : {
+
+    },
+    "Habit Details" : {
+
+    },
+    "Health" : {
+
+    },
+    "Health Action" : {
+
+    },
+    "Health Action Configuration" : {
+
+    },
+    "Health data can feel overwhelming. I’m here to make things simple." : {
+
+    },
+    "Health Focus" : {
+
+    },
+    "Health information disclaimer:" : {
+
+    },
+    "HealthKit Permissions" : {
+
+    },
+    "heart health" : {
+
+    },
+    "Heart Health" : {
+
+    },
+    "Heart Rate Recovery" : {
+
+    },
+    "Heart Rate Reserve" : {
+
+    },
+    "Heart rate reserve (HRR) is a measure used to calculate your target heart rate for various levels of exercise intensity." : {
+
+    },
+    "Heart Rate Variability" : {
+
+    },
+    "Heart Rate Variability (HRV) measures the variation in time between heartbeats. Higher HRV generally indicates better cardiovascular fitness and recovery, while lower HRV may suggest stress or fatigue." : {
+
+    },
+    "Heart Rate Variability is a measure of how quickly you can change your heart rate. A higher value indicates lower stress and more relaxation, and a lower value indicates your body is in stress." : {
+
+    },
+    "Heart Rate Zones" : {
+
+    },
+    "Heavy drinking day%@" : {
+
+    },
+    "Hello there! Welcome to Bloom." : {
+
+    },
+    "Help me help you 💙" : {
+
+    },
+    "Helps with %@" : {
+
+    },
+    "Hey there! I'm Bud 👋" : {
+
+    },
+    "high intensity interval training duration" : {
+
+    },
+    "Higher body fat percentages can be associated with an increased risk of health issues such as cardiovascular disease, diabetes, and other metabolic conditions. It may indicate a need for lifestyle changes to improve health." : {
+
+    },
+    "Highest Body Fat %" : {
+
+    },
+    "Highest Score" : {
+
+    },
+    "HIIT workouts" : {
+
+    },
+    "Historical Analysis" : {
+
+    },
+    "Hour" : {
+
+    },
+    "Hours Between" : {
+
+    },
+    "How many servings?" : {
+
+    },
+    "How much did you drink?" : {
+
+    },
+    "How much this drink contributes to hydration. Water is 100%, caffeinated drinks are typically 80-90%, alcoholic drinks are lower." : {
+
+    },
+    "How to Earn Achievements" : {
+
+    },
+    "HR" : {
+
+    },
+    "HRV" : {
+
+    },
+    "HRV is measured during sleep or rest periods with your Apple Watch." : {
+
+    },
+    "HRV Trend" : {
+
+    },
+    "HRV: %lld ms" : {
+
+    },
+    "Hydration Level" : {
+
+    },
+    "I can calculate your biological age and keep track of your vitals." : {
+
+    },
+    "I can give you insights into your health every day!" : {
+
+    },
+    "I confirm I’m the age of majority where I live and consent to Bloom reading and writing my Health app data for the purposes described above." : {
+
+    },
+    "I show you what’s affecting your health and what you can do about it." : {
+
+    },
+    "I'll answer by referencing your personal data." : {
+
+    },
+    "I've got your back!" : {
+
+    },
+    "ID: %@" : {
+
+    },
+    "If you're liking the experience so far, a quick rating would mean a lot to our small but mighty team!" : {
+
+    },
+    "Improving" : {
+
+    },
+    "Inches" : {
+
+    },
+    "Individuals in this range have a healthy amount of body fat and are usually quite active. This range is often seen in non-competitive athletes or individuals who maintain a consistent exercise routine." : {
+
+    },
+    "Input Mode" : {
+
+    },
+    "Insufficient Data" : {
+
+    },
+    "Intermittent Sounds" : {
+
+    },
+    "Interval" : {
+
+    },
+    "Interval Range" : {
+
+    },
+    "Invest in my Health" : {
+
+    },
+    "Jump to Here" : {
+
+    },
+    "Last 3 Months" : {
+
+    },
+    "Last 6 Months" : {
+
+    },
+    "Last 7 Days" : {
+
+    },
+    "Last 30 Days" : {
+
+    },
+    "Last Bowel Movement" : {
+
+    },
+    "Last checked: %@" : {
+
+    },
+    "Last fetched: %@" : {
+
+    },
+    "Last Month Diastolic" : {
+
+    },
+    "Last Month Systolic" : {
+
+    },
+    "Last Year" : {
+
+    },
+    "Late Period" : {
+
+    },
+    "Learn More" : {
+
+    },
+    "Learn patterns in your eating habits. Scan barcodes for faster logging. Log food by simply taking a picture!" : {
+
+    },
+    "Legend" : {
+
+    },
+    "Less Likely Next Period" : {
+
+    },
+    "Let me keep you on track with helpful reminders and health insights." : {
+
+    },
+    "Let's Do It!" : {
+
+    },
+    "Let's get to know each other a bit..." : {
+
+    },
+    "Let's go!" : {
+
+    },
+    "Let's Go!" : {
+
+    },
+    "Let's make Bloom work perfectly for you." : {
+
+    },
+    "Let’s set goals that actually fit you." : {
+
+    },
+    "Let's talk about your main Focus Area." : {
+
+    },
+    "Let's talk privacy." : {
+
+    },
+    "Level" : {
+
+    },
+    "Library" : {
+
+    },
+    "Likely Next Period" : {
+
+    },
+    "Loading notifications..." : {
+
+    },
+    "Loading Weather..." : {
+
+    },
+    "Log" : {
+
+    },
+    "Log %lld %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Log %1$lld %2$@"
+          }
+        }
+      }
+    },
+    "Log a workout with your Apple Watch to get a better sense of your Exercise Effectiveness." : {
+
+    },
+    "Log Actions Configuration" : {
+
+    },
+    "Log Blood Pressure" : {
+
+    },
+    "Log Bowel Movement" : {
+
+    },
+    "Log Food" : {
+
+    },
+    "Log Meal" : {
+
+    },
+    "Log Meal Configuration" : {
+
+    },
+    "Log Out" : {
+
+    },
+    "Log Period" : {
+
+    },
+    "Log Protein" : {
+
+    },
+    "Log Water" : {
+
+    },
+    "Log Weight" : {
+
+    },
+    "Log your bowel movements to learn more about your regularity." : {
+
+    },
+    "Log your weight to learn more about your body composition." : {
+
+    },
+    "Logged" : {
+
+    },
+    "Logs a meal with one or more food items." : {
+
+    },
+    "Long" : {
+
+    },
+    "Looking up foods..." : {
+
+    },
+    "Looks good!" : {
+
+    },
+    "Looks Great!" : {
+
+    },
+    "Lower" : {
+
+    },
+    "Lowest Body Fat %" : {
+
+    },
+    "Lowest Score" : {
+
+    },
+    "Loyalty Offer" : {
+
+    },
+    "Lunch" : {
+
+    },
+    "Luteal" : {
+
+    },
+    "Luteal HR" : {
+
+    },
+    "Luteal Sleep" : {
+
+    },
+    "Macro" : {
+
+    },
+    "Macros" : {
+
+    },
+    "Make sure to get the front of the packaging, including the brand and product name." : {
+
+    },
+    "Manage Containers" : {
+
+    },
+    "Mango" : {
+
+    },
+    "Max" : {
+
+    },
+    "Max Cholesterol" : {
+
+    },
+    "Max Fiber" : {
+
+    },
+    "Max Goal" : {
+
+    },
+    "Max Heart Rate" : {
+
+    },
+    "Max HR" : {
+
+    },
+    "Max Range" : {
+
+    },
+    "Max RHR" : {
+
+    },
+    "Max Sugar" : {
+
+    },
+    "MAX: %@" : {
+
+    },
+    "MAX: %lld" : {
+
+    },
+    "Max: %lld bpm" : {
+
+    },
+    "Meal" : {
+
+    },
+    "Meals" : {
+
+    },
+    "meditation minutes" : {
+
+    },
+    "Medium" : {
+
+    },
+    "Memory" : {
+
+    },
+    "Memory Removed" : {
+
+    },
+    "Memory Updated" : {
+
+    },
+    "Message" : {
+      "comment" : "Placeholder in the chat input field"
+    },
+    "Metric" : {
+
+    },
+    "Milestone Celebrations" : {
+
+    },
+    "Min" : {
+
+    },
+    "Min Fiber" : {
+
+    },
+    "Min Goal" : {
+
+    },
+    "Min HR" : {
+
+    },
+    "Min Range" : {
+
+    },
+    "Min Water" : {
+
+    },
+    "MIN: %@" : {
+
+    },
+    "Min: %lld bpm" : {
+
+    },
+    "Minutes" : {
+
+    },
+    "mL" : {
+
+    },
+    "mmHg" : {
+
+    },
+    "Mobility" : {
+
+    },
+    "mobility and flexibility duration" : {
+
+    },
+    "mobility and flexibility workouts" : {
+
+    },
+    "Monitor" : {
+
+    },
+    "Month" : {
+
+    },
+    "Monthly" : {
+
+    },
+    "More than 3 days between bowel movements suggests constipation. Consult healthcare provider if this persists." : {
+
+    },
+    "Morning Report" : {
+
+    },
+    "Most Recent Period Started" : {
+
+    },
+    "Muted" : {
+
+    },
+    "My Drink" : {
+
+    },
+    "My Water Bottle" : {
+
+    },
+    "My Waterbottle" : {
+
+    },
+    "Name" : {
+
+    },
+    "Name (Optional)" : {
+
+    },
+    "Neat-O!" : {
+
+    },
+    "Neat!" : {
+
+    },
+    "Needs Attention" : {
+
+    },
+    "Never" : {
+
+    },
+    "NEW" : {
+
+    },
+    "New Chat" : {
+
+    },
+    "New Meal" : {
+
+    },
+    "New Reminder" : {
+
+    },
+    "Next" : {
+
+    },
+    "Next Period" : {
+
+    },
+    "Next: %@" : {
+
+    },
+    "Nice to meet you %@, I'm Bud!" : {
+
+    },
+    "No" : {
+
+    },
+    "No Achievements Yet" : {
+
+    },
+    "No Alcohol Data" : {
+
+    },
+    "No binge or heavy drinking days" : {
+
+    },
+    "No Biological Age Data" : {
+
+    },
+    "No cached sales" : {
+
+    },
+    "No Calendars" : {
+
+    },
+    "No Conversations" : {
+
+    },
+    "No data" : {
+
+    },
+    "No Data" : {
+
+    },
+    "No Data Available" : {
+
+    },
+    "No debug logs have been recorded yet." : {
+
+    },
+    "No Device Use Last Night" : {
+
+    },
+    "No equipment required." : {
+
+    },
+    "No Events" : {
+
+    },
+    "No Food Logged" : {
+
+    },
+    "No generic plans. No one-size-fits-all tips. Just real insights based on your real data." : {
+
+    },
+    "No impact on your biological age" : {
+
+    },
+    "No Logs" : {
+
+    },
+    "No logs match your search." : {
+
+    },
+    "No longer available" : {
+
+    },
+    "No Match" : {
+
+    },
+    "No Meals" : {
+
+    },
+    "No Memories" : {
+
+    },
+    "No Override" : {
+
+    },
+    "No Period" : {
+
+    },
+    "No Plans" : {
+
+    },
+    "No Records" : {
+
+    },
+    "No Reminders" : {
+
+    },
+    "No Results" : {
+
+    },
+    "No Scheduled Notifications" : {
+
+    },
+    "No signal history available" : {
+
+    },
+    "No Sleep Data" : {
+
+    },
+    "No Workout Data" : {
+
+    },
+    "No Workouts" : {
+
+    },
+    "None" : {
+
+    },
+    "Normal Diastolic" : {
+
+    },
+    "Normal Range" : {
+
+    },
+    "Normal Systolic" : {
+
+    },
+    "NOT ELIGIBLE" : {
+
+    },
+    "Not Set" : {
+
+    },
+    "Notification Permissions" : {
+
+    },
+    "Notification Triggers" : {
+
+    },
+    "Notifications" : {
+
+    },
+    "NOTIFY" : {
+
+    },
+    "Number of Servings" : {
+
+    },
+    "nutrition" : {
+
+    },
+    "Nutrition" : {
+
+    },
+    "Nutrition Label" : {
+
+    },
+    "OK" : {
+
+    },
+    "Oops!" : {
+
+    },
+    "Open Barcode Scanner" : {
+
+    },
+    "Open Blood Pressure Logger" : {
+
+    },
+    "Open Bowel Movement Logger" : {
+
+    },
+    "Open Food Logger" : {
+
+    },
+    "Open Health Action" : {
+
+    },
+    "Open Logger" : {
+
+    },
+    "Open Magic Scanner" : {
+
+    },
+    "Open Period Logger" : {
+
+    },
+    "Open Settings" : {
+
+    },
+    "Open Voice Logger" : {
+
+    },
+    "Open Water Logger" : {
+
+    },
+    "Open Weight Logger" : {
+
+    },
+    "Opens a health action to log data." : {
+
+    },
+    "Opens a specific vital to view your health data." : {
+
+    },
+    "Options" : {
+
+    },
+    "Original" : {
+
+    },
+    "Other Monitors" : {
+
+    },
+    "Overall:" : {
+
+    },
+    "Override" : {
+
+    },
+    "Pause" : {
+
+    },
+    "Peak VO₂ Max" : {
+
+    },
+    "per %@ serving%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "per %1$@ serving%2$@"
+          }
+        }
+      }
+    },
+    "Percent" : {
+
+    },
+    "Perfect Sleep" : {
+
+    },
+    "Perfect Sleep Score!" : {
+
+    },
+    "Period" : {
+
+    },
+    "Personal Data Categories" : {
+
+    },
+    "Personal Details" : {
+
+    },
+    "Personalized daily insights based on your Personal Data." : {
+
+    },
+    "Phase" : {
+
+    },
+    "Photo Library" : {
+
+    },
+    "Pin" : {
+
+    },
+    "Plans" : {
+
+    },
+    "Please enter your name" : {
+
+    },
+    "Please select at least one food item to log" : {
+
+    },
+    "Plus" : {
+
+    },
+    "Powered by  Weather" : {
+
+    },
+    "Precipitation" : {
+
+    },
+    "Predicted Ovulation" : {
+
+    },
+    "Preferences" : {
+
+    },
+    "Previous" : {
+
+    },
+    "Previously %@" : {
+
+    },
+    "Prioritize Your Health. On The House." : {
+
+    },
+    "Privacy & Security → Health → Bloom" : {
+
+    },
+    "Privacy Policy" : {
+
+    },
+    "Progress" : {
+
+    },
+    "Promo Code" : {
+
+    },
+    "Protein" : {
+
+    },
+    "protein intake" : {
+
+    },
+    "Quantity" : {
+
+    },
+    "Questions? Email Us!" : {
+
+    },
+    "Quiet" : {
+
+    },
+    "Quit Date" : {
+
+    },
+    "Quitting can reduce this over time" : {
+
+    },
+    "Rain" : {
+
+    },
+    "Range Max" : {
+
+    },
+    "Range Min" : {
+
+    },
+    "Rate" : {
+
+    },
+    "Rate Bloom" : {
+
+    },
+    "Rate Your Effort" : {
+
+    },
+    "Ratio" : {
+
+    },
+    "Reading %@..." : {
+      "comment" : "Chat typing status. The placeholder is a list of health data areas, e.g. \"sleep, nutrition and workouts\"."
+    },
+    "Reading sleep data..." : {
+
+    },
+    "Really Like Us? Leave a Review!" : {
+
+    },
+    "Recalculate Vitals" : {
+
+    },
+    "Recent" : {
+
+    },
+    "Recommended" : {
+
+    },
+    "RECOMMENDED" : {
+
+    },
+    "Recommended %@" : {
+
+    },
+    "Recovery" : {
+
+    },
+    "Recovery & Sickness" : {
+
+    },
+    "Reduced impact over time" : {
+
+    },
+    "Refresh" : {
+
+    },
+    "Refresh Sales" : {
+
+    },
+    "Regenerate Today Insights" : {
+
+    },
+    "Regular Sounds" : {
+
+    },
+    "REM" : {
+
+    },
+    "REM Sleep" : {
+
+    },
+    "REM: %@" : {
+
+    },
+    "Reminder" : {
+
+    },
+    "Reminder Color" : {
+
+    },
+    "Reminder Deleted" : {
+
+    },
+    "reminders" : {
+
+    },
+    "Reminders" : {
+
+    },
+    "Remove Vital" : {
+
+    },
+    "Rename" : {
+
+    },
+    "Repeat" : {
+
+    },
+    "Repeats" : {
+
+    },
+    "Replay" : {
+
+    },
+    "Report a Problem" : {
+
+    },
+    "Report an Issue" : {
+
+    },
+    "Report Submitted" : {
+
+    },
+    "Reset" : {
+
+    },
+    "Reset Chat Migration" : {
+
+    },
+    "Reset Image Migration" : {
+
+    },
+    "Reset Onboarding" : {
+
+    },
+    "Reset PNG to JPEG Migration" : {
+
+    },
+    "Reset to Defaults" : {
+
+    },
+    "Reset to Defaults?" : {
+
+    },
+    "Respiratory rate" : {
+
+    },
+    "Respiratory Rate" : {
+
+    },
+    "Respiratory rate during sleep typically ranges from 12-20 breaths per minute for adults. Changes in your respiratory rate may indicate illness, stress, or changes in fitness level." : {
+
+    },
+    "Rest" : {
+
+    },
+    "Restart Workout" : {
+
+    },
+    "Resting" : {
+
+    },
+    "Resting Heart Rate" : {
+
+    },
+    "resting HR" : {
+
+    },
+    "Resting HR" : {
+
+    },
+    "Resting: %lld bpm" : {
+
+    },
+    "Restore Purchase" : {
+
+    },
+    "Restore Purchases" : {
+
+    },
+    "Resume" : {
+
+    },
+    "Review Goals" : {
+
+    },
+    "Review your goals and make adjustments." : {
+
+    },
+    "Revisit: %@" : {
+
+    },
+    "RHR" : {
+
+    },
+    "RHR: %lld" : {
+
+    },
+    "Risk Level" : {
+
+    },
+    "Run Analysis" : {
+
+    },
+    "run distance" : {
+
+    },
+    "run duration" : {
+
+    },
+    "running distance" : {
+
+    },
+    "running duration" : {
+
+    },
+    "Sale Product: %@" : {
+
+    },
+    "Save" : {
+
+    },
+    "Save as Meal" : {
+
+    },
+    "Save Workout" : {
+
+    },
+    "Saved" : {
+
+    },
+    "Saved Meal" : {
+
+    },
+    "Scan a barcode to add food" : {
+
+    },
+    "Scan a barcode to log food" : {
+
+    },
+    "Scheduled Notifications" : {
+
+    },
+    "Score" : {
+
+    },
+    "Search logs" : {
+
+    },
+    "Search or Describe Food" : {
+
+    },
+    "Searching..." : {
+
+    },
+    "Section" : {
+
+    },
+    "See how you did in %@!" : {
+
+    },
+    "Select" : {
+
+    },
+    "Select a celebration to show on next app foreground." : {
+
+    },
+    "Select a Food" : {
+
+    },
+    "Select All" : {
+
+    },
+    "Select Another Goal" : {
+
+    },
+    "Select Food Item" : {
+
+    },
+    "Select Photo" : {
+
+    },
+    "Select which categories Bud may use." : {
+
+    },
+    "Selected" : {
+
+    },
+    "Series" : {
+
+    },
+    "Serving Size" : {
+
+    },
+    "servings" : {
+
+    },
+    "Servings" : {
+
+    },
+    "Set %@ Start Time" : {
+
+    },
+    "Set %lld of %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Set %1$lld of %2$lld"
+          }
+        }
+      }
+    },
+    "Set Custom Value" : {
+
+    },
+    "Set Recommended Value" : {
+
+    },
+    "Set your smoking status to see how it affects your biological age." : {
+
+    },
+    "Settings" : {
+
+    },
+    "Sex" : {
+
+    },
+    "Shape" : {
+
+    },
+    "Share" : {
+
+    },
+    "Share Bloom" : {
+
+    },
+    "Share Bloom with a friend and keep each other motivated on the journey to better health!" : {
+
+    },
+    "Share your personal data so I can personalize your insights. Your info always stays private, I promise." : {
+
+    },
+    "Short" : {
+
+    },
+    "Show All" : {
+
+    },
+    "Show All Logs" : {
+
+    },
+    "Show Badge" : {
+
+    },
+    "Show celebration cards when you hit milestones" : {
+
+    },
+    "Show Less" : {
+
+    },
+    "Show Log In" : {
+
+    },
+    "Show More" : {
+
+    },
+    "Show Owned" : {
+
+    },
+    "Show Paywall" : {
+
+    },
+    "Show Sheet" : {
+
+    },
+    "Sign Out" : {
+
+    },
+    "Signal History" : {
+
+    },
+    "Signals: %@" : {
+
+    },
+    "Single Food Item" : {
+
+    },
+    "Skip" : {
+
+    },
+    "sleep" : {
+
+    },
+    "Sleep" : {
+
+    },
+    "Sleep Duration" : {
+
+    },
+    "Sleep Efficiency" : {
+
+    },
+    "Sleep HR" : {
+
+    },
+    "Sleep Metrics" : {
+
+    },
+    "Sleep Quality" : {
+
+    },
+    "Sleep Quality & Rhythm" : {
+
+    },
+    "Sleep Score" : {
+
+    },
+    "Sleep Stage" : {
+
+    },
+    "Sleep Stages" : {
+
+    },
+    "Smarter Health Starts Today" : {
+
+    },
+    "Smoking" : {
+
+    },
+    "Smoking is one of the most significant factors affecting biological age and overall health." : {
+
+    },
+    "Smoking Status" : {
+
+    },
+    "Snack" : {
+
+    },
+    "Snooze for %@" : {
+
+    },
+    "Snow" : {
+
+    },
+    "Some Light" : {
+
+    },
+    "Something else..." : {
+
+    },
+    "Sound Debug" : {
+
+    },
+    "Source: %@" : {
+
+    },
+    "Speed" : {
+
+    },
+    "Stable" : {
+
+    },
+    "Stage" : {
+
+    },
+    "Stair climb speed measures how quickly you ascend stairs and is an important indicator of lower body strength and cardiovascular fitness." : {
+
+    },
+    "Standard" : {
+
+    },
+    "Start" : {
+
+    },
+    "Start Date" : {
+
+    },
+    "Start Timer" : {
+
+    },
+    "Start Workout" : {
+
+    },
+    "Starting in %@" : {
+
+    },
+    "State Changes" : {
+
+    },
+    "Stay Ahead of How You Feel" : {
+
+    },
+    "Stay consistent together" : {
+
+    },
+    "step count" : {
+
+    },
+    "steps" : {
+
+    },
+    "Steps" : {
+
+    },
+    "Steps are compared to the previous period of the same length. The faded line represents the previous period." : {
+
+    },
+    "Steps Widget Configuration" : {
+
+    },
+    "Still have questions? Email us" : {
+
+    },
+    "Storage Analysis" : {
+
+    },
+    "Strain Meter" : {
+
+    },
+    "strength training duration" : {
+
+    },
+    "strength training workouts" : {
+
+    },
+    "stress" : {
+
+    },
+    "Stress" : {
+
+    },
+    "Stress & Workout Load" : {
+
+    },
+    "Stress Level" : {
+
+    },
+    "Stress Levels" : {
+
+    },
+    "Submit" : {
+
+    },
+    "Submit Anonymously" : {
+
+    },
+    "Submit Feedback" : {
+
+    },
+    "Submit Report" : {
+
+    },
+    "Suggested" : {
+
+    },
+    "Suggestions" : {
+
+    },
+    "Summary" : {
+
+    },
+    "Sync Nutrition to HealthKit" : {
+
+    },
+    "Systolic" : {
+
+    },
+    "Systolic / Diastolic" : {
+
+    },
+    "Tabata" : {
+
+    },
+    "Tag" : {
+
+    },
+    "Tap Analyze to scan storage usage" : {
+
+    },
+    "Tap the + button to create your first reminder." : {
+
+    },
+    "target heart rate zone 1 minutes" : {
+
+    },
+    "target heart rate zone 2 minutes" : {
+
+    },
+    "target heart rate zone 3 minutes" : {
+
+    },
+    "target heart rate zone 4 minutes" : {
+
+    },
+    "target heart rate zone 5 minutes" : {
+
+    },
+    "target heart rate zones" : {
+
+    },
+    "Target Weight" : {
+
+    },
+    "Tell me a bit about you" : {
+
+    },
+    "Tell me more" : {
+
+    },
+    "Tell me what's on your mind!" : {
+
+    },
+    "Temp" : {
+
+    },
+    "Temperature" : {
+
+    },
+    "Terms of Service" : {
+
+    },
+    "Test Monitor Detection" : {
+
+    },
+    "Test Push Notifications" : {
+
+    },
+    "Test Workout Notification" : {
+
+    },
+    "Text" : {
+
+    },
+    "Thank you so much for help testing Bloom! We're ending our TestFlight program, so you'll need to install the App Store version of the app to continue using Bloom." : {
+
+    },
+    "Thank You!" : {
+
+    },
+    "Thanks Bud!" : {
+
+    },
+    "That's Cool!" : {
+
+    },
+    "The Bristol Stool Types are a standard mechanism to help categorize bowel movements. They can help provide insights into your gut health." : {
+
+    },
+    "The following message content will be submitted with the report." : {
+
+    },
+    "There are currently no pending notifications scheduled for this app." : {
+
+    },
+    "There are no workouts to show." : {
+
+    },
+    "There is no sleep analysis available for %@." : {
+
+    },
+    "There is no sleep data for last night." : {
+
+    },
+    "There was a problem loading the weather." : {
+
+    },
+    "There's room to improve next year." : {
+
+    },
+    "This can help tailor my advice to you." : {
+
+    },
+    "This chart shows how your time was distributed across different sleep stages each night. A healthy sleep pattern includes cycles through all stages." : {
+
+    },
+    "This chart shows your average HRV for each time of day over the selected period. HRV is typically higher during sleep and lower during active periods." : {
+
+    },
+    "This chart shows your sleep schedule over time. Each bar represents a night of sleep, starting at your bedtime and ending at your wake time. A consistent sleep schedule helps regulate your circadian rhythm and improves sleep quality." : {
+
+    },
+    "This helps me personalize your insights and make sure Bloom is the right fit." : {
+
+    },
+    "This is " : {
+
+    },
+    "This monitor tracks early physiological signs that may indicate your body is fighting off illness or needs extra recovery time. It analyzes your resting heart rate, heart rate variability, wrist temperature, and respiratory rate to detect subtle changes from your personal baseline." : {
+
+    },
+    "This monitor tracks your sleep patterns including duration, efficiency, and schedule consistency. It detects when your sleep is declining or when your bedtime and wake time are becoming irregular, which can affect your circadian rhythm and overall health." : {
+
+    },
+    "This monitor tracks your training load using Apple's Workout Effort Scores. It compares your recent 7-day training load to your 28-day average to help you avoid overtraining or detraining. HRV trends and recovery metrics are also considered when available." : {
+
+    },
+    "This range is considered normal for the general population. People within this range have a balanced level of body fat, contributing to overall health and well-being." : {
+
+    },
+    "This range is typical for athletes who require higher muscle mass and lower fat levels for optimal performance. It reflects a high level of fitness and conditioning." : {
+
+    },
+    "This timeline shows how you transitioned between sleep stages throughout the night. Your body naturally cycles through these stages multiple times." : {
+
+    },
+    "This type can be caused by dietary issues, infections, stress, or other gastrointestinal problems. It’s important to stay hydrated and, if persistent, consider evaluating for potential infections or intolerances." : {
+
+    },
+    "This type indicates a healthy gut with slight indication of dehydration. Maintaining a balanced diet with sufficient fiber and hydration is recommended." : {
+
+    },
+    "This type indicates constipation. This can be caused by dehydration, lack of fiber, or other digestive issues. It may be beneficial to increase fluid intake and dietary fiber." : {
+
+    },
+    "This type indicates mild constipation. You might need to improve your diet, increase hydration, and consider physical activity to help regularize bowel movements." : {
+
+    },
+    "This type is the ideal stool. This indicates a healthy digestive system with normal bowel function. Continue with your current diet and lifestyle." : {
+
+    },
+    "This type may indicate a dietary change, mild digestive upset, or a temporary imbalance in your gut." : {
+
+    },
+    "This type represents severe diarrhea. This could indicate a significant gastrointestinal issue, such as an infection, food poisoning, or a chronic condition. It’s crucial to stay hydrated and seek medical advice if this persists." : {
+
+    },
+    "This will remove all custom containers and restore the default container sizes." : {
+
+    },
+    "Time" : {
+
+    },
+    "Time between bowel movements helps indicate digestive health and regularity patterns." : {
+
+    },
+    "Time between bowel movements helps indicate digestive health and regularity. Consistent patterns are generally healthier." : {
+
+    },
+    "Time Of Day" : {
+
+    },
+    "Time Period" : {
+
+    },
+    "Time Range" : {
+
+    },
+    "Title" : {
+
+    },
+    "To chat with Bud about your health, you’ll need to turn Chat back on. You’re always in control of what data gets used." : {
+
+    },
+    "To help you stay on top of your health and reach your goals, I need your permission for a few things." : {
+
+    },
+    "To keep helping you with personalized health insights, and to provide personalized responses to your questions, I need your permission for a few things. You’re always in control of what you share." : {
+
+    },
+    "To show your workout history, we need access to your personal data. You can manage this permission at any time." : {
+
+    },
+    "Today" : {
+
+    },
+    "Today Insight Configuration" : {
+
+    },
+    "Today's Advice" : {
+
+    },
+    "Tomorrow" : {
+
+    },
+    "Tonight's Sleep" : {
+
+    },
+    "Total" : {
+
+    },
+    "Total Cycles" : {
+
+    },
+    "Total Events" : {
+
+    },
+    "Total Storage" : {
+
+    },
+    "Track %@" : {
+
+    },
+    "Track more cardio workouts to see your fitness level." : {
+
+    },
+    "Track what you eat!" : {
+
+    },
+    "Track your alcohol consumption using the Drinks action card to see your weekly intake here." : {
+
+    },
+    "Track your food to get more insights into your Nutrition." : {
+
+    },
+    "Track your mobility by carrying your iPhone throughout the day or wearing your Apple Watch." : {
+
+    },
+    "Track your period in Apple Health to learn more about your cycle." : {
+
+    },
+    "TRAINING" : {
+
+    },
+    "Training load" : {
+
+    },
+    "Training Load" : {
+
+    },
+    "Training load +25%" : {
+
+    },
+    "Treatment" : {
+
+    },
+    "Trial Ends" : {
+
+    },
+    "Trial Notification" : {
+
+    },
+    "Trial Starts" : {
+
+    },
+    "Trigger" : {
+
+    },
+    "Try adding more whole foods to lunch today — fiber and protein can help stabilize energy and mood all afternoon." : {
+
+    },
+    "Try Again" : {
+
+    },
+    "Turn Off" : {
+
+    },
+    "Turn Off All" : {
+
+    },
+    "Turn Off Notifications" : {
+
+    },
+    "Turn On" : {
+
+    },
+    "Turn on All" : {
+
+    },
+    "Turn On All" : {
+
+    },
+    "Turn On Monitor" : {
+
+    },
+    "Turn On Notifications" : {
+
+    },
+    "Type" : {
+
+    },
+    "Type %lld" : {
+
+    },
+    "Types" : {
+
+    },
+    "Typical" : {
+
+    },
+    "Typical Day" : {
+
+    },
+    "Uh oh, looks like I wasn't able to get some important information." : {
+
+    },
+    "Unavailable" : {
+
+    },
+    "Under 15 min" : {
+
+    },
+    "Undo" : {
+
+    },
+    "Unit" : {
+
+    },
+    "Unknown" : {
+
+    },
+    "Unknown Action" : {
+
+    },
+    "Unknown Barcode" : {
+
+    },
+    "Unknown configuration" : {
+
+    },
+    "Unknown Content" : {
+
+    },
+    "Unlock Insights" : {
+
+    },
+    "Unlock Your True Age" : {
+
+    },
+    "Unpin" : {
+
+    },
+    "Unsure" : {
+
+    },
+    "Up Next" : {
+
+    },
+    "Upcoming Period" : {
+
+    },
+    "Update" : {
+
+    },
+    "Upload" : {
+
+    },
+    "Upload a Food" : {
+
+    },
+    "Upload Food" : {
+
+    },
+    "Uploading..." : {
+
+    },
+    "Upper" : {
+
+    },
+    "User Added" : {
+
+    },
+    "Value" : {
+
+    },
+    "Verified" : {
+
+    },
+    "Very frequent bowel movements (less than 8 hours apart) may indicate digestive sensitivity, dietary issues, or stress." : {
+
+    },
+    "View All Data" : {
+
+    },
+    "View All Plans" : {
+
+    },
+    "View Vital" : {
+
+    },
+    "Vital" : {
+
+    },
+    "VO₂ Max" : {
+
+    },
+    "VO₂ Max is estimated during outdoor walks, runs, or hikes with your Apple Watch." : {
+
+    },
+    "VO₂ Max Trend" : {
+
+    },
+    "Voice Logger" : {
+
+    },
+    "Volume" : {
+
+    },
+    "vs baseline" : {
+
+    },
+    "vs Baseline" : {
+
+    },
+    "Wake" : {
+
+    },
+    "Wake time" : {
+
+    },
+    "Wake Time" : {
+
+    },
+    "Wake: %@" : {
+
+    },
+    "walking running distance" : {
+
+    },
+    "Walking speed is a key indicator of mobility and overall health. Reference lines show typical speeds for different ages." : {
+
+    },
+    "walking-running distance" : {
+
+    },
+    "Want me to help you stay focused on what matters most for your health?" : {
+
+    },
+    "Warm-Up" : {
+
+    },
+    "Water" : {
+
+    },
+    "water intake" : {
+
+    },
+    "Water Logged" : {
+
+    },
+    "We analyzed your personal data and suggested goals tailored to your habits, trends, and opportunities." : {
+
+    },
+    "We couldn't find any workout data for %@. Start tracking your workouts to see your Year In Bloom!" : {
+
+    },
+    "We'll only use your personal data anonymously to provide you insights and goals." : {
+
+    },
+    "We'll send you a reminder notification before your trial ends!" : {
+
+    },
+    "Wear your Apple Watch throughout the day to get a better picture of your Activity Level." : {
+
+    },
+    "Wear your Apple Watch throughout the day to get a better picture of your Heart Health." : {
+
+    },
+    "Wear your Apple Watch throughout the day to get a better picture of your Stress Levels." : {
+
+    },
+    "Wear your Apple Watch to record resting heart rate data." : {
+
+    },
+    "Weather Not Available" : {
+
+    },
+    "Week" : {
+
+    },
+    "Weekly" : {
+
+    },
+    "Weight" : {
+
+    },
+    "Weight Logged" : {
+
+    },
+    "Welcome to the Club!" : {
+
+    },
+    "What Are People Saying?" : {
+
+    },
+    "What do you want me to help you with?" : {
+
+    },
+    "What else would you like to share with me?" : {
+
+    },
+    "What This Means" : {
+
+    },
+    "When did you quit?" : {
+
+    },
+    "When enabled, Bud provides insights into your monitor results using the Personal Data categories above." : {
+
+    },
+    "Where would you like to focus your effort?" : {
+
+    },
+    "Which food item?" : {
+
+    },
+    "Which meal?" : {
+
+    },
+    "Whoops, looks like I made a mistake. Let's try that again..." : {
+
+    },
+    "Why I need your personal data 💙" : {
+
+    },
+    "Widget Type" : {
+
+    },
+    "With your permission, I can use your personal data to give you better, more personal insights." : {
+
+    },
+    "Workout Completion" : {
+
+    },
+    "Workout Equipment" : {
+
+    },
+    "workout minutes" : {
+
+    },
+    "Workout Saved" : {
+
+    },
+    "Workout Settings" : {
+
+    },
+    "workouts" : {
+
+    },
+    "Workouts" : {
+
+    },
+    "Worst Day" : {
+
+    },
+    "Wrist Temperature" : {
+
+    },
+    "Wrist temperature is measured during sleep and can vary based on your environment, menstrual cycle, illness, and other factors. Tracking changes over time may help identify patterns in your health." : {
+
+    },
+    "Year Change" : {
+
+    },
+    "Year In Bloom" : {
+
+    },
+    "Yearly" : {
+
+    },
+    "Yes" : {
+
+    },
+    "Yes, Bud!" : {
+
+    },
+    "You" : {
+
+    },
+    "You averaged " : {
+
+    },
+    "You can ask me about your health trends, and I’ll generate insights using your Apple Health data." : {
+
+    },
+    "You can ask me anything!" : {
+
+    },
+    "You can change these settings anytime." : {
+
+    },
+    "You earned " : {
+
+    },
+    "You exercised for " : {
+
+    },
+    "You gained " : {
+
+    },
+    "You have no calendars." : {
+
+    },
+    "You have no events %@." : {
+
+    },
+    "You haven't saved any meals yet." : {
+
+    },
+    "You lost " : {
+
+    },
+    "You made it, %@!" : {
+
+    },
+    "You must be at least 18 years old to use Bloom." : {
+
+    },
+    "You scored a perfect 100 on your sleep score. That's as good as it gets!" : {
+
+    },
+    "You travelled " : {
+
+    },
+    "You’ve unlocked deeper insights, smarter guidance, and Bud’s full brainpower." : {
+
+    },
+    "Your average cycle was " : {
+
+    },
+    "Your biological age is 1 year younger than your actual age. Keep it up!" : {
+
+    },
+    "Your biological age will appear here once calculated. Check back after using the app for a few days." : {
+
+    },
+    "Your cardio fitness is " : {
+
+    },
+    "Your data is always safe:" : {
+
+    },
+    "Your Data, Your Choice" : {
+
+    },
+    "Your diet averaged " : {
+
+    },
+    "Your heart rate during sleep is typically lower than your resting heart rate during the day. A lower sleep heart rate generally indicates better cardiovascular fitness and recovery." : {
+
+    },
+    "Your Name" : {
+
+    },
+    "Your personal data always remains anonymous. Always consult with a doctor before making any changes to your health." : {
+
+    },
+    "Your personal data is used for:" : {
+
+    },
+    "Your resting heart rate averaged " : {
+
+    },
+    "Your selected goal:" : {
+
+    },
+    "Your selected goals:" : {
+
+    },
+    "Your sleep score is calculated based on sleep duration, time spent in each sleep stage, awake time, and heart rate during sleep. A score of 70 or higher indicates good quality sleep." : {
+
+    },
+    "Your stress level can fluctuate day to day. It's normal to have some days of high stress, but prolonged stress can be harmful to your overall health. Bloom factors in your blood pressure, sleep, and heart rate variability when calculating your stress level." : {
+
+    },
+    "Your weight stayed stable this year." : {
+
+    },
+    "Zone" : {
+
+    },
+    "Zone %lld" : {
+
+    },
+    "Zone Minutes — 150" : {
+
+    },
+    "Zone Minutes — 300" : {
+
+    }
   },
   "version" : "1.0"
 }

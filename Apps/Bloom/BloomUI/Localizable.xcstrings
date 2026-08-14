@@ -1,7 +1,129 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Afternoon" : {
 
+    },
+    "Age, biological sex, height, and your focus. Used to help Bud personalize responses and tailor insights to you." : {
+
+    },
+    "Alcohol consumption and smoking status. Used to help Bud understand lifestyle factors that may affect your health." : {
+
+    },
+    "Body composition, weight, resting heart rate, vO2 Max, and HRV. Used to help Bud understand changes in your physiology and answer related questions." : {
+
+    },
+    "Body Metrics" : {
+
+    },
+    "Bowel movements and patterns. Used to help Bud answer questions about digestive health and provide personalized insights." : {
+
+    },
+    "Calendar Events" : {
+
+    },
+    "Cycle Phase Tip" : {
+
+    },
+    "Cycle tracking and related data. Used to help Bud answer questions about menstrual health and provide personalized insights." : {
+
+    },
+    "Demographics" : {
+
+    },
+    "Digestive Health" : {
+
+    },
+    "Evening" : {
+
+    },
+    "Events from your selected calendars. Used to help Bud understand your schedule context and answer related questions." : {
+
+    },
+    "Goals" : {
+
+    },
+    "Insights" : {
+
+    },
+    "Lifestyle" : {
+
+    },
+    "Location" : {
+
+    },
+    "Meals, calories, macros, and water intake. Used to help Bud answer questions about your nutrition and provide personalized insights." : {
+
+    },
+    "Menstrual Health" : {
+
+    },
+    "Morning" : {
+
+    },
+    "Night" : {
+
+    },
+    "Nutrition" : {
+
+    },
+    "Period Forecast" : {
+
+    },
+    "Physical Activity" : {
+
+    },
+    "Reminders" : {
+
+    },
+    "Sleep" : {
+
+    },
+    "Sleep Details" : {
+
+    },
+    "Sleep duration, quality, and stages. Used to help Bud answer questions about your sleep patterns and provide personalized insights." : {
+
+    },
+    "Steps, workouts, training load, and exercise data. Used to provide personalized activity insights and answer your activity-related questions." : {
+
+    },
+    "Stress and Mindfulness" : {
+
+    },
+    "Stress levels and mindfulness activity. Used to help Bud answer questions about stress patterns and provide personalized insights." : {
+
+    },
+    "Today's Advice" : {
+
+    },
+    "Today's Events" : {
+
+    },
+    "Today's Weather" : {
+
+    },
+    "Tomorrow's Events" : {
+
+    },
+    "Tomorrow's Weather" : {
+
+    },
+    "Tonight's Sleep" : {
+
+    },
+    "Weather" : {
+
+    },
+    "Weather conditions for your location, but not your location itself. Used to help Bud understand external factors that may affect your health." : {
+
+    },
+    "Your coarse location (city, state, country). Used to help Bud understand environmental context and provide location-aware insights, without knowing your exact position." : {
+
+    },
+    "Your health goals and progress. Used to help Bud contextualize your questions and generate personalized suggestions." : {
+
+    }
   },
   "version" : "1.0"
 }
