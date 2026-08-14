@@ -249,7 +249,8 @@ extension ChatController {
       extraSystemContext: extraSystemContext,
       requestID: requestID,
       lastMessageID: lastMessageID,
-      conversationID: resolvedConversationID
+      conversationID: resolvedConversationID,
+      locale: ChatLanguage.tag
     )
 
     let socket = await createOrGetWebSocketHandle()
@@ -310,7 +311,8 @@ extension ChatController {
       extraSystemContext: systemContext,
       requestID: requestID,
       lastMessageID: lastMessageID,
-      conversationID: resolvedConversationID
+      conversationID: resolvedConversationID,
+      locale: ChatLanguage.tag
     )
 
     let socket = await createOrGetWebSocketHandle()
@@ -589,7 +591,8 @@ private extension ChatController {
           toolCallResults: toolCallsResponses,
           requestID: requestIDForResponse,
           conversationID: conversationID,
-          lastMessageID: lastMessageID
+          lastMessageID: lastMessageID,
+          locale: ChatLanguage.tag
         )
 
         if let socket = webSocketHandle {
@@ -604,7 +607,8 @@ private extension ChatController {
           toolCallResults: toolCallRequest.toolCalls.map { SocketMessage.ToolCallResult(toolCallID: $0.toolCallID) },
           requestID: requestIDForResponse,
           conversationID: conversationID,
-          lastMessageID: lastMessageID
+          lastMessageID: lastMessageID,
+          locale: ChatLanguage.tag
         )
         if let socket = webSocketHandle {
           try? await socket.send(payload: responseMessage)

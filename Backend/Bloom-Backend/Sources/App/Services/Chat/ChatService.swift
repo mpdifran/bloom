@@ -163,7 +163,11 @@ private extension ChatService {
     // Generate conversation title in parallel if this is the first message
     if message.lastMessageID == nil, let conversationID = message.conversationID, message.text.isNotEmpty {
       Task {
-        if let title = await openAIService.generateConversationTitle(userMessage: message.text) {
+        let languageName = ChatLanguageInstruction.languageDisplayName(forLocaleTag: message.locale)
+        if let title = await openAIService.generateConversationTitle(
+          userMessage: message.text,
+          languageName: languageName
+        ) {
           let nameUpdate = SocketMessage.ConversationNameUpdate(conversationID: conversationID, name: title)
           try? await ensureContentSilentlySent(nameUpdate, userID: userID, db: db)
         }
@@ -177,7 +181,8 @@ private extension ChatService {
       modelOverride: modelOverride,
       isV2Client: message.isV2 == true,
       clientLastMessageID: message.lastMessageID,
-      conversationID: message.conversationID
+      conversationID: message.conversationID,
+      locale: message.locale
     )
   }
 
@@ -213,7 +218,8 @@ private extension ChatService {
       modelOverride: modelOverride,
       isV2Client: isV2Client,
       clientLastMessageID: response.lastMessageID,
-      conversationID: response.conversationID
+      conversationID: response.conversationID,
+      locale: response.locale
     )
   }
 }
@@ -230,7 +236,8 @@ private extension ChatService {
     isRetry: Bool = false,
     isV2Client: Bool,
     clientLastMessageID: String?,
-    conversationID: String?
+    conversationID: String?,
+    locale: String?
   ) async throws {
 
     if isRetry {
@@ -266,11 +273,20 @@ private extension ChatService {
     // Enforce the per-user AI token budget before spending on a new request.
     try await application.aiUsageLimiter.checkBudget(for: userID)
 
+    // Client-supplied locale, mapped to a language name server-side. Nil for English or an
+    // unrecognized tag, which leaves the base prompt untouched.
+    let instructions: String
+    if let languageInstruction = ChatLanguageInstruction.instruction(forLocaleTag: locale) {
+      instructions = String.Prompt.chatAssistant + "\n" + languageInstruction
+    } else {
+      instructions = .Prompt.chatAssistant
+    }
+
     logger.debug("Streaming with model \(selectedModel.id)")
     let stream = try await openAIService.openAI.responses.createAndStreamResponse(
       input: fortifiedInputs,
       model: selectedModel,
-      instructions: .Prompt.chatAssistant,
+      instructions: instructions,
       previousResponseID: previousResponseID,
       reasoning: .init(effort: .low, summary: .auto),
       tools: tools,
@@ -297,7 +313,8 @@ private extension ChatService {
         isRetry: true,
         isV2Client: isV2Client,
         clientLastMessageID: clientLastMessageID,
-        conversationID: conversationID
+        conversationID: conversationID,
+        locale: locale
       )
     }
 

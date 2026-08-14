@@ -58,9 +58,13 @@ struct OpenAIService: Sendable {
 
 extension OpenAIService {
 
-  func generateConversationTitle(userMessage: String, userID: UserIdentifier? = nil) async -> String? {
+  func generateConversationTitle(userMessage: String, userID: UserIdentifier? = nil, languageName: String? = nil) async -> String? {
     do {
       let model = ModelID.GPT5.gpt5Nano
+
+      // Titles show up in the conversation list, so they follow the app's language too.
+      let languageInstruction: [Chat.Message.Content] = languageName
+        .map { [.text("Write the title in \($0).")] } ?? []
 
       let messages: [Chat.Message] = [
         Chat.Message(
@@ -85,7 +89,7 @@ extension OpenAIService {
               User: "I've been feeling tired lately"
               Title: Fatigue and Energy Levels
               """)
-          ]
+          ] + languageInstruction
         ),
         Chat.Message(
           role: .user,

@@ -104,9 +104,11 @@ The `SocketMessage` namespace contains 13 message types for WebSocket communicat
    - `requestID: String` - Unique request identifier
    - `lastMessageID: String?` - Previous response ID (V2 only)
    - `conversationID: String?` - Conversation identifier (V2 only)
+   - `locale: String?` - BCP-47 tag for the app's language, e.g. "es-MX" (see [Assistant Language](#assistant-language))
 
 2. **ToolCallsResponse** - Client responds with health data
    - `outputs: [ToolOutput]` - Query results
+   - `locale: String?` - Same tag; tool results re-enter the streaming path, so the language travels with them
    - `conversationID: String?` - Conversation identifier
 
 #### Response Types (Server → Client)
@@ -2070,3 +2072,53 @@ For questions or clarifications about this architecture, refer to:
 - `CLAUDE.md` - Development guidelines
 - `ARCHITECTURE.md` - General architectural patterns
 - Code comments in referenced files
+
+## Assistant Language
+
+Bud replies in the language the app is running in. The client sends a BCP-47 tag on
+`MessageRequest.locale` and `ToolCallsResponse.locale`; the server turns it into one extra line of
+instructions.
+
+### Why no protocol version
+
+`locale` is optional on both message types, so it's compatible in both directions: an older client
+omits the key and it decodes as `nil`; a newer client talking to an older server has the key ignored
+by `JSONDecoder`. Note that "V2" in this codebase is not a version number — `isV2` is computed as
+`conversationID != nil` — so there is nothing to bump.
+
+### Client
+
+**Location:** `Apps/Bloom/Bloom/UserInterface/Chat/ChatLogic/ChatLanguage.swift`
+
+`ChatLanguage.tag` reports the language the **UI actually resolved to**
+(`Bundle.main.preferredLocalizations.first`), not `Locale.current`. A device set to Spanish running
+an English-only build resolves to `en`, which is what we want — otherwise Bud would answer in
+Spanish surrounded by English labels. The current region is appended when the tag doesn't already
+carry one, so the server can tell `pt-BR` from `pt-PT`.
+
+### Server
+
+**Location:** `Backend/Bloom-Backend/Sources/App/Services/Chat/ChatLanguageInstruction.swift`
+
+The tag is **client-supplied input being promoted to system authority**, so none of it reaches the
+prompt. It's parsed into a language code and optional region code, both validated, and only names
+looked up from Foundation's tables are interpolated. Anything unrecognized returns `nil`.
+
+`nil` means *no instruction is added*, leaving the base prompt untouched. This matters for clients
+that predate the field: they keep today's behaviour, where Bud mirrors whatever language the user
+writes in. English also returns `nil` — the base prompt is already English.
+
+The instruction is a default, not a hard rule: it tells Bud to write in the app's language but to
+follow the user if they switch languages mid-conversation. It also states two things the model would
+otherwise get wrong:
+
+- Health data arrives in **English** (see the `canonicalName` rule in ARCHITECTURE.md) and should be
+  translated when referred to.
+- Inside ` ```json ` blocks, **keys and enumerated values stay English** — the client parses them.
+  Only free-text values may be translated.
+
+Conversation titles get the same language (`generateConversationTitle(userMessage:languageName:)`),
+so the conversation list doesn't end up as English titles over non-English chats.
+
+Instructions are per-request, so a user switching their phone's language takes effect on the next
+message — conversation continuity via `previousResponseID` is unaffected.

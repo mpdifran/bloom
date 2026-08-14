@@ -15,6 +15,12 @@ public extension SocketMessage {
     public let lastMessageID: String?
     public let conversationID: String?
 
+    /// BCP-47 tag for the language the client's UI is running in, e.g. "es-MX".
+    ///
+    /// Optional for backwards compatibility: clients shipped before this existed send nothing, and
+    /// the server leaves the assistant's language behaviour untouched in that case.
+    public let locale: String?
+
     public var isV2: Bool {
       conversationID != nil
     }
@@ -26,7 +32,8 @@ public extension SocketMessage {
       extraSystemContext: String? = nil,
       requestID: String? = nil,
       lastMessageID: String? = nil,
-      conversationID: String? = nil
+      conversationID: String? = nil,
+      locale: String? = nil
     ) {
       self.text = text
       self.imageFileIDs = imageFileIDs
@@ -35,6 +42,7 @@ public extension SocketMessage {
       self.requestID = requestID
       self.lastMessageID = lastMessageID
       self.conversationID = conversationID
+      self.locale = locale
     }
   }
 

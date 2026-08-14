@@ -51,18 +51,26 @@ public extension SocketMessage {
     public let conversationID: String?
     public let lastMessageID: String?
 
+    /// BCP-47 tag for the language the client's UI is running in, e.g. "es-MX".
+    ///
+    /// Tool call results re-enter the same streaming path as a message, so the language has to
+    /// travel with them too. Optional for the same backwards-compatibility reason.
+    public let locale: String?
+
     public init(
       runID: String,
       toolCallResults: [ToolCallResult],
       requestID: String? = nil,
       conversationID: String? = nil,
-      lastMessageID: String? = nil
+      lastMessageID: String? = nil,
+      locale: String? = nil
     ) {
       self.runID = runID
       self.toolCallResults = toolCallResults
       self.requestID = requestID
       self.conversationID = conversationID
       self.lastMessageID = lastMessageID
+      self.locale = locale
     }
   }
 }
