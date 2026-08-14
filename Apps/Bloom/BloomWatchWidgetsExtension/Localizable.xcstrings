@@ -1,106 +1,298 @@
 {
-  "sourceLanguage" : "en",
-  "strings" : {
-    "" : {
-
-    },
-    "%@" : {
-
-    },
-    "%@ %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ %2$@"
+  "sourceLanguage": "en",
+  "strings": {
+    "": {},
+    "%@": {},
+    "%@ %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ %2$@"
           }
         }
       }
     },
-    "%@ yrs" : {
-
+    "%@ yrs": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ans"
+          }
+        }
+      }
     },
-    "Action" : {
-
+    "Action": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Action"
+          }
+        }
+      }
     },
-    "Actions" : {
-
+    "Actions": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actions"
+          }
+        }
+      }
     },
-    "Actions Widget" : {
-
+    "Actions Widget": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widget Actions"
+          }
+        }
+      }
     },
-    "Bio Age" : {
-
+    "Bio Age": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Âge bio"
+          }
+        }
+      }
     },
-    "Biological Age" : {
-
+    "Biological Age": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Âge biologique"
+          }
+        }
+      }
     },
-    "Choose which action to open." : {
-
+    "Choose which action to open.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez l'action à ouvrir."
+          }
+        }
+      }
     },
-    "Choose which goal to display." : {
-
+    "Choose which goal to display.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez l'objectif à afficher."
+          }
+        }
+      }
     },
-    "Complete Reminder" : {
-
+    "Complete Reminder": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terminer le rappel"
+          }
+        }
+      }
     },
-    "Goal" : {
-
+    "Goal": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Objectif"
+          }
+        }
+      }
     },
-    "Goal Widget" : {
-
+    "Goal Widget": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widget Objectif"
+          }
+        }
+      }
     },
-    "Heart Rate" : {
-
+    "Heart Rate": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fréquence cardiaque"
+          }
+        }
+      }
     },
-    "Marks a reminder as completed." : {
-
+    "Marks a reminder as completed.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marque un rappel comme terminé."
+          }
+        }
+      }
     },
-    "No Goal" : {
-
+    "No Goal": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun objectif"
+          }
+        }
+      }
     },
-    "No Reminders" : {
-
+    "No Reminders": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun rappel"
+          }
+        }
+      }
     },
-    "Occurrence ID" : {
-
+    "Occurrence ID": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Identifiant d'occurrence"
+          }
+        }
+      }
     },
-    "Quickly open actions or a specific action." : {
-
+    "Quickly open actions or a specific action.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrez rapidement les actions ou une action précise."
+          }
+        }
+      }
     },
-    "Quickly open your workouts." : {
-
+    "Quickly open your workouts.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrez rapidement vos séances."
+          }
+        }
+      }
     },
-    "Reminder" : {
-
+    "Reminder": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rappel"
+          }
+        }
+      }
     },
-    "Reminder ID" : {
-
+    "Reminder ID": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Identifiant de rappel"
+          }
+        }
+      }
     },
-    "See your biological age at a glance." : {
-
+    "See your biological age at a glance.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consultez votre âge biologique d'un coup d'œil."
+          }
+        }
+      }
     },
-    "See your next upcoming reminder." : {
-
+    "See your next upcoming reminder.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consultez votre prochain rappel."
+          }
+        }
+      }
     },
-    "Slot" : {
-
+    "Slot": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Emplacement"
+          }
+        }
+      }
     },
-    "Steps" : {
-
+    "Steps": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas"
+          }
+        }
+      }
     },
-    "Track your goal progress at a glance." : {
-
+    "Track your goal progress at a glance.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suivez votre progression d'un coup d'œil."
+          }
+        }
+      }
     },
-    "View today's steps and distance." : {
-
+    "View today's steps and distance.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consultez vos pas et votre distance du jour."
+          }
+        }
+      }
     },
-    "View your latest heart rate with today's range." : {
-
+    "View your latest heart rate with today's range.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consultez votre dernière fréquence cardiaque et l'amplitude du jour."
+          }
+        }
+      }
     },
-    "Workouts" : {
-
+    "Workouts": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Séances"
+          }
+        }
+      }
     }
   },
-  "version" : "1.0"
+  "version": "1.0"
 }

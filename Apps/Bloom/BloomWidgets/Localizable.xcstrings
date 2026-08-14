@@ -1,307 +1,998 @@
 {
-  "sourceLanguage" : "en",
-  "strings" : {
-    "--" : {
-
-    },
-    "%@" : {
-
-    },
-    "%@ • %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ • %2$@"
+  "sourceLanguage": "en",
+  "strings": {
+    "%@": {},
+    "%@ • %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ • %2$@"
           }
         }
       }
     },
-    "Action" : {
-
-    },
-    "Action Type" : {
-
-    },
-    "Actions" : {
-
-    },
-    "Activity Level" : {
-
-    },
-    "Automatic (based on time)" : {
-
-    },
-    "Automatic (Time-based)" : {
-
-    },
-    "Body Composition" : {
-
-    },
-    "Bowel Movements" : {
-
-    },
-    "Breakfast" : {
-
-    },
-    "Bud's Summary" : {
-
-    },
-    "Choose Food Item" : {
-      "comment" : "Display name for log meal configuration intent"
-    },
-    "Choose Goal" : {
-      "comment" : "Display name for goal configuration intent"
-    },
-    "Choose Saved Meal" : {
-      "comment" : "Display name for log meal configuration intent"
-    },
-    "Choose the time period to display step data for." : {
-
-    },
-    "Choose which goal to display in the widget." : {
-
-    },
-    "Choose which health action to perform." : {
-
-    },
-    "Choose which health actions to display and their order." : {
-
-    },
-    "Configure which insight to display in the widget." : {
-
-    },
-    "Configure which meal to log with the widget." : {
-
-    },
-    "Cycle Tracking" : {
-
-    },
-    "Daily" : {
-
-    },
-    "Daily Insights" : {
-
-    },
-    "Dinner" : {
-
-    },
-    "Display Mode" : {
-
-    },
-    "Error" : {
-
-    },
-    "Exercise Effectiveness" : {
-
-    },
-    "Food Item" : {
-
-    },
-    "Food Items" : {
-
-    },
-    "Food?" : {
-
-    },
-    "Get Bloom Plus Today!" : {
-
-    },
-    "Get personalized insights on what’s boosting (or bumming out) your health. It’s like x-ray vision for your wellness." : {
-
-    },
-    "Goal" : {
-
-    },
-    "Goal Widget Configuration" : {
-
-    },
-    "Goals" : {
-
-    },
-    "Health Action" : {
-
-    },
-    "Health Action Configuration" : {
-
-    },
-    "Health Insights" : {
-
-    },
-    "Heart Health" : {
-
-    },
-    "How many servings?" : {
-
-    },
-    "Log Actions Configuration" : {
-
-    },
-    "Log Data" : {
-
-    },
-    "Log Meal" : {
-
-    },
-    "Log Meal Configuration" : {
-
-    },
-    "Logs a meal with one or more food items." : {
-
-    },
-    "Lunch" : {
-
-    },
-    "Meal" : {
-
-    },
-    "Monthly" : {
-
-    },
-    "Nutrition" : {
-
-    },
-    "Open Barcode Scanner" : {
-      "comment" : "Label for action type"
-    },
-    "Open Blood Pressure Logger" : {
-      "comment" : "Label for action type"
-    },
-    "Open Bloom to Refresh" : {
-
-    },
-    "Open Bowel Movement Logger" : {
-      "comment" : "Label for action type"
-    },
-    "Open Data Loggers" : {
-
-    },
-    "Open Food Logger" : {
-      "comment" : "Label for action type"
-    },
-    "Open Health Action" : {
-
-    },
-    "Open Magic Scanner" : {
-      "comment" : "Label for action type"
-    },
-    "Open Period Logger" : {
-      "comment" : "Label for action type"
-    },
-    "Open the app to load your personalized summary." : {
-
-    },
-    "Open Voice Logger" : {
-      "comment" : "Label for action type"
-    },
-    "Open Water Logger" : {
-      "comment" : "Label for action type"
-    },
-    "Open Weight Logger" : {
-      "comment" : "Label for action type"
-    },
-    "Opens a health action to log data." : {
-
-    },
-    "Opens a specific vital to view your health data." : {
-
-    },
-    "Please select at least one food item to log" : {
-
-    },
-    "Quick access to health data logging actions." : {
-
-    },
-    "Quickly log a meal with one or more food items." : {
-
-    },
-    "Quickly log personal data." : {
-
-    },
-    "Saved Meal" : {
-
-    },
-    "See Bud's daily summary of your health." : {
-
-    },
-    "Servings" : {
-
-    },
-    "Single Food Item" : {
-
-    },
-    "Sleep Quality" : {
-
-    },
-    "Slot" : {
-
-    },
-    "Snack" : {
-
-    },
-    "Steps" : {
-
-    },
-    "Steps Widget Configuration" : {
-
-    },
-    "Stress Levels" : {
-
-    },
-    "Time Period" : {
-
-    },
-    "Today Insight Configuration" : {
-
-    },
-    "Today's Advice" : {
-
-    },
-    "Tonight's Sleep" : {
-
-    },
-    "Track your goal completion visually over time." : {
-
-    },
-    "Track your steps and walking distance." : {
-
-    },
-    "Unable to load insights. Please open the app." : {
-
-    },
-    "Value" : {
-
-    },
-    "View personalized health insights that automatically cycle throughout the day." : {
-
-    },
-    "View Vital" : {
-
-    },
-    "View your personalized today's advice or tonight's sleep recommendations." : {
-
-    },
-    "Vital" : {
-
-    },
-    "Weekly" : {
-
-    },
-    "Which food item?" : {
-
-    },
-    "Which meal?" : {
-
-    },
-    "Whoops, looks like I made a mistake. Please open Bloom to try again." : {
-
-    },
-    "Widget Type" : {
-
-    },
-    "Yearly" : {
-
+    "--": {},
+    "Action": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Action"
+          }
+        }
+      }
+    },
+    "Action Type": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Type d'action"
+          }
+        }
+      }
+    },
+    "Actions": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actions"
+          }
+        }
+      }
+    },
+    "Activity Level": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveau d'activité"
+          }
+        }
+      }
+    },
+    "Automatic (Time-based)": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatique (selon l'heure)"
+          }
+        }
+      }
+    },
+    "Automatic (based on time)": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatique (selon l'heure)"
+          }
+        }
+      }
+    },
+    "Body Composition": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Composition corporelle"
+          }
+        }
+      }
+    },
+    "Bowel Movements": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selles"
+          }
+        }
+      }
+    },
+    "Breakfast": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Petit-déjeuner"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déjeuner"
+          }
+        }
+      }
+    },
+    "Bud's Summary": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le résumé de Bud"
+          }
+        }
+      }
+    },
+    "Choose Food Item": {
+      "comment": "Display name for log meal configuration intent",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisir un aliment"
+          }
+        }
+      }
+    },
+    "Choose Goal": {
+      "comment": "Display name for goal configuration intent",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisir un objectif"
+          }
+        }
+      }
+    },
+    "Choose Saved Meal": {
+      "comment": "Display name for log meal configuration intent",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisir un repas enregistré"
+          }
+        }
+      }
+    },
+    "Choose the time period to display step data for.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez la période pour laquelle afficher les données de pas."
+          }
+        }
+      }
+    },
+    "Choose which goal to display in the widget.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez l'objectif à afficher dans le widget."
+          }
+        }
+      }
+    },
+    "Choose which health action to perform.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez l'action santé à effectuer."
+          }
+        }
+      }
+    },
+    "Choose which health actions to display and their order.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez les actions santé à afficher et leur ordre."
+          }
+        }
+      }
+    },
+    "Configure which insight to display in the widget.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez l'analyse à afficher dans le widget."
+          }
+        }
+      }
+    },
+    "Configure which meal to log with the widget.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez le repas à enregistrer avec le widget."
+          }
+        }
+      }
+    },
+    "Cycle Tracking": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suivi du cycle"
+          }
+        }
+      }
+    },
+    "Daily": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quotidien"
+          }
+        }
+      }
+    },
+    "Daily Insights": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Analyses quotidiennes"
+          }
+        }
+      }
+    },
+    "Dinner": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dîner"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Souper"
+          }
+        }
+      }
+    },
+    "Display Mode": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mode d'affichage"
+          }
+        }
+      }
+    },
+    "Error": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erreur"
+          }
+        }
+      }
+    },
+    "Exercise Effectiveness": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Efficacité de l'exercice"
+          }
+        }
+      }
+    },
+    "Food Item": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aliment"
+          }
+        }
+      }
+    },
+    "Food Items": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aliments"
+          }
+        }
+      }
+    },
+    "Food?": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quel aliment ?"
+          }
+        }
+      }
+    },
+    "Get Bloom Plus Today!": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passez à Bloom Plus dès aujourd'hui !"
+          }
+        }
+      }
+    },
+    "Get personalized insights on what’s boosting (or bumming out) your health. It’s like x-ray vision for your wellness.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obtenez des analyses personnalisées sur ce qui stimule (ou plombe) votre santé. Une véritable radiographie de votre bien-être."
+          }
+        }
+      }
+    },
+    "Goal": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Objectif"
+          }
+        }
+      }
+    },
+    "Goal Widget Configuration": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuration du widget Objectif"
+          }
+        }
+      }
+    },
+    "Goals": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Objectifs"
+          }
+        }
+      }
+    },
+    "Health Action": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Action santé"
+          }
+        }
+      }
+    },
+    "Health Action Configuration": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuration de l'action santé"
+          }
+        }
+      }
+    },
+    "Health Insights": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Analyses santé"
+          }
+        }
+      }
+    },
+    "Heart Health": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Santé cardiaque"
+          }
+        }
+      }
+    },
+    "How many servings?": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Combien de portions ?"
+          }
+        }
+      }
+    },
+    "Log Actions Configuration": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuration des actions d'enregistrement"
+          }
+        }
+      }
+    },
+    "Log Data": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer des données"
+          }
+        }
+      }
+    },
+    "Log Meal": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer un repas"
+          }
+        }
+      }
+    },
+    "Log Meal Configuration": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuration de l'enregistrement des repas"
+          }
+        }
+      }
+    },
+    "Logs a meal with one or more food items.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistre un repas comprenant un ou plusieurs aliments."
+          }
+        }
+      }
+    },
+    "Lunch": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déjeuner"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dîner"
+          }
+        }
+      }
+    },
+    "Meal": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repas"
+          }
+        }
+      }
+    },
+    "Monthly": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mensuel"
+          }
+        }
+      }
+    },
+    "Nutrition": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutrition"
+          }
+        }
+      }
+    },
+    "Open Barcode Scanner": {
+      "comment": "Label for action type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir le lecteur de codes-barres"
+          }
+        }
+      }
+    },
+    "Open Blood Pressure Logger": {
+      "comment": "Label for action type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir l'enregistrement de la tension"
+          }
+        }
+      }
+    },
+    "Open Bloom to Refresh": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrez Bloom pour actualiser"
+          }
+        }
+      }
+    },
+    "Open Bowel Movement Logger": {
+      "comment": "Label for action type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir l'enregistrement des selles"
+          }
+        }
+      }
+    },
+    "Open Data Loggers": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir les outils d'enregistrement"
+          }
+        }
+      }
+    },
+    "Open Food Logger": {
+      "comment": "Label for action type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir l'enregistrement des aliments"
+          }
+        }
+      }
+    },
+    "Open Health Action": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir une action santé"
+          }
+        }
+      }
+    },
+    "Open Magic Scanner": {
+      "comment": "Label for action type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir le scanner magique"
+          }
+        }
+      }
+    },
+    "Open Period Logger": {
+      "comment": "Label for action type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir l'enregistrement des règles"
+          }
+        }
+      }
+    },
+    "Open Voice Logger": {
+      "comment": "Label for action type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir l'enregistrement vocal"
+          }
+        }
+      }
+    },
+    "Open Water Logger": {
+      "comment": "Label for action type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir l'enregistrement de l'eau"
+          }
+        }
+      }
+    },
+    "Open Weight Logger": {
+      "comment": "Label for action type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir l'enregistrement du poids"
+          }
+        }
+      }
+    },
+    "Open the app to load your personalized summary.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrez l'app pour charger votre résumé personnalisé."
+          }
+        }
+      }
+    },
+    "Opens a health action to log data.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvre une action santé pour enregistrer des données."
+          }
+        }
+      }
+    },
+    "Opens a specific vital to view your health data.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvre une constante précise pour consulter vos données de santé."
+          }
+        }
+      }
+    },
+    "Please select at least one food item to log": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sélectionnez au moins un aliment à enregistrer"
+          }
+        }
+      }
+    },
+    "Quick access to health data logging actions.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accès rapide aux actions d'enregistrement de données de santé."
+          }
+        }
+      }
+    },
+    "Quickly log a meal with one or more food items.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrez rapidement un repas comprenant un ou plusieurs aliments."
+          }
+        }
+      }
+    },
+    "Quickly log personal data.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrez rapidement vos données personnelles."
+          }
+        }
+      }
+    },
+    "Saved Meal": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repas enregistré"
+          }
+        }
+      }
+    },
+    "See Bud's daily summary of your health.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consultez le résumé quotidien de votre santé par Bud."
+          }
+        }
+      }
+    },
+    "Servings": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Portions"
+          }
+        }
+      }
+    },
+    "Single Food Item": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aliment unique"
+          }
+        }
+      }
+    },
+    "Sleep Quality": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qualité du sommeil"
+          }
+        }
+      }
+    },
+    "Slot": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Emplacement"
+          }
+        }
+      }
+    },
+    "Snack": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Collation"
+          }
+        }
+      }
+    },
+    "Steps": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas"
+          }
+        }
+      }
+    },
+    "Steps Widget Configuration": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuration du widget Pas"
+          }
+        }
+      }
+    },
+    "Stress Levels": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveaux de stress"
+          }
+        }
+      }
+    },
+    "Time Period": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Période"
+          }
+        }
+      }
+    },
+    "Today Insight Configuration": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuration de l'analyse du jour"
+          }
+        }
+      }
+    },
+    "Today's Advice": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le conseil du jour"
+          }
+        }
+      }
+    },
+    "Tonight's Sleep": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le sommeil de cette nuit"
+          }
+        }
+      }
+    },
+    "Track your goal completion visually over time.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suivez visuellement l'atteinte de votre objectif dans le temps."
+          }
+        }
+      }
+    },
+    "Track your steps and walking distance.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suivez vos pas et votre distance de marche."
+          }
+        }
+      }
+    },
+    "Unable to load insights. Please open the app.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de charger les analyses. Ouvrez l'app."
+          }
+        }
+      }
+    },
+    "Value": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Valeur"
+          }
+        }
+      }
+    },
+    "View Vital": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voir la constante"
+          }
+        }
+      }
+    },
+    "View personalized health insights that automatically cycle throughout the day.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consultez des analyses santé personnalisées qui défilent automatiquement au fil de la journée."
+          }
+        }
+      }
+    },
+    "View your personalized today's advice or tonight's sleep recommendations.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consultez votre conseil du jour ou vos recommandations pour le sommeil de cette nuit."
+          }
+        }
+      }
+    },
+    "Vital": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Constante"
+          }
+        }
+      }
+    },
+    "Weekly": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hebdomadaire"
+          }
+        }
+      }
+    },
+    "Which food item?": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quel aliment ?"
+          }
+        }
+      }
+    },
+    "Which meal?": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quel repas ?"
+          }
+        }
+      }
+    },
+    "Whoops, looks like I made a mistake. Please open Bloom to try again.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oups, on dirait que j'ai fait une erreur. Ouvrez Bloom pour réessayer."
+          }
+        }
+      }
+    },
+    "Widget Type": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Type de widget"
+          }
+        }
+      }
+    },
+    "Yearly": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annuel"
+          }
+        }
+      }
     }
   },
-  "version" : "1.0"
+  "version": "1.0"
 }
