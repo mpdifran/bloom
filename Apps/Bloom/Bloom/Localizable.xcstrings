@@ -4,28 +4,13 @@
     "" : {
 
     },
-    " " : {
-
-    },
     " • " : {
-
-    },
-    "-" : {
-
-    },
-    "--" : {
 
     },
     "-12 (younger)" : {
 
     },
     "—" : {
-
-    },
-    "—-" : {
-
-    },
-    "[%@]" : {
 
     },
     "**Benefits of quitting:**" : {
@@ -37,16 +22,7 @@
     "**Low-risk drinking** is defined as:" : {
 
     },
-    "/" : {
-
-    },
-    "/ %@" : {
-
-    },
     "/ %@ min" : {
-
-    },
-    "%" : {
 
     },
     "%.0f" : {
@@ -57,26 +33,6 @@
     },
     "%@" : {
 
-    },
-    "%@ - %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ - %2$@"
-          }
-        }
-      }
-    },
-    "%@ (%@ %@)" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ (%2$@ %3$@)"
-          }
-        }
-      }
     },
     "%@ / %@" : {
       "localizations" : {
@@ -95,16 +51,6 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$@ %2$@"
-          }
-        }
-      }
-    },
-    "%@ • %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ • %2$@"
           }
         }
       }
@@ -164,16 +110,6 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$@. %2$@"
-          }
-        }
-      }
-    },
-    "%@%@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@%2$@"
           }
         }
       }
@@ -268,12 +204,6 @@
         }
       }
     },
-    "%lld'" : {
-
-    },
-    "%lld\"" : {
-
-    },
     "%lld%%" : {
 
     },
@@ -290,9 +220,6 @@
 
     },
     "%lldm" : {
-
-    },
-    "•" : {
 
     },
     "• 4 or more drinks within a few hours" : {
@@ -361,14 +288,8 @@
     "±%lld min variation" : {
 
     },
-    "×%lld" : {
-
-    },
     "< 8 Hours" : {
       "comment" : "Label for bowel movements detail view"
-    },
-    "=" : {
-
     },
     "> 72 Hours" : {
       "comment" : "Label for bowel movements detail view"
@@ -390,9 +311,6 @@
 
     },
     "0 years" : {
-
-    },
-    "1" : {
 
     },
     "1 Day" : {
