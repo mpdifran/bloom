@@ -5128,8 +5128,26 @@
         }
       }
     },
-    "Loading notifications...": {},
-    "Log": {},
+    "Loading notifications...": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chargement des notifications…"
+          }
+        }
+      }
+    },
+    "Log": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer"
+          }
+        }
+      }
+    },
     "Log %lld %@": {
       "localizations": {
         "en": {
@@ -5137,348 +5155,2626 @@
             "state": "new",
             "value": "Log %1$lld %2$@"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer %1$lld %2$@"
+          }
         }
       }
     },
-    "Log Actions Configuration": {},
+    "Log Actions Configuration": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuration des actions d'enregistrement"
+          }
+        }
+      }
+    },
     "Log Blood Pressure": {
-      "comment": "Display name for to do model"
+      "comment": "Display name for to do model",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer la tension"
+          }
+        }
+      }
     },
-    "Log Bowel Movement": {},
+    "Log Bowel Movement": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer des selles"
+          }
+        }
+      }
+    },
     "Log Food": {
-      "comment": "Display name for to do model\nTitle for side effect cell"
+      "comment": "Display name for to do model\nTitle for side effect cell",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer un aliment"
+          }
+        }
+      }
     },
-    "Log Meal": {},
-    "Log Meal Configuration": {},
-    "Log Out": {},
-    "Log Period": {},
+    "Log Meal": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer un repas"
+          }
+        }
+      }
+    },
+    "Log Meal Configuration": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuration de l'enregistrement des repas"
+          }
+        }
+      }
+    },
+    "Log Out": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se déconnecter"
+          }
+        }
+      }
+    },
+    "Log Period": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer les règles"
+          }
+        }
+      }
+    },
     "Log Protein": {
-      "comment": "Display name for to do model"
+      "comment": "Display name for to do model",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer des protéines"
+          }
+        }
+      }
     },
     "Log Water": {
-      "comment": "Title for side effect cell"
+      "comment": "Title for side effect cell",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer de l'eau"
+          }
+        }
+      }
     },
     "Log Weight": {
-      "comment": "Display name for to do model"
+      "comment": "Display name for to do model",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer le poids"
+          }
+        }
+      }
     },
-    "Log a workout with your Apple Watch to get a better sense of your Exercise Effectiveness.": {},
-    "Log your bowel movements to learn more about your regularity.": {},
-    "Log your weight to learn more about your body composition.": {},
-    "Logged": {},
-    "Logs a meal with one or more food items.": {},
+    "Log a workout with your Apple Watch to get a better sense of your Exercise Effectiveness.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrez une séance avec votre Apple Watch pour mieux évaluer l'efficacité de votre exercice."
+          }
+        }
+      }
+    },
+    "Log your bowel movements to learn more about your regularity.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrez vos selles pour en savoir plus sur votre régularité."
+          }
+        }
+      }
+    },
+    "Log your weight to learn more about your body composition.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrez votre poids pour en savoir plus sur votre composition corporelle."
+          }
+        }
+      }
+    },
+    "Logged": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistré"
+          }
+        }
+      }
+    },
+    "Logs a meal with one or more food items.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistre un repas comprenant un ou plusieurs aliments."
+          }
+        }
+      }
+    },
     "Long": {
-      "comment": "Title for workout duration"
+      "comment": "Title for workout duration",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Long"
+          }
+        }
+      }
     },
-    "Looking up foods...": {},
-    "Looks Great!": {},
-    "Looks good!": {},
-    "Lower": {},
-    "Lowest Body Fat %": {},
-    "Lowest Score": {},
-    "Loyalty Offer": {},
-    "Lunch": {},
-    "Luteal": {},
-    "Luteal HR": {},
-    "Luteal Sleep": {},
-    "MAX: %@": {},
-    "MAX: %lld": {},
-    "MIN: %@": {},
-    "Macro": {},
+    "Looking up foods...": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recherche d'aliments…"
+          }
+        }
+      }
+    },
+    "Looks Great!": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Très bien !"
+          }
+        }
+      }
+    },
+    "Looks good!": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ça a l'air bien !"
+          }
+        }
+      }
+    },
+    "Lower": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inférieur"
+          }
+        }
+      }
+    },
+    "Lowest Body Fat %": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Masse grasse la plus basse"
+          }
+        }
+      }
+    },
+    "Lowest Score": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Score le plus bas"
+          }
+        }
+      }
+    },
+    "Loyalty Offer": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Offre de fidélité"
+          }
+        }
+      }
+    },
+    "Lunch": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déjeuner"
+          }
+        }
+      }
+    },
+    "Luteal": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lutéale"
+          }
+        }
+      }
+    },
+    "Luteal HR": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FC en phase lutéale"
+          }
+        }
+      }
+    },
+    "Luteal Sleep": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sommeil en phase lutéale"
+          }
+        }
+      }
+    },
+    "MAX: %@": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MAX : %@"
+          }
+        }
+      }
+    },
+    "MAX: %lld": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MAX : %lld"
+          }
+        }
+      }
+    },
+    "MIN: %@": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MIN : %@"
+          }
+        }
+      }
+    },
+    "Macro": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Macronutriment"
+          }
+        }
+      }
+    },
     "Macros": {
-      "comment": "Title for nutrients widget view model"
+      "comment": "Title for nutrients widget view model",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Macronutriments"
+          }
+        }
+      }
     },
-    "Make sure to get the front of the packaging, including the brand and product name.": {},
-    "Manage Containers": {},
+    "Make sure to get the front of the packaging, including the brand and product name.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Veillez à photographier le devant de l'emballage, avec la marque et le nom du produit."
+          }
+        }
+      }
+    },
+    "Manage Containers": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gérer les contenants"
+          }
+        }
+      }
+    },
     "Mango": {
-      "comment": "Display name for theme"
+      "comment": "Display name for theme",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mangue"
+          }
+        }
+      }
     },
-    "Max": {},
-    "Max Cholesterol": {},
-    "Max Fiber": {},
-    "Max Goal": {},
-    "Max HR": {},
-    "Max Heart Rate": {},
-    "Max RHR": {},
-    "Max Range": {},
-    "Max Sugar": {},
-    "Max: %lld bpm": {},
-    "Meal": {},
+    "Max": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Max"
+          }
+        }
+      }
+    },
+    "Max Cholesterol": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cholestérol max"
+          }
+        }
+      }
+    },
+    "Max Fiber": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fibres max"
+          }
+        }
+      }
+    },
+    "Max Goal": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Objectif max"
+          }
+        }
+      }
+    },
+    "Max HR": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FC max"
+          }
+        }
+      }
+    },
+    "Max Heart Rate": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fréquence cardiaque maximale"
+          }
+        }
+      }
+    },
+    "Max RHR": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FC au repos max"
+          }
+        }
+      }
+    },
+    "Max Range": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plage max"
+          }
+        }
+      }
+    },
+    "Max Sugar": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sucres max"
+          }
+        }
+      }
+    },
+    "Max: %lld bpm": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Max : %lld bpm"
+          }
+        }
+      }
+    },
+    "Meal": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repas"
+          }
+        }
+      }
+    },
     "Meals": {
-      "comment": "Display name for food logging action card view"
+      "comment": "Display name for food logging action card view",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repas"
+          }
+        }
+      }
     },
     "Medium": {
-      "comment": "Title for workout duration"
+      "comment": "Title for workout duration",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moyen"
+          }
+        }
+      }
     },
-    "Memory": {},
-    "Memory Removed": {},
-    "Memory Updated": {},
+    "Memory": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mémoire"
+          }
+        }
+      }
+    },
+    "Memory Removed": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Souvenir supprimé"
+          }
+        }
+      }
+    },
+    "Memory Updated": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Souvenir mis à jour"
+          }
+        }
+      }
+    },
     "Message": {
-      "comment": "Placeholder in the chat input field"
+      "comment": "Placeholder in the chat input field",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Message"
+          }
+        }
+      }
     },
-    "Metric": {},
-    "Milestone Celebrations": {},
-    "Min": {},
-    "Min Fiber": {},
-    "Min Goal": {},
-    "Min HR": {},
-    "Min Range": {},
-    "Min Water": {},
-    "Min: %lld bpm": {},
-    "Minutes": {},
-    "Mobility": {},
-    "Monitor": {},
-    "Month": {},
+    "Metric": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mesure"
+          }
+        }
+      }
+    },
+    "Milestone Celebrations": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Célébration des jalons"
+          }
+        }
+      }
+    },
+    "Min": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Min"
+          }
+        }
+      }
+    },
+    "Min Fiber": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fibres min"
+          }
+        }
+      }
+    },
+    "Min Goal": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Objectif min"
+          }
+        }
+      }
+    },
+    "Min HR": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FC min"
+          }
+        }
+      }
+    },
+    "Min Range": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plage min"
+          }
+        }
+      }
+    },
+    "Min Water": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eau min"
+          }
+        }
+      }
+    },
+    "Min: %lld bpm": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Min : %lld bpm"
+          }
+        }
+      }
+    },
+    "Minutes": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minutes"
+          }
+        }
+      }
+    },
+    "Mobility": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mobilité"
+          }
+        }
+      }
+    },
+    "Monitor": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Surveillance"
+          }
+        }
+      }
+    },
+    "Month": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mois"
+          }
+        }
+      }
+    },
     "Monthly": {
-      "comment": "Display name for goal time period"
+      "comment": "Display name for goal time period",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mensuel"
+          }
+        }
+      }
     },
-    "More than 3 days between bowel movements suggests constipation. Consult healthcare provider if this persists.": {},
-    "Morning Report": {},
-    "Most Recent Period Started": {},
-    "Muted": {},
-    "My Drink": {},
-    "My Water Bottle": {},
-    "My Waterbottle": {},
-    "NEW": {},
-    "NOT ELIGIBLE": {},
-    "NOTIFY": {},
-    "Name": {},
-    "Name (Optional)": {},
-    "Neat!": {},
-    "Neat-O!": {},
-    "Needs Attention": {},
-    "Never": {},
+    "More than 3 days between bowel movements suggests constipation. Consult healthcare provider if this persists.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus de 3 jours entre deux selles évoque une constipation. Consultez un professionnel de santé si cela persiste."
+          }
+        }
+      }
+    },
+    "Morning Report": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rapport du matin"
+          }
+        }
+      }
+    },
+    "Most Recent Period Started": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Début des dernières règles"
+          }
+        }
+      }
+    },
+    "Muted": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sourdine"
+          }
+        }
+      }
+    },
+    "My Drink": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ma boisson"
+          }
+        }
+      }
+    },
+    "My Water Bottle": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ma bouteille d'eau"
+          }
+        }
+      }
+    },
+    "My Waterbottle": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ma bouteille d'eau"
+          }
+        }
+      }
+    },
+    "NEW": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "NOUVEAU"
+          }
+        }
+      }
+    },
+    "NOT ELIGIBLE": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "NON ADMISSIBLE"
+          }
+        }
+      }
+    },
+    "NOTIFY": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "NOTIFIER"
+          }
+        }
+      }
+    },
+    "Name": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nom"
+          }
+        }
+      }
+    },
+    "Name (Optional)": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nom (facultatif)"
+          }
+        }
+      }
+    },
+    "Neat!": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Génial !"
+          }
+        }
+      }
+    },
+    "Neat-O!": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Super !"
+          }
+        }
+      }
+    },
+    "Needs Attention": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nécessite votre attention"
+          }
+        }
+      }
+    },
+    "Never": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jamais"
+          }
+        }
+      }
+    },
     "New Chat": {
-      "comment": "Title for chat title view"
+      "comment": "Title for chat title view",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nouvelle conversation"
+          }
+        }
+      }
     },
-    "New Meal": {},
-    "New Reminder": {},
-    "Next": {},
-    "Next Period": {},
-    "Next: %@": {},
-    "Nice to meet you %@, I'm Bud!": {},
-    "No": {},
-    "No Achievements Yet": {},
-    "No Alcohol Data": {},
-    "No Biological Age Data": {},
-    "No Calendars": {},
-    "No Conversations": {},
-    "No Data": {},
-    "No Data Available": {},
-    "No Device Use Last Night": {},
-    "No Events": {},
-    "No Food Logged": {},
-    "No Logs": {},
-    "No Match": {},
-    "No Meals": {},
-    "No Memories": {},
-    "No Override": {},
+    "New Meal": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nouveau repas"
+          }
+        }
+      }
+    },
+    "New Reminder": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nouveau rappel"
+          }
+        }
+      }
+    },
+    "Next": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suivant"
+          }
+        }
+      }
+    },
+    "Next Period": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prochaines règles"
+          }
+        }
+      }
+    },
+    "Next: %@": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ensuite : %@"
+          }
+        }
+      }
+    },
+    "Nice to meet you %@, I'm Bud!": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enchanté %@, moi c'est Bud !"
+          }
+        }
+      }
+    },
+    "No": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non"
+          }
+        }
+      }
+    },
+    "No Achievements Yet": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune réussite pour l'instant"
+          }
+        }
+      }
+    },
+    "No Alcohol Data": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune donnée sur l'alcool"
+          }
+        }
+      }
+    },
+    "No Biological Age Data": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune donnée d'âge biologique"
+          }
+        }
+      }
+    },
+    "No Calendars": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun calendrier"
+          }
+        }
+      }
+    },
+    "No Conversations": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune conversation"
+          }
+        }
+      }
+    },
+    "No Data": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune donnée"
+          }
+        }
+      }
+    },
+    "No Data Available": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune donnée disponible"
+          }
+        }
+      }
+    },
+    "No Device Use Last Night": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune utilisation de l'appareil la nuit dernière"
+          }
+        }
+      }
+    },
+    "No Events": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun événement"
+          }
+        }
+      }
+    },
+    "No Food Logged": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun aliment enregistré"
+          }
+        }
+      }
+    },
+    "No Logs": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun enregistrement"
+          }
+        }
+      }
+    },
+    "No Match": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune correspondance"
+          }
+        }
+      }
+    },
+    "No Meals": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun repas"
+          }
+        }
+      }
+    },
+    "No Memories": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun souvenir"
+          }
+        }
+      }
+    },
+    "No Override": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune substitution"
+          }
+        }
+      }
+    },
     "No Period": {
-      "comment": "Title for legend label"
+      "comment": "Title for legend label",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucunes règles"
+          }
+        }
+      }
     },
-    "No Plans": {},
-    "No Records": {},
-    "No Reminders": {},
-    "No Results": {},
-    "No Scheduled Notifications": {},
-    "No Sleep Data": {},
-    "No Workout Data": {},
-    "No Workouts": {},
-    "No binge or heavy drinking days": {},
-    "No cached sales": {},
-    "No data": {},
-    "No debug logs have been recorded yet.": {},
-    "No equipment required.": {},
-    "No generic plans. No one-size-fits-all tips. Just real insights based on your real data.": {},
-    "No impact on your biological age": {},
-    "No logs match your search.": {},
-    "No longer available": {},
-    "No signal history available": {},
-    "None": {},
-    "Normal Diastolic": {},
-    "Normal Range": {},
-    "Normal Systolic": {},
-    "Not Set": {},
-    "Notification Permissions": {},
-    "Notification Triggers": {},
-    "Notifications": {},
-    "Number of Servings": {},
+    "No Plans": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun programme"
+          }
+        }
+      }
+    },
+    "No Records": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun relevé"
+          }
+        }
+      }
+    },
+    "No Reminders": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun rappel"
+          }
+        }
+      }
+    },
+    "No Results": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun résultat"
+          }
+        }
+      }
+    },
+    "No Scheduled Notifications": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune notification programmée"
+          }
+        }
+      }
+    },
+    "No Sleep Data": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune donnée de sommeil"
+          }
+        }
+      }
+    },
+    "No Workout Data": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune donnée de séance"
+          }
+        }
+      }
+    },
+    "No Workouts": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune séance"
+          }
+        }
+      }
+    },
+    "No binge or heavy drinking days": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun jour de consommation excessive ou importante"
+          }
+        }
+      }
+    },
+    "No cached sales": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune promotion en cache"
+          }
+        }
+      }
+    },
+    "No data": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune donnée"
+          }
+        }
+      }
+    },
+    "No debug logs have been recorded yet.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun journal de débogage n'a encore été enregistré."
+          }
+        }
+      }
+    },
+    "No equipment required.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun équipement nécessaire."
+          }
+        }
+      }
+    },
+    "No generic plans. No one-size-fits-all tips. Just real insights based on your real data.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas de programme générique. Pas de conseils passe-partout. Que des analyses concrètes fondées sur vos données réelles."
+          }
+        }
+      }
+    },
+    "No impact on your biological age": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun effet sur votre âge biologique"
+          }
+        }
+      }
+    },
+    "No logs match your search.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun enregistrement ne correspond à votre recherche."
+          }
+        }
+      }
+    },
+    "No longer available": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus disponible"
+          }
+        }
+      }
+    },
+    "No signal history available": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun historique de signal disponible"
+          }
+        }
+      }
+    },
+    "None": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun"
+          }
+        }
+      }
+    },
+    "Normal Diastolic": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diastolique normale"
+          }
+        }
+      }
+    },
+    "Normal Range": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plage normale"
+          }
+        }
+      }
+    },
+    "Normal Systolic": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Systolique normale"
+          }
+        }
+      }
+    },
+    "Not Set": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non défini"
+          }
+        }
+      }
+    },
+    "Notification Permissions": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autorisations de notification"
+          }
+        }
+      }
+    },
+    "Notification Triggers": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déclencheurs de notification"
+          }
+        }
+      }
+    },
+    "Notifications": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications"
+          }
+        }
+      }
+    },
+    "Number of Servings": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nombre de portions"
+          }
+        }
+      }
+    },
     "Nutrition": {
-      "comment": "Display name for tab kind"
+      "comment": "Display name for tab kind",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutrition"
+          }
+        }
+      }
     },
-    "Nutrition Label": {},
-    "OK": {},
-    "Oops!": {},
+    "Nutrition Label": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tableau nutritionnel"
+          }
+        }
+      }
+    },
+    "OK": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        }
+      }
+    },
+    "Oops!": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oups !"
+          }
+        }
+      }
+    },
     "Open Barcode Scanner": {
-      "comment": "Label for action type"
+      "comment": "Label for action type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir le lecteur de codes-barres"
+          }
+        }
+      }
     },
     "Open Blood Pressure Logger": {
-      "comment": "Label for action type"
+      "comment": "Label for action type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir l'enregistrement de la tension"
+          }
+        }
+      }
     },
     "Open Bowel Movement Logger": {
-      "comment": "Label for action type"
+      "comment": "Label for action type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir l'enregistrement des selles"
+          }
+        }
+      }
     },
     "Open Food Logger": {
-      "comment": "Label for action type"
+      "comment": "Label for action type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir l'enregistrement des aliments"
+          }
+        }
+      }
     },
-    "Open Health Action": {},
-    "Open Logger": {},
+    "Open Health Action": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir une action santé"
+          }
+        }
+      }
+    },
+    "Open Logger": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir l'enregistrement"
+          }
+        }
+      }
+    },
     "Open Magic Scanner": {
-      "comment": "Label for action type"
+      "comment": "Label for action type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir le scanner magique"
+          }
+        }
+      }
     },
     "Open Period Logger": {
-      "comment": "Label for action type"
+      "comment": "Label for action type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir l'enregistrement des règles"
+          }
+        }
+      }
     },
-    "Open Settings": {},
+    "Open Settings": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir Réglages"
+          }
+        }
+      }
+    },
     "Open Voice Logger": {
-      "comment": "Label for action type"
+      "comment": "Label for action type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir l'enregistrement vocal"
+          }
+        }
+      }
     },
     "Open Water Logger": {
-      "comment": "Label for action type"
+      "comment": "Label for action type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir l'enregistrement de l'eau"
+          }
+        }
+      }
     },
     "Open Weight Logger": {
-      "comment": "Label for action type"
+      "comment": "Label for action type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir l'enregistrement du poids"
+          }
+        }
+      }
     },
-    "Opens a health action to log data.": {},
-    "Opens a specific vital to view your health data.": {},
-    "Options": {},
+    "Opens a health action to log data.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvre une action santé pour enregistrer des données."
+          }
+        }
+      }
+    },
+    "Opens a specific vital to view your health data.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvre une constante précise pour consulter vos données de santé."
+          }
+        }
+      }
+    },
+    "Options": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Options"
+          }
+        }
+      }
+    },
     "Original": {
-      "comment": "Display name for experiment override"
+      "comment": "Display name for experiment override",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Original"
+          }
+        }
+      }
     },
-    "Other Monitors": {},
-    "Overall:": {},
-    "Override": {},
-    "Pause": {},
-    "Peak VO₂ Max": {},
-    "Percent": {},
-    "Perfect Sleep": {},
+    "Other Monitors": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autres surveillances"
+          }
+        }
+      }
+    },
+    "Overall:": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Global :"
+          }
+        }
+      }
+    },
+    "Override": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Substitution"
+          }
+        }
+      }
+    },
+    "Pause": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause"
+          }
+        }
+      }
+    },
+    "Peak VO₂ Max": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "VO₂ max maximale"
+          }
+        }
+      }
+    },
+    "Percent": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pourcentage"
+          }
+        }
+      }
+    },
+    "Perfect Sleep": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sommeil parfait"
+          }
+        }
+      }
+    },
     "Perfect Sleep Score!": {
-      "comment": "Title for celebration kind"
+      "comment": "Title for celebration kind",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Score de sommeil parfait !"
+          }
+        }
+      }
     },
     "Period": {
-      "comment": "Title for legend label"
+      "comment": "Title for legend label",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Règles"
+          }
+        }
+      }
     },
-    "Personal Data Categories": {},
-    "Personal Details": {},
+    "Personal Data Categories": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Catégories de données personnelles"
+          }
+        }
+      }
+    },
+    "Personal Details": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Informations personnelles"
+          }
+        }
+      }
+    },
     "Personalized daily insights based on your Personal Data.": {
-      "comment": "Subtitle for today insights privacy AI feature opt in cell"
+      "comment": "Subtitle for today insights privacy AI feature opt in cell",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Des analyses quotidiennes personnalisées fondées sur vos données personnelles."
+          }
+        }
+      }
     },
-    "Phase": {},
-    "Photo Library": {},
-    "Pin": {},
+    "Phase": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Phase"
+          }
+        }
+      }
+    },
+    "Photo Library": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photothèque"
+          }
+        }
+      }
+    },
+    "Pin": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Épingler"
+          }
+        }
+      }
+    },
     "Plans": {
-      "comment": "Title for workouts tab view"
+      "comment": "Title for workouts tab view",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Programmes"
+          }
+        }
+      }
     },
-    "Please enter your name": {},
-    "Please select at least one food item to log": {},
-    "Plus": {},
-    "Powered by  Weather": {},
-    "Precipitation": {},
+    "Please enter your name": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saisissez votre nom"
+          }
+        }
+      }
+    },
+    "Please select at least one food item to log": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sélectionnez au moins un aliment à enregistrer"
+          }
+        }
+      }
+    },
+    "Plus": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus"
+          }
+        }
+      }
+    },
+    "Powered by  Weather": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Propulsé par  Météo"
+          }
+        }
+      }
+    },
+    "Precipitation": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Précipitations"
+          }
+        }
+      }
+    },
     "Predicted Ovulation": {
-      "comment": "Title for legend label"
+      "comment": "Title for legend label",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ovulation prévue"
+          }
+        }
+      }
     },
-    "Preferences": {},
-    "Previous": {},
-    "Previously %@": {},
-    "Prioritize Your Health. On The House.": {},
-    "Privacy & Security → Health → Bloom": {},
-    "Privacy Policy": {},
-    "Progress": {},
-    "Promo Code": {},
-    "Protein": {},
-    "Quantity": {},
-    "Questions? Email Us!": {},
+    "Preferences": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Préférences"
+          }
+        }
+      }
+    },
+    "Previous": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Précédent"
+          }
+        }
+      }
+    },
+    "Previously %@": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auparavant %@"
+          }
+        }
+      }
+    },
+    "Prioritize Your Health. On The House.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prenez soin de votre santé. C'est offert."
+          }
+        }
+      }
+    },
+    "Privacy & Security → Health → Bloom": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confidentialité et sécurité → Santé → Bloom"
+          }
+        }
+      }
+    },
+    "Privacy Policy": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Politique de confidentialité"
+          }
+        }
+      }
+    },
+    "Progress": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Progression"
+          }
+        }
+      }
+    },
+    "Promo Code": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Code promo"
+          }
+        }
+      }
+    },
+    "Protein": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Protéines"
+          }
+        }
+      }
+    },
+    "Quantity": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quantité"
+          }
+        }
+      }
+    },
+    "Questions? Email Us!": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Des questions ? Écrivez-nous !"
+          }
+        }
+      }
+    },
     "Quiet": {
-      "comment": "Display name for sleep environment sound"
+      "comment": "Display name for sleep environment sound",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calme"
+          }
+        }
+      }
     },
-    "Quit Date": {},
-    "Quitting can reduce this over time": {},
-    "RECOMMENDED": {},
+    "Quit Date": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Date d'arrêt"
+          }
+        }
+      }
+    },
+    "Quitting can reduce this over time": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arrêter peut réduire cet effet avec le temps"
+          }
+        }
+      }
+    },
+    "RECOMMENDED": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RECOMMANDÉ"
+          }
+        }
+      }
+    },
     "REM": {
-      "comment": "Display name for apple sleep stage\nShort display name for monitor metric type"
+      "comment": "Display name for apple sleep stage\nShort display name for monitor metric type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paradoxal"
+          }
+        }
+      }
     },
     "REM Sleep": {
-      "comment": "Display name for monitor metric type"
+      "comment": "Display name for monitor metric type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sommeil paradoxal"
+          }
+        }
+      }
     },
-    "REM: %@": {},
+    "REM: %@": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paradoxal : %@"
+          }
+        }
+      }
+    },
     "RHR": {
-      "comment": "Short display name for monitor metric type"
+      "comment": "Short display name for monitor metric type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FC repos"
+          }
+        }
+      }
     },
-    "RHR: %lld": {},
-    "Rain": {},
-    "Range Max": {},
-    "Range Min": {},
-    "Rate": {},
-    "Rate Bloom": {},
-    "Rate Your Effort": {},
-    "Ratio": {},
+    "RHR: %lld": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FC repos : %lld"
+          }
+        }
+      }
+    },
+    "Rain": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pluie"
+          }
+        }
+      }
+    },
+    "Range Max": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plage max"
+          }
+        }
+      }
+    },
+    "Range Min": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plage min"
+          }
+        }
+      }
+    },
+    "Rate": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noter"
+          }
+        }
+      }
+    },
+    "Rate Bloom": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noter Bloom"
+          }
+        }
+      }
+    },
+    "Rate Your Effort": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Évaluez votre effort"
+          }
+        }
+      }
+    },
+    "Ratio": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ratio"
+          }
+        }
+      }
+    },
     "Reading %@...": {
-      "comment": "Chat typing status. The placeholder is a list of health data areas, e.g. \"sleep, nutrition and workouts\"."
+      "comment": "Chat typing status. The placeholder is a list of health data areas, e.g. \"sleep, nutrition and workouts\".",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lecture de %@…"
+          }
+        }
+      }
     },
-    "Reading sleep data...": {},
-    "Really Like Us? Leave a Review!": {},
-    "Recalculate Vitals": {},
+    "Reading sleep data...": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lecture des données de sommeil…"
+          }
+        }
+      }
+    },
+    "Really Like Us? Leave a Review!": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous nous appréciez ? Laissez un avis !"
+          }
+        }
+      }
+    },
+    "Recalculate Vitals": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recalculer les constantes"
+          }
+        }
+      }
+    },
     "Recent": {
-      "comment": "Display name for food item picker\nDisplay name for food logging action card view"
+      "comment": "Display name for food item picker\nDisplay name for food logging action card view",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Récent"
+          }
+        }
+      }
     },
-    "Recommended": {},
-    "Recommended %@": {},
-    "Recovery": {},
+    "Recommended": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recommandé"
+          }
+        }
+      }
+    },
+    "Recommended %@": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ recommandé"
+          }
+        }
+      }
+    },
+    "Recovery": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Récupération"
+          }
+        }
+      }
+    },
     "Recovery & Sickness": {
-      "comment": "Display name for monitor type\nTitle for mini monitor card"
+      "comment": "Display name for monitor type\nTitle for mini monitor card",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Récupération et maladie"
+          }
+        }
+      }
     },
-    "Reduced impact over time": {},
-    "Refresh": {},
-    "Refresh Sales": {},
-    "Regenerate Today Insights": {},
+    "Reduced impact over time": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Effet réduit avec le temps"
+          }
+        }
+      }
+    },
+    "Refresh": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actualiser"
+          }
+        }
+      }
+    },
+    "Refresh Sales": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actualiser les promotions"
+          }
+        }
+      }
+    },
+    "Regenerate Today Insights": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Régénérer les analyses du jour"
+          }
+        }
+      }
+    },
     "Regular Sounds": {
-      "comment": "Display name for sleep environment sound"
+      "comment": "Display name for sleep environment sound",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sons réguliers"
+          }
+        }
+      }
     },
-    "Reminder": {},
-    "Reminder Color": {},
-    "Reminder Deleted": {},
-    "Reminders": {},
-    "Remove Vital": {},
-    "Rename": {},
-    "Repeat": {},
-    "Repeats": {},
-    "Replay": {},
-    "Report Submitted": {},
-    "Report a Problem": {},
-    "Report an Issue": {},
-    "Reset": {},
-    "Reset Chat Migration": {},
-    "Reset Image Migration": {},
-    "Reset Onboarding": {},
-    "Reset PNG to JPEG Migration": {},
-    "Reset to Defaults": {},
-    "Reset to Defaults?": {},
+    "Reminder": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rappel"
+          }
+        }
+      }
+    },
+    "Reminder Color": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couleur du rappel"
+          }
+        }
+      }
+    },
+    "Reminder Deleted": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rappel supprimé"
+          }
+        }
+      }
+    },
+    "Reminders": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rappels"
+          }
+        }
+      }
+    },
+    "Remove Vital": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retirer la constante"
+          }
+        }
+      }
+    },
+    "Rename": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renommer"
+          }
+        }
+      }
+    },
+    "Repeat": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Répéter"
+          }
+        }
+      }
+    },
+    "Repeats": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Répétitions"
+          }
+        }
+      }
+    },
+    "Replay": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Revoir"
+          }
+        }
+      }
+    },
+    "Report Submitted": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Signalement envoyé"
+          }
+        }
+      }
+    },
+    "Report a Problem": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Signaler un problème"
+          }
+        }
+      }
+    },
+    "Report an Issue": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Signaler un problème"
+          }
+        }
+      }
+    },
+    "Reset": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réinitialiser"
+          }
+        }
+      }
+    },
+    "Reset Chat Migration": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réinitialiser la migration des conversations"
+          }
+        }
+      }
+    },
+    "Reset Image Migration": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réinitialiser la migration des images"
+          }
+        }
+      }
+    },
+    "Reset Onboarding": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réinitialiser l'intégration"
+          }
+        }
+      }
+    },
+    "Reset PNG to JPEG Migration": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réinitialiser la migration PNG vers JPEG"
+          }
+        }
+      }
+    },
+    "Reset to Defaults": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rétablir les valeurs par défaut"
+          }
+        }
+      }
+    },
+    "Reset to Defaults?": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rétablir les valeurs par défaut ?"
+          }
+        }
+      }
+    },
     "Respiratory Rate": {
-      "comment": "Display name for monitor metric type"
+      "comment": "Display name for monitor metric type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fréquence respiratoire"
+          }
+        }
+      }
     },
     "Respiratory rate": {
-      "comment": "Short display name for monitor metric type"
+      "comment": "Short display name for monitor metric type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fréquence respiratoire"
+          }
+        }
+      }
     },
-    "Respiratory rate during sleep typically ranges from 12-20 breaths per minute for adults. Changes in your respiratory rate may indicate illness, stress, or changes in fitness level.": {},
-    "Rest": {},
-    "Restart Workout": {},
-    "Resting": {},
-    "Resting HR": {},
+    "Respiratory rate during sleep typically ranges from 12-20 breaths per minute for adults. Changes in your respiratory rate may indicate illness, stress, or changes in fitness level.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pendant le sommeil, la fréquence respiratoire se situe généralement entre 12 et 20 respirations par minute chez l'adulte. Une variation peut traduire une maladie, du stress ou une évolution de votre condition physique."
+          }
+        }
+      }
+    },
+    "Rest": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repos"
+          }
+        }
+      }
+    },
+    "Restart Workout": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recommencer la séance"
+          }
+        }
+      }
+    },
+    "Resting": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Au repos"
+          }
+        }
+      }
+    },
+    "Resting HR": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FC au repos"
+          }
+        }
+      }
+    },
     "Resting Heart Rate": {
-      "comment": "Display name for monitor metric type"
+      "comment": "Display name for monitor metric type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fréquence cardiaque au repos"
+          }
+        }
+      }
     },
-    "Resting: %lld bpm": {},
-    "Restore Purchase": {},
-    "Restore Purchases": {},
-    "Resume": {},
-    "Review Goals": {},
-    "Review your goals and make adjustments.": {},
-    "Revisit: %@": {},
-    "Risk Level": {},
-    "Run Analysis": {},
-    "Sale Product: %@": {},
-    "Save": {},
-    "Save Workout": {},
-    "Save as Meal": {},
+    "Resting: %lld bpm": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Au repos : %lld bpm"
+          }
+        }
+      }
+    },
+    "Restore Purchase": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restaurer l'achat"
+          }
+        }
+      }
+    },
+    "Restore Purchases": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restaurer les achats"
+          }
+        }
+      }
+    },
+    "Resume": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reprendre"
+          }
+        }
+      }
+    },
+    "Review Goals": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Revoir les objectifs"
+          }
+        }
+      }
+    },
+    "Review your goals and make adjustments.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passez vos objectifs en revue et ajustez-les."
+          }
+        }
+      }
+    },
+    "Revisit: %@": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À revoir : %@"
+          }
+        }
+      }
+    },
+    "Risk Level": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveau de risque"
+          }
+        }
+      }
+    },
+    "Run Analysis": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lancer l'analyse"
+          }
+        }
+      }
+    },
+    "Sale Product: %@": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Produit en promotion : %@"
+          }
+        }
+      }
+    },
+    "Save": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer"
+          }
+        }
+      }
+    },
+    "Save Workout": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer la séance"
+          }
+        }
+      }
+    },
+    "Save as Meal": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer comme repas"
+          }
+        }
+      }
+    },
     "Saved": {},
     "Saved Meal": {},
     "Scan a barcode to add food": {},
