@@ -28,9 +28,9 @@ enum HRVTrend {
 
   var label: String {
     switch self {
-    case .improving: String(localized: "Improving")
-    case .stable: String(localized: "Stable")
-    case .declining: String(localized: "Declining")
+    case .improving: String(localized: "Improving", comment: "Label for hrv trend")
+    case .stable: String(localized: "Stable", comment: "Label for hrv trend")
+    case .declining: String(localized: "Declining", comment: "Label for hrv trend")
     }
   }
 }
@@ -77,17 +77,20 @@ struct HeartHealthStoryPage: View {
   }
 
   private var focusSentence: Text {
-    let baseSentence = Text("Your resting heart rate averaged ") +
-      Text(formattedAverageRestingHR)
-        .foregroundStyle(.mutedRed)
+    let average = Text(formattedAverageRestingHR).foregroundStyle(.mutedRed)
+    let baseSentence = Text(
+      "Your resting heart rate averaged \(average)",
+      comment: "Year in Bloom heart summary. The placeholder is an average resting heart rate."
+    )
 
     guard let feedbackText = restingHeartRateFeedback else {
       return baseSentence
     }
 
-    return baseSentence +
-      Text(". ") +
-      feedbackText
+    return Text(
+      "\(baseSentence). \(feedbackText)",
+      comment: "Year in Bloom heart summary, followed by a sentence of feedback about the value."
+    )
   }
 
   private var restingHeartRateFeedback: Text? {
@@ -96,15 +99,19 @@ struct HeartHealthStoryPage: View {
     let goal = HealthGoalProvider.shared.goalRestingHeartRateForUser()
 
     if hr <= goal.0 {
-      return Text("This is ") +
-        Text("excellent")
-          .foregroundStyle(.mutedRed) +
-        Text(" for your age!")
+      let rating = Text("excellent", comment: "Rating of a resting heart rate, used inside \"This is %@ for your age!\"")
+        .foregroundStyle(.mutedRed)
+      return Text(
+        "This is \(rating) for your age!",
+        comment: "Year in Bloom resting heart rate feedback. The placeholder is a rating such as \"excellent\"."
+      )
     } else if hr < goal.1 {
-      return Text("This is ") +
-        Text("great")
-          .foregroundStyle(.mutedRed) +
-        Text(" for your age!")
+      let rating = Text("great", comment: "Rating of a resting heart rate, used inside \"This is %@ for your age!\"")
+        .foregroundStyle(.mutedRed)
+      return Text(
+        "This is \(rating) for your age!",
+        comment: "Year in Bloom resting heart rate feedback. The placeholder is a rating such as \"excellent\"."
+      )
     } else {
       return Text("There's room to improve next year.")
     }

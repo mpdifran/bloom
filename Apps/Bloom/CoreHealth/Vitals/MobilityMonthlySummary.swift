@@ -27,11 +27,11 @@ public extension MobilityMonthlySummary {
 
     public var name: String {
       switch self {
-      case .unknown: String(localized: "Unknown", bundle: Bundle.coreHealth)
-      case .poor: String(localized: "Poor", bundle: Bundle.coreHealth)
-      case .concern: String(localized: "Concern", bundle: Bundle.coreHealth)
-      case .good: String(localized: "Good", bundle: Bundle.coreHealth)
-      case .excellent: String(localized: "Excellent", bundle: Bundle.coreHealth)
+      case .unknown: String(localized: "Unknown", bundle: Bundle.coreHealth, comment: "Display name for mobility monthly summary")
+      case .poor: String(localized: "Poor", bundle: Bundle.coreHealth, comment: "Display name for mobility monthly summary")
+      case .concern: String(localized: "Concern", bundle: Bundle.coreHealth, comment: "Display name for mobility monthly summary")
+      case .good: String(localized: "Good", bundle: Bundle.coreHealth, comment: "Display name for mobility monthly summary")
+      case .excellent: String(localized: "Excellent", bundle: Bundle.coreHealth, comment: "Display name for mobility monthly summary")
       }
     }
 

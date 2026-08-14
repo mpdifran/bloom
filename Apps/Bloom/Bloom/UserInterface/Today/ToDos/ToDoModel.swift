@@ -37,23 +37,23 @@ extension ToDoModel {
     var name: String {
       switch self {
       case .everySunday:
-        String(localized: "Every Sunday")
+        String(localized: "Every Sunday", comment: "Display name for to do model")
       case .everyMonday:
-        String(localized: "Every Monday")
+        String(localized: "Every Monday", comment: "Display name for to do model")
       case .everyTuesday:
-        String(localized: "Every Tuesday")
+        String(localized: "Every Tuesday", comment: "Display name for to do model")
       case .everyWednesday:
-        String(localized: "Every Wednesday")
+        String(localized: "Every Wednesday", comment: "Display name for to do model")
       case .everyThursday:
-        String(localized: "Every Thursday")
+        String(localized: "Every Thursday", comment: "Display name for to do model")
       case .everyFriday:
-        String(localized: "Every Friday")
+        String(localized: "Every Friday", comment: "Display name for to do model")
       case .everySaturday:
-        String(localized: "Every Saturday")
+        String(localized: "Every Saturday", comment: "Display name for to do model")
       case .everyThreeDays:
-        String(localized: "Every 3 Days")
+        String(localized: "Every 3 Days", comment: "Display name for to do model")
       case .everySevenDays:
-        String(localized: "Every 7 Days")
+        String(localized: "Every 7 Days", comment: "Display name for to do model")
       default:
         rawValue.capitalized
       }
@@ -68,10 +68,10 @@ extension ToDoModel {
 
     var name: String {
       switch self {
-      case .logWeight: String(localized: "Log Weight")
-      case .logBloodPressure: String(localized: "Log Blood Pressure")
-      case .logFood: String(localized: "Log Food")
-      case .logProtein: String(localized: "Log Protein")
+      case .logWeight: String(localized: "Log Weight", comment: "Display name for to do model")
+      case .logBloodPressure: String(localized: "Log Blood Pressure", comment: "Display name for to do model")
+      case .logFood: String(localized: "Log Food", comment: "Display name for to do model")
+      case .logProtein: String(localized: "Log Protein", comment: "Display name for to do model")
       }
     }
 

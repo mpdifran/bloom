@@ -20,8 +20,8 @@ enum WeatherDay: CaseIterable {
   
   var displayName: String {
     switch self {
-    case .today: return String(localized: "Today")
-    case .tomorrow: return String(localized: "Tomorrow")  
+    case .today: return String(localized: "Today", comment: "Display name for weather day")
+    case .tomorrow: return String(localized: "Tomorrow", comment: "Display name for weather day")  
     }
   }
 }

@@ -21,15 +21,15 @@ public extension MenstrualCyclePhase {
   var name: String {
     switch self {
     case .menstrual:
-      String(localized: "Menstrual Phase", bundle: Bundle.coreHealth)
+      String(localized: "Menstrual Phase", bundle: Bundle.coreHealth, comment: "Display name for menstrual cycle phase")
     case .follicular:
-      String(localized: "Follicular Phase", bundle: Bundle.coreHealth)
+      String(localized: "Follicular Phase", bundle: Bundle.coreHealth, comment: "Display name for menstrual cycle phase")
     case .ovulation:
-      String(localized: "Ovulation Phase", bundle: Bundle.coreHealth)
+      String(localized: "Ovulation Phase", bundle: Bundle.coreHealth, comment: "Display name for menstrual cycle phase")
     case .luteal:
-      String(localized: "Luteal Phase", bundle: Bundle.coreHealth)
+      String(localized: "Luteal Phase", bundle: Bundle.coreHealth, comment: "Display name for menstrual cycle phase")
     case .unknown:
-      String(localized: "Unknown", bundle: Bundle.coreHealth)
+      String(localized: "Unknown", bundle: Bundle.coreHealth, comment: "Display name for menstrual cycle phase")
     }
   }
 

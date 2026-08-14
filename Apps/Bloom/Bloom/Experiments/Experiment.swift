@@ -17,7 +17,7 @@ enum Experiment: String, CaseIterable, Identifiable {
 
   var name: String {
     switch self {
-    case .standard: String(localized: "Standard")
+    case .standard: String(localized: "Standard", comment: "Display name for experiment")
     }
   }
 

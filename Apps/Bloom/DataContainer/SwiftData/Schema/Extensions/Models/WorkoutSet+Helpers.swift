@@ -85,17 +85,17 @@ public extension WorkoutSet {
     public var name: String {
       switch self {
       case .warmup:
-        String(localized: "Warm-Up", bundle: Bundle.dataContainer)
+        String(localized: "Warm-Up", bundle: Bundle.dataContainer, comment: "Display name for workout set")
       case .standard:
-        String(localized: "Standard", bundle: Bundle.dataContainer)
+        String(localized: "Standard", bundle: Bundle.dataContainer, comment: "Display name for workout set")
       case .amrap:
-        String(localized: "AMRAP", bundle: Bundle.dataContainer)
+        String(localized: "AMRAP", bundle: Bundle.dataContainer, comment: "Display name for workout set")
       case .emom:
-        String(localized: "EMOM", bundle: Bundle.dataContainer)
+        String(localized: "EMOM", bundle: Bundle.dataContainer, comment: "Display name for workout set")
       case .tabata:
-        String(localized: "Tabata", bundle: Bundle.dataContainer)
+        String(localized: "Tabata", bundle: Bundle.dataContainer, comment: "Display name for workout set")
       case .coolDown:
-        String(localized: "Cool-Down", bundle: Bundle.dataContainer)
+        String(localized: "Cool-Down", bundle: Bundle.dataContainer, comment: "Display name for workout set")
       }
     }
   }

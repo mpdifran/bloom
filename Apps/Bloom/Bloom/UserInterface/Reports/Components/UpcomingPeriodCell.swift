@@ -43,9 +43,9 @@ private extension UpcomingPeriodCell {
 
     var title: String {
         if isLate {
-            String(localized: "Late Period")
+            String(localized: "Late Period", comment: "Title for upcoming period cell")
         } else {
-            String(localized: "Upcoming Period")
+            String(localized: "Upcoming Period", comment: "Title for upcoming period cell")
         }
     }
 

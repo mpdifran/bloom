@@ -18,20 +18,20 @@ public enum BiologicalAgeConfidence: String, Sendable, Codable {
 
   public var displayName: String {
     switch self {
-    case .high: String(localized: "High Confidence", bundle: Bundle.coreHealth)
-    case .moderate: String(localized: "Moderate Confidence", bundle: Bundle.coreHealth)
-    case .low: String(localized: "Low Confidence", bundle: Bundle.coreHealth)
+    case .high: String(localized: "High Confidence", bundle: Bundle.coreHealth, comment: "Display name for biological age confidence")
+    case .moderate: String(localized: "Moderate Confidence", bundle: Bundle.coreHealth, comment: "Display name for biological age confidence")
+    case .low: String(localized: "Low Confidence", bundle: Bundle.coreHealth, comment: "Display name for biological age confidence")
     }
   }
 
   public var description: String {
     switch self {
     case .high:
-      String(localized: "Your biological age is calculated using most of your available health metrics.", bundle: Bundle.coreHealth)
+      String(localized: "Your biological age is calculated using most of your available health metrics.", bundle: Bundle.coreHealth, comment: "Description for biological age confidence")
     case .moderate:
-      String(localized: "Your biological age is based on a moderate amount of health data. Adding more metrics will improve accuracy.", bundle: Bundle.coreHealth)
+      String(localized: "Your biological age is based on a moderate amount of health data. Adding more metrics will improve accuracy.", bundle: Bundle.coreHealth, comment: "Description for biological age confidence")
     case .low:
-      String(localized: "Limited health data is available. Track more health metrics to get a more accurate biological age.", bundle: Bundle.coreHealth)
+      String(localized: "Limited health data is available. Track more health metrics to get a more accurate biological age.", bundle: Bundle.coreHealth, comment: "Description for biological age confidence")
     }
   }
 

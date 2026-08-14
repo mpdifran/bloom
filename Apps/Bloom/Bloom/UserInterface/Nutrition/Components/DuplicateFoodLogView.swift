@@ -138,7 +138,7 @@ private extension FoodItemLog {
               let foodItem = firstServing.foodItem {
       return foodItem.name
     } else {
-      return String(localized: "Food Item")
+      return String(localized: "Food Item", comment: "Display name for food item log")
     }
   }
 }

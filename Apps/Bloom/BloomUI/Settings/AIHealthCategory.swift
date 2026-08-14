@@ -25,31 +25,31 @@ public enum AIHealthCategory: String, Codable, CaseIterable, Sendable {
   public var displayName: String {
     switch self {
     case .physicalActivity:
-      return String(localized: "Physical Activity", bundle: Bundle.bloomUI)
+      return String(localized: "Physical Activity", bundle: Bundle.bloomUI, comment: "Display name for AI health category")
     case .bodyMetrics:
-      return String(localized: "Body Metrics", bundle: Bundle.bloomUI)
+      return String(localized: "Body Metrics", bundle: Bundle.bloomUI, comment: "Display name for AI health category")
     case .mentalWellness:
-      return String(localized: "Stress and Mindfulness", bundle: Bundle.bloomUI)
+      return String(localized: "Stress and Mindfulness", bundle: Bundle.bloomUI, comment: "Display name for AI health category")
     case .sleep:
-      return String(localized: "Sleep", bundle: Bundle.bloomUI)
+      return String(localized: "Sleep", bundle: Bundle.bloomUI, comment: "Display name for AI health category")
     case .nutrition:
-      return String(localized: "Nutrition", bundle: Bundle.bloomUI)
+      return String(localized: "Nutrition", bundle: Bundle.bloomUI, comment: "Display name for AI health category")
     case .digestiveHealth:
-      return String(localized: "Digestive Health", bundle: Bundle.bloomUI)
+      return String(localized: "Digestive Health", bundle: Bundle.bloomUI, comment: "Display name for AI health category")
     case .menstrualHealth:
-      return String(localized: "Menstrual Health", bundle: Bundle.bloomUI)
+      return String(localized: "Menstrual Health", bundle: Bundle.bloomUI, comment: "Display name for AI health category")
     case .lifestyle:
-      return String(localized: "Lifestyle", bundle: Bundle.bloomUI)
+      return String(localized: "Lifestyle", bundle: Bundle.bloomUI, comment: "Display name for AI health category")
     case .demographics:
-      return String(localized: "Demographics", bundle: Bundle.bloomUI)
+      return String(localized: "Demographics", bundle: Bundle.bloomUI, comment: "Display name for AI health category")
     case .goals:
-      return String(localized: "Goals", bundle: Bundle.bloomUI)
+      return String(localized: "Goals", bundle: Bundle.bloomUI, comment: "Display name for AI health category")
     case .location:
-      return String(localized: "Location", bundle: Bundle.bloomUI)
+      return String(localized: "Location", bundle: Bundle.bloomUI, comment: "Display name for AI health category")
     case .weather:
-      return String(localized: "Weather", bundle: Bundle.bloomUI)
+      return String(localized: "Weather", bundle: Bundle.bloomUI, comment: "Display name for AI health category")
     case .calendarEvents:
-      return String(localized: "Calendar Events", bundle: Bundle.bloomUI)
+      return String(localized: "Calendar Events", bundle: Bundle.bloomUI, comment: "Display name for AI health category")
     }
   }
 
@@ -120,31 +120,31 @@ public enum AIHealthCategory: String, Codable, CaseIterable, Sendable {
   public var description: String {
       switch self {
       case .physicalActivity:
-          return String(localized: "Steps, workouts, training load, and exercise data. Used to provide personalized activity insights and answer your activity-related questions.", bundle: Bundle.bloomUI)
+          return String(localized: "Steps, workouts, training load, and exercise data. Used to provide personalized activity insights and answer your activity-related questions.", bundle: Bundle.bloomUI, comment: "Description for AI health category")
       case .bodyMetrics:
-          return String(localized: "Body composition, weight, resting heart rate, vO2 Max, and HRV. Used to help Bud understand changes in your physiology and answer related questions.", bundle: Bundle.bloomUI)
+          return String(localized: "Body composition, weight, resting heart rate, vO2 Max, and HRV. Used to help Bud understand changes in your physiology and answer related questions.", bundle: Bundle.bloomUI, comment: "Description for AI health category")
       case .mentalWellness:
-          return String(localized: "Stress levels and mindfulness activity. Used to help Bud answer questions about stress patterns and provide personalized insights.", bundle: Bundle.bloomUI)
+          return String(localized: "Stress levels and mindfulness activity. Used to help Bud answer questions about stress patterns and provide personalized insights.", bundle: Bundle.bloomUI, comment: "Description for AI health category")
       case .sleep:
-          return String(localized: "Sleep duration, quality, and stages. Used to help Bud answer questions about your sleep patterns and provide personalized insights.", bundle: Bundle.bloomUI)
+          return String(localized: "Sleep duration, quality, and stages. Used to help Bud answer questions about your sleep patterns and provide personalized insights.", bundle: Bundle.bloomUI, comment: "Description for AI health category")
       case .nutrition:
-          return String(localized: "Meals, calories, macros, and water intake. Used to help Bud answer questions about your nutrition and provide personalized insights.", bundle: Bundle.bloomUI)
+          return String(localized: "Meals, calories, macros, and water intake. Used to help Bud answer questions about your nutrition and provide personalized insights.", bundle: Bundle.bloomUI, comment: "Description for AI health category")
       case .digestiveHealth:
-          return String(localized: "Bowel movements and patterns. Used to help Bud answer questions about digestive health and provide personalized insights.", bundle: Bundle.bloomUI)
+          return String(localized: "Bowel movements and patterns. Used to help Bud answer questions about digestive health and provide personalized insights.", bundle: Bundle.bloomUI, comment: "Description for AI health category")
       case .menstrualHealth:
-          return String(localized: "Cycle tracking and related data. Used to help Bud answer questions about menstrual health and provide personalized insights.", bundle: Bundle.bloomUI)
+          return String(localized: "Cycle tracking and related data. Used to help Bud answer questions about menstrual health and provide personalized insights.", bundle: Bundle.bloomUI, comment: "Description for AI health category")
       case .lifestyle:
-          return String(localized: "Alcohol consumption and smoking status. Used to help Bud understand lifestyle factors that may affect your health.", bundle: Bundle.bloomUI)
+          return String(localized: "Alcohol consumption and smoking status. Used to help Bud understand lifestyle factors that may affect your health.", bundle: Bundle.bloomUI, comment: "Description for AI health category")
       case .demographics:
-          return String(localized: "Age, biological sex, height, and your focus. Used to help Bud personalize responses and tailor insights to you.", bundle: Bundle.bloomUI)
+          return String(localized: "Age, biological sex, height, and your focus. Used to help Bud personalize responses and tailor insights to you.", bundle: Bundle.bloomUI, comment: "Description for AI health category")
       case .goals:
-          return String(localized: "Your health goals and progress. Used to help Bud contextualize your questions and generate personalized suggestions.", bundle: Bundle.bloomUI)
+          return String(localized: "Your health goals and progress. Used to help Bud contextualize your questions and generate personalized suggestions.", bundle: Bundle.bloomUI, comment: "Description for AI health category")
       case .location:
-          return String(localized: "Your coarse location (city, state, country). Used to help Bud understand environmental context and provide location-aware insights, without knowing your exact position.", bundle: Bundle.bloomUI)
+          return String(localized: "Your coarse location (city, state, country). Used to help Bud understand environmental context and provide location-aware insights, without knowing your exact position.", bundle: Bundle.bloomUI, comment: "Description for AI health category")
       case .weather:
-          return String(localized: "Weather conditions for your location, but not your location itself. Used to help Bud understand external factors that may affect your health.", bundle: Bundle.bloomUI)
+          return String(localized: "Weather conditions for your location, but not your location itself. Used to help Bud understand external factors that may affect your health.", bundle: Bundle.bloomUI, comment: "Description for AI health category")
       case .calendarEvents:
-          return String(localized: "Events from your selected calendars. Used to help Bud understand your schedule context and answer related questions.", bundle: Bundle.bloomUI)
+          return String(localized: "Events from your selected calendars. Used to help Bud understand your schedule context and answer related questions.", bundle: Bundle.bloomUI, comment: "Description for AI health category")
       }
   }
 

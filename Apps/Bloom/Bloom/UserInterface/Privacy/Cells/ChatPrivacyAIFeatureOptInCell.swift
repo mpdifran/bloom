@@ -35,7 +35,7 @@ private extension ChatPrivacyAIFeatureOptInCell {
     if let extraContext {
       return "Chat with Bud about your health and wellness. \(extraContext)"
     }
-    return String(localized: "Chat with Bud about your health and wellness.")
+    return String(localized: "Chat with Bud about your health and wellness.", comment: "Subtitle for chat privacy AI feature opt in cell")
   }
 }
 

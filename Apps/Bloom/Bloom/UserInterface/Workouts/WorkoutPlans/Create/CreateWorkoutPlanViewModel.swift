@@ -17,17 +17,17 @@ enum WorkoutDuration: String, CaseIterable {
 
   var title: String {
     switch self {
-    case .short: String(localized: "Short")
-    case .medium: String(localized: "Medium")
-    case .long: String(localized: "Long")
+    case .short: String(localized: "Short", comment: "Title for workout duration")
+    case .medium: String(localized: "Medium", comment: "Title for workout duration")
+    case .long: String(localized: "Long", comment: "Title for workout duration")
     }
   }
 
   var subtitle: String {
     switch self {
-    case .short: String(localized: "Under 15 min")
-    case .medium: String(localized: "15 – 45 min")
-    case .long: String(localized: "45+ min")
+    case .short: String(localized: "Under 15 min", comment: "Subtitle for workout duration")
+    case .medium: String(localized: "15 – 45 min", comment: "Subtitle for workout duration")
+    case .long: String(localized: "45+ min", comment: "Subtitle for workout duration")
     }
   }
 

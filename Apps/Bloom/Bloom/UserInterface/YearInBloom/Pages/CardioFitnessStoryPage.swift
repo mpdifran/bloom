@@ -28,9 +28,9 @@ enum VO2MaxTrend {
 
   var label: String {
     switch self {
-    case .improving: String(localized: "Improving")
-    case .stable: String(localized: "Stable")
-    case .declining: String(localized: "Declining")
+    case .improving: String(localized: "Improving", comment: "Label for VO2 max trend")
+    case .stable: String(localized: "Stable", comment: "Label for VO2 max trend")
+    case .declining: String(localized: "Declining", comment: "Label for VO2 max trend")
     }
   }
 }
@@ -76,11 +76,12 @@ struct CardioFitnessStoryPage: View {
 
   private var focusSentence: Text {
     if let level = stats.currentCardioFitnessLevel {
-      return Text("Your cardio fitness is ") +
-        Text(level.name)
-          .foregroundStyle(level.color) +
-        Text(formattedVO2Max) +
-      Text(" mL/kg/min.")
+      let levelName = Text(level.name).foregroundStyle(level.color)
+
+      return Text(
+        "Your cardio fitness is \(levelName)\(formattedVO2Max) mL/kg/min.",
+        comment: "Year in Bloom cardio summary. Placeholders are a fitness level and a VO2 max value."
+      )
     }
     return Text("Track more cardio workouts to see your fitness level.")
       .foregroundStyle(.secondary)

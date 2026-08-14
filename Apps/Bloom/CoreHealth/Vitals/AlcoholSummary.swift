@@ -17,13 +17,13 @@ public enum AlcoholRiskLevel: String, CaseIterable, Sendable {
   public var displayName: String {
     switch self {
     case .low:
-      String(localized: "Low Risk", bundle: Bundle.coreHealth)
+      String(localized: "Low Risk", bundle: Bundle.coreHealth, comment: "Display name for alcohol risk level")
     case .moderate:
-      String(localized: "Moderate", bundle: Bundle.coreHealth)
+      String(localized: "Moderate", bundle: Bundle.coreHealth, comment: "Display name for alcohol risk level")
     case .elevated:
-      String(localized: "Elevated", bundle: Bundle.coreHealth)
+      String(localized: "Elevated", bundle: Bundle.coreHealth, comment: "Display name for alcohol risk level")
     case .high:
-      String(localized: "High Risk", bundle: Bundle.coreHealth)
+      String(localized: "High Risk", bundle: Bundle.coreHealth, comment: "Display name for alcohol risk level")
     }
   }
 

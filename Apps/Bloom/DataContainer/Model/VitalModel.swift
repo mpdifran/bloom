@@ -25,27 +25,27 @@ public extension VitalModel {
       switch self {
         // TODO: Get rid of the cardioFitness case
       case .cardioFitness:
-        String(localized: "Cardio Fitness", bundle: Bundle.dataContainer)
+        String(localized: "Cardio Fitness", bundle: Bundle.dataContainer, comment: "Display name for vital model")
       case .sleepQuality:
-        String(localized: "Sleep Quality", bundle: Bundle.dataContainer)
+        String(localized: "Sleep Quality", bundle: Bundle.dataContainer, comment: "Display name for vital model")
       case .activityLevel:
-        String(localized: "Activity Level", bundle: Bundle.dataContainer)
+        String(localized: "Activity Level", bundle: Bundle.dataContainer, comment: "Display name for vital model")
       case .heartHealth:
-        String(localized: "Heart Health", bundle: Bundle.dataContainer)
+        String(localized: "Heart Health", bundle: Bundle.dataContainer, comment: "Display name for vital model")
       case .bodyComposition:
-        String(localized: "Body Composition", bundle: Bundle.dataContainer)
+        String(localized: "Body Composition", bundle: Bundle.dataContainer, comment: "Display name for vital model")
       case .stressLevels:
-        String(localized: "Stress Levels", bundle: Bundle.dataContainer)
+        String(localized: "Stress Levels", bundle: Bundle.dataContainer, comment: "Display name for vital model")
       case .nutrition:
-        String(localized: "Nutrition", bundle: Bundle.dataContainer)
+        String(localized: "Nutrition", bundle: Bundle.dataContainer, comment: "Display name for vital model")
       case .lifestyle:
-        String(localized: "Lifestyle", bundle: Bundle.dataContainer)
+        String(localized: "Lifestyle", bundle: Bundle.dataContainer, comment: "Display name for vital model")
       case .exerciseEffectiveness:
-        String(localized: "Exercise Effectiveness", bundle: Bundle.dataContainer)
+        String(localized: "Exercise Effectiveness", bundle: Bundle.dataContainer, comment: "Display name for vital model")
       case .cycleTracking:
-        String(localized: "Cycle Tracking", bundle: Bundle.dataContainer)
+        String(localized: "Cycle Tracking", bundle: Bundle.dataContainer, comment: "Display name for vital model")
       case .bowelMovements:
-        String(localized: "Bowel Movements", bundle: Bundle.dataContainer)
+        String(localized: "Bowel Movements", bundle: Bundle.dataContainer, comment: "Display name for vital model")
       }
     }
 

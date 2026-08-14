@@ -71,7 +71,7 @@ struct ActiveWorkoutView: View {
 private extension ActiveWorkoutView {
 
   var title: String {
-    workoutManager.session?.workoutConfiguration.activityType.name ?? String(localized: "Workout")
+    workoutManager.session?.workoutConfiguration.activityType.name ?? String(localized: "Workout", comment: "Title for active workout view")
   }
 
   func displayMetricsView() {

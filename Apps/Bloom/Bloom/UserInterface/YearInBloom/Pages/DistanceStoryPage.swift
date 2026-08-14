@@ -48,13 +48,17 @@ struct DistanceStoryPage: View {
   }
 
   private var focusSentence: Text {
-    let base = Text("You travelled ") +
-      Text(formattedTotalDistance)
-        .foregroundStyle(.tint) +
-      Text(" while working out this year.")
+    let distance = Text(formattedTotalDistance).foregroundStyle(.tint)
+    let base = Text(
+      "You travelled \(distance) while working out this year.",
+      comment: "Year in Bloom distance summary. The placeholder is a total distance."
+    )
 
     if let comparison = distanceComparison {
-      return base + Text(" \(comparison)")
+      return Text(
+        "\(base) \(comparison)",
+        comment: "Year in Bloom distance summary followed by a comparison sentence."
+      )
     }
     return base
   }

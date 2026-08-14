@@ -31,9 +31,15 @@ struct OnboardingProposedGoalCell: View {
           .bold()
           .fontDesign(.rounded)
         Group {
-          Text(isWeekly ? "Weekly" : "Daily")
-          + Text(" • ")
-          + Text("Avg: \(averageQuantity.displayString(for: targetMetric.defaultUnit))")
+          let cadence = isWeekly
+            ? Text("Weekly", comment: "Goal cadence")
+            : Text("Daily", comment: "Goal cadence")
+          let average = averageQuantity.displayString(for: targetMetric.defaultUnit)
+
+          Text(
+            "\(cadence) • Avg: \(average)",
+            comment: "Goal subtitle. Placeholders are the cadence (Daily/Weekly) and the user's average."
+          )
         }
         .fixedSize(horizontal: false, vertical: true)
         .foregroundStyle(.secondary)

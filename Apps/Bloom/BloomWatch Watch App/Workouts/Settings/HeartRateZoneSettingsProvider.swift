@@ -238,20 +238,20 @@ public enum HeartRateZoneMode: String, CaseIterable, Sendable {
 
   public var displayName: String {
     switch self {
-    case .automatic: return String(localized: "Automatic")
-    case .semiManual: return String(localized: "Custom HR")
-    case .manual: return String(localized: "Custom Zones")
+    case .automatic: return String(localized: "Automatic", comment: "Display name for heart rate zone mode")
+    case .semiManual: return String(localized: "Custom HR", comment: "Display name for heart rate zone mode")
+    case .manual: return String(localized: "Custom Zones", comment: "Display name for heart rate zone mode")
     }
   }
 
   public var description: String {
     switch self {
     case .automatic:
-      return String(localized: "Zones calculated from your age and resting heart rate")
+      return String(localized: "Zones calculated from your age and resting heart rate", comment: "Description for heart rate zone mode")
     case .semiManual:
-      return String(localized: "Set your max and resting HR, zones calculated automatically")
+      return String(localized: "Set your max and resting HR, zones calculated automatically", comment: "Description for heart rate zone mode")
     case .manual:
-      return String(localized: "Set each zone threshold individually")
+      return String(localized: "Set each zone threshold individually", comment: "Description for heart rate zone mode")
     }
   }
 }

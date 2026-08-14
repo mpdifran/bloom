@@ -48,16 +48,18 @@ struct BodyWeightStoryPage: View {
 
   private var focusSentence: Text {
     if let change = weightChange {
+      let amount = Text(formattedWeightChange).foregroundStyle(.tint)
+
       if change < 0 {
-        return Text("You lost ") +
-          Text(formattedWeightChange)
-            .foregroundStyle(.tint) +
-          Text(" this year.")
+        return Text(
+          "You lost \(amount) this year.",
+          comment: "Year in Bloom weight summary. The placeholder is an amount of weight lost."
+        )
       } else if change > 0 {
-        return Text("You gained ") +
-          Text(formattedWeightChange)
-            .foregroundStyle(.tint) +
-          Text(" this year.")
+        return Text(
+          "You gained \(amount) this year.",
+          comment: "Year in Bloom weight summary. The placeholder is an amount of weight gained."
+        )
       }
     }
     return Text("Your weight stayed stable this year.")

@@ -36,10 +36,10 @@ public extension StressMonthlySummary {
 
     public var name: String {
       switch self {
-      case .relaxed: String(localized: "Relaxed", bundle: Bundle.coreHealth)
-      case .mild: String(localized: "Mild", bundle: Bundle.coreHealth)
-      case .moderate: String(localized: "Moderate", bundle: Bundle.coreHealth)
-      case .high: String(localized: "High", bundle: Bundle.coreHealth)
+      case .relaxed: String(localized: "Relaxed", bundle: Bundle.coreHealth, comment: "Display name for stress monthly summary")
+      case .mild: String(localized: "Mild", bundle: Bundle.coreHealth, comment: "Display name for stress monthly summary")
+      case .moderate: String(localized: "Moderate", bundle: Bundle.coreHealth, comment: "Display name for stress monthly summary")
+      case .high: String(localized: "High", bundle: Bundle.coreHealth, comment: "Display name for stress monthly summary")
       }
     }
 

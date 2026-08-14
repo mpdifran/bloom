@@ -50,16 +50,16 @@ struct MacroDistributionStoryPage: View {
   }
 
   private var focusSentence: Text {
-    Text("Your diet averaged ") +
-    Text("\(yearlyProteinPercent)%")
-      .foregroundStyle(.protein) +
-    Text(" protein, ") +
-    Text("\(yearlyCarbsPercent)%")
-      .foregroundStyle(.carbohydrates) +
-    Text(" carbs, ") +
-    Text("\(yearlyFatPercent)%")
-      .foregroundStyle(.fat) +
-    Text(" fat.")
+    // One sentence rather than concatenated pieces: the fragments were untranslatable on their
+    // own, and word order differs by language. The styled values interpolate as Text.
+    let protein = Text("\(yearlyProteinPercent)%").foregroundStyle(.protein)
+    let carbs = Text("\(yearlyCarbsPercent)%").foregroundStyle(.carbohydrates)
+    let fat = Text("\(yearlyFatPercent)%").foregroundStyle(.fat)
+
+    return Text(
+      "Your diet averaged \(protein) protein, \(carbs) carbs, \(fat) fat.",
+      comment: "Year in Bloom macro summary. Placeholders are protein, carbohydrate and fat percentages."
+    )
   }
 }
 

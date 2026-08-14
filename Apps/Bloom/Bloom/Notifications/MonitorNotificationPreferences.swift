@@ -151,11 +151,11 @@ public extension MonitorNotificationPreferences {
     public var displayName: String {
       switch self {
       case .oneDay:
-        return String(localized: "1 Day")
+        return String(localized: "1 Day", comment: "Display name for monitor notification preferences")
       case .oneWeek:
-        return String(localized: "1 Week")
+        return String(localized: "1 Week", comment: "Display name for monitor notification preferences")
       case .oneMonth:
-        return String(localized: "1 Month")
+        return String(localized: "1 Month", comment: "Display name for monitor notification preferences")
       }
     }
   }

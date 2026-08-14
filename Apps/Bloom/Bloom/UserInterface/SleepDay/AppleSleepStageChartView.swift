@@ -29,10 +29,10 @@ enum AppleSleepStage: Int, CaseIterable {
 
   var name: String {
     switch self {
-    case .awake: String(localized: "Awake")
-    case .rem: String(localized: "REM")
-    case .core: String(localized: "Core")
-    case .deep: String(localized: "Deep")
+    case .awake: String(localized: "Awake", comment: "Display name for apple sleep stage")
+    case .rem: String(localized: "REM", comment: "Display name for apple sleep stage")
+    case .core: String(localized: "Core", comment: "Display name for apple sleep stage")
+    case .deep: String(localized: "Deep", comment: "Display name for apple sleep stage")
     }
   }
 

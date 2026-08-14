@@ -35,15 +35,15 @@ public extension HKBiologicalSex {
   var name: String {
     switch self {
     case .notSet:
-      String(localized: "Prefer not to say", bundle: Bundle.coreHealth)
+      String(localized: "Prefer not to say", bundle: Bundle.coreHealth, comment: "Display name for biological sex")
     case .female:
-      String(localized: "Female", bundle: Bundle.coreHealth)
+      String(localized: "Female", bundle: Bundle.coreHealth, comment: "Display name for biological sex")
     case .male:
-      String(localized: "Male", bundle: Bundle.coreHealth)
+      String(localized: "Male", bundle: Bundle.coreHealth, comment: "Display name for biological sex")
     case .other:
-      String(localized: "Other", bundle: Bundle.coreHealth)
+      String(localized: "Other", bundle: Bundle.coreHealth, comment: "Display name for biological sex")
     @unknown default:
-      String(localized: "Unknown", bundle: Bundle.coreHealth)
+      String(localized: "Unknown", bundle: Bundle.coreHealth, comment: "Display name for biological sex")
     }
   }
 }

@@ -27,29 +27,29 @@ public enum TodaySection: String, CaseIterable, Identifiable, Codable {
   public var displayName: String {
     switch self {
     case .todaysAdvice:
-      return String(localized: "Today's Advice", bundle: Bundle.bloomUI)
+      return String(localized: "Today's Advice", bundle: Bundle.bloomUI, comment: "Display name for today section")
     case .insights:
-      return String(localized: "Insights", bundle: Bundle.bloomUI)
+      return String(localized: "Insights", bundle: Bundle.bloomUI, comment: "Display name for today section")
     case .sleepDetails:
-      return String(localized: "Sleep Details", bundle: Bundle.bloomUI)
+      return String(localized: "Sleep Details", bundle: Bundle.bloomUI, comment: "Display name for today section")
     case .tonightsSleep:
-      return String(localized: "Tonight's Sleep", bundle: Bundle.bloomUI)
+      return String(localized: "Tonight's Sleep", bundle: Bundle.bloomUI, comment: "Display name for today section")
     case .phaseTip:
-      return String(localized: "Cycle Phase Tip", bundle: Bundle.bloomUI)
+      return String(localized: "Cycle Phase Tip", bundle: Bundle.bloomUI, comment: "Display name for today section")
     case .periodForecast:
-      return String(localized: "Period Forecast", bundle: Bundle.bloomUI)
+      return String(localized: "Period Forecast", bundle: Bundle.bloomUI, comment: "Display name for today section")
     case .goals:
-      return String(localized: "Goals", bundle: Bundle.bloomUI)
+      return String(localized: "Goals", bundle: Bundle.bloomUI, comment: "Display name for today section")
     case .reminders:
-      return String(localized: "Reminders", bundle: Bundle.bloomUI)
+      return String(localized: "Reminders", bundle: Bundle.bloomUI, comment: "Display name for today section")
     case .todaysEvents:
-      return String(localized: "Today's Events", bundle: Bundle.bloomUI)
+      return String(localized: "Today's Events", bundle: Bundle.bloomUI, comment: "Display name for today section")
     case .tomorrowsEvents:
-      return String(localized: "Tomorrow's Events", bundle: Bundle.bloomUI)
+      return String(localized: "Tomorrow's Events", bundle: Bundle.bloomUI, comment: "Display name for today section")
     case .todaysWeather:
-      return String(localized: "Today's Weather", bundle: Bundle.bloomUI)
+      return String(localized: "Today's Weather", bundle: Bundle.bloomUI, comment: "Display name for today section")
     case .tomorrowsWeather:
-      return String(localized: "Tomorrow's Weather", bundle: Bundle.bloomUI)
+      return String(localized: "Tomorrow's Weather", bundle: Bundle.bloomUI, comment: "Display name for today section")
     }
   }
 

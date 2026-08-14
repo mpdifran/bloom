@@ -74,13 +74,13 @@ struct WorkoutsStoryPage: View {
   }
 
   private var focusSentence: Text {
-    Text("You exercised for ") +
-    Text(formattedMinutes)
-      .foregroundStyle(.tint) +
-    Text(" and burned ") +
-    Text(formattedCalories + " cals")
-      .foregroundStyle(.tint) +
-    Text(" this year!")
+    let minutes = Text(formattedMinutes).foregroundStyle(.tint)
+    let calories = Text("\(formattedCalories) cals").foregroundStyle(.tint)
+
+    return Text(
+      "You exercised for \(minutes) and burned \(calories) this year!",
+      comment: "Year in Bloom workout summary. Placeholders are a duration and a calorie amount."
+    )
   }
 }
 

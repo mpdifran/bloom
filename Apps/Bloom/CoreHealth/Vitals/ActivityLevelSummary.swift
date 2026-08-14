@@ -39,21 +39,21 @@ public extension ActivityLevelSummary.ActivityLevel {
 
   var name: String {
     switch self {
-    case .sedentary: String(localized: "Sedentary", bundle: Bundle.coreHealth)
-    case .light: String(localized: "Light", bundle: Bundle.coreHealth)
-    case .moderate: String(localized: "Moderate", bundle: Bundle.coreHealth)
-    case .high: String(localized: "High", bundle: Bundle.coreHealth)
-    case .intense: String(localized: "Intense", bundle: Bundle.coreHealth)
+    case .sedentary: String(localized: "Sedentary", bundle: Bundle.coreHealth, comment: "Display name for activity level")
+    case .light: String(localized: "Light", bundle: Bundle.coreHealth, comment: "Display name for activity level")
+    case .moderate: String(localized: "Moderate", bundle: Bundle.coreHealth, comment: "Display name for activity level")
+    case .high: String(localized: "High", bundle: Bundle.coreHealth, comment: "Display name for activity level")
+    case .intense: String(localized: "Intense", bundle: Bundle.coreHealth, comment: "Display name for activity level")
     }
   }
 
   var summary: String {
     switch self {
-    case .sedentary: String(localized: "Little to no exercise", bundle: Bundle.coreHealth)
-    case .light: String(localized: "Exercise a couple times a week", bundle: Bundle.coreHealth)
-    case .moderate: String(localized: "Exercise half the week", bundle: Bundle.coreHealth)
-    case .high: String(localized: "Exercise almost every day", bundle: Bundle.coreHealth)
-    case .intense: String(localized: "Intense exercise most days", bundle: Bundle.coreHealth)
+    case .sedentary: String(localized: "Little to no exercise", bundle: Bundle.coreHealth, comment: "Summary for activity level")
+    case .light: String(localized: "Exercise a couple times a week", bundle: Bundle.coreHealth, comment: "Summary for activity level")
+    case .moderate: String(localized: "Exercise half the week", bundle: Bundle.coreHealth, comment: "Summary for activity level")
+    case .high: String(localized: "Exercise almost every day", bundle: Bundle.coreHealth, comment: "Summary for activity level")
+    case .intense: String(localized: "Intense exercise most days", bundle: Bundle.coreHealth, comment: "Summary for activity level")
     }
   }
 
@@ -197,7 +197,7 @@ public extension ActivityLevelSummary {
     let basal = details.averageBasalEnergyBurned
     let active = details.averageActiveEnergyBurned
 
-    guard basal > 1 else { return String(localized: "No Data", bundle: Bundle.coreHealth) }
+    guard basal > 1 else { return String(localized: "No Data", bundle: Bundle.coreHealth, comment: "Subtitle for activity level summary") }
 
     let basalValue = String(format: "%.0f", basal)
     let activeValue = String(format: "%.0f", active)

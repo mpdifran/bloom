@@ -90,23 +90,23 @@ enum ActionType: String, AppEnum, CaseIterable {
   var label: String {
     switch self {
     case .magicScan:
-      return String(localized: "Open Magic Scanner")
+      return String(localized: "Open Magic Scanner", comment: "Label for action type")
     case .barcodeScan:
-      return String(localized: "Open Barcode Scanner")
+      return String(localized: "Open Barcode Scanner", comment: "Label for action type")
     case .logFood:
-      return String(localized: "Open Food Logger")
+      return String(localized: "Open Food Logger", comment: "Label for action type")
     case .logWater:
-      return String(localized: "Open Water Logger")
+      return String(localized: "Open Water Logger", comment: "Label for action type")
     case .logBowelMovement:
-      return String(localized: "Open Bowel Movement Logger")
+      return String(localized: "Open Bowel Movement Logger", comment: "Label for action type")
     case .logPeriod:
-      return String(localized: "Open Period Logger")
+      return String(localized: "Open Period Logger", comment: "Label for action type")
     case .logWeight:
-      return String(localized: "Open Weight Logger")
+      return String(localized: "Open Weight Logger", comment: "Label for action type")
     case .logBloodPressure:
-      return String(localized: "Open Blood Pressure Logger")
+      return String(localized: "Open Blood Pressure Logger", comment: "Label for action type")
     case .logVoice:
-      return String(localized: "Open Voice Logger")
+      return String(localized: "Open Voice Logger", comment: "Label for action type")
     }
   }
 

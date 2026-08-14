@@ -27,15 +27,15 @@ extension TabKind {
   var name: String {
     switch self {
     case .today:
-      String(localized: "Today")
+      String(localized: "Today", comment: "Display name for tab kind")
     case .you:
-      String(localized: "You")
+      String(localized: "You", comment: "Display name for tab kind")
     case .nutrition:
-      String(localized: "Nutrition")
+      String(localized: "Nutrition", comment: "Display name for tab kind")
     case .workouts:
-      String(localized: "Workouts")
+      String(localized: "Workouts", comment: "Display name for tab kind")
     case .actions:
-      String(localized: "Actions")
+      String(localized: "Actions", comment: "Display name for tab kind")
     }
   }
 

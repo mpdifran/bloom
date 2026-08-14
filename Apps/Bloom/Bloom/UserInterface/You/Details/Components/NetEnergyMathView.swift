@@ -41,12 +41,10 @@ private struct EnergyLabelView: View {
 
     var body: some View {
         VStack {
-                Text("\(energy.format())")
-                    .font(.subheadline)
-                    .bold()
-                +
-                Text(" Cals")
-                    .font(.caption2)
+                Text(
+                    "\(Text(energy.format()).font(.subheadline).bold()) \(Text("Cals").font(.caption2))",
+                    comment: "Energy value with its unit. The placeholders are an amount and the unit \"Cals\"."
+                )
             Text(name)
                 .font(.caption2)
                 .foregroundStyle(.secondary)

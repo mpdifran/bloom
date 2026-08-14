@@ -20,10 +20,10 @@ enum FoodItemCategoryTab: TabFilterItem {
 
   var name: String {
     switch self {
-    case .branded: return String(localized: "Branded")
-    case .generic: return String(localized: "Generic")
-//    case .restaurant: return String(localized: "Restaurant")
-//    case .fastFood: return String(localized: "Fast Food")
+    case .branded: return String(localized: "Branded", comment: "Display name for food item category tab")
+    case .generic: return String(localized: "Generic", comment: "Display name for food item category tab")
+//    case .restaurant: return String(localized: "Restaurant", comment: "Display name for food item category tab")
+//    case .fastFood: return String(localized: "Fast Food", comment: "Display name for food item category tab")
     }
   }
 

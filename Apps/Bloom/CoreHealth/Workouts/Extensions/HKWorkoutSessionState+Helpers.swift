@@ -15,19 +15,19 @@ public extension HKWorkoutSessionState {
   var name: String {
     switch self {
     case .notStarted:
-      String(localized: "Not Started", bundle: Bundle.coreHealth)
+      String(localized: "Not Started", bundle: Bundle.coreHealth, comment: "Display name for workout session state")
     case .running:
-      String(localized: "Running", bundle: Bundle.coreHealth)
+      String(localized: "Running", bundle: Bundle.coreHealth, comment: "Display name for workout session state")
     case .ended:
-      String(localized: "Ended", bundle: Bundle.coreHealth)
+      String(localized: "Ended", bundle: Bundle.coreHealth, comment: "Display name for workout session state")
     case .paused:
-      String(localized: "Paused", bundle: Bundle.coreHealth)
+      String(localized: "Paused", bundle: Bundle.coreHealth, comment: "Display name for workout session state")
     case .prepared:
-      String(localized: "Prepared", bundle: Bundle.coreHealth)
+      String(localized: "Prepared", bundle: Bundle.coreHealth, comment: "Display name for workout session state")
     case .stopped:
-      String(localized: "Stopped", bundle: Bundle.coreHealth)
+      String(localized: "Stopped", bundle: Bundle.coreHealth, comment: "Display name for workout session state")
     @unknown default:
-      String(localized: "Unknown", bundle: Bundle.coreHealth)
+      String(localized: "Unknown", bundle: Bundle.coreHealth, comment: "Display name for workout session state")
     }
   }
 }

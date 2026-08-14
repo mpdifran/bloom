@@ -19,9 +19,9 @@ extension FoodItemPicker {
     var name: String {
       switch self {
       case .frequent:
-        return String(localized: "Frequent")
+        return String(localized: "Frequent", comment: "Display name for food item picker")
       case .recent:
-        return String(localized: "Recent")
+        return String(localized: "Recent", comment: "Display name for food item picker")
       }
     }
   }

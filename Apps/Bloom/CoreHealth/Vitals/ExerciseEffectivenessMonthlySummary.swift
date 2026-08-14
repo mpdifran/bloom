@@ -31,13 +31,13 @@ public extension ExerciseEffectivenessMonthlySummary {
     public var name: String {
       switch self {
       case .minimal:
-        String(localized: "Minimal", bundle: Bundle.coreHealth)
+        String(localized: "Minimal", bundle: Bundle.coreHealth, comment: "Display name for exercise effectiveness monthly summary")
       case .moderate:
-        String(localized: "Moderate", bundle: Bundle.coreHealth)
+        String(localized: "Moderate", bundle: Bundle.coreHealth, comment: "Display name for exercise effectiveness monthly summary")
       case .sufficient:
-        String(localized: "Sufficient", bundle: Bundle.coreHealth)
+        String(localized: "Sufficient", bundle: Bundle.coreHealth, comment: "Display name for exercise effectiveness monthly summary")
       case .high:
-        String(localized: "High", bundle: Bundle.coreHealth)
+        String(localized: "High", bundle: Bundle.coreHealth, comment: "Display name for exercise effectiveness monthly summary")
       }
     }
 
@@ -127,7 +127,7 @@ public extension ExerciseEffectivenessMonthlySummary.Details {
 
       return "\(remainderDuration.format()) zone minutes short"
     }
-    return String(localized: "Exercise Effective", bundle: Bundle.coreHealth)
+    return String(localized: "Exercise Effective", bundle: Bundle.coreHealth, comment: "Subtitle for details")
   }
 
   var level: ExerciseEffectivenessMonthlySummary.Level {

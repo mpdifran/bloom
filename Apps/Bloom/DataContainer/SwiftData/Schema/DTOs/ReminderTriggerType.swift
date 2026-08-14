@@ -20,38 +20,38 @@ public enum ReminderTriggerType: String, Codable, CaseIterable, Sendable {
   public var displayName: String {
     switch self {
     case .logWeight:
-      return String(localized: "Log Weight", bundle: Bundle.dataContainer)
+      return String(localized: "Log Weight", bundle: Bundle.dataContainer, comment: "Display name for reminder trigger type")
     case .logWater:
-      return String(localized: "Log Water", bundle: Bundle.dataContainer)
+      return String(localized: "Log Water", bundle: Bundle.dataContainer, comment: "Display name for reminder trigger type")
     case .logBloodPressure:
-      return String(localized: "Log Blood Pressure", bundle: Bundle.dataContainer)
+      return String(localized: "Log Blood Pressure", bundle: Bundle.dataContainer, comment: "Display name for reminder trigger type")
     case .logStrengthTraining:
-      return String(localized: "Log Strength Training", bundle: Bundle.dataContainer)
+      return String(localized: "Log Strength Training", bundle: Bundle.dataContainer, comment: "Display name for reminder trigger type")
     case .logCardio:
-      return String(localized: "Log Cardio Workout", bundle: Bundle.dataContainer)
+      return String(localized: "Log Cardio Workout", bundle: Bundle.dataContainer, comment: "Display name for reminder trigger type")
     case .logMobilityFlexibility:
-      return String(localized: "Log Mobility/Flexibility", bundle: Bundle.dataContainer)
+      return String(localized: "Log Mobility/Flexibility", bundle: Bundle.dataContainer, comment: "Display name for reminder trigger type")
     case .logHIIT:
-      return String(localized: "Log HIIT Workout", bundle: Bundle.dataContainer)
+      return String(localized: "Log HIIT Workout", bundle: Bundle.dataContainer, comment: "Display name for reminder trigger type")
     }
   }
   
   public var description: String {
     switch self {
     case .logWeight:
-      return String(localized: "Automatically complete the reminder when you log your body weight.", bundle: Bundle.dataContainer)
+      return String(localized: "Automatically complete the reminder when you log your body weight.", bundle: Bundle.dataContainer, comment: "Description for reminder trigger type")
     case .logWater:
-      return String(localized: "Automatically complete the reminder when you log water intake.", bundle: Bundle.dataContainer)
+      return String(localized: "Automatically complete the reminder when you log water intake.", bundle: Bundle.dataContainer, comment: "Description for reminder trigger type")
     case .logBloodPressure:
-      return String(localized: "Automatically complete the reminder when you log blood pressure.", bundle: Bundle.dataContainer)
+      return String(localized: "Automatically complete the reminder when you log blood pressure.", bundle: Bundle.dataContainer, comment: "Description for reminder trigger type")
     case .logStrengthTraining:
-      return String(localized: "Automatically complete the reminder when you log a strength training workout.", bundle: Bundle.dataContainer)
+      return String(localized: "Automatically complete the reminder when you log a strength training workout.", bundle: Bundle.dataContainer, comment: "Description for reminder trigger type")
     case .logCardio:
-      return String(localized: "Automatically complete the reminder when you log a cardio workout.", bundle: Bundle.dataContainer)
+      return String(localized: "Automatically complete the reminder when you log a cardio workout.", bundle: Bundle.dataContainer, comment: "Description for reminder trigger type")
     case .logMobilityFlexibility:
-      return String(localized: "Automatically complete the reminder when you log yoga, pilates, or flexibility.", bundle: Bundle.dataContainer)
+      return String(localized: "Automatically complete the reminder when you log yoga, pilates, or flexibility.", bundle: Bundle.dataContainer, comment: "Description for reminder trigger type")
     case .logHIIT:
-      return String(localized: "Automatically complete the reminder when you log a HIIT workout.", bundle: Bundle.dataContainer)
+      return String(localized: "Automatically complete the reminder when you log a HIIT workout.", bundle: Bundle.dataContainer, comment: "Description for reminder trigger type")
     }
   }
   

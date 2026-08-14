@@ -66,13 +66,13 @@ struct WorkoutsShareCompositeView: View {
   }
 
   private var focusSentence: Text {
-    Text("You exercised for ") +
-    Text(formattedMinutes)
-      .foregroundStyle(.green) +
-    Text(" and burned ") +
-    Text(formattedCalories + " cals")
-      .foregroundStyle(.green) +
-    Text(" this year!")
+    let minutes = Text(formattedMinutes).foregroundStyle(.green)
+    let calories = Text("\(formattedCalories) cals").foregroundStyle(.green)
+
+    return Text(
+      "You exercised for \(minutes) and burned \(calories) this year!",
+      comment: "Year in Bloom workout summary. Placeholders are a duration and a calorie amount."
+    )
   }
 
   private var statsGrid: some View {

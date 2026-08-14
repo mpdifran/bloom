@@ -57,10 +57,12 @@ struct ExerciseEffectivenessStoryPage: View {
   }
 
   private var focusSentence: Text {
-    Text("You earned ") +
-    Text(formattedZoneMinutes)
-      .foregroundStyle(.tint) +
-    Text(" zone minutes this year!")
+    let zoneMinutes = Text(formattedZoneMinutes).foregroundStyle(.tint)
+
+    return Text(
+      "You earned \(zoneMinutes) zone minutes this year!",
+      comment: "Year in Bloom exercise summary. The placeholder is a number of heart rate zone minutes."
+    )
   }
 }
 

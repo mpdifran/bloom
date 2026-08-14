@@ -23,11 +23,11 @@ public enum MonitorStateValue: String, Sendable, Codable, CaseIterable {
 
   public var displayName: String {
     switch self {
-    case .good: return String(localized: "Typical")
-    case .attention: return String(localized: "Attention")
-    case .alert: return String(localized: "Alert")
-    case .unavailable: return String(localized: "Unavailable")
-    case .encourage: return String(localized: "Get Moving")
+    case .good: return String(localized: "Typical", comment: "Display name for monitor state value")
+    case .attention: return String(localized: "Attention", comment: "Display name for monitor state value")
+    case .alert: return String(localized: "Alert", comment: "Display name for monitor state value")
+    case .unavailable: return String(localized: "Unavailable", comment: "Display name for monitor state value")
+    case .encourage: return String(localized: "Get Moving", comment: "Display name for monitor state value")
     }
   }
 

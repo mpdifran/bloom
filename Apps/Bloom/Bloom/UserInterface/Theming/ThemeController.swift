@@ -28,11 +28,11 @@ extension ThemeController.Theme {
   var name: String {
     switch self {
     case .purple:
-      String(localized: "Dragonfruit")
+      String(localized: "Dragonfruit", comment: "Display name for theme")
     case .blue:
-      String(localized: "Blueberry")
+      String(localized: "Blueberry", comment: "Display name for theme")
     case .orange:
-      String(localized: "Mango")
+      String(localized: "Mango", comment: "Display name for theme")
     }
   }
 

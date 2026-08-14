@@ -61,10 +61,12 @@ struct SleepStoryPage: View {
   }
 
   private var focusSentence: Text {
-    Text("You averaged ") +
-    Text(formattedSleepDuration)
-      .foregroundStyle(.coreSleep) +
-    Text(" of sleep per night.")
+    let duration = Text(formattedSleepDuration).foregroundStyle(.coreSleep)
+
+    return Text(
+      "You averaged \(duration) of sleep per night.",
+      comment: "Year in Bloom sleep summary. The placeholder is an average nightly sleep duration."
+    )
   }
 }
 

@@ -33,13 +33,13 @@ public extension BowelMovementSummary {
     public var name: String {
       switch self {
       case .poor:
-        String(localized: "Poor", bundle: Bundle.coreHealth)
+        String(localized: "Poor", bundle: Bundle.coreHealth, comment: "Display name for bowel movement summary")
       case .fair:
-        String(localized: "Fair", bundle: Bundle.coreHealth)
+        String(localized: "Fair", bundle: Bundle.coreHealth, comment: "Display name for bowel movement summary")
       case .good:
-        String(localized: "Good", bundle: Bundle.coreHealth)
+        String(localized: "Good", bundle: Bundle.coreHealth, comment: "Display name for bowel movement summary")
       case .excellent:
-        String(localized: "Excellent", bundle: Bundle.coreHealth)
+        String(localized: "Excellent", bundle: Bundle.coreHealth, comment: "Display name for bowel movement summary")
       }
     }
 
@@ -320,7 +320,7 @@ public extension BowelMovementSummary {
     var shortName: String {
       switch self {
       case .veryPoor:
-        return String(localized: "Very Poor", bundle: Bundle.coreHealth)
+        return String(localized: "Very Poor", bundle: Bundle.coreHealth, comment: "Short display name for bowel movement summary")
       default:
         return rawValue
       }

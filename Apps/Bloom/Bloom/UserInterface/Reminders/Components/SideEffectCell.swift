@@ -46,11 +46,11 @@ struct SideEffectCell: View {
   private var title: String {
     switch sideEffect.type {
     case .logFood:
-      return String(localized: "Log Food")
+      return String(localized: "Log Food", comment: "Title for side effect cell")
     case .logWater:
-      return String(localized: "Log Water")
+      return String(localized: "Log Water", comment: "Title for side effect cell")
     @unknown default:
-      return String(localized: "Unknown Action")
+      return String(localized: "Unknown Action", comment: "Title for side effect cell")
     }
   }
   
@@ -61,7 +61,7 @@ struct SideEffectCell: View {
         let mealName = config.meal.name
         return "\(config.foodItemName) • \(config.servingSize.format()) serving • \(mealName)"
       }
-      return String(localized: "Configure food item")
+      return String(localized: "Configure food item", comment: "Subtitle for side effect cell")
       
     case .logWater:
       if let config = sideEffect.decodeConfiguration(as: LogWaterSideEffectConfig.self) {
@@ -69,9 +69,9 @@ struct SideEffectCell: View {
         let quantity = HKQuantity(unit: unit, doubleValue: config.amount)
         return quantity.displayString(for: unit)
       }
-      return String(localized: "Configure water amount")
+      return String(localized: "Configure water amount", comment: "Subtitle for side effect cell")
     @unknown default:
-      return String(localized: "Unknown configuration")
+      return String(localized: "Unknown configuration", comment: "Subtitle for side effect cell")
     }
   }
   

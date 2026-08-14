@@ -112,33 +112,33 @@ public extension WorkoutPlan.Equipment {
   var name: String {
     switch self {
     case .dumbbells:
-      String(localized: "Dumbbells", bundle: Bundle.dataContainer)
+      String(localized: "Dumbbells", bundle: Bundle.dataContainer, comment: "Display name for equipment")
     case .barbell:
-      String(localized: "Barbell", bundle: Bundle.dataContainer)
+      String(localized: "Barbell", bundle: Bundle.dataContainer, comment: "Display name for equipment")
     case .kettlebell:
-      String(localized: "Kettlebell", bundle: Bundle.dataContainer)
+      String(localized: "Kettlebell", bundle: Bundle.dataContainer, comment: "Display name for equipment")
     case .batBell:
-      String(localized: "Batbell", bundle: Bundle.dataContainer)
+      String(localized: "Batbell", bundle: Bundle.dataContainer, comment: "Display name for equipment")
     case .chinUpBar:
-      String(localized: "Chin-up Bar", bundle: Bundle.dataContainer)
+      String(localized: "Chin-up Bar", bundle: Bundle.dataContainer, comment: "Display name for equipment")
     case .treadmill:
-      String(localized: "Treadmill", bundle: Bundle.dataContainer)
+      String(localized: "Treadmill", bundle: Bundle.dataContainer, comment: "Display name for equipment")
     case .stationaryBike:
-      String(localized: "Stationary Bike", bundle: Bundle.dataContainer)
+      String(localized: "Stationary Bike", bundle: Bundle.dataContainer, comment: "Display name for equipment")
     case .bike:
-      String(localized: "Bike", bundle: Bundle.dataContainer)
+      String(localized: "Bike", bundle: Bundle.dataContainer, comment: "Display name for equipment")
     case .elliptical:
-      String(localized: "Elliptical", bundle: Bundle.dataContainer)
+      String(localized: "Elliptical", bundle: Bundle.dataContainer, comment: "Display name for equipment")
     case .rowingMachine:
-      String(localized: "Rowing Machine", bundle: Bundle.dataContainer)
+      String(localized: "Rowing Machine", bundle: Bundle.dataContainer, comment: "Display name for equipment")
     case .skiMachine:
-      String(localized: "Ski Machine", bundle: Bundle.dataContainer)
+      String(localized: "Ski Machine", bundle: Bundle.dataContainer, comment: "Display name for equipment")
     case .yogaMat:
-      String(localized: "Yoga Mat", bundle: Bundle.dataContainer)
+      String(localized: "Yoga Mat", bundle: Bundle.dataContainer, comment: "Display name for equipment")
     case .resistanceBand:
-      String(localized: "Resistance Band", bundle: Bundle.dataContainer)
+      String(localized: "Resistance Band", bundle: Bundle.dataContainer, comment: "Display name for equipment")
     case .weightedVest:
-      String(localized: "Weighted Vest", bundle: Bundle.dataContainer)
+      String(localized: "Weighted Vest", bundle: Bundle.dataContainer, comment: "Display name for equipment")
     }
   }
 }

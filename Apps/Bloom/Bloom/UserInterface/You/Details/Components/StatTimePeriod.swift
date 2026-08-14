@@ -20,12 +20,12 @@ enum StatTimePeriod: String, CaseIterable, Identifiable, Sendable {
 
   var displayName: String {
     switch self {
-    case .oneDay: String(localized: "Today")
-    case .sevenDays: String(localized: "Last 7 Days")
-    case .oneMonth: String(localized: "Last 30 Days")
-    case .threeMonths: String(localized: "Last 3 Months")
-    case .sixMonths: String(localized: "Last 6 Months")
-    case .oneYear: String(localized: "Last Year")
+    case .oneDay: String(localized: "Today", comment: "Display name for stat time period")
+    case .sevenDays: String(localized: "Last 7 Days", comment: "Display name for stat time period")
+    case .oneMonth: String(localized: "Last 30 Days", comment: "Display name for stat time period")
+    case .threeMonths: String(localized: "Last 3 Months", comment: "Display name for stat time period")
+    case .sixMonths: String(localized: "Last 6 Months", comment: "Display name for stat time period")
+    case .oneYear: String(localized: "Last Year", comment: "Display name for stat time period")
     }
   }
 

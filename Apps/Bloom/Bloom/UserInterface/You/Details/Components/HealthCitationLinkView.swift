@@ -15,12 +15,10 @@ struct HealthCitationLinkView: View {
   var body: some View {
     Link(destination: url) {
       Group {
-        Text(title)
-          .foregroundStyle(.secondary)
-        +
-        Text(" Source")
-          .bold()
-          .foregroundStyle(.tint)
+        Text(
+          "\(Text(title).foregroundStyle(.secondary)) \(Text("Source").bold().foregroundStyle(.tint))",
+          comment: "Citation line. The first placeholder is the citation title, the second is the word \"Source\" shown as a link."
+        )
       }
       .multilineTextAlignment(.leading)
     }

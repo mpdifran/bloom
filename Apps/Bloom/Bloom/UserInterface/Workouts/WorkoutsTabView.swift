@@ -20,8 +20,8 @@ struct WorkoutsTabView: View {
 
     var title: String {
       switch self {
-      case .workouts: String(localized: "Workouts")
-      case .workoutPlans: String(localized: "Plans")
+      case .workouts: String(localized: "Workouts", comment: "Title for workouts tab view")
+      case .workoutPlans: String(localized: "Plans", comment: "Title for workouts tab view")
       }
     }
   }

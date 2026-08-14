@@ -51,10 +51,12 @@ struct MenstrualCycleStoryPage: View {
   }
 
   private var focusSentence: Text {
-    Text("Your average cycle was ") +
-    Text("\(Int(stats.averageCycleDuration)) days")
-      .foregroundStyle(.mutedPurple) +
-    Text(" long.")
+    let duration = Text("\(Int(stats.averageCycleDuration)) days").foregroundStyle(.mutedPurple)
+
+    return Text(
+      "Your average cycle was \(duration) long.",
+      comment: "Year in Bloom cycle summary. The placeholder is an average cycle length in days."
+    )
   }
 }
 
