@@ -1516,6 +1516,8 @@
 			knownRegions = (
 				en,
 				Base,
+				fr,
+				"fr-CA",
 			);
 			mainGroup = FFACBAD02BAC7788006AAD0B;
 			packageReferences = (

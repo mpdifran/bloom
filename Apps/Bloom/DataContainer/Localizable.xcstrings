@@ -1,144 +1,512 @@
 {
-  "sourceLanguage" : "en",
-  "strings" : {
-    "Activity Level" : {
-      "comment" : "Display name for vital model"
+  "sourceLanguage": "en",
+  "strings": {
+    "AMRAP": {
+      "comment": "Display name for workout set",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AMRAP"
+          }
+        }
+      }
     },
-    "AMRAP" : {
-      "comment" : "Display name for workout set"
+    "Activity Level": {
+      "comment": "Display name for vital model",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveau d'activité"
+          }
+        }
+      }
     },
-    "Automatically complete the reminder when you log a cardio workout." : {
-      "comment" : "Description for reminder trigger type"
+    "Automatically complete the reminder when you log a HIIT workout.": {
+      "comment": "Description for reminder trigger type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marquer automatiquement le rappel comme terminé lorsque vous enregistrez une séance de HIIT."
+          }
+        }
+      }
     },
-    "Automatically complete the reminder when you log a HIIT workout." : {
-      "comment" : "Description for reminder trigger type"
+    "Automatically complete the reminder when you log a cardio workout.": {
+      "comment": "Description for reminder trigger type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marquer automatiquement le rappel comme terminé lorsque vous enregistrez une séance de cardio."
+          }
+        }
+      }
     },
-    "Automatically complete the reminder when you log a strength training workout." : {
-      "comment" : "Description for reminder trigger type"
+    "Automatically complete the reminder when you log a strength training workout.": {
+      "comment": "Description for reminder trigger type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marquer automatiquement le rappel comme terminé lorsque vous enregistrez une séance de musculation."
+          }
+        }
+      }
     },
-    "Automatically complete the reminder when you log blood pressure." : {
-      "comment" : "Description for reminder trigger type"
+    "Automatically complete the reminder when you log blood pressure.": {
+      "comment": "Description for reminder trigger type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marquer automatiquement le rappel comme terminé lorsque vous enregistrez votre tension artérielle."
+          }
+        }
+      }
     },
-    "Automatically complete the reminder when you log water intake." : {
-      "comment" : "Description for reminder trigger type"
+    "Automatically complete the reminder when you log water intake.": {
+      "comment": "Description for reminder trigger type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marquer automatiquement le rappel comme terminé lorsque vous enregistrez votre consommation d'eau."
+          }
+        }
+      }
     },
-    "Automatically complete the reminder when you log yoga, pilates, or flexibility." : {
-      "comment" : "Description for reminder trigger type"
+    "Automatically complete the reminder when you log yoga, pilates, or flexibility.": {
+      "comment": "Description for reminder trigger type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marquer automatiquement le rappel comme terminé lorsque vous enregistrez du yoga, du Pilates ou de la souplesse."
+          }
+        }
+      }
     },
-    "Automatically complete the reminder when you log your body weight." : {
-      "comment" : "Description for reminder trigger type"
+    "Automatically complete the reminder when you log your body weight.": {
+      "comment": "Description for reminder trigger type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marquer automatiquement le rappel comme terminé lorsque vous enregistrez votre poids."
+          }
+        }
+      }
     },
-    "Barbell" : {
-      "comment" : "Display name for equipment"
+    "Barbell": {
+      "comment": "Display name for equipment",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Barre"
+          }
+        }
+      }
     },
-    "Batbell" : {
-      "comment" : "Display name for equipment"
+    "Batbell": {
+      "comment": "Display name for equipment",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Barre"
+          }
+        }
+      }
     },
-    "Bike" : {
-      "comment" : "Display name for equipment"
+    "Bike": {
+      "comment": "Display name for equipment",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vélo"
+          }
+        }
+      }
     },
-    "Body Composition" : {
-      "comment" : "Display name for vital model"
+    "Body Composition": {
+      "comment": "Display name for vital model",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Composition corporelle"
+          }
+        }
+      }
     },
-    "Bowel Movements" : {
-      "comment" : "Display name for vital model"
+    "Bowel Movements": {
+      "comment": "Display name for vital model",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selles"
+          }
+        }
+      }
     },
-    "Cardio Fitness" : {
-      "comment" : "Display name for vital model"
+    "Cardio Fitness": {
+      "comment": "Display name for vital model",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Condition cardio"
+          }
+        }
+      }
     },
-    "Chin-up Bar" : {
-      "comment" : "Display name for equipment"
+    "Chin-up Bar": {
+      "comment": "Display name for equipment",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Barre de traction"
+          }
+        }
+      }
     },
-    "Cool-Down" : {
-      "comment" : "Display name for workout set"
+    "Cool-Down": {
+      "comment": "Display name for workout set",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Récupération"
+          }
+        }
+      }
     },
-    "Cycle Tracking" : {
-      "comment" : "Display name for vital model"
+    "Cycle Tracking": {
+      "comment": "Display name for vital model",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suivi du cycle"
+          }
+        }
+      }
     },
-    "Dumbbells" : {
-      "comment" : "Display name for equipment"
+    "Dumbbells": {
+      "comment": "Display name for equipment",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Haltères"
+          }
+        }
+      }
     },
-    "Elliptical" : {
-      "comment" : "Display name for equipment"
+    "EMOM": {
+      "comment": "Display name for workout set",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EMOM"
+          }
+        }
+      }
     },
-    "EMOM" : {
-      "comment" : "Display name for workout set"
+    "Elliptical": {
+      "comment": "Display name for equipment",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elliptique"
+          }
+        }
+      }
     },
-    "Exercise Effectiveness" : {
-      "comment" : "Display name for vital model"
+    "Exercise Effectiveness": {
+      "comment": "Display name for vital model",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Efficacité de l'exercice"
+          }
+        }
+      }
     },
-    "Heart Health" : {
-      "comment" : "Display name for vital model"
+    "Heart Health": {
+      "comment": "Display name for vital model",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Santé cardiaque"
+          }
+        }
+      }
     },
-    "Kettlebell" : {
-      "comment" : "Display name for equipment"
+    "Kettlebell": {
+      "comment": "Display name for equipment",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kettlebell"
+          }
+        }
+      }
     },
-    "Lifestyle" : {
-      "comment" : "Display name for vital model"
+    "Lifestyle": {
+      "comment": "Display name for vital model",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mode de vie"
+          }
+        }
+      }
     },
-    "Log Blood Pressure" : {
-      "comment" : "Display name for reminder trigger type"
+    "Log Blood Pressure": {
+      "comment": "Display name for reminder trigger type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer la tension"
+          }
+        }
+      }
     },
-    "Log Cardio Workout" : {
-      "comment" : "Display name for reminder trigger type"
+    "Log Cardio Workout": {
+      "comment": "Display name for reminder trigger type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer une séance de cardio"
+          }
+        }
+      }
     },
-    "Log Food" : {
-      "comment" : "Display name for side effect type"
+    "Log Food": {
+      "comment": "Display name for side effect type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer un aliment"
+          }
+        }
+      }
     },
-    "Log HIIT Workout" : {
-      "comment" : "Display name for reminder trigger type"
+    "Log HIIT Workout": {
+      "comment": "Display name for reminder trigger type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer une séance de HIIT"
+          }
+        }
+      }
     },
-    "Log Mobility/Flexibility" : {
-      "comment" : "Display name for reminder trigger type"
+    "Log Mobility/Flexibility": {
+      "comment": "Display name for reminder trigger type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer mobilité/souplesse"
+          }
+        }
+      }
     },
-    "Log Strength Training" : {
-      "comment" : "Display name for reminder trigger type"
+    "Log Strength Training": {
+      "comment": "Display name for reminder trigger type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer une séance de musculation"
+          }
+        }
+      }
     },
-    "Log Water" : {
-      "comment" : "Display name for reminder trigger type\nDisplay name for side effect type"
+    "Log Water": {
+      "comment": "Display name for reminder trigger type\nDisplay name for side effect type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer de l'eau"
+          }
+        }
+      }
     },
-    "Log Weight" : {
-      "comment" : "Display name for reminder trigger type"
+    "Log Weight": {
+      "comment": "Display name for reminder trigger type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer le poids"
+          }
+        }
+      }
     },
-    "Nutrition" : {
-      "comment" : "Display name for vital model"
+    "Nutrition": {
+      "comment": "Display name for vital model",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutrition"
+          }
+        }
+      }
     },
-    "Resistance Band" : {
-      "comment" : "Display name for equipment"
+    "Resistance Band": {
+      "comment": "Display name for equipment",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bande de résistance"
+          }
+        }
+      }
     },
-    "Rowing Machine" : {
-      "comment" : "Display name for equipment"
+    "Rowing Machine": {
+      "comment": "Display name for equipment",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rameur"
+          }
+        }
+      }
     },
-    "Ski Machine" : {
-      "comment" : "Display name for equipment"
+    "Ski Machine": {
+      "comment": "Display name for equipment",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Simulateur de ski"
+          }
+        }
+      }
     },
-    "Sleep Quality" : {
-      "comment" : "Display name for vital model"
+    "Sleep Quality": {
+      "comment": "Display name for vital model",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qualité du sommeil"
+          }
+        }
+      }
     },
-    "Standard" : {
-      "comment" : "Display name for workout set"
+    "Standard": {
+      "comment": "Display name for workout set",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Standard"
+          }
+        }
+      }
     },
-    "Stationary Bike" : {
-      "comment" : "Display name for equipment"
+    "Stationary Bike": {
+      "comment": "Display name for equipment",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vélo stationnaire"
+          }
+        }
+      }
     },
-    "Stress Levels" : {
-      "comment" : "Display name for vital model"
+    "Stress Levels": {
+      "comment": "Display name for vital model",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveaux de stress"
+          }
+        }
+      }
     },
-    "Tabata" : {
-      "comment" : "Display name for workout set"
+    "Tabata": {
+      "comment": "Display name for workout set",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tabata"
+          }
+        }
+      }
     },
-    "Treadmill" : {
-      "comment" : "Display name for equipment"
+    "Treadmill": {
+      "comment": "Display name for equipment",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tapis de course"
+          }
+        }
+      }
     },
-    "Warm-Up" : {
-      "comment" : "Display name for workout set"
+    "Warm-Up": {
+      "comment": "Display name for workout set",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Échauffement"
+          }
+        }
+      }
     },
-    "Weighted Vest" : {
-      "comment" : "Display name for equipment"
+    "Weighted Vest": {
+      "comment": "Display name for equipment",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gilet lesté"
+          }
+        }
+      }
     },
-    "Yoga Mat" : {
-      "comment" : "Display name for equipment"
+    "Yoga Mat": {
+      "comment": "Display name for equipment",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tapis de yoga"
+          }
+        }
+      }
     }
   },
-  "version" : "1.0"
+  "version": "1.0"
 }

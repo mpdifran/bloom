@@ -1,129 +1,457 @@
 {
-  "sourceLanguage" : "en",
-  "strings" : {
-    "Afternoon" : {
-      "comment" : "Display name for time mode"
+  "sourceLanguage": "en",
+  "strings": {
+    "Afternoon": {
+      "comment": "Display name for time mode",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Après-midi"
+          }
+        }
+      }
     },
-    "Age, biological sex, height, and your focus. Used to help Bud personalize responses and tailor insights to you." : {
-      "comment" : "Description for AI health category"
+    "Age, biological sex, height, and your focus. Used to help Bud personalize responses and tailor insights to you.": {
+      "comment": "Description for AI health category",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Âge, sexe biologique, taille et votre objectif. Permet à Bud de personnaliser ses réponses et d'adapter ses conseils à votre situation."
+          }
+        }
+      }
     },
-    "Alcohol consumption and smoking status. Used to help Bud understand lifestyle factors that may affect your health." : {
-      "comment" : "Description for AI health category"
+    "Alcohol consumption and smoking status. Used to help Bud understand lifestyle factors that may affect your health.": {
+      "comment": "Description for AI health category",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consommation d'alcool et statut tabagique. Permet à Bud de comprendre les facteurs liés à votre mode de vie qui peuvent influencer votre santé."
+          }
+        }
+      }
     },
-    "Body composition, weight, resting heart rate, vO2 Max, and HRV. Used to help Bud understand changes in your physiology and answer related questions." : {
-      "comment" : "Description for AI health category"
+    "Body Metrics": {
+      "comment": "Display name for AI health category",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mesures corporelles"
+          }
+        }
+      }
     },
-    "Body Metrics" : {
-      "comment" : "Display name for AI health category"
+    "Body composition, weight, resting heart rate, vO2 Max, and HRV. Used to help Bud understand changes in your physiology and answer related questions.": {
+      "comment": "Description for AI health category",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Composition corporelle, poids, fréquence cardiaque au repos, VO2 max et VFC. Permet à Bud de comprendre l'évolution de votre physiologie et de répondre aux questions associées."
+          }
+        }
+      }
     },
-    "Bowel movements and patterns. Used to help Bud answer questions about digestive health and provide personalized insights." : {
-      "comment" : "Description for AI health category"
+    "Bowel movements and patterns. Used to help Bud answer questions about digestive health and provide personalized insights.": {
+      "comment": "Description for AI health category",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selles et habitudes intestinales. Permet à Bud de répondre à vos questions sur la santé digestive et de vous proposer des conseils personnalisés."
+          }
+        }
+      }
     },
-    "Calendar Events" : {
-      "comment" : "Display name for AI health category"
+    "Calendar Events": {
+      "comment": "Display name for AI health category",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Événements du calendrier"
+          }
+        }
+      }
     },
-    "Cycle Phase Tip" : {
-      "comment" : "Display name for today section"
+    "Cycle Phase Tip": {
+      "comment": "Display name for today section",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conseil selon la phase du cycle"
+          }
+        }
+      }
     },
-    "Cycle tracking and related data. Used to help Bud answer questions about menstrual health and provide personalized insights." : {
-      "comment" : "Description for AI health category"
+    "Cycle tracking and related data. Used to help Bud answer questions about menstrual health and provide personalized insights.": {
+      "comment": "Description for AI health category",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suivi du cycle et données associées. Permet à Bud de répondre à vos questions sur la santé menstruelle et de vous proposer des conseils personnalisés."
+          }
+        }
+      }
     },
-    "Demographics" : {
-      "comment" : "Display name for AI health category"
+    "Demographics": {
+      "comment": "Display name for AI health category",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Données démographiques"
+          }
+        }
+      }
     },
-    "Digestive Health" : {
-      "comment" : "Display name for AI health category"
+    "Digestive Health": {
+      "comment": "Display name for AI health category",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Santé digestive"
+          }
+        }
+      }
     },
-    "Evening" : {
-      "comment" : "Display name for time mode"
+    "Evening": {
+      "comment": "Display name for time mode",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soirée"
+          }
+        }
+      }
     },
-    "Events from your selected calendars. Used to help Bud understand your schedule context and answer related questions." : {
-      "comment" : "Description for AI health category"
+    "Events from your selected calendars. Used to help Bud understand your schedule context and answer related questions.": {
+      "comment": "Description for AI health category",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Événements des calendriers que vous avez sélectionnés. Permet à Bud de tenir compte de votre emploi du temps et de répondre aux questions associées."
+          }
+        }
+      }
     },
-    "Goals" : {
-      "comment" : "Display name for AI health category\nDisplay name for today section"
+    "Goals": {
+      "comment": "Display name for AI health category\nDisplay name for today section",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Objectifs"
+          }
+        }
+      }
     },
-    "Insights" : {
-      "comment" : "Display name for today section"
+    "Insights": {
+      "comment": "Display name for today section",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Analyses"
+          }
+        }
+      }
     },
-    "Lifestyle" : {
-      "comment" : "Display name for AI health category"
+    "Lifestyle": {
+      "comment": "Display name for AI health category",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mode de vie"
+          }
+        }
+      }
     },
-    "Location" : {
-      "comment" : "Display name for AI health category"
+    "Location": {
+      "comment": "Display name for AI health category",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Localisation"
+          }
+        }
+      }
     },
-    "Meals, calories, macros, and water intake. Used to help Bud answer questions about your nutrition and provide personalized insights." : {
-      "comment" : "Description for AI health category"
+    "Meals, calories, macros, and water intake. Used to help Bud answer questions about your nutrition and provide personalized insights.": {
+      "comment": "Description for AI health category",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repas, calories, macronutriments et consommation d'eau. Permet à Bud de répondre à vos questions sur votre alimentation et de vous proposer des conseils personnalisés."
+          }
+        }
+      }
     },
-    "Menstrual Health" : {
-      "comment" : "Display name for AI health category"
+    "Menstrual Health": {
+      "comment": "Display name for AI health category",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Santé menstruelle"
+          }
+        }
+      }
     },
-    "Morning" : {
-      "comment" : "Display name for time mode"
+    "Morning": {
+      "comment": "Display name for time mode",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Matin"
+          }
+        }
+      }
     },
-    "Night" : {
-      "comment" : "Display name for time mode"
+    "Night": {
+      "comment": "Display name for time mode",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nuit"
+          }
+        }
+      }
     },
-    "Nutrition" : {
-      "comment" : "Display name for AI health category"
+    "Nutrition": {
+      "comment": "Display name for AI health category",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutrition"
+          }
+        }
+      }
     },
-    "Period Forecast" : {
-      "comment" : "Display name for today section"
+    "Period Forecast": {
+      "comment": "Display name for today section",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prévision des règles"
+          }
+        }
+      }
     },
-    "Physical Activity" : {
-      "comment" : "Display name for AI health category"
+    "Physical Activity": {
+      "comment": "Display name for AI health category",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activité physique"
+          }
+        }
+      }
     },
-    "Reminders" : {
-      "comment" : "Display name for today section"
+    "Reminders": {
+      "comment": "Display name for today section",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rappels"
+          }
+        }
+      }
     },
-    "Sleep" : {
-      "comment" : "Display name for AI health category"
+    "Sleep": {
+      "comment": "Display name for AI health category",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sommeil"
+          }
+        }
+      }
     },
-    "Sleep Details" : {
-      "comment" : "Display name for today section"
+    "Sleep Details": {
+      "comment": "Display name for today section",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Détails du sommeil"
+          }
+        }
+      }
     },
-    "Sleep duration, quality, and stages. Used to help Bud answer questions about your sleep patterns and provide personalized insights." : {
-      "comment" : "Description for AI health category"
+    "Sleep duration, quality, and stages. Used to help Bud answer questions about your sleep patterns and provide personalized insights.": {
+      "comment": "Description for AI health category",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durée, qualité et phases de sommeil. Permet à Bud de répondre à vos questions sur vos habitudes de sommeil et de vous proposer des conseils personnalisés."
+          }
+        }
+      }
     },
-    "Steps, workouts, training load, and exercise data. Used to provide personalized activity insights and answer your activity-related questions." : {
-      "comment" : "Description for AI health category"
+    "Steps, workouts, training load, and exercise data. Used to provide personalized activity insights and answer your activity-related questions.": {
+      "comment": "Description for AI health category",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas, séances, charge d'entraînement et données d'exercice. Permet de vous proposer des analyses d'activité personnalisées et de répondre à vos questions sur l'activité physique."
+          }
+        }
+      }
     },
-    "Stress and Mindfulness" : {
-      "comment" : "Display name for AI health category"
+    "Stress and Mindfulness": {
+      "comment": "Display name for AI health category",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stress et pleine conscience"
+          }
+        }
+      }
     },
-    "Stress levels and mindfulness activity. Used to help Bud answer questions about stress patterns and provide personalized insights." : {
-      "comment" : "Description for AI health category"
+    "Stress levels and mindfulness activity. Used to help Bud answer questions about stress patterns and provide personalized insights.": {
+      "comment": "Description for AI health category",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveaux de stress et séances de pleine conscience. Permet à Bud de répondre à vos questions sur vos tendances de stress et de vous proposer des conseils personnalisés."
+          }
+        }
+      }
     },
-    "Today's Advice" : {
-      "comment" : "Display name for today section"
+    "Today's Advice": {
+      "comment": "Display name for today section",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le conseil du jour"
+          }
+        }
+      }
     },
-    "Today's Events" : {
-      "comment" : "Display name for today section"
+    "Today's Events": {
+      "comment": "Display name for today section",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les événements du jour"
+          }
+        }
+      }
     },
-    "Today's Weather" : {
-      "comment" : "Display name for today section"
+    "Today's Weather": {
+      "comment": "Display name for today section",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La météo du jour"
+          }
+        }
+      }
     },
-    "Tomorrow's Events" : {
-      "comment" : "Display name for today section"
+    "Tomorrow's Events": {
+      "comment": "Display name for today section",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les événements de demain"
+          }
+        }
+      }
     },
-    "Tomorrow's Weather" : {
-      "comment" : "Display name for today section"
+    "Tomorrow's Weather": {
+      "comment": "Display name for today section",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La météo de demain"
+          }
+        }
+      }
     },
-    "Tonight's Sleep" : {
-      "comment" : "Display name for today section"
+    "Tonight's Sleep": {
+      "comment": "Display name for today section",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le sommeil de cette nuit"
+          }
+        }
+      }
     },
-    "Weather" : {
-      "comment" : "Display name for AI health category"
+    "Weather": {
+      "comment": "Display name for AI health category",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Météo"
+          }
+        }
+      }
     },
-    "Weather conditions for your location, but not your location itself. Used to help Bud understand external factors that may affect your health." : {
-      "comment" : "Description for AI health category"
+    "Weather conditions for your location, but not your location itself. Used to help Bud understand external factors that may affect your health.": {
+      "comment": "Description for AI health category",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conditions météo de votre région, sans votre position elle-même. Permet à Bud de tenir compte des facteurs extérieurs qui peuvent influencer votre santé."
+          }
+        }
+      }
     },
-    "Your coarse location (city, state, country). Used to help Bud understand environmental context and provide location-aware insights, without knowing your exact position." : {
-      "comment" : "Description for AI health category"
+    "Your coarse location (city, state, country). Used to help Bud understand environmental context and provide location-aware insights, without knowing your exact position.": {
+      "comment": "Description for AI health category",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre localisation approximative (ville, région, pays). Permet à Bud de tenir compte du contexte environnemental et de proposer des analyses adaptées à votre région, sans connaître votre position exacte."
+          }
+        }
+      }
     },
-    "Your health goals and progress. Used to help Bud contextualize your questions and generate personalized suggestions." : {
-      "comment" : "Description for AI health category"
+    "Your health goals and progress. Used to help Bud contextualize your questions and generate personalized suggestions.": {
+      "comment": "Description for AI health category",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vos objectifs de santé et votre progression. Permet à Bud de replacer vos questions dans leur contexte et de générer des suggestions personnalisées."
+          }
+        }
+      }
     }
   },
-  "version" : "1.0"
+  "version": "1.0"
 }
