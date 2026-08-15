@@ -15,6 +15,12 @@
             "state": "translated",
             "value": "AMRAP"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AMRAP"
+          }
         }
       }
     },
@@ -31,6 +37,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Niveau d'activité"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activiteitsniveau"
           }
         }
       }
@@ -55,6 +67,12 @@
             "state": "translated",
             "value": "Marquer automatiquement le rappel comme terminé lorsque tu enregistres une séance de HIIT."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vink de herinnering automatisch af als je een HIIT-training vastlegt."
+          }
         }
       }
     },
@@ -77,6 +95,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Marquer automatiquement le rappel comme terminé lorsque tu enregistres une séance de cardio."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vink de herinnering automatisch af als je een cardiotraining vastlegt."
           }
         }
       }
@@ -101,6 +125,12 @@
             "state": "translated",
             "value": "Marquer automatiquement le rappel comme terminé lorsque tu enregistres une séance de musculation."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vink de herinnering automatisch af als je een krachttraining vastlegt."
+          }
         }
       }
     },
@@ -123,6 +153,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Marquer automatiquement le rappel comme terminé lorsque tu enregistres ta tension artérielle."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vink de herinnering automatisch af als je je bloeddruk vastlegt."
           }
         }
       }
@@ -147,6 +183,12 @@
             "state": "translated",
             "value": "Marquer automatiquement le rappel comme terminé lorsque tu enregistres ta consommation d'eau."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vink de herinnering automatisch af als je je waterinname vastlegt."
+          }
         }
       }
     },
@@ -169,6 +211,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Marquer automatiquement le rappel comme terminé lorsque tu enregistres du yoga, du Pilates ou de la souplesse."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vink de herinnering automatisch af als je yoga, pilates of lenigheid vastlegt."
           }
         }
       }
@@ -193,6 +241,12 @@
             "state": "translated",
             "value": "Marquer automatiquement le rappel comme terminé lorsque tu enregistres ton poids."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vink de herinnering automatisch af als je je gewicht vastlegt."
+          }
         }
       }
     },
@@ -209,6 +263,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Barre"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Halterstang"
           }
         }
       }
@@ -227,6 +287,12 @@
             "state": "translated",
             "value": "Barre"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Halterstang"
+          }
         }
       }
     },
@@ -243,6 +309,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vélo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fiets"
           }
         }
       }
@@ -261,6 +333,12 @@
             "state": "translated",
             "value": "Composition corporelle"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lichaamssamenstelling"
+          }
         }
       }
     },
@@ -277,6 +355,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Selles"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stoelgang"
           }
         }
       }
@@ -295,6 +379,12 @@
             "state": "translated",
             "value": "Condition cardio"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conditie"
+          }
         }
       }
     },
@@ -311,6 +401,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Barre de traction"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Optrekstang"
           }
         }
       }
@@ -329,6 +425,12 @@
             "state": "translated",
             "value": "Récupération"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cooling-down"
+          }
         }
       }
     },
@@ -345,6 +447,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Suivi du cycle"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cyclus bijhouden"
           }
         }
       }
@@ -363,6 +471,12 @@
             "state": "translated",
             "value": "Haltères"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dumbbells"
+          }
         }
       }
     },
@@ -376,6 +490,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EMOM"
+          }
+        },
+        "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "EMOM"
@@ -397,6 +517,12 @@
             "state": "translated",
             "value": "Elliptique"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crosstrainer"
+          }
         }
       }
     },
@@ -413,6 +539,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Efficacité de l'exercice"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Effectiviteit van training"
           }
         }
       }
@@ -431,6 +563,12 @@
             "state": "translated",
             "value": "Santé cardiaque"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hartgezondheid"
+          }
         }
       }
     },
@@ -444,6 +582,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kettlebell"
+          }
+        },
+        "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Kettlebell"
@@ -465,6 +609,12 @@
             "state": "translated",
             "value": "Mode de vie"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leefstijl"
+          }
         }
       }
     },
@@ -481,6 +631,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Enregistrer la tension"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloeddruk vastleggen"
           }
         }
       }
@@ -499,6 +655,12 @@
             "state": "translated",
             "value": "Enregistrer une séance de cardio"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cardiotraining vastleggen"
+          }
         }
       }
     },
@@ -515,6 +677,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Enregistrer un aliment"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voeding vastleggen"
           }
         }
       }
@@ -533,6 +701,12 @@
             "state": "translated",
             "value": "Enregistrer une séance de HIIT"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HIIT-training vastleggen"
+          }
         }
       }
     },
@@ -549,6 +723,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Enregistrer mobilité/souplesse"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mobiliteit/lenigheid vastleggen"
           }
         }
       }
@@ -567,6 +747,12 @@
             "state": "translated",
             "value": "Enregistrer une séance de musculation"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Krachttraining vastleggen"
+          }
         }
       }
     },
@@ -583,6 +769,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Enregistrer de l'eau"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Water vastleggen"
           }
         }
       }
@@ -601,6 +793,12 @@
             "state": "translated",
             "value": "Enregistrer le poids"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gewicht vastleggen"
+          }
         }
       }
     },
@@ -617,6 +815,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nutrition"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voeding"
           }
         }
       }
@@ -635,6 +839,12 @@
             "state": "translated",
             "value": "Bande de résistance"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weerstandsband"
+          }
         }
       }
     },
@@ -651,6 +861,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rameur"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Roeimachine"
           }
         }
       }
@@ -669,6 +885,12 @@
             "state": "translated",
             "value": "Simulateur de ski"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skimachine"
+          }
         }
       }
     },
@@ -685,6 +907,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Qualité du sommeil"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slaapkwaliteit"
           }
         }
       }
@@ -703,6 +931,12 @@
             "state": "translated",
             "value": "Standard"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Standaard"
+          }
         }
       }
     },
@@ -719,6 +953,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vélo stationnaire"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hometrainer"
           }
         }
       }
@@ -737,6 +977,12 @@
             "state": "translated",
             "value": "Niveaux de stress"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stressniveaus"
+          }
         }
       }
     },
@@ -750,6 +996,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tabata"
+          }
+        },
+        "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Tabata"
@@ -771,6 +1023,12 @@
             "state": "translated",
             "value": "Tapis de course"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loopband"
+          }
         }
       }
     },
@@ -787,6 +1045,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Échauffement"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warming-up"
           }
         }
       }
@@ -805,6 +1069,12 @@
             "state": "translated",
             "value": "Gilet lesté"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gewichtsvest"
+          }
         }
       }
     },
@@ -821,6 +1091,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tapis de yoga"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yogamat"
           }
         }
       }

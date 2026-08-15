@@ -15,6 +15,12 @@
             "state": "translated",
             "value": " cal"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": " kcal"
+          }
         }
       }
     },
@@ -30,6 +36,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ Cal"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ kcal"
           }
         }
       }
@@ -48,6 +60,12 @@
             "state": "translated",
             "value": "%lld min en zone"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld zonemin."
+          }
         }
       }
     },
@@ -60,6 +78,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld bpm"
+          }
+        },
+        "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld bpm"
@@ -86,6 +110,12 @@
             "state": "translated",
             "value": "%1$lld mesures sur %2$lld"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld van %2$lld waarden"
+          }
         }
       }
     },
@@ -102,6 +132,12 @@
             "state": "translated",
             "value": "%lld séances"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld trainingen"
+          }
         }
       }
     },
@@ -114,6 +150,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld %% alc."
+          }
+        },
+        "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld %% alc."
@@ -134,6 +176,12 @@
             "state": "translated",
             "value": "5 à 10 min"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "5-10 min"
+          }
         }
       }
     },
@@ -146,6 +194,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "< 5 min"
+          }
+        },
+        "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "< 5 min"
@@ -166,6 +220,12 @@
             "state": "translated",
             "value": "> 10 min"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "> 10 min"
+          }
         }
       }
     },
@@ -181,6 +241,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Réel : %lld"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Werkelijk: %lld"
           }
         }
       }
@@ -198,6 +264,12 @@
             "state": "translated",
             "value": "Ajouter une séance favorite"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Favoriete training toevoegen"
+          }
         }
       }
     },
@@ -214,6 +286,12 @@
             "state": "translated",
             "value": "Âge"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leeftijd"
+          }
         }
       }
     },
@@ -229,6 +307,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Points à améliorer"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verbeterpunten"
           }
         }
       }
@@ -247,6 +331,12 @@
             "state": "translated",
             "value": "Automatique"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatisch"
+          }
         }
       }
     },
@@ -259,6 +349,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BPM"
+          }
+        },
+        "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "BPM"
@@ -279,6 +375,12 @@
             "state": "translated",
             "value": "Âge bio"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bio-leeftijd"
+          }
         }
       }
     },
@@ -294,6 +396,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Historique de l'âge bio"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geschiedenis bio-leeftijd"
           }
         }
       }
@@ -311,6 +419,12 @@
             "state": "translated",
             "value": "Tension artérielle"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloeddruk"
+          }
         }
       }
     },
@@ -326,6 +440,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Selles"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stoelgang"
           }
         }
       }
@@ -343,6 +463,12 @@
             "state": "translated",
             "value": "Effacer"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wissen"
+          }
         }
       }
     },
@@ -359,6 +485,12 @@
             "state": "translated",
             "value": "Bientôt disponible"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Binnenkort"
+          }
         }
       }
     },
@@ -374,6 +506,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Contenant"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beker"
           }
         }
       }
@@ -392,6 +530,12 @@
             "state": "translated",
             "value": "FC personnalisée"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eigen HS"
+          }
         }
       }
     },
@@ -407,6 +551,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fréquence cardiaque personnalisée"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eigen hartslag"
           }
         }
       }
@@ -425,6 +575,12 @@
             "state": "translated",
             "value": "Zones personnalisées"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eigen zones"
+          }
         }
       }
     },
@@ -440,6 +596,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Date"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datum"
           }
         }
       }
@@ -457,6 +619,12 @@
             "state": "translated",
             "value": "Détails"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Details"
+          }
         }
       }
     },
@@ -472,6 +640,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Diastolique"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diastolisch"
           }
         }
       }
@@ -489,6 +663,12 @@
             "state": "translated",
             "value": "OK"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gereed"
+          }
         }
       }
     },
@@ -504,6 +684,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Durée"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duur"
           }
         }
       }
@@ -521,6 +707,12 @@
             "state": "translated",
             "value": "Effort"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inspanning"
+          }
         }
       }
     },
@@ -536,6 +728,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Terminer"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beëindig"
           }
         }
       }
@@ -553,6 +751,12 @@
             "state": "translated",
             "value": "Filtrer"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filter"
+          }
         }
       }
     },
@@ -568,6 +772,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "C'est parti !"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GO!"
           }
         }
       }
@@ -585,6 +795,12 @@
             "state": "translated",
             "value": "Zones de FC"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HS-zones"
+          }
         }
       }
     },
@@ -600,6 +816,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fréquence cardiaque"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hartslag"
           }
         }
       }
@@ -617,6 +839,12 @@
             "state": "translated",
             "value": "Enregistrer"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vastleggen"
+          }
         }
       }
     },
@@ -632,6 +860,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Enregistrer une boisson"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drankje vastleggen"
           }
         }
       }
@@ -649,6 +883,12 @@
             "state": "translated",
             "value": "Enregistrer un aliment"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voeding vastleggen"
+          }
         }
       }
     },
@@ -664,6 +904,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Enregistrer les règles"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menstruatie vastleggen"
           }
         }
       }
@@ -681,6 +927,12 @@
             "state": "translated",
             "value": "Repas"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maaltijd"
+          }
         }
       }
     },
@@ -696,6 +948,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mode"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modus"
           }
         }
       }
@@ -713,6 +971,12 @@
             "state": "translated",
             "value": "Surveillances"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bewaking"
+          }
         }
       }
     },
@@ -728,6 +992,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nouvelle séance"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nieuwe training"
           }
         }
       }
@@ -745,6 +1015,12 @@
             "state": "translated",
             "value": "Aucune donnée"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geen gegevens"
+          }
         }
       }
     },
@@ -760,6 +1036,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aucun effet"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geen effect"
           }
         }
       }
@@ -777,6 +1059,12 @@
             "state": "translated",
             "value": "Aucune zone cardiaque définie"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geen hartzones ingesteld"
+          }
         }
       }
     },
@@ -792,6 +1080,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aucun rappel"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geen herinneringen"
           }
         }
       }
@@ -809,6 +1103,12 @@
             "state": "translated",
             "value": "Aucun résultat"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geen resultaten"
+          }
         }
       }
     },
@@ -824,6 +1124,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Données insuffisantes"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Te weinig gegevens"
           }
         }
       }
@@ -841,6 +1147,12 @@
             "state": "translated",
             "value": "Ouvrez Bloom sur l'iPhone"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Bloom op je iPhone"
+          }
         }
       }
     },
@@ -856,6 +1168,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pause"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pauzeer"
           }
         }
       }
@@ -879,6 +1197,12 @@
             "state": "translated",
             "value": "Le suivi des règles nécessite l'accès aux données Santé. Active-le dans l'app Santé sur ton iPhone."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voor het bijhouden van je menstruatie is toegang tot Gezondheid nodig. Schakel dit in in de Gezondheid-app op je iPhone."
+          }
         }
       }
     },
@@ -894,6 +1218,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Facteurs positifs"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Positieve factoren"
           }
         }
       }
@@ -911,6 +1241,12 @@
             "state": "translated",
             "value": "Évaluer l'effort"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inspanning beoordelen"
+          }
         }
       }
     },
@@ -926,6 +1262,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rappels"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herinneringen"
           }
         }
       }
@@ -943,6 +1285,12 @@
             "state": "translated",
             "value": "Résultats"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resultaten"
+          }
         }
       }
     },
@@ -958,6 +1306,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Reprendre"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hervat"
           }
         }
       }
@@ -975,6 +1329,12 @@
             "state": "translated",
             "value": "Enregistrer"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bewaar"
+          }
         }
       }
     },
@@ -990,6 +1350,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Enregistré"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bewaard"
           }
         }
       }
@@ -1007,6 +1373,12 @@
             "state": "translated",
             "value": "Enregistrement de la séance"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Training wordt bewaard"
+          }
         }
       }
     },
@@ -1022,6 +1394,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rechercher"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zoek"
           }
         }
       }
@@ -1039,6 +1417,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Définir chaque seuil de zone individuellement"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stel elke zonegrens apart in"
           }
         }
       }
@@ -1063,6 +1447,12 @@
             "state": "translated",
             "value": "Définisse ton FC maximale et au repos ; les zones sont calculées automatiquement"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stel je maximale en rusthartslag in; de zones worden automatisch berekend"
+          }
         }
       }
     },
@@ -1078,6 +1468,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Réglages"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Instellingen"
           }
         }
       }
@@ -1095,6 +1491,12 @@
             "state": "translated",
             "value": "Ajouter aux favoris"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Markeer als favoriet"
+          }
         }
       }
     },
@@ -1110,6 +1512,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Favoris"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Favorieten"
           }
         }
       }
@@ -1127,6 +1535,12 @@
             "state": "translated",
             "value": "Séances favorites"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Favoriete trainingen"
+          }
         }
       }
     },
@@ -1142,6 +1556,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Résumé"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Samenvatting"
           }
         }
       }
@@ -1159,6 +1579,12 @@
             "state": "translated",
             "value": "Changement…"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wisselen …"
+          }
         }
       }
     },
@@ -1174,6 +1600,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Systolique"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Systolisch"
           }
         }
       }
@@ -1191,6 +1623,12 @@
             "state": "translated",
             "value": "Le conseil du jour"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Advies van vandaag"
+          }
         }
       }
     },
@@ -1203,6 +1641,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Type"
+          }
+        },
+        "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Type"
@@ -1223,6 +1667,12 @@
             "state": "translated",
             "value": "Retirer des favoris"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uit favorieten"
+          }
         }
       }
     },
@@ -1238,6 +1688,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mis à jour %@"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bijgewerkt %@"
           }
         }
       }
@@ -1255,6 +1711,12 @@
             "state": "translated",
             "value": "Enregistrement vocal"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spraakinvoer"
+          }
         }
       }
     },
@@ -1271,6 +1733,12 @@
             "state": "translated",
             "value": "Échauffement"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warming-up"
+          }
         }
       }
     },
@@ -1286,6 +1754,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Poids"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gewicht"
           }
         }
       }
@@ -1309,6 +1783,12 @@
             "state": "translated",
             "value": "Qu'as-tu mangé ?"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wat heb je gegeten?"
+          }
         }
       }
     },
@@ -1326,6 +1806,12 @@
             "state": "translated",
             "value": "Séance"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Training"
+          }
         }
       }
     },
@@ -1341,6 +1827,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Séances"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trainingen"
           }
         }
       }
@@ -1364,6 +1856,12 @@
             "state": "translated",
             "value": "Tu n'as aucun rappel aujourd'hui."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je hebt vandaag geen herinneringen."
+          }
         }
       }
     },
@@ -1376,6 +1874,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zone %lld"
+          }
+        },
+        "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Zone %lld"
@@ -1396,6 +1900,12 @@
             "state": "translated",
             "value": "Seuils de zone"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zonegrenzen"
+          }
         }
       }
     },
@@ -1408,6 +1918,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zones"
+          }
+        },
+        "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Zones"
@@ -1435,6 +1951,12 @@
             "state": "translated",
             "value": "Zones calculées à partir de ton âge et de ta fréquence cardiaque au repos"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zones berekend op basis van je leeftijd en rusthartslag"
+          }
         }
       }
     },
@@ -1447,6 +1969,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "bpm"
+          }
+        },
+        "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "bpm"
@@ -1467,6 +1995,12 @@
             "state": "translated",
             "value": "cal"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "kcal"
+          }
         }
       }
     },
@@ -1479,6 +2013,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "mmHg"
+          }
+        },
+        "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "mmHg"
@@ -1498,6 +2038,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "portions"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "porties"
           }
         }
       }

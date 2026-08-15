@@ -15,6 +15,12 @@
             "state": "translated",
             "value": "Après-midi"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Middag"
+          }
         }
       }
     },
@@ -37,6 +43,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Âge, sexe biologique, taille et ton objectif. Permet à Bud de personnaliser ses réponses et d'adapter ses conseils à ton situation."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leeftijd, biologisch geslacht, lengte en je focus. Hiermee stemt Bud zijn antwoorden en inzichten op jou af."
           }
         }
       }
@@ -61,6 +73,12 @@
             "state": "translated",
             "value": "Consommation d'alcool et statut tabagique. Permet à Bud de comprendre les facteurs liés à ton mode de vie qui peuvent influencer ta santé."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alcoholgebruik en rookstatus. Hiermee begrijpt Bud leefstijlfactoren die je gezondheid kunnen beïnvloeden."
+          }
         }
       }
     },
@@ -77,6 +95,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mesures corporelles"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lichaamswaarden"
           }
         }
       }
@@ -101,6 +125,12 @@
             "state": "translated",
             "value": "Composition corporelle, poids, fréquence cardiaque au repos, VO2 max et VFC. Permet à Bud de comprendre l'évolution de ton physiologie et de répondre aux questions associées."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lichaamssamenstelling, gewicht, rusthartslag, VO2max en HRV. Hiermee ziet Bud veranderingen in je lichaam en beantwoordt hij bijbehorende vragen."
+          }
         }
       }
     },
@@ -124,6 +154,12 @@
             "state": "translated",
             "value": "Selles et habitudes intestinales. Permet à Bud de répondre à tes questions sur la santé digestive et de te proposer des conseils personnalisés."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stoelgang en patronen. Hiermee beantwoordt Bud vragen over je spijsvertering en geeft hij persoonlijke inzichten."
+          }
         }
       }
     },
@@ -141,6 +177,12 @@
             "state": "translated",
             "value": "Événements du calendrier"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Agenda-afspraken"
+          }
         }
       }
     },
@@ -157,6 +199,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Conseil selon la phase du cycle"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tip bij je cyclusfase"
           }
         }
       }
@@ -181,6 +229,12 @@
             "state": "translated",
             "value": "Suivi du cycle et données associées. Permet à Bud de répondre à tes questions sur la santé menstruelle et de te proposer des conseils personnalisés."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cyclusgegevens en aanverwante data. Hiermee beantwoordt Bud vragen over menstruatiegezondheid en geeft hij persoonlijke inzichten."
+          }
         }
       }
     },
@@ -197,6 +251,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Données démographiques"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demografische gegevens"
           }
         }
       }
@@ -215,6 +275,12 @@
             "state": "translated",
             "value": "Santé digestive"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spijsvertering"
+          }
         }
       }
     },
@@ -231,6 +297,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Soirée"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avond"
           }
         }
       }
@@ -255,6 +327,12 @@
             "state": "translated",
             "value": "Événements des calendriers que tu as sélectionnés. Permet à Bud de tenir compte de ton emploi du temps et de répondre aux questions associées."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afspraken uit de agenda's die je kiest. Hiermee houdt Bud rekening met je planning en beantwoordt hij bijbehorende vragen."
+          }
         }
       }
     },
@@ -271,6 +349,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Objectifs"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doelen"
           }
         }
       }
@@ -289,6 +373,12 @@
             "state": "translated",
             "value": "Analyses"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inzichten"
+          }
         }
       }
     },
@@ -306,6 +396,12 @@
             "state": "translated",
             "value": "Mode de vie"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leefstijl"
+          }
         }
       }
     },
@@ -322,6 +418,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Localisation"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Locatie"
           }
         }
       }
@@ -346,6 +448,12 @@
             "state": "translated",
             "value": "Repas, calories, macronutriments et consommation d'eau. Permet à Bud de répondre à tes questions sur ton alimentation et de te proposer des conseils personnalisés."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maaltijden, calorieën, macro's en waterinname. Hiermee beantwoordt Bud vragen over je voeding en geeft hij persoonlijke inzichten."
+          }
         }
       }
     },
@@ -362,6 +470,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Santé menstruelle"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menstruatiegezondheid"
           }
         }
       }
@@ -380,6 +494,12 @@
             "state": "translated",
             "value": "Matin"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ochtend"
+          }
         }
       }
     },
@@ -396,6 +516,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nuit"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nacht"
           }
         }
       }
@@ -414,6 +540,12 @@
             "state": "translated",
             "value": "Nutrition"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voeding"
+          }
         }
       }
     },
@@ -430,6 +562,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Prévision des règles"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verwachting menstruatie"
           }
         }
       }
@@ -448,6 +586,12 @@
             "state": "translated",
             "value": "Activité physique"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lichaamsbeweging"
+          }
         }
       }
     },
@@ -464,6 +608,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rappels"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herinneringen"
           }
         }
       }
@@ -482,6 +632,12 @@
             "state": "translated",
             "value": "Sommeil"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slaap"
+          }
         }
       }
     },
@@ -498,6 +654,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Détails du sommeil"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slaapdetails"
           }
         }
       }
@@ -522,6 +684,12 @@
             "state": "translated",
             "value": "Durée, qualité et phases de sommeil. Permet à Bud de répondre à tes questions sur tes habitudes de sommeil et de te proposer des conseils personnalisés."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slaapduur, -kwaliteit en -fasen. Hiermee beantwoordt Bud vragen over je slaappatroon en geeft hij persoonlijke inzichten."
+          }
         }
       }
     },
@@ -545,6 +713,12 @@
             "state": "translated",
             "value": "Pas, séances, charge d'entraînement et données d'exercice. Permet de te proposer des analyses d'activité personnalisées et de répondre à tes questions sur l'activité physique."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stappen, trainingen, trainingsbelasting en beweeggegevens. Hiermee krijg je persoonlijke inzichten en antwoorden over je activiteit."
+          }
         }
       }
     },
@@ -561,6 +735,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Stress et pleine conscience"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stress en mindfulness"
           }
         }
       }
@@ -585,6 +765,12 @@
             "state": "translated",
             "value": "Niveaux de stress et séances de pleine conscience. Permet à Bud de répondre à tes questions sur tes tendances de stress et de te proposer des conseils personnalisés."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stressniveaus en mindfulnessoefeningen. Hiermee beantwoordt Bud vragen over je stresspatronen en geeft hij persoonlijke inzichten."
+          }
         }
       }
     },
@@ -601,6 +787,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Le conseil du jour"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Advies van vandaag"
           }
         }
       }
@@ -619,6 +811,12 @@
             "state": "translated",
             "value": "Les événements du jour"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afspraken vandaag"
+          }
         }
       }
     },
@@ -635,6 +833,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "La météo du jour"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weer vandaag"
           }
         }
       }
@@ -653,6 +857,12 @@
             "state": "translated",
             "value": "Les événements de demain"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afspraken morgen"
+          }
         }
       }
     },
@@ -669,6 +879,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "La météo de demain"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weer morgen"
           }
         }
       }
@@ -687,6 +903,12 @@
             "state": "translated",
             "value": "Le sommeil de cette nuit"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slaap vannacht"
+          }
         }
       }
     },
@@ -703,6 +925,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Météo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weer"
           }
         }
       }
@@ -727,6 +955,12 @@
             "state": "translated",
             "value": "Conditions météo de ton région, sans ta position elle-même. Permet à Bud de tenir compte des facteurs extérieurs qui peuvent influencer ta santé."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Het weer op jouw locatie, maar niet je locatie zelf. Hiermee houdt Bud rekening met externe factoren die je gezondheid beïnvloeden."
+          }
         }
       }
     },
@@ -750,6 +984,12 @@
             "state": "translated",
             "value": "Ton localisation approximative (ville, région, pays). Permet à Bud de tenir compte du contexte environnemental et de proposer des analyses adaptées à ton région, sans connaître ta position exacte."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je globale locatie (stad, regio, land). Hiermee houdt Bud rekening met je omgeving en geeft hij locatiebewuste inzichten, zonder je precieze positie te kennen."
+          }
         }
       }
     },
@@ -772,6 +1012,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "tes objectifs de santé et ta progression. Permet à Bud de replacer tes questions dans leur contexte et de générer des suggestions personnalisées."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je gezondheidsdoelen en voortgang. Hiermee plaatst Bud je vragen in context en doet hij persoonlijke suggesties."
           }
         }
       }

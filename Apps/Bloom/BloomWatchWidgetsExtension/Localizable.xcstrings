@@ -26,6 +26,12 @@
             "state": "translated",
             "value": "%@ ans"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ jr"
+          }
         }
       }
     },
@@ -41,6 +47,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Action"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actie"
           }
         }
       }
@@ -58,6 +70,12 @@
             "state": "translated",
             "value": "Actions"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acties"
+          }
         }
       }
     },
@@ -73,6 +91,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Widget Actions"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actiewidget"
           }
         }
       }
@@ -90,6 +114,12 @@
             "state": "translated",
             "value": "Âge bio"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bio-leeftijd"
+          }
         }
       }
     },
@@ -105,6 +135,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Âge biologique"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Biologische leeftijd"
           }
         }
       }
@@ -122,6 +158,12 @@
             "state": "translated",
             "value": "Choisissez l'action à ouvrir."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kies welke actie je wilt openen."
+          }
         }
       }
     },
@@ -137,6 +179,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Choisissez l'objectif à afficher."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kies welk doel je wilt zien."
           }
         }
       }
@@ -154,6 +202,12 @@
             "state": "translated",
             "value": "Terminer le rappel"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herinnering afvinken"
+          }
         }
       }
     },
@@ -169,6 +223,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Objectif"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doel"
           }
         }
       }
@@ -186,6 +246,12 @@
             "state": "translated",
             "value": "Widget Objectif"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doelwidget"
+          }
         }
       }
     },
@@ -201,6 +267,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fréquence cardiaque"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hartslag"
           }
         }
       }
@@ -218,6 +290,12 @@
             "state": "translated",
             "value": "Marque un rappel comme terminé."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Markeert een herinnering als voltooid."
+          }
         }
       }
     },
@@ -233,6 +311,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aucun objectif"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geen doel"
           }
         }
       }
@@ -250,6 +334,12 @@
             "state": "translated",
             "value": "Aucun rappel"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geen herinneringen"
+          }
         }
       }
     },
@@ -266,6 +356,12 @@
             "state": "translated",
             "value": "Identifiant d'occurrence"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voorkomens-id"
+          }
         }
       }
     },
@@ -281,6 +377,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ouvrez rapidement les actions ou une action précise."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open snel je acties of een specifieke actie."
           }
         }
       }
@@ -304,6 +406,12 @@
             "state": "translated",
             "value": "Ouvre rapidement tes séances."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open snel je trainingen."
+          }
         }
       }
     },
@@ -320,6 +428,12 @@
             "state": "translated",
             "value": "Rappel"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herinnering"
+          }
         }
       }
     },
@@ -335,6 +449,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Identifiant de rappel"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herinnerings-id"
           }
         }
       }
@@ -358,6 +478,12 @@
             "state": "translated",
             "value": "Consulte ton âge biologique d'un coup d'œil."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zie je biologische leeftijd in één oogopslag."
+          }
         }
       }
     },
@@ -380,6 +506,12 @@
             "state": "translated",
             "value": "Consulte ton prochain rappel."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zie je eerstvolgende herinnering."
+          }
         }
       }
     },
@@ -396,6 +528,12 @@
             "state": "translated",
             "value": "Emplacement"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plek"
+          }
         }
       }
     },
@@ -411,6 +549,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pas"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stappen"
           }
         }
       }
@@ -434,6 +578,12 @@
             "state": "translated",
             "value": "Suis ta progression d'un coup d'œil."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volg je voortgang in één oogopslag."
+          }
         }
       }
     },
@@ -455,6 +605,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Consulte tes pas et ton distance du jour."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bekijk je stappen en afstand van vandaag."
           }
         }
       }
@@ -478,6 +634,12 @@
             "state": "translated",
             "value": "Consulte ton dernière fréquence cardiaque et l'amplitude du jour."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bekijk je laatste hartslag met het bereik van vandaag."
+          }
         }
       }
     },
@@ -493,6 +655,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Séances"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trainingen"
           }
         }
       }

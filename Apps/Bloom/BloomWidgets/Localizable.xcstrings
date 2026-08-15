@@ -26,6 +26,12 @@
             "state": "translated",
             "value": "Action"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actie"
+          }
         }
       }
     },
@@ -41,6 +47,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Type d'action"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actietype"
           }
         }
       }
@@ -58,6 +70,12 @@
             "state": "translated",
             "value": "Actions"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acties"
+          }
         }
       }
     },
@@ -73,6 +91,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Niveau d'activité"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activiteitsniveau"
           }
         }
       }
@@ -90,6 +114,12 @@
             "state": "translated",
             "value": "Automatique (selon l'heure)"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatisch (op tijd)"
+          }
         }
       }
     },
@@ -105,6 +135,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Automatique (selon l'heure)"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatisch (op tijd)"
           }
         }
       }
@@ -122,6 +158,12 @@
             "state": "translated",
             "value": "Composition corporelle"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lichaamssamenstelling"
+          }
         }
       }
     },
@@ -137,6 +179,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Selles"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stoelgang"
           }
         }
       }
@@ -160,6 +208,12 @@
             "state": "translated",
             "value": "Déjeuner"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ontbijt"
+          }
         }
       }
     },
@@ -175,6 +229,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Le résumé de Bud"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buds samenvatting"
           }
         }
       }
@@ -193,6 +253,12 @@
             "state": "translated",
             "value": "Choisir un aliment"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voedingsmiddel kiezen"
+          }
         }
       }
     },
@@ -209,6 +275,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Choisir un objectif"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doel kiezen"
           }
         }
       }
@@ -227,6 +299,12 @@
             "state": "translated",
             "value": "Choisir un repas enregistré"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bewaarde maaltijd kiezen"
+          }
         }
       }
     },
@@ -242,6 +320,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Choisissez la période pour laquelle afficher les données de pas."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kies de periode waarvoor je stapgegevens wilt zien."
           }
         }
       }
@@ -259,6 +343,12 @@
             "state": "translated",
             "value": "Choisissez l'objectif à afficher dans le widget."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kies welk doel in de widget verschijnt."
+          }
         }
       }
     },
@@ -274,6 +364,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Choisissez l'action santé à effectuer."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kies welke gezondheidsactie je wilt uitvoeren."
           }
         }
       }
@@ -291,6 +387,12 @@
             "state": "translated",
             "value": "Choisissez les actions santé à afficher et leur ordre."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kies welke gezondheidsacties je ziet en in welke volgorde."
+          }
         }
       }
     },
@@ -306,6 +408,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Choisissez l'analyse à afficher dans le widget."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stel in welk inzicht in de widget verschijnt."
           }
         }
       }
@@ -323,6 +431,12 @@
             "state": "translated",
             "value": "Choisissez le repas à enregistrer avec le widget."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stel in welke maaltijd je met de widget vastlegt."
+          }
         }
       }
     },
@@ -338,6 +452,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Suivi du cycle"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cyclus bijhouden"
           }
         }
       }
@@ -355,6 +475,12 @@
             "state": "translated",
             "value": "Quotidien"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dagelijks"
+          }
         }
       }
     },
@@ -370,6 +496,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Analyses quotidiennes"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dagelijkse inzichten"
           }
         }
       }
@@ -393,6 +525,12 @@
             "state": "translated",
             "value": "Souper"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avondeten"
+          }
         }
       }
     },
@@ -408,6 +546,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mode d'affichage"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weergavemodus"
           }
         }
       }
@@ -425,6 +569,12 @@
             "state": "translated",
             "value": "Erreur"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fout"
+          }
         }
       }
     },
@@ -440,6 +590,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Efficacité de l'exercice"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Effectiviteit van training"
           }
         }
       }
@@ -457,6 +613,12 @@
             "state": "translated",
             "value": "Aliment"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voedingsmiddel"
+          }
         }
       }
     },
@@ -472,6 +634,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aliments"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voedingsmiddelen"
           }
         }
       }
@@ -489,6 +657,12 @@
             "state": "translated",
             "value": "Quel aliment ?"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welk voedingsmiddel?"
+          }
         }
       }
     },
@@ -504,6 +678,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Passez à Bloom Plus dès aujourd'hui !"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neem vandaag nog Bloom Plus!"
           }
         }
       }
@@ -527,6 +707,12 @@
             "state": "translated",
             "value": "Obtiens des analyses personnalisées sur ce qui stimule (ou plombe) ta santé. Une véritable radiographie de ton bien-être."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Krijg persoonlijke inzichten in wat je gezondheid een boost geeft (of juist onderuithaalt). Als röntgenblik voor je welzijn."
+          }
         }
       }
     },
@@ -542,6 +728,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Objectif"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doel"
           }
         }
       }
@@ -559,6 +751,12 @@
             "state": "translated",
             "value": "Configuration du widget Objectif"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuratie doelwidget"
+          }
         }
       }
     },
@@ -574,6 +772,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Objectifs"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doelen"
           }
         }
       }
@@ -591,6 +795,12 @@
             "state": "translated",
             "value": "Action santé"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gezondheidsactie"
+          }
         }
       }
     },
@@ -606,6 +816,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Configuration de l'action santé"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuratie gezondheidsactie"
           }
         }
       }
@@ -623,6 +839,12 @@
             "state": "translated",
             "value": "Analyses santé"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gezondheidsinzichten"
+          }
         }
       }
     },
@@ -638,6 +860,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Santé cardiaque"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hartgezondheid"
           }
         }
       }
@@ -655,6 +883,12 @@
             "state": "translated",
             "value": "Combien de portions ?"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hoeveel porties?"
+          }
         }
       }
     },
@@ -670,6 +904,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Configuration des actions d'enregistrement"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuratie vastlegacties"
           }
         }
       }
@@ -687,6 +927,12 @@
             "state": "translated",
             "value": "Enregistrer des données"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gegevens vastleggen"
+          }
         }
       }
     },
@@ -702,6 +948,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Enregistrer un repas"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maaltijd vastleggen"
           }
         }
       }
@@ -719,6 +971,12 @@
             "state": "translated",
             "value": "Configuration de l'enregistrement des repas"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuratie maaltijd vastleggen"
+          }
         }
       }
     },
@@ -734,6 +992,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Enregistre un repas comprenant un ou plusieurs aliments."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Legt een maaltijd met een of meer voedingsmiddelen vast."
           }
         }
       }
@@ -757,6 +1021,12 @@
             "state": "translated",
             "value": "Dîner"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lunch"
+          }
         }
       }
     },
@@ -772,6 +1042,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Repas"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maaltijd"
           }
         }
       }
@@ -789,6 +1065,12 @@
             "state": "translated",
             "value": "Mensuel"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maandelijks"
+          }
         }
       }
     },
@@ -804,6 +1086,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nutrition"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voeding"
           }
         }
       }
@@ -822,6 +1110,12 @@
             "state": "translated",
             "value": "Ouvrir le lecteur de codes-barres"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Barcodescanner openen"
+          }
         }
       }
     },
@@ -839,6 +1133,12 @@
             "state": "translated",
             "value": "Ouvrir l'enregistrement de la tension"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloeddruk vastleggen openen"
+          }
         }
       }
     },
@@ -854,6 +1154,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ouvrez Bloom pour actualiser"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Bloom om te vernieuwen"
           }
         }
       }
@@ -872,6 +1178,12 @@
             "state": "translated",
             "value": "Ouvrir l'enregistrement des selles"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stoelgang vastleggen openen"
+          }
         }
       }
     },
@@ -887,6 +1199,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ouvrir les outils d'enregistrement"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vastlegfuncties openen"
           }
         }
       }
@@ -905,6 +1223,12 @@
             "state": "translated",
             "value": "Ouvrir l'enregistrement des aliments"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voeding vastleggen openen"
+          }
         }
       }
     },
@@ -920,6 +1244,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ouvrir une action santé"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gezondheidsactie openen"
           }
         }
       }
@@ -938,6 +1268,12 @@
             "state": "translated",
             "value": "Ouvrir le scanner magique"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Magic Scanner openen"
+          }
         }
       }
     },
@@ -954,6 +1290,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ouvrir l'enregistrement des règles"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menstruatie vastleggen openen"
           }
         }
       }
@@ -972,6 +1314,12 @@
             "state": "translated",
             "value": "Ouvrir l'enregistrement vocal"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spraakinvoer openen"
+          }
         }
       }
     },
@@ -989,6 +1337,12 @@
             "state": "translated",
             "value": "Ouvrir l'enregistrement de l'eau"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Water vastleggen openen"
+          }
         }
       }
     },
@@ -1005,6 +1359,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ouvrir l'enregistrement du poids"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gewicht vastleggen openen"
           }
         }
       }
@@ -1028,6 +1388,12 @@
             "state": "translated",
             "value": "Ouvre l'app pour charger ton résumé personnalisé."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open de app om je persoonlijke samenvatting te laden."
+          }
         }
       }
     },
@@ -1043,6 +1409,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ouvre une action santé pour enregistrer des données."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opent een gezondheidsactie om gegevens vast te leggen."
           }
         }
       }
@@ -1066,6 +1438,12 @@
             "state": "translated",
             "value": "Ouvre une constante précise pour consulter tes données de santé."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opent een specifieke waarde om je gezondheidsgegevens te bekijken."
+          }
         }
       }
     },
@@ -1081,6 +1459,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sélectionnez au moins un aliment à enregistrer"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kies minstens één voedingsmiddel om vast te leggen"
           }
         }
       }
@@ -1098,6 +1482,12 @@
             "state": "translated",
             "value": "Accès rapide aux actions d'enregistrement de données de santé."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snelle toegang tot acties om gezondheidsgegevens vast te leggen."
+          }
         }
       }
     },
@@ -1113,6 +1503,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Enregistrez rapidement un repas comprenant un ou plusieurs aliments."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leg snel een maaltijd met een of meer voedingsmiddelen vast."
           }
         }
       }
@@ -1136,6 +1532,12 @@
             "state": "translated",
             "value": "Enregistre rapidement tes données personnelles."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leg snel persoonlijke gegevens vast."
+          }
         }
       }
     },
@@ -1151,6 +1553,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Repas enregistré"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bewaarde maaltijd"
           }
         }
       }
@@ -1174,6 +1582,12 @@
             "state": "translated",
             "value": "Consulte le résumé quotidien de ta santé par Bud."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bekijk Buds dagelijkse samenvatting van je gezondheid."
+          }
         }
       }
     },
@@ -1189,6 +1603,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Portions"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Porties"
           }
         }
       }
@@ -1206,6 +1626,12 @@
             "state": "translated",
             "value": "Aliment unique"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eén voedingsmiddel"
+          }
         }
       }
     },
@@ -1221,6 +1647,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Qualité du sommeil"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slaapkwaliteit"
           }
         }
       }
@@ -1238,6 +1670,12 @@
             "state": "translated",
             "value": "Emplacement"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plek"
+          }
         }
       }
     },
@@ -1253,6 +1691,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Collation"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snack"
           }
         }
       }
@@ -1270,6 +1714,12 @@
             "state": "translated",
             "value": "Pas"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stappen"
+          }
         }
       }
     },
@@ -1285,6 +1735,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Configuration du widget Pas"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuratie stappenwidget"
           }
         }
       }
@@ -1302,6 +1758,12 @@
             "state": "translated",
             "value": "Niveaux de stress"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stressniveaus"
+          }
         }
       }
     },
@@ -1317,6 +1779,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Période"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Periode"
           }
         }
       }
@@ -1334,6 +1802,12 @@
             "state": "translated",
             "value": "Configuration de l'analyse du jour"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuratie inzicht van vandaag"
+          }
         }
       }
     },
@@ -1350,6 +1824,12 @@
             "state": "translated",
             "value": "Le conseil du jour"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Advies van vandaag"
+          }
         }
       }
     },
@@ -1365,6 +1845,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Le sommeil de cette nuit"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slaap vannacht"
           }
         }
       }
@@ -1388,6 +1874,12 @@
             "state": "translated",
             "value": "Suis visuellement l'atteinte de ton objectif dans le temps."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volg visueel hoe je je doel in de tijd haalt."
+          }
         }
       }
     },
@@ -1410,6 +1902,12 @@
             "state": "translated",
             "value": "Suis tes pas et ton distance de marche."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volg je stappen en wandelafstand."
+          }
         }
       }
     },
@@ -1425,6 +1923,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Impossible de charger les analyses. Ouvrez l'app."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inzichten kunnen niet worden geladen. Open de app."
           }
         }
       }
@@ -1442,6 +1946,12 @@
             "state": "translated",
             "value": "Valeur"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waarde"
+          }
         }
       }
     },
@@ -1458,6 +1968,12 @@
             "state": "translated",
             "value": "Voir la constante"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waarde bekijken"
+          }
         }
       }
     },
@@ -1473,6 +1989,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Consultez des analyses santé personnalisées qui défilent automatiquement au fil de la journée."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bekijk persoonlijke gezondheidsinzichten die de dag door automatisch wisselen."
           }
         }
       }
@@ -1496,6 +2018,12 @@
             "state": "translated",
             "value": "Consulte ton conseil du jour ou tes recommandations pour le sommeil de cette nuit."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bekijk je persoonlijke advies van vandaag of je slaaptips voor vannacht."
+          }
         }
       }
     },
@@ -1511,6 +2039,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Constante"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waarde"
           }
         }
       }
@@ -1528,6 +2062,12 @@
             "state": "translated",
             "value": "Hebdomadaire"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wekelijks"
+          }
         }
       }
     },
@@ -1543,6 +2083,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Quel aliment ?"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welk voedingsmiddel?"
           }
         }
       }
@@ -1560,6 +2106,12 @@
             "state": "translated",
             "value": "Quel repas ?"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welke maaltijd?"
+          }
         }
       }
     },
@@ -1575,6 +2127,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Oups, on dirait que j'ai fait une erreur. Ouvrez Bloom pour réessayer."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oeps, ik heb blijkbaar een fout gemaakt. Open Bloom om het opnieuw te proberen."
           }
         }
       }
@@ -1592,6 +2150,12 @@
             "state": "translated",
             "value": "Type de widget"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widgettype"
+          }
         }
       }
     },
@@ -1607,6 +2171,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Annuel"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jaarlijks"
           }
         }
       }

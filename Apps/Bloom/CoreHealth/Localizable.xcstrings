@@ -21,6 +21,12 @@
             "state": "translated",
             "value": "%1$@ Cal de base\n%2$@ Cal actives"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ kcal basaal\n%2$@ kcal actief"
+          }
         }
       }
     },
@@ -37,6 +43,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Marche de 6 min : %@ m"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "6 minuten wandelen: %@ m"
           }
         }
       }
@@ -55,6 +67,12 @@
             "state": "translated",
             "value": "Football américain"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "American football"
+          }
         }
       }
     },
@@ -71,6 +89,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Minutes d'exercice Apple Watch"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Watch-oefenminuten"
           }
         }
       }
@@ -89,6 +113,12 @@
             "state": "translated",
             "value": "Tir à l'arc"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Boogschieten"
+          }
         }
       }
     },
@@ -105,6 +135,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Endormi"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slapend"
           }
         }
       }
@@ -123,6 +159,12 @@
             "state": "translated",
             "value": "À risque"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Risico"
+          }
         }
       }
     },
@@ -139,6 +181,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Athlète"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atletisch"
           }
         }
       }
@@ -157,6 +205,12 @@
             "state": "translated",
             "value": "Football australien"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Australian football"
+          }
         }
       }
     },
@@ -173,6 +227,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Automatique"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatisch"
           }
         }
       }
@@ -191,6 +251,12 @@
             "state": "translated",
             "value": "Éveillé"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wakker"
+          }
         }
       }
     },
@@ -204,6 +270,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Badminton"
+          }
+        },
+        "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Badminton"
@@ -225,6 +297,12 @@
             "state": "translated",
             "value": "Barre"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Barre"
+          }
         }
       }
     },
@@ -241,6 +319,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Baseball"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Honkbal"
           }
         }
       }
@@ -259,6 +343,12 @@
             "state": "translated",
             "value": "Basketball"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Basketbal"
+          }
         }
       }
     },
@@ -275,6 +365,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Verre à bière"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bierglas"
           }
         }
       }
@@ -293,6 +389,12 @@
             "state": "translated",
             "value": "Distance à vélo"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fietsafstand"
+          }
         }
       }
     },
@@ -309,6 +411,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Durée à vélo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fietsduur"
           }
         }
       }
@@ -327,6 +435,12 @@
             "state": "translated",
             "value": "À ce stade, la tension artérielle est nettement élevée et présente un risque accru de maladie cardiaque, d'AVC et d'autres complications. Elle nécessite souvent des médicaments et des changements d'habitudes de vie pour être maîtrisée."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In dit stadium is de bloeddruk fors verhoogd, met een groter risico op hartziekten, beroerte en andere complicaties. Vaak zijn medicijnen en aanpassingen in je leefstijl nodig om hem onder controle te krijgen."
+          }
         }
       }
     },
@@ -343,6 +457,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Une tension artérielle dans cette plage est plus élevée que la normale, sans pour autant atteindre le seuil de l'hypertension. Elle indique un risque accru de développer de l'hypertension."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Een bloeddruk in dit bereik is hoger dan normaal, maar nog niet in het bereik van hoge bloeddruk. Het wijst op een verhoogd risico om hypertensie te ontwikkelen."
           }
         }
       }
@@ -367,6 +487,12 @@
             "state": "translated",
             "value": "Quilles"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bowlen"
+          }
         }
       }
     },
@@ -383,6 +509,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Boxe"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Boksen"
           }
         }
       }
@@ -401,6 +533,12 @@
             "state": "translated",
             "value": "Canette"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blikje"
+          }
         }
       }
     },
@@ -417,6 +555,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Danse cardio"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cardiodans"
           }
         }
       }
@@ -435,6 +579,12 @@
             "state": "translated",
             "value": "Séances de cardio"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cardiotrainingen"
+          }
         }
       }
     },
@@ -451,6 +601,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Escalade"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klimmen"
           }
         }
       }
@@ -469,6 +625,12 @@
             "state": "translated",
             "value": "Tasse à café"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Koffiekopje"
+          }
         }
       }
     },
@@ -485,6 +647,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Préoccupant"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aandachtspunt"
           }
         }
       }
@@ -503,6 +671,12 @@
             "state": "translated",
             "value": "Récupération"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cooling-down"
+          }
         }
       }
     },
@@ -519,6 +693,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sommeil de base"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kernslaap"
           }
         }
       }
@@ -537,6 +717,12 @@
             "state": "translated",
             "value": "Renforcement du tronc"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coretraining"
+          }
         }
       }
     },
@@ -550,6 +736,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cricket"
+          }
+        },
+        "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Cricket"
@@ -571,6 +763,12 @@
             "state": "translated",
             "value": "Ski de fond"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Langlaufen"
+          }
         }
       }
     },
@@ -588,6 +786,12 @@
             "state": "translated",
             "value": "Entraînement croisé"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crosstraining"
+          }
         }
       }
     },
@@ -601,6 +805,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Curling"
+          }
+        },
+        "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Curling"
@@ -622,6 +832,12 @@
             "state": "translated",
             "value": "Fumeur actuel"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rookt momenteel"
+          }
         }
       }
     },
@@ -638,6 +854,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "FC personnalisée"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eigen HS"
           }
         }
       }
@@ -656,6 +878,12 @@
             "state": "translated",
             "value": "Zones personnalisées"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eigen zones"
+          }
         }
       }
     },
@@ -672,6 +900,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vélo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fietsen"
           }
         }
       }
@@ -690,6 +924,12 @@
             "state": "translated",
             "value": "Danse"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dansen"
+          }
         }
       }
     },
@@ -706,6 +946,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Entraînement inspiré de la danse"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dansgeïnspireerde training"
           }
         }
       }
@@ -724,6 +970,12 @@
             "state": "translated",
             "value": "Sommeil profond"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diepe slaap"
+          }
         }
       }
     },
@@ -740,6 +992,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Calories alimentaires"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voedingscalorieën"
           }
         }
       }
@@ -758,6 +1016,12 @@
             "state": "translated",
             "value": "Sports de disque"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discsporten"
+          }
         }
       }
     },
@@ -774,6 +1038,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Double appui : %@ %%"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dubbele steunfase: %@ %%"
           }
         }
       }
@@ -792,6 +1062,12 @@
             "state": "translated",
             "value": "Ski alpin"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afdalingsskiën"
+          }
         }
       }
     },
@@ -808,6 +1084,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Élevée"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verhoogd"
           }
         }
       }
@@ -826,6 +1108,12 @@
             "state": "translated",
             "value": "Elliptique"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crosstrainer"
+          }
         }
       }
     },
@@ -842,6 +1130,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Terminée"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beëindigd"
           }
         }
       }
@@ -860,6 +1154,12 @@
             "state": "translated",
             "value": "Sports équestres"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paardensport"
+          }
         }
       }
     },
@@ -876,6 +1176,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tasse à expresso"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Espressokopje"
           }
         }
       }
@@ -894,6 +1200,12 @@
             "state": "translated",
             "value": "Masse grasse essentielle"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Essentieel vet"
+          }
         }
       }
     },
@@ -910,6 +1222,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Excellent"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uitstekend"
           }
         }
       }
@@ -928,6 +1246,12 @@
             "state": "translated",
             "value": "Exercice efficace"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Effectief trainen"
+          }
         }
       }
     },
@@ -944,6 +1268,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "De l'exercice deux ou trois fois par semaine"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Een paar keer per week sporten"
           }
         }
       }
@@ -962,6 +1292,12 @@
             "state": "translated",
             "value": "De l'exercice presque tous les jours"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bijna elke dag sporten"
+          }
         }
       }
     },
@@ -978,6 +1314,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "De l'exercice la moitié de la semaine"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De halve week sporten"
           }
         }
       }
@@ -996,6 +1338,12 @@
             "state": "translated",
             "value": "Passable"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Matig"
+          }
         }
       }
     },
@@ -1012,6 +1360,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Femme"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vrouw"
           }
         }
       }
@@ -1030,6 +1384,12 @@
             "state": "translated",
             "value": "Escrime"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schermen"
+          }
         }
       }
     },
@@ -1046,6 +1406,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Apport en fibres"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vezelinname"
           }
         }
       }
@@ -1064,6 +1430,12 @@
             "state": "translated",
             "value": "Pêche"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vissen"
+          }
         }
       }
     },
@@ -1080,6 +1452,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "En forme"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fit"
           }
         }
       }
@@ -1098,6 +1476,12 @@
             "state": "translated",
             "value": "Jeux de fitness"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fitnessgaming"
+          }
         }
       }
     },
@@ -1114,6 +1498,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Souplesse"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lenigheid"
           }
         }
       }
@@ -1132,6 +1522,12 @@
             "state": "translated",
             "value": "Phase folliculaire"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Folliculaire fase"
+          }
         }
       }
     },
@@ -1148,6 +1544,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ancien fumeur"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voormalig roker"
           }
         }
       }
@@ -1166,6 +1568,12 @@
             "state": "translated",
             "value": "Renforcement musculaire fonctionnel"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Functionele krachttraining"
+          }
         }
       }
     },
@@ -1182,6 +1590,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Prendre du poids"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aankomen"
           }
         }
       }
@@ -1200,6 +1614,12 @@
             "state": "translated",
             "value": "Verre"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Glas"
+          }
         }
       }
     },
@@ -1213,6 +1633,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Golf"
+          }
+        },
+        "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Golf"
@@ -1234,6 +1660,12 @@
             "state": "translated",
             "value": "Bon"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goed"
+          }
         }
       }
     },
@@ -1250,6 +1682,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Très bon"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heel goed"
           }
         }
       }
@@ -1268,6 +1706,12 @@
             "state": "translated",
             "value": "Gymnastique"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gymnastiek"
+          }
         }
       }
     },
@@ -1284,6 +1728,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Séances de HIIT"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HIIT-trainingen"
           }
         }
       }
@@ -1302,6 +1752,12 @@
             "state": "translated",
             "value": "Vélo à bras"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Handbiken"
+          }
         }
       }
     },
@@ -1318,6 +1774,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Handball"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Handbal"
           }
         }
       }
@@ -1336,6 +1798,12 @@
             "state": "translated",
             "value": "Sain"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gezond"
+          }
         }
       }
     },
@@ -1352,6 +1820,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Abondant"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hevig"
           }
         }
       }
@@ -1370,6 +1844,12 @@
             "state": "translated",
             "value": "Élevé"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hoog"
+          }
         }
       }
     },
@@ -1386,6 +1866,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Confiance élevée"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hoge betrouwbaarheid"
           }
         }
       }
@@ -1404,6 +1890,12 @@
             "state": "translated",
             "value": "Entraînement fractionné de haute intensité"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hoogintensieve intervaltraining"
+          }
         }
       }
     },
@@ -1420,6 +1912,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Risque élevé"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hoog risico"
           }
         }
       }
@@ -1438,6 +1936,12 @@
             "state": "translated",
             "value": "Randonnée"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wandelen"
+          }
         }
       }
     },
@@ -1451,6 +1955,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hockey"
+          }
+        },
+        "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Hockey"
@@ -1472,6 +1982,12 @@
             "state": "translated",
             "value": "Chasse"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jagen"
+          }
         }
       }
     },
@@ -1488,6 +2004,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hypertension stade 1"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypertensie fase 1"
           }
         }
       }
@@ -1506,6 +2028,12 @@
             "state": "translated",
             "value": "Hypertension stade 2"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypertensie fase 2"
+          }
         }
       }
     },
@@ -1522,6 +2050,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Crise hypertensive"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypertensieve crisis"
           }
         }
       }
@@ -1540,6 +2074,12 @@
             "state": "translated",
             "value": "Au lit"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In bed"
+          }
         }
       }
     },
@@ -1556,6 +2096,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Les personnes de cette catégorie ont une condition cardiovasculaire inférieure à la médiane, sans se situer dans la catégorie la plus basse."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mensen in deze categorie hebben een conditie onder de mediaan, maar zitten niet in de laagste categorie."
           }
         }
       }
@@ -1574,6 +2120,12 @@
             "state": "translated",
             "value": "Intense"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intensief"
+          }
         }
       }
     },
@@ -1590,6 +2142,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "De l'exercice intense presque tous les jours"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De meeste dagen intensief sporten"
           }
         }
       }
@@ -1608,6 +2166,12 @@
             "state": "translated",
             "value": "Corde à sauter"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touwtjespringen"
+          }
         }
       }
     },
@@ -1624,6 +2188,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kickboxing"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kickboksen"
           }
         }
       }
@@ -1648,6 +2218,12 @@
             "state": "translated",
             "value": "Crosse"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lacrosse"
+          }
         }
       }
     },
@@ -1664,6 +2240,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Léger"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Licht"
           }
         }
       }
@@ -1682,6 +2264,12 @@
             "state": "translated",
             "value": "Peu de données de santé sont disponibles. Suivez davantage de mesures pour obtenir un âge biologique plus précis."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Er zijn weinig gezondheidsgegevens beschikbaar. Houd meer waarden bij voor een nauwkeuriger biologische leeftijd."
+          }
         }
       }
     },
@@ -1698,6 +2286,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Peu ou pas d'exercice"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weinig tot geen beweging"
           }
         }
       }
@@ -1716,6 +2310,12 @@
             "state": "translated",
             "value": "Perdre du poids"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afvallen"
+          }
         }
       }
     },
@@ -1732,6 +2332,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Basse"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laag"
           }
         }
       }
@@ -1750,6 +2356,12 @@
             "state": "translated",
             "value": "Confiance faible"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lage betrouwbaarheid"
+          }
         }
       }
     },
@@ -1766,6 +2378,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Risque faible"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laag risico"
           }
         }
       }
@@ -1784,6 +2402,12 @@
             "state": "translated",
             "value": "Une tension artérielle basse peut être normale chez certaines personnes, surtout en l'absence de symptômes. Toutefois, lorsqu'elle descend trop bas, elle peut réduire l'irrigation des organes et provoquer des étourdissements, des évanouissements et, dans les cas graves, un état de choc."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Een lage bloeddruk kan bij sommige mensen normaal zijn, zeker zonder klachten. Zakt hij te ver, dan krijgen organen te weinig bloed, met klachten als duizeligheid, flauwvallen en in ernstige gevallen shock."
+          }
         }
       }
     },
@@ -1800,6 +2424,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Phase lutéale"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Luteale fase"
           }
         }
       }
@@ -1818,6 +2448,12 @@
             "state": "translated",
             "value": "Maintenir son poids"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gewicht behouden"
+          }
         }
       }
     },
@@ -1834,6 +2470,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Homme"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Man"
           }
         }
       }
@@ -1852,6 +2494,12 @@
             "state": "translated",
             "value": "Arts martiaux"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vechtsport"
+          }
         }
       }
     },
@@ -1868,6 +2516,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Minutes de méditation"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meditatieminuten"
           }
         }
       }
@@ -1886,6 +2540,12 @@
             "state": "translated",
             "value": "Moyen"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gemiddeld"
+          }
         }
       }
     },
@@ -1902,6 +2562,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Phase menstruelle"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menstruatiefase"
           }
         }
       }
@@ -1920,6 +2586,12 @@
             "state": "translated",
             "value": "Léger"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Licht"
+          }
         }
       }
     },
@@ -1936,6 +2608,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Corps et esprit"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lichaam en geest"
           }
         }
       }
@@ -1954,6 +2632,12 @@
             "state": "translated",
             "value": "Minimal"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minimaal"
+          }
         }
       }
     },
@@ -1970,6 +2654,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cardio mixte"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gemengde cardio"
           }
         }
       }
@@ -1988,6 +2678,12 @@
             "state": "translated",
             "value": "Entraînement cardio métabolique mixte"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gemengde metabole cardiotraining"
+          }
         }
       }
     },
@@ -2004,6 +2700,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mobilité et souplesse"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mobiliteit en lenigheid"
           }
         }
       }
@@ -2022,6 +2724,12 @@
             "state": "translated",
             "value": "Modéré"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gemiddeld"
+          }
         }
       }
     },
@@ -2038,6 +2746,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Confiance modérée"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gemiddelde betrouwbaarheid"
           }
         }
       }
@@ -2056,6 +2770,12 @@
             "state": "translated",
             "value": "Surveiller ma santé"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gezondheid volgen"
+          }
         }
       }
     },
@@ -2072,6 +2792,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Grande tasse"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mok"
           }
         }
       }
@@ -2090,6 +2816,12 @@
             "state": "translated",
             "value": "N'a jamais fumé"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nooit gerookt"
+          }
         }
       }
     },
@@ -2106,6 +2838,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aucune donnée"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geen gegevens"
           }
         }
       }
@@ -2124,6 +2862,12 @@
             "state": "translated",
             "value": "Aucun"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geen"
+          }
         }
       }
     },
@@ -2140,6 +2884,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Normale"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Normaal"
           }
         }
       }
@@ -2158,6 +2908,12 @@
             "state": "translated",
             "value": "Non défini"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niet ingesteld"
+          }
         }
       }
     },
@@ -2174,6 +2930,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Non commencée"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niet gestart"
           }
         }
       }
@@ -2192,6 +2954,12 @@
             "state": "translated",
             "value": "Optimal"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Optimaal"
+          }
         }
       }
     },
@@ -2208,6 +2976,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Autre"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anders"
           }
         }
       }
@@ -2226,6 +3000,12 @@
             "state": "translated",
             "value": "Phase d'ovulation"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ovulatiefase"
+          }
         }
       }
     },
@@ -2242,6 +3022,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sports de pagaie"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peddelen"
           }
         }
       }
@@ -2260,6 +3046,12 @@
             "state": "translated",
             "value": "En pause"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gepauzeerd"
+          }
         }
       }
     },
@@ -2273,6 +3065,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pickleball"
+          }
+        },
+        "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Pickleball"
@@ -2294,6 +3092,12 @@
             "state": "translated",
             "value": "Pilates"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pilates"
+          }
         }
       }
     },
@@ -2310,6 +3114,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Jeu"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spelen"
           }
         }
       }
@@ -2328,6 +3138,12 @@
             "state": "translated",
             "value": "Faible"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slecht"
+          }
         }
       }
     },
@@ -2344,6 +3160,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Je préfère ne pas répondre"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zeg ik liever niet"
           }
         }
       }
@@ -2362,6 +3184,12 @@
             "state": "translated",
             "value": "Préparation et récupération"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voorbereiding en herstel"
+          }
         }
       }
     },
@@ -2378,6 +3206,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Prête"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klaar"
           }
         }
       }
@@ -2396,6 +3230,12 @@
             "state": "translated",
             "value": "Apport en protéines"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eiwitinname"
+          }
         }
       }
     },
@@ -2413,6 +3253,12 @@
             "state": "translated",
             "value": "Sommeil paradoxal"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "REM-slaap"
+          }
         }
       }
     },
@@ -2426,6 +3272,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Racquetball"
+          }
+        },
+        "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Racquetball"
@@ -2447,6 +3299,12 @@
             "state": "translated",
             "value": "Détendu"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ontspannen"
+          }
         }
       }
     },
@@ -2464,6 +3322,12 @@
             "state": "translated",
             "value": "Aviron"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Roeien"
+          }
         }
       }
     },
@@ -2477,6 +3341,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rugby"
+          }
+        },
+        "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Rugby"
@@ -2498,6 +3368,12 @@
             "state": "translated",
             "value": "Course"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hardlopen"
+          }
         }
       }
     },
@@ -2514,6 +3390,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Course à pied"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hardlopen"
           }
         }
       }
@@ -2532,6 +3414,12 @@
             "state": "translated",
             "value": "Distance de course"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loopafstand"
+          }
         }
       }
     },
@@ -2548,6 +3436,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Durée de course"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loopduur"
           }
         }
       }
@@ -2566,6 +3460,12 @@
             "state": "translated",
             "value": "Voile"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zeilen"
+          }
         }
       }
     },
@@ -2583,6 +3483,12 @@
             "state": "translated",
             "value": "Sédentaire"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weinig actief"
+          }
         }
       }
     },
@@ -2599,6 +3505,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Définir chaque seuil de zone individuellement"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stel elke zonegrens apart in"
           }
         }
       }
@@ -2623,6 +3535,12 @@
             "state": "translated",
             "value": "Définisse ton FC maximale et au repos ; les zones sont calculées en pourcentages"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stel je maximale en rusthartslag in; de zones worden als percentages berekend"
+          }
         }
       }
     },
@@ -2636,6 +3554,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shaker"
+          }
+        },
+        "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Shaker"
@@ -2657,6 +3581,12 @@
             "state": "translated",
             "value": "Verre à shooter"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shotglas"
+          }
         }
       }
     },
@@ -2674,6 +3604,12 @@
             "state": "translated",
             "value": "Sports de patinage"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schaatssporten"
+          }
         }
       }
     },
@@ -2690,6 +3626,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sports de neige"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wintersport"
           }
         }
       }
@@ -2714,6 +3656,12 @@
             "state": "translated",
             "value": "Planche à neige"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snowboarden"
+          }
         }
       }
     },
@@ -2737,6 +3685,12 @@
             "state": "translated",
             "value": "Soccer"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voetbal"
+          }
         }
       }
     },
@@ -2753,6 +3707,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Danse de salon"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stijldansen"
           }
         }
       }
@@ -2771,6 +3731,12 @@
             "state": "translated",
             "value": "Softball"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Softbal"
+          }
         }
       }
     },
@@ -2784,6 +3750,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Squash"
+          }
+        },
+        "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Squash"
@@ -2805,6 +3777,12 @@
             "state": "translated",
             "value": "Montée d'escaliers"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Traplopen"
+          }
         }
       }
     },
@@ -2821,6 +3799,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Escaliers"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trappen"
           }
         }
       }
@@ -2839,6 +3823,12 @@
             "state": "translated",
             "value": "Step"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Steptraining"
+          }
         }
       }
     },
@@ -2855,6 +3845,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pas"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stappen"
           }
         }
       }
@@ -2873,6 +3869,12 @@
             "state": "translated",
             "value": "Arrêtée"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gestopt"
+          }
         }
       }
     },
@@ -2889,6 +3891,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Musculation"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Krachttraining"
           }
         }
       }
@@ -2907,6 +3915,12 @@
             "state": "translated",
             "value": "Suffisant"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voldoende"
+          }
         }
       }
     },
@@ -2923,6 +3937,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Surf"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Surfen"
           }
         }
       }
@@ -2941,6 +3961,12 @@
             "state": "translated",
             "value": "Triathlon"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Triatlon"
+          }
         }
       }
     },
@@ -2957,6 +3983,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Natation"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zwemmen"
           }
         }
       }
@@ -2975,6 +4007,12 @@
             "state": "translated",
             "value": "Tennis de table"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tafeltennis"
+          }
         }
       }
     },
@@ -2991,6 +4029,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Taï-chi"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tai chi"
           }
         }
       }
@@ -3009,6 +4053,12 @@
             "state": "translated",
             "value": "Zone de fréquence cardiaque cible 1"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Streefhartslagzone 1"
+          }
         }
       }
     },
@@ -3025,6 +4075,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Zone de fréquence cardiaque cible 2"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Streefhartslagzone 2"
           }
         }
       }
@@ -3043,6 +4099,12 @@
             "state": "translated",
             "value": "Zone de fréquence cardiaque cible 3"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Streefhartslagzone 3"
+          }
         }
       }
     },
@@ -3059,6 +4121,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Zone de fréquence cardiaque cible 4"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Streefhartslagzone 4"
           }
         }
       }
@@ -3077,6 +4145,12 @@
             "state": "translated",
             "value": "Zone de fréquence cardiaque cible 5"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Streefhartslagzone 5"
+          }
         }
       }
     },
@@ -3094,6 +4168,12 @@
             "state": "translated",
             "value": "Tasse à thé"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Theekopje"
+          }
         }
       }
     },
@@ -3107,6 +4187,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tennis"
+          }
+        },
+        "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Tennis"
@@ -3128,6 +4214,12 @@
             "state": "translated",
             "value": "Il s'agit d'une situation critique où la tension artérielle est dangereusement élevée et nécessite une prise en charge médicale immédiate afin d'éviter des lésions graves aux organes."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dit is een kritieke situatie waarbij de bloeddruk gevaarlijk hoog is. Er is direct medische hulp nodig om ernstige orgaanschade te voorkomen."
+          }
         }
       }
     },
@@ -3144,6 +4236,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ce niveau indique une faible condition cardiovasculaire, associée à un risque accru de maladies cardiovasculaires et d'autres problèmes de santé."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dit niveau wijst op een slechte conditie en hangt samen met een hoger risico op hart- en vaatziekten en andere gezondheidsproblemen."
           }
         }
       }
@@ -3162,6 +4260,12 @@
             "state": "translated",
             "value": "Ce niveau représente une condition cardiovasculaire supérieure à la moyenne et suggère un risque plus faible de maladies cardiovasculaires."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dit niveau staat voor een bovengemiddelde conditie en wijst op een lager risico op hart- en vaatziekten."
+          }
         }
       }
     },
@@ -3178,6 +4282,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cette plage est considérée comme optimale et indique que le cœur fonctionne bien, sans contrainte excessive sur les vaisseaux sanguins."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dit bereik geldt als optimaal en laat zien dat het hart goed werkt zonder de bloedvaten te zwaar te belasten."
           }
         }
       }
@@ -3196,6 +4306,12 @@
             "state": "translated",
             "value": "Ce stade marque le début de l'hypertension : la pression exercée sur les artères augmente et peut entraîner des problèmes de santé si elle n'est pas prise en charge."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dit stadium is het begin van hoge bloeddruk: de druk op de slagaders neemt toe en kan zonder behandeling tot gezondheidsproblemen leiden."
+          }
         }
       }
     },
@@ -3212,6 +4328,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ce niveau supérieur se caractérise par une excellente condition cardiovasculaire, signe d'une très bonne santé générale et d'un risque plus faible de troubles cardiaques."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dit topniveau staat voor een uitstekende conditie, meestal een teken van een zeer goede gezondheid en een lager risico op hartklachten."
           }
         }
       }
@@ -3230,6 +4352,12 @@
             "state": "translated",
             "value": "Temps à la lumière du jour"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tijd in daglicht"
+          }
         }
       }
     },
@@ -3246,6 +4374,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Athlétisme"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atletiek"
           }
         }
       }
@@ -3264,6 +4398,12 @@
             "state": "translated",
             "value": "Musculation classique"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klassieke krachttraining"
+          }
         }
       }
     },
@@ -3280,6 +4420,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Transition"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Overgang"
           }
         }
       }
@@ -3298,6 +4444,12 @@
             "state": "translated",
             "value": "Gobelet"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beker"
+          }
         }
       }
     },
@@ -3314,6 +4466,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Plongée sous-marine"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duiken"
           }
         }
       }
@@ -3332,6 +4490,12 @@
             "state": "translated",
             "value": "Inconnu"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Onbekend"
+          }
         }
       }
     },
@@ -3348,6 +4512,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Non précisé"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niet opgegeven"
           }
         }
       }
@@ -3366,6 +4536,12 @@
             "state": "translated",
             "value": "Très faible"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zeer slecht"
+          }
         }
       }
     },
@@ -3382,6 +4558,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Volleyball"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volleybal"
           }
         }
       }
@@ -3400,6 +4582,12 @@
             "state": "translated",
             "value": "Marche"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wandelen"
+          }
         }
       }
     },
@@ -3417,6 +4605,12 @@
             "state": "translated",
             "value": "Distance de marche et de course"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wandel- en loopafstand"
+          }
         }
       }
     },
@@ -3433,6 +4627,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bouteille d'eau"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waterfles"
           }
         }
       }
@@ -3457,6 +4657,12 @@
             "state": "translated",
             "value": "Aquaforme"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aquafitness"
+          }
         }
       }
     },
@@ -3473,6 +4679,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Apport en eau"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waterinname"
           }
         }
       }
@@ -3491,6 +4703,12 @@
             "state": "translated",
             "value": "Water-polo"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waterpolo"
+          }
         }
       }
     },
@@ -3507,6 +4725,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sports nautiques"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Watersport"
           }
         }
       }
@@ -3525,6 +4749,12 @@
             "state": "translated",
             "value": "Fauteuil roulant (rythme course)"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rolstoel (looptempo)"
+          }
         }
       }
     },
@@ -3541,6 +4771,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fauteuil roulant (rythme marche)"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rolstoel (wandeltempo)"
           }
         }
       }
@@ -3559,6 +4795,12 @@
             "state": "translated",
             "value": "Verre à vin"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wijnglas"
+          }
         }
       }
     },
@@ -3575,6 +4817,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Durée de la séance"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trainingsduur"
           }
         }
       }
@@ -3593,6 +4841,12 @@
             "state": "translated",
             "value": "Lutte"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Worstelen"
+          }
         }
       }
     },
@@ -3606,6 +4860,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yoga"
+          }
+        },
+        "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Yoga"
@@ -3633,6 +4893,12 @@
             "state": "translated",
             "value": "Ton âge biologique repose sur un nombre modéré de données de santé. Ajouter d'autres mesures en améliorera la précision."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je biologische leeftijd is gebaseerd op een beperkte set gezondheidsgegevens. Meer waarden maken het nauwkeuriger."
+          }
         }
       }
     },
@@ -3656,6 +4922,12 @@
             "state": "translated",
             "value": "Ton âge biologique est calculé à partir de la plupart de tes mesures de santé disponibles."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je biologische leeftijd wordt berekend met de meeste van je beschikbare gezondheidswaarden."
+          }
         }
       }
     },
@@ -3678,6 +4950,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Zones calculées à partir de ton âge et de ta fréquence cardiaque au repos issus de HealthKit"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zones berekend op basis van je leeftijd en rusthartslag uit HealthKit"
           }
         }
       }
