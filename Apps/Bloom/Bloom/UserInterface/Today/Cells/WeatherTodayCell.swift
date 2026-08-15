@@ -237,7 +237,12 @@ private extension WeatherTodayCell {
 
       precipitationChartView(for: weather)
 
-      Link("Powered by  Weather", destination: .appleWeatherAttribution)
+      // The  glyph is Apple's required WeatherKit attribution and must survive translation
+      // into every language - do not replace it with the word "Apple".
+      Link(
+        "Powered by  Weather",
+        destination: .appleWeatherAttribution
+      )
         .font(.caption)
         .foregroundStyle(.secondary)
         .padding(.vertical, 4)

@@ -1471,6 +1471,20 @@ raw value, use `rawValue` at the wire/analytics site instead.
 Before localizing a display property, grep its call sites for `TelemetryDeck.signal`, network request
 bodies, chat/AI payloads and SwiftData writes.
 
+### Strings that must not be "cleaned up" in translation
+
+The WeatherKit attribution link (`WeatherTodayCell`) contains U+F8FF, the Apple logo glyph. Apple
+requires that attribution, and it has to survive into every language - a translator who replaces it
+with the word "Apple", or a copy/paste that drops the private-use character, breaks the requirement.
+The French value is `Propulsé par  Météo`.
+
+When adding a language, check that glyph is present:
+
+```bash
+python3 -c "import json; d=json.load(open('Apps/Bloom/Bloom/Localizable.xcstrings')); \
+  print({k: v for k, v in d['strings']['Powered by  Weather']['localizations'].items()})"
+```
+
 ### Known gaps
 
 - `DrinkType`'s built-in names are stored `String` properties that are also persisted and sent as

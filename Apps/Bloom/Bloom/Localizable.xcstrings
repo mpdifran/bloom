@@ -141,6 +141,12 @@
             "state": "new",
             "value": "%1$@ • Avg: %2$@"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ • Moy. : %2$@"
+          }
         }
       }
     },
@@ -1986,6 +1992,12 @@
             "state": "translated",
             "value": "Petit-déjeuner"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déjeuner"
+          }
         }
       }
     },
@@ -3328,6 +3340,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dîner"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Souper"
           }
         }
       }
@@ -5416,6 +5434,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Déjeuner"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dîner"
           }
         }
       }
@@ -7775,30 +7799,246 @@
         }
       }
     },
-    "Saved": {},
-    "Saved Meal": {},
-    "Scan a barcode to add food": {},
-    "Scan a barcode to log food": {},
-    "Scheduled Notifications": {},
-    "Score": {},
-    "Search logs": {},
-    "Search or Describe Food": {},
-    "Searching...": {},
-    "Section": {},
-    "See how you did in %@!": {},
-    "Select": {},
-    "Select All": {},
-    "Select Another Goal": {},
-    "Select Food Item": {},
-    "Select Photo": {},
-    "Select a Food": {},
-    "Select a celebration to show on next app foreground.": {},
-    "Select which categories Bud may use.": {},
-    "Selected": {},
-    "Series": {},
-    "Serving Size": {},
-    "Servings": {},
-    "Set %@ Start Time": {},
+    "Saved": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistré"
+          }
+        }
+      }
+    },
+    "Saved Meal": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repas enregistré"
+          }
+        }
+      }
+    },
+    "Scan a barcode to add food": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scannez un code-barres pour ajouter un aliment"
+          }
+        }
+      }
+    },
+    "Scan a barcode to log food": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scannez un code-barres pour enregistrer un aliment"
+          }
+        }
+      }
+    },
+    "Scheduled Notifications": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications programmées"
+          }
+        }
+      }
+    },
+    "Score": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Score"
+          }
+        }
+      }
+    },
+    "Search logs": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rechercher dans les enregistrements"
+          }
+        }
+      }
+    },
+    "Search or Describe Food": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rechercher ou décrire un aliment"
+          }
+        }
+      }
+    },
+    "Searching...": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recherche…"
+          }
+        }
+      }
+    },
+    "Section": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Section"
+          }
+        }
+      }
+    },
+    "See how you did in %@!": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Découvrez votre bilan de %@ !"
+          }
+        }
+      }
+    },
+    "Select": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sélectionner"
+          }
+        }
+      }
+    },
+    "Select All": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tout sélectionner"
+          }
+        }
+      }
+    },
+    "Select Another Goal": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisir un autre objectif"
+          }
+        }
+      }
+    },
+    "Select Food Item": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sélectionner un aliment"
+          }
+        }
+      }
+    },
+    "Select Photo": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sélectionner une photo"
+          }
+        }
+      }
+    },
+    "Select a Food": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sélectionnez un aliment"
+          }
+        }
+      }
+    },
+    "Select a celebration to show on next app foreground.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez la célébration à afficher au prochain passage au premier plan."
+          }
+        }
+      }
+    },
+    "Select which categories Bud may use.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez les catégories que Bud peut utiliser."
+          }
+        }
+      }
+    },
+    "Selected": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sélectionné"
+          }
+        }
+      }
+    },
+    "Series": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Série"
+          }
+        }
+      }
+    },
+    "Serving Size": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taille de la portion"
+          }
+        }
+      }
+    },
+    "Servings": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Portions"
+          }
+        }
+      }
+    },
+    "Set %@ Start Time": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Définir l'heure de début de %@"
+          }
+        }
+      }
+    },
     "Set %lld of %lld": {
       "localizations": {
         "en": {
@@ -7806,343 +8046,2737 @@
             "state": "new",
             "value": "Set %1$lld of %2$lld"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Série %1$lld sur %2$lld"
+          }
         }
       }
     },
-    "Set Custom Value": {},
-    "Set Recommended Value": {},
-    "Set your smoking status to see how it affects your biological age.": {},
-    "Settings": {},
-    "Sex": {},
-    "Shape": {},
-    "Share": {},
-    "Share Bloom": {},
-    "Share Bloom with a friend and keep each other motivated on the journey to better health!": {},
-    "Share your personal data so I can personalize your insights. Your info always stays private, I promise.": {},
-    "Short": {
-      "comment": "Title for workout duration"
+    "Set Custom Value": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Définir une valeur personnalisée"
+          }
+        }
+      }
     },
-    "Show All": {},
-    "Show All Logs": {},
-    "Show Badge": {},
-    "Show Less": {},
-    "Show Log In": {},
-    "Show More": {},
-    "Show Owned": {},
-    "Show Paywall": {},
-    "Show Sheet": {},
-    "Show celebration cards when you hit milestones": {},
-    "Sign Out": {},
-    "Signal History": {},
-    "Signals: %@": {},
-    "Single Food Item": {},
-    "Skip": {},
+    "Set Recommended Value": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Utiliser la valeur recommandée"
+          }
+        }
+      }
+    },
+    "Set your smoking status to see how it affects your biological age.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indiquez votre statut tabagique pour voir son effet sur votre âge biologique."
+          }
+        }
+      }
+    },
+    "Settings": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réglages"
+          }
+        }
+      }
+    },
+    "Sex": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sexe"
+          }
+        }
+      }
+    },
+    "Shape": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forme"
+          }
+        }
+      }
+    },
+    "Share": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partager"
+          }
+        }
+      }
+    },
+    "Share Bloom": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partager Bloom"
+          }
+        }
+      }
+    },
+    "Share Bloom with a friend and keep each other motivated on the journey to better health!": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partagez Bloom avec un proche et motivez-vous mutuellement sur le chemin d'une meilleure santé !"
+          }
+        }
+      }
+    },
+    "Share your personal data so I can personalize your insights. Your info always stays private, I promise.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partagez vos données personnelles pour que je personnalise vos analyses. Vos informations restent privées, promis."
+          }
+        }
+      }
+    },
+    "Short": {
+      "comment": "Title for workout duration",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Court"
+          }
+        }
+      }
+    },
+    "Show All": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tout afficher"
+          }
+        }
+      }
+    },
+    "Show All Logs": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher tous les enregistrements"
+          }
+        }
+      }
+    },
+    "Show Badge": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher la pastille"
+          }
+        }
+      }
+    },
+    "Show Less": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher moins"
+          }
+        }
+      }
+    },
+    "Show Log In": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher la connexion"
+          }
+        }
+      }
+    },
+    "Show More": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher plus"
+          }
+        }
+      }
+    },
+    "Show Owned": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher les produits détenus"
+          }
+        }
+      }
+    },
+    "Show Paywall": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher l'écran d'abonnement"
+          }
+        }
+      }
+    },
+    "Show Sheet": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher la fiche"
+          }
+        }
+      }
+    },
+    "Show celebration cards when you hit milestones": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher des cartes de célébration lorsque vous atteignez un jalon"
+          }
+        }
+      }
+    },
+    "Sign Out": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se déconnecter"
+          }
+        }
+      }
+    },
+    "Signal History": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Historique des signaux"
+          }
+        }
+      }
+    },
+    "Signals: %@": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Signaux : %@"
+          }
+        }
+      }
+    },
+    "Single Food Item": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aliment unique"
+          }
+        }
+      }
+    },
+    "Skip": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ignorer"
+          }
+        }
+      }
+    },
     "Sleep": {
-      "comment": "Display name for stress details view\nShort display name for monitor metric type"
+      "comment": "Display name for stress details view\nShort display name for monitor metric type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sommeil"
+          }
+        }
+      }
     },
     "Sleep Duration": {
-      "comment": "Display name for monitor metric type"
+      "comment": "Display name for monitor metric type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durée de sommeil"
+          }
+        }
+      }
     },
     "Sleep Efficiency": {
-      "comment": "Display name for monitor metric type"
+      "comment": "Display name for monitor metric type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Efficacité du sommeil"
+          }
+        }
+      }
     },
-    "Sleep HR": {},
-    "Sleep Metrics": {},
-    "Sleep Quality": {},
+    "Sleep HR": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FC pendant le sommeil"
+          }
+        }
+      }
+    },
+    "Sleep Metrics": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Données de sommeil"
+          }
+        }
+      }
+    },
+    "Sleep Quality": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qualité du sommeil"
+          }
+        }
+      }
+    },
     "Sleep Quality & Rhythm": {
-      "comment": "Display name for monitor type\nTitle for mini monitor card"
+      "comment": "Display name for monitor type\nTitle for mini monitor card",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qualité et rythme du sommeil"
+          }
+        }
+      }
     },
-    "Sleep Score": {},
-    "Sleep Stage": {},
-    "Sleep Stages": {},
-    "Smarter Health Starts Today": {},
-    "Smoking": {},
-    "Smoking Status": {},
-    "Smoking is one of the most significant factors affecting biological age and overall health.": {},
-    "Snack": {},
-    "Snooze for %@": {},
-    "Snow": {},
+    "Sleep Score": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Score de sommeil"
+          }
+        }
+      }
+    },
+    "Sleep Stage": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Phase de sommeil"
+          }
+        }
+      }
+    },
+    "Sleep Stages": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Phases de sommeil"
+          }
+        }
+      }
+    },
+    "Smarter Health Starts Today": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une santé plus futée commence aujourd'hui"
+          }
+        }
+      }
+    },
+    "Smoking": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tabagisme"
+          }
+        }
+      }
+    },
+    "Smoking Status": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Statut tabagique"
+          }
+        }
+      }
+    },
+    "Smoking is one of the most significant factors affecting biological age and overall health.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le tabagisme est l'un des facteurs qui pèsent le plus sur l'âge biologique et la santé en général."
+          }
+        }
+      }
+    },
+    "Snack": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Collation"
+          }
+        }
+      }
+    },
+    "Snooze for %@": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reporter de %@"
+          }
+        }
+      }
+    },
+    "Snow": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neige"
+          }
+        }
+      }
+    },
     "Some Light": {
-      "comment": "Display name for sleep environment darkness"
+      "comment": "Display name for sleep environment darkness",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un peu de lumière"
+          }
+        }
+      }
     },
-    "Something else...": {},
-    "Sound Debug": {},
-    "Source": {},
-    "Source: %@": {},
-    "Speed": {},
+    "Something else...": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autre chose…"
+          }
+        }
+      }
+    },
+    "Sound Debug": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Débogage du son"
+          }
+        }
+      }
+    },
+    "Source": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Source"
+          }
+        }
+      }
+    },
+    "Source: %@": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Source : %@"
+          }
+        }
+      }
+    },
+    "Speed": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vitesse"
+          }
+        }
+      }
+    },
     "Stable": {
-      "comment": "Label for VO2 max trend\nLabel for hrv trend"
+      "comment": "Label for VO2 max trend\nLabel for hrv trend",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stable"
+          }
+        }
+      }
     },
-    "Stage": {},
-    "Stair climb speed measures how quickly you ascend stairs and is an important indicator of lower body strength and cardiovascular fitness.": {},
+    "Stage": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Phase"
+          }
+        }
+      }
+    },
+    "Stair climb speed measures how quickly you ascend stairs and is an important indicator of lower body strength and cardiovascular fitness.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La vitesse de montée d'escaliers mesure la rapidité avec laquelle vous montez les marches. C'est un bon indicateur de la force du bas du corps et de la condition cardiovasculaire."
+          }
+        }
+      }
+    },
     "Standard": {
-      "comment": "Display name for experiment\nDisplay name for format"
+      "comment": "Display name for experiment\nDisplay name for format",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Standard"
+          }
+        }
+      }
     },
-    "Start": {},
-    "Start Date": {},
-    "Start Timer": {},
-    "Start Workout": {},
-    "Starting in %@": {},
-    "State Changes": {},
-    "Stay Ahead of How You Feel": {},
-    "Stay consistent together": {},
-    "Steps": {},
-    "Steps Widget Configuration": {},
-    "Steps are compared to the previous period of the same length. The faded line represents the previous period.": {},
-    "Still have questions? Email us": {},
-    "Storage Analysis": {},
-    "Strain Meter": {},
-    "Stress": {},
+    "Start": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Commencer"
+          }
+        }
+      }
+    },
+    "Start Date": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Date de début"
+          }
+        }
+      }
+    },
+    "Start Timer": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lancer le minuteur"
+          }
+        }
+      }
+    },
+    "Start Workout": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Commencer la séance"
+          }
+        }
+      }
+    },
+    "Starting in %@": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Commence dans %@"
+          }
+        }
+      }
+    },
+    "State Changes": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Changements d'état"
+          }
+        }
+      }
+    },
+    "Stay Ahead of How You Feel": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gardez une longueur d'avance sur votre forme"
+          }
+        }
+      }
+    },
+    "Stay consistent together": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restez réguliers ensemble"
+          }
+        }
+      }
+    },
+    "Steps": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas"
+          }
+        }
+      }
+    },
+    "Steps Widget Configuration": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuration du widget Pas"
+          }
+        }
+      }
+    },
+    "Steps are compared to the previous period of the same length. The faded line represents the previous period.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les pas sont comparés à la période précédente de même durée. La courbe estompée représente la période précédente."
+          }
+        }
+      }
+    },
+    "Still have questions? Email us": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "D'autres questions ? Écrivez-nous"
+          }
+        }
+      }
+    },
+    "Storage Analysis": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Analyse du stockage"
+          }
+        }
+      }
+    },
+    "Strain Meter": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indicateur de charge"
+          }
+        }
+      }
+    },
+    "Stress": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stress"
+          }
+        }
+      }
+    },
     "Stress & Workout Load": {
-      "comment": "Display name for monitor type\nTitle for mini monitor card"
+      "comment": "Display name for monitor type\nTitle for mini monitor card",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stress et charge d'entraînement"
+          }
+        }
+      }
     },
-    "Stress Level": {},
-    "Stress Levels": {},
-    "Submit": {},
-    "Submit Anonymously": {},
-    "Submit Feedback": {},
-    "Submit Report": {},
-    "Suggested": {},
-    "Suggestions": {},
-    "Summary": {},
-    "Sync Nutrition to HealthKit": {},
-    "Systolic": {},
-    "Systolic / Diastolic": {},
-    "TRAINING": {},
+    "Stress Level": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveau de stress"
+          }
+        }
+      }
+    },
+    "Stress Levels": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveaux de stress"
+          }
+        }
+      }
+    },
+    "Submit": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoyer"
+          }
+        }
+      }
+    },
+    "Submit Anonymously": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoyer anonymement"
+          }
+        }
+      }
+    },
+    "Submit Feedback": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoyer un commentaire"
+          }
+        }
+      }
+    },
+    "Submit Report": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoyer le signalement"
+          }
+        }
+      }
+    },
+    "Suggested": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suggéré"
+          }
+        }
+      }
+    },
+    "Suggestions": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suggestions"
+          }
+        }
+      }
+    },
+    "Summary": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Résumé"
+          }
+        }
+      }
+    },
+    "Sync Nutrition to HealthKit": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Synchroniser la nutrition avec HealthKit"
+          }
+        }
+      }
+    },
+    "Systolic": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Systolique"
+          }
+        }
+      }
+    },
+    "Systolic / Diastolic": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Systolique / diastolique"
+          }
+        }
+      }
+    },
+    "TRAINING": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ENTRAÎNEMENT"
+          }
+        }
+      }
+    },
     "Tabata": {
-      "comment": "Display name for format"
+      "comment": "Display name for format",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tabata"
+          }
+        }
+      }
     },
-    "Tag": {},
-    "Tap Analyze to scan storage usage": {},
-    "Tap the + button to create your first reminder.": {},
-    "Target Weight": {},
-    "Tell me a bit about you": {},
-    "Tell me more": {},
-    "Tell me what's on your mind!": {},
+    "Tag": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Étiquette"
+          }
+        }
+      }
+    },
+    "Tap Analyze to scan storage usage": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touchez Analyser pour examiner l'utilisation du stockage"
+          }
+        }
+      }
+    },
+    "Tap the + button to create your first reminder.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touchez le bouton + pour créer votre premier rappel."
+          }
+        }
+      }
+    },
+    "Target Weight": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Poids cible"
+          }
+        }
+      }
+    },
+    "Tell me a bit about you": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parlez-moi un peu de vous"
+          }
+        }
+      }
+    },
+    "Tell me more": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dites-m'en plus"
+          }
+        }
+      }
+    },
+    "Tell me what's on your mind!": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dites-moi ce qui vous préoccupe !"
+          }
+        }
+      }
+    },
     "Temp": {
-      "comment": "Short display name for monitor metric type"
+      "comment": "Short display name for monitor metric type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Temp."
+          }
+        }
+      }
     },
-    "Temperature": {},
-    "Terms of Service": {},
-    "Test Monitor Detection": {},
-    "Test Push Notifications": {},
-    "Test Workout Notification": {},
-    "Text": {},
-    "Thank You!": {},
-    "Thank you so much for help testing Bloom! We're ending our TestFlight program, so you'll need to install the App Store version of the app to continue using Bloom.": {},
-    "Thanks Bud!": {},
-    "That's Cool!": {},
-    "The Bristol Stool Types are a standard mechanism to help categorize bowel movements. They can help provide insights into your gut health.": {},
-    "The following message content will be submitted with the report.": {},
-    "There are currently no pending notifications scheduled for this app.": {},
-    "There are no workouts to show.": {},
-    "There is no sleep analysis available for %@.": {},
-    "There is no sleep data for last night.": {},
-    "There was a problem loading the weather.": {},
-    "There's room to improve next year.": {},
-    "This can help tailor my advice to you.": {},
-    "This chart shows how your time was distributed across different sleep stages each night. A healthy sleep pattern includes cycles through all stages.": {},
-    "This chart shows your average HRV for each time of day over the selected period. HRV is typically higher during sleep and lower during active periods.": {},
-    "This chart shows your sleep schedule over time. Each bar represents a night of sleep, starting at your bedtime and ending at your wake time. A consistent sleep schedule helps regulate your circadian rhythm and improves sleep quality.": {},
-    "This helps me personalize your insights and make sure Bloom is the right fit.": {},
+    "Temperature": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Température"
+          }
+        }
+      }
+    },
+    "Terms of Service": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conditions d'utilisation"
+          }
+        }
+      }
+    },
+    "Test Monitor Detection": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tester la détection des surveillances"
+          }
+        }
+      }
+    },
+    "Test Push Notifications": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tester les notifications push"
+          }
+        }
+      }
+    },
+    "Test Workout Notification": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tester la notification de séance"
+          }
+        }
+      }
+    },
+    "Text": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Texte"
+          }
+        }
+      }
+    },
+    "Thank You!": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Merci !"
+          }
+        }
+      }
+    },
+    "Thank you so much for help testing Bloom! We're ending our TestFlight program, so you'll need to install the App Store version of the app to continue using Bloom.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Merci beaucoup d'avoir participé aux tests de Bloom ! Notre programme TestFlight prend fin : installez la version de l'App Store pour continuer à utiliser Bloom."
+          }
+        }
+      }
+    },
+    "Thanks Bud!": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Merci Bud !"
+          }
+        }
+      }
+    },
+    "That's Cool!": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Super !"
+          }
+        }
+      }
+    },
+    "The Bristol Stool Types are a standard mechanism to help categorize bowel movements. They can help provide insights into your gut health.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'échelle de Bristol est un outil standard de classification des selles. Elle aide à mieux comprendre votre santé intestinale."
+          }
+        }
+      }
+    },
+    "The following message content will be submitted with the report.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le contenu du message ci-dessous sera envoyé avec le signalement."
+          }
+        }
+      }
+    },
+    "There are currently no pending notifications scheduled for this app.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune notification n'est actuellement programmée pour cette app."
+          }
+        }
+      }
+    },
+    "There are no workouts to show.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune séance à afficher."
+          }
+        }
+      }
+    },
+    "There is no sleep analysis available for %@.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune analyse du sommeil n'est disponible pour %@."
+          }
+        }
+      }
+    },
+    "There is no sleep data for last night.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune donnée de sommeil pour la nuit dernière."
+          }
+        }
+      }
+    },
+    "There was a problem loading the weather.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un problème est survenu lors du chargement de la météo."
+          }
+        }
+      }
+    },
+    "There's room to improve next year.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il y a de la marge pour progresser l'an prochain."
+          }
+        }
+      }
+    },
+    "This can help tailor my advice to you.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cela m'aidera à adapter mes conseils à votre situation."
+          }
+        }
+      }
+    },
+    "This chart shows how your time was distributed across different sleep stages each night. A healthy sleep pattern includes cycles through all stages.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce graphique montre la répartition de votre temps entre les différentes phases de sommeil chaque nuit. Un sommeil sain comprend des cycles passant par toutes les phases."
+          }
+        }
+      }
+    },
+    "This chart shows your average HRV for each time of day over the selected period. HRV is typically higher during sleep and lower during active periods.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce graphique montre votre VFC moyenne selon le moment de la journée sur la période sélectionnée. La VFC est généralement plus élevée pendant le sommeil et plus basse durant les périodes actives."
+          }
+        }
+      }
+    },
+    "This chart shows your sleep schedule over time. Each bar represents a night of sleep, starting at your bedtime and ending at your wake time. A consistent sleep schedule helps regulate your circadian rhythm and improves sleep quality.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce graphique montre l'évolution de vos horaires de sommeil. Chaque barre représente une nuit, du coucher au réveil. Des horaires réguliers aident à réguler votre rythme circadien et améliorent la qualité du sommeil."
+          }
+        }
+      }
+    },
+    "This helps me personalize your insights and make sure Bloom is the right fit.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cela m'aide à personnaliser vos analyses et à vérifier que Bloom vous convient."
+          }
+        }
+      }
+    },
     "This is %@ for your age!": {
-      "comment": "Year in Bloom resting heart rate feedback. The placeholder is a rating such as \"excellent\"."
+      "comment": "Year in Bloom resting heart rate feedback. The placeholder is a rating such as \"excellent\".",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "C'est %@ pour votre âge !"
+          }
+        }
+      }
     },
-    "This monitor tracks early physiological signs that may indicate your body is fighting off illness or needs extra recovery time. It analyzes your resting heart rate, heart rate variability, wrist temperature, and respiratory rate to detect subtle changes from your personal baseline.": {},
-    "This monitor tracks your sleep patterns including duration, efficiency, and schedule consistency. It detects when your sleep is declining or when your bedtime and wake time are becoming irregular, which can affect your circadian rhythm and overall health.": {},
-    "This monitor tracks your training load using Apple's Workout Effort Scores. It compares your recent 7-day training load to your 28-day average to help you avoid overtraining or detraining. HRV trends and recovery metrics are also considered when available.": {},
-    "This range is considered normal for the general population. People within this range have a balanced level of body fat, contributing to overall health and well-being.": {},
-    "This range is typical for athletes who require higher muscle mass and lower fat levels for optimal performance. It reflects a high level of fitness and conditioning.": {},
-    "This timeline shows how you transitioned between sleep stages throughout the night. Your body naturally cycles through these stages multiple times.": {},
-    "This type can be caused by dietary issues, infections, stress, or other gastrointestinal problems. It’s important to stay hydrated and, if persistent, consider evaluating for potential infections or intolerances.": {},
-    "This type indicates a healthy gut with slight indication of dehydration. Maintaining a balanced diet with sufficient fiber and hydration is recommended.": {},
-    "This type indicates constipation. This can be caused by dehydration, lack of fiber, or other digestive issues. It may be beneficial to increase fluid intake and dietary fiber.": {},
-    "This type indicates mild constipation. You might need to improve your diet, increase hydration, and consider physical activity to help regularize bowel movements.": {},
-    "This type is the ideal stool. This indicates a healthy digestive system with normal bowel function. Continue with your current diet and lifestyle.": {},
-    "This type may indicate a dietary change, mild digestive upset, or a temporary imbalance in your gut.": {},
-    "This type represents severe diarrhea. This could indicate a significant gastrointestinal issue, such as an infection, food poisoning, or a chronic condition. It’s crucial to stay hydrated and seek medical advice if this persists.": {},
-    "This will remove all custom containers and restore the default container sizes.": {},
-    "Time": {},
-    "Time Of Day": {},
-    "Time Period": {},
-    "Time Range": {},
-    "Time between bowel movements helps indicate digestive health and regularity patterns.": {},
-    "Time between bowel movements helps indicate digestive health and regularity. Consistent patterns are generally healthier.": {},
-    "Title": {},
-    "To chat with Bud about your health, you’ll need to turn Chat back on. You’re always in control of what data gets used.": {},
-    "To help you stay on top of your health and reach your goals, I need your permission for a few things.": {},
-    "To keep helping you with personalized health insights, and to provide personalized responses to your questions, I need your permission for a few things. You’re always in control of what you share.": {},
-    "To show your workout history, we need access to your personal data. You can manage this permission at any time.": {},
+    "This monitor tracks early physiological signs that may indicate your body is fighting off illness or needs extra recovery time. It analyzes your resting heart rate, heart rate variability, wrist temperature, and respiratory rate to detect subtle changes from your personal baseline.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cette surveillance repère les premiers signes physiologiques indiquant que votre corps combat une maladie ou a besoin de plus de récupération. Elle analyse votre fréquence cardiaque au repos, votre variabilité cardiaque, votre température au poignet et votre fréquence respiratoire afin de détecter de légers écarts par rapport à vos valeurs de référence."
+          }
+        }
+      }
+    },
+    "This monitor tracks your sleep patterns including duration, efficiency, and schedule consistency. It detects when your sleep is declining or when your bedtime and wake time are becoming irregular, which can affect your circadian rhythm and overall health.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cette surveillance suit vos habitudes de sommeil : durée, efficacité et régularité des horaires. Elle détecte une dégradation de votre sommeil ou des heures de coucher et de lever irrégulières, ce qui peut perturber votre rythme circadien et votre santé générale."
+          }
+        }
+      }
+    },
+    "This monitor tracks your training load using Apple's Workout Effort Scores. It compares your recent 7-day training load to your 28-day average to help you avoid overtraining or detraining. HRV trends and recovery metrics are also considered when available.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cette surveillance suit votre charge d'entraînement à partir des scores d'effort d'Apple. Elle compare votre charge des 7 derniers jours à votre moyenne sur 28 jours pour vous éviter le surentraînement ou le désentraînement. Les tendances de VFC et les données de récupération sont également prises en compte lorsqu'elles sont disponibles."
+          }
+        }
+      }
+    },
+    "This range is considered normal for the general population. People within this range have a balanced level of body fat, contributing to overall health and well-being.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cette plage est considérée comme normale pour la population générale. Les personnes qui s'y situent ont un taux de masse grasse équilibré, favorable à la santé et au bien-être."
+          }
+        }
+      }
+    },
+    "This range is typical for athletes who require higher muscle mass and lower fat levels for optimal performance. It reflects a high level of fitness and conditioning.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cette plage est typique des athlètes qui ont besoin d'une masse musculaire élevée et d'un faible taux de graisse pour performer. Elle traduit un excellent niveau de condition physique."
+          }
+        }
+      }
+    },
+    "This timeline shows how you transitioned between sleep stages throughout the night. Your body naturally cycles through these stages multiple times.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cette chronologie montre vos passages d'une phase de sommeil à l'autre au cours de la nuit. Votre corps traverse naturellement ces phases à plusieurs reprises."
+          }
+        }
+      }
+    },
+    "This type can be caused by dietary issues, infections, stress, or other gastrointestinal problems. It’s important to stay hydrated and, if persistent, consider evaluating for potential infections or intolerances.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce type peut être lié à l'alimentation, à une infection, au stress ou à d'autres troubles digestifs. Pensez à bien vous hydrater et, si cela persiste, à faire rechercher une infection ou une intolérance."
+          }
+        }
+      }
+    },
+    "This type indicates a healthy gut with slight indication of dehydration. Maintaining a balanced diet with sufficient fiber and hydration is recommended.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce type témoigne d'un intestin en bonne santé, avec un léger signe de déshydratation. Une alimentation équilibrée, riche en fibres, et une bonne hydratation sont recommandées."
+          }
+        }
+      }
+    },
+    "This type indicates constipation. This can be caused by dehydration, lack of fiber, or other digestive issues. It may be beneficial to increase fluid intake and dietary fiber.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce type indique une constipation, qui peut être due à la déshydratation, à un manque de fibres ou à d'autres troubles digestifs. Augmenter votre consommation de liquides et de fibres peut être bénéfique."
+          }
+        }
+      }
+    },
+    "This type indicates mild constipation. You might need to improve your diet, increase hydration, and consider physical activity to help regularize bowel movements.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce type indique une légère constipation. Améliorer votre alimentation, boire davantage et bouger plus peut aider à régulariser le transit."
+          }
+        }
+      }
+    },
+    "This type is the ideal stool. This indicates a healthy digestive system with normal bowel function. Continue with your current diet and lifestyle.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce type correspond à la selle idéale : il traduit un système digestif sain et un transit normal. Poursuivez votre alimentation et vos habitudes actuelles."
+          }
+        }
+      }
+    },
+    "This type may indicate a dietary change, mild digestive upset, or a temporary imbalance in your gut.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce type peut traduire un changement d'alimentation, un léger trouble digestif ou un déséquilibre passager de votre flore intestinale."
+          }
+        }
+      }
+    },
+    "This type represents severe diarrhea. This could indicate a significant gastrointestinal issue, such as an infection, food poisoning, or a chronic condition. It’s crucial to stay hydrated and seek medical advice if this persists.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce type correspond à une diarrhée sévère. Elle peut signaler un trouble digestif important : infection, intoxication alimentaire ou maladie chronique. Il est essentiel de bien vous hydrater et de consulter si cela persiste."
+          }
+        }
+      }
+    },
+    "This will remove all custom containers and restore the default container sizes.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cette action supprimera tous les contenants personnalisés et rétablira les tailles par défaut."
+          }
+        }
+      }
+    },
+    "Time": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heure"
+          }
+        }
+      }
+    },
+    "Time Of Day": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moment de la journée"
+          }
+        }
+      }
+    },
+    "Time Period": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Période"
+          }
+        }
+      }
+    },
+    "Time Range": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plage horaire"
+          }
+        }
+      }
+    },
+    "Time between bowel movements helps indicate digestive health and regularity patterns.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le délai entre deux selles renseigne sur votre santé digestive et votre régularité."
+          }
+        }
+      }
+    },
+    "Time between bowel movements helps indicate digestive health and regularity. Consistent patterns are generally healthier.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le délai entre deux selles renseigne sur votre santé digestive et votre régularité. Un rythme régulier est généralement meilleur signe."
+          }
+        }
+      }
+    },
+    "Title": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Titre"
+          }
+        }
+      }
+    },
+    "To chat with Bud about your health, you’ll need to turn Chat back on. You’re always in control of what data gets used.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pour discuter de votre santé avec Bud, vous devez réactiver la conversation. Vous gardez toujours la main sur les données utilisées."
+          }
+        }
+      }
+    },
+    "To help you stay on top of your health and reach your goals, I need your permission for a few things.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pour vous aider à suivre votre santé et à atteindre vos objectifs, j'ai besoin de quelques autorisations."
+          }
+        }
+      }
+    },
+    "To keep helping you with personalized health insights, and to provide personalized responses to your questions, I need your permission for a few things. You’re always in control of what you share.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pour continuer à vous proposer des analyses personnalisées et à répondre à vos questions, j'ai besoin de quelques autorisations. Vous gardez toujours la main sur ce que vous partagez."
+          }
+        }
+      }
+    },
+    "To show your workout history, we need access to your personal data. You can manage this permission at any time.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pour afficher l'historique de vos séances, nous avons besoin d'accéder à vos données personnelles. Vous pouvez modifier cette autorisation à tout moment."
+          }
+        }
+      }
+    },
     "Today": {
-      "comment": "Display name for calendar day\nDisplay name for stat time period\nDisplay name for tab kind\nDisplay name for weather day"
+      "comment": "Display name for calendar day\nDisplay name for stat time period\nDisplay name for tab kind\nDisplay name for weather day",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aujourd'hui"
+          }
+        }
+      }
     },
-    "Today Insight Configuration": {},
-    "Today's Advice": {},
+    "Today Insight Configuration": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuration de l'analyse du jour"
+          }
+        }
+      }
+    },
+    "Today's Advice": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le conseil du jour"
+          }
+        }
+      }
+    },
     "Tomorrow": {
-      "comment": "Display name for calendar day\nDisplay name for weather day"
+      "comment": "Display name for calendar day\nDisplay name for weather day",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demain"
+          }
+        }
+      }
     },
-    "Tonight's Sleep": {},
-    "Total": {},
-    "Total Cycles": {},
-    "Total Events": {},
-    "Total Storage": {},
-    "Track %@": {},
-    "Track more cardio workouts to see your fitness level.": {},
-    "Track what you eat!": {},
-    "Track your alcohol consumption using the Drinks action card to see your weekly intake here.": {},
-    "Track your food to get more insights into your Nutrition.": {},
-    "Track your mobility by carrying your iPhone throughout the day or wearing your Apple Watch.": {},
-    "Track your period in Apple Health to learn more about your cycle.": {},
+    "Tonight's Sleep": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le sommeil de cette nuit"
+          }
+        }
+      }
+    },
+    "Total": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Total"
+          }
+        }
+      }
+    },
+    "Total Cycles": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nombre de cycles"
+          }
+        }
+      }
+    },
+    "Total Events": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nombre d'événements"
+          }
+        }
+      }
+    },
+    "Total Storage": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stockage total"
+          }
+        }
+      }
+    },
+    "Track %@": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suivre %@"
+          }
+        }
+      }
+    },
+    "Track more cardio workouts to see your fitness level.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrez plus de séances de cardio pour voir votre niveau de forme."
+          }
+        }
+      }
+    },
+    "Track what you eat!": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suivez ce que vous mangez !"
+          }
+        }
+      }
+    },
+    "Track your alcohol consumption using the Drinks action card to see your weekly intake here.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suivez votre consommation d'alcool avec la carte Boissons pour voir votre total hebdomadaire ici."
+          }
+        }
+      }
+    },
+    "Track your food to get more insights into your Nutrition.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrez vos aliments pour obtenir plus d'analyses sur votre nutrition."
+          }
+        }
+      }
+    },
+    "Track your mobility by carrying your iPhone throughout the day or wearing your Apple Watch.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suivez votre mobilité en gardant votre iPhone sur vous durant la journée ou en portant votre Apple Watch."
+          }
+        }
+      }
+    },
+    "Track your period in Apple Health to learn more about your cycle.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suivez vos règles dans l'app Santé pour en savoir plus sur votre cycle."
+          }
+        }
+      }
+    },
     "Training Load": {
-      "comment": "Display name for monitor metric type"
+      "comment": "Display name for monitor metric type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Charge d'entraînement"
+          }
+        }
+      }
     },
     "Training load": {
-      "comment": "Short display name for monitor metric type"
+      "comment": "Short display name for monitor metric type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Charge d'entraînement"
+          }
+        }
+      }
     },
-    "Training load +25%": {},
+    "Training load +25%": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Charge d'entraînement +25 %"
+          }
+        }
+      }
+    },
     "Treatment": {
-      "comment": "Display name for experiment override"
+      "comment": "Display name for experiment override",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Groupe test"
+          }
+        }
+      }
     },
-    "Trial Ends": {},
-    "Trial Notification": {},
-    "Trial Starts": {},
-    "Trigger": {},
-    "Try Again": {},
-    "Try adding more whole foods to lunch today — fiber and protein can help stabilize energy and mood all afternoon.": {},
-    "Turn Off": {},
-    "Turn Off All": {},
-    "Turn Off Notifications": {},
-    "Turn On": {},
-    "Turn On All": {},
-    "Turn On Monitor": {},
-    "Turn On Notifications": {},
-    "Turn on All": {},
-    "Type": {},
-    "Type %lld": {},
-    "Types": {},
+    "Trial Ends": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fin de l'essai"
+          }
+        }
+      }
+    },
+    "Trial Notification": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notification d'essai"
+          }
+        }
+      }
+    },
+    "Trial Starts": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Début de l'essai"
+          }
+        }
+      }
+    },
+    "Trigger": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déclencheur"
+          }
+        }
+      }
+    },
+    "Try Again": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réessayer"
+          }
+        }
+      }
+    },
+    "Try adding more whole foods to lunch today — fiber and protein can help stabilize energy and mood all afternoon.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Essayez d'ajouter des aliments complets à votre repas de midi : les fibres et les protéines aident à stabiliser l'énergie et l'humeur tout l'après-midi."
+          }
+        }
+      }
+    },
+    "Turn Off": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Désactiver"
+          }
+        }
+      }
+    },
+    "Turn Off All": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tout désactiver"
+          }
+        }
+      }
+    },
+    "Turn Off Notifications": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Désactiver les notifications"
+          }
+        }
+      }
+    },
+    "Turn On": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activer"
+          }
+        }
+      }
+    },
+    "Turn On All": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tout activer"
+          }
+        }
+      }
+    },
+    "Turn On Monitor": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activer la surveillance"
+          }
+        }
+      }
+    },
+    "Turn On Notifications": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activer les notifications"
+          }
+        }
+      }
+    },
+    "Turn on All": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tout activer"
+          }
+        }
+      }
+    },
+    "Type": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Type"
+          }
+        }
+      }
+    },
+    "Type %lld": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Type %lld"
+          }
+        }
+      }
+    },
+    "Types": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Types"
+          }
+        }
+      }
+    },
     "Typical": {
-      "comment": "Display name for monitor state value"
+      "comment": "Display name for monitor state value",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Habituel"
+          }
+        }
+      }
     },
-    "Typical Day": {},
-    "Uh oh, looks like I wasn't able to get some important information.": {},
+    "Typical Day": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Journée type"
+          }
+        }
+      }
+    },
+    "Uh oh, looks like I wasn't able to get some important information.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aïe, on dirait que je n'ai pas pu récupérer certaines informations importantes."
+          }
+        }
+      }
+    },
     "Unavailable": {
-      "comment": "Display name for monitor state value"
+      "comment": "Display name for monitor state value",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indisponible"
+          }
+        }
+      }
     },
     "Under 15 min": {
-      "comment": "Subtitle for workout duration"
+      "comment": "Subtitle for workout duration",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moins de 15 min"
+          }
+        }
+      }
     },
-    "Undo": {},
-    "Unit": {},
-    "Unknown": {},
+    "Undo": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annuler"
+          }
+        }
+      }
+    },
+    "Unit": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unité"
+          }
+        }
+      }
+    },
+    "Unknown": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inconnu"
+          }
+        }
+      }
+    },
     "Unknown Action": {
-      "comment": "Title for side effect cell"
+      "comment": "Title for side effect cell",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Action inconnue"
+          }
+        }
+      }
     },
-    "Unknown Barcode": {},
-    "Unknown Content": {},
+    "Unknown Barcode": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Code-barres inconnu"
+          }
+        }
+      }
+    },
+    "Unknown Content": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contenu inconnu"
+          }
+        }
+      }
+    },
     "Unknown configuration": {
-      "comment": "Subtitle for side effect cell"
+      "comment": "Subtitle for side effect cell",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuration inconnue"
+          }
+        }
+      }
     },
-    "Unlock Insights": {},
-    "Unlock Your True Age": {},
-    "Unpin": {},
-    "Unsure": {},
-    "Up Next": {},
+    "Unlock Insights": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Débloquer les analyses"
+          }
+        }
+      }
+    },
+    "Unlock Your True Age": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Découvrez votre âge réel"
+          }
+        }
+      }
+    },
+    "Unpin": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Détacher"
+          }
+        }
+      }
+    },
+    "Unsure": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Incertain"
+          }
+        }
+      }
+    },
+    "Up Next": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À suivre"
+          }
+        }
+      }
+    },
     "Upcoming Period": {
-      "comment": "Title for upcoming period cell"
+      "comment": "Title for upcoming period cell",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prochaines règles"
+          }
+        }
+      }
     },
-    "Update": {},
-    "Upload": {},
-    "Upload Food": {},
-    "Upload a Food": {},
-    "Uploading...": {},
-    "Upper": {},
-    "User Added": {},
-    "VO₂ Max": {},
-    "VO₂ Max Trend": {},
-    "VO₂ Max is estimated during outdoor walks, runs, or hikes with your Apple Watch.": {},
-    "Value": {},
-    "Verified": {},
-    "Very frequent bowel movements (less than 8 hours apart) may indicate digestive sensitivity, dietary issues, or stress.": {},
-    "View All Data": {},
-    "View All Plans": {},
-    "View Vital": {},
-    "Vital": {},
-    "Voice Logger": {},
-    "Volume": {},
-    "Wake": {},
+    "Update": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mettre à jour"
+          }
+        }
+      }
+    },
+    "Upload": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoyer"
+          }
+        }
+      }
+    },
+    "Upload Food": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoyer un aliment"
+          }
+        }
+      }
+    },
+    "Upload a Food": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoyer un aliment"
+          }
+        }
+      }
+    },
+    "Uploading...": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoi…"
+          }
+        }
+      }
+    },
+    "Upper": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supérieur"
+          }
+        }
+      }
+    },
+    "User Added": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouté par l'utilisateur"
+          }
+        }
+      }
+    },
+    "VO₂ Max": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "VO₂ max"
+          }
+        }
+      }
+    },
+    "VO₂ Max Trend": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tendance de la VO₂ max"
+          }
+        }
+      }
+    },
+    "VO₂ Max is estimated during outdoor walks, runs, or hikes with your Apple Watch.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La VO₂ max est estimée lors des marches, courses ou randonnées en extérieur avec votre Apple Watch."
+          }
+        }
+      }
+    },
+    "Value": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Valeur"
+          }
+        }
+      }
+    },
+    "Verified": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vérifié"
+          }
+        }
+      }
+    },
+    "Very frequent bowel movements (less than 8 hours apart) may indicate digestive sensitivity, dietary issues, or stress.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Des selles très fréquentes (moins de 8 heures d'intervalle) peuvent traduire une sensibilité digestive, un problème alimentaire ou du stress."
+          }
+        }
+      }
+    },
+    "View All Data": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voir toutes les données"
+          }
+        }
+      }
+    },
+    "View All Plans": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voir tous les programmes"
+          }
+        }
+      }
+    },
+    "View Vital": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voir la constante"
+          }
+        }
+      }
+    },
+    "Vital": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Constante"
+          }
+        }
+      }
+    },
+    "Voice Logger": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrement vocal"
+          }
+        }
+      }
+    },
+    "Volume": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volume"
+          }
+        }
+      }
+    },
+    "Wake": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réveil"
+          }
+        }
+      }
+    },
     "Wake Time": {
-      "comment": "Display name for monitor metric type"
+      "comment": "Display name for monitor metric type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heure de réveil"
+          }
+        }
+      }
     },
     "Wake time": {
-      "comment": "Short display name for monitor metric type"
+      "comment": "Short display name for monitor metric type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heure de réveil"
+          }
+        }
+      }
     },
-    "Wake: %@": {},
-    "Walking speed is a key indicator of mobility and overall health. Reference lines show typical speeds for different ages.": {},
-    "Want me to help you stay focused on what matters most for your health?": {},
+    "Wake: %@": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réveil : %@"
+          }
+        }
+      }
+    },
+    "Walking speed is a key indicator of mobility and overall health. Reference lines show typical speeds for different ages.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La vitesse de marche est un indicateur clé de la mobilité et de la santé générale. Les lignes de référence indiquent les vitesses habituelles selon l'âge."
+          }
+        }
+      }
+    },
+    "Want me to help you stay focused on what matters most for your health?": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voulez-vous que je vous aide à rester concentré sur l'essentiel pour votre santé ?"
+          }
+        }
+      }
+    },
     "Warm-Up": {
-      "comment": "Display name for format"
+      "comment": "Display name for format",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Échauffement"
+          }
+        }
+      }
     },
-    "Water": {},
-    "Water Logged": {},
-    "We analyzed your personal data and suggested goals tailored to your habits, trends, and opportunities.": {},
-    "We couldn't find any workout data for %@. Start tracking your workouts to see your Year In Bloom!": {},
-    "We'll only use your personal data anonymously to provide you insights and goals.": {},
-    "We'll send you a reminder notification before your trial ends!": {},
-    "Wear your Apple Watch throughout the day to get a better picture of your Activity Level.": {},
-    "Wear your Apple Watch throughout the day to get a better picture of your Heart Health.": {},
-    "Wear your Apple Watch throughout the day to get a better picture of your Stress Levels.": {},
-    "Wear your Apple Watch to record resting heart rate data.": {},
-    "Weather Not Available": {},
-    "Week": {},
+    "Water": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eau"
+          }
+        }
+      }
+    },
+    "Water Logged": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eau enregistrée"
+          }
+        }
+      }
+    },
+    "We analyzed your personal data and suggested goals tailored to your habits, trends, and opportunities.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nous avons analysé vos données personnelles et proposé des objectifs adaptés à vos habitudes, à vos tendances et à vos marges de progression."
+          }
+        }
+      }
+    },
+    "We couldn't find any workout data for %@. Start tracking your workouts to see your Year In Bloom!": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nous n'avons trouvé aucune donnée de séance pour %@. Commencez à enregistrer vos séances pour découvrir votre année Bloom !"
+          }
+        }
+      }
+    },
+    "We'll only use your personal data anonymously to provide you insights and goals.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nous n'utiliserons vos données personnelles que de façon anonyme, pour vous proposer des analyses et des objectifs."
+          }
+        }
+      }
+    },
+    "We'll send you a reminder notification before your trial ends!": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nous vous enverrons une notification de rappel avant la fin de votre essai !"
+          }
+        }
+      }
+    },
+    "Wear your Apple Watch throughout the day to get a better picture of your Activity Level.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Portez votre Apple Watch tout au long de la journée pour mieux cerner votre niveau d'activité."
+          }
+        }
+      }
+    },
+    "Wear your Apple Watch throughout the day to get a better picture of your Heart Health.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Portez votre Apple Watch tout au long de la journée pour mieux cerner votre santé cardiaque."
+          }
+        }
+      }
+    },
+    "Wear your Apple Watch throughout the day to get a better picture of your Stress Levels.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Portez votre Apple Watch tout au long de la journée pour mieux cerner vos niveaux de stress."
+          }
+        }
+      }
+    },
+    "Wear your Apple Watch to record resting heart rate data.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Portez votre Apple Watch pour enregistrer votre fréquence cardiaque au repos."
+          }
+        }
+      }
+    },
+    "Weather Not Available": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Météo indisponible"
+          }
+        }
+      }
+    },
+    "Week": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Semaine"
+          }
+        }
+      }
+    },
     "Weekly": {
-      "comment": "Display name for goal time period\nGoal cadence"
+      "comment": "Display name for goal time period\nGoal cadence",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hebdomadaire"
+          }
+        }
+      }
     },
-    "Weight": {},
-    "Weight Logged": {},
-    "Welcome to the Club!": {},
-    "What Are People Saying?": {},
-    "What This Means": {},
-    "What do you want me to help you with?": {},
-    "What else would you like to share with me?": {},
-    "When did you quit?": {},
-    "When enabled, Bud provides insights into your monitor results using the Personal Data categories above.": {},
-    "Where would you like to focus your effort?": {},
-    "Which food item?": {},
-    "Which meal?": {},
-    "Whoops, looks like I made a mistake. Let's try that again...": {},
-    "Why I need your personal data 💙": {},
-    "Widget Type": {},
-    "With your permission, I can use your personal data to give you better, more personal insights.": {},
-    "Workout Completion": {},
-    "Workout Equipment": {},
-    "Workout Saved": {},
-    "Workout Settings": {},
+    "Weight": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Poids"
+          }
+        }
+      }
+    },
+    "Weight Logged": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Poids enregistré"
+          }
+        }
+      }
+    },
+    "Welcome to the Club!": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bienvenue dans le club !"
+          }
+        }
+      }
+    },
+    "What Are People Saying?": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce qu'en disent les utilisateurs"
+          }
+        }
+      }
+    },
+    "What This Means": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce que cela signifie"
+          }
+        }
+      }
+    },
+    "What do you want me to help you with?": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sur quoi puis-je vous aider ?"
+          }
+        }
+      }
+    },
+    "What else would you like to share with me?": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Que souhaitez-vous me partager d'autre ?"
+          }
+        }
+      }
+    },
+    "When did you quit?": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quand avez-vous arrêté ?"
+          }
+        }
+      }
+    },
+    "When enabled, Bud provides insights into your monitor results using the Personal Data categories above.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lorsque cette option est activée, Bud analyse vos résultats de surveillance à partir des catégories de données personnelles ci-dessus."
+          }
+        }
+      }
+    },
+    "Where would you like to focus your effort?": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sur quoi souhaitez-vous concentrer vos efforts ?"
+          }
+        }
+      }
+    },
+    "Which food item?": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quel aliment ?"
+          }
+        }
+      }
+    },
+    "Which meal?": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quel repas ?"
+          }
+        }
+      }
+    },
+    "Whoops, looks like I made a mistake. Let's try that again...": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oups, on dirait que j'ai fait une erreur. Réessayons…"
+          }
+        }
+      }
+    },
+    "Why I need your personal data 💙": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pourquoi j'ai besoin de vos données personnelles 💙"
+          }
+        }
+      }
+    },
+    "Widget Type": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Type de widget"
+          }
+        }
+      }
+    },
+    "With your permission, I can use your personal data to give you better, more personal insights.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avec votre autorisation, je peux utiliser vos données personnelles pour vous proposer des analyses plus justes et plus personnelles."
+          }
+        }
+      }
+    },
+    "Workout Completion": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fin de séance"
+          }
+        }
+      }
+    },
+    "Workout Equipment": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Équipement d'entraînement"
+          }
+        }
+      }
+    },
+    "Workout Saved": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Séance enregistrée"
+          }
+        }
+      }
+    },
+    "Workout Settings": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réglages des séances"
+          }
+        }
+      }
+    },
     "Workouts": {
-      "comment": "Display name for tab kind\nTitle for workouts tab view"
+      "comment": "Display name for tab kind\nTitle for workouts tab view",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Séances"
+          }
+        }
+      }
     },
-    "Worst Day": {},
+    "Worst Day": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pire journée"
+          }
+        }
+      }
+    },
     "Wrist Temperature": {
-      "comment": "Display name for monitor metric type"
+      "comment": "Display name for monitor metric type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Température au poignet"
+          }
+        }
+      }
     },
-    "Wrist temperature is measured during sleep and can vary based on your environment, menstrual cycle, illness, and other factors. Tracking changes over time may help identify patterns in your health.": {},
-    "Year Change": {},
-    "Year In Bloom": {},
+    "Wrist temperature is measured during sleep and can vary based on your environment, menstrual cycle, illness, and other factors. Tracking changes over time may help identify patterns in your health.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La température au poignet est mesurée pendant le sommeil et peut varier selon votre environnement, votre cycle menstruel, une maladie ou d'autres facteurs. En suivre l'évolution aide à repérer des tendances dans votre santé."
+          }
+        }
+      }
+    },
+    "Year Change": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Évolution sur l'année"
+          }
+        }
+      }
+    },
+    "Year In Bloom": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Année Bloom"
+          }
+        }
+      }
+    },
     "Yearly": {
-      "comment": "Display name for goal time period"
+      "comment": "Display name for goal time period",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annuel"
+          }
+        }
+      }
     },
-    "Yes": {},
-    "Yes, Bud!": {},
+    "Yes": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oui"
+          }
+        }
+      }
+    },
+    "Yes, Bud!": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oui, Bud !"
+          }
+        }
+      }
+    },
     "You": {
-      "comment": "Display name for tab kind"
+      "comment": "Display name for tab kind",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous"
+          }
+        }
+      }
     },
     "You averaged %@ of sleep per night.": {
-      "comment": "Year in Bloom sleep summary. The placeholder is an average nightly sleep duration."
+      "comment": "Year in Bloom sleep summary. The placeholder is an average nightly sleep duration.",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous avez dormi %@ en moyenne par nuit."
+          }
+        }
+      }
     },
-    "You can ask me about your health trends, and I’ll generate insights using your Apple Health data.": {},
-    "You can ask me anything!": {},
-    "You can change these settings anytime.": {},
+    "You can ask me about your health trends, and I’ll generate insights using your Apple Health data.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Posez-moi des questions sur vos tendances de santé : je produirai des analyses à partir de vos données Apple Santé."
+          }
+        }
+      }
+    },
+    "You can ask me anything!": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous pouvez tout me demander !"
+          }
+        }
+      }
+    },
+    "You can change these settings anytime.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous pouvez modifier ces réglages à tout moment."
+          }
+        }
+      }
+    },
     "You earned %@ zone minutes this year!": {
-      "comment": "Year in Bloom exercise summary. The placeholder is a number of heart rate zone minutes."
+      "comment": "Year in Bloom exercise summary. The placeholder is a number of heart rate zone minutes.",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous avez accumulé %@ minutes en zone cette année !"
+          }
+        }
+      }
     },
     "You exercised for %@ and burned %@ this year!": {
       "comment": "Year in Bloom workout summary. Placeholders are a duration and a calorie amount.",
@@ -8152,35 +10786,161 @@
             "state": "new",
             "value": "You exercised for %1$@ and burned %2$@ this year!"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous vous êtes entraîné %1$@ et avez brûlé %2$@ cette année !"
+          }
         }
       }
     },
     "You gained %@ this year.": {
-      "comment": "Year in Bloom weight summary. The placeholder is an amount of weight gained."
+      "comment": "Year in Bloom weight summary. The placeholder is an amount of weight gained.",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous avez pris %@ cette année."
+          }
+        }
+      }
     },
-    "You have no calendars.": {},
-    "You have no events %@.": {},
-    "You haven't saved any meals yet.": {},
+    "You have no calendars.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous n'avez aucun calendrier."
+          }
+        }
+      }
+    },
+    "You have no events %@.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous n'avez aucun événement %@."
+          }
+        }
+      }
+    },
+    "You haven't saved any meals yet.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous n'avez encore enregistré aucun repas."
+          }
+        }
+      }
+    },
     "You lost %@ this year.": {
-      "comment": "Year in Bloom weight summary. The placeholder is an amount of weight lost."
+      "comment": "Year in Bloom weight summary. The placeholder is an amount of weight lost.",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous avez perdu %@ cette année."
+          }
+        }
+      }
     },
-    "You made it, %@!": {},
-    "You must be at least 18 years old to use Bloom.": {},
+    "You made it, %@!": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous avez réussi, %@ !"
+          }
+        }
+      }
+    },
+    "You must be at least 18 years old to use Bloom.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous devez avoir au moins 18 ans pour utiliser Bloom."
+          }
+        }
+      }
+    },
     "You scored a perfect 100 on your sleep score. That's as good as it gets!": {
-      "comment": "Subtitle for celebration kind"
+      "comment": "Subtitle for celebration kind",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous avez obtenu un score de sommeil parfait de 100. Impossible de faire mieux !"
+          }
+        }
+      }
     },
     "You travelled %@ while working out this year.": {
-      "comment": "Year in Bloom distance summary. The placeholder is a total distance."
+      "comment": "Year in Bloom distance summary. The placeholder is a total distance.",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous avez parcouru %@ à l'entraînement cette année."
+          }
+        }
+      }
     },
-    "Your Data, Your Choice": {},
-    "Your Name": {},
+    "Your Data, Your Choice": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vos données, votre choix"
+          }
+        }
+      }
+    },
+    "Your Name": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre nom"
+          }
+        }
+      }
+    },
     "Your average cycle was %@ long.": {
-      "comment": "Year in Bloom cycle summary. The placeholder is an average cycle length in days."
+      "comment": "Year in Bloom cycle summary. The placeholder is an average cycle length in days.",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre cycle a duré %@ en moyenne."
+          }
+        }
+      }
     },
     "Your biological age is 1 year younger than your actual age. Keep it up!": {
-      "comment": "Subtitle for celebration kind"
+      "comment": "Subtitle for celebration kind",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre âge biologique a 1 an de moins que votre âge réel. Continuez comme ça !"
+          }
+        }
+      }
     },
-    "Your biological age will appear here once calculated. Check back after using the app for a few days.": {},
+    "Your biological age will appear here once calculated. Check back after using the app for a few days.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre âge biologique s'affichera ici une fois calculé. Revenez après quelques jours d'utilisation."
+          }
+        }
+      }
+    },
     "Your cardio fitness is %@%@ mL/kg/min.": {
       "comment": "Year in Bloom cardio summary. Placeholders are a fitness level and a VO2 max value.",
       "localizations": {
@@ -8189,10 +10949,25 @@
             "state": "new",
             "value": "Your cardio fitness is %1$@%2$@ mL/kg/min."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre condition cardio est %1$@%2$@ ml/kg/min."
+          }
         }
       }
     },
-    "Your data is always safe:": {},
+    "Your data is always safe:": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vos données sont toujours protégées :"
+          }
+        }
+      }
+    },
     "Your diet averaged %@ protein, %@ carbs, %@ fat.": {
       "comment": "Year in Bloom macro summary. Placeholders are protein, carbohydrate and fat percentages.",
       "localizations": {
@@ -8201,99 +10976,487 @@
             "state": "new",
             "value": "Your diet averaged %1$@ protein, %2$@ carbs, %3$@ fat."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre alimentation comptait en moyenne %1$@ de protéines, %2$@ de glucides et %3$@ de lipides."
+          }
         }
       }
     },
-    "Your heart rate during sleep is typically lower than your resting heart rate during the day. A lower sleep heart rate generally indicates better cardiovascular fitness and recovery.": {},
-    "Your personal data always remains anonymous. Always consult with a doctor before making any changes to your health.": {},
-    "Your personal data is used for:": {},
-    "Your resting heart rate averaged %@": {
-      "comment": "Year in Bloom heart summary. The placeholder is an average resting heart rate."
+    "Your heart rate during sleep is typically lower than your resting heart rate during the day. A lower sleep heart rate generally indicates better cardiovascular fitness and recovery.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre fréquence cardiaque pendant le sommeil est généralement plus basse que votre fréquence au repos en journée. Une valeur plus basse traduit en général une meilleure condition cardiovasculaire et une bonne récupération."
+          }
+        }
+      }
     },
-    "Your selected goal:": {},
-    "Your selected goals:": {},
-    "Your sleep score is calculated based on sleep duration, time spent in each sleep stage, awake time, and heart rate during sleep. A score of 70 or higher indicates good quality sleep.": {},
-    "Your stress level can fluctuate day to day. It's normal to have some days of high stress, but prolonged stress can be harmful to your overall health. Bloom factors in your blood pressure, sleep, and heart rate variability when calculating your stress level.": {},
-    "Your weight stayed stable this year.": {},
-    "You’ve unlocked deeper insights, smarter guidance, and Bud’s full brainpower.": {},
-    "Zone": {},
-    "Zone %lld": {},
-    "Zone Minutes — 150": {},
-    "Zone Minutes — 300": {},
+    "Your personal data always remains anonymous. Always consult with a doctor before making any changes to your health.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vos données personnelles restent toujours anonymes. Consultez toujours un médecin avant de modifier quoi que ce soit concernant votre santé."
+          }
+        }
+      }
+    },
+    "Your personal data is used for:": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vos données personnelles servent à :"
+          }
+        }
+      }
+    },
+    "Your resting heart rate averaged %@": {
+      "comment": "Year in Bloom heart summary. The placeholder is an average resting heart rate.",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre fréquence cardiaque au repos était de %@ en moyenne"
+          }
+        }
+      }
+    },
+    "Your selected goal:": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre objectif :"
+          }
+        }
+      }
+    },
+    "Your selected goals:": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vos objectifs :"
+          }
+        }
+      }
+    },
+    "Your sleep score is calculated based on sleep duration, time spent in each sleep stage, awake time, and heart rate during sleep. A score of 70 or higher indicates good quality sleep.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre score de sommeil est calculé à partir de la durée de sommeil, du temps passé dans chaque phase, du temps d'éveil et de votre fréquence cardiaque nocturne. Un score de 70 ou plus indique un sommeil de bonne qualité."
+          }
+        }
+      }
+    },
+    "Your stress level can fluctuate day to day. It's normal to have some days of high stress, but prolonged stress can be harmful to your overall health. Bloom factors in your blood pressure, sleep, and heart rate variability when calculating your stress level.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre niveau de stress peut varier d'un jour à l'autre. Quelques journées tendues sont normales, mais un stress prolongé peut nuire à votre santé. Bloom tient compte de votre tension artérielle, de votre sommeil et de votre variabilité cardiaque pour calculer votre niveau de stress."
+          }
+        }
+      }
+    },
+    "Your weight stayed stable this year.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre poids est resté stable cette année."
+          }
+        }
+      }
+    },
+    "You’ve unlocked deeper insights, smarter guidance, and Bud’s full brainpower.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous avez débloqué des analyses plus poussées, des conseils plus fins et toute l'intelligence de Bud."
+          }
+        }
+      }
+    },
+    "Zone": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zone"
+          }
+        }
+      }
+    },
+    "Zone %lld": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zone %lld"
+          }
+        }
+      }
+    },
+    "Zone Minutes — 150": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minutes en zone — 150"
+          }
+        }
+      }
+    },
+    "Zone Minutes — 300": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minutes en zone — 300"
+          }
+        }
+      }
+    },
     "activity level": {
-      "comment": "Display name for query data type"
+      "comment": "Display name for query data type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "niveau d'activité"
+          }
+        }
+      }
     },
     "bike distance": {
-      "comment": "Display name for query data type"
+      "comment": "Display name for query data type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "distance à vélo"
+          }
+        }
+      }
     },
     "bike duration": {
-      "comment": "Display name for query data type"
+      "comment": "Display name for query data type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "durée à vélo"
+          }
+        }
+      }
     },
     "biking distance": {
-      "comment": "Display name for metric"
+      "comment": "Display name for metric",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "distance à vélo"
+          }
+        }
+      }
     },
     "biking duration": {
-      "comment": "Display name for metric"
+      "comment": "Display name for metric",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "durée à vélo"
+          }
+        }
+      }
     },
     "body weight": {
-      "comment": "Display name for query data type"
+      "comment": "Display name for query data type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "poids corporel"
+          }
+        }
+      }
     },
     "bowel movements": {
-      "comment": "Display name for query data type"
+      "comment": "Display name for query data type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "selles"
+          }
+        }
+      }
     },
-    "bpm": {},
-    "cal": {},
+    "bpm": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "bpm"
+          }
+        }
+      }
+    },
+    "cal": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "cal"
+          }
+        }
+      }
+    },
     "caloric intake": {
-      "comment": "Display name for metric\nDisplay name for query data type"
+      "comment": "Display name for metric\nDisplay name for query data type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "apport calorique"
+          }
+        }
+      }
     },
     "cardio duration": {
-      "comment": "Display name for query data type"
+      "comment": "Display name for query data type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "durée de cardio"
+          }
+        }
+      }
     },
     "cardio workouts": {
-      "comment": "Display name for metric"
+      "comment": "Display name for metric",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "séances de cardio"
+          }
+        }
+      }
     },
     "cycle tracking": {
-      "comment": "Display name for query data type"
+      "comment": "Display name for query data type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "suivi du cycle"
+          }
+        }
+      }
     },
-    "days": {},
-    "e.g. A 30 minute upper body strength workout focusing on chest and back.": {},
-    "efficiency": {},
-    "ex: 192.168.1.1": {},
+    "days": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "jours"
+          }
+        }
+      }
+    },
+    "e.g. A 30 minute upper body strength workout focusing on chest and back.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ex. : une séance de musculation de 30 minutes pour le haut du corps, axée sur la poitrine et le dos."
+          }
+        }
+      }
+    },
+    "efficiency": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "efficacité"
+          }
+        }
+      }
+    },
+    "ex: 192.168.1.1": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ex. : 192.168.1.1"
+          }
+        }
+      }
+    },
     "excellent": {
-      "comment": "Rating of a resting heart rate, used inside \"This is %@ for your age!\""
+      "comment": "Rating of a resting heart rate, used inside \"This is %@ for your age!\"",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "excellente"
+          }
+        }
+      }
     },
     "exercise minutes": {
-      "comment": "Display name for metric\nDisplay name for query data type"
+      "comment": "Display name for metric\nDisplay name for query data type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "minutes d'exercice"
+          }
+        }
+      }
     },
     "fiber intake": {
-      "comment": "Display name for metric\nDisplay name for query data type"
+      "comment": "Display name for metric\nDisplay name for query data type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "apport en fibres"
+          }
+        }
+      }
     },
-    "fl oz": {},
+    "fl oz": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "oz liq."
+          }
+        }
+      }
+    },
     "goals": {
-      "comment": "Display name for query data type"
+      "comment": "Display name for query data type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "objectifs"
+          }
+        }
+      }
     },
     "great": {
-      "comment": "Rating of a resting heart rate, used inside \"This is %@ for your age!\""
+      "comment": "Rating of a resting heart rate, used inside \"This is %@ for your age!\"",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "très bonne"
+          }
+        }
+      }
     },
     "heart health": {
-      "comment": "Display name for query data type"
+      "comment": "Display name for query data type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "santé cardiaque"
+          }
+        }
+      }
     },
     "high intensity interval training duration": {
-      "comment": "Display name for query data type"
+      "comment": "Display name for query data type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "durée d'entraînement fractionné de haute intensité"
+          }
+        }
+      }
     },
-    "mL": {},
+    "mL": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ml"
+          }
+        }
+      }
+    },
     "meditation minutes": {
-      "comment": "Display name for metric\nDisplay name for query data type"
+      "comment": "Display name for metric\nDisplay name for query data type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "minutes de méditation"
+          }
+        }
+      }
     },
-    "mmHg": {},
+    "mmHg": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "mmHg"
+          }
+        }
+      }
+    },
     "mobility and flexibility duration": {
-      "comment": "Display name for query data type"
+      "comment": "Display name for query data type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "durée de mobilité et de souplesse"
+          }
+        }
+      }
     },
     "mobility and flexibility workouts": {
-      "comment": "Display name for metric"
+      "comment": "Display name for metric",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "séances de mobilité et de souplesse"
+          }
+        }
+      }
     },
     "nutrition": {
-      "comment": "Display name for query data type"
+      "comment": "Display name for query data type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "nutrition"
+          }
+        }
+      }
     },
     "per %@ serving%@": {
       "localizations": {
@@ -8302,107 +11465,501 @@
             "state": "new",
             "value": "per %1$@ serving%2$@"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "pour %1$@ portion%2$@"
+          }
         }
       }
     },
     "protein intake": {
-      "comment": "Display name for metric\nDisplay name for query data type"
+      "comment": "Display name for metric\nDisplay name for query data type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "apport en protéines"
+          }
+        }
+      }
     },
     "reminders": {
-      "comment": "Display name for query data type"
+      "comment": "Display name for query data type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "rappels"
+          }
+        }
+      }
     },
-    "resting HR": {},
+    "resting HR": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FC au repos"
+          }
+        }
+      }
+    },
     "run distance": {
-      "comment": "Display name for query data type"
+      "comment": "Display name for query data type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "distance de course"
+          }
+        }
+      }
     },
     "run duration": {
-      "comment": "Display name for query data type"
+      "comment": "Display name for query data type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "durée de course"
+          }
+        }
+      }
     },
     "running distance": {
-      "comment": "Display name for metric"
+      "comment": "Display name for metric",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "distance de course"
+          }
+        }
+      }
     },
     "running duration": {
-      "comment": "Display name for metric"
+      "comment": "Display name for metric",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "durée de course"
+          }
+        }
+      }
     },
-    "servings": {},
+    "servings": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "portions"
+          }
+        }
+      }
+    },
     "sleep": {
-      "comment": "Display name for query data type"
+      "comment": "Display name for query data type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "sommeil"
+          }
+        }
+      }
     },
     "step count": {
-      "comment": "Display name for query data type"
+      "comment": "Display name for query data type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "nombre de pas"
+          }
+        }
+      }
     },
     "steps": {
-      "comment": "Display name for metric"
+      "comment": "Display name for metric",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "pas"
+          }
+        }
+      }
     },
     "strength training duration": {
-      "comment": "Display name for query data type"
+      "comment": "Display name for query data type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "durée de musculation"
+          }
+        }
+      }
     },
     "strength training workouts": {
-      "comment": "Display name for metric"
+      "comment": "Display name for metric",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "séances de musculation"
+          }
+        }
+      }
     },
     "stress": {
-      "comment": "Display name for query data type"
+      "comment": "Display name for query data type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "stress"
+          }
+        }
+      }
     },
     "target heart rate zone 1 minutes": {
-      "comment": "Display name for metric"
+      "comment": "Display name for metric",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "minutes en zone cardiaque cible 1"
+          }
+        }
+      }
     },
     "target heart rate zone 2 minutes": {
-      "comment": "Display name for metric"
+      "comment": "Display name for metric",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "minutes en zone cardiaque cible 2"
+          }
+        }
+      }
     },
     "target heart rate zone 3 minutes": {
-      "comment": "Display name for metric"
+      "comment": "Display name for metric",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "minutes en zone cardiaque cible 3"
+          }
+        }
+      }
     },
     "target heart rate zone 4 minutes": {
-      "comment": "Display name for metric"
+      "comment": "Display name for metric",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "minutes en zone cardiaque cible 4"
+          }
+        }
+      }
     },
     "target heart rate zone 5 minutes": {
-      "comment": "Display name for metric"
+      "comment": "Display name for metric",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "minutes en zone cardiaque cible 5"
+          }
+        }
+      }
     },
     "target heart rate zones": {
-      "comment": "Display name for query data type"
+      "comment": "Display name for query data type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "zones cardiaques cibles"
+          }
+        }
+      }
     },
-    "vs Baseline": {},
-    "vs baseline": {},
+    "vs Baseline": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "par rapport à la référence"
+          }
+        }
+      }
+    },
+    "vs baseline": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "par rapport à la référence"
+          }
+        }
+      }
+    },
     "walking running distance": {
-      "comment": "Display name for query data type"
+      "comment": "Display name for query data type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "distance de marche et de course"
+          }
+        }
+      }
     },
     "walking-running distance": {
-      "comment": "Display name for metric"
+      "comment": "Display name for metric",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "distance de marche et de course"
+          }
+        }
+      }
     },
     "water intake": {
-      "comment": "Display name for metric\nDisplay name for query data type"
+      "comment": "Display name for metric\nDisplay name for query data type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "apport en eau"
+          }
+        }
+      }
     },
     "workout minutes": {
-      "comment": "Display name for metric"
+      "comment": "Display name for metric",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "minutes de séance"
+          }
+        }
+      }
     },
     "workouts": {
-      "comment": "Display name for query data type"
+      "comment": "Display name for query data type",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "séances"
+          }
+        }
+      }
     },
-    "© 2025 Lotus Labs Inc. All Rights Reserved.": {},
-    "±%lld min variation": {},
+    "© 2025 Lotus Labs Inc. All Rights Reserved.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "© 2025 Lotus Labs Inc. Tous droits réservés."
+          }
+        }
+      }
+    },
+    "±%lld min variation": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "variation de ±%lld min"
+          }
+        }
+      }
+    },
     "—": {},
-    "• 4 or more drinks within a few hours": {},
-    "• 5 or more drinks within a few hours": {},
-    "• No more than 14 drinks per week": {},
-    "• No more than 3 drinks on any single day": {},
-    "• No more than 4 drinks on any single day": {},
-    "• No more than 7 drinks per week": {},
-    "• Only visible to you, stored on your device": {},
-    "• Secured by %@ Apple": {},
-    "• Shared with Bud anonymously and never tied to your identity": {},
-    "• Within 1 year: Heart disease risk halves": {},
-    "• Within 1-9 months: Coughing decreases": {},
-    "• Within 12 hours: Carbon monoxide levels normalize": {},
-    "• Within 2-12 weeks: Circulation improves": {},
-    "• Within 20 minutes: Heart rate drops": {},
-    "• Within 5-15 years: Stroke risk equals non-smoker": {},
-    "• You can change permissions anytime in Settings": {},
+    "• 4 or more drinks within a few hours": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "• 4 verres ou plus en quelques heures"
+          }
+        }
+      }
+    },
+    "• 5 or more drinks within a few hours": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "• 5 verres ou plus en quelques heures"
+          }
+        }
+      }
+    },
+    "• No more than 14 drinks per week": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "• Pas plus de 14 verres par semaine"
+          }
+        }
+      }
+    },
+    "• No more than 3 drinks on any single day": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "• Pas plus de 3 verres sur une même journée"
+          }
+        }
+      }
+    },
+    "• No more than 4 drinks on any single day": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "• Pas plus de 4 verres sur une même journée"
+          }
+        }
+      }
+    },
+    "• No more than 7 drinks per week": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "• Pas plus de 7 verres par semaine"
+          }
+        }
+      }
+    },
+    "• Only visible to you, stored on your device": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "• Visibles par vous seul, stockées sur votre appareil"
+          }
+        }
+      }
+    },
+    "• Secured by %@ Apple": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "• Sécurisées par %@ Apple"
+          }
+        }
+      }
+    },
+    "• Shared with Bud anonymously and never tied to your identity": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "• Partagées avec Bud de façon anonyme, jamais associées à votre identité"
+          }
+        }
+      }
+    },
+    "• Within 1 year: Heart disease risk halves": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "• En 1 an : le risque de maladie cardiaque est divisé par deux"
+          }
+        }
+      }
+    },
+    "• Within 1-9 months: Coughing decreases": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "• En 1 à 9 mois : la toux diminue"
+          }
+        }
+      }
+    },
+    "• Within 12 hours: Carbon monoxide levels normalize": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "• En 12 heures : le taux de monoxyde de carbone se normalise"
+          }
+        }
+      }
+    },
+    "• Within 2-12 weeks: Circulation improves": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "• En 2 à 12 semaines : la circulation s'améliore"
+          }
+        }
+      }
+    },
+    "• Within 20 minutes: Heart rate drops": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "• En 20 minutes : la fréquence cardiaque baisse"
+          }
+        }
+      }
+    },
+    "• Within 5-15 years: Stroke risk equals non-smoker": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "• En 5 à 15 ans : le risque d'AVC rejoint celui d'un non-fumeur"
+          }
+        }
+      }
+    },
+    "• You can change permissions anytime in Settings": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "• Vous pouvez modifier les autorisations à tout moment dans Réglages"
+          }
+        }
+      }
+    },
     "≈ %@ %@ hydration": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "new",
             "value": "≈ %1$@ %2$@ hydration"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "≈ %1$@ %2$@ d'hydratation"
           }
         }
       }
