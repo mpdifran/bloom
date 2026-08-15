@@ -59,4 +59,41 @@ struct ChatLanguageInstructionTests {
   func unknownRegionFallsBackToLanguage() {
     #expect(ChatLanguageInstruction.languageDisplayName(forLocaleTag: "es-ZZ") == "Spanish")
   }
+
+  @Test("A Dutch reader on an English build is told the interface is English")
+  func differingInterfaceLanguageIsMentioned() throws {
+    let instruction = try #require(
+      ChatLanguageInstruction.instruction(forLocaleTag: "nl-NL", interfaceTag: "en-US")
+    )
+
+    #expect(instruction.contains("Write your prose in Dutch"))
+    #expect(instruction.contains("interface is displayed in English"))
+  }
+
+  @Test("When both languages match, no interface clause is added")
+  func matchingInterfaceLanguageIsSilent() throws {
+    let instruction = try #require(
+      ChatLanguageInstruction.instruction(forLocaleTag: "fr-CA", interfaceTag: "fr-CA")
+    )
+
+    #expect(instruction.contains("Write your prose in French (Canada)"))
+    #expect(!instruction.contains("interface is displayed"))
+  }
+
+  @Test("Language switching requires a full sentence, so short messages don't cause ping-pong")
+  func switchingRequiresASentence() throws {
+    let instruction = try #require(ChatLanguageInstruction.instruction(forLocaleTag: "nl"))
+
+    #expect(instruction.contains("full sentence"))
+    #expect(instruction.contains("stay in it for the rest of the conversation"))
+    #expect(instruction.contains("not a request to change language"))
+  }
+
+  @Test("An absent interface tag adds no clause, so older clients are unaffected")
+  func absentInterfaceTagIsSilent() throws {
+    let instruction = try #require(ChatLanguageInstruction.instruction(forLocaleTag: "es"))
+
+    #expect(instruction.contains("Write your prose in Spanish"))
+    #expect(!instruction.contains("interface is displayed"))
+  }
 }

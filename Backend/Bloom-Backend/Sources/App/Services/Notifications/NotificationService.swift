@@ -149,10 +149,14 @@ struct NotificationService {
     let priority = APNSPriority.immediately
     let topic = application.bloomAppBundleID
 
-    let foodName = foodItemName ?? "a food item"
+    // loc-key rather than literal text: iOS resolves these against the app's own String Catalog in
+    // whichever language the user's app is running in, so the server never needs to know the locale
+    // and the strings live in one place. The keys are declared in RemoteNotificationString on the
+    // client - if one is renamed there without being renamed here, the user sees the raw key.
+    let foodName = foodItemName ?? ""
     let alert = APNSAlertNotificationContent(
-      title: .raw("Thanks for your help!"),
-      body: .raw("Your suggestions for \(foodName) look great, thanks for helping improve Bloom!")
+      title: .localized(key: "notification.issueReportAccepted.title", arguments: []),
+      body: .localized(key: "notification.issueReportAccepted.body", arguments: [foodName])
     )
 
     struct IssueReportAcceptedPayload: Codable {

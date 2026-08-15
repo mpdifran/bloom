@@ -117,7 +117,9 @@ final class MonitorInsightManager {
         monitorType: monitorType.rawValue,
         monitorContext: monitorContextString,
         healthContext: healthContext,
-        timezone: TimeZone.current.identifier
+        timezone: TimeZone.current.identifier,
+        locale: ChatLanguage.proseTag,
+        interfaceLocale: ChatLanguage.interfaceTag
       )
 
       let urlRequest = try await URLRequest.Monitor.getInsight(body: request)

@@ -766,6 +766,7 @@ extension OpenAIService {
   func generateWorkoutPlan(
     equipment: [String],
     description: String,
+    locale: String? = nil,
     userID: UserIdentifier? = nil
   ) async throws -> SocketMessage.WorkoutPlan {
     let equipmentText = equipment.isEmpty
@@ -775,7 +776,7 @@ extension OpenAIService {
     let messages: [Chat.Message] = [
       Chat.Message(
         role: .system,
-        content: [.text(.Prompt.generateWorkoutPlan)]
+        content: [.text(.Prompt.generateWorkoutPlan + (ChatLanguageInstruction.instruction(forLocaleTag: locale) ?? ""))]
       ),
       Chat.Message(
         role: .user,

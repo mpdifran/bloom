@@ -94,7 +94,8 @@ final class CreateWorkoutPlanViewModel {
 
     let request = GenerateWorkoutPlanRequest(
       equipment: Array(selectedEquipment),
-      description: fullDescription
+      description: fullDescription,
+      locale: ChatLanguage.proseTag
     )
 
     let urlRequest = try await URLRequest.Workouts.generatePlan(body: request)

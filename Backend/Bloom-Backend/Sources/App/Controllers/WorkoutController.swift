@@ -40,6 +40,7 @@ private extension WorkoutController {
     let workoutPlan = try await request.openAIService.generateWorkoutPlan(
       equipment: body.equipment,
       description: body.description,
+      locale: body.locale,
       userID: userID
     )
 

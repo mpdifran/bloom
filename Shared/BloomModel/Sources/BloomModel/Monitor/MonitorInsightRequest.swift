@@ -23,15 +23,27 @@ public struct MonitorInsightRequest: Codable, Hashable, Sendable {
   /// User's timezone identifier (e.g., "America/Toronto")
   public let timezone: String
 
+  /// BCP-47 tag for the language the insight should be written in, e.g. "es-MX".
+  /// Optional for backwards compatibility.
+  public let locale: String?
+
+  /// BCP-47 tag for the language the app's interface is displayed in, which may differ from
+  /// `locale` when the user's language isn't one we ship a localization for.
+  public let interfaceLocale: String?
+
   public init(
     monitorType: String,
     monitorContext: String,
     healthContext: String,
-    timezone: String
+    timezone: String,
+    locale: String? = nil,
+    interfaceLocale: String? = nil
   ) {
     self.monitorType = monitorType
     self.monitorContext = monitorContext
     self.healthContext = healthContext
     self.timezone = timezone
+    self.locale = locale
+    self.interfaceLocale = interfaceLocale
   }
 }

@@ -21,6 +21,13 @@ public extension SocketMessage {
     /// the server leaves the assistant's language behaviour untouched in that case.
     public let locale: String?
 
+    /// BCP-47 tag for the language the app's interface is displayed in.
+    ///
+    /// Differs from `locale` when the user's language isn't one we ship a localization for: Bud can
+    /// write Dutch even though the UI is English, and needs to know that so it names UI labels in
+    /// the language the user actually sees on screen.
+    public let interfaceLocale: String?
+
     public var isV2: Bool {
       conversationID != nil
     }
@@ -33,7 +40,8 @@ public extension SocketMessage {
       requestID: String? = nil,
       lastMessageID: String? = nil,
       conversationID: String? = nil,
-      locale: String? = nil
+      locale: String? = nil,
+      interfaceLocale: String? = nil
     ) {
       self.text = text
       self.imageFileIDs = imageFileIDs
@@ -43,6 +51,7 @@ public extension SocketMessage {
       self.lastMessageID = lastMessageID
       self.conversationID = conversationID
       self.locale = locale
+      self.interfaceLocale = interfaceLocale
     }
   }
 

@@ -57,13 +57,17 @@ public extension SocketMessage {
     /// travel with them too. Optional for the same backwards-compatibility reason.
     public let locale: String?
 
+    /// BCP-47 tag for the language the app's interface is displayed in. See `MessageRequest`.
+    public let interfaceLocale: String?
+
     public init(
       runID: String,
       toolCallResults: [ToolCallResult],
       requestID: String? = nil,
       conversationID: String? = nil,
       lastMessageID: String? = nil,
-      locale: String? = nil
+      locale: String? = nil,
+      interfaceLocale: String? = nil
     ) {
       self.runID = runID
       self.toolCallResults = toolCallResults
@@ -71,6 +75,7 @@ public extension SocketMessage {
       self.conversationID = conversationID
       self.lastMessageID = lastMessageID
       self.locale = locale
+      self.interfaceLocale = interfaceLocale
     }
   }
 }

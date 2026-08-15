@@ -45,6 +45,8 @@ private extension HealthReportController {
       healthContext: body.healthContext,
       currentTime: body.currentTime,
       timezone: body.timezone,
+      locale: body.locale,
+      interfaceLocale: body.interfaceLocale,
       userID: userID
     )
   }
@@ -65,6 +67,8 @@ private extension HealthReportController {
       monitorContext: body.monitorContext,
       healthContext: body.healthContext,
       timezone: body.timezone,
+      locale: body.locale,
+      interfaceLocale: body.interfaceLocale,
       userID: userID
     )
   }

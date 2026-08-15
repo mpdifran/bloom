@@ -160,7 +160,9 @@ final class TodayInsightsManager {
       let request = TodayReportRequest(
         healthContext: healthContext,
         currentTime: DateFormatter.mediumDateShortTime.string(from: today),
-        timezone: timezone
+        timezone: timezone,
+        locale: ChatLanguage.proseTag,
+        interfaceLocale: ChatLanguage.interfaceTag
       )
 
       let response = try await NetworkRequester.shared.getTodayInsights(request: request)

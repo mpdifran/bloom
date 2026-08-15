@@ -182,7 +182,8 @@ private extension ChatService {
       isV2Client: message.isV2 == true,
       clientLastMessageID: message.lastMessageID,
       conversationID: message.conversationID,
-      locale: message.locale
+      locale: message.locale,
+      interfaceLocale: message.interfaceLocale
     )
   }
 
@@ -219,7 +220,8 @@ private extension ChatService {
       isV2Client: isV2Client,
       clientLastMessageID: response.lastMessageID,
       conversationID: response.conversationID,
-      locale: response.locale
+      locale: response.locale,
+      interfaceLocale: response.interfaceLocale
     )
   }
 }
@@ -237,7 +239,8 @@ private extension ChatService {
     isV2Client: Bool,
     clientLastMessageID: String?,
     conversationID: String?,
-    locale: String?
+    locale: String?,
+    interfaceLocale: String?
   ) async throws {
 
     if isRetry {
@@ -276,7 +279,7 @@ private extension ChatService {
     // Client-supplied locale, mapped to a language name server-side. Nil for English or an
     // unrecognized tag, which leaves the base prompt untouched.
     let instructions: String
-    if let languageInstruction = ChatLanguageInstruction.instruction(forLocaleTag: locale) {
+    if let languageInstruction = ChatLanguageInstruction.instruction(forLocaleTag: locale, interfaceTag: interfaceLocale) {
       instructions = String.Prompt.chatAssistant + "\n" + languageInstruction
     } else {
       instructions = .Prompt.chatAssistant
@@ -314,7 +317,8 @@ private extension ChatService {
         isV2Client: isV2Client,
         clientLastMessageID: clientLastMessageID,
         conversationID: conversationID,
-        locale: locale
+        locale: locale,
+        interfaceLocale: interfaceLocale
       )
     }
 

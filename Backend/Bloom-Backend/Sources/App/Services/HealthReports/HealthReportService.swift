@@ -35,6 +35,8 @@ extension HealthReportService {
     healthContext: String,
     currentTime: String,
     timezone: String,
+    locale: String?,
+    interfaceLocale: String?,
     userID: UserIdentifier
   ) async throws -> TodayReportResponse {
 
@@ -65,7 +67,7 @@ extension HealthReportService {
     let response = try await openAIService.openAI.responses.createResponse(
       input: inputItems,
       model: modelID,
-      instructions: .Prompt.todayAI,
+      instructions: .Prompt.todayAI + (ChatLanguageInstruction.instruction(forLocaleTag: locale, interfaceTag: interfaceLocale) ?? ""),
       reasoning: .init(effort: .low, summary: .auto),
       text: OpenAIKit.Text(format: Format(type: .jsonSchema(.todayAI))),
       truncation: .auto,
@@ -91,6 +93,8 @@ extension HealthReportService {
     monitorContext: String,
     healthContext: String,
     timezone: String,
+    locale: String?,
+    interfaceLocale: String?,
     userID: UserIdentifier
   ) async throws -> MonitorInsightResponse {
 
@@ -143,7 +147,7 @@ extension HealthReportService {
     let response = try await openAIService.openAI.responses.createResponse(
       input: inputItems,
       model: modelID,
-      instructions: .Prompt.monitorInsight,
+      instructions: .Prompt.monitorInsight + (ChatLanguageInstruction.instruction(forLocaleTag: locale, interfaceTag: interfaceLocale) ?? ""),
       reasoning: .init(effort: .low, summary: .auto),
       text: OpenAIKit.Text(format: Format(type: .jsonSchema(.monitorInsight))),
       truncation: .auto,

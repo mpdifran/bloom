@@ -15,13 +15,26 @@ import Foundation
 /// yields nil, which leaves the assistant's language behaviour exactly as it was.
 enum ChatLanguageInstruction {
 
-  static func instruction(forLocaleTag tag: String?) -> String? {
+  static func instruction(forLocaleTag tag: String?, interfaceTag: String? = nil) -> String? {
     guard let displayName = languageDisplayName(forLocaleTag: tag) else { return nil }
 
     return """
 
-      Language: The user's app is set to \(displayName). Write your prose in \(displayName) by default. If the user writes to you in a different language, reply in that language instead. The health data you are given is always in English - translate it when you refer to it, and never mention that it arrived in English. Inside ```json blocks, keep every key and every enumerated value exactly as specified in English; only free-text values such as names and notes may be written in the user's language.
+      Language: Write your prose in \(displayName) by default. If the user writes you a full sentence in a different language, switch to that language and stay in it for the rest of the conversation. Ignore short or ambiguous messages when deciding - a food name, a number, an acknowledgement or an emoji is not a request to change language, so keep writing in the language you were already using.\(interfaceClause(proseName: displayName, interfaceTag: interfaceTag)) The health data you are given is always in English - translate it when you refer to it, and never mention that it arrived in English. Inside ```json blocks, keep every key and every enumerated value exactly as specified in English; only free-text values such as names and notes may be written in the user's language.
       """
+  }
+
+  /// The interface is limited to the localizations we ship; the assistant is not. When the two
+  /// languages differ the model has to be told, or it will translate on-screen labels that the user
+  /// is actually seeing in another language.
+  static func interfaceClause(proseName: String, interfaceTag: String?) -> String {
+    guard let interfaceTag, !interfaceTag.isEmpty else { return "" }
+
+    // languageDisplayName returns nil for English, which is exactly the common case here.
+    let interfaceName = languageDisplayName(forLocaleTag: interfaceTag) ?? "English"
+    guard interfaceName != proseName else { return "" }
+
+    return " The app's interface is displayed in \(interfaceName), so when you refer to a button, tab or screen by name, give that name in \(interfaceName) even though the rest of your reply is in \(proseName)."
   }
 
   /// English display name for the tag, e.g. "Spanish" or "Portuguese (Brazil)".

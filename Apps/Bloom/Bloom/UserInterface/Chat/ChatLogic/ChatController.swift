@@ -250,7 +250,8 @@ extension ChatController {
       requestID: requestID,
       lastMessageID: lastMessageID,
       conversationID: resolvedConversationID,
-      locale: ChatLanguage.tag
+      locale: ChatLanguage.proseTag,
+      interfaceLocale: ChatLanguage.interfaceTag
     )
 
     let socket = await createOrGetWebSocketHandle()
@@ -312,7 +313,8 @@ extension ChatController {
       requestID: requestID,
       lastMessageID: lastMessageID,
       conversationID: resolvedConversationID,
-      locale: ChatLanguage.tag
+      locale: ChatLanguage.proseTag,
+      interfaceLocale: ChatLanguage.interfaceTag
     )
 
     let socket = await createOrGetWebSocketHandle()
@@ -592,7 +594,8 @@ private extension ChatController {
           requestID: requestIDForResponse,
           conversationID: conversationID,
           lastMessageID: lastMessageID,
-          locale: ChatLanguage.tag
+          locale: ChatLanguage.proseTag,
+          interfaceLocale: ChatLanguage.interfaceTag
         )
 
         if let socket = webSocketHandle {
@@ -608,7 +611,8 @@ private extension ChatController {
           requestID: requestIDForResponse,
           conversationID: conversationID,
           lastMessageID: lastMessageID,
-          locale: ChatLanguage.tag
+          locale: ChatLanguage.proseTag,
+          interfaceLocale: ChatLanguage.interfaceTag
         )
         if let socket = webSocketHandle {
           try? await socket.send(payload: responseMessage)
