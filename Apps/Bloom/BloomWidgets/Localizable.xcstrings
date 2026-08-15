@@ -15,6 +15,12 @@
     "--": {},
     "Action": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktion"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -25,6 +31,12 @@
     },
     "Action Type": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktionstyp"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -35,6 +47,12 @@
     },
     "Actions": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktionen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -45,6 +63,12 @@
     },
     "Activity Level": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktivitätsniveau"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -55,6 +79,12 @@
     },
     "Automatic (Time-based)": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatisch (nach Uhrzeit)"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -65,6 +95,12 @@
     },
     "Automatic (based on time)": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatisch (nach Uhrzeit)"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -75,6 +111,12 @@
     },
     "Body Composition": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Körperzusammensetzung"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -85,6 +127,12 @@
     },
     "Bowel Movements": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stuhlgang"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -95,6 +143,12 @@
     },
     "Breakfast": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frühstück"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -111,6 +165,12 @@
     },
     "Bud's Summary": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buds Zusammenfassung"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -122,6 +182,12 @@
     "Choose Food Item": {
       "comment": "Display name for log meal configuration intent",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lebensmittel wählen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -133,6 +199,12 @@
     "Choose Goal": {
       "comment": "Display name for goal configuration intent",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ziel wählen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -144,6 +216,12 @@
     "Choose Saved Meal": {
       "comment": "Display name for log meal configuration intent",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gespeicherte Mahlzeit wählen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -154,6 +232,12 @@
     },
     "Choose the time period to display step data for.": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle den Zeitraum für die Schrittdaten."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -164,6 +248,12 @@
     },
     "Choose which goal to display in the widget.": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle das Ziel, das im Widget angezeigt wird."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -174,6 +264,12 @@
     },
     "Choose which health action to perform.": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle die Gesundheitsaktion, die ausgeführt werden soll."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -184,6 +280,12 @@
     },
     "Choose which health actions to display and their order.": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle die angezeigten Gesundheitsaktionen und ihre Reihenfolge."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -194,6 +296,12 @@
     },
     "Configure which insight to display in the widget.": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lege fest, welche Erkenntnis im Widget erscheint."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -204,6 +312,12 @@
     },
     "Configure which meal to log with the widget.": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lege fest, welche Mahlzeit mit dem Widget eingetragen wird."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -214,6 +328,12 @@
     },
     "Cycle Tracking": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zyklustracking"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -224,6 +344,12 @@
     },
     "Daily": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Täglich"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -234,6 +360,12 @@
     },
     "Daily Insights": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tägliche Erkenntnisse"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -244,6 +376,12 @@
     },
     "Dinner": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abendessen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -260,6 +398,12 @@
     },
     "Display Mode": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anzeigemodus"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -270,6 +414,12 @@
     },
     "Error": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fehler"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -280,6 +430,12 @@
     },
     "Exercise Effectiveness": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trainingseffektivität"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -290,6 +446,12 @@
     },
     "Food Item": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lebensmittel"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -300,6 +462,12 @@
     },
     "Food Items": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lebensmittel"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -310,6 +478,12 @@
     },
     "Food?": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welches Lebensmittel?"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -320,6 +494,12 @@
     },
     "Get Bloom Plus Today!": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hol dir noch heute Bloom Plus!"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -330,6 +510,12 @@
     },
     "Get personalized insights on what’s boosting (or bumming out) your health. It’s like x-ray vision for your wellness.": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erhalte persönliche Erkenntnisse darüber, was deiner Gesundheit guttut (oder ihr zusetzt). Wie ein Röntgenblick für dein Wohlbefinden."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -346,6 +532,12 @@
     },
     "Goal": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ziel"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -356,6 +548,12 @@
     },
     "Goal Widget Configuration": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Konfiguration des Ziel-Widgets"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -366,6 +564,12 @@
     },
     "Goals": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ziele"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -376,6 +580,12 @@
     },
     "Health Action": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gesundheitsaktion"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -386,6 +596,12 @@
     },
     "Health Action Configuration": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Konfiguration der Gesundheitsaktion"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -396,6 +612,12 @@
     },
     "Health Insights": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gesundheitserkenntnisse"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -406,6 +628,12 @@
     },
     "Heart Health": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herzgesundheit"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -416,6 +644,12 @@
     },
     "How many servings?": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wie viele Portionen?"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -426,6 +660,12 @@
     },
     "Log Actions Configuration": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Konfiguration der Eintragungsaktionen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -436,6 +676,12 @@
     },
     "Log Data": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daten eintragen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -446,6 +692,12 @@
     },
     "Log Meal": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mahlzeit eintragen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -456,6 +708,12 @@
     },
     "Log Meal Configuration": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Konfiguration der Mahlzeiteneingabe"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -466,6 +724,12 @@
     },
     "Logs a meal with one or more food items.": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trägt eine Mahlzeit mit einem oder mehreren Lebensmitteln ein."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -476,6 +740,12 @@
     },
     "Lunch": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mittagessen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -492,6 +762,12 @@
     },
     "Meal": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mahlzeit"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -502,6 +778,12 @@
     },
     "Monthly": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Monatlich"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -512,6 +794,12 @@
     },
     "Nutrition": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ernährung"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -523,6 +811,12 @@
     "Open Barcode Scanner": {
       "comment": "Label for action type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Barcode-Scanner öffnen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -534,6 +828,12 @@
     "Open Blood Pressure Logger": {
       "comment": "Label for action type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blutdruckeingabe öffnen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -544,6 +844,12 @@
     },
     "Open Bloom to Refresh": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloom öffnen zum Aktualisieren"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -555,6 +861,12 @@
     "Open Bowel Movement Logger": {
       "comment": "Label for action type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stuhlgangeingabe öffnen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -565,6 +877,12 @@
     },
     "Open Data Loggers": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eingabefunktionen öffnen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -576,6 +894,12 @@
     "Open Food Logger": {
       "comment": "Label for action type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Essenseingabe öffnen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -586,6 +910,12 @@
     },
     "Open Health Action": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gesundheitsaktion öffnen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -597,6 +927,12 @@
     "Open Magic Scanner": {
       "comment": "Label for action type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Magic Scanner öffnen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -608,6 +944,12 @@
     "Open Period Logger": {
       "comment": "Label for action type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Periodeneingabe öffnen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -619,6 +961,12 @@
     "Open Voice Logger": {
       "comment": "Label for action type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spracheingabe öffnen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -630,6 +978,12 @@
     "Open Water Logger": {
       "comment": "Label for action type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wassereingabe öffnen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -641,6 +995,12 @@
     "Open Weight Logger": {
       "comment": "Label for action type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gewichtseingabe öffnen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -651,6 +1011,12 @@
     },
     "Open the app to load your personalized summary.": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Öffne die App, um deine persönliche Zusammenfassung zu laden."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -667,6 +1033,12 @@
     },
     "Opens a health action to log data.": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Öffnet eine Gesundheitsaktion zum Eintragen von Daten."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -677,6 +1049,12 @@
     },
     "Opens a specific vital to view your health data.": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Öffnet einen bestimmten Vitalwert, um deine Gesundheitsdaten anzusehen."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -693,6 +1071,12 @@
     },
     "Please select at least one food item to log": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle mindestens ein Lebensmittel zum Eintragen aus"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -703,6 +1087,12 @@
     },
     "Quick access to health data logging actions.": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schnellzugriff auf Aktionen zum Eintragen von Gesundheitsdaten."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -713,6 +1103,12 @@
     },
     "Quickly log a meal with one or more food items.": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trage schnell eine Mahlzeit mit einem oder mehreren Lebensmitteln ein."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -723,6 +1119,12 @@
     },
     "Quickly log personal data.": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trage schnell persönliche Daten ein."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -739,6 +1141,12 @@
     },
     "Saved Meal": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gespeicherte Mahlzeit"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -749,6 +1157,12 @@
     },
     "See Bud's daily summary of your health.": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sieh dir Buds tägliche Zusammenfassung deiner Gesundheit an."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -765,6 +1179,12 @@
     },
     "Servings": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Portionen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -775,6 +1195,12 @@
     },
     "Single Food Item": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einzelnes Lebensmittel"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -785,6 +1211,12 @@
     },
     "Sleep Quality": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schlafqualität"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -795,6 +1227,12 @@
     },
     "Slot": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Platz"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -805,6 +1243,12 @@
     },
     "Snack": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snack"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -815,6 +1259,12 @@
     },
     "Steps": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schritte"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -825,6 +1275,12 @@
     },
     "Steps Widget Configuration": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Konfiguration des Schritte-Widgets"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -835,6 +1291,12 @@
     },
     "Stress Levels": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stresslevel"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -845,6 +1307,12 @@
     },
     "Time Period": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zeitraum"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -855,6 +1323,12 @@
     },
     "Today Insight Configuration": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Konfiguration der Tageserkenntnis"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -865,6 +1339,12 @@
     },
     "Today's Advice": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tipp des Tages"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -875,6 +1355,12 @@
     },
     "Tonight's Sleep": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schlaf heute Nacht"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -885,6 +1371,12 @@
     },
     "Track your goal completion visually over time.": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verfolge visuell, wie du dein Ziel im Lauf der Zeit erreichst."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -901,6 +1393,12 @@
     },
     "Track your steps and walking distance.": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verfolge deine Schritte und deine Gehstrecke."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -917,6 +1415,12 @@
     },
     "Unable to load insights. Please open the app.": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erkenntnisse konnten nicht geladen werden. Bitte öffne die App."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -927,6 +1431,12 @@
     },
     "Value": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wert"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -937,6 +1447,12 @@
     },
     "View Vital": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vitalwert ansehen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -947,6 +1463,12 @@
     },
     "View personalized health insights that automatically cycle throughout the day.": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sieh dir persönliche Gesundheitserkenntnisse an, die im Tagesverlauf automatisch wechseln."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -957,6 +1479,12 @@
     },
     "View your personalized today's advice or tonight's sleep recommendations.": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sieh dir deinen persönlichen Tagestipp oder deine Schlafempfehlungen für heute Nacht an."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -973,6 +1501,12 @@
     },
     "Vital": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vitalwert"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -983,6 +1517,12 @@
     },
     "Weekly": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wöchentlich"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -993,6 +1533,12 @@
     },
     "Which food item?": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welches Lebensmittel?"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1003,6 +1549,12 @@
     },
     "Which meal?": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welche Mahlzeit?"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1013,6 +1565,12 @@
     },
     "Whoops, looks like I made a mistake. Please open Bloom to try again.": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hoppla, da ist mir wohl ein Fehler unterlaufen. Öffne Bloom, um es noch einmal zu versuchen."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1023,6 +1581,12 @@
     },
     "Widget Type": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widget-Typ"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1033,6 +1597,12 @@
     },
     "Yearly": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jährlich"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",

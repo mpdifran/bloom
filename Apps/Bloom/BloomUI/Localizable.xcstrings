@@ -4,6 +4,12 @@
     "Afternoon": {
       "comment": "Display name for time mode",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nachmittag"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -15,6 +21,12 @@
     "Age, biological sex, height, and your focus. Used to help Bud personalize responses and tailor insights to you.": {
       "comment": "Description for AI health category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alter, biologisches Geschlecht, Größe und dein Schwerpunkt. Damit passt Bud seine Antworten und Erkenntnisse an dich an."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -32,6 +44,12 @@
     "Alcohol consumption and smoking status. Used to help Bud understand lifestyle factors that may affect your health.": {
       "comment": "Description for AI health category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alkoholkonsum und Rauchstatus. Damit versteht Bud Lebensstilfaktoren, die deine Gesundheit beeinflussen können."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -49,6 +67,12 @@
     "Body Metrics": {
       "comment": "Display name for AI health category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Körperwerte"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -60,6 +84,12 @@
     "Body composition, weight, resting heart rate, vO2 Max, and HRV. Used to help Bud understand changes in your physiology and answer related questions.": {
       "comment": "Description for AI health category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Körperzusammensetzung, Gewicht, Ruheherzfrequenz, VO2max und HRV. Damit erkennt Bud Veränderungen deiner Physiologie und kann passende Fragen beantworten."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -77,6 +107,12 @@
     "Bowel movements and patterns. Used to help Bud answer questions about digestive health and provide personalized insights.": {
       "comment": "Description for AI health category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stuhlgang und Muster. Damit beantwortet Bud Fragen zur Verdauungsgesundheit und liefert persönliche Erkenntnisse."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -94,6 +130,12 @@
     "Calendar Events": {
       "comment": "Display name for AI health category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kalendereinträge"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -105,6 +147,12 @@
     "Cycle Phase Tip": {
       "comment": "Display name for today section",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tipp zur Zyklusphase"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -116,6 +164,12 @@
     "Cycle tracking and related data. Used to help Bud answer questions about menstrual health and provide personalized insights.": {
       "comment": "Description for AI health category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zyklustracking und zugehörige Daten. Damit beantwortet Bud Fragen zur Menstruationsgesundheit und liefert persönliche Erkenntnisse."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -133,6 +187,12 @@
     "Demographics": {
       "comment": "Display name for AI health category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demografische Daten"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -144,6 +204,12 @@
     "Digestive Health": {
       "comment": "Display name for AI health category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verdauungsgesundheit"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -155,6 +221,12 @@
     "Evening": {
       "comment": "Display name for time mode",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abend"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -166,6 +238,12 @@
     "Events from your selected calendars. Used to help Bud understand your schedule context and answer related questions.": {
       "comment": "Description for AI health category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Termine aus den von dir gewählten Kalendern. Damit berücksichtigt Bud deinen Tagesablauf und beantwortet passende Fragen."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -183,6 +261,12 @@
     "Goals": {
       "comment": "Display name for AI health category\nDisplay name for today section",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ziele"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -194,6 +278,12 @@
     "Insights": {
       "comment": "Display name for today section",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erkenntnisse"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -205,6 +295,12 @@
     "Lifestyle": {
       "comment": "Display name for AI health category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lebensstil"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -216,6 +312,12 @@
     "Location": {
       "comment": "Display name for AI health category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Standort"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -227,6 +329,12 @@
     "Meals, calories, macros, and water intake. Used to help Bud answer questions about your nutrition and provide personalized insights.": {
       "comment": "Description for AI health category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mahlzeiten, Kalorien, Makros und Wasserzufuhr. Damit beantwortet Bud Fragen zu deiner Ernährung und liefert persönliche Erkenntnisse."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -244,6 +352,12 @@
     "Menstrual Health": {
       "comment": "Display name for AI health category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menstruationsgesundheit"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -255,6 +369,12 @@
     "Morning": {
       "comment": "Display name for time mode",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Morgen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -266,6 +386,12 @@
     "Night": {
       "comment": "Display name for time mode",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nacht"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -277,6 +403,12 @@
     "Nutrition": {
       "comment": "Display name for AI health category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ernährung"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -288,6 +420,12 @@
     "Period Forecast": {
       "comment": "Display name for today section",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Periodenprognose"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -299,6 +437,12 @@
     "Physical Activity": {
       "comment": "Display name for AI health category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Körperliche Aktivität"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -310,6 +454,12 @@
     "Reminders": {
       "comment": "Display name for today section",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerungen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -321,6 +471,12 @@
     "Sleep": {
       "comment": "Display name for AI health category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schlaf"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -332,6 +488,12 @@
     "Sleep Details": {
       "comment": "Display name for today section",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schlafdetails"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -343,6 +505,12 @@
     "Sleep duration, quality, and stages. Used to help Bud answer questions about your sleep patterns and provide personalized insights.": {
       "comment": "Description for AI health category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schlafdauer, -qualität und -phasen. Damit beantwortet Bud Fragen zu deinem Schlafverhalten und liefert persönliche Erkenntnisse."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -360,6 +528,12 @@
     "Steps, workouts, training load, and exercise data. Used to provide personalized activity insights and answer your activity-related questions.": {
       "comment": "Description for AI health category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schritte, Workouts, Trainingsbelastung und Bewegungsdaten. Damit erhältst du persönliche Aktivitätserkenntnisse und Antworten zu deinem Training."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -377,6 +551,12 @@
     "Stress and Mindfulness": {
       "comment": "Display name for AI health category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stress und Achtsamkeit"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -388,6 +568,12 @@
     "Stress levels and mindfulness activity. Used to help Bud answer questions about stress patterns and provide personalized insights.": {
       "comment": "Description for AI health category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stresslevel und Achtsamkeitsübungen. Damit beantwortet Bud Fragen zu deinen Stressmustern und liefert persönliche Erkenntnisse."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -405,6 +591,12 @@
     "Today's Advice": {
       "comment": "Display name for today section",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tipp des Tages"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -416,6 +608,12 @@
     "Today's Events": {
       "comment": "Display name for today section",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heutige Termine"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -427,6 +625,12 @@
     "Today's Weather": {
       "comment": "Display name for today section",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wetter heute"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -438,6 +642,12 @@
     "Tomorrow's Events": {
       "comment": "Display name for today section",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Termine morgen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -449,6 +659,12 @@
     "Tomorrow's Weather": {
       "comment": "Display name for today section",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wetter morgen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -460,6 +676,12 @@
     "Tonight's Sleep": {
       "comment": "Display name for today section",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schlaf heute Nacht"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -471,6 +693,12 @@
     "Weather": {
       "comment": "Display name for AI health category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wetter"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -482,6 +710,12 @@
     "Weather conditions for your location, but not your location itself. Used to help Bud understand external factors that may affect your health.": {
       "comment": "Description for AI health category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Wetterlage an deinem Standort, nicht der Standort selbst. Damit berücksichtigt Bud äußere Einflüsse auf deine Gesundheit."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -499,6 +733,12 @@
     "Your coarse location (city, state, country). Used to help Bud understand environmental context and provide location-aware insights, without knowing your exact position.": {
       "comment": "Description for AI health category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dein ungefährer Standort (Stadt, Region, Land). Damit berücksichtigt Bud dein Umfeld und liefert ortsbezogene Erkenntnisse, ohne deine genaue Position zu kennen."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -516,6 +756,12 @@
     "Your health goals and progress. Used to help Bud contextualize your questions and generate personalized suggestions.": {
       "comment": "Description for AI health category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Gesundheitsziele und Fortschritte. Damit ordnet Bud deine Fragen ein und macht persönliche Vorschläge."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",

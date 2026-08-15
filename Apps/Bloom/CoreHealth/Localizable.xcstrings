@@ -4,6 +4,12 @@
     "%@ Cal Basal\n%@ Cal Active": {
       "comment": "Activity level subtitle. Placeholders are basal and active calorie amounts.",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ kcal Grundumsatz\n%2$@ kcal aktiv"
+          }
+        },
         "en": {
           "stringUnit": {
             "state": "new",
@@ -21,6 +27,12 @@
     "6 Min Walk: %@m": {
       "comment": "Mobility subtitle line. The placeholder is a distance in metres.",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "6-Minuten-Gehtest: %@ m"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -32,6 +44,12 @@
     "American Football": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "American Football"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -43,6 +61,12 @@
     "Apple Watch Exercise Minutes": {
       "comment": "Display name for target metric",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Watch Trainingsminuten"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -54,6 +78,12 @@
     "Archery": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bogenschießen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -65,6 +95,12 @@
     "Asleep": {
       "comment": "Display name for category value sleep analysis",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schlafend"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -76,6 +112,12 @@
     "At Risk": {
       "comment": "Display name for heart health monthly summary",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gefährdet"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -87,6 +129,12 @@
     "Athlete": {
       "comment": "Display name for body composition monthly summary",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Athletisch"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -98,6 +146,12 @@
     "Australian Football": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Australian Football"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -109,6 +163,12 @@
     "Automatic": {
       "comment": "Display name for heart rate zone calculation mode",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatisch"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -120,6 +180,12 @@
     "Awake": {
       "comment": "Display name for category value sleep analysis",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wach"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -131,6 +197,12 @@
     "Badminton": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Badminton"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -142,6 +214,12 @@
     "Barre": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Barre"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -153,6 +231,12 @@
     "Baseball": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Baseball"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -164,6 +248,12 @@
     "Basketball": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Basketball"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -175,6 +265,12 @@
     "Beer Glass": {
       "comment": "Display name for container shape type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bierglas"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -186,6 +282,12 @@
     "Bike Distance": {
       "comment": "Display name for target metric",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Radstrecke"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -197,6 +299,12 @@
     "Bike Duration": {
       "comment": "Display name for target metric",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Raddauer"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -208,6 +316,12 @@
     "Blood pressure at this stage is significantly high, posing a greater risk for heart disease, stroke, and other complications. It often requires medication and lifestyle changes to control.": {
       "comment": "Description for blood pressure category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In diesem Stadium ist der Blutdruck deutlich erhöht und birgt ein höheres Risiko für Herzerkrankungen, Schlaganfälle und weitere Komplikationen. Meist sind Medikamente und Änderungen der Lebensgewohnheiten nötig, um ihn in den Griff zu bekommen."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -219,6 +333,12 @@
     "Blood pressure in this range is higher than normal but not yet in the high blood pressure range. It suggests that there may be an increased risk of developing hypertension.": {
       "comment": "Description for blood pressure category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein Blutdruck in diesem Bereich ist höher als normal, liegt aber noch nicht im Bluthochdruckbereich. Er deutet auf ein erhöhtes Risiko hin, Bluthochdruck zu entwickeln."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -230,6 +350,12 @@
     "Bowling": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bowling"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -247,6 +373,12 @@
     "Boxing": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Boxen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -258,6 +390,12 @@
     "Can": {
       "comment": "Display name for container shape type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dose"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -269,6 +407,12 @@
     "Cardio Dance": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cardio-Tanz"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -280,6 +424,12 @@
     "Cardio Workouts": {
       "comment": "Display name for target metric",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cardio-Workouts"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -291,6 +441,12 @@
     "Climbing": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klettern"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -302,6 +458,12 @@
     "Coffee Cup": {
       "comment": "Display name for container shape type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kaffeetasse"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -313,6 +475,12 @@
     "Concern": {
       "comment": "Display name for mobility monthly summary",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auffällig"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -324,6 +492,12 @@
     "Cooldown": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cool-down"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -335,6 +509,12 @@
     "Core Sleep": {
       "comment": "Display name for category value sleep analysis",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kernschlaf"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -346,6 +526,12 @@
     "Core Training": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rumpftraining"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -357,6 +543,12 @@
     "Cricket": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cricket"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -368,6 +560,12 @@
     "Cross Country Skiing": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skilanglauf"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -379,6 +577,12 @@
     "Cross Training": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cross-Training"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -390,6 +594,12 @@
     "Curling": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Curling"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -401,6 +611,12 @@
     "Current Smoker": {
       "comment": "Display name for smoking status",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Raucher"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -412,6 +628,12 @@
     "Custom HR": {
       "comment": "Display name for heart rate zone calculation mode",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eigene HF"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -423,6 +645,12 @@
     "Custom Zones": {
       "comment": "Display name for heart rate zone calculation mode",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eigene Zonen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -434,6 +662,12 @@
     "Cycling": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Radfahren"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -445,6 +679,12 @@
     "Dance": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tanzen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -456,6 +696,12 @@
     "Dance Inspired Training": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tanzinspiriertes Training"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -467,6 +713,12 @@
     "Deep Sleep": {
       "comment": "Display name for category value sleep analysis",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tiefschlaf"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -478,6 +730,12 @@
     "Dietary Calories": {
       "comment": "Display name for target metric",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nahrungskalorien"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -489,6 +747,12 @@
     "Disc Sports": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Disc-Sportarten"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -500,6 +764,12 @@
     "Double Support: %@%%": {
       "comment": "Mobility subtitle line. The placeholder is a percentage of time spent in double support.",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doppelte Standphase: %@ %%"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -511,6 +781,12 @@
     "Downhill Skiing": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ski alpin"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -522,6 +798,12 @@
     "Elevated": {
       "comment": "Display name for alcohol risk level\nDisplay name for blood pressure category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erhöht"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -533,6 +815,12 @@
     "Elliptical": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crosstrainer"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -544,6 +832,12 @@
     "Ended": {
       "comment": "Display name for workout session state",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beendet"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -555,6 +849,12 @@
     "Equestrian Sports": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reitsport"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -566,6 +866,12 @@
     "Espresso Cup": {
       "comment": "Display name for container shape type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Espressotasse"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -577,6 +883,12 @@
     "Essential Fat": {
       "comment": "Display name for body composition monthly summary",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Essenzielles Fett"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -588,6 +900,12 @@
     "Excellent": {
       "comment": "Display name for bowel movement summary\nDisplay name for heart health monthly summary\nDisplay name for mobility monthly summary",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ausgezeichnet"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -599,6 +917,12 @@
     "Exercise Effective": {
       "comment": "Subtitle for details",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Effektives Training"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -610,6 +934,12 @@
     "Exercise a couple times a week": {
       "comment": "Summary for activity level",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein paar Mal pro Woche Sport"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -621,6 +951,12 @@
     "Exercise almost every day": {
       "comment": "Summary for activity level",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fast täglich Sport"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -632,6 +968,12 @@
     "Exercise half the week": {
       "comment": "Summary for activity level",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "An der Hälfte der Woche Sport"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -643,6 +985,12 @@
     "Fair": {
       "comment": "Display name for bowel movement summary\nDisplay name for heart health monthly summary",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mäßig"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -654,6 +1002,12 @@
     "Female": {
       "comment": "Display name for biological sex",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weiblich"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -665,6 +1019,12 @@
     "Fencing": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fechten"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -676,6 +1036,12 @@
     "Fiber Intake": {
       "comment": "Display name for target metric",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ballaststoffzufuhr"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -687,6 +1053,12 @@
     "Fishing": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Angeln"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -698,6 +1070,12 @@
     "Fit": {
       "comment": "Display name for body composition monthly summary",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fit"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -709,6 +1087,12 @@
     "Fitness Gaming": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fitness-Gaming"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -720,6 +1104,12 @@
     "Flexibility": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beweglichkeit"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -731,6 +1121,12 @@
     "Follicular Phase": {
       "comment": "Display name for menstrual cycle phase",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Follikelphase"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -742,6 +1138,12 @@
     "Former Smoker": {
       "comment": "Display name for smoking status",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ehemaliger Raucher"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -753,6 +1155,12 @@
     "Functional Strength Training": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Funktionelles Krafttraining"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -764,6 +1172,12 @@
     "Gain Weight": {
       "comment": "Display name for health goal",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zunehmen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -775,6 +1189,12 @@
     "Glass": {
       "comment": "Display name for container shape type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Glas"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -786,6 +1206,12 @@
     "Golf": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Golf"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -797,6 +1223,12 @@
     "Good": {
       "comment": "Display name for bowel movement summary\nDisplay name for heart health monthly summary\nDisplay name for mobility monthly summary\nDisplay name for sleep vitals monthly summary",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gut"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -808,6 +1240,12 @@
     "Great": {
       "comment": "Display name for sleep vitals monthly summary",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sehr gut"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -819,6 +1257,12 @@
     "Gymnastics": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -830,6 +1274,12 @@
     "HIIT Workouts": {
       "comment": "Display name for target metric",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HIIT-Workouts"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -841,6 +1291,12 @@
     "Hand Cycling": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Handbike"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -852,6 +1308,12 @@
     "Handball": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Handball"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -863,6 +1325,12 @@
     "Healthy": {
       "comment": "Display name for body composition monthly summary\nDisplay name for heart health monthly summary",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gesund"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -874,6 +1342,12 @@
     "Heavy": {
       "comment": "Display name for category value vaginal bleeding",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stark"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -885,6 +1359,12 @@
     "High": {
       "comment": "Display name for activity level\nDisplay name for body composition monthly summary\nDisplay name for exercise effectiveness monthly summary\nDisplay name for stress monthly summary",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hoch"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -896,6 +1376,12 @@
     "High Confidence": {
       "comment": "Display name for biological age confidence",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hohe Zuverlässigkeit"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -907,6 +1393,12 @@
     "High Intensity Interval Training": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hochintensives Intervalltraining"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -918,6 +1410,12 @@
     "High Risk": {
       "comment": "Display name for alcohol risk level",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hohes Risiko"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -929,6 +1427,12 @@
     "Hiking": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wandern"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -940,6 +1444,12 @@
     "Hockey": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hockey"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -951,6 +1461,12 @@
     "Hunting": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jagen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -962,6 +1478,12 @@
     "Hypertension Stage 1": {
       "comment": "Display name for blood pressure category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bluthochdruck Stufe 1"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -973,6 +1495,12 @@
     "Hypertension Stage 2": {
       "comment": "Display name for blood pressure category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bluthochdruck Stufe 2"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -984,6 +1512,12 @@
     "Hypertensive Crisis": {
       "comment": "Display name for blood pressure category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypertensive Krise"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -995,6 +1529,12 @@
     "In Bed": {
       "comment": "Display name for category value sleep analysis",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Im Bett"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1006,6 +1546,12 @@
     "Individuals in this category have cardiovascular fitness below the median but are not in the lowest fitness category.": {
       "comment": "Summary for heart health monthly summary",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personen in dieser Kategorie haben eine Ausdauerleistung unter dem Median, liegen aber nicht in der untersten Kategorie."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1017,6 +1563,12 @@
     "Intense": {
       "comment": "Display name for activity level",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intensiv"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1028,6 +1580,12 @@
     "Intense exercise most days": {
       "comment": "Summary for activity level",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "An den meisten Tagen intensiver Sport"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1039,6 +1597,12 @@
     "Jump Rope": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seilspringen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1050,6 +1614,12 @@
     "Kickboxing": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kickboxen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1061,6 +1631,12 @@
     "Lacrosse": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lacrosse"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1078,6 +1654,12 @@
     "Light": {
       "comment": "Display name for activity level\nDisplay name for category value vaginal bleeding",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leicht"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1089,6 +1671,12 @@
     "Limited health data is available. Track more health metrics to get a more accurate biological age.": {
       "comment": "Description for biological age confidence",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Es liegen nur wenige Gesundheitsdaten vor. Erfasse mehr Werte, um dein biologisches Alter genauer zu bestimmen."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1100,6 +1688,12 @@
     "Little to no exercise": {
       "comment": "Summary for activity level",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wenig bis kein Sport"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1111,6 +1705,12 @@
     "Lose Weight": {
       "comment": "Display name for health goal",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abnehmen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1122,6 +1722,12 @@
     "Low": {
       "comment": "Display name for blood pressure category\nDisplay name for sleep vitals monthly summary",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niedrig"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1133,6 +1739,12 @@
     "Low Confidence": {
       "comment": "Display name for biological age confidence",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geringe Zuverlässigkeit"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1144,6 +1756,12 @@
     "Low Risk": {
       "comment": "Display name for alcohol risk level",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geringes Risiko"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1155,6 +1773,12 @@
     "Low blood pressure can be normal for some people, especially if they have no symptoms. However, when blood pressure drops too low, it can cause inadequate blood flow to the organs, leading to symptoms like dizziness, fainting, and in severe cases, shock.": {
       "comment": "Description for blood pressure category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein niedriger Blutdruck kann bei manchen Menschen normal sein, vor allem ohne Beschwerden. Sinkt er jedoch zu stark, können die Organe schlechter durchblutet werden - mit Symptomen wie Schwindel, Ohnmacht und in schweren Fällen einem Schock."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1166,6 +1790,12 @@
     "Luteal Phase": {
       "comment": "Display name for menstrual cycle phase",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lutealphase"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1177,6 +1807,12 @@
     "Maintain Weight": {
       "comment": "Display name for health goal",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gewicht halten"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1188,6 +1824,12 @@
     "Male": {
       "comment": "Display name for biological sex",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Männlich"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1199,6 +1841,12 @@
     "Martial Arts": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kampfsport"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1210,6 +1858,12 @@
     "Meditation Minutes": {
       "comment": "Display name for target metric",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meditationsminuten"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1221,6 +1875,12 @@
     "Medium": {
       "comment": "Display name for category value vaginal bleeding",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mittel"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1232,6 +1892,12 @@
     "Menstrual Phase": {
       "comment": "Display name for menstrual cycle phase",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menstruationsphase"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1243,6 +1909,12 @@
     "Mild": {
       "comment": "Display name for stress monthly summary",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leicht"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1254,6 +1926,12 @@
     "Mind and Body": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Körper und Geist"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1265,6 +1943,12 @@
     "Minimal": {
       "comment": "Display name for exercise effectiveness monthly summary",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minimal"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1276,6 +1960,12 @@
     "Mixed Cardio": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gemischtes Cardio"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1287,6 +1977,12 @@
     "Mixed Metabolic Cardio Training": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gemischtes metabolisches Cardiotraining"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1298,6 +1994,12 @@
     "Mobility & Flexibility": {
       "comment": "Display name for target metric",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mobilität und Beweglichkeit"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1309,6 +2011,12 @@
     "Moderate": {
       "comment": "Display name for activity level\nDisplay name for alcohol risk level\nDisplay name for exercise effectiveness monthly summary\nDisplay name for heart health monthly summary\nDisplay name for stress monthly summary",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moderat"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1320,6 +2028,12 @@
     "Moderate Confidence": {
       "comment": "Display name for biological age confidence",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mittlere Zuverlässigkeit"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1331,6 +2045,12 @@
     "Monitor Health": {
       "comment": "Display name for health goal",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gesundheit im Blick behalten"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1342,6 +2062,12 @@
     "Mug": {
       "comment": "Display name for container shape type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Becher"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1353,6 +2079,12 @@
     "Never Smoked": {
       "comment": "Display name for smoking status",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nie geraucht"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1364,6 +2096,12 @@
     "No Data": {
       "comment": "Subtitle for activity level summary",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Daten"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1375,6 +2113,12 @@
     "None": {
       "comment": "Display name for category value vaginal bleeding\nDisplay name for target metric",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1386,6 +2130,12 @@
     "Normal": {
       "comment": "Display name for blood pressure category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Normal"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1397,6 +2147,12 @@
     "Not Set": {
       "comment": "Display name for smoking status",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nicht festgelegt"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1408,6 +2164,12 @@
     "Not Started": {
       "comment": "Display name for workout session state",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nicht gestartet"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1419,6 +2181,12 @@
     "Optimal": {
       "comment": "Display name for heart health monthly summary",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Optimal"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1430,6 +2198,12 @@
     "Other": {
       "comment": "Display name for biological sex\nDisplay name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Andere"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1441,6 +2215,12 @@
     "Ovulation Phase": {
       "comment": "Display name for menstrual cycle phase",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eisprungphase"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1452,6 +2232,12 @@
     "Paddling": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paddeln"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1463,6 +2249,12 @@
     "Paused": {
       "comment": "Display name for workout session state",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausiert"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1474,6 +2266,12 @@
     "Picklebal": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pickleball"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1485,6 +2283,12 @@
     "Pilates": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pilates"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1496,6 +2300,12 @@
     "Play": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spielen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1507,6 +2317,12 @@
     "Poor": {
       "comment": "Display name for bowel movement summary\nDisplay name for heart health monthly summary\nDisplay name for mobility monthly summary\nDisplay name for sleep vitals monthly summary",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schlecht"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1518,6 +2334,12 @@
     "Prefer not to say": {
       "comment": "Display name for biological sex",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Angabe"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1529,6 +2351,12 @@
     "Preparation and Recovery": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vorbereitung und Erholung"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1540,6 +2368,12 @@
     "Prepared": {
       "comment": "Display name for workout session state",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bereit"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1551,6 +2385,12 @@
     "Protein Intake": {
       "comment": "Display name for target metric",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Proteinzufuhr"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1562,6 +2402,12 @@
     "REM Sleep": {
       "comment": "Display name for category value sleep analysis",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "REM-Schlaf"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1573,6 +2419,12 @@
     "Racquetball": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Racquetball"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1584,6 +2436,12 @@
     "Relaxed": {
       "comment": "Display name for stress monthly summary",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entspannt"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1595,6 +2453,12 @@
     "Rowing": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rudern"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1606,6 +2470,12 @@
     "Rugby": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rugby"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1617,6 +2487,12 @@
     "Run": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lauf"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1628,6 +2504,12 @@
     "Running": {
       "comment": "Display name for workout session state",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laufen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1639,6 +2521,12 @@
     "Running Distance": {
       "comment": "Display name for target metric",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laufstrecke"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1650,6 +2538,12 @@
     "Running Duration": {
       "comment": "Display name for target metric",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laufdauer"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1661,6 +2555,12 @@
     "Sailing": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Segeln"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1672,6 +2572,12 @@
     "Sedentary": {
       "comment": "Display name for activity level",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wenig aktiv"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1683,6 +2589,12 @@
     "Set each zone threshold individually": {
       "comment": "Description for heart rate zone calculation mode",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jeden Zonenschwellenwert einzeln festlegen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1694,6 +2606,12 @@
     "Set your max and resting heart rate, zones calculated as percentages": {
       "comment": "Description for heart rate zone calculation mode",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lege deine maximale und Ruheherzfrequenz fest; die Zonen werden prozentual berechnet"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1711,6 +2629,12 @@
     "Shaker": {
       "comment": "Display name for container shape type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shaker"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1722,6 +2646,12 @@
     "Shot Glass": {
       "comment": "Display name for container shape type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schnapsglas"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1733,6 +2663,12 @@
     "Skating Sports": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eislaufsport"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1744,6 +2680,12 @@
     "Snow Sports": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wintersport"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1755,6 +2697,12 @@
     "Snowboarding": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snowboarden"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1772,6 +2720,12 @@
     "Soccer": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fußball"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1789,6 +2743,12 @@
     "Social Dance": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gesellschaftstanz"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1800,6 +2760,12 @@
     "Softball": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Softball"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1811,6 +2777,12 @@
     "Squash": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Squash"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1822,6 +2794,12 @@
     "Stair Climbing": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Treppensteigen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1833,6 +2811,12 @@
     "Stairs": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Treppen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1844,6 +2828,12 @@
     "Step Training": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Step-Training"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1855,6 +2845,12 @@
     "Steps": {
       "comment": "Display name for target metric",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schritte"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1866,6 +2862,12 @@
     "Stopped": {
       "comment": "Display name for workout session state",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gestoppt"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1877,6 +2879,12 @@
     "Strength Training": {
       "comment": "Display name for target metric",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Krafttraining"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1888,6 +2896,12 @@
     "Sufficient": {
       "comment": "Display name for exercise effectiveness monthly summary",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ausreichend"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1899,6 +2913,12 @@
     "Surfing Sports": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Surfen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1910,6 +2930,12 @@
     "Swim Bike Run": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Triathlon"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1921,6 +2947,12 @@
     "Swimming": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schwimmen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1932,6 +2964,12 @@
     "Table Tennis": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tischtennis"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1943,6 +2981,12 @@
     "Tai Chi": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tai-Chi"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1954,6 +2998,12 @@
     "Target Heart Rate Zone 1": {
       "comment": "Display name for target metric",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ziel-Herzfrequenzzone 1"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1965,6 +3015,12 @@
     "Target Heart Rate Zone 2": {
       "comment": "Display name for target metric",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ziel-Herzfrequenzzone 2"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1976,6 +3032,12 @@
     "Target Heart Rate Zone 3": {
       "comment": "Display name for target metric",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ziel-Herzfrequenzzone 3"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1987,6 +3049,12 @@
     "Target Heart Rate Zone 4": {
       "comment": "Display name for target metric",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ziel-Herzfrequenzzone 4"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1998,6 +3066,12 @@
     "Target Heart Rate Zone 5": {
       "comment": "Display name for target metric",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ziel-Herzfrequenzzone 5"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2009,6 +3083,12 @@
     "Tea Cup": {
       "comment": "Display name for container shape type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Teetasse"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2020,6 +3100,12 @@
     "Tennis": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tennis"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2031,6 +3117,12 @@
     "This is a critical condition where blood pressure is dangerously high, requiring immediate medical attention to prevent severe damage to organs.": {
       "comment": "Description for blood pressure category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Das ist ein kritischer Zustand mit gefährlich hohem Blutdruck, der sofortige ärztliche Behandlung erfordert, um schwere Organschäden zu verhindern."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2042,6 +3134,12 @@
     "This level indicates poor cardiovascular fitness and is associated with a higher risk of cardiovascular diseases and other health issues.": {
       "comment": "Summary for heart health monthly summary",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieses Niveau steht für eine schlechte Ausdauerleistung und geht mit einem höheren Risiko für Herz-Kreislauf-Erkrankungen und andere Gesundheitsprobleme einher."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2053,6 +3151,12 @@
     "This level represents better-than-average cardiovascular fitness and suggests a lower risk of cardiovascular diseases.": {
       "comment": "Summary for heart health monthly summary",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieses Niveau steht für eine überdurchschnittliche Ausdauerleistung und deutet auf ein geringeres Risiko für Herz-Kreislauf-Erkrankungen hin."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2064,6 +3168,12 @@
     "This range is considered optimal and indicates that the heart is functioning well without excessive strain on the blood vessels.": {
       "comment": "Description for blood pressure category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieser Bereich gilt als optimal und zeigt, dass das Herz gut arbeitet, ohne die Blutgefäße übermäßig zu belasten."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2075,6 +3185,12 @@
     "This stage indicates the beginning of high blood pressure, where there’s increased force on the arteries, potentially leading to health issues if not managed.": {
       "comment": "Description for blood pressure category",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieses Stadium markiert den Beginn von Bluthochdruck: Der Druck auf die Arterien steigt und kann ohne Behandlung zu gesundheitlichen Problemen führen."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2086,6 +3202,12 @@
     "This top level is characterized by superior cardiovascular fitness, often indicating excellent overall health and a lower risk of heart-related conditions.": {
       "comment": "Summary for heart health monthly summary",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieses Spitzenniveau steht für eine hervorragende Ausdauerleistung, meist ein Zeichen für sehr gute Gesundheit und ein geringeres Risiko für Herzerkrankungen."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2097,6 +3219,12 @@
     "Time in Daylight": {
       "comment": "Display name for target metric",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zeit im Tageslicht"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2108,6 +3236,12 @@
     "Track and Field": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leichtathletik"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2119,6 +3253,12 @@
     "Traditional Strength Training": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klassisches Krafttraining"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2130,6 +3270,12 @@
     "Transition": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Übergang"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2141,6 +3287,12 @@
     "Tumbler": {
       "comment": "Display name for container shape type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trinkbecher"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2152,6 +3304,12 @@
     "Underwater Diving": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tauchen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2163,6 +3321,12 @@
     "Unknown": {
       "comment": "Display name for biological sex\nDisplay name for body composition monthly summary\nDisplay name for category value sleep analysis\nDisplay name for category value vaginal bleeding\nDisplay name for menstrual cycle phase\nDisplay name for mobility monthly summary\nDisplay name for target metric\nDisplay name for workout session state",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unbekannt"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2174,6 +3338,12 @@
     "Unspecified": {
       "comment": "Display name for category value vaginal bleeding",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nicht angegeben"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2185,6 +3355,12 @@
     "Very Poor": {
       "comment": "Short display name for bowel movement summary",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sehr schlecht"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2196,6 +3372,12 @@
     "Volleyball": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volleyball"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2207,6 +3389,12 @@
     "Walk": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gehen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2218,6 +3406,12 @@
     "Walking + Running Distance": {
       "comment": "Display name for target metric",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geh- und Laufstrecke"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2229,6 +3423,12 @@
     "Water Bottle": {
       "comment": "Display name for container shape type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trinkflasche"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2240,6 +3440,12 @@
     "Water Fitness": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wassergymnastik"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2257,6 +3463,12 @@
     "Water Intake": {
       "comment": "Display name for target metric",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wasserzufuhr"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2268,6 +3480,12 @@
     "Water Polo": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wasserball"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2279,6 +3497,12 @@
     "Water Sports": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wassersport"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2290,6 +3514,12 @@
     "Wheelchair Run Pace": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rollstuhl (Lauftempo)"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2301,6 +3531,12 @@
     "Wheelchair Walk Pace": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rollstuhl (Gehtempo)"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2312,6 +3548,12 @@
     "Wine Glass": {
       "comment": "Display name for container shape type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weinglas"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2323,6 +3565,12 @@
     "Workout Duration": {
       "comment": "Display name for target metric",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trainingsdauer"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2334,6 +3582,12 @@
     "Wrestling": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ringen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2345,6 +3599,12 @@
     "Yoga": {
       "comment": "Display name for workout activity type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yoga"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2356,6 +3616,12 @@
     "Your biological age is based on a moderate amount of health data. Adding more metrics will improve accuracy.": {
       "comment": "Description for biological age confidence",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dein biologisches Alter beruht auf einer mittleren Menge an Gesundheitsdaten. Mit weiteren Werten wird es genauer."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2373,6 +3639,12 @@
     "Your biological age is calculated using most of your available health metrics.": {
       "comment": "Description for biological age confidence",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dein biologisches Alter wird aus den meisten deiner verfügbaren Gesundheitswerte berechnet."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2390,6 +3662,12 @@
     "Zones calculated from your age and resting heart rate from HealthKit": {
       "comment": "Description for heart rate zone calculation mode",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zonen werden aus deinem Alter und deiner Ruheherzfrequenz aus HealthKit berechnet"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",

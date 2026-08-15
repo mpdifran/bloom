@@ -46,8 +46,15 @@ def main():
             catalog = json.load(handle)
 
         for key, entry in catalog.get("strings", {}).items():
-            source = signature(key)
-            for language, localization in entry.get("localizations", {}).items():
+            localizations = entry.get("localizations", {})
+
+            # Most keys are the English text itself, so the key carries the placeholders. Keys that
+            # are identifiers instead - the loc-keys the backend sends via APNs - carry none, and
+            # their English localization is the real source string.
+            english = localizations.get("en", {}).get("stringUnit", {}).get("value")
+            source = signature(english if english is not None else key)
+
+            for language, localization in localizations.items():
                 if language == "en":
                     continue
                 value = localization.get("stringUnit", {}).get("value")

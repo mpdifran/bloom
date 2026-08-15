@@ -1519,6 +1519,9 @@
 				Base,
 				fr,
 				"fr-CA",
+				de,
+				nl,
+				es,
 			);
 			mainGroup = FFACBAD02BAC7788006AAD0B;
 			packageReferences = (

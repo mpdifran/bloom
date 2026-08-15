@@ -15,6 +15,12 @@
     },
     "%@ yrs": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ J."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -25,6 +31,12 @@
     },
     "Action": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktion"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -35,6 +47,12 @@
     },
     "Actions": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktionen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -45,6 +63,12 @@
     },
     "Actions Widget": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktionen-Widget"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -55,6 +79,12 @@
     },
     "Bio Age": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bio-Alter"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -65,6 +95,12 @@
     },
     "Biological Age": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Biologisches Alter"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -75,6 +111,12 @@
     },
     "Choose which action to open.": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle die Aktion, die geöffnet werden soll."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -85,6 +127,12 @@
     },
     "Choose which goal to display.": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle das Ziel, das angezeigt werden soll."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -95,6 +143,12 @@
     },
     "Complete Reminder": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerung abhaken"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -105,6 +159,12 @@
     },
     "Goal": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ziel"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -115,6 +175,12 @@
     },
     "Goal Widget": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ziel-Widget"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -125,6 +191,12 @@
     },
     "Heart Rate": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herzfrequenz"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -135,6 +207,12 @@
     },
     "Marks a reminder as completed.": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hakt eine Erinnerung als erledigt ab."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -145,6 +223,12 @@
     },
     "No Goal": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kein Ziel"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -155,6 +239,12 @@
     },
     "No Reminders": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Erinnerungen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -165,6 +255,12 @@
     },
     "Occurrence ID": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vorkommens-ID"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -175,6 +271,12 @@
     },
     "Quickly open actions or a specific action.": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Öffne schnell die Aktionen oder eine bestimmte Aktion."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -185,6 +287,12 @@
     },
     "Quickly open your workouts.": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Öffne schnell deine Workouts."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -201,6 +309,12 @@
     },
     "Reminder": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerung"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -211,6 +325,12 @@
     },
     "Reminder ID": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerungs-ID"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -221,6 +341,12 @@
     },
     "See your biological age at a glance.": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sieh dein biologisches Alter auf einen Blick."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -237,6 +363,12 @@
     },
     "See your next upcoming reminder.": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sieh deine nächste anstehende Erinnerung."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -253,6 +385,12 @@
     },
     "Slot": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Platz"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -263,6 +401,12 @@
     },
     "Steps": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schritte"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -273,6 +417,12 @@
     },
     "Track your goal progress at a glance.": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verfolge deinen Zielfortschritt auf einen Blick."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -289,6 +439,12 @@
     },
     "View today's steps and distance.": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sieh dir Schritte und Strecke von heute an."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -305,6 +461,12 @@
     },
     "View your latest heart rate with today's range.": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sieh deine aktuelle Herzfrequenz samt heutiger Spanne."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -321,6 +483,12 @@
     },
     "Workouts": {
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workouts"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",

@@ -4,6 +4,12 @@
     "AMRAP": {
       "comment": "Display name for workout set",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AMRAP"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -15,6 +21,12 @@
     "Activity Level": {
       "comment": "Display name for vital model",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktivitätsniveau"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -26,6 +38,12 @@
     "Automatically complete the reminder when you log a HIIT workout.": {
       "comment": "Description for reminder trigger type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerung automatisch abhaken, wenn du ein HIIT-Workout einträgst."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -43,6 +61,12 @@
     "Automatically complete the reminder when you log a cardio workout.": {
       "comment": "Description for reminder trigger type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerung automatisch abhaken, wenn du ein Cardio-Workout einträgst."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -60,6 +84,12 @@
     "Automatically complete the reminder when you log a strength training workout.": {
       "comment": "Description for reminder trigger type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerung automatisch abhaken, wenn du ein Krafttraining einträgst."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -77,6 +107,12 @@
     "Automatically complete the reminder when you log blood pressure.": {
       "comment": "Description for reminder trigger type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerung automatisch abhaken, wenn du deinen Blutdruck einträgst."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -94,6 +130,12 @@
     "Automatically complete the reminder when you log water intake.": {
       "comment": "Description for reminder trigger type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerung automatisch abhaken, wenn du deine Wasserzufuhr einträgst."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -111,6 +153,12 @@
     "Automatically complete the reminder when you log yoga, pilates, or flexibility.": {
       "comment": "Description for reminder trigger type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerung automatisch abhaken, wenn du Yoga, Pilates oder Beweglichkeitstraining einträgst."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -128,6 +176,12 @@
     "Automatically complete the reminder when you log your body weight.": {
       "comment": "Description for reminder trigger type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerung automatisch abhaken, wenn du dein Gewicht einträgst."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -145,6 +199,12 @@
     "Barbell": {
       "comment": "Display name for equipment",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Langhantel"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -156,6 +216,12 @@
     "Batbell": {
       "comment": "Display name for equipment",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Langhantel"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -167,6 +233,12 @@
     "Bike": {
       "comment": "Display name for equipment",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fahrrad"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -178,6 +250,12 @@
     "Body Composition": {
       "comment": "Display name for vital model",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Körperzusammensetzung"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -189,6 +267,12 @@
     "Bowel Movements": {
       "comment": "Display name for vital model",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stuhlgang"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -200,6 +284,12 @@
     "Cardio Fitness": {
       "comment": "Display name for vital model",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ausdauerfitness"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -211,6 +301,12 @@
     "Chin-up Bar": {
       "comment": "Display name for equipment",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klimmzugstange"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -222,6 +318,12 @@
     "Cool-Down": {
       "comment": "Display name for workout set",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cool-down"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -233,6 +335,12 @@
     "Cycle Tracking": {
       "comment": "Display name for vital model",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zyklustracking"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -244,6 +352,12 @@
     "Dumbbells": {
       "comment": "Display name for equipment",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kurzhanteln"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -255,6 +369,12 @@
     "EMOM": {
       "comment": "Display name for workout set",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EMOM"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -266,6 +386,12 @@
     "Elliptical": {
       "comment": "Display name for equipment",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crosstrainer"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -277,6 +403,12 @@
     "Exercise Effectiveness": {
       "comment": "Display name for vital model",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trainingseffektivität"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -288,6 +420,12 @@
     "Heart Health": {
       "comment": "Display name for vital model",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herzgesundheit"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -299,6 +437,12 @@
     "Kettlebell": {
       "comment": "Display name for equipment",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kettlebell"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -310,6 +454,12 @@
     "Lifestyle": {
       "comment": "Display name for vital model",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lebensstil"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -321,6 +471,12 @@
     "Log Blood Pressure": {
       "comment": "Display name for reminder trigger type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blutdruck eintragen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -332,6 +488,12 @@
     "Log Cardio Workout": {
       "comment": "Display name for reminder trigger type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cardio-Workout eintragen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -343,6 +505,12 @@
     "Log Food": {
       "comment": "Display name for side effect type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Essen eintragen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -354,6 +522,12 @@
     "Log HIIT Workout": {
       "comment": "Display name for reminder trigger type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HIIT-Workout eintragen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -365,6 +539,12 @@
     "Log Mobility/Flexibility": {
       "comment": "Display name for reminder trigger type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mobilität/Beweglichkeit eintragen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -376,6 +556,12 @@
     "Log Strength Training": {
       "comment": "Display name for reminder trigger type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Krafttraining eintragen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -387,6 +573,12 @@
     "Log Water": {
       "comment": "Display name for reminder trigger type\nDisplay name for side effect type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wasser eintragen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -398,6 +590,12 @@
     "Log Weight": {
       "comment": "Display name for reminder trigger type",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gewicht eintragen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -409,6 +607,12 @@
     "Nutrition": {
       "comment": "Display name for vital model",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ernährung"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -420,6 +624,12 @@
     "Resistance Band": {
       "comment": "Display name for equipment",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widerstandsband"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -431,6 +641,12 @@
     "Rowing Machine": {
       "comment": "Display name for equipment",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rudergerät"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -442,6 +658,12 @@
     "Ski Machine": {
       "comment": "Display name for equipment",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skiergometer"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -453,6 +675,12 @@
     "Sleep Quality": {
       "comment": "Display name for vital model",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schlafqualität"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -464,6 +692,12 @@
     "Standard": {
       "comment": "Display name for workout set",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Standard"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -475,6 +709,12 @@
     "Stationary Bike": {
       "comment": "Display name for equipment",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heimtrainer"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -486,6 +726,12 @@
     "Stress Levels": {
       "comment": "Display name for vital model",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stresslevel"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -497,6 +743,12 @@
     "Tabata": {
       "comment": "Display name for workout set",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tabata"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -508,6 +760,12 @@
     "Treadmill": {
       "comment": "Display name for equipment",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laufband"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -519,6 +777,12 @@
     "Warm-Up": {
       "comment": "Display name for workout set",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aufwärmen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -530,6 +794,12 @@
     "Weighted Vest": {
       "comment": "Display name for equipment",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gewichtsweste"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -541,6 +811,12 @@
     "Yoga Mat": {
       "comment": "Display name for equipment",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yogamatte"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
