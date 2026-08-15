@@ -31,6 +31,12 @@
             "state": "translated",
             "value": "Marquer automatiquement le rappel comme terminé lorsque vous enregistrez une séance de HIIT."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marquer automatiquement le rappel comme terminé lorsque tu enregistres une séance de HIIT."
+          }
         }
       }
     },
@@ -41,6 +47,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Marquer automatiquement le rappel comme terminé lorsque vous enregistrez une séance de cardio."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marquer automatiquement le rappel comme terminé lorsque tu enregistres une séance de cardio."
           }
         }
       }
@@ -53,6 +65,12 @@
             "state": "translated",
             "value": "Marquer automatiquement le rappel comme terminé lorsque vous enregistrez une séance de musculation."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marquer automatiquement le rappel comme terminé lorsque tu enregistres une séance de musculation."
+          }
         }
       }
     },
@@ -63,6 +81,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Marquer automatiquement le rappel comme terminé lorsque vous enregistrez votre tension artérielle."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marquer automatiquement le rappel comme terminé lorsque tu enregistres ta tension artérielle."
           }
         }
       }
@@ -75,6 +99,12 @@
             "state": "translated",
             "value": "Marquer automatiquement le rappel comme terminé lorsque vous enregistrez votre consommation d'eau."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marquer automatiquement le rappel comme terminé lorsque tu enregistres ta consommation d'eau."
+          }
         }
       }
     },
@@ -86,6 +116,12 @@
             "state": "translated",
             "value": "Marquer automatiquement le rappel comme terminé lorsque vous enregistrez du yoga, du Pilates ou de la souplesse."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marquer automatiquement le rappel comme terminé lorsque tu enregistres du yoga, du Pilates ou de la souplesse."
+          }
         }
       }
     },
@@ -96,6 +132,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Marquer automatiquement le rappel comme terminé lorsque vous enregistrez votre poids."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marquer automatiquement le rappel comme terminé lorsque tu enregistres ton poids."
           }
         }
       }

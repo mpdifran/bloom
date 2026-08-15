@@ -1699,6 +1699,12 @@
             "state": "translated",
             "value": "Définissez votre FC maximale et au repos ; les zones sont calculées en pourcentages"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Définisse ton FC maximale et au repos ; les zones sont calculées en pourcentages"
+          }
         }
       }
     },
@@ -2355,6 +2361,12 @@
             "state": "translated",
             "value": "Votre âge biologique repose sur un nombre modéré de données de santé. Ajouter d'autres mesures en améliorera la précision."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton âge biologique repose sur un nombre modéré de données de santé. Ajouter d'autres mesures en améliorera la précision."
+          }
         }
       }
     },
@@ -2366,6 +2378,12 @@
             "state": "translated",
             "value": "Votre âge biologique est calculé à partir de la plupart de vos mesures de santé disponibles."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton âge biologique est calculé à partir de la plupart de tes mesures de santé disponibles."
+          }
         }
       }
     },
@@ -2376,6 +2394,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Zones calculées à partir de votre âge et de votre fréquence cardiaque au repos issus de HealthKit"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zones calculées à partir de ton âge et de ta fréquence cardiaque au repos issus de HealthKit"
           }
         }
       }

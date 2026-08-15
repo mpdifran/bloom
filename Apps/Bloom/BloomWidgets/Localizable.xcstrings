@@ -335,6 +335,12 @@
             "state": "translated",
             "value": "Obtenez des analyses personnalisées sur ce qui stimule (ou plombe) votre santé. Une véritable radiographie de votre bien-être."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obtiens des analyses personnalisées sur ce qui stimule (ou plombe) ta santé. Une véritable radiographie de ton bien-être."
+          }
         }
       }
     },
@@ -650,6 +656,12 @@
             "state": "translated",
             "value": "Ouvrez l'app pour charger votre résumé personnalisé."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvre l'app pour charger ton résumé personnalisé."
+          }
         }
       }
     },
@@ -669,6 +681,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ouvre une constante précise pour consulter vos données de santé."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvre une constante précise pour consulter tes données de santé."
           }
         }
       }
@@ -710,6 +728,12 @@
             "state": "translated",
             "value": "Enregistrez rapidement vos données personnelles."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistre rapidement tes données personnelles."
+          }
         }
       }
     },
@@ -729,6 +753,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Consultez le résumé quotidien de votre santé par Bud."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consulte le résumé quotidien de ta santé par Bud."
           }
         }
       }
@@ -860,6 +890,12 @@
             "state": "translated",
             "value": "Suivez visuellement l'atteinte de votre objectif dans le temps."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suis visuellement l'atteinte de ton objectif dans le temps."
+          }
         }
       }
     },
@@ -869,6 +905,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Suivez vos pas et votre distance de marche."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suis tes pas et ton distance de marche."
           }
         }
       }
@@ -919,6 +961,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Consultez votre conseil du jour ou vos recommandations pour le sommeil de cette nuit."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consulte ton conseil du jour ou tes recommandations pour le sommeil de cette nuit."
           }
         }
       }

@@ -549,6 +549,12 @@
             "state": "translated",
             "value": "Le suivi des règles nécessite l'accès aux données Santé. Activez-le dans l'app Santé sur votre iPhone."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le suivi des règles nécessite l'accès aux données Santé. Active-le dans l'app Santé sur ton iPhone."
+          }
         }
       }
     },
@@ -660,6 +666,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Définissez votre FC maximale et au repos ; les zones sont calculées automatiquement"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Définisse ton FC maximale et au repos ; les zones sont calculées automatiquement"
           }
         }
       }
@@ -811,6 +823,12 @@
             "state": "translated",
             "value": "Qu'avez-vous mangé ?"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qu'as-tu mangé ?"
+          }
         }
       }
     },
@@ -841,6 +859,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vous n'avez aucun rappel aujourd'hui."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu n'as aucun rappel aujourd'hui."
           }
         }
       }
@@ -882,6 +906,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Zones calculées à partir de votre âge et de votre fréquence cardiaque au repos"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zones calculées à partir de ton âge et de ta fréquence cardiaque au repos"
           }
         }
       }

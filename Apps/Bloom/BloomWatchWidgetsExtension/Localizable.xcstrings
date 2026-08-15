@@ -190,6 +190,12 @@
             "state": "translated",
             "value": "Ouvrez rapidement vos séances."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvre rapidement tes séances."
+          }
         }
       }
     },
@@ -220,6 +226,12 @@
             "state": "translated",
             "value": "Consultez votre âge biologique d'un coup d'œil."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consulte ton âge biologique d'un coup d'œil."
+          }
         }
       }
     },
@@ -229,6 +241,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Consultez votre prochain rappel."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consulte ton prochain rappel."
           }
         }
       }
@@ -260,6 +278,12 @@
             "state": "translated",
             "value": "Suivez votre progression d'un coup d'œil."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suis ta progression d'un coup d'œil."
+          }
         }
       }
     },
@@ -270,6 +294,12 @@
             "state": "translated",
             "value": "Consultez vos pas et votre distance du jour."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consulte tes pas et ton distance du jour."
+          }
         }
       }
     },
@@ -279,6 +309,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Consultez votre dernière fréquence cardiaque et l'amplitude du jour."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consulte ton dernière fréquence cardiaque et l'amplitude du jour."
           }
         }
       }

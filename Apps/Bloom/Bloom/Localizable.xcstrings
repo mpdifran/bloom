@@ -723,6 +723,12 @@
             "state": "translated",
             "value": "Une mauvaise nuit peut faire grimper votre niveau de stress le lendemain. Essayez de dormir suffisamment chaque nuit pour garder votre stress au plus bas."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une mauvaise nuit peut faire grimper ton niveau de stress le lendemain. Essaie de dormir suffisamment chaque nuit pour garder ton stress au plus bas."
+          }
         }
       }
     },
@@ -733,6 +739,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Analyses par IA de vos résultats de surveillance. Les calculs de surveillance se font entièrement sur l'appareil."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Analyses par IA de tes résultats de surveillance. Les calculs de surveillance se font entièrement sur l'appareil."
           }
         }
       }
@@ -810,6 +822,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "D'après vos données, vous êtes %2$@ et vous avez %1$lld ans. Est-ce exact ?"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "D'après tes données, tu es %2$@ et tu as %1$lld ans. Est-ce exact ?"
           }
         }
       }
@@ -1032,6 +1050,12 @@
             "state": "translated",
             "value": "Ajoutez des précisions sur votre repas."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajoute des précisions sur ton repas."
+          }
         }
       }
     },
@@ -1051,6 +1075,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ajoute jusqu'à 8 ans à votre âge biologique"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajoute jusqu'à 8 ans à ton âge biologique"
           }
         }
       }
@@ -1184,6 +1214,12 @@
             "state": "translated",
             "value": "Tous les calculs sont effectués sur votre appareil"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tous les calculs sont effectués sur ton appareil"
+          }
         }
       }
     },
@@ -1234,6 +1270,12 @@
             "state": "translated",
             "value": "Autorisez l'accès pour filtrer vos calendriers ici."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autorise l'accès pour filtrer tes calendriers ici."
+          }
         }
       }
     },
@@ -1244,6 +1286,12 @@
             "state": "translated",
             "value": "Autorisez l'accès à votre calendrier pour afficher vos événements ici."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autorise l'accès à ton calendrier pour afficher tes événements ici."
+          }
         }
       }
     },
@@ -1253,6 +1301,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Autorisez l'accès à votre position pour consulter la météo locale."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autorise l'accès à ta position pour consulter la météo locale."
           }
         }
       }
@@ -1334,6 +1388,12 @@
             "state": "translated",
             "value": "Analyse de vos données personnelles…"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Analyse de tes données personnelles…"
+          }
         }
       }
     },
@@ -1410,6 +1470,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Public : %1$@ (vous : %2$@)"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Public : %1$@ (tu : %2$@)"
           }
         }
       }
@@ -1850,6 +1916,12 @@
             "state": "translated",
             "value": "Bloom estime votre véritable âge biologique à partir de vos habitudes de santé. Petit indice : il est peut-être plus bas que vous ne le pensez."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloom estime ton véritable âge biologique à partir de tes habitudes de santé. Petit indice : il est peut-être plus bas que tu ne le penses."
+          }
         }
       }
     },
@@ -1859,6 +1931,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bloom ne remplace pas un avis médical professionnel. Consultez toujours votre médecin en premier lieu."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloom ne remplace pas un avis médical professionnel. Consulte toujours ton médecin en premier lieu."
           }
         }
       }
@@ -1870,6 +1948,12 @@
             "state": "translated",
             "value": "Bloom apprend vos valeurs de référence pour le stress, la récupération et le sommeil, puis vous alerte lorsque quelque chose cloche. Il peut même repérer les premiers signes d'une maladie avant que vous ne la ressentiez."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloom apprend tes valeurs de référence pour le stress, la récupération et le sommeil, puis t'alerte lorsque quelque chose cloche. Il peut même repérer les premiers signes d'une maladie avant que tu ne la ressentes."
+          }
         }
       }
     },
@@ -1879,6 +1963,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bloom apprend vos valeurs de référence pour le stress, la récupération et le sommeil, puis vous alerte lorsque quelque chose cloche."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloom apprend tes valeurs de référence pour le stress, la récupération et le sommeil, puis t'alerte lorsque quelque chose cloche."
           }
         }
       }
@@ -1900,6 +1990,12 @@
             "state": "translated",
             "value": "Bloom utilise les catégories de données personnelles que vous activez pour formuler des réponses personnalisées à vos questions de santé et de bien-être, et pour générer des analyses personnalisées."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloom utilise les catégories de données personnelles que tu actives pour formuler des réponses personnalisées à tes questions de santé et de bien-être, et pour générer des analyses personnalisées."
+          }
         }
       }
     },
@@ -1909,6 +2005,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bloom combine vos données personnelles d'Apple Santé et l'IA pour produire des analyses générales de bien-être. Ces analyses sont fournies à titre informatif uniquement et ne constituent pas un avis médical.\n\nConsultez toujours un professionnel de santé qualifié avant de prendre une décision médicale."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloom combine tes données personnelles d'Apple Santé et l'IA pour produire des analyses générales de bien-être. Ces analyses sont fournies à titre informatif uniquement et ne constituent pas un avis médical.\n\nConsulte toujours un professionnel de santé qualifié avant de prendre une décision médicale."
           }
         }
       }
@@ -2049,6 +2151,12 @@
             "state": "translated",
             "value": "Bud ne peut pas vous aider pour le moment"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bud ne peut pas t'aider pour le moment"
+          }
         }
       }
     },
@@ -2068,6 +2176,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bud retiendra les informations importantes que vous partagez avec lui."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bud retiendra les informations importantes que tu partages avec lui."
           }
         }
       }
@@ -2168,6 +2282,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Calcul de votre année Bloom…"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calcul de ton année Bloom…"
           }
         }
       }
@@ -2279,6 +2399,12 @@
             "state": "translated",
             "value": "Célébrer l'atteinte de vos objectifs"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Célébrer l'atteinte de tes objectifs"
+          }
         }
       }
     },
@@ -2349,6 +2475,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Discutez avec Bud de votre santé et de votre bien-être."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discute avec Bud de ta santé et de ton bien-être."
           }
         }
       }
@@ -2848,6 +2980,12 @@
             "state": "translated",
             "value": "Créez votre compte Bloom"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crée ton compte Bloom"
+          }
         }
       }
     },
@@ -3251,6 +3389,12 @@
             "state": "translated",
             "value": "Décrivez ce que vous avez mangé"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Décris ce que tu as mangé"
+          }
         }
       }
     },
@@ -3260,6 +3404,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Décrivez votre objectif santé"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Décris ton objectif santé"
           }
         }
       }
@@ -3271,6 +3421,12 @@
             "state": "translated",
             "value": "Décrivez votre objectif santé"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Décris ton objectif santé"
+          }
         }
       }
     },
@@ -3280,6 +3436,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Décrivez votre repas"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Décris ton repas"
           }
         }
       }
@@ -3396,6 +3558,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Souhaitez-vous l'indiquer ?"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Souhaites-tu l'indiquer ?"
           }
         }
       }
@@ -3600,6 +3768,12 @@
             "state": "translated",
             "value": "Activez le mode de concentration Sommeil et portez votre Apple Watch la nuit pour suivre vos données de sommeil."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active le mode de concentration Sommeil et porte ton Apple Watch la nuit pour suivre tes données de sommeil."
+          }
         }
       }
     },
@@ -3609,6 +3783,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Activez le mode de concentration Sommeil et portez votre Apple Watch la nuit pour suivre vos horaires de sommeil."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active le mode de concentration Sommeil et porte ton Apple Watch la nuit pour suivre tes horaires de sommeil."
           }
         }
       }
@@ -3620,6 +3800,12 @@
             "state": "translated",
             "value": "Activez le mode de concentration Sommeil et portez votre Apple Watch la nuit pour suivre votre score de sommeil."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active le mode de concentration Sommeil et porte ton Apple Watch la nuit pour suivre ton score de sommeil."
+          }
         }
       }
     },
@@ -3630,6 +3816,12 @@
             "state": "translated",
             "value": "Activez le mode de concentration Sommeil et portez votre Apple Watch la nuit pour suivre vos phases de sommeil."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active le mode de concentration Sommeil et porte ton Apple Watch la nuit pour suivre tes phases de sommeil."
+          }
         }
       }
     },
@@ -3639,6 +3831,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Activez le mode de concentration Sommeil et portez votre Apple Watch la nuit pour suivre votre sommeil."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active le mode de concentration Sommeil et porte ton Apple Watch la nuit pour suivre ton sommeil."
           }
         }
       }
@@ -3680,6 +3878,12 @@
             "state": "translated",
             "value": "Le ratio énergétique compare votre énergie de base à votre DEJ (dépense énergétique journalière) pour une journée donnée. Plus il est élevé, plus vous avez été actif."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le ratio énergétique compare ton énergie de base à ton DEJ (dépense énergétique journalière) pour une journée donnée. Plus il est élevé, plus tu as été actif."
+          }
         }
       }
     },
@@ -3689,6 +3893,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bloom vous plaît ?"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloom te plaît ?"
           }
         }
       }
@@ -4170,6 +4380,12 @@
             "state": "translated",
             "value": "Soyez averti lorsqu'une surveillance santé requiert votre attention."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sois averti lorsqu'une surveillance santé requiert ton attention."
+          }
         }
       }
     },
@@ -4179,6 +4395,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Soyez averti lorsqu'une surveillance requiert votre attention. Les notifications ne sont envoyées que lorsqu'une surveillance passe en attention ou en alerte."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sois averti lorsqu'une surveillance requiert ton attention. Les notifications ne sont envoyées que lorsqu'une surveillance passe en attention ou en alerte."
           }
         }
       }
@@ -4190,6 +4412,12 @@
             "state": "translated",
             "value": "Obtenez des analyses personnalisées sur ce qui stimule (ou plombe) votre santé. Une véritable radiographie de votre bien-être."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obtiens des analyses personnalisées sur ce qui stimule (ou plombe) ta santé. Une véritable radiographie de ton bien-être."
+          }
         }
       }
     },
@@ -4200,6 +4428,12 @@
             "state": "translated",
             "value": "Recevez chaque matin des analyses simples et personnalisées pour bouger, vous reposer et manger en pleine conscience."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reçois chaque matin des analyses simples et personnalisées pour bouger, te reposer et manger en pleine conscience."
+          }
         }
       }
     },
@@ -4209,6 +4443,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ravi de mieux vous connaître !"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ravi de mieux te connaître !"
           }
         }
       }
@@ -4341,6 +4581,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "La VFC est mesurée pendant le sommeil ou les périodes de repos avec votre Apple Watch."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La VFC est mesurée pendant le sommeil ou les périodes de repos avec ton Apple Watch."
           }
         }
       }
@@ -4493,6 +4739,12 @@
             "state": "translated",
             "value": "La variabilité de la fréquence cardiaque mesure la rapidité avec laquelle votre rythme cardiaque peut varier. Une valeur élevée traduit moins de stress et plus de détente ; une valeur faible indique que votre corps est sous tension."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La variabilité de la fréquence cardiaque mesure la rapidité avec laquelle ton rythme cardiaque peut varier. Une valeur élevée traduit moins de stress et plus de détente ; une valeur faible indique que ton corps est sous tension."
+          }
         }
       }
     },
@@ -4512,6 +4764,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "La réserve de fréquence cardiaque sert à calculer votre fréquence cardiaque cible selon les différentes intensités d'effort."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La réserve de fréquence cardiaque sert à calculer ta fréquence cardiaque cible selon les différentes intensités d'effort."
           }
         }
       }
@@ -4542,6 +4800,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aidez-moi à vous aider 💙"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aide-moi à t'aider 💙"
           }
         }
       }
@@ -4643,6 +4907,12 @@
             "state": "translated",
             "value": "Quelle quantité avez-vous bue ?"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quelle quantité as-tu bue ?"
+          }
         }
       }
     },
@@ -4683,6 +4953,12 @@
             "state": "translated",
             "value": "Je peux calculer votre âge biologique et suivre vos constantes."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je peux calculer ton âge biologique et suivre tes constantes."
+          }
         }
       }
     },
@@ -4692,6 +4968,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Je peux vous proposer des analyses de votre santé chaque jour !"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je peux te proposer des analyses de ta santé chaque jour !"
           }
         }
       }
@@ -4713,6 +4995,12 @@
             "state": "translated",
             "value": "Je vous montre ce qui influence votre santé et ce que vous pouvez y faire."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je te montre ce qui influence ta santé et ce que tu peux y faire."
+          }
         }
       }
     },
@@ -4723,6 +5011,12 @@
             "state": "translated",
             "value": "Je répondrai en m'appuyant sur vos données personnelles."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je répondrai en m'appuyant sur tes données personnelles."
+          }
         }
       }
     },
@@ -4732,6 +5026,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Je veille sur vous !"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je veille sur tu !"
           }
         }
       }
@@ -4752,6 +5052,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Si l'expérience vous plaît jusqu'ici, une petite note compterait beaucoup pour notre petite équipe !"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Si l'expérience te plaît jusqu'ici, une petite note compterait beaucoup pour notre petite équipe !"
           }
         }
       }
@@ -4991,6 +5297,12 @@
             "state": "translated",
             "value": "Découvrez vos habitudes alimentaires. Scannez les codes-barres pour enregistrer plus vite. Enregistrez un repas d'une simple photo !"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Découvre tes habitudes alimentaires. Scanne les codes-barres pour enregistrer plus vite. Enregistre un repas d'une simple photo !"
+          }
         }
       }
     },
@@ -5021,6 +5333,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Laissez-moi vous accompagner avec des rappels utiles et des analyses de santé."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laisse-moi t'accompagner avec des rappels utiles et des analyses de santé."
           }
         }
       }
@@ -5072,6 +5390,12 @@
             "state": "translated",
             "value": "Configurons Bloom pour qu'il vous convienne parfaitement."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configurons Bloom pour qu'il te convienne parfaitement."
+          }
         }
       }
     },
@@ -5081,6 +5405,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Parlons de votre objectif principal."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parlons de ton objectif principal."
           }
         }
       }
@@ -5101,6 +5431,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fixons des objectifs vraiment adaptés à vous."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fixons des objectifs vraiment adaptés à toi."
           }
         }
       }
@@ -5304,6 +5640,12 @@
             "state": "translated",
             "value": "Enregistrez une séance avec votre Apple Watch pour mieux évaluer l'efficacité de votre exercice."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistre une séance avec ton Apple Watch pour mieux évaluer l'efficacité de ton exercice."
+          }
         }
       }
     },
@@ -5314,6 +5656,12 @@
             "state": "translated",
             "value": "Enregistrez vos selles pour en savoir plus sur votre régularité."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistre tes selles pour en savoir plus sur ton régularité."
+          }
         }
       }
     },
@@ -5323,6 +5671,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Enregistrez votre poids pour en savoir plus sur votre composition corporelle."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistre ton poids pour en savoir plus sur ton composition corporelle."
           }
         }
       }
@@ -6017,6 +6371,12 @@
             "state": "translated",
             "value": "Nécessite votre attention"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nécessite ton attention"
+          }
         }
       }
     },
@@ -6409,6 +6769,12 @@
             "state": "translated",
             "value": "Pas de programme générique. Pas de conseils passe-partout. Que des analyses concrètes fondées sur vos données réelles."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas de programme générique. Pas de conseils passe-partout. Que des analyses concrètes fondées sur tes données réelles."
+          }
         }
       }
     },
@@ -6419,6 +6785,12 @@
             "state": "translated",
             "value": "Aucun effet sur votre âge biologique"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun effet sur ton âge biologique"
+          }
         }
       }
     },
@@ -6428,6 +6800,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aucun enregistrement ne correspond à votre recherche."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun enregistrement ne correspond à ton recherche."
           }
         }
       }
@@ -6729,6 +7107,12 @@
             "state": "translated",
             "value": "Ouvre une constante précise pour consulter vos données de santé."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvre une constante précise pour consulter tes données de santé."
+          }
         }
       }
     },
@@ -6873,6 +7257,12 @@
             "state": "translated",
             "value": "Des analyses quotidiennes personnalisées fondées sur vos données personnelles."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Des analyses quotidiennes personnalisées fondées sur tes données personnelles."
+          }
         }
       }
     },
@@ -6923,6 +7313,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Saisissez votre nom"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saisis ton nom"
           }
         }
       }
@@ -7014,6 +7410,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Prenez soin de votre santé. C'est offert."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prends soin de ta santé. C'est offert."
           }
         }
       }
@@ -7239,6 +7641,12 @@
             "state": "translated",
             "value": "Évaluez votre effort"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Évalue ton effort"
+          }
         }
       }
     },
@@ -7279,6 +7687,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vous nous appréciez ? Laissez un avis !"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu nous apprécies ? Laisse un avis !"
           }
         }
       }
@@ -7615,6 +8029,12 @@
             "state": "translated",
             "value": "Pendant le sommeil, la fréquence respiratoire se situe généralement entre 12 et 20 respirations par minute chez l'adulte. Une variation peut traduire une maladie, du stress ou une évolution de votre condition physique."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pendant le sommeil, la fréquence respiratoire se situe généralement entre 12 et 20 respirations par minute chez l'adulte. Une variation peut traduire une maladie, du stress ou une évolution de ta condition physique."
+          }
         }
       }
     },
@@ -7725,6 +8145,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Passez vos objectifs en revue et ajustez-les."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passe tes objectifs en revue et ajuste-les."
           }
         }
       }
@@ -7906,6 +8332,12 @@
             "state": "translated",
             "value": "Découvrez votre bilan de %@ !"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Découvre ton bilan de %@ !"
+          }
         }
       }
     },
@@ -8082,6 +8514,12 @@
             "state": "translated",
             "value": "Indiquez votre statut tabagique pour voir son effet sur votre âge biologique."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indique ton statut tabagique pour voir son effet sur ton âge biologique."
+          }
         }
       }
     },
@@ -8142,6 +8580,12 @@
             "state": "translated",
             "value": "Partagez Bloom avec un proche et motivez-vous mutuellement sur le chemin d'une meilleure santé !"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partage Bloom avec un proche et motive-tu mutuellement sur le chemin d'une meilleure santé !"
+          }
         }
       }
     },
@@ -8151,6 +8595,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Partagez vos données personnelles pour que je personnalise vos analyses. Vos informations restent privées, promis."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partage tes données personnelles pour que je personnalise tes analyses. tes informations restent privées, promis."
           }
         }
       }
@@ -8262,6 +8712,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Afficher des cartes de célébration lorsque vous atteignez un jalon"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher des cartes de célébration lorsque tu atteignes un jalon"
           }
         }
       }
@@ -8579,6 +9035,12 @@
             "state": "translated",
             "value": "La vitesse de montée d'escaliers mesure la rapidité avec laquelle vous montez les marches. C'est un bon indicateur de la force du bas du corps et de la condition cardiovasculaire."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La vitesse de montée d'escaliers mesure la rapidité avec laquelle tu montes les marches. C'est un bon indicateur de la force du bas du corps et de la condition cardiovasculaire."
+          }
         }
       }
     },
@@ -8659,6 +9121,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gardez une longueur d'avance sur votre forme"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Garde une longueur d'avance sur ta forme"
           }
         }
       }
@@ -8922,6 +9390,12 @@
             "state": "translated",
             "value": "Touchez le bouton + pour créer votre premier rappel."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touche le bouton + pour créer ton premier rappel."
+          }
         }
       }
     },
@@ -8942,6 +9416,12 @@
             "state": "translated",
             "value": "Parlez-moi un peu de vous"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parle-moi un peu de tu"
+          }
         }
       }
     },
@@ -8961,6 +9441,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dites-moi ce qui vous préoccupe !"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dites-moi ce qui te préoccupe !"
           }
         }
       }
@@ -9083,6 +9569,12 @@
             "state": "translated",
             "value": "L'échelle de Bristol est un outil standard de classification des selles. Elle aide à mieux comprendre votre santé intestinale."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'échelle de Bristol est un outil standard de classification des selles. Elle aide à mieux comprendre ta santé intestinale."
+          }
         }
       }
     },
@@ -9163,6 +9655,12 @@
             "state": "translated",
             "value": "Cela m'aidera à adapter mes conseils à votre situation."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cela m'aidera à adapter mes conseils à ton situation."
+          }
         }
       }
     },
@@ -9172,6 +9670,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ce graphique montre la répartition de votre temps entre les différentes phases de sommeil chaque nuit. Un sommeil sain comprend des cycles passant par toutes les phases."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce graphique montre la répartition de ton temps entre les différentes phases de sommeil chaque nuit. Un sommeil sain comprend des cycles passant par toutes les phases."
           }
         }
       }
@@ -9183,6 +9687,12 @@
             "state": "translated",
             "value": "Ce graphique montre votre VFC moyenne selon le moment de la journée sur la période sélectionnée. La VFC est généralement plus élevée pendant le sommeil et plus basse durant les périodes actives."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce graphique montre ton VFC moyenne selon le moment de la journée sur la période sélectionnée. La VFC est généralement plus élevée pendant le sommeil et plus basse durant les périodes actives."
+          }
         }
       }
     },
@@ -9193,6 +9703,12 @@
             "state": "translated",
             "value": "Ce graphique montre l'évolution de vos horaires de sommeil. Chaque barre représente une nuit, du coucher au réveil. Des horaires réguliers aident à réguler votre rythme circadien et améliorent la qualité du sommeil."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce graphique montre l'évolution de tes horaires de sommeil. Chaque barre représente une nuit, du coucher au réveil. Des horaires réguliers aident à réguler ton rythme circadien et améliorent la qualité du sommeil."
+          }
         }
       }
     },
@@ -9202,6 +9718,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cela m'aide à personnaliser vos analyses et à vérifier que Bloom vous convient."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cela m'aide à personnaliser tes analyses et à vérifier que Bloom te convient."
           }
         }
       }
@@ -9214,6 +9736,12 @@
             "state": "translated",
             "value": "C'est %@ pour votre âge !"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "C'est %@ pour ton âge !"
+          }
         }
       }
     },
@@ -9223,6 +9751,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cette surveillance repère les premiers signes physiologiques indiquant que votre corps combat une maladie ou a besoin de plus de récupération. Elle analyse votre fréquence cardiaque au repos, votre variabilité cardiaque, votre température au poignet et votre fréquence respiratoire afin de détecter de légers écarts par rapport à vos valeurs de référence."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cette surveillance repère les premiers signes physiologiques indiquant que ton corps combat une maladie ou a besoin de plus de récupération. Elle analyse ta fréquence cardiaque au repos, ta variabilité cardiaque, ta température au poignet et ta fréquence respiratoire afin de détecter de légers écarts par rapport à tes valeurs de référence."
           }
         }
       }
@@ -9234,6 +9768,12 @@
             "state": "translated",
             "value": "Cette surveillance suit vos habitudes de sommeil : durée, efficacité et régularité des horaires. Elle détecte une dégradation de votre sommeil ou des heures de coucher et de lever irrégulières, ce qui peut perturber votre rythme circadien et votre santé générale."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cette surveillance suit tes habitudes de sommeil : durée, efficacité et régularité des horaires. Elle détecte une dégradation de ton sommeil ou des heures de coucher et de lever irrégulières, ce qui peut perturber ton rythme circadien et ta santé générale."
+          }
         }
       }
     },
@@ -9243,6 +9783,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cette surveillance suit votre charge d'entraînement à partir des scores d'effort d'Apple. Elle compare votre charge des 7 derniers jours à votre moyenne sur 28 jours pour vous éviter le surentraînement ou le désentraînement. Les tendances de VFC et les données de récupération sont également prises en compte lorsqu'elles sont disponibles."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cette surveillance suit ta charge d'entraînement à partir des scores d'effort d'Apple. Elle compare ta charge des 7 derniers jours à ta moyenne sur 28 jours pour toi éviter le surentraînement ou le désentraînement. Les tendances de VFC et les données de récupération sont également prises en compte lorsqu'elles sont disponibles."
           }
         }
       }
@@ -9274,6 +9820,12 @@
             "state": "translated",
             "value": "Cette chronologie montre vos passages d'une phase de sommeil à l'autre au cours de la nuit. Votre corps traverse naturellement ces phases à plusieurs reprises."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cette chronologie montre tes passages d'une phase de sommeil à l'autre au cours de la nuit. Ton corps traverse naturellement ces phases à plusieurs reprises."
+          }
         }
       }
     },
@@ -9283,6 +9835,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ce type peut être lié à l'alimentation, à une infection, au stress ou à d'autres troubles digestifs. Pensez à bien vous hydrater et, si cela persiste, à faire rechercher une infection ou une intolérance."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce type peut être lié à l'alimentation, à une infection, au stress ou à d'autres troubles digestifs. Pense à bien tu hydrater et, si cela persiste, à faire rechercher une infection ou une intolérance."
           }
         }
       }
@@ -9304,6 +9862,12 @@
             "state": "translated",
             "value": "Ce type indique une constipation, qui peut être due à la déshydratation, à un manque de fibres ou à d'autres troubles digestifs. Augmenter votre consommation de liquides et de fibres peut être bénéfique."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce type indique une constipation, qui peut être due à la déshydratation, à un manque de fibres ou à d'autres troubles digestifs. Augmenter ta consommation de liquides et de fibres peut être bénéfique."
+          }
         }
       }
     },
@@ -9313,6 +9877,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ce type indique une légère constipation. Améliorer votre alimentation, boire davantage et bouger plus peut aider à régulariser le transit."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce type indique une légère constipation. Améliorer ton alimentation, boire davantage et bouger plus peut aider à régulariser le transit."
           }
         }
       }
@@ -9324,6 +9894,12 @@
             "state": "translated",
             "value": "Ce type correspond à la selle idéale : il traduit un système digestif sain et un transit normal. Poursuivez votre alimentation et vos habitudes actuelles."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce type correspond à la selle idéale : il traduit un système digestif sain et un transit normal. Poursuive ton alimentation et tes habitudes actuelles."
+          }
         }
       }
     },
@@ -9334,6 +9910,12 @@
             "state": "translated",
             "value": "Ce type peut traduire un changement d'alimentation, un léger trouble digestif ou un déséquilibre passager de votre flore intestinale."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce type peut traduire un changement d'alimentation, un léger trouble digestif ou un déséquilibre passager de ta flore intestinale."
+          }
         }
       }
     },
@@ -9343,6 +9925,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ce type correspond à une diarrhée sévère. Elle peut signaler un trouble digestif important : infection, intoxication alimentaire ou maladie chronique. Il est essentiel de bien vous hydrater et de consulter si cela persiste."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce type correspond à une diarrhée sévère. Elle peut signaler un trouble digestif important : infection, intoxication alimentaire ou maladie chronique. Il est essentiel de bien tu hydrater et de consulter si cela persiste."
           }
         }
       }
@@ -9404,6 +9992,12 @@
             "state": "translated",
             "value": "Le délai entre deux selles renseigne sur votre santé digestive et votre régularité."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le délai entre deux selles renseigne sur ta santé digestive et ton régularité."
+          }
         }
       }
     },
@@ -9413,6 +10007,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Le délai entre deux selles renseigne sur votre santé digestive et votre régularité. Un rythme régulier est généralement meilleur signe."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le délai entre deux selles renseigne sur ta santé digestive et ton régularité. Un rythme régulier est généralement meilleur signe."
           }
         }
       }
@@ -9434,6 +10034,12 @@
             "state": "translated",
             "value": "Pour discuter de votre santé avec Bud, vous devez réactiver la conversation. Vous gardez toujours la main sur les données utilisées."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pour discuter de ta santé avec Bud, tu dois réactiver la conversation. Tu gardes toujours la main sur les données utilisées."
+          }
         }
       }
     },
@@ -9443,6 +10049,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pour vous aider à suivre votre santé et à atteindre vos objectifs, j'ai besoin de quelques autorisations."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pour t'aider à suivre ta santé et à atteindre tes objectifs, j'ai besoin de quelques autorisations."
           }
         }
       }
@@ -9454,6 +10066,12 @@
             "state": "translated",
             "value": "Pour continuer à vous proposer des analyses personnalisées et à répondre à vos questions, j'ai besoin de quelques autorisations. Vous gardez toujours la main sur ce que vous partagez."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pour continuer à te proposer des analyses personnalisées et à répondre à tes questions, j'ai besoin de quelques autorisations. Tu gardes toujours la main sur ce que tu partages."
+          }
         }
       }
     },
@@ -9463,6 +10081,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pour afficher l'historique de vos séances, nous avons besoin d'accéder à vos données personnelles. Vous pouvez modifier cette autorisation à tout moment."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pour afficher l'historique de tes séances, nous avons besoin d'accéder à tes données personnelles. Tu peux modifier cette autorisation à tout moment."
           }
         }
       }
@@ -9576,6 +10200,12 @@
             "state": "translated",
             "value": "Enregistrez plus de séances de cardio pour voir votre niveau de forme."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistre plus de séances de cardio pour voir ton niveau de forme."
+          }
         }
       }
     },
@@ -9585,6 +10215,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Suivez ce que vous mangez !"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suis ce que tu manges !"
           }
         }
       }
@@ -9596,6 +10232,12 @@
             "state": "translated",
             "value": "Suivez votre consommation d'alcool avec la carte Boissons pour voir votre total hebdomadaire ici."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suis ta consommation d'alcool avec la carte Boissons pour voir ton total hebdomadaire ici."
+          }
         }
       }
     },
@@ -9605,6 +10247,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Enregistrez vos aliments pour obtenir plus d'analyses sur votre nutrition."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistre tes aliments pour obtenir plus d'analyses sur ton nutrition."
           }
         }
       }
@@ -9616,6 +10264,12 @@
             "state": "translated",
             "value": "Suivez votre mobilité en gardant votre iPhone sur vous durant la journée ou en portant votre Apple Watch."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suis ton mobilité en gardant ton iPhone sur tu durant la journée ou en portant ton Apple Watch."
+          }
         }
       }
     },
@@ -9625,6 +10279,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Suivez vos règles dans l'app Santé pour en savoir plus sur votre cycle."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suis tes règles dans l'app Santé pour en savoir plus sur ton cycle."
           }
         }
       }
@@ -9728,6 +10388,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Essayez d'ajouter des aliments complets à votre repas de midi : les fibres et les protéines aident à stabiliser l'énergie et l'humeur tout l'après-midi."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Essaie d'ajouter des aliments complets à ton repas de midi : les fibres et les protéines aident à stabiliser l'énergie et l'humeur tout l'après-midi."
           }
         }
       }
@@ -9984,6 +10650,12 @@
             "state": "translated",
             "value": "Découvrez votre âge réel"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Découvre ton âge réel"
+          }
         }
       }
     },
@@ -10124,6 +10796,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "La VO₂ max est estimée lors des marches, courses ou randonnées en extérieur avec votre Apple Watch."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La VO₂ max est estimée lors des marches, courses ou randonnées en extérieur avec ton Apple Watch."
           }
         }
       }
@@ -10277,6 +10955,12 @@
             "state": "translated",
             "value": "Voulez-vous que je vous aide à rester concentré sur l'essentiel pour votre santé ?"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Veux-tu que je t'aide à rester concentré sur l'essentiel pour ta santé ?"
+          }
         }
       }
     },
@@ -10318,6 +11002,12 @@
             "state": "translated",
             "value": "Nous avons analysé vos données personnelles et proposé des objectifs adaptés à vos habitudes, à vos tendances et à vos marges de progression."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nous avons analysé tes données personnelles et proposé des objectifs adaptés à tes habitudes, à tes tendances et à tes marges de progression."
+          }
         }
       }
     },
@@ -10327,6 +11017,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nous n'avons trouvé aucune donnée de séance pour %@. Commencez à enregistrer vos séances pour découvrir votre année Bloom !"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nous n'avons trouvé aucune donnée de séance pour %@. Commence à enregistrer tes séances pour découvrir ton année Bloom !"
           }
         }
       }
@@ -10338,6 +11034,12 @@
             "state": "translated",
             "value": "Nous n'utiliserons vos données personnelles que de façon anonyme, pour vous proposer des analyses et des objectifs."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nous n'utiliserons tes données personnelles que de façon anonyme, pour te proposer des analyses et des objectifs."
+          }
         }
       }
     },
@@ -10347,6 +11049,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nous vous enverrons une notification de rappel avant la fin de votre essai !"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nous t'enverrons une notification de rappel avant la fin de ton essai !"
           }
         }
       }
@@ -10358,6 +11066,12 @@
             "state": "translated",
             "value": "Portez votre Apple Watch tout au long de la journée pour mieux cerner votre niveau d'activité."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Porte ton Apple Watch tout au long de la journée pour mieux cerner ton niveau d'activité."
+          }
         }
       }
     },
@@ -10367,6 +11081,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Portez votre Apple Watch tout au long de la journée pour mieux cerner votre santé cardiaque."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Porte ton Apple Watch tout au long de la journée pour mieux cerner ta santé cardiaque."
           }
         }
       }
@@ -10378,6 +11098,12 @@
             "state": "translated",
             "value": "Portez votre Apple Watch tout au long de la journée pour mieux cerner vos niveaux de stress."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Porte ton Apple Watch tout au long de la journée pour mieux cerner tes niveaux de stress."
+          }
         }
       }
     },
@@ -10387,6 +11113,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Portez votre Apple Watch pour enregistrer votre fréquence cardiaque au repos."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Porte ton Apple Watch pour enregistrer ta fréquence cardiaque au repos."
           }
         }
       }
@@ -10479,6 +11211,12 @@
             "state": "translated",
             "value": "Sur quoi puis-je vous aider ?"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sur quoi puis-je t'aider ?"
+          }
         }
       }
     },
@@ -10488,6 +11226,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Que souhaitez-vous me partager d'autre ?"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Que souhaites-tu me partager d'autre ?"
           }
         }
       }
@@ -10499,6 +11243,12 @@
             "state": "translated",
             "value": "Quand avez-vous arrêté ?"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quand as-tu arrêté ?"
+          }
         }
       }
     },
@@ -10509,6 +11259,12 @@
             "state": "translated",
             "value": "Lorsque cette option est activée, Bud analyse vos résultats de surveillance à partir des catégories de données personnelles ci-dessus."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lorsque cette option est activée, Bud analyse tes résultats de surveillance à partir des catégories de données personnelles ci-dessus."
+          }
         }
       }
     },
@@ -10518,6 +11274,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sur quoi souhaitez-vous concentrer vos efforts ?"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sur quoi souhaites-tu concentrer tes efforts ?"
           }
         }
       }
@@ -10559,6 +11321,12 @@
             "state": "translated",
             "value": "Pourquoi j'ai besoin de vos données personnelles 💙"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pourquoi j'ai besoin de tes données personnelles 💙"
+          }
         }
       }
     },
@@ -10578,6 +11346,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Avec votre autorisation, je peux utiliser vos données personnelles pour vous proposer des analyses plus justes et plus personnelles."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avec ton autorisation, je peux utiliser tes données personnelles pour te proposer des analyses plus justes et plus personnelles."
           }
         }
       }
@@ -10661,6 +11435,12 @@
             "state": "translated",
             "value": "La température au poignet est mesurée pendant le sommeil et peut varier selon votre environnement, votre cycle menstruel, une maladie ou d'autres facteurs. En suivre l'évolution aide à repérer des tendances dans votre santé."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La température au poignet est mesurée pendant le sommeil et peut varier selon ton environnement, ton cycle menstruel, une maladie ou d'autres facteurs. En suivre l'évolution aide à repérer des tendances dans ta santé."
+          }
         }
       }
     },
@@ -10723,6 +11503,12 @@
             "state": "translated",
             "value": "Vous"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu"
+          }
         }
       }
     },
@@ -10734,6 +11520,12 @@
             "state": "translated",
             "value": "Vous avez dormi %@ en moyenne par nuit."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu as dormi %@ en moyenne par nuit."
+          }
         }
       }
     },
@@ -10743,6 +11535,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Posez-moi des questions sur vos tendances de santé : je produirai des analyses à partir de vos données Apple Santé."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pose-moi des questions sur tes tendances de santé : je produirai des analyses à partir de tes données Apple Santé."
           }
         }
       }
@@ -10754,6 +11552,12 @@
             "state": "translated",
             "value": "Vous pouvez tout me demander !"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu peux tout me demander !"
+          }
         }
       }
     },
@@ -10763,6 +11567,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vous pouvez modifier ces réglages à tout moment."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu peux modifier ces réglages à tout moment."
           }
         }
       }
@@ -10774,6 +11584,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vous avez accumulé %@ minutes en zone cette année !"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu as accumulé %@ minutes en zone cette année !"
           }
         }
       }
@@ -10792,6 +11608,12 @@
             "state": "translated",
             "value": "Vous vous êtes entraîné %1$@ et avez brûlé %2$@ cette année !"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu tu es entraîné %1$@ et ave brûlé %2$@ cette année !"
+          }
         }
       }
     },
@@ -10803,6 +11625,12 @@
             "state": "translated",
             "value": "Vous avez pris %@ cette année."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu as pris %@ cette année."
+          }
         }
       }
     },
@@ -10812,6 +11640,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vous n'avez aucun calendrier."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu n'as aucun calendrier."
           }
         }
       }
@@ -10823,6 +11657,12 @@
             "state": "translated",
             "value": "Vous n'avez aucun événement %@."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu n'as aucun événement %@."
+          }
         }
       }
     },
@@ -10832,6 +11672,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vous n'avez encore enregistré aucun repas."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu n'as encore enregistré aucun repas."
           }
         }
       }
@@ -10844,6 +11690,12 @@
             "state": "translated",
             "value": "Vous avez perdu %@ cette année."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu as perdu %@ cette année."
+          }
         }
       }
     },
@@ -10854,6 +11706,12 @@
             "state": "translated",
             "value": "Vous avez réussi, %@ !"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu as réussi, %@ !"
+          }
         }
       }
     },
@@ -10863,6 +11721,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vous devez avoir au moins 18 ans pour utiliser Bloom."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu dois avoir au moins 18 ans pour utiliser Bloom."
           }
         }
       }
@@ -10875,6 +11739,12 @@
             "state": "translated",
             "value": "Vous avez obtenu un score de sommeil parfait de 100. Impossible de faire mieux !"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu as obtenu un score de sommeil parfait de 100. Impossible de faire mieux !"
+          }
         }
       }
     },
@@ -10886,6 +11756,12 @@
             "state": "translated",
             "value": "Vous avez parcouru %@ à l'entraînement cette année."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu as parcouru %@ à l'entraînement cette année."
+          }
         }
       }
     },
@@ -10896,6 +11772,12 @@
             "state": "translated",
             "value": "Vos données, votre choix"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tes données, ton choix"
+          }
         }
       }
     },
@@ -10905,6 +11787,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Votre nom"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton nom"
           }
         }
       }
@@ -10917,6 +11805,12 @@
             "state": "translated",
             "value": "Votre cycle a duré %@ en moyenne."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton cycle a duré %@ en moyenne."
+          }
         }
       }
     },
@@ -10928,6 +11822,12 @@
             "state": "translated",
             "value": "Votre âge biologique a 1 an de moins que votre âge réel. Continuez comme ça !"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton âge biologique a 1 an de moins que ton âge réel. Continue comme ça !"
+          }
         }
       }
     },
@@ -10937,6 +11837,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Votre âge biologique s'affichera ici une fois calculé. Revenez après quelques jours d'utilisation."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton âge biologique s'affichera ici une fois calculé. Reviens après quelques jours d'utilisation."
           }
         }
       }
@@ -10955,6 +11861,12 @@
             "state": "translated",
             "value": "Votre condition cardio est %1$@%2$@ ml/kg/min."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta condition cardio est %1$@%2$@ ml/kg/min."
+          }
         }
       }
     },
@@ -10964,6 +11876,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vos données sont toujours protégées :"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tes données sont toujours protégées :"
           }
         }
       }
@@ -10982,6 +11900,12 @@
             "state": "translated",
             "value": "Votre alimentation comptait en moyenne %1$@ de protéines, %2$@ de glucides et %3$@ de lipides."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton alimentation comptait en moyenne %1$@ de protéines, %2$@ de glucides et %3$@ de lipides."
+          }
         }
       }
     },
@@ -10991,6 +11915,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Votre fréquence cardiaque pendant le sommeil est généralement plus basse que votre fréquence au repos en journée. Une valeur plus basse traduit en général une meilleure condition cardiovasculaire et une bonne récupération."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta fréquence cardiaque pendant le sommeil est généralement plus basse que ta fréquence au repos en journée. Une valeur plus basse traduit en général une meilleure condition cardiovasculaire et une bonne récupération."
           }
         }
       }
@@ -11002,6 +11932,12 @@
             "state": "translated",
             "value": "Vos données personnelles restent toujours anonymes. Consultez toujours un médecin avant de modifier quoi que ce soit concernant votre santé."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tes données personnelles restent toujours anonymes. Consulte toujours un médecin avant de modifier quoi que ce soit concernant ta santé."
+          }
         }
       }
     },
@@ -11011,6 +11947,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vos données personnelles servent à :"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tes données personnelles servent à :"
           }
         }
       }
@@ -11023,6 +11965,12 @@
             "state": "translated",
             "value": "Votre fréquence cardiaque au repos était de %@ en moyenne"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta fréquence cardiaque au repos était de %@ en moyenne"
+          }
         }
       }
     },
@@ -11032,6 +11980,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Votre objectif :"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton objectif :"
           }
         }
       }
@@ -11043,6 +11997,12 @@
             "state": "translated",
             "value": "Vos objectifs :"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tes objectifs :"
+          }
         }
       }
     },
@@ -11052,6 +12012,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Votre score de sommeil est calculé à partir de la durée de sommeil, du temps passé dans chaque phase, du temps d'éveil et de votre fréquence cardiaque nocturne. Un score de 70 ou plus indique un sommeil de bonne qualité."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton score de sommeil est calculé à partir de la durée de sommeil, du temps passé dans chaque phase, du temps d'éveil et de ta fréquence cardiaque nocturne. Un score de 70 ou plus indique un sommeil de bonne qualité."
           }
         }
       }
@@ -11063,6 +12029,12 @@
             "state": "translated",
             "value": "Votre niveau de stress peut varier d'un jour à l'autre. Quelques journées tendues sont normales, mais un stress prolongé peut nuire à votre santé. Bloom tient compte de votre tension artérielle, de votre sommeil et de votre variabilité cardiaque pour calculer votre niveau de stress."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton niveau de stress peut varier d'un jour à l'autre. Quelques journées tendues sont normales, mais un stress prolongé peut nuire à ta santé. Bloom tient compte de ta tension artérielle, de ton sommeil et de ta variabilité cardiaque pour calculer ton niveau de stress."
+          }
         }
       }
     },
@@ -11073,6 +12045,12 @@
             "state": "translated",
             "value": "Votre poids est resté stable cette année."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton poids est resté stable cette année."
+          }
         }
       }
     },
@@ -11082,6 +12060,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vous avez débloqué des analyses plus poussées, des conseils plus fins et toute l'intelligence de Bud."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu as débloqué des analyses plus poussées, des conseils plus fins et toute l'intelligence de Bud."
           }
         }
       }
@@ -11855,6 +12839,12 @@
             "state": "translated",
             "value": "• Visibles par vous seul, stockées sur votre appareil"
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "• Visibles par toi seul, stockées sur ton appareil"
+          }
         }
       }
     },
@@ -11874,6 +12864,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "• Partagées avec Bud de façon anonyme, jamais associées à votre identité"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "• Partagées avec Bud de façon anonyme, jamais associées à ton identité"
           }
         }
       }
@@ -11944,6 +12940,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "• Vous pouvez modifier les autorisations à tout moment dans Réglages"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "• Tu peux modifier les autorisations à tout moment dans Réglages"
           }
         }
       }

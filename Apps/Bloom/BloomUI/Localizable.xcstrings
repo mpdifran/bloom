@@ -20,6 +20,12 @@
             "state": "translated",
             "value": "Âge, sexe biologique, taille et votre objectif. Permet à Bud de personnaliser ses réponses et d'adapter ses conseils à votre situation."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Âge, sexe biologique, taille et ton objectif. Permet à Bud de personnaliser ses réponses et d'adapter ses conseils à ton situation."
+          }
         }
       }
     },
@@ -30,6 +36,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Consommation d'alcool et statut tabagique. Permet à Bud de comprendre les facteurs liés à votre mode de vie qui peuvent influencer votre santé."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consommation d'alcool et statut tabagique. Permet à Bud de comprendre les facteurs liés à ton mode de vie qui peuvent influencer ta santé."
           }
         }
       }
@@ -53,6 +65,12 @@
             "state": "translated",
             "value": "Composition corporelle, poids, fréquence cardiaque au repos, VO2 max et VFC. Permet à Bud de comprendre l'évolution de votre physiologie et de répondre aux questions associées."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Composition corporelle, poids, fréquence cardiaque au repos, VO2 max et VFC. Permet à Bud de comprendre l'évolution de ton physiologie et de répondre aux questions associées."
+          }
         }
       }
     },
@@ -63,6 +81,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Selles et habitudes intestinales. Permet à Bud de répondre à vos questions sur la santé digestive et de vous proposer des conseils personnalisés."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selles et habitudes intestinales. Permet à Bud de répondre à tes questions sur la santé digestive et de te proposer des conseils personnalisés."
           }
         }
       }
@@ -96,6 +120,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Suivi du cycle et données associées. Permet à Bud de répondre à vos questions sur la santé menstruelle et de vous proposer des conseils personnalisés."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suivi du cycle et données associées. Permet à Bud de répondre à tes questions sur la santé menstruelle et de te proposer des conseils personnalisés."
           }
         }
       }
@@ -140,6 +170,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Événements des calendriers que vous avez sélectionnés. Permet à Bud de tenir compte de votre emploi du temps et de répondre aux questions associées."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Événements des calendriers que tu as sélectionnés. Permet à Bud de tenir compte de ton emploi du temps et de répondre aux questions associées."
           }
         }
       }
@@ -195,6 +231,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Repas, calories, macronutriments et consommation d'eau. Permet à Bud de répondre à vos questions sur votre alimentation et de vous proposer des conseils personnalisés."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repas, calories, macronutriments et consommation d'eau. Permet à Bud de répondre à tes questions sur ton alimentation et de te proposer des conseils personnalisés."
           }
         }
       }
@@ -306,6 +348,12 @@
             "state": "translated",
             "value": "Durée, qualité et phases de sommeil. Permet à Bud de répondre à vos questions sur vos habitudes de sommeil et de vous proposer des conseils personnalisés."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durée, qualité et phases de sommeil. Permet à Bud de répondre à tes questions sur tes habitudes de sommeil et de te proposer des conseils personnalisés."
+          }
         }
       }
     },
@@ -316,6 +364,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pas, séances, charge d'entraînement et données d'exercice. Permet de vous proposer des analyses d'activité personnalisées et de répondre à vos questions sur l'activité physique."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas, séances, charge d'entraînement et données d'exercice. Permet de te proposer des analyses d'activité personnalisées et de répondre à tes questions sur l'activité physique."
           }
         }
       }
@@ -338,6 +392,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Niveaux de stress et séances de pleine conscience. Permet à Bud de répondre à vos questions sur vos tendances de stress et de vous proposer des conseils personnalisés."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveaux de stress et séances de pleine conscience. Permet à Bud de répondre à tes questions sur tes tendances de stress et de te proposer des conseils personnalisés."
           }
         }
       }
@@ -427,6 +487,12 @@
             "state": "translated",
             "value": "Conditions météo de votre région, sans votre position elle-même. Permet à Bud de tenir compte des facteurs extérieurs qui peuvent influencer votre santé."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conditions météo de ton région, sans ta position elle-même. Permet à Bud de tenir compte des facteurs extérieurs qui peuvent influencer ta santé."
+          }
         }
       }
     },
@@ -438,6 +504,12 @@
             "state": "translated",
             "value": "Votre localisation approximative (ville, région, pays). Permet à Bud de tenir compte du contexte environnemental et de proposer des analyses adaptées à votre région, sans connaître votre position exacte."
           }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton localisation approximative (ville, région, pays). Permet à Bud de tenir compte du contexte environnemental et de proposer des analyses adaptées à ton région, sans connaître ta position exacte."
+          }
         }
       }
     },
@@ -448,6 +520,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vos objectifs de santé et votre progression. Permet à Bud de replacer vos questions dans leur contexte et de générer des suggestions personnalisées."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tes objectifs de santé et ta progression. Permet à Bud de replacer tes questions dans leur contexte et de générer des suggestions personnalisées."
           }
         }
       }

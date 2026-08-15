@@ -1319,6 +1319,7 @@
 			buildConfigurationList = FFACBAE72BAC778A006AAD0B /* Build configuration list for PBXNativeTarget "Bloom" */;
 			buildPhases = (
 				4BDE10302D68115B005E5C6D /* SwiftLint */,
+				FFA1L0C12F00000000000001 /* Validate Localization */,
 				FFACBAD52BAC7788006AAD0B /* Sources */,
 				FFACBAD62BAC7788006AAD0B /* Frameworks */,
 				FFACBAD72BAC7788006AAD0B /* Resources */,
@@ -1694,6 +1695,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "#!/bin/bash\n\n# Run the SwiftLint script\n\"${SRCROOT}/Scripts/swiftlint.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FFA1L0C12F00000000000001 /* Validate Localization */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Validate Localization";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash\n\n# Fail the build on placeholder mismatches between a string and its translations\n\"${SRCROOT}/Scripts/validate-localization.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
