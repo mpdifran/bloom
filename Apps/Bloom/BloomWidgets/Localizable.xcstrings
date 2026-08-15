@@ -21,6 +21,12 @@
             "value": "Aktion"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acción"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -41,6 +47,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aktionstyp"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tipo de acción"
           }
         },
         "fr": {
@@ -65,6 +77,12 @@
             "value": "Aktionen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acciones"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -85,6 +103,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aktivitätsniveau"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nivel de actividad"
           }
         },
         "fr": {
@@ -109,6 +133,12 @@
             "value": "Automatisch (nach Uhrzeit)"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automático (según la hora)"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -129,6 +159,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Automatisch (nach Uhrzeit)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automático (según la hora)"
           }
         },
         "fr": {
@@ -153,6 +189,12 @@
             "value": "Körperzusammensetzung"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Composición corporal"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -175,6 +217,12 @@
             "value": "Stuhlgang"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deposiciones"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -195,6 +243,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Frühstück"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desayuno"
           }
         },
         "fr": {
@@ -225,6 +279,12 @@
             "value": "Buds Zusammenfassung"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El resumen de Bud"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -246,6 +306,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Lebensmittel wählen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elegir alimento"
           }
         },
         "fr": {
@@ -271,6 +337,12 @@
             "value": "Ziel wählen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elegir objetivo"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -292,6 +364,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gespeicherte Mahlzeit wählen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elegir comida guardada"
           }
         },
         "fr": {
@@ -316,6 +394,12 @@
             "value": "Wähle den Zeitraum für die Schrittdaten."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige el periodo del que quieres ver los pasos."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -336,6 +420,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wähle das Ziel, das im Widget angezeigt wird."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige qué objetivo aparece en el widget."
           }
         },
         "fr": {
@@ -360,6 +450,12 @@
             "value": "Wähle die Gesundheitsaktion, die ausgeführt werden soll."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige qué acción de salud quieres realizar."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -380,6 +476,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wähle die angezeigten Gesundheitsaktionen und ihre Reihenfolge."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige qué acciones de salud se muestran y en qué orden."
           }
         },
         "fr": {
@@ -404,6 +506,12 @@
             "value": "Lege fest, welche Erkenntnis im Widget erscheint."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configura qué análisis aparece en el widget."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -424,6 +532,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Lege fest, welche Mahlzeit mit dem Widget eingetragen wird."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configura qué comida se registra con el widget."
           }
         },
         "fr": {
@@ -448,6 +562,12 @@
             "value": "Zyklustracking"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seguimiento del ciclo"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -468,6 +588,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Täglich"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diario"
           }
         },
         "fr": {
@@ -492,6 +618,12 @@
             "value": "Tägliche Erkenntnisse"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Análisis diarios"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -512,6 +644,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Abendessen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cena"
           }
         },
         "fr": {
@@ -542,6 +680,12 @@
             "value": "Anzeigemodus"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modo de visualización"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -562,6 +706,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fehler"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error"
           }
         },
         "fr": {
@@ -586,6 +736,12 @@
             "value": "Trainingseffektivität"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Efectividad del ejercicio"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -606,6 +762,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Lebensmittel"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alimento"
           }
         },
         "fr": {
@@ -630,6 +792,12 @@
             "value": "Lebensmittel"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alimentos"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -650,6 +818,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Welches Lebensmittel?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Qué alimento?"
           }
         },
         "fr": {
@@ -674,6 +848,12 @@
             "value": "Hol dir noch heute Bloom Plus!"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¡Hazte con Bloom Plus hoy mismo!"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -694,6 +874,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Erhalte persönliche Erkenntnisse darüber, was deiner Gesundheit guttut (oder ihr zusetzt). Wie ein Röntgenblick für dein Wohlbefinden."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Descubre con análisis personalizados qué impulsa (o hunde) tu salud. Como una radiografía de tu bienestar."
           }
         },
         "fr": {
@@ -724,6 +910,12 @@
             "value": "Ziel"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Objetivo"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -744,6 +936,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Konfiguration des Ziel-Widgets"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuración del widget de objetivos"
           }
         },
         "fr": {
@@ -768,6 +966,12 @@
             "value": "Ziele"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Objetivos"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -788,6 +992,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gesundheitsaktion"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acción de salud"
           }
         },
         "fr": {
@@ -812,6 +1022,12 @@
             "value": "Konfiguration der Gesundheitsaktion"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuración de la acción de salud"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -832,6 +1048,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gesundheitserkenntnisse"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Análisis de salud"
           }
         },
         "fr": {
@@ -856,6 +1078,12 @@
             "value": "Herzgesundheit"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salud cardíaca"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -876,6 +1104,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wie viele Portionen?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Cuántas porciones?"
           }
         },
         "fr": {
@@ -900,6 +1134,12 @@
             "value": "Konfiguration der Eintragungsaktionen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuración de las acciones de registro"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -920,6 +1160,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Daten eintragen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrar datos"
           }
         },
         "fr": {
@@ -944,6 +1190,12 @@
             "value": "Mahlzeit eintragen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrar comida"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -964,6 +1216,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Konfiguration der Mahlzeiteneingabe"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuración del registro de comidas"
           }
         },
         "fr": {
@@ -988,6 +1246,12 @@
             "value": "Trägt eine Mahlzeit mit einem oder mehreren Lebensmitteln ein."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra una comida con uno o varios alimentos."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1008,6 +1272,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mittagessen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Almuerzo"
           }
         },
         "fr": {
@@ -1038,6 +1308,12 @@
             "value": "Mahlzeit"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comida"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1060,6 +1336,12 @@
             "value": "Monatlich"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mensual"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1080,6 +1362,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ernährung"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutrición"
           }
         },
         "fr": {
@@ -1105,6 +1393,12 @@
             "value": "Barcode-Scanner öffnen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir el lector de códigos de barras"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1128,6 +1422,12 @@
             "value": "Blutdruckeingabe öffnen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir el registro de presión arterial"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1148,6 +1448,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bloom öffnen zum Aktualisieren"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abre Bloom para actualizar"
           }
         },
         "fr": {
@@ -1173,6 +1479,12 @@
             "value": "Stuhlgangeingabe öffnen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir el registro de deposiciones"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1193,6 +1505,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Eingabefunktionen öffnen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir los registros de datos"
           }
         },
         "fr": {
@@ -1218,6 +1536,12 @@
             "value": "Essenseingabe öffnen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir el registro de comidas"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1238,6 +1562,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gesundheitsaktion öffnen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir una acción de salud"
           }
         },
         "fr": {
@@ -1263,6 +1593,12 @@
             "value": "Magic Scanner öffnen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir Magic Scanner"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1284,6 +1620,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Periodeneingabe öffnen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir el registro de la regla"
           }
         },
         "fr": {
@@ -1309,6 +1651,12 @@
             "value": "Spracheingabe öffnen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir el registro por voz"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1330,6 +1678,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wassereingabe öffnen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir el registro de agua"
           }
         },
         "fr": {
@@ -1355,6 +1709,12 @@
             "value": "Gewichtseingabe öffnen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir el registro de peso"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1375,6 +1735,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Öffne die App, um deine persönliche Zusammenfassung zu laden."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abre la app para cargar tu resumen personalizado."
           }
         },
         "fr": {
@@ -1405,6 +1771,12 @@
             "value": "Öffnet eine Gesundheitsaktion zum Eintragen von Daten."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abre una acción de salud para registrar datos."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1425,6 +1797,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Öffnet einen bestimmten Vitalwert, um deine Gesundheitsdaten anzusehen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abre una constante concreta para ver tus datos de salud."
           }
         },
         "fr": {
@@ -1455,6 +1833,12 @@
             "value": "Wähle mindestens ein Lebensmittel zum Eintragen aus"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selecciona al menos un alimento para registrar"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1475,6 +1859,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Schnellzugriff auf Aktionen zum Eintragen von Gesundheitsdaten."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acceso rápido a las acciones para registrar datos de salud."
           }
         },
         "fr": {
@@ -1499,6 +1889,12 @@
             "value": "Trage schnell eine Mahlzeit mit einem oder mehreren Lebensmitteln ein."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra rápidamente una comida con uno o varios alimentos."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1519,6 +1915,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Trage schnell persönliche Daten ein."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra rápidamente tus datos personales."
           }
         },
         "fr": {
@@ -1549,6 +1951,12 @@
             "value": "Gespeicherte Mahlzeit"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comida guardada"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1569,6 +1977,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sieh dir Buds tägliche Zusammenfassung deiner Gesundheit an."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consulta el resumen diario de tu salud según Bud."
           }
         },
         "fr": {
@@ -1599,6 +2013,12 @@
             "value": "Portionen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Porciones"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1619,6 +2039,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Einzelnes Lebensmittel"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un solo alimento"
           }
         },
         "fr": {
@@ -1643,6 +2069,12 @@
             "value": "Schlafqualität"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calidad del sueño"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1663,6 +2095,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Platz"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Espacio"
           }
         },
         "fr": {
@@ -1687,6 +2125,12 @@
             "value": "Snack"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tentempié"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1707,6 +2151,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Schritte"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pasos"
           }
         },
         "fr": {
@@ -1731,6 +2181,12 @@
             "value": "Konfiguration des Schritte-Widgets"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuración del widget de pasos"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1751,6 +2207,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Stresslevel"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveles de estrés"
           }
         },
         "fr": {
@@ -1775,6 +2237,12 @@
             "value": "Zeitraum"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Periodo"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1795,6 +2263,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Konfiguration der Tageserkenntnis"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuración del análisis de hoy"
           }
         },
         "fr": {
@@ -1819,6 +2293,12 @@
             "value": "Tipp des Tages"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El consejo de hoy"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1841,6 +2321,12 @@
             "value": "Schlaf heute Nacht"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El sueño de esta noche"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1861,6 +2347,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Verfolge visuell, wie du dein Ziel im Lauf der Zeit erreichst."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sigue visualmente cómo cumples tu objetivo con el tiempo."
           }
         },
         "fr": {
@@ -1891,6 +2383,12 @@
             "value": "Verfolge deine Schritte und deine Gehstrecke."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sigue tus pasos y la distancia caminada."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1919,6 +2417,12 @@
             "value": "Erkenntnisse konnten nicht geladen werden. Bitte öffne die App."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se han podido cargar los análisis. Abre la app."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1939,6 +2443,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wert"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Valor"
           }
         },
         "fr": {
@@ -1963,6 +2473,12 @@
             "value": "Vitalwert ansehen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ver constante"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1985,6 +2501,12 @@
             "value": "Sieh dir persönliche Gesundheitserkenntnisse an, die im Tagesverlauf automatisch wechseln."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consulta análisis de salud personalizados que van rotando a lo largo del día."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2005,6 +2527,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sieh dir deinen persönlichen Tagestipp oder deine Schlafempfehlungen für heute Nacht an."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consulta tu consejo del día o tus recomendaciones para el sueño de esta noche."
           }
         },
         "fr": {
@@ -2035,6 +2563,12 @@
             "value": "Vitalwert"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Constante"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2055,6 +2589,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wöchentlich"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Semanal"
           }
         },
         "fr": {
@@ -2079,6 +2619,12 @@
             "value": "Welches Lebensmittel?"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Qué alimento?"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2099,6 +2645,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Welche Mahlzeit?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Qué comida?"
           }
         },
         "fr": {
@@ -2123,6 +2675,12 @@
             "value": "Hoppla, da ist mir wohl ein Fehler unterlaufen. Öffne Bloom, um es noch einmal zu versuchen."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vaya, parece que me he equivocado. Abre Bloom para intentarlo de nuevo."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2145,6 +2703,12 @@
             "value": "Widget-Typ"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tipo de widget"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2165,6 +2729,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Jährlich"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anual"
           }
         },
         "fr": {

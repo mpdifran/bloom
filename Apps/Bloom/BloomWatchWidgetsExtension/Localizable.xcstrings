@@ -21,6 +21,12 @@
             "value": "%@ J."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ años"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -41,6 +47,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aktion"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acción"
           }
         },
         "fr": {
@@ -65,6 +77,12 @@
             "value": "Aktionen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acciones"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -85,6 +103,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aktionen-Widget"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widget de acciones"
           }
         },
         "fr": {
@@ -109,6 +133,12 @@
             "value": "Bio-Alter"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edad bio"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -129,6 +159,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Biologisches Alter"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edad biológica"
           }
         },
         "fr": {
@@ -153,6 +189,12 @@
             "value": "Wähle die Aktion, die geöffnet werden soll."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige qué acción quieres abrir."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -173,6 +215,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wähle das Ziel, das angezeigt werden soll."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige qué objetivo quieres ver."
           }
         },
         "fr": {
@@ -197,6 +245,12 @@
             "value": "Erinnerung abhaken"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Completar recordatorio"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -217,6 +271,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ziel"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Objetivo"
           }
         },
         "fr": {
@@ -241,6 +301,12 @@
             "value": "Ziel-Widget"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widget de objetivos"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -261,6 +327,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Herzfrequenz"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frecuencia cardíaca"
           }
         },
         "fr": {
@@ -285,6 +357,12 @@
             "value": "Hakt eine Erinnerung als erledigt ab."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marca un recordatorio como completado."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -305,6 +383,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kein Ziel"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin objetivo"
           }
         },
         "fr": {
@@ -329,6 +413,12 @@
             "value": "Keine Erinnerungen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin recordatorios"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -349,6 +439,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vorkommens-ID"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ID de repetición"
           }
         },
         "fr": {
@@ -373,6 +469,12 @@
             "value": "Öffne schnell die Aktionen oder eine bestimmte Aktion."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abre rápidamente tus acciones o una acción concreta."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -393,6 +495,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Öffne schnell deine Workouts."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abre rápidamente tus entrenamientos."
           }
         },
         "fr": {
@@ -423,6 +531,12 @@
             "value": "Erinnerung"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recordatorio"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -445,6 +559,12 @@
             "value": "Erinnerungs-ID"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ID de recordatorio"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -465,6 +585,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sieh dein biologisches Alter auf einen Blick."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consulta tu edad biológica de un vistazo."
           }
         },
         "fr": {
@@ -495,6 +621,12 @@
             "value": "Sieh deine nächste anstehende Erinnerung."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consulta tu próximo recordatorio."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -523,6 +655,12 @@
             "value": "Platz"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Espacio"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -545,6 +683,12 @@
             "value": "Schritte"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pasos"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -565,6 +709,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Verfolge deinen Zielfortschritt auf einen Blick."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sigue tu progreso de un vistazo."
           }
         },
         "fr": {
@@ -595,6 +745,12 @@
             "value": "Sieh dir Schritte und Strecke von heute an."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consulta tus pasos y distancia de hoy."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -623,6 +779,12 @@
             "value": "Sieh deine aktuelle Herzfrequenz samt heutiger Spanne."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consulta tu última frecuencia cardíaca y el rango de hoy."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -649,6 +811,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Workouts"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrenamientos"
           }
         },
         "fr": {

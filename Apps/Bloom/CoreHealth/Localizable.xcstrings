@@ -16,6 +16,12 @@
             "value": "%1$@ Cal Basal\n%2$@ Cal Active"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ kcal basal\n%2$@ kcal activas"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -37,6 +43,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "6-Minuten-Gehtest: %@ m"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caminata de 6 min: %@ m"
           }
         },
         "fr": {
@@ -62,6 +74,12 @@
             "value": "American Football"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fútbol americano"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -83,6 +101,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Apple Watch Trainingsminuten"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minutos de ejercicio del Apple Watch"
           }
         },
         "fr": {
@@ -108,6 +132,12 @@
             "value": "Bogenschießen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tiro con arco"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -129,6 +159,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Schlafend"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dormido"
           }
         },
         "fr": {
@@ -154,6 +190,12 @@
             "value": "Gefährdet"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En riesgo"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -175,6 +217,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Athletisch"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atlético"
           }
         },
         "fr": {
@@ -200,6 +248,12 @@
             "value": "Australian Football"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fútbol australiano"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -221,6 +275,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Automatisch"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automático"
           }
         },
         "fr": {
@@ -246,6 +306,12 @@
             "value": "Wach"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Despierto"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -269,6 +335,12 @@
             "value": "Badminton"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bádminton"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -287,6 +359,12 @@
       "comment": "Display name for workout activity type",
       "localizations": {
         "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Barre"
+          }
+        },
+        "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Barre"
@@ -315,6 +393,12 @@
             "value": "Baseball"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Béisbol"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -336,6 +420,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Basketball"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Baloncesto"
           }
         },
         "fr": {
@@ -361,6 +451,12 @@
             "value": "Bierglas"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vaso de cerveza"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -382,6 +478,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Radstrecke"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Distancia en bici"
           }
         },
         "fr": {
@@ -407,6 +509,12 @@
             "value": "Raddauer"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duración en bici"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -428,6 +536,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "In diesem Stadium ist der Blutdruck deutlich erhöht und birgt ein höheres Risiko für Herzerkrankungen, Schlaganfälle und weitere Komplikationen. Meist sind Medikamente und Änderungen der Lebensgewohnheiten nötig, um ihn in den Griff zu bekommen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En esta etapa la presión arterial es bastante alta y supone un mayor riesgo de enfermedad cardíaca, ictus y otras complicaciones. Suele requerir medicación y cambios en el estilo de vida para controlarla."
           }
         },
         "fr": {
@@ -453,6 +567,12 @@
             "value": "Ein Blutdruck in diesem Bereich ist höher als normal, liegt aber noch nicht im Bluthochdruckbereich. Er deutet auf ein erhöhtes Risiko hin, Bluthochdruck zu entwickeln."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Una presión arterial en este rango es más alta de lo normal, pero aún no llega a hipertensión. Indica un mayor riesgo de desarrollarla."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -474,6 +594,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bowling"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bolos"
           }
         },
         "fr": {
@@ -505,6 +631,12 @@
             "value": "Boxen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Boxeo"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -526,6 +658,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dose"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lata"
           }
         },
         "fr": {
@@ -551,6 +689,12 @@
             "value": "Cardio-Tanz"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Baile cardio"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -572,6 +716,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cardio-Workouts"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrenamientos de cardio"
           }
         },
         "fr": {
@@ -597,6 +747,12 @@
             "value": "Klettern"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escalada"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -618,6 +774,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kaffeetasse"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taza de café"
           }
         },
         "fr": {
@@ -643,6 +805,12 @@
             "value": "Auffällig"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atención"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -664,6 +832,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cool-down"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enfriamiento"
           }
         },
         "fr": {
@@ -689,6 +863,12 @@
             "value": "Kernschlaf"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sueño base"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -710,6 +890,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rumpftraining"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrenamiento del core"
           }
         },
         "fr": {
@@ -735,6 +921,12 @@
             "value": "Cricket"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Críquet"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -756,6 +948,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Skilanglauf"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esquí de fondo"
           }
         },
         "fr": {
@@ -781,6 +979,12 @@
             "value": "Cross-Training"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrenamiento cruzado"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -799,6 +1003,12 @@
       "comment": "Display name for workout activity type",
       "localizations": {
         "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Curling"
+          }
+        },
+        "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Curling"
@@ -827,6 +1037,12 @@
             "value": "Raucher"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fumador actual"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -848,6 +1064,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Eigene HF"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FC personalizada"
           }
         },
         "fr": {
@@ -873,6 +1095,12 @@
             "value": "Eigene Zonen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zonas personalizadas"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -894,6 +1122,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Radfahren"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ciclismo"
           }
         },
         "fr": {
@@ -919,6 +1153,12 @@
             "value": "Tanzen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Baile"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -940,6 +1180,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tanzinspiriertes Training"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrenamiento inspirado en el baile"
           }
         },
         "fr": {
@@ -965,6 +1211,12 @@
             "value": "Tiefschlaf"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sueño profundo"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -986,6 +1238,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nahrungskalorien"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calorías de la dieta"
           }
         },
         "fr": {
@@ -1011,6 +1269,12 @@
             "value": "Disc-Sportarten"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deportes de disco"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1032,6 +1296,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Doppelte Standphase: %@ %%"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doble apoyo: %@ %%"
           }
         },
         "fr": {
@@ -1057,6 +1327,12 @@
             "value": "Ski alpin"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esquí alpino"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1078,6 +1354,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Erhöht"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elevada"
           }
         },
         "fr": {
@@ -1103,6 +1385,12 @@
             "value": "Crosstrainer"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elíptica"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1124,6 +1412,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Beendet"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finalizado"
           }
         },
         "fr": {
@@ -1149,6 +1443,12 @@
             "value": "Reitsport"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deportes ecuestres"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1170,6 +1470,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Espressotasse"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taza de espresso"
           }
         },
         "fr": {
@@ -1195,6 +1501,12 @@
             "value": "Essenzielles Fett"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grasa esencial"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1216,6 +1528,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ausgezeichnet"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Excelente"
           }
         },
         "fr": {
@@ -1241,6 +1559,12 @@
             "value": "Effektives Training"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ejercicio efectivo"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1262,6 +1586,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ein paar Mal pro Woche Sport"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ejercicio un par de veces por semana"
           }
         },
         "fr": {
@@ -1287,6 +1617,12 @@
             "value": "Fast täglich Sport"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ejercicio casi todos los días"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1308,6 +1644,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "An der Hälfte der Woche Sport"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ejercicio la mitad de la semana"
           }
         },
         "fr": {
@@ -1333,6 +1675,12 @@
             "value": "Mäßig"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Regular"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1354,6 +1702,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Weiblich"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mujer"
           }
         },
         "fr": {
@@ -1379,6 +1733,12 @@
             "value": "Fechten"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esgrima"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1400,6 +1760,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ballaststoffzufuhr"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consumo de fibra"
           }
         },
         "fr": {
@@ -1425,6 +1791,12 @@
             "value": "Angeln"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pesca"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1446,6 +1818,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fit"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En forma"
           }
         },
         "fr": {
@@ -1471,6 +1849,12 @@
             "value": "Fitness-Gaming"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Videojuegos de fitness"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1492,6 +1876,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Beweglichkeit"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flexibilidad"
           }
         },
         "fr": {
@@ -1517,6 +1907,12 @@
             "value": "Follikelphase"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fase folicular"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1538,6 +1934,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ehemaliger Raucher"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exfumador"
           }
         },
         "fr": {
@@ -1563,6 +1965,12 @@
             "value": "Funktionelles Krafttraining"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrenamiento funcional de fuerza"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1584,6 +1992,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Zunehmen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ganar peso"
           }
         },
         "fr": {
@@ -1609,6 +2023,12 @@
             "value": "Glas"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vaso"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1627,6 +2047,12 @@
       "comment": "Display name for workout activity type",
       "localizations": {
         "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Golf"
+          }
+        },
+        "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Golf"
@@ -1655,6 +2081,12 @@
             "value": "Gut"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bueno"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1676,6 +2108,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sehr gut"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muy bueno"
           }
         },
         "fr": {
@@ -1701,6 +2139,12 @@
             "value": "Turnen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gimnasia"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1722,6 +2166,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "HIIT-Workouts"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrenamientos HIIT"
           }
         },
         "fr": {
@@ -1747,6 +2197,12 @@
             "value": "Handbike"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ciclismo de brazos"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1768,6 +2224,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Handball"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Balonmano"
           }
         },
         "fr": {
@@ -1793,6 +2255,12 @@
             "value": "Gesund"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saludable"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1814,6 +2282,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Stark"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abundante"
           }
         },
         "fr": {
@@ -1839,6 +2313,12 @@
             "value": "Hoch"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alto"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1860,6 +2340,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hohe Zuverlässigkeit"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confianza alta"
           }
         },
         "fr": {
@@ -1885,6 +2371,12 @@
             "value": "Hochintensives Intervalltraining"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrenamiento por intervalos de alta intensidad"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1906,6 +2398,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hohes Risiko"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riesgo alto"
           }
         },
         "fr": {
@@ -1931,6 +2429,12 @@
             "value": "Wandern"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Senderismo"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1949,6 +2453,12 @@
       "comment": "Display name for workout activity type",
       "localizations": {
         "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hockey"
+          }
+        },
+        "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Hockey"
@@ -1977,6 +2487,12 @@
             "value": "Jagen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caza"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1998,6 +2514,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bluthochdruck Stufe 1"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hipertensión etapa 1"
           }
         },
         "fr": {
@@ -2023,6 +2545,12 @@
             "value": "Bluthochdruck Stufe 2"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hipertensión etapa 2"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2044,6 +2572,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hypertensive Krise"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crisis hipertensiva"
           }
         },
         "fr": {
@@ -2069,6 +2603,12 @@
             "value": "Im Bett"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En la cama"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2090,6 +2630,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Personen in dieser Kategorie haben eine Ausdauerleistung unter dem Median, liegen aber nicht in der untersten Kategorie."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Las personas de esta categoría tienen una condición cardiovascular por debajo de la mediana, pero no están en la categoría más baja."
           }
         },
         "fr": {
@@ -2115,6 +2661,12 @@
             "value": "Intensiv"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intenso"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2136,6 +2688,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "An den meisten Tagen intensiver Sport"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ejercicio intenso casi todos los días"
           }
         },
         "fr": {
@@ -2161,6 +2719,12 @@
             "value": "Seilspringen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saltar la cuerda"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2184,6 +2748,12 @@
             "value": "Kickboxen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kickboxing"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2202,6 +2772,12 @@
       "comment": "Display name for workout activity type",
       "localizations": {
         "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lacrosse"
+          }
+        },
+        "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Lacrosse"
@@ -2236,6 +2812,12 @@
             "value": "Leicht"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ligero"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2257,6 +2839,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Es liegen nur wenige Gesundheitsdaten vor. Erfasse mehr Werte, um dein biologisches Alter genauer zu bestimmen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hay pocos datos de salud disponibles. Registra más métricas para obtener una edad biológica más precisa."
           }
         },
         "fr": {
@@ -2282,6 +2870,12 @@
             "value": "Wenig bis kein Sport"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Poco o nada de ejercicio"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2303,6 +2897,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Abnehmen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perder peso"
           }
         },
         "fr": {
@@ -2328,6 +2928,12 @@
             "value": "Niedrig"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Baja"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2349,6 +2955,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Geringe Zuverlässigkeit"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confianza baja"
           }
         },
         "fr": {
@@ -2374,6 +2986,12 @@
             "value": "Geringes Risiko"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riesgo bajo"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2395,6 +3013,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ein niedriger Blutdruck kann bei manchen Menschen normal sein, vor allem ohne Beschwerden. Sinkt er jedoch zu stark, können die Organe schlechter durchblutet werden - mit Symptomen wie Schwindel, Ohnmacht und in schweren Fällen einem Schock."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Una presión arterial baja puede ser normal en algunas personas, sobre todo si no tienen síntomas. Sin embargo, si baja demasiado, los órganos reciben menos sangre y pueden aparecer mareos, desmayos y, en casos graves, un shock."
           }
         },
         "fr": {
@@ -2420,6 +3044,12 @@
             "value": "Lutealphase"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fase lútea"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2441,6 +3071,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gewicht halten"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mantener el peso"
           }
         },
         "fr": {
@@ -2466,6 +3102,12 @@
             "value": "Männlich"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hombre"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2487,6 +3129,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kampfsport"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Artes marciales"
           }
         },
         "fr": {
@@ -2512,6 +3160,12 @@
             "value": "Meditationsminuten"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minutos de meditación"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2533,6 +3187,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mittel"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Medio"
           }
         },
         "fr": {
@@ -2558,6 +3218,12 @@
             "value": "Menstruationsphase"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fase menstrual"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2579,6 +3245,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Leicht"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leve"
           }
         },
         "fr": {
@@ -2604,6 +3276,12 @@
             "value": "Körper und Geist"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cuerpo y mente"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2625,6 +3303,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Minimal"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mínimo"
           }
         },
         "fr": {
@@ -2650,6 +3334,12 @@
             "value": "Gemischtes Cardio"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cardio mixto"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2671,6 +3361,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gemischtes metabolisches Cardiotraining"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrenamiento cardiometabólico mixto"
           }
         },
         "fr": {
@@ -2696,6 +3392,12 @@
             "value": "Mobilität und Beweglichkeit"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Movilidad y flexibilidad"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2717,6 +3419,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Moderat"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moderado"
           }
         },
         "fr": {
@@ -2742,6 +3450,12 @@
             "value": "Mittlere Zuverlässigkeit"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confianza moderada"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2763,6 +3477,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gesundheit im Blick behalten"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cuidar mi salud"
           }
         },
         "fr": {
@@ -2788,6 +3508,12 @@
             "value": "Becher"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taza grande"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2809,6 +3535,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nie geraucht"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nunca ha fumado"
           }
         },
         "fr": {
@@ -2834,6 +3566,12 @@
             "value": "Keine Daten"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin datos"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2857,6 +3595,12 @@
             "value": "Keine"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ninguno"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2875,6 +3619,12 @@
       "comment": "Display name for blood pressure category",
       "localizations": {
         "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Normal"
+          }
+        },
+        "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Normal"
@@ -2903,6 +3653,12 @@
             "value": "Nicht festgelegt"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin definir"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2924,6 +3680,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nicht gestartet"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin empezar"
           }
         },
         "fr": {
@@ -2949,6 +3711,12 @@
             "value": "Optimal"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Óptimo"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2970,6 +3738,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Andere"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otro"
           }
         },
         "fr": {
@@ -2995,6 +3769,12 @@
             "value": "Eisprungphase"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fase de ovulación"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -3016,6 +3796,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Paddeln"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remo con pala"
           }
         },
         "fr": {
@@ -3041,6 +3827,12 @@
             "value": "Pausiert"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En pausa"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -3059,6 +3851,12 @@
       "comment": "Display name for workout activity type",
       "localizations": {
         "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pickleball"
+          }
+        },
+        "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Pickleball"
@@ -3087,6 +3885,12 @@
             "value": "Pilates"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pilates"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -3108,6 +3912,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Spielen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Juego"
           }
         },
         "fr": {
@@ -3133,6 +3943,12 @@
             "value": "Schlecht"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bajo"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -3154,6 +3970,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Keine Angabe"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prefiero no decirlo"
           }
         },
         "fr": {
@@ -3179,6 +4001,12 @@
             "value": "Vorbereitung und Erholung"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preparación y recuperación"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -3200,6 +4028,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bereit"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Listo"
           }
         },
         "fr": {
@@ -3225,6 +4059,12 @@
             "value": "Proteinzufuhr"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consumo de proteínas"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -3248,6 +4088,12 @@
             "value": "REM-Schlaf"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sueño REM"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -3266,6 +4112,12 @@
       "comment": "Display name for workout activity type",
       "localizations": {
         "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Racquetball"
+          }
+        },
+        "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Racquetball"
@@ -3294,6 +4146,12 @@
             "value": "Entspannt"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Relajado"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -3317,6 +4175,12 @@
             "value": "Rudern"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remo"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -3335,6 +4199,12 @@
       "comment": "Display name for workout activity type",
       "localizations": {
         "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rugby"
+          }
+        },
+        "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Rugby"
@@ -3363,6 +4233,12 @@
             "value": "Lauf"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carrera"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -3384,6 +4260,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Laufen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Correr"
           }
         },
         "fr": {
@@ -3409,6 +4291,12 @@
             "value": "Laufstrecke"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Distancia corriendo"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -3430,6 +4318,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Laufdauer"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duración corriendo"
           }
         },
         "fr": {
@@ -3455,6 +4349,12 @@
             "value": "Segeln"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vela"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -3476,6 +4376,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wenig aktiv"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sedentario"
           }
         },
         "fr": {
@@ -3501,6 +4407,12 @@
             "value": "Jeden Zonenschwellenwert einzeln festlegen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Define cada umbral de zona por separado"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -3522,6 +4434,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Lege deine maximale und Ruheherzfrequenz fest; die Zonen werden prozentual berechnet"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Define tu frecuencia cardíaca máxima y en reposo; las zonas se calculan en porcentajes"
           }
         },
         "fr": {
@@ -3553,6 +4471,12 @@
             "value": "Shaker"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shaker"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -3574,6 +4498,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Schnapsglas"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vaso de chupito"
           }
         },
         "fr": {
@@ -3599,6 +4529,12 @@
             "value": "Eislaufsport"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deportes de patinaje"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -3622,6 +4558,12 @@
             "value": "Wintersport"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deportes de nieve"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -3643,6 +4585,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Snowboarden"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snowboard"
           }
         },
         "fr": {
@@ -3674,6 +4622,12 @@
             "value": "Fußball"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fútbol"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -3703,6 +4657,12 @@
             "value": "Gesellschaftstanz"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Baile de salón"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -3726,6 +4686,12 @@
             "value": "Softball"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sóftbol"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -3744,6 +4710,12 @@
       "comment": "Display name for workout activity type",
       "localizations": {
         "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Squash"
+          }
+        },
+        "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Squash"
@@ -3772,6 +4744,12 @@
             "value": "Treppensteigen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subir escaleras"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -3793,6 +4771,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Treppen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escaleras"
           }
         },
         "fr": {
@@ -3818,6 +4802,12 @@
             "value": "Step-Training"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrenamiento de step"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -3839,6 +4829,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Schritte"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pasos"
           }
         },
         "fr": {
@@ -3864,6 +4860,12 @@
             "value": "Gestoppt"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detenido"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -3885,6 +4887,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Krafttraining"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrenamiento de fuerza"
           }
         },
         "fr": {
@@ -3910,6 +4918,12 @@
             "value": "Ausreichend"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suficiente"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -3931,6 +4945,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Surfen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Surf"
           }
         },
         "fr": {
@@ -3956,6 +4976,12 @@
             "value": "Triathlon"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Triatlón"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -3977,6 +5003,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Schwimmen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Natación"
           }
         },
         "fr": {
@@ -4002,6 +5034,12 @@
             "value": "Tischtennis"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tenis de mesa"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -4023,6 +5061,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tai-Chi"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taichí"
           }
         },
         "fr": {
@@ -4048,6 +5092,12 @@
             "value": "Ziel-Herzfrequenzzone 1"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zona de frecuencia cardíaca objetivo 1"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -4069,6 +5119,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ziel-Herzfrequenzzone 2"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zona de frecuencia cardíaca objetivo 2"
           }
         },
         "fr": {
@@ -4094,6 +5150,12 @@
             "value": "Ziel-Herzfrequenzzone 3"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zona de frecuencia cardíaca objetivo 3"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -4115,6 +5177,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ziel-Herzfrequenzzone 4"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zona de frecuencia cardíaca objetivo 4"
           }
         },
         "fr": {
@@ -4140,6 +5208,12 @@
             "value": "Ziel-Herzfrequenzzone 5"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zona de frecuencia cardíaca objetivo 5"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -4161,6 +5235,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Teetasse"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taza de té"
           }
         },
         "fr": {
@@ -4186,6 +5266,12 @@
             "value": "Tennis"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tenis"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -4207,6 +5293,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Das ist ein kritischer Zustand mit gefährlich hohem Blutdruck, der sofortige ärztliche Behandlung erfordert, um schwere Organschäden zu verhindern."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Es una situación crítica en la que la presión arterial es peligrosamente alta y requiere atención médica inmediata para evitar daños graves en los órganos."
           }
         },
         "fr": {
@@ -4232,6 +5324,12 @@
             "value": "Dieses Niveau steht für eine schlechte Ausdauerleistung und geht mit einem höheren Risiko für Herz-Kreislauf-Erkrankungen und andere Gesundheitsprobleme einher."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este nivel indica una condición cardiovascular baja y se asocia a un mayor riesgo de enfermedades cardiovasculares y otros problemas de salud."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -4253,6 +5351,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dieses Niveau steht für eine überdurchschnittliche Ausdauerleistung und deutet auf ein geringeres Risiko für Herz-Kreislauf-Erkrankungen hin."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este nivel representa una condición cardiovascular superior a la media y sugiere un menor riesgo de enfermedades cardiovasculares."
           }
         },
         "fr": {
@@ -4278,6 +5382,12 @@
             "value": "Dieser Bereich gilt als optimal und zeigt, dass das Herz gut arbeitet, ohne die Blutgefäße übermäßig zu belasten."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este rango se considera óptimo e indica que el corazón funciona bien sin someter los vasos sanguíneos a un esfuerzo excesivo."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -4299,6 +5409,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dieses Stadium markiert den Beginn von Bluthochdruck: Der Druck auf die Arterien steigt und kann ohne Behandlung zu gesundheitlichen Problemen führen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esta etapa marca el inicio de la hipertensión: aumenta la presión sobre las arterias y, sin tratamiento, puede derivar en problemas de salud."
           }
         },
         "fr": {
@@ -4324,6 +5440,12 @@
             "value": "Dieses Spitzenniveau steht für eine hervorragende Ausdauerleistung, meist ein Zeichen für sehr gute Gesundheit und ein geringeres Risiko für Herzerkrankungen."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este nivel máximo se caracteriza por una condición cardiovascular excelente, señal de muy buena salud general y menor riesgo de problemas cardíacos."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -4345,6 +5467,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Zeit im Tageslicht"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tiempo con luz natural"
           }
         },
         "fr": {
@@ -4370,6 +5498,12 @@
             "value": "Leichtathletik"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atletismo"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -4391,6 +5525,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Klassisches Krafttraining"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrenamiento de fuerza tradicional"
           }
         },
         "fr": {
@@ -4416,6 +5556,12 @@
             "value": "Übergang"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transición"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -4437,6 +5583,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Trinkbecher"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vaso térmico"
           }
         },
         "fr": {
@@ -4462,6 +5614,12 @@
             "value": "Tauchen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buceo"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -4483,6 +5641,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Unbekannt"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desconocido"
           }
         },
         "fr": {
@@ -4508,6 +5672,12 @@
             "value": "Nicht angegeben"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin especificar"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -4529,6 +5699,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sehr schlecht"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muy bajo"
           }
         },
         "fr": {
@@ -4554,6 +5730,12 @@
             "value": "Volleyball"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voleibol"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -4575,6 +5757,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gehen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caminata"
           }
         },
         "fr": {
@@ -4600,6 +5788,12 @@
             "value": "Geh- und Laufstrecke"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Distancia caminando y corriendo"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -4623,6 +5817,12 @@
             "value": "Trinkflasche"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Botella de agua"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -4644,6 +5844,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wassergymnastik"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aquagym"
           }
         },
         "fr": {
@@ -4675,6 +5881,12 @@
             "value": "Wasserzufuhr"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consumo de agua"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -4696,6 +5908,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wasserball"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waterpolo"
           }
         },
         "fr": {
@@ -4721,6 +5939,12 @@
             "value": "Wassersport"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deportes acuáticos"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -4742,6 +5966,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rollstuhl (Lauftempo)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Silla de ruedas (ritmo de carrera)"
           }
         },
         "fr": {
@@ -4767,6 +5997,12 @@
             "value": "Rollstuhl (Gehtempo)"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Silla de ruedas (ritmo de paseo)"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -4788,6 +6024,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Weinglas"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copa de vino"
           }
         },
         "fr": {
@@ -4813,6 +6055,12 @@
             "value": "Trainingsdauer"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duración del entrenamiento"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -4836,6 +6084,12 @@
             "value": "Ringen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lucha"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -4854,6 +6108,12 @@
       "comment": "Display name for workout activity type",
       "localizations": {
         "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yoga"
+          }
+        },
+        "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Yoga"
@@ -4880,6 +6140,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dein biologisches Alter beruht auf einer mittleren Menge an Gesundheitsdaten. Mit weiteren Werten wird es genauer."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu edad biológica se basa en una cantidad moderada de datos de salud. Añadir más métricas mejorará la precisión."
           }
         },
         "fr": {
@@ -4911,6 +6177,12 @@
             "value": "Dein biologisches Alter wird aus den meisten deiner verfügbaren Gesundheitswerte berechnet."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu edad biológica se calcula con la mayoría de tus métricas de salud disponibles."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -4938,6 +6210,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Zonen werden aus deinem Alter und deiner Ruheherzfrequenz aus HealthKit berechnet"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zonas calculadas a partir de tu edad y tu frecuencia cardíaca en reposo de HealthKit"
           }
         },
         "fr": {

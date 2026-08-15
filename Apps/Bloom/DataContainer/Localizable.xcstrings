@@ -10,6 +10,12 @@
             "value": "AMRAP"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AMRAP"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -33,6 +39,12 @@
             "value": "Aktivitätsniveau"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nivel de actividad"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -54,6 +66,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Erinnerung automatisch abhaken, wenn du ein HIIT-Workout einträgst."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marca el recordatorio como hecho automáticamente cuando registres un entrenamiento HIIT."
           }
         },
         "fr": {
@@ -85,6 +103,12 @@
             "value": "Erinnerung automatisch abhaken, wenn du ein Cardio-Workout einträgst."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marca el recordatorio como hecho automáticamente cuando registres un entrenamiento de cardio."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -112,6 +136,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Erinnerung automatisch abhaken, wenn du ein Krafttraining einträgst."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marca el recordatorio como hecho automáticamente cuando registres un entrenamiento de fuerza."
           }
         },
         "fr": {
@@ -143,6 +173,12 @@
             "value": "Erinnerung automatisch abhaken, wenn du deinen Blutdruck einträgst."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marca el recordatorio como hecho automáticamente cuando registres tu presión arterial."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -170,6 +206,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Erinnerung automatisch abhaken, wenn du deine Wasserzufuhr einträgst."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marca el recordatorio como hecho automáticamente cuando registres tu consumo de agua."
           }
         },
         "fr": {
@@ -201,6 +243,12 @@
             "value": "Erinnerung automatisch abhaken, wenn du Yoga, Pilates oder Beweglichkeitstraining einträgst."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marca el recordatorio como hecho automáticamente cuando registres yoga, pilates o flexibilidad."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -228,6 +276,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Erinnerung automatisch abhaken, wenn du dein Gewicht einträgst."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marca el recordatorio como hecho automáticamente cuando registres tu peso."
           }
         },
         "fr": {
@@ -259,6 +313,12 @@
             "value": "Langhantel"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Barra"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -280,6 +340,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Langhantel"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Barra"
           }
         },
         "fr": {
@@ -305,6 +371,12 @@
             "value": "Fahrrad"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bicicleta"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -326,6 +398,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Körperzusammensetzung"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Composición corporal"
           }
         },
         "fr": {
@@ -351,6 +429,12 @@
             "value": "Stuhlgang"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deposiciones"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -372,6 +456,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ausdauerfitness"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Condición cardiovascular"
           }
         },
         "fr": {
@@ -397,6 +487,12 @@
             "value": "Klimmzugstange"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Barra de dominadas"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -418,6 +514,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cool-down"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enfriamiento"
           }
         },
         "fr": {
@@ -443,6 +545,12 @@
             "value": "Zyklustracking"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seguimiento del ciclo"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -466,6 +574,12 @@
             "value": "Kurzhanteln"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mancuernas"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -484,6 +598,12 @@
       "comment": "Display name for workout set",
       "localizations": {
         "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EMOM"
+          }
+        },
+        "es": {
           "stringUnit": {
             "state": "translated",
             "value": "EMOM"
@@ -512,6 +632,12 @@
             "value": "Crosstrainer"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elíptica"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -533,6 +659,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Trainingseffektivität"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Efectividad del ejercicio"
           }
         },
         "fr": {
@@ -558,6 +690,12 @@
             "value": "Herzgesundheit"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salud cardíaca"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -579,6 +717,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kettlebell"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pesa rusa"
           }
         },
         "fr": {
@@ -604,6 +748,12 @@
             "value": "Lebensstil"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estilo de vida"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -625,6 +775,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Blutdruck eintragen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrar presión arterial"
           }
         },
         "fr": {
@@ -650,6 +806,12 @@
             "value": "Cardio-Workout eintragen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrar entrenamiento de cardio"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -671,6 +833,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Essen eintragen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrar comida"
           }
         },
         "fr": {
@@ -696,6 +864,12 @@
             "value": "HIIT-Workout eintragen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrar entrenamiento HIIT"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -717,6 +891,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mobilität/Beweglichkeit eintragen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrar movilidad/flexibilidad"
           }
         },
         "fr": {
@@ -742,6 +922,12 @@
             "value": "Krafttraining eintragen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrar entrenamiento de fuerza"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -763,6 +949,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wasser eintragen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrar agua"
           }
         },
         "fr": {
@@ -788,6 +980,12 @@
             "value": "Gewicht eintragen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrar peso"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -809,6 +1007,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ernährung"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutrición"
           }
         },
         "fr": {
@@ -834,6 +1038,12 @@
             "value": "Widerstandsband"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Banda elástica"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -855,6 +1065,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rudergerät"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Máquina de remo"
           }
         },
         "fr": {
@@ -880,6 +1096,12 @@
             "value": "Skiergometer"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Máquina de esquí"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -901,6 +1123,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Schlafqualität"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calidad del sueño"
           }
         },
         "fr": {
@@ -926,6 +1154,12 @@
             "value": "Standard"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estándar"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -947,6 +1181,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Heimtrainer"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bicicleta estática"
           }
         },
         "fr": {
@@ -972,6 +1212,12 @@
             "value": "Stresslevel"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveles de estrés"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -990,6 +1236,12 @@
       "comment": "Display name for workout set",
       "localizations": {
         "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tabata"
+          }
+        },
+        "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Tabata"
@@ -1018,6 +1270,12 @@
             "value": "Laufband"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cinta de correr"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1039,6 +1297,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aufwärmen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calentamiento"
           }
         },
         "fr": {
@@ -1064,6 +1328,12 @@
             "value": "Gewichtsweste"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chaleco lastrado"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1085,6 +1355,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Yogamatte"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esterilla de yoga"
           }
         },
         "fr": {

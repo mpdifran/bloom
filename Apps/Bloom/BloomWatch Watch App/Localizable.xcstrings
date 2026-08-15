@@ -10,6 +10,12 @@
             "value": " kcal"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": " kcal"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -27,6 +33,12 @@
     "%@ Cal": {
       "localizations": {
         "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ kcal"
+          }
+        },
+        "es": {
           "stringUnit": {
             "state": "translated",
             "value": "%@ kcal"
@@ -55,6 +67,12 @@
             "value": "%lld Zonenmin."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld min en zona"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -75,6 +93,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld bpm"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld ppm"
           }
         },
         "fr": {
@@ -105,6 +129,12 @@
             "value": "%1$lld of %2$lld metrics"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld de %2$lld métricas"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -125,6 +155,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld Workouts"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld entrenamientos"
           }
         },
         "fr": {
@@ -149,6 +185,12 @@
             "value": "%lld %% Vol."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld %% vol."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -169,6 +211,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "5-10 Min."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "5-10 min"
           }
         },
         "fr": {
@@ -193,6 +241,12 @@
             "value": "< 5 Min."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "< 5 min"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -213,6 +267,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "> 10 Min."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "> 10 min"
           }
         },
         "fr": {
@@ -237,6 +297,12 @@
             "value": "Tatsächlich: %lld"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Real: %lld"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -257,6 +323,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Favorisiertes Workout hinzufügen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Añadir entrenamiento favorito"
           }
         },
         "fr": {
@@ -281,6 +353,12 @@
             "value": "Alter"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edad"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -301,6 +379,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Verbesserungspotenzial"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aspectos a mejorar"
           }
         },
         "fr": {
@@ -326,6 +410,12 @@
             "value": "Automatisch"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automático"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -346,6 +436,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "BPM"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PPM"
           }
         },
         "fr": {
@@ -370,6 +466,12 @@
             "value": "Bio-Alter"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edad bio"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -390,6 +492,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Verlauf des Bio-Alters"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Historial de edad bio"
           }
         },
         "fr": {
@@ -414,6 +522,12 @@
             "value": "Blutdruck"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Presión arterial"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -434,6 +548,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Stuhlgang"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deposición"
           }
         },
         "fr": {
@@ -458,6 +578,12 @@
             "value": "Löschen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Borrar"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -480,6 +606,12 @@
             "value": "Demnächst"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muy pronto"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -500,6 +632,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gefäß"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recipiente"
           }
         },
         "fr": {
@@ -525,6 +663,12 @@
             "value": "Eigene HF"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FC personalizada"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -545,6 +689,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Eigene Herzfrequenz"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frecuencia cardíaca personalizada"
           }
         },
         "fr": {
@@ -570,6 +720,12 @@
             "value": "Eigene Zonen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zonas personalizadas"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -590,6 +746,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Datum"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fecha"
           }
         },
         "fr": {
@@ -614,6 +776,12 @@
             "value": "Details"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detalles"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -634,6 +802,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Diastolisch"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diastólica"
           }
         },
         "fr": {
@@ -658,6 +832,12 @@
             "value": "Fertig"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -678,6 +858,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dauer"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duración"
           }
         },
         "fr": {
@@ -702,6 +888,12 @@
             "value": "Anstrengung"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esfuerzo"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -722,6 +914,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Beenden"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finalizar"
           }
         },
         "fr": {
@@ -746,6 +944,12 @@
             "value": "Filtern"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filtrar"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -766,6 +970,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "LOS!"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¡VAMOS!"
           }
         },
         "fr": {
@@ -790,6 +1000,12 @@
             "value": "HF-Zonen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zonas de FC"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -810,6 +1026,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Herzfrequenz"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frecuencia cardíaca"
           }
         },
         "fr": {
@@ -834,6 +1056,12 @@
             "value": "Eintragen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrar"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -854,6 +1082,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Getränk eintragen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrar bebida"
           }
         },
         "fr": {
@@ -878,6 +1112,12 @@
             "value": "Essen eintragen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrar comida"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -898,6 +1138,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Periode eintragen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrar la regla"
           }
         },
         "fr": {
@@ -922,6 +1168,12 @@
             "value": "Mahlzeit"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comida"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -942,6 +1194,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Modus"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modo"
           }
         },
         "fr": {
@@ -966,6 +1224,12 @@
             "value": "Überwachungen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Monitores"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -986,6 +1250,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Neues Workout"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nuevo entrenamiento"
           }
         },
         "fr": {
@@ -1010,6 +1280,12 @@
             "value": "Keine Daten"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin datos"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1030,6 +1306,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kein Effekt"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin efecto"
           }
         },
         "fr": {
@@ -1054,6 +1336,12 @@
             "value": "Keine Herzzonen festgelegt"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin zonas cardíacas definidas"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1074,6 +1362,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Keine Erinnerungen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin recordatorios"
           }
         },
         "fr": {
@@ -1098,6 +1392,12 @@
             "value": "Keine Ergebnisse"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin resultados"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1118,6 +1418,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nicht genug Daten"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datos insuficientes"
           }
         },
         "fr": {
@@ -1142,6 +1448,12 @@
             "value": "Bloom auf dem iPhone öffnen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abre Bloom en el iPhone"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1164,6 +1476,12 @@
             "value": "Pause"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausa"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1184,6 +1502,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Für das Periodentracking wird Zugriff auf Gesundheitsdaten benötigt. Aktiviere ihn in der Health-App auf deinem iPhone."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El seguimiento de la regla necesita acceso a los datos de Salud. Actívalo en la app Salud de tu iPhone."
           }
         },
         "fr": {
@@ -1214,6 +1538,12 @@
             "value": "Positive Faktoren"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Factores positivos"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1234,6 +1564,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Anstrengung bewerten"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Valorar el esfuerzo"
           }
         },
         "fr": {
@@ -1258,6 +1594,12 @@
             "value": "Erinnerungen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recordatorios"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1278,6 +1620,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ergebnisse"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resultados"
           }
         },
         "fr": {
@@ -1302,6 +1650,12 @@
             "value": "Fortsetzen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reanudar"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1322,6 +1676,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sichern"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guardar"
           }
         },
         "fr": {
@@ -1346,6 +1706,12 @@
             "value": "Gesichert"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guardado"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1368,6 +1734,12 @@
             "value": "Workout wird gesichert"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guardando entrenamiento"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1388,6 +1760,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Suchen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buscar"
           }
         },
         "fr": {
@@ -1413,6 +1791,12 @@
             "value": "Jeden Zonenschwellenwert einzeln festlegen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Define cada umbral de zona por separado"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1434,6 +1818,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Lege deine maximale und Ruhe-HF fest; die Zonen werden automatisch berechnet"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Define tu FC máxima y en reposo; las zonas se calculan automáticamente"
           }
         },
         "fr": {
@@ -1464,6 +1854,12 @@
             "value": "Einstellungen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajustes"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1484,6 +1880,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Favorisieren"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marcar como favorito"
           }
         },
         "fr": {
@@ -1508,6 +1910,12 @@
             "value": "Favoriten"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Favoritos"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1528,6 +1936,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Favorisierte Workouts"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrenamientos favoritos"
           }
         },
         "fr": {
@@ -1552,6 +1966,12 @@
             "value": "Zusammenfassung"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resumen"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1572,6 +1992,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wird gewechselt …"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cambiando…"
           }
         },
         "fr": {
@@ -1596,6 +2022,12 @@
             "value": "Systolisch"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sistólica"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1616,6 +2048,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tipp des Tages"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El consejo de hoy"
           }
         },
         "fr": {
@@ -1640,6 +2078,12 @@
             "value": "Typ"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tipo"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1660,6 +2104,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aus Favoriten entfernen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quitar de favoritos"
           }
         },
         "fr": {
@@ -1684,6 +2134,12 @@
             "value": "Aktualisiert %@"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actualizado %@"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1704,6 +2160,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Spracheingabe"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registro por voz"
           }
         },
         "fr": {
@@ -1728,6 +2190,12 @@
             "value": "Aufwärmen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calentando"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1750,6 +2218,12 @@
             "value": "Gewicht"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peso"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1770,6 +2244,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Was hast du gegessen?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Qué has comido?"
           }
         },
         "fr": {
@@ -1801,6 +2281,12 @@
             "value": "Workout"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrenamiento"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1823,6 +2309,12 @@
             "value": "Workouts"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrenamientos"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1843,6 +2335,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Du hast heute keine Erinnerungen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No tienes recordatorios para hoy."
           }
         },
         "fr": {
@@ -1873,6 +2371,12 @@
             "value": "Zone %lld"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zona %lld"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1893,6 +2397,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Zonenschwellenwerte"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Umbrales de zona"
           }
         },
         "fr": {
@@ -1917,6 +2427,12 @@
             "value": "Zonen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zonas"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1938,6 +2454,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Zonen werden aus deinem Alter und deiner Ruheherzfrequenz berechnet"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zonas calculadas a partir de tu edad y tu frecuencia cardíaca en reposo"
           }
         },
         "fr": {
@@ -1968,6 +2490,12 @@
             "value": "bpm"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ppm"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1985,6 +2513,12 @@
     "cals": {
       "localizations": {
         "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "kcal"
+          }
+        },
+        "es": {
           "stringUnit": {
             "state": "translated",
             "value": "kcal"
@@ -2012,6 +2546,12 @@
             "value": "mmHg"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "mmHg"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -2032,6 +2572,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Portionen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "porciones"
           }
         },
         "fr": {

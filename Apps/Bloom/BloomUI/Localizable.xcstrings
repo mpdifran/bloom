@@ -10,6 +10,12 @@
             "value": "Nachmittag"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tarde"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -31,6 +37,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Alter, biologisches Geschlecht, Größe und dein Schwerpunkt. Damit passt Bud seine Antworten und Erkenntnisse an dich an."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edad, sexo biológico, estatura y tu objetivo. Ayuda a Bud a personalizar sus respuestas y adaptar sus análisis a ti."
           }
         },
         "fr": {
@@ -62,6 +74,12 @@
             "value": "Alkoholkonsum und Rauchstatus. Damit versteht Bud Lebensstilfaktoren, die deine Gesundheit beeinflussen können."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consumo de alcohol y hábito de fumar. Ayuda a Bud a entender los factores de estilo de vida que pueden afectar a tu salud."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -91,6 +109,12 @@
             "value": "Körperwerte"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Métricas corporales"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -112,6 +136,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Körperzusammensetzung, Gewicht, Ruheherzfrequenz, VO2max und HRV. Damit erkennt Bud Veränderungen deiner Physiologie und kann passende Fragen beantworten."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Composición corporal, peso, frecuencia cardíaca en reposo, VO2 máx. y VFC. Ayuda a Bud a entender los cambios en tu fisiología y responder preguntas relacionadas."
           }
         },
         "fr": {
@@ -143,6 +173,12 @@
             "value": "Stuhlgang und Muster. Damit beantwortet Bud Fragen zur Verdauungsgesundheit und liefert persönliche Erkenntnisse."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deposiciones y patrones. Ayuda a Bud a responder preguntas sobre salud digestiva y ofrecer análisis personalizados."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -172,6 +208,12 @@
             "value": "Kalendereinträge"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eventos del calendario"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -195,6 +237,12 @@
             "value": "Tipp zur Zyklusphase"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consejo según tu fase del ciclo"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -216,6 +264,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Zyklustracking und zugehörige Daten. Damit beantwortet Bud Fragen zur Menstruationsgesundheit und liefert persönliche Erkenntnisse."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seguimiento del ciclo y datos relacionados. Ayuda a Bud a responder preguntas sobre salud menstrual y ofrecer análisis personalizados."
           }
         },
         "fr": {
@@ -247,6 +301,12 @@
             "value": "Demografische Daten"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datos demográficos"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -268,6 +328,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Verdauungsgesundheit"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salud digestiva"
           }
         },
         "fr": {
@@ -293,6 +359,12 @@
             "value": "Abend"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noche"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -314,6 +386,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Termine aus den von dir gewählten Kalendern. Damit berücksichtigt Bud deinen Tagesablauf und beantwortet passende Fragen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eventos de los calendarios que elijas. Ayuda a Bud a tener en cuenta tu agenda y responder preguntas relacionadas."
           }
         },
         "fr": {
@@ -345,6 +423,12 @@
             "value": "Ziele"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Objetivos"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -366,6 +450,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Erkenntnisse"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Análisis"
           }
         },
         "fr": {
@@ -391,6 +481,12 @@
             "value": "Lebensstil"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estilo de vida"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -414,6 +510,12 @@
             "value": "Standort"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ubicación"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -435,6 +537,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mahlzeiten, Kalorien, Makros und Wasserzufuhr. Damit beantwortet Bud Fragen zu deiner Ernährung und liefert persönliche Erkenntnisse."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comidas, calorías, macros y consumo de agua. Ayuda a Bud a responder preguntas sobre tu alimentación y ofrecer análisis personalizados."
           }
         },
         "fr": {
@@ -466,6 +574,12 @@
             "value": "Menstruationsgesundheit"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salud menstrual"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -487,6 +601,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Morgen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mañana"
           }
         },
         "fr": {
@@ -512,6 +632,12 @@
             "value": "Nacht"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noche"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -533,6 +659,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ernährung"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutrición"
           }
         },
         "fr": {
@@ -558,6 +690,12 @@
             "value": "Periodenprognose"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Previsión de la regla"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -579,6 +717,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Körperliche Aktivität"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actividad física"
           }
         },
         "fr": {
@@ -604,6 +748,12 @@
             "value": "Erinnerungen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recordatorios"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -625,6 +775,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Schlaf"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sueño"
           }
         },
         "fr": {
@@ -650,6 +806,12 @@
             "value": "Schlafdetails"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detalles del sueño"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -671,6 +833,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Schlafdauer, -qualität und -phasen. Damit beantwortet Bud Fragen zu deinem Schlafverhalten und liefert persönliche Erkenntnisse."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duración, calidad y fases del sueño. Ayuda a Bud a responder preguntas sobre tus hábitos de sueño y ofrecer análisis personalizados."
           }
         },
         "fr": {
@@ -702,6 +870,12 @@
             "value": "Schritte, Workouts, Trainingsbelastung und Bewegungsdaten. Damit erhältst du persönliche Aktivitätserkenntnisse und Antworten zu deinem Training."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pasos, entrenamientos, carga de entrenamiento y datos de ejercicio. Permiten ofrecerte análisis de actividad personalizados y responder tus preguntas."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -731,6 +905,12 @@
             "value": "Stress und Achtsamkeit"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estrés y mindfulness"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -752,6 +932,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Stresslevel und Achtsamkeitsübungen. Damit beantwortet Bud Fragen zu deinen Stressmustern und liefert persönliche Erkenntnisse."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveles de estrés y sesiones de mindfulness. Ayudan a Bud a responder preguntas sobre tus patrones de estrés y ofrecer análisis personalizados."
           }
         },
         "fr": {
@@ -783,6 +969,12 @@
             "value": "Tipp des Tages"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El consejo de hoy"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -804,6 +996,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Heutige Termine"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eventos de hoy"
           }
         },
         "fr": {
@@ -829,6 +1027,12 @@
             "value": "Wetter heute"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El tiempo de hoy"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -850,6 +1054,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Termine morgen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eventos de mañana"
           }
         },
         "fr": {
@@ -875,6 +1085,12 @@
             "value": "Wetter morgen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El tiempo de mañana"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -896,6 +1112,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Schlaf heute Nacht"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El sueño de esta noche"
           }
         },
         "fr": {
@@ -921,6 +1143,12 @@
             "value": "Wetter"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tiempo"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -942,6 +1170,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Die Wetterlage an deinem Standort, nicht der Standort selbst. Damit berücksichtigt Bud äußere Einflüsse auf deine Gesundheit."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Las condiciones meteorológicas de tu zona, pero no tu ubicación en sí. Ayudan a Bud a tener en cuenta factores externos que pueden afectar a tu salud."
           }
         },
         "fr": {
@@ -973,6 +1207,12 @@
             "value": "Dein ungefährer Standort (Stadt, Region, Land). Damit berücksichtigt Bud dein Umfeld und liefert ortsbezogene Erkenntnisse, ohne deine genaue Position zu kennen."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu ubicación aproximada (ciudad, región, país). Ayuda a Bud a entender tu entorno y ofrecer análisis adaptados a tu zona, sin conocer tu posición exacta."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
@@ -1000,6 +1240,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Deine Gesundheitsziele und Fortschritte. Damit ordnet Bud deine Fragen ein und macht persönliche Vorschläge."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tus objetivos de salud y tu progreso. Ayudan a Bud a contextualizar tus preguntas y generar sugerencias personalizadas."
           }
         },
         "fr": {
