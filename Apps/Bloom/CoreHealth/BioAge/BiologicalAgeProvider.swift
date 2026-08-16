@@ -142,11 +142,11 @@ public final class BiologicalAgeProvider {
     }
 
     if let contributionsData = UserDefaults.group.data(forKey: Self.contributionsKey) {
-      metricContributions = try? JSONDecoder().decode([WatchMetricContribution].self, from: contributionsData)
+      metricContributions = try? JSONDecoder.watch.decode([WatchMetricContribution].self, from: contributionsData)
     }
 
     if let chartDataData = UserDefaults.group.data(forKey: Self.chartDataKey) {
-      chartData = try? JSONDecoder().decode([WatchBioAgeChartPoint].self, from: chartDataData)
+      chartData = try? JSONDecoder.watch.decode([WatchBioAgeChartPoint].self, from: chartDataData)
     }
   }
 
@@ -163,10 +163,10 @@ public final class BiologicalAgeProvider {
     if let confidence {
       UserDefaults.group.set(confidence.rawValue, forKey: Self.confidenceKey)
     }
-    if let metricContributions, let data = try? JSONEncoder().encode(metricContributions) {
+    if let metricContributions, let data = try? JSONEncoder.watch.encode(metricContributions) {
       UserDefaults.group.set(data, forKey: Self.contributionsKey)
     }
-    if let chartData, let data = try? JSONEncoder().encode(chartData) {
+    if let chartData, let data = try? JSONEncoder.watch.encode(chartData) {
       UserDefaults.group.set(data, forKey: Self.chartDataKey)
     }
   }

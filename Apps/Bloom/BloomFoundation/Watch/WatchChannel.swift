@@ -116,12 +116,12 @@ public extension WatchChannel {
 
     #if targetEnvironment(simulator)
     // Simulator doesn't support complication transfers, fall back to application context
-    try? WCSession.default.updateApplicationContext([key: data])
+    try? updateApplicationContext(key: key, data: data)
     return 50
     #else
     guard WCSession.default.isComplicationEnabled else {
       // Fall back to application context if complications aren't enabled
-      try? WCSession.default.updateApplicationContext([key: data])
+      try? updateApplicationContext(key: key, data: data)
       return 0
     }
 
@@ -181,10 +181,27 @@ private extension WatchChannel {
             }
           }
         case Self.biologicalAgeKey:
-          // Decode and store individual values for widget access
+          // Decode and store individual values for widget access.
+          // Every field is written: the provider reloads its whole state from these keys, so a
+          // partial write would leave it showing a stale timestamp and stale contributing metrics.
           if let bioAgeData = try? JSONDecoder.watch.decode(WatchBiologicalAgeData.self, from: data) {
             UserDefaults.group.set(bioAgeData.biologicalAge, forKey: "BiologicalAgeProvider.biologicalAge")
             UserDefaults.group.set(bioAgeData.actualAge, forKey: "BiologicalAgeProvider.actualAge")
+            UserDefaults.group.set(
+              bioAgeData.lastCalculated.timeIntervalSince1970,
+              forKey: "BiologicalAgeProvider.lastCalculated"
+            )
+            if let confidence = bioAgeData.confidence {
+              UserDefaults.group.set(confidence.rawValue, forKey: "BiologicalAgeProvider.confidence")
+            }
+            if let contributions = bioAgeData.metricContributions,
+               let contributionsData = try? JSONEncoder.watch.encode(contributions) {
+              UserDefaults.group.set(contributionsData, forKey: "BiologicalAgeProvider.contributions")
+            }
+            if let chartData = bioAgeData.chartData,
+               let chartDataData = try? JSONEncoder.watch.encode(chartData) {
+              UserDefaults.group.set(chartDataData, forKey: "BiologicalAgeProvider.chartData")
+            }
           }
         default:
           break
@@ -192,12 +209,16 @@ private extension WatchChannel {
       }
     }
 
-    // Post notification for any observers
-    NotificationCenter.default.post(
-      name: Self.complicationUserInfoDidReceive,
-      object: nil,
-      userInfo: userInfo
-    )
+    // Post notification for any observers. Observers are @MainActor, and this runs on the
+    // WatchConnectivity queue, so hop to main the same way didReceiveApplicationContext does.
+    let sendableUserInfo = userInfo.compactMapValues { $0 as? Data }
+    DispatchQueue.main.async {
+      NotificationCenter.default.post(
+        name: Self.complicationUserInfoDidReceive,
+        object: nil,
+        userInfo: sendableUserInfo
+      )
+    }
 
     #if os(watchOS)
     // Immediately refresh widget timelines when complication data arrives

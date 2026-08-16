@@ -59,7 +59,7 @@ final actor BiologicalAgeCalculator {
       biologicalAge = loadedResult
 
       // Save full result for watch app access (ensures watch has latest data)
-      saveLastResult(loadedResult)
+      await saveLastResult(loadedResult)
     }
 
     isInitialized = true
@@ -80,15 +80,15 @@ final actor BiologicalAgeCalculator {
     UserDefaults.standard.set(data, forKey: Self.metricContributionsKey)
   }
 
-  private func saveLastResult(_ result: BiologicalAgeResult) {
+  private func saveLastResult(_ result: BiologicalAgeResult) async {
     guard let data = try? JSONEncoder().encode(result) else { return }
     UserDefaults.standard.set(data, forKey: Self.lastResultKey)
 
-    // Sync to watchOS
-    syncToWatch(result)
+    // Sync to watchOS. Awaited so a background-launched app can't be suspended mid-transfer.
+    await syncToWatch(result)
   }
 
-  private func syncToWatch(_ result: BiologicalAgeResult) {
+  private func syncToWatch(_ result: BiologicalAgeResult) async {
     #if os(iOS)
     // Map confidence to watch type
     let watchConfidence: WatchBioAgeConfidence? = {
@@ -109,36 +109,37 @@ final actor BiologicalAgeCalculator {
       )
     }
 
-    // Fetch chart data asynchronously
-    Task {
-      let chartData = await fetchChartDataForWatch()
+    let chartData = await fetchChartDataForWatch()
 
-      let watchData = WatchBiologicalAgeData(
-        biologicalAge: result.biologicalAge,
-        actualAge: result.actualAge,
-        lastCalculated: result.lastCalculated,
-        confidence: watchConfidence,
-        metricContributions: watchContributions,
-        chartData: chartData
-      )
+    let watchData = WatchBiologicalAgeData(
+      biologicalAge: result.biologicalAge,
+      actualAge: result.actualAge,
+      lastCalculated: result.lastCalculated,
+      confidence: watchConfidence,
+      metricContributions: watchContributions,
+      chartData: chartData
+    )
 
-      guard let data = try? JSONEncoder.watch.encode(watchData) else { return }
+    guard let data = try? JSONEncoder.watch.encode(watchData) else { return }
 
-      // Use complication transfer for immediate widget update
-      let remainingTransfers = await WatchChannel.shared.transferComplicationUserInfo(
+    // Use complication transfer for immediate widget update
+    let remainingTransfers = await WatchChannel.shared.transferComplicationUserInfo(
+      key: WatchChannel.biologicalAgeKey,
+      data: data
+    )
+
+    if remainingTransfers < 10 {
+      print("Warning: Only \(remainingTransfers) complication transfers remaining today")
+    }
+
+    // Also update application context as a fallback for watch app
+    do {
+      try await WatchChannel.shared.updateApplicationContext(
         key: WatchChannel.biologicalAgeKey,
         data: data
       )
-
-      if remainingTransfers < 10 {
-        print("Warning: Only \(remainingTransfers) complication transfers remaining today")
-      }
-
-      // Also update application context as a fallback for watch app
-      try? await WatchChannel.shared.updateApplicationContext(
-        key: WatchChannel.biologicalAgeKey,
-        data: data
-      )
+    } catch {
+      print("Failed to sync biological age to watch: \(error)")
     }
     #endif
   }
@@ -162,10 +163,20 @@ final actor BiologicalAgeCalculator {
     #endif
   }
 
-  /// Syncs the current biological age to the watch
-  func syncBiologicalAgeToWatch() {
+  /// Syncs the current biological age to the watch.
+  ///
+  /// Loads the last stored result first when nothing is in memory yet. Without that the sync is a
+  /// no-op in exactly the case that matters most: the watch asking for a sync wakes the iOS app in
+  /// the background, where no view has ever run `loadLatestResult()`, so `biologicalAge` is nil.
+  func syncBiologicalAgeToWatch() async {
+    if biologicalAge == nil {
+      // loadLatestResult() syncs whatever it loads, so there's nothing left to push afterwards.
+      await loadLatestResult()
+      return
+    }
+
     guard let result = biologicalAge else { return }
-    syncToWatch(result)
+    await syncToWatch(result)
   }
 
   /// Refresh biological age calculation
@@ -252,7 +263,7 @@ final actor BiologicalAgeCalculator {
     biologicalAge = newResult
 
     // Save full result for watch app access
-    saveLastResult(newResult)
+    await saveLastResult(newResult)
 
     internalLog(.biologicalAge, "Calculated: \(String(format: "%.1f", clampedAge)) (actual: \(String(format: "%.1f", userAge)))")
 

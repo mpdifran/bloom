@@ -69,6 +69,8 @@ struct BloomWatch_Watch_AppApp: App {
             await PendingReminderCompletionManager.shared.consumeWidgetQueuedCompletions()
             await PendingFoodLogManager.shared.syncPendingEntries()
             TodayProvider.shared.loadFromApplicationContext()
+            // Context that arrived while the app was suspended never posted a notification.
+            BiologicalAgeProvider.shared.loadFromApplicationContext()
           }
         }
         .onAppear {
