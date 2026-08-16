@@ -15,13 +15,15 @@ public struct ReminderOccurrenceDisplay: Identifiable {
   public let scheduledTime: Date
   public let isCompleted: Bool
   public let completionDate: Date?
-  
+  public let status: ReminderStatus
+
   public init(
     reminder: ReminderDTO,
     occurrence: ReminderOccurrenceDTO,
     scheduledTime: Date,
     isCompleted: Bool,
-    completionDate: Date? = nil
+    completionDate: Date? = nil,
+    status: ReminderStatus? = nil
   ) {
     self.id = "\(reminder.id)-\(occurrence.id)-\(scheduledTime.timeIntervalSince1970)"
     self.reminder = reminder
@@ -29,73 +31,34 @@ public struct ReminderOccurrenceDisplay: Identifiable {
     self.scheduledTime = scheduledTime
     self.isCompleted = isCompleted
     self.completionDate = completionDate
+    self.status = status ?? ReminderSchedule.status(
+      scheduledTime: scheduledTime,
+      isCompleted: isCompleted,
+      now: Date()
+    )
   }
 }
 
 public extension ReminderDTO {
-  /// Returns display items for today's occurrences, taking into account completions
-  func todaysOccurrenceDisplays() -> [ReminderOccurrenceDisplay] {
-    let calendar = Calendar.current
-    let now = Date()
-    let today = calendar.startOfDay(for: now)
-    
-    // Get today's completion records
-    let todaysCompletions = completionRecords
-      .filter { calendar.isDate($0.completedDate, inSameDayAs: today) }
-    
-    // Get all occurrences that are scheduled for today with their times
-    var occurrenceTimePairs: [(ReminderOccurrenceDTO, Date)] = []
-    
-    for occurrence in occurrences {
-      let scheduledTimes = occurrence.scheduledTimesToday()
-      for scheduledTime in scheduledTimes {
-        occurrenceTimePairs.append((occurrence, scheduledTime))
-      }
+  /// Returns display items for today's occurrences, taking into account completions.
+  ///
+  /// The scheduling rules live in `ReminderSchedule` in BloomFoundation so the watch app resolves
+  /// occurrences exactly the way this does.
+  func todaysOccurrenceDisplays(now: Date = Date()) -> [ReminderOccurrenceDisplay] {
+    let occurrencesByID = Dictionary(occurrences.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+
+    return ReminderSchedule.slots(for: asPlan(), now: now).compactMap { slot in
+      guard let occurrence = occurrencesByID[slot.occurrenceID] else { return nil }
+
+      return ReminderOccurrenceDisplay(
+        reminder: self,
+        occurrence: occurrence,
+        scheduledTime: slot.scheduledTime,
+        isCompleted: slot.isCompleted,
+        completionDate: slot.completionDate,
+        status: slot.status
+      )
     }
-    
-    // Sort by scheduled time
-    occurrenceTimePairs.sort { $0.1 < $1.1 }
-    
-    // Create displays checking specific occurrence completions
-    var displays: [ReminderOccurrenceDisplay] = []
-    
-    // Track which occurrences have been shown as uncompleted
-    var hasShownUncompleted = false
-    
-    for pair in occurrenceTimePairs {
-      let (occurrence, scheduledTime) = pair
-      
-      // Check if this specific occurrence is completed
-      let isCompleted = todaysCompletions.contains { completion in
-        completion.occurrenceID == occurrence.id
-      }
-      
-      // Get the specific completion date for this occurrence (if completed)
-      let completionDate = todaysCompletions.first { $0.occurrenceID == occurrence.id }?.completedDate
-      
-      // Check if the notification time has passed
-      let notificationTimePassed = scheduledTime <= now
-      
-      // Show if:
-      // 1. Already completed, OR
-      // 2. First uncompleted occurrence, OR
-      // 3. Notification time has passed (to show multiple occurrences when their times have elapsed)
-      if isCompleted || !hasShownUncompleted || notificationTimePassed {
-        displays.append(ReminderOccurrenceDisplay(
-          reminder: self,
-          occurrence: occurrence,
-          scheduledTime: scheduledTime,
-          isCompleted: isCompleted,
-          completionDate: completionDate
-        ))
-        
-        if !isCompleted {
-          hasShownUncompleted = true
-        }
-      }
-    }
-    
-    return displays
   }
 }
 
@@ -171,73 +134,6 @@ public extension ReminderOccurrenceDTO {
   
   /// Returns all scheduled times for today for this occurrence
   func scheduledTimesToday() -> [Date] {
-    let calendar = Calendar.current
-    let now = Date()
-    let today = calendar.startOfDay(for: now)
-    
-    switch cadenceType {
-    case .daily:
-      // Daily reminders occur once per day at the specified time
-      let hour = Int(timeOfDay) / 3600
-      let minute = (Int(timeOfDay) % 3600) / 60
-      
-      if let scheduledTime = calendar.date(bySettingHour: hour, minute: minute, second: 0, of: today) {
-        return [scheduledTime]
-      }
-      return []
-      
-    case .weekly:
-      // Check if today is one of the scheduled days
-      guard let daysOfWeek = daysOfWeek,
-            let todayWeekday = calendar.dateComponents([.weekday], from: now).weekday,
-            daysOfWeek.contains(todayWeekday) else {
-        return []
-      }
-      
-      let hour = Int(timeOfDay) / 3600
-      let minute = (Int(timeOfDay) % 3600) / 60
-      
-      if let scheduledTime = calendar.date(bySettingHour: hour, minute: minute, second: 0, of: today) {
-        return [scheduledTime]
-      }
-      return []
-      
-    case .monthly:
-      // Check if today is the scheduled day of month
-      guard let dayOfMonth = dayOfMonth,
-            let todayDay = calendar.dateComponents([.day], from: now).day,
-            dayOfMonth == todayDay else {
-        return []
-      }
-      
-      let hour = Int(timeOfDay) / 3600
-      let minute = (Int(timeOfDay) % 3600) / 60
-      
-      if let scheduledTime = calendar.date(bySettingHour: hour, minute: minute, second: 0, of: today) {
-        return [scheduledTime]
-      }
-      return []
-      
-    case .yearly:
-      // Check if today is the scheduled month and day
-      guard let monthOfYear = monthOfYear,
-            let dayOfYear = dayOfYear else {
-        return []
-      }
-      
-      let todayComponents = calendar.dateComponents([.month, .day], from: now)
-      guard monthOfYear == todayComponents.month,
-            dayOfYear == todayComponents.day else {
-        return []
-      }
-      
-      let hour = Int(timeOfDay) / 3600
-      let minute = (Int(timeOfDay) % 3600) / 60
-      
-      if let scheduledTime = calendar.date(bySettingHour: hour, minute: minute, second: 0, of: today) {
-        return [scheduledTime]
-      }
-      return []
-    }
+    ReminderSchedule.scheduledTimes(for: asRule, on: Date())
   }
 }

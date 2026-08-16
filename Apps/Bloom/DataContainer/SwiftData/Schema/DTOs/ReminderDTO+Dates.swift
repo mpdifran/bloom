@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import BloomFoundation
 
 public extension ReminderDTO {
   
@@ -53,115 +54,26 @@ public extension ReminderDTO {
   
   /// Returns true if this reminder has a notification scheduled for today (regardless of time)
   var hasNotificationToday: Bool {
-    let calendar = Calendar.current
-    let now = Date()
-    let todayComponents = calendar.dateComponents([.weekday, .day, .month], from: now)
-    
-    return occurrences.contains { occurrence in
-      switch occurrence.cadenceType {
-      case .daily:
-        // Daily reminders always have notifications today
-        return true
-        
-      case .weekly:
-        // Check if today's weekday is in the selected days
-        guard let todayWeekday = todayComponents.weekday,
-              let daysOfWeek = occurrence.daysOfWeek else { return false }
-        return daysOfWeek.contains(todayWeekday)
-        
-      case .monthly:
-        // Check if today's day of month matches
-        guard let todayDay = todayComponents.day,
-              let dayOfMonth = occurrence.dayOfMonth else { return false }
-        return todayDay == dayOfMonth
-        
-      case .yearly:
-        // Check if today's month and day match
-        guard let todayMonth = todayComponents.month,
-              let todayDay = todayComponents.day,
-              let monthOfYear = occurrence.monthOfYear,
-              let dayOfYear = occurrence.dayOfYear else { return false }
-        return todayMonth == monthOfYear && todayDay == dayOfYear
-      }
-    }
+    ReminderSchedule.hasOccurrence(asPlan(), on: Date())
   }
-  
+
   /// Returns true if this reminder had a notification scheduled for today that has already passed
   func isOverdueToday(completionRecords: [ReminderCompletionRecordDTO]) -> Bool {
-    // If completed today, it's not overdue
     let calendar = Calendar.current
-    let today = calendar.startOfDay(for: Date())
-    let isCompletedToday = completionRecords.contains { record in
-      calendar.isDate(record.completedDate, inSameDayAs: today)
-    }
-    
-    if isCompletedToday { return false }
-    
-    // Check if any occurrence had a notification scheduled for today that has passed
     let now = Date()
-    
-    for occurrence in occurrences {
-      switch occurrence.cadenceType {
-      case .daily:
-        // For daily reminders, check if the time today has passed
-        let hour = Int(occurrence.timeOfDay) / 3600
-        let minute = (Int(occurrence.timeOfDay) % 3600) / 60
-        
-        if let todayTime = calendar.date(bySettingHour: hour, minute: minute, second: 0, of: now),
-           todayTime < now {
-          return true
-        }
-        
-      case .weekly:
-        // For weekly reminders, check if today is a scheduled day and time has passed
-        guard let daysOfWeek = occurrence.daysOfWeek,
-              let todayWeekday = calendar.dateComponents([.weekday], from: now).weekday,
-              daysOfWeek.contains(todayWeekday) else { continue }
-        
-        let hour = Int(occurrence.timeOfDay) / 3600
-        let minute = (Int(occurrence.timeOfDay) % 3600) / 60
-        
-        if let todayTime = calendar.date(bySettingHour: hour, minute: minute, second: 0, of: now),
-           todayTime < now {
-          return true
-        }
-        
-      case .monthly:
-        // For monthly reminders, check if today is the scheduled day and time has passed
-        guard let dayOfMonth = occurrence.dayOfMonth,
-              let todayDay = calendar.dateComponents([.day], from: now).day,
-              dayOfMonth == todayDay else { continue }
-        
-        let hour = Int(occurrence.timeOfDay) / 3600
-        let minute = (Int(occurrence.timeOfDay) % 3600) / 60
-        
-        if let todayTime = calendar.date(bySettingHour: hour, minute: minute, second: 0, of: now),
-           todayTime < now {
-          return true
-        }
-        
-      case .yearly:
-        // For yearly reminders, check if today is the scheduled month/day and time has passed
-        guard let monthOfYear = occurrence.monthOfYear,
-              let dayOfYear = occurrence.dayOfYear else { continue }
-        
-        let todayComponents = calendar.dateComponents([.month, .day], from: now)
-        guard monthOfYear == todayComponents.month,
-              dayOfYear == todayComponents.day else { continue }
-        
-        let hour = Int(occurrence.timeOfDay) / 3600
-        let minute = (Int(occurrence.timeOfDay) % 3600) / 60
-        
-        if let todayTime = calendar.date(bySettingHour: hour, minute: minute, second: 0, of: now),
-           todayTime < now {
-          return true
-        }
-      }
+
+    // If completed today, it's not overdue
+    let isCompletedToday = completionRecords.contains { record in
+      calendar.isDate(record.completedDate, inSameDayAs: now)
     }
-    
-    return false
+
+    if isCompletedToday { return false }
+
+    return occurrences.contains { occurrence in
+      ReminderSchedule.scheduledTimes(for: occurrence.asRule, on: now).contains { $0 < now }
+    }
   }
-  
+
   /// Returns today's completion date if this reminder was completed today
   var todaysCompletionDate: Date? {
     let calendar = Calendar.current

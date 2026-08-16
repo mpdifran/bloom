@@ -10,6 +10,10 @@ import BloomFoundation
 import WidgetKit
 
 /// Provides today's advice and reminders data on watchOS by reading from WatchConnectivity application context.
+///
+/// The phone syncs reminder rules, not a rendered list, so this resolves them locally: the same
+/// `ReminderSchedule` the iOS app uses decides what shows and whether it's upcoming, due or overdue.
+/// That keeps the watch correct as the clock moves - including across midnight - without a sync.
 @Observable @MainActor
 public final class TodayProvider {
   public static let shared = TodayProvider()
@@ -22,6 +26,7 @@ public final class TodayProvider {
     didSet { saveToUserDefaults() }
   }
 
+  /// Today's occurrences, resolved as of the last `refresh()`.
   public private(set) var reminders: [WatchReminderData] = [] {
     didSet { saveToUserDefaults() }
   }
@@ -29,6 +34,12 @@ public final class TodayProvider {
   public private(set) var lastUpdated: Date? {
     didSet { saveToUserDefaults() }
   }
+
+  /// The reminder rules the phone last sent, or nil if it has never sent any (older phone build).
+  private var plans: [ReminderPlan]?
+
+  /// Completions made on this watch that the phone hasn't echoed back yet.
+  private var overrides: [ReminderCompletionOverride] = []
 
   public var hasContent: Bool {
     reminders.isNotEmpty
@@ -54,16 +65,71 @@ public final class TodayProvider {
   public func loadFromApplicationContext() {
     guard let data = WatchChannel.shared.getApplicationContextData(for: WatchChannel.todayDataKey),
           let watchData = try? JSONDecoder.watch.decode(WatchTodayData.self, from: data) else {
+      // Still re-resolve: statuses move on even when no new data arrives.
+      refresh()
       return
     }
 
     todaysAdvice = watchData.todaysAdvice
-    reminders = watchData.reminders
     lastUpdated = watchData.lastUpdated
+
+    guard let plans = watchData.reminderPlans else {
+      // Phone app predates reminder plans - fall back to its resolved list.
+      self.plans = nil
+      ReminderStore.savePlans(nil)
+      reminders = watchData.reminders
+      return
+    }
+
+    self.plans = plans
+    ReminderStore.savePlans(plans)
+    reconcileOverrides(against: plans, sentAt: watchData.lastUpdated)
+    refresh()
+  }
+
+  /// Re-resolves today's occurrences against the current time.
+  public func refresh() {
+    guard let plans else { return }
+
+    // The widget completes reminders too, straight into the shared store.
+    overrides = ReminderStore.loadOverrides()
+
+    let resolved = ReminderSchedule.applying(overrides, to: plans)
+    let slots = ReminderSchedule.slots(for: resolved).map(WatchReminderData.init(slot:))
+
+    // Only assign on a real change: this runs on a timer, and every write reloads widget timelines.
+    guard slots != reminders else { return }
+
+    reminders = slots
+  }
+
+  /// Drops local completions the phone has caught up with.
+  ///
+  /// An override is only retired once the phone's own data agrees with it - a sync built before the
+  /// completion message landed is newer in time but doesn't know about it yet, and dropping the
+  /// override there would flash the row back to uncompleted.
+  private func reconcileOverrides(against plans: [ReminderPlan], sentAt: Date) {
+    let calendar = Calendar.current
+    let now = Date()
+
+    overrides = ReminderStore.loadOverrides().filter { override in
+      // Completions are day-scoped, so yesterday's override can never apply again.
+      guard calendar.isDate(override.date, inSameDayAs: now) else { return false }
+      guard override.date < sentAt else { return true }
+
+      let plan = plans.first { $0.id == override.reminderID }
+      let phoneSaysCompleted = plan?.completions.contains { $0.occurrenceID == override.occurrenceID } ?? false
+
+      return phoneSaysCompleted != override.isCompleted
+    }
+
+    ReminderStore.saveOverrides(overrides)
   }
 
   private func loadFromUserDefaults() {
     todaysAdvice = UserDefaults.group.string(forKey: Self.adviceKey)
+    plans = ReminderStore.loadPlans()
+    overrides = ReminderStore.loadOverrides()
 
     if let remindersData = UserDefaults.group.data(forKey: Self.remindersKey) {
       do {
@@ -79,6 +145,8 @@ public final class TodayProvider {
     if let timestamp = UserDefaults.group.object(forKey: Self.lastUpdatedKey) as? Double {
       lastUpdated = Date(timeIntervalSince1970: timestamp)
     }
+
+    refresh()
   }
 
   private func saveToUserDefaults() {
@@ -99,28 +167,33 @@ public final class TodayProvider {
     WidgetCenter.shared.reloadTimelines(ofKind: String.WidgetKind.watchReminder)
   }
 
-  /// Updates a reminder's completion status optimistically (before phone confirms)
+  /// Records a completion made on this watch, before the phone confirms it.
+  ///
+  /// The override survives re-resolution and app restarts, and is dropped once the phone sends
+  /// reminder data that agrees with it.
   func updateReminderOptimistically(reminderID: String, occurrenceID: String, isCompleted: Bool) {
-    guard let index = reminders.firstIndex(where: {
-      $0.reminderID == reminderID && $0.occurrenceID == occurrenceID
-    }) else { return }
+    ReminderStore.addOverride(ReminderCompletionOverride(
+      reminderID: reminderID,
+      occurrenceID: occurrenceID,
+      isCompleted: isCompleted,
+      date: Date()
+    ))
 
-    let newStatus: WatchReminderStatus = isCompleted ? .completed : calculateUncompleteStatus(for: reminders[index])
+    guard plans != nil else {
+      // No rules to resolve (older phone build) - fall back to editing the rendered list.
+      guard let index = reminders.firstIndex(where: {
+        $0.reminderID == reminderID && $0.occurrenceID == occurrenceID
+      }) else { return }
 
-    reminders[index].isCompleted = isCompleted
-    reminders[index].status = newStatus
-  }
-
-  private func calculateUncompleteStatus(for reminder: WatchReminderData) -> WatchReminderStatus {
-    let now = Date()
-    let fifteenMinutesAfter = reminder.scheduledTime.addingTimeInterval(15 * 60)
-
-    if reminder.scheduledTime <= now && now <= fifteenMinutesAfter {
-      return .dueNow
-    } else if fifteenMinutesAfter < now {
-      return .overdue
-    } else {
-      return .upcoming
+      reminders[index].isCompleted = isCompleted
+      reminders[index].status = ReminderSchedule.status(
+        scheduledTime: reminders[index].scheduledTime,
+        isCompleted: isCompleted,
+        now: Date()
+      )
+      return
     }
+
+    refresh()
   }
 }

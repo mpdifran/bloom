@@ -11,16 +11,24 @@ import Foundation
 /// Contains only the data needed by the watchOS UI.
 public struct WatchTodayData: Codable, Sendable {
   public let todaysAdvice: String?
+  /// Reminder occurrences as the phone resolved them at `lastUpdated`.
+  ///
+  /// Kept so a watch app older than the phone app still has something to show; current watch
+  /// builds resolve `reminderPlans` themselves instead. Optional on the wire in both directions.
   public let reminders: [WatchReminderData]
+  /// Raw reminder rules, for the watch to resolve against its own clock.
+  public let reminderPlans: [ReminderPlan]?
   public let lastUpdated: Date
 
   public init(
     todaysAdvice: String?,
     reminders: [WatchReminderData],
+    reminderPlans: [ReminderPlan]? = nil,
     lastUpdated: Date = Date()
   ) {
     self.todaysAdvice = todaysAdvice
     self.reminders = reminders
+    self.reminderPlans = reminderPlans
     self.lastUpdated = lastUpdated
   }
 }
@@ -66,10 +74,23 @@ public struct WatchReminderData: Codable, Sendable, Identifiable, Equatable {
   }
 }
 
-/// Status of a reminder for display purposes
-public enum WatchReminderStatus: String, Codable, Sendable {
-  case upcoming   // Scheduled time is in the future
-  case dueNow     // Within 15 minutes of scheduled time
-  case overdue    // Past scheduled time and not completed
-  case completed  // Completed for today
+public extension WatchReminderData {
+  /// Renders a resolved occurrence into the legacy wire/display shape.
+  init(slot: ReminderSlot) {
+    self.init(
+      reminderID: slot.reminderID,
+      title: slot.title,
+      colorHex: slot.colorHex,
+      scheduledTime: slot.scheduledTime,
+      occurrenceID: slot.occurrenceID,
+      isCompleted: slot.isCompleted,
+      status: slot.status,
+      completionDate: slot.completionDate
+    )
+  }
 }
+
+/// Status of a reminder for display purposes.
+///
+/// The watch and the phone share one status type; this name stays for the existing call sites.
+public typealias WatchReminderStatus = ReminderStatus

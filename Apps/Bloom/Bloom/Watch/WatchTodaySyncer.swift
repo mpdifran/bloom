@@ -23,12 +23,17 @@ final class WatchTodaySyncer {
     // Get today's advice
     let todaysAdvice = TodayInsightsManager.shared.todayContent?.todaysAdvice
 
-    // Get today's reminders
-    let reminders = await fetchTodaysReminders()
+    // Send the reminders themselves rather than a rendered list: the watch resolves them against
+    // its own clock, so an occurrence can go from upcoming to due to overdue without a sync.
+    let plans = await fetchTodaysReminderPlans()
+
+    // Resolved occurrences for watch builds that predate reminderPlans.
+    let resolved = ReminderSchedule.slots(for: plans).map(WatchReminderData.init(slot:))
 
     let watchData = WatchTodayData(
       todaysAdvice: todaysAdvice,
-      reminders: reminders,
+      reminders: resolved,
+      reminderPlans: plans,
       lastUpdated: Date()
     )
 
@@ -48,98 +53,16 @@ final class WatchTodaySyncer {
     #endif
   }
 
-  private func fetchTodaysReminders() async -> [WatchReminderData] {
+  private func fetchTodaysReminderPlans() async -> [ReminderPlan] {
     let context = ContainerHolder.shared.createContext()
 
     guard let reminders = try? context.fetchRemindersWithOccurrenceToday() else {
       return []
     }
 
-    let now = Date()
-    var watchReminders: [WatchReminderData] = []
+    // Only today's completions matter for what's outstanding, and they keep the payload small.
+    let startOfToday = Calendar.current.startOfDay(for: Date())
 
-    for reminder in reminders {
-      let dto = reminder.asDTO()
-      let occurrenceDisplays = dto.todaysOccurrenceDisplays()
-
-      for display in occurrenceDisplays {
-        let status = calculateStatus(
-          scheduledTime: display.scheduledTime,
-          isCompleted: display.isCompleted,
-          now: now
-        )
-
-        let watchReminder = WatchReminderData(
-          reminderID: reminder.id,
-          title: reminder.title,
-          colorHex: reminder.colorHex,
-          scheduledTime: display.scheduledTime,
-          occurrenceID: display.occurrence.id,
-          isCompleted: display.isCompleted,
-          status: status,
-          completionDate: display.completionDate
-        )
-        watchReminders.append(watchReminder)
-      }
-    }
-
-    // Sort to match iOS app sorting (TodayView.sortedOccurrences)
-    return watchReminders.sorted { r1, r2 in
-      let isCompleted1 = r1.isCompleted
-      let isCompleted2 = r2.isCompleted
-
-      // Both completed - sort by completion date (most recent first)
-      if isCompleted1 && isCompleted2 {
-        if let date1 = r1.completionDate, let date2 = r2.completionDate {
-          return date1 > date2
-        }
-        // Fallback to scheduled time (most recent first)
-        return r1.scheduledTime > r2.scheduledTime
-      }
-
-      // One completed, one not - uncompleted first
-      if isCompleted1 != isCompleted2 {
-        return !isCompleted1
-      }
-
-      // Both uncompleted - sort by status priority, then scheduled time
-      let priority1 = statusPriority(r1.status)
-      let priority2 = statusPriority(r2.status)
-
-      if priority1 != priority2 {
-        return priority1 < priority2
-      }
-      return r1.scheduledTime < r2.scheduledTime
-    }
-  }
-
-  private func calculateStatus(
-    scheduledTime: Date,
-    isCompleted: Bool,
-    now: Date
-  ) -> WatchReminderStatus {
-    if isCompleted {
-      return .completed
-    }
-
-    let fifteenMinutesAfter = scheduledTime.addingTimeInterval(15 * 60)
-
-    if scheduledTime <= now && now <= fifteenMinutesAfter {
-      return .dueNow
-    } else if fifteenMinutesAfter < now {
-      return .overdue
-    } else {
-      return .upcoming
-    }
-  }
-
-  private func statusPriority(_ status: WatchReminderStatus) -> Int {
-    switch status {
-    case .overdue: return 0
-    case .dueNow: return 1
-    case .upcoming: return 2
-    case .completed: return 3
-    @unknown default: return 4
-    }
+    return reminders.map { $0.asDTO().asPlan(completionsSince: startOfToday) }
   }
 }

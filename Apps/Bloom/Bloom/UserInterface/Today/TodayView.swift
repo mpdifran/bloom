@@ -627,48 +627,32 @@ extension TodayView {
   }
 
   var sortedOccurrences: [ReminderOccurrenceDisplay] {
-    return filteredTodaysOccurrences.sorted { occurrence1, occurrence2 in
-      let isOverdue1 = isOccurrenceOverdue(occurrence1)
-      let isOverdue2 = isOccurrenceOverdue(occurrence2)
-      let isCompleted1 = occurrence1.isCompleted
-      let isCompleted2 = occurrence2.isCompleted
-
-      // Both are completed - sort by completion time (most recent first)
-      if isCompleted1 && isCompleted2 {
-        let completion1 = occurrence1.completionDate
-        let completion2 = occurrence2.completionDate
-
-        // If we have completion dates, sort by most recent first (descending)
-        if let date1 = completion1, let date2 = completion2 {
-          return date1 > date2 // Most recent first
+    // Ordering lives in ReminderSchedule so the watch shows the same order this does.
+    filteredTodaysOccurrences.sorted { first, second in
+      if first.isCompleted && second.isCompleted {
+        if let firstDate = first.completionDate, let secondDate = second.completionDate {
+          return firstDate > secondDate
         }
-        // Fallback to scheduled time (most recent first)
-        return occurrence1.scheduledTime > occurrence2.scheduledTime
+        return first.scheduledTime > second.scheduledTime
       }
 
-      // One is completed, one is not - uncompleted items come first
-      if isCompleted1 != isCompleted2 {
-        return !isCompleted1
+      if first.isCompleted != second.isCompleted {
+        return !first.isCompleted
       }
 
-      // Both uncompleted - sort by urgency
+      let firstPriority = first.status.sortPriority
+      let secondPriority = second.status.sortPriority
 
-      // Overdue items first
-      if isOverdue1 != isOverdue2 {
-        return isOverdue1
+      if firstPriority != secondPriority {
+        return firstPriority < secondPriority
       }
 
-      // Both not overdue or both overdue - sort by scheduled time
-      return occurrence1.scheduledTime < occurrence2.scheduledTime
+      return first.scheduledTime < second.scheduledTime
     }
   }
 
   func isReminderCompleted(_ reminder: ReminderDTO) -> Bool {
     return remindersManager.isReminderCompletedToday(reminder)
-  }
-
-  func isOccurrenceOverdue(_ occurrence: ReminderOccurrenceDisplay) -> Bool {
-    return occurrence.scheduledTime < Date() && !occurrence.isCompleted
   }
 
   func handleReminderTap(_ reminder: ReminderDTO) {

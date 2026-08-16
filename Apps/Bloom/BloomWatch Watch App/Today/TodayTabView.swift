@@ -27,6 +27,14 @@ struct TodayTabView: View {
     .onAppear {
       provider.loadFromApplicationContext()
     }
+    .task {
+      // Reminders roll from upcoming to due to overdue on their own - re-resolve while on screen
+      // so the list doesn't need a sync from the phone to stay honest.
+      while !Task.isCancelled {
+        provider.refresh()
+        try? await Task.sleep(for: .seconds(60))
+      }
+    }
   }
 
   private var contentView: some View {

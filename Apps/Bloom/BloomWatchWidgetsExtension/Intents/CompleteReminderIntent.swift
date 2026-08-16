@@ -34,37 +34,47 @@ struct CompleteReminderIntent: AppIntent {
   static let widgetQueueKey = "WidgetPendingReminderCompletions"
 
   func perform() async throws -> some IntentResult {
-    // 1. Load current reminders from UserDefaults
-    guard let data = UserDefaults.group.data(forKey: Self.remindersKey),
-          var reminders = try? JSONDecoder.watch.decode([WatchReminderData].self, from: data) else {
-      return .result()
-    }
-
-    // 2. Find and mark the reminder as completed
-    guard let index = reminders.firstIndex(where: {
-      $0.reminderID == reminderID && $0.occurrenceID == occurrenceID
-    }) else {
-      return .result()
-    }
-
     let completionDate = Date()
+
+    // 1. Record the completion in the shared store, so the watch app and the widget agree on it
+    //    until the phone confirms.
+    ReminderStore.addOverride(ReminderCompletionOverride(
+      reminderID: reminderID,
+      occurrenceID: occurrenceID,
+      isCompleted: true,
+      date: completionDate
+    ))
+
+    // 2. Older phone builds don't send reminder rules; edit the rendered list instead.
+    if ReminderStore.loadPlans() == nil {
+      markCompletedInRenderedList(completionDate: completionDate)
+    }
+
+    // 3. Queue a pending completion for later sync to the phone
+    queueCompletion(completionDate: completionDate)
+
+    // 4. Reload widget timeline to show next reminder
+    WidgetCenter.shared.reloadTimelines(ofKind: String.WidgetKind.watchReminder)
+
+    return .result()
+  }
+
+  private func markCompletedInRenderedList(completionDate: Date) {
+    guard let data = UserDefaults.group.data(forKey: Self.remindersKey),
+          var reminders = try? JSONDecoder.watch.decode([WatchReminderData].self, from: data),
+          let index = reminders.firstIndex(where: {
+            $0.reminderID == reminderID && $0.occurrenceID == occurrenceID
+          }) else {
+      return
+    }
 
     reminders[index].isCompleted = true
     reminders[index].status = .completed
     reminders[index].completionDate = completionDate
 
-    // 3. Save updated reminders back
     if let encoded = try? JSONEncoder.watch.encode(reminders) {
       UserDefaults.group.set(encoded, forKey: Self.remindersKey)
     }
-
-    // 4. Queue a pending completion for later sync to the phone
-    queueCompletion(completionDate: completionDate)
-
-    // 5. Reload widget timeline to show next reminder
-    WidgetCenter.shared.reloadTimelines(ofKind: String.WidgetKind.watchReminder)
-
-    return .result()
   }
 
   private func queueCompletion(completionDate: Date) {

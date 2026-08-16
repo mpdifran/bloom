@@ -239,6 +239,49 @@ final class PendingDataManager {
 
 Call `syncPending()` on app launch in `BloomWatchApp.swift`.
 
+### Sync rules, not rendered state
+
+Anything whose correct value depends on the current time must sync as **rules the watch evaluates
+itself**, never as a snapshot the phone resolved. A snapshot is stale the moment the clock moves, and
+the watch has no way to tell how stale it is.
+
+Reminders work this way. The phone sends `[ReminderPlan]` - the repeat rules plus today's completion
+records - and the watch resolves them through `ReminderSchedule` in BloomFoundation, the same engine
+`TodayView` uses on iOS. An occurrence therefore moves from upcoming to due to overdue, and the list
+rolls over at midnight, with no sync at all.
+
+- Shared engine: `BloomFoundation/Reminders/ReminderSchedule.swift` (pure, `Foundation`-only, unit
+  tested in `BloomTests/Reminders/`)
+- Shared storage: `BloomFoundation/Reminders/ReminderStore.swift` - the watch app and the widget
+  extension read the same rules and pending completions from `UserDefaults.group`
+- iOS mapping: `ReminderDTO.asPlan()` in DataContainer (SwiftData types can't cross to watchOS)
+
+State that the user changes on the watch travels the other way as a **message**, not as synced state:
+`PendingReminderCompletionManager` sends the completion and records a local
+`ReminderCompletionOverride`. The override wins during resolution until the phone sends data that
+agrees with it, so a completion never flickers back while the round trip is in flight.
+
+When adding a field to a synced payload, make it optional so an older app on either side still
+decodes; keep the resolved list alongside the rules until old builds age out.
+
+### Push from the phone must work when the phone is in the background
+
+The watch's `WatchSyncRequester` wakes the iOS app via WatchConnectivity to ask for a sync. That app
+has no UI running, so any syncer that reads its data from a view model, or that early-returns when an
+in-memory cache is empty, silently does nothing. Biological age was broken this way for months:
+`syncBiologicalAgeToWatch()` returned immediately unless the You tab had already been visited in that
+app session.
+
+Syncers must load their own data (`BiologicalAgeCalculator.syncBiologicalAgeToWatch()` now calls
+`loadLatestResult()` first) and must be `async` all the way to the `WCSession` call, so a
+background-launched app isn't suspended mid-transfer.
+
+### Never replace the application context
+
+`WCSession.updateApplicationContext` **replaces** the whole dictionary. Every key shares one context,
+so writing `[key: data]` directly wipes every other syncer's data. Always go through
+`WatchChannel.updateApplicationContext(key:data:)`, which merges.
+
 ## UserDefaults
 
 Always use `UserDefaults.group` (not `.standard`) for data that needs to persist:
@@ -260,3 +303,4 @@ WKInterfaceDevice.current().play(.failure)  // Failure haptic + sound
 - **Complication Priority Sync**: `WatchGoalSyncer`, `BiologicalAgeCalculator.syncToWatch()`
 - **Direct Messaging**: `PendingBowelMovementManager`, `WatchBowelMovementHandler`
 - **Offline Queue**: `PendingBowelMovementManager`
+- **Rules, not rendered state**: `ReminderSchedule`, `ReminderStore`, `WatchTodaySyncer`, `TodayProvider`
