@@ -9,6 +9,7 @@
 import CoreImage
 import UIKit
 import BloomFoundation
+import TelemetryDeck
 
 // MARK: - CameraManager
 
@@ -17,9 +18,33 @@ final class CameraManager: NSObject {
 
   var onNewBarcode: ((String) -> Void)?
 
+  /// Photo size to ask for, when the active format supports it. Capped rather than maximal: a
+  /// magic scan is uploaded over cellular, so more pixels cost the user time for no gain.
+  private static let preferredPhotoDimensions = CMVideoDimensions(width: 4032, height: 3024)
+
   private var isInitialized = false
   private var capturedImageContinuation: CheckedContinuation<UIImage?, Never>?
   private var deviceInput: AVCaptureDeviceInput?
+
+  /// Largest size the active format supports that isn't bigger than `preferredPhotoDimensions`.
+  ///
+  /// Never hardcode this: a device whose active format doesn't list the size we ask for fails the
+  /// capture outright, which surfaces as a photo that silently never arrives.
+  private var supportedPhotoDimensions: CMVideoDimensions? {
+    guard let supported = deviceInput?.device.activeFormat.supportedMaxPhotoDimensions,
+          !supported.isEmpty else {
+      return nil
+    }
+
+    let preferred = Self.preferredPhotoDimensions
+    let withinPreferred = supported.filter {
+      $0.width <= preferred.width && $0.height <= preferred.height
+    }
+
+    // Fall back to the format's smallest if everything it offers is larger than we asked for.
+    return (withinPreferred.isEmpty ? supported : withinPreferred)
+      .max { ($0.width, $0.height) < ($1.width, $1.height) }
+  }
 
   let captureSession = AVCaptureSession()
   private let photoOutput = AVCapturePhotoOutput()
@@ -60,7 +85,13 @@ extension CameraManager {
         photoSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.hevc])
       }
 
-      photoSettings.maxPhotoDimensions = CMVideoDimensions(width: 4032, height: 3024)
+      // Must match what the output was configured with, and the output only accepts sizes the
+      // active format lists. Asking for anything else fails the capture - including asking for
+      // 0x0, which is what the output still reads as before setPhotoOutputProperties() has run.
+      let outputDimensions = photoOutput.maxPhotoDimensions
+      if outputDimensions.width > 0 && outputDimensions.height > 0 {
+        photoSettings.maxPhotoDimensions = outputDimensions
+      }
       photoSettings.photoQualityPrioritization = .balanced
 
       photoOutput.capturePhoto(with: photoSettings, delegate: self)
@@ -196,7 +227,9 @@ private extension CameraManager {
       return
     }
 
-    photoOutput.maxPhotoDimensions = CMVideoDimensions(width: 4032, height: 3024)
+    if let supportedPhotoDimensions {
+      photoOutput.maxPhotoDimensions = supportedPhotoDimensions
+    }
     photoOutput.maxPhotoQualityPrioritization = .quality
 
     metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue(label: "com.lotus-labs.camera-manager.metadata-objects"))
@@ -237,7 +270,7 @@ extension CameraManager: AVCapturePhotoCaptureDelegate {
     defer { capturedImageContinuation = nil }
 
     if let error = sendableImage.error {
-      print("CameraManager: Error capturing photo: \(error)")
+      report(failure: error.localizedDescription)
       capturedImageContinuation?.resume(returning: nil)
       capturedImageContinuation = nil
       return
@@ -248,9 +281,25 @@ extension CameraManager: AVCapturePhotoCaptureDelegate {
     {
       capturedImageContinuation?.resume(returning: image)
     } else {
+      report(failure: sendableImage.data == nil ? "No photo data" : "Photo data was not an image")
       capturedImageContinuation?.resume(returning: nil)
     }
     capturedImageContinuation = nil
+  }
+
+  /// A capture that yields no image used to fail silently, which is how magic scan could break for
+  /// ten days without leaving a single trace in telemetry or on the server.
+  private func report(failure: String) {
+    let dimensions = photoOutput.maxPhotoDimensions
+    let message = "\(failure) [requested: \(dimensions.width)x\(dimensions.height)]"
+
+    print("CameraManager: Error capturing photo: \(message)")
+
+    TelemetryDeck.errorOccurred(
+      id: "CameraManager.capture",
+      category: .thrownException,
+      message: message
+    )
   }
 }
 

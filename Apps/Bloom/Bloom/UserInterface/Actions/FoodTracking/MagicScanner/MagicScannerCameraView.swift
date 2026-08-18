@@ -29,6 +29,7 @@ struct MagicScannerCameraView: View {
   @State private var contextText: String = ""
   @State private var showReviewSheet = false
   @State private var selectedPhotoItem: PhotosPickerItem?
+  @State private var showPhotoPicker = false
   @State private var mockImage: UIImage?
   @State private var mockPhotoItem: PhotosPickerItem?
 
@@ -80,7 +81,14 @@ struct MagicScannerCameraView: View {
         }
       }
     }
-    .presentationCompactAdaptation(.fullScreenCover)
+    // Presented as a sheet, deliberately. As of iOS 27 a photo picker presented from a full screen
+    // presentation - a fullScreenCover, or a sheet using .presentationCompactAdaptation - is torn
+    // down immediately without its binding ever flipping back, so the gallery silently did nothing.
+    // These modifiers make the sheet fill the screen as closely as a sheet can.
+    .presentationDetents([.large])
+    .presentationCornerRadius(0)
+    .presentationDragIndicator(.hidden)
+    .presentationBackgroundInteraction(.disabled)
     .onAppear {
       Task {
         if !mockMagicScanner {
@@ -95,6 +103,23 @@ struct MagicScannerCameraView: View {
       if !mockMagicScanner {
         cameraManager.stop()
       }
+    }
+    .photosPicker(
+      isPresented: $showPhotoPicker,
+      selection: $selectedPhotoItem,
+      matching: .images
+    )
+    .task(id: selectedPhotoItem) {
+      guard
+        let selectedPhotoItem,
+        let data = try? await selectedPhotoItem.loadTransferable(type: Data.self),
+        let uiImage = UIImage(data: data)
+      else {
+        return
+      }
+
+      capturedImage = uiImage
+      showReviewSheet = true
     }
     .task(id: mockPhotoItem) {
       guard
@@ -212,6 +237,13 @@ private extension MagicScannerCameraView {
         let image = await cameraManager.capture()
         cameraCaptureToggle.toggle()
         await MainActor.run {
+          // A failed capture used to present the review sheet anyway, which rendered empty and
+          // dismissed itself - looking like the feature had quietly died.
+          guard let image else {
+            alertDetails = captureFailedAlert
+            return
+          }
+
           capturedImage = image
           showReviewSheet = true
         }
@@ -230,25 +262,25 @@ private extension MagicScannerCameraView {
     .sensoryFeedback(.impact, trigger: cameraCaptureToggle)
   }
 
+  var captureFailedAlert: AlertDetails {
+    AlertDetails(
+      title: "Couldn't Take Photo",
+      message: "Something went wrong with the camera. Please try again.",
+      buttons: [
+        AlertDetails.Button(title: "OK", role: .cancel) { }
+      ]
+    )
+  }
+
+  /// A plain button; the picker itself is presented from the root via `.photosPicker(isPresented:)`
+  /// so its presentation and the task that consumes its selection sit in the main view subtree.
   var galleryButton: some View {
-    PhotosPicker(
-      selection: $selectedPhotoItem,
-      matching: .images
-    ) {
+    Button {
+      showPhotoPicker = true
+    } label: {
       Image(systemSymbol: .photoOnRectangleAngled)
     }
     .buttonStyle(.plain)
-    .task(id: selectedPhotoItem) {
-      guard
-        let selectedPhotoItem,
-        let image = try? await selectedPhotoItem.loadTransferable(type: Data.self),
-        let uiImage = UIImage(data: image)
-      else {
-        return
-      }
-      capturedImage = uiImage
-      showReviewSheet = true
-    }
   }
 }
 
