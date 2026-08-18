@@ -28,7 +28,7 @@ final class WatchTodaySyncer {
     let plans = await fetchTodaysReminderPlans()
 
     // Resolved occurrences for watch builds that predate reminderPlans.
-    let resolved = ReminderSchedule.slots(for: plans).map(WatchReminderData.init(slot:))
+    let resolved = ReminderSchedule.slots(for: plans).map { WatchReminderData(slot: $0) }
 
     let watchData = WatchTodayData(
       todaysAdvice: todaysAdvice,

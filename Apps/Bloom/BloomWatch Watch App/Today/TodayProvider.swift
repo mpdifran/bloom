@@ -95,7 +95,7 @@ public final class TodayProvider {
     overrides = ReminderStore.loadOverrides()
 
     let resolved = ReminderSchedule.applying(overrides, to: plans)
-    let slots = ReminderSchedule.slots(for: resolved).map(WatchReminderData.init(slot:))
+    let slots = ReminderSchedule.slots(for: resolved).map { WatchReminderData(slot: $0) }
 
     // Only assign on a real change: this runs on a timer, and every write reloads widget timelines.
     guard slots != reminders else { return }

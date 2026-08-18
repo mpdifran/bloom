@@ -85,7 +85,7 @@ struct ReminderTimelineProvider: TimelineProvider {
     // Resolve the synced rules against the current time where possible, so the widget stays right
     // between syncs - including on a day the watch app hasn't been opened.
     if let slots = ReminderStore.resolvedSlots() {
-      return slots.map(WatchReminderData.init(slot:))
+      return slots.map { WatchReminderData(slot: $0) }
     }
 
     guard let data = UserDefaults.group.data(forKey: Self.remindersKey),
