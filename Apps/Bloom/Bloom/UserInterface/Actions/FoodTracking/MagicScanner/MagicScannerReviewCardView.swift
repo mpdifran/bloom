@@ -67,6 +67,14 @@ struct MagicScannerReviewCardView: View {
         .bold()
         .multilineTextAlignment(.leading)
         .cardContainer()
+
+        AsyncButton {
+          try await handleSave()
+        } label: {
+          Text("Save")
+            .horizontallyCentered()
+        }
+        .buttonStyle(.primary)
       }
       .readViewSize { proxy in
         imageWidth = proxy.size.width
@@ -78,15 +86,6 @@ struct MagicScannerReviewCardView: View {
     .presentationCornerRadius(30)
     .presentationDetents([.fraction(0.85), .large])
     .presentationDragIndicator(.visible)
-    .shelf {
-      AsyncButton {
-        try await handleSave()
-      } label: {
-        Text("Save")
-          .horizontallyCentered()
-      }
-      .buttonStyle(.primary)
-    }
     .onAppear {
       locationViewModel.requestLocation()
     }
