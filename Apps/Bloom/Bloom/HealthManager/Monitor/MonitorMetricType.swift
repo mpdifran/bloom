@@ -323,39 +323,24 @@ public enum MonitorMetricType: String, CaseIterable, Sendable, Codable {
   }
 
   private func formatDifferenceAsMinutes(_ minutes: Double) -> String {
-    let sign = minutes >= 0 ? "+" : ""
-    let absMinutes = abs(Int(minutes))
-    let hours = absMinutes / 60
-    let mins = absMinutes % 60
-    if hours > 0 && mins > 0 {
-      return "\(sign)\(hours)h \(mins)m"
-    } else if hours > 0 {
-      return "\(sign)\(hours)h"
-    } else {
-      return "\(sign)\(Int(minutes))m"
-    }
+    let sign = minutes >= 0 ? "+" : "-"
+    // Locale-aware duration: hand-built "3h 45m" hardcoded English unit abbreviations.
+    let magnitude = Duration.seconds(abs(Int(minutes)) * 60)
+      .formatted(.units(allowed: [.hours, .minutes], width: .narrow))
+    return "\(sign)\(magnitude)"
   }
 
   private func formatMinutesAsHoursMinutes(_ minutes: Double) -> String {
-    let hours = Int(minutes) / 60
-    let mins = Int(minutes) % 60
-    if hours > 0 && mins > 0 {
-      return "\(hours)h \(mins)m"
-    } else if hours > 0 {
-      return "\(hours)h"
-    } else {
-      return "\(mins)m"
-    }
+    // Locale-aware duration: hand-built "3h 45m" hardcoded English unit abbreviations.
+    Duration.seconds(Int(minutes) * 60)
+      .formatted(.units(allowed: [.hours, .minutes], width: .narrow))
   }
 
   private func formatMinutesAsHoursMinutesShort(_ minutes: Double) -> String {
-    let hours = Int(minutes) / 60
-    let mins = Int(minutes) % 60
-    if hours > 0 {
-      return "\(hours):\(String(format: "%02d", mins))"
-    } else {
-      return "\(mins)m"
-    }
+    // Locale-aware duration: the hand-built "2:05" / "45m" strings hardcoded a ":" time separator
+    // and an English unit abbreviation.
+    Duration.seconds(Int(minutes) * 60)
+      .formatted(.units(allowed: [.hours, .minutes], width: .narrow))
   }
 
   private func formatMinutesFromMidnightAsTime(_ minutes: Double) -> String {
@@ -369,15 +354,14 @@ public enum MonitorMetricType: String, CaseIterable, Sendable, Codable {
     }
     let hour = adjustedMinutes / 60
     let minute = adjustedMinutes % 60
-    let formatter = DateFormatter()
-    formatter.dateFormat = "h:mm a"
     var components = DateComponents()
     components.hour = hour
     components.minute = minute
     guard let date = Calendar.current.date(from: components) else {
       return "--:--"
     }
-    return formatter.string(from: date)
+    // Locale-aware: a fixed "h:mm a" pattern forced 12-hour AM/PM on 24-hour locales.
+    return date.formatted(.dateTime.hour().minute())
   }
 
   private func formatLocalizedTemperature(_ fahrenheitValue: Double, showUnits: Bool = true) -> String {

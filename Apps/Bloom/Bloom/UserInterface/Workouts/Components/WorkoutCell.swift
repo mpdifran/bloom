@@ -65,7 +65,7 @@ struct WorkoutCell: View {
               .frame(width: 20, height: 20)
               .background(category.color, in: Circle())
 
-            Text(category.rawValue)
+            Text(category.displayName)
               .font(.caption)
               .bold()
               .fontDesign(.rounded)

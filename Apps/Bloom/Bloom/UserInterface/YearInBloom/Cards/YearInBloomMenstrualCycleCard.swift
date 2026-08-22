@@ -83,7 +83,7 @@ private extension YearInBloomMenstrualCycleCard {
         HStack(alignment: .firstTextBaseline, spacing: 2) {
           Text(increase >= 0 ? "+" : "")
             .font(.title3)
-          Text(String(format: "%.1f", increase))
+          Text(increase.formatted(.number.precision(.fractionLength(1))))
             .font(.title2)
             .bold()
           Text(verbatim: "%")
@@ -117,7 +117,7 @@ private extension YearInBloomMenstrualCycleCard {
         HStack(alignment: .firstTextBaseline, spacing: 2) {
           Text(change >= 0 ? "+" : "")
             .font(.title3)
-          Text(String(format: "%.1f", change))
+          Text(change.formatted(.number.precision(.fractionLength(1))))
             .font(.title2)
             .bold()
           Text("bpm")
@@ -151,7 +151,7 @@ private extension YearInBloomMenstrualCycleCard {
         HStack(alignment: .firstTextBaseline, spacing: 2) {
           Text(change >= 0 ? "+" : "")
             .font(.title3)
-          Text(String(format: "%.1f", change))
+          Text(change.formatted(.number.precision(.fractionLength(1))))
             .font(.title2)
             .bold()
           Text(verbatim: "%")

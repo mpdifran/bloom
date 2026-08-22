@@ -13,7 +13,7 @@ public extension Array where Element == ReminderOccurrenceDTO {
   /// Returns a combined description of all cadence types and times
   func combinedCadenceDescription() -> String {
     guard !isEmpty else {
-      return "No schedule set"
+      return String(localized: "No schedule set", bundle: Bundle.dataContainer, comment: "Shown when a reminder has no occurrences configured")
     }
     
     // Group occurrences by cadence type
@@ -41,7 +41,11 @@ public extension Array where Element == ReminderOccurrenceDTO {
         
         switch cadenceType {
         case .daily:
-          descriptions.append("Daily, \(combinedTimes)")
+          descriptions.append(String(
+            localized: "Daily, \(combinedTimes)",
+            bundle: Bundle.dataContainer,
+            comment: "Combined reminder cadence. The placeholder is a list of times of day."
+          ))
         case .weekly:
           // For weekly, we need to check if they have the same days
           let allDaysOfWeek = occurrencesForType.compactMap { $0.daysOfWeek }.flatMap { $0 }
@@ -51,14 +55,30 @@ public extension Array where Element == ReminderOccurrenceDTO {
             // All occurrences have the same days of week
             let dayNames = uniqueDays.sorted().compactMap { Calendar.current.weekdaySymbols[safe: $0 - 1] }
             if dayNames.count == 7 {
-              descriptions.append("Daily, \(combinedTimes)")
+              descriptions.append(String(
+                localized: "Daily, \(combinedTimes)",
+                bundle: Bundle.dataContainer,
+                comment: "Combined reminder cadence. The placeholder is a list of times of day."
+              ))
             } else if dayNames.count == 5 && Set([2, 3, 4, 5, 6]).isSubset(of: uniqueDays) {
-              descriptions.append("Weekdays, \(combinedTimes)")
+              descriptions.append(String(
+                localized: "Weekdays, \(combinedTimes)",
+                bundle: Bundle.dataContainer,
+                comment: "Combined reminder cadence for Monday through Friday. The placeholder is a list of times of day."
+              ))
             } else if dayNames.count == 2 && Set([1, 7]).isSubset(of: uniqueDays) {
-              descriptions.append("Weekends, \(combinedTimes)")
+              descriptions.append(String(
+                localized: "Weekends, \(combinedTimes)",
+                bundle: Bundle.dataContainer,
+                comment: "Combined reminder cadence for Saturday and Sunday. The placeholder is a list of times of day."
+              ))
             } else {
               let formattedDays = ListFormatter.main.string(from: dayNames) ?? dayNames.joined(separator: ", ")
-              descriptions.append("Every \(formattedDays), \(combinedTimes)")
+              descriptions.append(String(
+                localized: "Every \(formattedDays), \(combinedTimes)",
+                bundle: Bundle.dataContainer,
+                comment: "Combined reminder cadence. Placeholders are a list of weekday names and a list of times of day."
+              ))
             }
           } else {
             // Different days of week, show individual descriptions
@@ -69,9 +89,17 @@ public extension Array where Element == ReminderOccurrenceDTO {
           if occurrencesForType.allSatisfy({ $0.dayOfMonth == occurrencesForType.first?.dayOfMonth }) {
             if let dayOfMonth = occurrencesForType.first?.dayOfMonth {
               let ordinal = NumberFormatter.ordinal.string(for: dayOfMonth) ?? "\(dayOfMonth)"
-              descriptions.append("Monthly on the \(ordinal), \(combinedTimes)")
+              descriptions.append(String(
+                localized: "Monthly on the \(ordinal), \(combinedTimes)",
+                bundle: Bundle.dataContainer,
+                comment: "Combined reminder cadence. Placeholders are an ordinal day of the month (e.g. \"3rd\") and a list of times of day."
+              ))
             } else {
-              descriptions.append("Monthly, \(combinedTimes)")
+              descriptions.append(String(
+                localized: "Monthly, \(combinedTimes)",
+                bundle: Bundle.dataContainer,
+                comment: "Combined reminder cadence. The placeholder is a list of times of day."
+              ))
             }
           } else {
             // Different days of month, show individual descriptions
@@ -83,9 +111,17 @@ public extension Array where Element == ReminderOccurrenceDTO {
             if let monthOfYear = occurrencesForType.first?.monthOfYear, let dayOfYear = occurrencesForType.first?.dayOfYear {
               let monthName = Calendar.current.monthSymbols[safe: monthOfYear - 1] ?? ""
               let ordinal = NumberFormatter.ordinal.string(for: dayOfYear) ?? "\(dayOfYear)"
-              descriptions.append("Yearly on \(monthName) \(ordinal), \(combinedTimes)")
+              descriptions.append(String(
+                localized: "Yearly on \(monthName) \(ordinal), \(combinedTimes)",
+                bundle: Bundle.dataContainer,
+                comment: "Combined reminder cadence. Placeholders are a month name, an ordinal day (e.g. \"3rd\"), and a list of times of day."
+              ))
             } else {
-              descriptions.append("Yearly, \(combinedTimes)")
+              descriptions.append(String(
+                localized: "Yearly, \(combinedTimes)",
+                bundle: Bundle.dataContainer,
+                comment: "Combined reminder cadence. The placeholder is a list of times of day."
+              ))
             }
           } else {
             // Different months/days, show individual descriptions

@@ -1,6 +1,42 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "%lld categories selected": {
+      "comment": "Number of health data categories shared with AI features. NEEDS A PLURAL RULE — one: fr 'catégorie sélectionnée', de 'Kategorie ausgewählt', nl 'categorie geselecteerd', es 'categoría seleccionada'.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld Kategorien ausgewählt"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld categorías seleccionadas"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld catégories sélectionnées"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld catégories sélectionnées"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld categorieën geselecteerd"
+          }
+        }
+      }
+    },
     "Afternoon": {
       "comment": "Display name for time mode",
       "localizations": {
@@ -17,6 +53,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Après-midi"
+          }
+        },
+        "fr-CA": {
           "stringUnit": {
             "state": "translated",
             "value": "Après-midi"
@@ -121,6 +163,12 @@
             "value": "Mesures corporelles"
           }
         },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mesures corporelles"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -220,6 +268,12 @@
             "value": "Événements du calendrier"
           }
         },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Événements du calendrier"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -244,6 +298,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conseil selon la phase du cycle"
+          }
+        },
+        "fr-CA": {
           "stringUnit": {
             "state": "translated",
             "value": "Conseil selon la phase du cycle"
@@ -313,6 +373,12 @@
             "value": "Données démographiques"
           }
         },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Données démographiques"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -342,6 +408,12 @@
             "value": "Santé digestive"
           }
         },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Santé digestive"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -366,6 +438,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soirée"
+          }
+        },
+        "fr-CA": {
           "stringUnit": {
             "state": "translated",
             "value": "Soirée"
@@ -435,6 +513,12 @@
             "value": "Objectifs"
           }
         },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Objectifs"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -459,6 +543,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Analyses"
+          }
+        },
+        "fr-CA": {
           "stringUnit": {
             "state": "translated",
             "value": "Analyses"
@@ -493,6 +583,12 @@
             "value": "Mode de vie"
           }
         },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mode de vie"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -517,6 +613,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Localisation"
+          }
+        },
+        "fr-CA": {
           "stringUnit": {
             "state": "translated",
             "value": "Localisation"
@@ -586,6 +688,12 @@
             "value": "Santé menstruelle"
           }
         },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Santé menstruelle"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -610,6 +718,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Matin"
+          }
+        },
+        "fr-CA": {
           "stringUnit": {
             "state": "translated",
             "value": "Matin"
@@ -644,10 +758,52 @@
             "value": "Nuit"
           }
         },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nuit"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Nacht"
+          }
+        }
+      }
+    },
+    "No data selected": {
+      "comment": "Shown when no health data categories are shared with AI features",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Daten ausgewählt"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ningún dato seleccionado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune donnée sélectionnée"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune donnée sélectionnée"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geen gegevens geselecteerd"
           }
         }
       }
@@ -668,6 +824,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutrition"
+          }
+        },
+        "fr-CA": {
           "stringUnit": {
             "state": "translated",
             "value": "Nutrition"
@@ -702,6 +864,12 @@
             "value": "Prévision des règles"
           }
         },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prévision des règles"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -726,6 +894,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activité physique"
+          }
+        },
+        "fr-CA": {
           "stringUnit": {
             "state": "translated",
             "value": "Activité physique"
@@ -760,6 +934,12 @@
             "value": "Rappels"
           }
         },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rappels"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -789,6 +969,12 @@
             "value": "Sommeil"
           }
         },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sommeil"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -813,6 +999,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Détails du sommeil"
+          }
+        },
+        "fr-CA": {
           "stringUnit": {
             "state": "translated",
             "value": "Détails du sommeil"
@@ -917,6 +1109,12 @@
             "value": "Stress et pleine conscience"
           }
         },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stress et pleine conscience"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -981,6 +1179,12 @@
             "value": "Le conseil du jour"
           }
         },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le conseil du jour"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1005,6 +1209,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les événements du jour"
+          }
+        },
+        "fr-CA": {
           "stringUnit": {
             "state": "translated",
             "value": "Les événements du jour"
@@ -1039,6 +1249,12 @@
             "value": "La météo du jour"
           }
         },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La météo du jour"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1063,6 +1279,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les événements de demain"
+          }
+        },
+        "fr-CA": {
           "stringUnit": {
             "state": "translated",
             "value": "Les événements de demain"
@@ -1097,6 +1319,12 @@
             "value": "La météo de demain"
           }
         },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La météo de demain"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1126,6 +1354,12 @@
             "value": "Le sommeil de cette nuit"
           }
         },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le sommeil de cette nuit"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1150,6 +1384,12 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Météo"
+          }
+        },
+        "fr-CA": {
           "stringUnit": {
             "state": "translated",
             "value": "Météo"

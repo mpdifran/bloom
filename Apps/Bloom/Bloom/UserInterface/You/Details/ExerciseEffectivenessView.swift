@@ -145,7 +145,7 @@ private extension ExerciseEffectivenessView {
     }
   }
 
-  func zoneLegendItem(color: Color, label: String) -> some View {
+  func zoneLegendItem(color: Color, label: LocalizedStringKey) -> some View {
     HStack(spacing: 4) {
       Circle()
         .fill(color)

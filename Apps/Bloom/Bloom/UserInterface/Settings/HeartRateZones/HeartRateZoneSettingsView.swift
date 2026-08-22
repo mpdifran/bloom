@@ -236,8 +236,10 @@ private extension HeartRateZoneSettingsView {
     }
   }
 
+  /// `title` is a LocalizedStringKey, not a String: a String literal is passed straight to Text
+  /// without a catalog lookup, so every row title rendered in English regardless of language.
   func heartRateInputRow(
-    title: String,
+    title: LocalizedStringKey,
     value: Binding<Double>,
     placeholder: String,
     color: Color? = nil
@@ -290,7 +292,9 @@ private extension HeartRateZoneSettingsView {
     }
   }
 
-  func zonePreviewRow(_ title: String, range: String, color: Color) -> some View {
+  /// `title` is a LocalizedStringKey for the same reason as `heartRateInputRow(title:…)`.
+  /// `range` stays a String: it holds a runtime-formatted heart rate range.
+  func zonePreviewRow(_ title: LocalizedStringKey, range: String, color: Color) -> some View {
     HStack {
       Circle()
         .fill(color)

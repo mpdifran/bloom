@@ -85,9 +85,11 @@ private extension ActivityLevelDistributionView {
     }
 
     func formattedPercent(for level: ActivityLevelSummary.ActivityLevel) -> String {
-        guard let count = ratioDistribution[level], count > 0 else { return "0%" }
+        guard let count = ratioDistribution[level], count > 0 else {
+            return Double.zero.formatted(.percent.precision(.fractionLength(0)))
+        }
 
-        return String(format: "%.0f", CGFloat(count) / total * 100) + "%"
+        return (Double(count) / Double(total)).formatted(.percent.precision(.fractionLength(0)))
     }
 }
 

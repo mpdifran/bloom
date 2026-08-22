@@ -186,9 +186,30 @@ public extension HeartHealthMonthlySummary.Details {
 
   @MainActor
   var subtitle: String? {
-    let vo2Max = averageVO2Max.map { "VO₂ Max: \($0.displayString(for: .vo2Max()))" }
-    let rhr = averageRestingHeartRate.map { _ in "RHR: \(displayRestingHeartRate)" }
-    let heartRateRecovery = averageHeartRateRecovery.map { _ in "HRR: \(displayHeartRateRecovery)" }
+    let vo2Max = averageVO2Max.map { quantity in
+      let value = quantity.displayString(for: .vo2Max())
+      return String(
+        localized: "VO₂ Max: \(value)",
+        bundle: Bundle.coreHealth,
+        comment: "Heart health subtitle line. The placeholder is a VO₂ max value."
+      )
+    }
+    let rhr = averageRestingHeartRate.map { _ in
+      let value = displayRestingHeartRate
+      return String(
+        localized: "RHR: \(value)",
+        bundle: Bundle.coreHealth,
+        comment: "Heart health subtitle line. RHR is resting heart rate; the placeholder is the value in bpm."
+      )
+    }
+    let heartRateRecovery = averageHeartRateRecovery.map { _ in
+      let value = displayHeartRateRecovery
+      return String(
+        localized: "HRR: \(value)",
+        bundle: Bundle.coreHealth,
+        comment: "Heart health subtitle line. HRR is heart rate recovery; the placeholder is the value in bpm."
+      )
+    }
 
     let descriptions = [vo2Max, rhr, heartRateRecovery].unwrap()
 

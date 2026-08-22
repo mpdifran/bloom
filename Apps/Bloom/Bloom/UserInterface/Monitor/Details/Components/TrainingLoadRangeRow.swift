@@ -39,7 +39,7 @@ struct TrainingLoadRangeRow: View {
         Spacer()
 
         if let summary = trainingLoadSummary {
-          Text(summary.status.rawValue)
+          Text(summary.status.displayName)
             .font(.subheadline)
             .fontWeight(.semibold)
             .foregroundStyle(.primary)

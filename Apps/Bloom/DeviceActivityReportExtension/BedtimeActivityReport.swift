@@ -24,7 +24,8 @@ struct BedtimeActivityReport: DeviceActivityReportScene {
                         guard applicationActivity.totalActivityDuration > 1 else { continue }
 
                         let id = applicationActivity.application.bundleIdentifier ?? UUID().uuidString
-                        let name = applicationActivity.application.localizedDisplayName ?? "Unknown App"
+                        let name = applicationActivity.application.localizedDisplayName
+                            ?? String(localized: "Unknown App", comment: "Fallback name for an app with no display name")
                         let duration = applicationActivity.totalActivityDuration
 
                         if let index = result.firstIndex(where: { $0.id == id }) {
@@ -43,7 +44,8 @@ struct BedtimeActivityReport: DeviceActivityReportScene {
                         guard webDomainActivity.totalActivityDuration > 1 else { continue }
 
                         let id = webDomainActivity.webDomain.domain ?? UUID().uuidString
-                        let name = webDomainActivity.webDomain.domain ?? "Unknown Website"
+                        let name = webDomainActivity.webDomain.domain
+                            ?? String(localized: "Unknown Website", comment: "Fallback name for a website with no domain")
                         let duration = webDomainActivity.totalActivityDuration
 
                         if let index = result.firstIndex(where: { $0.id == id }) {

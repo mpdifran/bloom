@@ -64,7 +64,7 @@ struct CurrentPhaseStatCard: View {
       StatCard(
         symbol: .circleDottedAndCircle,
         title: "Current Phase",
-        value: "No Data",
+        value: String(localized: "No Data", comment: "Stat card value shown when there is no data"),
         valueStyle: .largeTinted(nil),
         aspectRatio: 2
       )

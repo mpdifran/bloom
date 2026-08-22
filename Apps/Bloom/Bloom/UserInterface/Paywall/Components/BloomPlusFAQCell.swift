@@ -9,8 +9,8 @@ import SFSafeSymbols
 import SwiftUI
 
 struct BloomPlusFAQCell: View {
-  let question: String
-  let answer: String
+  let question: LocalizedStringKey
+  let answer: LocalizedStringKey
 
   @State private var isExpanded: Bool = false
 

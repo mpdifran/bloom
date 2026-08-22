@@ -359,7 +359,7 @@ private extension WorkoutDetailsView {
 
   var distance: String? {
     guard let distance = workout.totalDistanceWalkingRunningCycling else { return nil }
-    return String(format: "%.2f", distance.doubleValue(for: .meterUnit(with: .kilo)))
+    return distance.doubleValue(for: .meterUnit(with: .kilo)).formatted(.number.precision(.fractionLength(2)))
   }
 
   var elevation: String? {
@@ -402,7 +402,7 @@ private extension WorkoutDetailsView {
               .fontDesign(.rounded)
               .foregroundStyle(category.color)
 
-            Text(category.rawValue)
+            Text(category.displayName)
               .bold()
               .fontDesign(.rounded)
               .foregroundStyle(category.color)

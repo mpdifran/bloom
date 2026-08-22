@@ -173,7 +173,7 @@ private extension CardioFitnessStoryPage {
             .foregroundStyle(yearlyAverageColor)
             .font(.title2)
           VStack(alignment: .leading, spacing: 0) {
-            Text(String(format: "%.1f", vo2Max))
+            Text(vo2Max.formatted(.number.precision(.fractionLength(1))))
               .font(.title2)
               .bold()
             Text("Current VO₂ Max")
@@ -192,7 +192,7 @@ private extension CardioFitnessStoryPage {
             .foregroundStyle(.white, change >= 0 ? Color.vitalGood : Color.vitalWarning)
             .font(.title2)
           VStack(alignment: .leading, spacing: 0) {
-            Text(change >= 0 ? "+\(String(format: "%.1f", change))" : String(format: "%.1f", change))
+            Text(change.formatted(.number.precision(.fractionLength(1)).sign(strategy: .always())))
               .font(.title2)
               .bold()
             Text("Year Change")
@@ -211,7 +211,7 @@ private extension CardioFitnessStoryPage {
             .foregroundStyle(.white, yearlyAverageColor)
             .font(.title2)
           VStack(alignment: .leading, spacing: 0) {
-            Text(String(format: "%.1f", peakVO2Max))
+            Text(peakVO2Max.formatted(.number.precision(.fractionLength(1))))
               .font(.title2)
               .bold()
             Text("Peak VO₂ Max")
@@ -253,7 +253,7 @@ private extension CardioFitnessStoryPage {
 
   var formattedVO2Max: String {
     guard let vo2Max = stats.latestVO2Max else { return "" }
-    return " at \(String(format: "%.1f", vo2Max))"
+    return " at \(vo2Max.formatted(.number.precision(.fractionLength(1))))"
   }
 
   var vo2MaxChange: Double? {

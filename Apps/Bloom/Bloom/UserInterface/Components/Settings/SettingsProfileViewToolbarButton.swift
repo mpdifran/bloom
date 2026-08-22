@@ -9,6 +9,14 @@ import SwiftUI
 import CoreHealth
 
 struct SettingsProfileViewToolbarButton: ToolbarContent {
+  /// Overrides the signed-in user's photo. Used by the App Store screenshot previews, which show a
+  /// fictional person rather than whoever is signed in on the capturing machine.
+  let photoOverride: UIImage?
+
+  init(photoOverride: UIImage? = nil) {
+    self.photoOverride = photoOverride
+  }
+
   @State private var presentedSheet: AnyView?
 
   @ObservedObject private var userController = UserController.shared
@@ -37,7 +45,7 @@ private extension SettingsProfileViewToolbarButton {
 
   @ViewBuilder
   var glassProfilePhotoView: some View {
-    if let image = userController.profilePhoto {
+    if let image = photoOverride ?? userController.profilePhoto {
       Image(uiImage: image)
         .resizable()
         .scaledToFill()

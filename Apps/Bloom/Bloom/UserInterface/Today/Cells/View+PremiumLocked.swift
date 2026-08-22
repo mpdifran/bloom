@@ -9,7 +9,9 @@ import SwiftUI
 
 extension View {
 
-  func premiumLocked(_ title: String) -> some View {
+  /// LocalizedStringKey, not String: a String literal is passed straight to Text without a
+  /// catalog lookup, so the lock overlay rendered in English regardless of language.
+  func premiumLocked(_ title: LocalizedStringKey) -> some View {
     self
       .blur(radius: 7)
       .overlay {

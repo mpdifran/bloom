@@ -19,7 +19,7 @@ struct BodyWeightStatCard: View {
     StatCard(
       symbol: .gaugeWithDotsNeedle67percent,
       title: "Body Weight",
-      value: formattedWeight ?? "No Data",
+      value: formattedWeight ?? String(localized: "No Data", comment: "Stat card value shown when there is no data"),
       valueStyle: .largeTinted(relativeDate),
       layerContent: hasData,
       includePadding: !hasData
@@ -47,12 +47,12 @@ private extension BodyWeightStatCard {
     let calendar = Calendar.current
 
     if calendar.isDateInToday(date) {
-      return "Today"
+      return String(localized: "Today", comment: "Body weight card date label for a reading taken today")
     } else if calendar.isDateInYesterday(date) {
-      return "Yesterday"
+      return String(localized: "Yesterday", comment: "Body weight card date label for a reading taken yesterday")
     } else {
       let days = calendar.dateComponents([.day], from: date, to: Date()).day ?? 0
-      return "\(days) days ago"
+      return String(localized: "\(days) days ago", comment: "Body weight card date label. The placeholder is a number of days.")
     }
   }
 

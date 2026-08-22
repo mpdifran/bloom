@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct SettingsHealthAppCell: View {
-  let title: String
+  /// LocalizedStringKey, not String: a String literal is passed straight to Text without a
+  /// catalog lookup, so the title rendered in English regardless of language.
+  let title: LocalizedStringKey
 
   var body: some View {
     LabeledContent {

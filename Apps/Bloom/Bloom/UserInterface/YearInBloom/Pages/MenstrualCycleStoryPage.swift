@@ -129,7 +129,7 @@ private extension MenstrualCycleStoryPage {
           AxisGridLine()
           AxisValueLabel {
             if let activity = value.as(Double.self) {
-              Text(String(format: "%.0f%%", activity * 100))
+              Text(activity.formatted(.percent.precision(.fractionLength(0))))
                 .font(.caption2)
             }
           }
@@ -190,7 +190,7 @@ private extension MenstrualCycleStoryPage {
           Circle()
             .fill(Color.mutedPurple)
             .frame(width: 8, height: 8)
-          Text("Follicular: \(String(format: "%.0f%%", follicular * 100))")
+          Text("Follicular: \(follicular.formatted(.percent.precision(.fractionLength(0))))")
             .font(.caption2)
         }
       }
@@ -200,7 +200,7 @@ private extension MenstrualCycleStoryPage {
           Circle()
             .fill(Color.mutedPurple.opacity(0.4))
             .frame(width: 8, height: 8)
-          Text("Baseline: \(String(format: "%.0f%%", other * 100))")
+          Text("Baseline: \(other.formatted(.percent.precision(.fractionLength(0))))")
             .font(.caption2)
         }
       }
@@ -255,7 +255,7 @@ private extension MenstrualCycleStoryPage {
         .font(.title2)
       VStack(alignment: .leading, spacing: 0) {
         if let length = stats.averagePeriodLength {
-          Text(String(format: "%.1f days", length))
+          Text(length.formatted(.number.precision(.fractionLength(1))) + " days")
             .font(.title3)
             .bold()
         } else {
@@ -279,7 +279,7 @@ private extension MenstrualCycleStoryPage {
         .font(.title2)
       VStack(alignment: .leading, spacing: 0) {
         if let change = stats.lutealRestingHRChange {
-          Text("\(change >= 0 ? "+" : "")\(String(format: "%.1f", change)) bpm")
+          Text("\(change >= 0 ? "+" : "")\(change.formatted(.number.precision(.fractionLength(1)))) bpm")
             .font(.title3)
             .bold()
         } else {
@@ -303,7 +303,7 @@ private extension MenstrualCycleStoryPage {
         .font(.title2)
       VStack(alignment: .leading, spacing: 0) {
         if let change = stats.lutealSleepEfficiencyChange {
-          Text("\(change >= 0 ? "+" : "")\(String(format: "%.1f", change))%")
+          Text("\(change >= 0 ? "+" : "")\(change.formatted(.number.precision(.fractionLength(1))))%")
             .font(.title3)
             .bold()
         } else {
@@ -362,9 +362,8 @@ private extension MenstrualCycleStoryPage {
   }
 
   func monthName(for date: Date) -> String {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "MMMM"
-    return formatter.string(from: date)
+    // Locale-aware month name; a fixed "MMMM" pattern rendered English months in every language.
+    date.formatted(.dateTime.month(.wide))
   }
 }
 

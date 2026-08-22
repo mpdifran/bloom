@@ -46,8 +46,8 @@ struct ActiveWorkoutSummaryView: View {
         SummaryMetricView(
           title: "Effort",
           value: effortScore.map {
-            "\($0) \(WorkoutEffortCategory(effortScore: Double($0)).rawValue)"
-          } ?? "Rate"
+            "\($0) \(WorkoutEffortCategory(effortScore: Double($0)).displayName)"
+          } ?? String(localized: "Rate", comment: "Prompt to rate workout effort")
         )
         .tint(effortScore.map { WorkoutEffortCategory(effortScore: Double($0)).color } ?? .gray)
       }
@@ -62,7 +62,13 @@ struct ActiveWorkoutSummaryView: View {
       SummaryMetricView(title: "Avg. Heart Rate", value: workout.averageHeartRate.displayString(for: .bpm()))
         .tint(.mutedRed)
 
-      SummaryMetricView(title: "Zone Minutes", value: "\(Int(workoutManager.totalZoneMinutes)) Min")
+      SummaryMetricView(
+        title: "Zone Minutes",
+        value: String(
+          localized: "\(Int(workoutManager.totalZoneMinutes)) Min",
+          comment: "Minutes spent in heart rate zones"
+        )
+      )
         .tint(.mutedGreen)
 
       SummaryMetricView(title: "Heart Rate Zones") {

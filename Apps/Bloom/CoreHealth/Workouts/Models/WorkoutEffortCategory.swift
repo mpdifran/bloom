@@ -22,6 +22,16 @@ public enum WorkoutEffortCategory: String, Sendable, CaseIterable {
     }
   }
 
+  /// The user-facing name. `rawValue` stays canonical English — it is a persistence identifier.
+  public var displayName: String {
+    switch self {
+    case .easy: String(localized: "Easy", bundle: Bundle.coreHealth, comment: "Display name for workout effort category")
+    case .moderate: String(localized: "Moderate", bundle: Bundle.coreHealth, comment: "Display name for workout effort category")
+    case .hard: String(localized: "Hard", bundle: Bundle.coreHealth, comment: "Display name for workout effort category")
+    case .allOut: String(localized: "All Out", bundle: Bundle.coreHealth, comment: "Display name for workout effort category")
+    }
+  }
+
   public var color: Color {
     switch self {
     case .easy: .cyan

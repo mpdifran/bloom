@@ -37,7 +37,7 @@ struct DrinkSubTypeSelectionView: View {
 }
 
 #Preview {
-  let beer = DrinkType.defaultDrinks.first { $0.name == "Beer" }!
+  let beer = DrinkType.beer
 
   DrinkSubTypeSelectionView(
     parentDrink: beer,

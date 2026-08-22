@@ -199,8 +199,8 @@ public extension ActivityLevelSummary {
 
     guard basal > 1 else { return String(localized: "No Data", bundle: Bundle.coreHealth, comment: "Subtitle for activity level summary") }
 
-    let basalValue = String(format: "%.0f", basal)
-    let activeValue = String(format: "%.0f", active)
+    let basalValue = basal.format(using: .noDecimalPlaces)
+    let activeValue = active.format(using: .noDecimalPlaces)
 
     return String(
       localized: "\(basalValue) Cal Basal\n\(activeValue) Cal Active",

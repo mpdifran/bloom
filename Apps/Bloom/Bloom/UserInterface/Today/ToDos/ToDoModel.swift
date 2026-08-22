@@ -54,8 +54,10 @@ extension ToDoModel {
         String(localized: "Every 3 Days", comment: "Display name for to do model")
       case .everySevenDays:
         String(localized: "Every 7 Days", comment: "Display name for to do model")
-      default:
-        rawValue.capitalized
+      case .daily:
+        String(localized: "Daily", comment: "Display name for to do model")
+      case .never:
+        String(localized: "Never", comment: "Display name for to do model")
       }
     }
   }

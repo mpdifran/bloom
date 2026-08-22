@@ -34,15 +34,27 @@ public extension MenstrualSummary {
     var entries = [String]()
 
     if let averageCycleDuration {
-      entries.append("\(averageCycleDuration) Day Cycle")
+      entries.append(String(
+        localized: "\(averageCycleDuration) Day Cycle",
+        bundle: Bundle.coreHealth,
+        comment: "Menstrual subtitle line. The placeholder is the average cycle length in days."
+      ))
     }
 
     if isMenstruating {
-      entries.append("Menstruating")
+      entries.append(String(
+        localized: "Menstruating",
+        bundle: Bundle.coreHealth,
+        comment: "Menstrual subtitle line shown while the user is on their period."
+      ))
     } else {
       if let date = nextPredictedPeriodDate {
         let dateString = DateFormatter.monthAndDay.string(from: date)
-        entries.append("Next Period: \(dateString)")
+        entries.append(String(
+          localized: "Next Period: \(dateString)",
+          bundle: Bundle.coreHealth,
+          comment: "Menstrual subtitle line. The placeholder is a formatted month and day."
+        ))
       }
     }
 
@@ -55,7 +67,7 @@ public extension MenstrualSummary {
     if let phase = currentPhase() {
       return phase.name
     } else if menstrualCycles.isNotEmpty {
-      return "Calculating Cycle"
+      return String(localized: "Calculating Cycle", bundle: Bundle.coreHealth, comment: "Placeholder phase name shown while the cycle is still being calculated")
     }
     return nil
   }

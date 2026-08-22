@@ -21,7 +21,7 @@ struct WatchMissingMetricCell: View {
 
       // Metric info
       VStack(alignment: .leading, spacing: 1) {
-        Text(metric.rawValue)
+        Text(metric.displayName)
           .font(.caption)
           .fontWeight(.medium)
           .lineLimit(3)

@@ -56,7 +56,7 @@ struct BloomPlusFeaturesListView: View {
 
 private struct FeatureCard: View {
   let image: Image
-  let message: String
+  let message: LocalizedStringKey
 
   var body: some View {
     VStack(alignment: .leading, spacing: 0) {

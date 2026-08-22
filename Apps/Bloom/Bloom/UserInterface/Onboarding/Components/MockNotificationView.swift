@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct MockNotificationView: View {
-  let title: String
-  let message: String
-  let timestamp: String
+  let title: LocalizedStringKey
+  let message: LocalizedStringKey?
+  let timestamp: LocalizedStringKey
 
   var body: some View {
       content
@@ -35,7 +35,7 @@ private extension MockNotificationView {
             .foregroundStyle(.secondary)
         }
 
-        if message.isNotEmpty {
+        if let message {
           Text(message)
             .lineLimit(2)
         }

@@ -70,12 +70,42 @@ struct WatchActionEntity: AppEntity {
 struct WatchActionEntityQuery: EntityQuery {
   // Available actions on the watch
   private static let availableActions: [WatchActionEntity] = [
-    WatchActionEntity(id: "food", name: "Food", systemImage: "fork.knife", colorHex: "3EC17D"),
-    WatchActionEntity(id: "drink", name: "Drink", systemImage: "waterbottle", colorHex: "6BB1D6"),
-    WatchActionEntity(id: "weight", name: "Weight", systemImage: "scalemass", colorHex: "7B68EE"),
-    WatchActionEntity(id: "bowelMovement", name: "Bowel Movement", systemImage: "toilet", colorHex: "A0522D"),
-    WatchActionEntity(id: "bloodPressure", name: "Blood Pressure", systemImage: "heart", colorHex: "FF6B6B"),
-    WatchActionEntity(id: "voice", name: "Voice", systemImage: "microphone.fill", colorHex: "EAAD63")
+    WatchActionEntity(
+      id: "food",
+      name: String(localized: "Food", comment: "Name of a quick action on the watch"),
+      systemImage: "fork.knife",
+      colorHex: "3EC17D"
+    ),
+    WatchActionEntity(
+      id: "drink",
+      name: String(localized: "Drink", comment: "Name of a quick action on the watch"),
+      systemImage: "waterbottle",
+      colorHex: "6BB1D6"
+    ),
+    WatchActionEntity(
+      id: "weight",
+      name: String(localized: "Weight", comment: "Name of a quick action on the watch"),
+      systemImage: "scalemass",
+      colorHex: "7B68EE"
+    ),
+    WatchActionEntity(
+      id: "bowelMovement",
+      name: String(localized: "Bowel Movement", comment: "Name of a quick action on the watch"),
+      systemImage: "toilet",
+      colorHex: "A0522D"
+    ),
+    WatchActionEntity(
+      id: "bloodPressure",
+      name: String(localized: "Blood Pressure", comment: "Name of a quick action on the watch"),
+      systemImage: "heart",
+      colorHex: "FF6B6B"
+    ),
+    WatchActionEntity(
+      id: "voice",
+      name: String(localized: "Voice", comment: "Name of a quick action on the watch"),
+      systemImage: "microphone.fill",
+      colorHex: "EAAD63"
+    )
   ]
 
   func entities(for identifiers: [String]) async throws -> [WatchActionEntity] {

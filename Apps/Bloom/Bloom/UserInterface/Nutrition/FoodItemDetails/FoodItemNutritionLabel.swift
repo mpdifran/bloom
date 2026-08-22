@@ -21,7 +21,7 @@ struct FoodItemNutritionLabel: View {
           .fontDesign(.rounded)
           .bold()
 
-        Text("per \(numberOfServings.formatted(.number.precision(.fractionLength(0...2)))) serving\(numberOfServings == 1 ? "" : "s")")
+        Text("per \(numberOfServings.formatted(.number.precision(.fractionLength(0...2)))) serving")
           .font(.subheadline)
           .fontDesign(.rounded)
           .foregroundStyle(.secondary)
@@ -258,7 +258,9 @@ private extension FoodItemNutritionLabel {
 
 private extension FoodItemNutritionLabel {
   struct NutritionLine: View {
-    let name: String
+    /// LocalizedStringKey, not String: every call site passes a literal nutrient label, and a
+    /// String would be handed to Text without a catalog lookup, rendering it in English.
+    let name: LocalizedStringKey
     let quantity: FoodItem.Quantity?
     let preferredUnit: HKUnit
     let indentationLevel: Int
@@ -266,7 +268,7 @@ private extension FoodItemNutritionLabel {
     let numberOfServings: Double
 
     init(
-      name: String,
+      name: LocalizedStringKey,
       quantity: FoodItem.Quantity?,
       preferredUnit: HKUnit,
       indentationLevel: Int,

@@ -41,7 +41,7 @@ struct AddCustomContainerView: View {
       return "\(Int(volumeML)) mL"
     } else {
       let flOz = volumeML / 29.5735
-      return String(format: "%.1f %@", flOz, unitPreferences.liquidVolumeUnit.sensibleUnitString)
+      return "\(flOz.formatted(.number.precision(.fractionLength(1)))) \(unitPreferences.liquidVolumeUnit.sensibleUnitString)"
     }
   }
 
@@ -50,7 +50,8 @@ struct AddCustomContainerView: View {
       return "\(Int(volumeML))"
     } else {
       let flOz = volumeML / 29.5735
-      return String(format: "%.1f", flOz)
+      // No grouping separator: this string seeds the volume text field and is parsed back out.
+      return flOz.formatted(.number.precision(.fractionLength(1)).grouping(.never))
     }
   }
 

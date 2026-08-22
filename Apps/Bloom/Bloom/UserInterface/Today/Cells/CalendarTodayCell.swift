@@ -111,7 +111,9 @@ private extension CalendarTodayCell {
     ContentUnavailableView(
       "No Events",
       systemSymbol: .calendar,
-      description: Text("You have no events \(day == .today ? "today" : "tomorrow").")
+      description: day == .today
+        ? Text("You have no events today.")
+        : Text("You have no events tomorrow.")
     )
     .fixedSize(horizontal: false, vertical: true)
     .foregroundStyle(.secondary)

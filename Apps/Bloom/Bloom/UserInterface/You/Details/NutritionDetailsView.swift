@@ -195,7 +195,7 @@ private extension NutritionDetailsView {
         VitalDetailChartTitleView(
           title: "Macros",
           valueLabel: "",
-          value: details.macroStatus()?.rawValue ?? ""
+          value: details.macroStatus()?.displayName ?? ""
         )
         .padding(.horizontal)
 

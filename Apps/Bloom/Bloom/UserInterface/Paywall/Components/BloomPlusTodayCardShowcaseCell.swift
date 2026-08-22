@@ -23,7 +23,7 @@ struct BloomPlusTodayCardShowcaseCell: View {
       BloomPlusTodayCardShowcaseCard(
         title: "Less guessing. More progressing.",
         message: "Every morning, Bud checks your sleep, activity, and recovery, then gives you one simple piece of advice to help you crush the day.") {
-          TodaysAdviceTodayCell(advice: "Your recovery’s looking a little low today. Try to take it easy — swap intense workouts for something gentle, like a stretch or slow walk.")
+          TodaysAdviceTodayCell(advice: String(localized: "Your recovery’s looking a little low today. Try to take it easy — swap intense workouts for something gentle, like a stretch or slow walk.", comment: "Sample daily advice shown on the paywall."))
         }
         .tag(0)
         .padding(.horizontal)
@@ -36,7 +36,7 @@ struct BloomPlusTodayCardShowcaseCell: View {
       BloomPlusTodayCardShowcaseCard(
         title: "Less tossing. More snoozing.",
         message: "Every evening, Bud checks your recent sleep and activity, then gives you one simple tip to help you fall asleep faster and sleep more deeply.") {
-          TonightsSleepTodayCell(recommendations: "Try putting your phone away by 9:30 PM tonight. Less screen time before bed = deeper, more refreshing sleep. Your brain will thank you tomorrow.")
+          TonightsSleepTodayCell(recommendations: String(localized: "Try putting your phone away by 9:30 PM tonight. Less screen time before bed = deeper, more refreshing sleep. Your brain will thank you tomorrow.", comment: "Sample sleep tip shown on the paywall."))
         }
         .tag(1)
         .padding(.horizontal)

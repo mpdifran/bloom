@@ -88,7 +88,7 @@ struct ReminderScheduleTests {
     let augustTwelfth = rule(cadence: .yearly, hour: 7, monthOfYear: 8, dayOfYear: 12)
     let julyTwelfth = rule(cadence: .yearly, hour: 7, monthOfYear: 7, dayOfYear: 12)
 
-    #expect(ReminderSchedule.scheduledTimes(for: augustTwelfth, on: date(hour: 1), calendar: calendar).isNotEmpty)
+    #expect(!ReminderSchedule.scheduledTimes(for: augustTwelfth, on: date(hour: 1), calendar: calendar).isEmpty)
     #expect(ReminderSchedule.scheduledTimes(for: julyTwelfth, on: date(hour: 1), calendar: calendar).isEmpty)
   }
 

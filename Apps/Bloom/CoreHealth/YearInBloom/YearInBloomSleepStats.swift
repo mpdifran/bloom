@@ -87,19 +87,18 @@ public struct MonthlySleepStats: Sendable, Codable, Hashable, Identifiable {
   }
 
   public var monthName: String {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "MMMM"
-    let components = DateComponents(month: month)
-    guard let date = Calendar.current.date(from: components) else { return "" }
-    return formatter.string(from: date)
+    // Calendar's symbols are already translated for every locale; a "MMMM" DateFormatter would
+    // hand French and German users the English month name.
+    let symbols = Calendar.current.standaloneMonthSymbols
+    guard symbols.indices.contains(month - 1) else { return "" }
+    return symbols[month - 1]
   }
 
   public var shortMonthName: String {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "MMM"
-    let components = DateComponents(month: month)
-    guard let date = Calendar.current.date(from: components) else { return "" }
-    return formatter.string(from: date)
+    // Localized abbreviated month name, rather than a hardcoded "MMM" pattern.
+    let symbols = Calendar.current.shortStandaloneMonthSymbols
+    guard symbols.indices.contains(month - 1) else { return "" }
+    return symbols[month - 1]
   }
 }
 
@@ -119,11 +118,10 @@ public struct SleepScoreExtreme: Sendable, Codable, Hashable {
   }
 
   public var shortMonthName: String {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "MMM"
-    let components = DateComponents(month: month)
-    guard let date = Calendar.current.date(from: components) else { return "" }
-    return formatter.string(from: date)
+    // Localized abbreviated month name, rather than a hardcoded "MMM" pattern.
+    let symbols = Calendar.current.shortStandaloneMonthSymbols
+    guard symbols.indices.contains(month - 1) else { return "" }
+    return symbols[month - 1]
   }
 }
 
@@ -225,13 +223,10 @@ public struct MonthlySleepStageChartData: Identifiable, Sendable, Equatable {
   public var awakeMinutesDisplay: String { Self.formatDuration(awakeMinutes) }
 
   private static func formatDuration(_ minutes: Double) -> String {
-    let hours = Int(minutes) / 60
-    let mins = Int(minutes) % 60
-    if hours > 0 {
-      return "\(hours)h \(mins)m"
-    } else {
-      return "\(mins)m"
-    }
+    // Localized unit abbreviations instead of hardcoded English "h"/"m". Zero-valued units are
+    // hidden by default, so a sub-hour duration still renders as just the minutes.
+    Duration.seconds(Int(minutes) * 60)
+      .formatted(.units(allowed: [.hours, .minutes], width: .abbreviated))
   }
 }
 
@@ -279,18 +274,23 @@ public struct MonthlySleepScheduleData: Identifiable, Sendable, Equatable {
     Self.formatMinutesAsTime(wakeTimeMinutes)
   }
 
-  /// Convert minutes from noon to display time (e.g., 600 -> "10:00 PM")
+  /// Convert minutes from noon to display time (e.g. 600 -> "10:00 PM" in the US, "22:00" in France)
   public static func formatMinutesAsTime(_ minutesFromNoon: Double) -> String {
     // Convert back to minutes from midnight
     var minutesFromMidnight = minutesFromNoon + 720
     if minutesFromMidnight >= 1440 {
       minutesFromMidnight -= 1440
     }
-    let hours = Int(minutesFromMidnight) / 60
-    let mins = Int(minutesFromMidnight) % 60
-    let period = hours >= 12 ? "PM" : "AM"
-    let displayHour = hours == 0 ? 12 : (hours > 12 ? hours - 12 : hours)
-    return String(format: "%d:%02d %@", displayHour, mins, period)
+
+    var components = DateComponents()
+    components.hour = Int(minutesFromMidnight) / 60
+    components.minute = Int(minutesFromMidnight) % 60
+
+    guard let date = Calendar.current.date(from: components) else { return "" }
+
+    // Formatting a real date respects the user's 12/24-hour setting and time separator, rather
+    // than hardcoding a US-style "10:00 PM".
+    return date.formatted(.dateTime.hour().minute())
   }
 }
 

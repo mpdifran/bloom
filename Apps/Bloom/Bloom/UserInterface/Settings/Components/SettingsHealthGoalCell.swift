@@ -10,7 +10,10 @@ import SwiftUI
 
 struct SettingsHealthGoalCell: View {
   let image: Image
-  let value: String
+  /// LocalizedStringKey, not String: a String literal is passed straight to Text without a
+  /// catalog lookup, so the value rendered in English regardless of language.
+  let value: LocalizedStringKey
+  /// Stays String: call sites pass already-localized runtime copy (the user's health focus).
   let subtitle: String
 
   var body: some View {

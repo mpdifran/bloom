@@ -27,7 +27,9 @@ struct ExperimentOverrideView: View {
     let currentVariant = experimentManager.variant(for: identifier)
     
     SettingsCell(
-      experimentName,
+      // Experiment names come from the remote config, so there is nothing to look up - the key
+      // misses and renders the raw name, which is what this developer-only screen wants.
+      LocalizedStringKey(experimentName),
       subtitle: "Current: \(currentVariant == .control ? "Control" : "Treatment")"
     ) {
       Picker("", selection: $selectedOverride) {

@@ -302,6 +302,18 @@ public extension BowelMovementSummary {
     case veryPoor = "Very Poor"
     case unknown = "Unknown"
     
+    /// The user-facing name. `rawValue` stays canonical English — it is a persistence identifier.
+    public var displayName: String {
+      switch self {
+      case .excellent: String(localized: "Excellent", bundle: Bundle.coreHealth, comment: "Display name for bowel movement regularity level")
+      case .good: String(localized: "Good", bundle: Bundle.coreHealth, comment: "Display name for bowel movement regularity level")
+      case .moderate: String(localized: "Moderate", bundle: Bundle.coreHealth, comment: "Display name for bowel movement regularity level")
+      case .poor: String(localized: "Poor", bundle: Bundle.coreHealth, comment: "Display name for bowel movement regularity level")
+      case .veryPoor: String(localized: "Very Poor", bundle: Bundle.coreHealth, comment: "Display name for bowel movement regularity level")
+      case .unknown: String(localized: "Unknown", bundle: Bundle.coreHealth, comment: "Display name for bowel movement regularity level")
+      }
+    }
+
     public var color: Color {
       switch self {
       case .excellent:
@@ -322,7 +334,7 @@ public extension BowelMovementSummary {
       case .veryPoor:
         return String(localized: "Very Poor", bundle: Bundle.coreHealth, comment: "Short display name for bowel movement summary")
       default:
-        return rawValue
+        return displayName
       }
     }
   }

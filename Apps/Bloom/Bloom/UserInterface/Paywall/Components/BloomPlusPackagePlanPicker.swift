@@ -22,7 +22,7 @@ struct BloomPlusPackagePlanPicker: View {
   @Environment(\.dismiss) private var dismiss
 
   var body: some View {
-    LargeTitleActionCard("Select a Plan") {
+    LargeTitleActionCard(String(localized: "Select a Plan", comment: "Title of the sheet listing every subscription plan.")) {
       VStack(spacing: 20) {
         ForEach(packages) { package in
           BloomPlusPackageCell(

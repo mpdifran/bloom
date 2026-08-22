@@ -145,7 +145,9 @@ private extension AlcoholDetailsView {
               .foregroundStyle(summary.riskLevel.color)
               .contentTransition(.numericText(value: Double(summary.bingeDays)))
 
-            Text("Binge drinking day\(summary.bingeDays == 1 ? "" : "s")")
+            Text(summary.bingeDays == 1
+                 ? String(localized: "Binge drinking day", comment: "Label under a count of 1")
+                 : String(localized: "Binge drinking days", comment: "Label under a count of 2 or more"))
               .font(.subheadline)
           }
         }
@@ -156,7 +158,9 @@ private extension AlcoholDetailsView {
               .foregroundStyle(summary.riskLevel.color)
               .contentTransition(.numericText(value: Double(summary.bingeDays)))
 
-            Text("Heavy drinking day\(summary.heavyDays == 1 ? "" : "s")")
+            Text(summary.heavyDays == 1
+                 ? String(localized: "Heavy drinking day", comment: "Label under a count of 1")
+                 : String(localized: "Heavy drinking days", comment: "Label under a count of 2 or more"))
               .font(.subheadline)
           }
         }

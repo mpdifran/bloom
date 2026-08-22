@@ -41,11 +41,11 @@ extension SchemaV17 {
             public var name: String {
                 switch self {
                 case .lessThan5Min:
-                    "< 5 min"
+                    String(localized: "< 5 min", bundle: Bundle.dataContainer, comment: "Display name for a bowel movement duration bucket")
                 case .between5And10Min:
-                    "5 - 10 min"
+                    String(localized: "5 - 10 min", bundle: Bundle.dataContainer, comment: "Display name for a bowel movement duration bucket")
                 case .moreThan10Min:
-                    "> 10 min"
+                    String(localized: "> 10 min", bundle: Bundle.dataContainer, comment: "Display name for a bowel movement duration bucket")
                 }
             }
             

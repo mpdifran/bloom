@@ -106,7 +106,7 @@ extension HabitsViewModel {
     unit: HKUnit,
     for habit: Habit
   ) throws -> Habit {
-    guard let fetchedHabit = try modelContext.fetchHabit(id: habit.id) else { throw NSError(description: "There was a problem updating this habit.") }
+    guard let fetchedHabit = try modelContext.fetchHabit(id: habit.id) else { throw NSError(description: String(localized: "There was a problem updating this habit.", comment: "Error shown when saving an edited goal fails")) }
 
     let updatedHabit: Habit
     let isUserEdited: Bool

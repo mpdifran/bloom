@@ -100,13 +100,13 @@ private extension WelcomeToBloomPlusView {
     SectionTitleView("Features")
       .padding(.horizontal)
 
-    TodayInsightsPrivacyAIFeatureOptInCell(extraContext: "Bud uses the Personal Data you turn on to generate personalized daily insights.")
+    TodayInsightsPrivacyAIFeatureOptInCell(extraContext: String(localized: "Bud uses the Personal Data you turn on to generate personalized daily insights.", comment: "Extra explanation under the Today Insights toggle."))
       .cardContainer()
 
-    ChatPrivacyAIFeatureOptInCell(extraContext: "Bud uses the Personal Data you turn on to answer your health and wellness questions.")
+    ChatPrivacyAIFeatureOptInCell(extraContext: String(localized: "Bud uses the Personal Data you turn on to answer your health and wellness questions.", comment: "Extra explanation under the Chat toggle."))
       .cardContainer()
 
-    MonitorPrivacyAIFeatureOptInCell(extraContext: "Bud uses the Personal Data you turn on to provide insights on your current monitor state.")
+    MonitorPrivacyAIFeatureOptInCell(extraContext: String(localized: "Bud uses the Personal Data you turn on to provide insights on your current monitor state.", comment: "Extra explanation under the Monitor toggle."))
       .cardContainer()
   }
 
@@ -158,13 +158,13 @@ private extension WelcomeToBloomPlusView {
   func showConfirmationAlert() async -> Bool {
     await withCheckedContinuation { continuation in
       alertDetails = AlertDetails(
-        title: "Before You Continue",
+        title: String(localized: "Before You Continue", comment: "Title of the consent confirmation alert."),
         message: confirmationAlertBody,
         buttons: [
-          AlertDetails.Button(title: "Edit Choices", role: .cancel, action: {
+          AlertDetails.Button(title: String(localized: "Edit Choices", comment: "Alert button that returns the user to the data sharing toggles."), role: .cancel, action: {
             continuation.resume(returning: false)
           }),
-          AlertDetails.Button(title: "Agree", action: {
+          AlertDetails.Button(title: String(localized: "Agree", comment: "Alert button confirming consent."), action: {
             continuation.resume(returning: true)
           })
         ]
@@ -174,9 +174,11 @@ private extension WelcomeToBloomPlusView {
 
   var confirmationAlertBody: String {
     let numCategories = aiDataSharingSettings.enabledCategories.count
-    let personalDataCategoriesText = numCategories == 1 ? "1 Personal Data category" : "\(numCategories) Personal Data categories"
+    let personalDataCategoriesText = numCategories == 1
+      ? String(localized: "1 Personal Data category", comment: "Fragment used inside the consent confirmation alert.")
+      : String(localized: "\(numCategories) Personal Data categories", comment: "Fragment used inside the consent confirmation alert.")
 
-    return "Bud will only use the \(personalDataCategoriesText) you turned on to generate personalized responses to your questions about health and wellness, and to generate personalized insights.\n\nDo you agree to Bud using the Personal Data categories you selected for these purposes?"
+    return String(localized: "Bud will only use the \(personalDataCategoriesText) you turned on to generate personalized responses to your questions about health and wellness, and to generate personalized insights.\n\nDo you agree to Bud using the Personal Data categories you selected for these purposes?", comment: "Body of the consent confirmation alert. Placeholder is a count of Personal Data categories.")
   }
 
   func logConfirmation() async throws {

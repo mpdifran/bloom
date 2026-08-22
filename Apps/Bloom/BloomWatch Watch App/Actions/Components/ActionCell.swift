@@ -10,7 +10,7 @@ import BloomFoundation
 
 struct ActionCell: View {
   let imageContent: ImageContent
-  let title: String
+  let title: LocalizedStringKey
   let color: Color
 
   enum ImageContent {
@@ -18,13 +18,13 @@ struct ActionCell: View {
     case system(String)
   }
 
-  init(image: ImageResource, title: String, color: Color) {
+  init(image: ImageResource, title: LocalizedStringKey, color: Color) {
     self.imageContent = .resource(image)
     self.title = title
     self.color = color
   }
 
-  init(systemImage: String, title: String, color: Color) {
+  init(systemImage: String, title: LocalizedStringKey, color: Color) {
     self.imageContent = .system(systemImage)
     self.title = title
     self.color = color

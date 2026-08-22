@@ -229,7 +229,7 @@ private extension VO2MaxDetailsView {
   var averageVO2MaxDisplayString: String {
     guard vo2MaxSamples.isNotEmpty else { return "" }
     let average = vo2MaxSamples.map { $0.quantity.doubleValue(for: .vo2Max()) }.reduce(0, +) / Double(vo2MaxSamples.count)
-    return String(format: "%.1f", average)
+    return average.formatted(.number.precision(.fractionLength(1)))
   }
 
   var selectedFitnessLevelRanges: (lower: Double, upper: Double)? {

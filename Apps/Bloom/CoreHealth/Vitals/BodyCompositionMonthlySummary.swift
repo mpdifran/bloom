@@ -119,11 +119,20 @@ public extension BodyCompositionMonthlySummary {
     var entries = [String]()
 
     if let bodyWeight = details.averageBodyMass {
-      entries.append("Avg Weight: \(bodyWeight.displayString(for: .pound(), formatter: .oneDecimalPlace))")
+      let weight = bodyWeight.displayString(for: .pound(), formatter: .oneDecimalPlace)
+      entries.append(String(
+        localized: "Avg Weight: \(weight)",
+        bundle: Bundle.coreHealth,
+        comment: "Body composition subtitle line. The placeholder is an average body weight."
+      ))
     }
     if let bodyFatPercentage = details.bodyFatPercentage?.doubleValue(for: .percent()) {
-      let percent = bodyFatPercentage * 100
-      entries.append("Fat: \(percent.format())%")
+      let percent = (bodyFatPercentage * 100).format()
+      entries.append(String(
+        localized: "Fat: \(percent)%",
+        bundle: Bundle.coreHealth,
+        comment: "Body composition subtitle line. The placeholder is a body fat percentage."
+      ))
     }
 
     let compactEntries = entries.compactMap({ $0 })

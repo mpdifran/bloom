@@ -17,7 +17,7 @@ struct AlcoholStatCard: View {
         symbol: .wineglassFill,
         title: "Alcohol",
         value: summary.weeklyTotalDisplayString,
-        valueStyle: .largeTinted("this week")
+        valueStyle: .largeTinted(String(localized: "this week", comment: "Stat card subtitle: the value covers this week"))
       ) {
         barChart(summary: summary)
       }
@@ -26,7 +26,7 @@ struct AlcoholStatCard: View {
       StatCard(
         symbol: .wineglassFill,
         title: "Alcohol",
-        value: "No Data",
+        value: String(localized: "No Data", comment: "Stat card value shown when there is no data"),
         valueStyle: .largeTinted(nil)
       )
       .tint(.secondary)

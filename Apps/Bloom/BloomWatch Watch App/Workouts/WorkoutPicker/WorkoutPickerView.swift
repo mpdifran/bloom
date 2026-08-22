@@ -27,7 +27,7 @@ struct WorkoutPickerView: View {
       List {
         if !starredVariants.isEmpty {
           WorkoutCategoryCell(
-            title: "Starred Workouts",
+            title: String(localized: "Starred Workouts", comment: "Workout picker section for pinned workouts"),
             workoutVariants: starredVariants
           )
           .onTapGesture {
@@ -40,7 +40,7 @@ struct WorkoutPickerView: View {
 
         ForEach(WorkoutCategory.allCases) { category in
           WorkoutCategoryCell(
-            title: category.rawValue,
+            title: category.displayName,
             workoutVariants: category.workoutVariants
           )
           .onTapGesture {

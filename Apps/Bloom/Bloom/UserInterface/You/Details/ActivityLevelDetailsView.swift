@@ -216,9 +216,11 @@ private extension ActivityLevelDetailsView {
           }
         }
         .chartYScale(domain: 1...((distribution.max(keyPath: \.value) ?? 1.8) * 1.1), range: .plotDimension)
-        .chartXScale(domain: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], range: .plotDimension)
+        // Calendar symbols, not hardcoded English: the bar labels below are localized, so an
+        // English domain would neither match them nor read correctly in other languages.
+        .chartXScale(domain: Calendar.current.shortWeekdaySymbols, range: .plotDimension)
         .chartXAxis {
-          AxisMarks(values: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]) { value in
+          AxisMarks(values: Calendar.current.shortWeekdaySymbols) { value in
             AxisGridLine()
             AxisTick()
 
@@ -259,17 +261,12 @@ private extension ActivityLevelDetailsView {
 
 private extension Int {
 
+  /// Uses the calendar's own symbols rather than hardcoded English abbreviations, which
+  /// rendered as "Sun"/"Mon" in every language.
   var dayOfWeekLabel: String {
-    switch self {
-    case 1: "Sun"
-    case 2: "Mon"
-    case 3: "Tue"
-    case 4: "Wed"
-    case 5: "Thu"
-    case 6: "Fri"
-    case 7: "Sat"
-    default: ""
-    }
+    let symbols = Calendar.current.shortWeekdaySymbols
+    guard (1...symbols.count).contains(self) else { return "" }
+    return symbols[self - 1]
   }
 }
 

@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct SectionTitleView: View {
-  let title: String
+  /// LocalizedStringKey, not String: a String literal is passed straight to Text without a
+  /// catalog lookup, so every section title rendered in English regardless of language.
+  let title: LocalizedStringKey
   let includeTopPadding: Bool
 
   init(
-    _ title: String,
+    _ title: LocalizedStringKey,
     includeTopPadding: Bool = true
   ) {
     self.title = title

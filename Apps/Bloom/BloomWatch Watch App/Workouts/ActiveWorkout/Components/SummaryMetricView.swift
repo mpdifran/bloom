@@ -10,11 +10,11 @@ import HealthKit
 import CoreHealth
 
 struct SummaryMetricView<Content: View>: View {
-  let title: String
+  let title: LocalizedStringKey
   let contentBuilder: () -> Content
 
   init(
-    title: String,
+    title: LocalizedStringKey,
     @ViewBuilder contentBuilder: @escaping () -> Content
   ) {
     self.title = title
@@ -39,7 +39,7 @@ struct SummaryMetricView<Content: View>: View {
 }
 
 extension SummaryMetricView where Content == Text {
-  init(title: String, value: String) {
+  init(title: LocalizedStringKey, value: String) {
     self.title = title
     self.contentBuilder = {
       Text(value)

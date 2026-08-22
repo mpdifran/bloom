@@ -115,9 +115,9 @@ private extension CalendarSelectionView {
   var selectAllButtonTitle: String {
     if calendarPreferences.selectedCalendarIdentifiers.isEmpty || 
        calendarPreferences.selectedCalendarIdentifiers.count == calendars.count {
-      return "Deselect All"
+      return String(localized: "Deselect All", comment: "Button that clears the calendar selection")
     } else {
-      return "Select All"
+      return String(localized: "Select All", comment: "Button that selects every calendar")
     }
   }
   

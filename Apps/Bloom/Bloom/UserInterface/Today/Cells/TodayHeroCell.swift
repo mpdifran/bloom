@@ -21,19 +21,29 @@ struct TodayHeroCell: View {
   let hasError: Bool
   let isLoading: Bool
   let onReload: (() async -> Void)?
-  
+  /// Overrides the name from HealthManager. Used by the App Store screenshot previews, which show
+  /// a fictional person rather than whoever is signed in on the capturing machine.
+  let nameOverride: String?
+  /// Overrides "now" for the greeting and the date. Also for the screenshot previews, so a capture
+  /// doesn't say "Good Night" because of when it happened to be taken.
+  let dateOverride: Date?
+
   init(
     budState: TodayReportResponse.BudState?,
     summary: String?,
     hasError: Bool,
     isLoading: Bool,
-    onReload: (() async -> Void)? = nil
+    onReload: (() async -> Void)? = nil,
+    nameOverride: String? = nil,
+    dateOverride: Date? = nil
   ) {
     self.budState = budState
     self.summary = summary
     self.hasError = hasError
     self.isLoading = isLoading
     self.onReload = onReload
+    self.nameOverride = nameOverride
+    self.dateOverride = dateOverride
   }
   
   @TodaySettingsStorage("TodayView.settings") private var todaySettings = TodaySettings()
@@ -99,26 +109,43 @@ private extension TodayHeroCell {
   }
   
   var greetingText: String {
-    let currentMode = TimeMode.current(for: .now, settings: todaySettings)
-    let userName = HealthManager.shared.name.isEmpty ? "" : ", \(HealthManager.shared.name)"
+    let currentMode = TimeMode.current(for: dateOverride ?? .now, settings: todaySettings)
+    let name = nameOverride ?? HealthManager.shared.name
+
+    guard name.isNotEmpty else {
+      switch currentMode {
+      case .morning:
+        return String(localized: "Good Morning!", comment: "Today screen greeting, no name known")
+      case .afternoon:
+        return String(localized: "Good Afternoon!", comment: "Today screen greeting, no name known")
+      case .evening:
+        return String(localized: "Good Evening!", comment: "Today screen greeting, no name known")
+      case .night:
+        return String(localized: "Good Night!", comment: "Today screen greeting, no name known")
+      @unknown default:
+        return String(localized: "Hello!", comment: "Today screen greeting, no name known")
+      }
+    }
 
     switch currentMode {
     case .morning:
-      return "Good Morning\(userName)!"
+      return String(localized: "Good Morning, \(name)!", comment: "Today screen greeting, %@ is the person's first name")
     case .afternoon:
-      return "Good Afternoon\(userName)!"
+      return String(localized: "Good Afternoon, \(name)!", comment: "Today screen greeting, %@ is the person's first name")
     case .evening:
-      return "Good Evening\(userName)!"
+      return String(localized: "Good Evening, \(name)!", comment: "Today screen greeting, %@ is the person's first name")
     case .night:
-      return "Good Night\(userName)!"
+      return String(localized: "Good Night, \(name)!", comment: "Today screen greeting, %@ is the person's first name")
     @unknown default:
-      return "Hello\(userName)!"
+      return String(localized: "Hello, \(name)!", comment: "Today screen greeting, %@ is the person's first name")
     }
   }
 
   var todaysDateView: some View {
     TimelineView(.everyMinute) { _ in
-      Text(verbatim: "\(DateFormatter.weekdayFullMonthDayYear.string(from: .now))")
+      // Formatted by SwiftUI rather than a fixed DateFormatter, so it follows the environment's
+      // locale - which is what makes a French screenshot show a French date.
+      Text(dateOverride ?? .now, format: .dateTime.weekday(.wide).month(.wide).day().year())
         .font(.subheadline)
         .fontDesign(.rounded)
         .bold()

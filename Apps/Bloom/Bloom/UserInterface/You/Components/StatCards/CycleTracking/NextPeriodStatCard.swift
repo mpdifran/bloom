@@ -18,14 +18,14 @@ struct NextPeriodStatCard: View {
         symbol: .calendarBadgeClock,
         title: "Next Period",
         value: DateFormatter.justRelativeDateMedium.string(from: nextPeriod),
-        valueStyle: .largeTinted("Predicted")
+        valueStyle: .largeTinted(String(localized: "Predicted", comment: "Stat card subtitle indicating the value is a prediction"))
       )
       .tint(.pink)
     } else {
       StatCard(
         symbol: .calendarBadgeClock,
         title: "Next Period",
-        value: "No Data",
+        value: String(localized: "No Data", comment: "Stat card value shown when there is no data"),
         valueStyle: .largeTinted(nil)
       )
       .tint(.gray)

@@ -213,7 +213,9 @@ private extension OnboardingPersonalizationView {
       ForEachEnumerated(suggestions) { (index, suggestion) in
         if canShowFocusCard(for: index) {
           FocusCardCell(
-            title: suggestion.title,
+            // `FocusPair.title` stays canonical English (it's persisted as the user's
+            // focus and sent to the backend), so localize it only for display.
+            title: LocalizedStringKey(suggestion.title),
             symbol: suggestion.symbol,
             isSelected: healthManager.focus == suggestion.title
           )
@@ -267,7 +269,7 @@ private extension OnboardingPersonalizationView {
 }
 
 private struct FocusCardCell: View {
-  let title: String
+  let title: LocalizedStringKey
   let symbol: SFSymbol
   let isSelected: Bool
 

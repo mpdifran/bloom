@@ -218,9 +218,9 @@ private extension SleepScoreHistoryView {
 private extension SleepScoreHistoryView {
 
   func formatDuration(_ minutes: Double) -> String {
-    let hours = Int(minutes) / 60
-    let mins = Int(minutes) % 60
-    return "\(hours)h \(mins)m"
+    // Locale-aware duration: hand-built "3h 45m" hardcoded English unit abbreviations.
+    Duration.seconds(Int(minutes) * 60)
+      .formatted(.units(allowed: [.hours, .minutes], width: .narrow))
   }
 
   func formatTimeRange(_ analysis: SleepAnalysis) -> String {

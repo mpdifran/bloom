@@ -106,23 +106,23 @@ private extension LogActionsWidgetView {
   func shortName(for actionType: ActionType) -> String {
     switch actionType {
     case .magicScan:
-      "Magic Scanner"
+      String(localized: "Magic Scanner", comment: "Short label for a health action button in the Log Actions widget")
     case .barcodeScan:
-      "Barcode Scanner"
+      String(localized: "Barcode Scanner", comment: "Short label for a health action button in the Log Actions widget")
     case .logVoice:
-      "Voice Logger"
+      String(localized: "Voice Logger", comment: "Short label for a health action button in the Log Actions widget")
     case .logFood:
-      "Log Food"
+      String(localized: "Log Food", comment: "Short label for a health action button in the Log Actions widget")
     case .logWater:
-      "Log Water"
+      String(localized: "Log Water", comment: "Short label for a health action button in the Log Actions widget")
     case .logBowelMovement:
-      "Log Bowel Movement"
+      String(localized: "Log Bowel Movement", comment: "Short label for a health action button in the Log Actions widget")
     case .logPeriod:
-      "Log Period"
+      String(localized: "Log Period", comment: "Short label for a health action button in the Log Actions widget")
     case .logWeight:
-      "Log Weight"
+      String(localized: "Log Weight", comment: "Short label for a health action button in the Log Actions widget")
     case .logBloodPressure:
-      "Log Blood Pressure"
+      String(localized: "Log Blood Pressure", comment: "Short label for a health action button in the Log Actions widget")
     }
   }
 }

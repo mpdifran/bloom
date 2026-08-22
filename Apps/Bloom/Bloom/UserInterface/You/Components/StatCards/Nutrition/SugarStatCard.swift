@@ -12,13 +12,15 @@ struct SugarStatCard: View {
   let data: SugarChartData?
 
   private var valueText: String {
-    guard let data else { return "No Data" }
+    guard let data else { return String(localized: "No Data", comment: "Stat card value shown when there is no data") }
     return "\(Int(data.averageGrams))g"
   }
 
   private var subtitle: String? {
     guard let data else { return nil }
-    return data.isExceeded ? "Exceeded" : "Within Limit"
+    return data.isExceeded
+      ? String(localized: "Exceeded", comment: "Sugar card subtitle when intake exceeds the limit")
+      : String(localized: "Within Limit", comment: "Sugar card subtitle when intake is within the limit")
   }
 
   var body: some View {

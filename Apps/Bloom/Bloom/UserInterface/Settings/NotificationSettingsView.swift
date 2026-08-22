@@ -191,11 +191,11 @@ struct NotificationSettingsView: View {
     let days = max(0, components.day ?? 0)
 
     if days == 0 {
-      return "Less than 1 day remaining"
+      return String(localized: "Less than 1 day remaining", comment: "Subtitle showing a health monitor is snoozed for under a day")
     } else if days == 1 {
-      return "1 day remaining"
+      return String(localized: "1 day remaining", comment: "Subtitle showing a health monitor is snoozed for one more day")
     } else {
-      return "\(days) days remaining"
+      return String(localized: "\(days) days remaining", comment: "Subtitle showing how many days a health monitor stays snoozed")
     }
   }
 
@@ -237,11 +237,11 @@ struct NotificationSettingsView: View {
 
   private func statusLabel(for monitorType: MonitorType) -> String {
     if monitorPreferences.isSnoozed(for: monitorType) {
-      return "Snoozed"
+      return String(localized: "Snoozed", comment: "Status of a health monitor whose notifications are temporarily paused")
     } else if monitorPreferences.isEnabled(for: monitorType) {
-      return "On"
+      return String(localized: "On", comment: "Status of a health monitor whose notifications are enabled")
     } else {
-      return "Off"
+      return String(localized: "Off", comment: "Status of a health monitor whose notifications are disabled")
     }
   }
 

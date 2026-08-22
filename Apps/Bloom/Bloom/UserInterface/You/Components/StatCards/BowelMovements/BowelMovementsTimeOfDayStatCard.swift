@@ -36,14 +36,14 @@ struct BowelMovementsTimeOfDayStatCard: View {
         symbol: .sunMaxFill,
         title: "Time Of Day",
         value: timeOfDay.name,
-        valueStyle: .largeTinted("Most Common")
+        valueStyle: .largeTinted(String(localized: "Most Common", comment: "Stat card subtitle: the value is the most common one"))
       )
       .tint(tintColor)
     } else {
       StatCard(
         symbol: .sunMaxFill,
         title: "Time Of Day",
-        value: "No Data",
+        value: String(localized: "No Data", comment: "Stat card value shown when there is no data"),
         valueStyle: .largeTinted(nil)
       )
     }

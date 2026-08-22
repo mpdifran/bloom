@@ -19,7 +19,17 @@ public enum DrinkCategory: String, CaseIterable, Codable, Sendable {
   case alcohol = "Alcohol"
   case custom = "Custom"
 
-  public var displayName: String { rawValue }
+  public var displayName: String {
+    switch self {
+    case .water: String(localized: "Water", bundle: Bundle.coreHealth, comment: "Display name for drink category")
+    case .coffee: String(localized: "Coffee", bundle: Bundle.coreHealth, comment: "Display name for drink category")
+    case .tea: String(localized: "Tea", bundle: Bundle.coreHealth, comment: "Display name for drink category")
+    case .milk: String(localized: "Milk", bundle: Bundle.coreHealth, comment: "Display name for drink category")
+    case .soft: String(localized: "Soft", bundle: Bundle.coreHealth, comment: "Display name for drink category")
+    case .alcohol: String(localized: "Alcohol", bundle: Bundle.coreHealth, comment: "Display name for drink category")
+    case .custom: String(localized: "Custom", bundle: Bundle.coreHealth, comment: "Display name for drink category")
+    }
+  }
 }
 
 // MARK: - ContainerShapeType
@@ -127,7 +137,7 @@ public extension DrinkType {
 
   static let beerSubTypes: [DrinkType] = [
     DrinkType(
-      name: "Light Beer",
+      name: String(localized: "Light Beer", bundle: Bundle.coreHealth, comment: "Name of a built-in drink type"),
       category: .alcohol,
       symbolName: "mug.fill",
       colorHex: "#C9A227",
@@ -136,7 +146,7 @@ public extension DrinkType {
       abv: 4.0
     ),
     DrinkType(
-      name: "Lager",
+      name: String(localized: "Lager", bundle: Bundle.coreHealth, comment: "Name of a built-in drink type"),
       category: .alcohol,
       symbolName: "mug.fill",
       colorHex: "#B8860B",
@@ -145,7 +155,7 @@ public extension DrinkType {
       abv: 5.0
     ),
     DrinkType(
-      name: "IPA",
+      name: String(localized: "IPA", bundle: Bundle.coreHealth, comment: "Name of a built-in drink type"),
       category: .alcohol,
       symbolName: "mug.fill",
       colorHex: "#CC5500",
@@ -154,7 +164,7 @@ public extension DrinkType {
       abv: 6.5
     ),
     DrinkType(
-      name: "Stout",
+      name: String(localized: "Stout", bundle: Bundle.coreHealth, comment: "Name of a built-in drink type"),
       category: .alcohol,
       symbolName: "mug.fill",
       colorHex: "#5C4033",
@@ -168,7 +178,7 @@ public extension DrinkType {
 
   static let wineSubTypes: [DrinkType] = [
     DrinkType(
-      name: "Sparkling",
+      name: String(localized: "Sparkling", bundle: Bundle.coreHealth, comment: "Name of a built-in drink type"),
       category: .alcohol,
       symbolName: "wineglass.fill",
       colorHex: "#D4AF37",
@@ -177,7 +187,7 @@ public extension DrinkType {
       abv: 12.0
     ),
     DrinkType(
-      name: "White Wine",
+      name: String(localized: "White Wine", bundle: Bundle.coreHealth, comment: "Name of a built-in drink type"),
       category: .alcohol,
       symbolName: "wineglass.fill",
       colorHex: "#C5B358",
@@ -186,7 +196,7 @@ public extension DrinkType {
       abv: 12.0
     ),
     DrinkType(
-      name: "Rosé",
+      name: String(localized: "Rosé", bundle: Bundle.coreHealth, comment: "Name of a built-in drink type"),
       category: .alcohol,
       symbolName: "wineglass.fill",
       colorHex: "#E8909C",
@@ -195,7 +205,7 @@ public extension DrinkType {
       abv: 12.0
     ),
     DrinkType(
-      name: "Red Wine",
+      name: String(localized: "Red Wine", bundle: Bundle.coreHealth, comment: "Name of a built-in drink type"),
       category: .alcohol,
       symbolName: "wineglass.fill",
       colorHex: "#8B3A3A",
@@ -207,10 +217,24 @@ public extension DrinkType {
 
   // MARK: Default Drinks Catalog
 
+  /// Referenced directly rather than looked up by name.
+  ///
+  /// `name` is localized, so `defaultDrinks.first { $0.name == "Beer" }` returns nil in every
+  /// language but English - which crashed previews that force-unwrapped it.
+  static let beer = DrinkType(
+    name: String(localized: "Beer", bundle: Bundle.coreHealth, comment: "Name of a built-in drink type"),
+    category: .alcohol,
+    symbolName: "mug.fill",
+    colorHex: "#DAA520",
+    hydrationCoefficient: 0.50,
+    containerShapeType: .beerGlass,
+    subTypes: beerSubTypes
+  )
+
   static let defaultDrinks: [DrinkType] = [
     // Water
     DrinkType(
-      name: "Water",
+      name: String(localized: "Water", bundle: Bundle.coreHealth, comment: "Name of a built-in drink type"),
       category: .water,
       symbolName: "waterbottle.fill",
       colorHex: "#4A90D9",
@@ -220,7 +244,7 @@ public extension DrinkType {
 
     // Coffee
     DrinkType(
-      name: "Coffee",
+      name: String(localized: "Coffee", bundle: Bundle.coreHealth, comment: "Name of a built-in drink type"),
       category: .coffee,
       symbolName: "cup.and.saucer.fill",
       colorHex: "#6F4E37",
@@ -231,7 +255,7 @@ public extension DrinkType {
 
     // Tea
     DrinkType(
-      name: "Tea",
+      name: String(localized: "Tea", bundle: Bundle.coreHealth, comment: "Name of a built-in drink type"),
       category: .tea,
       symbolName: "leaf.fill",
       colorHex: "#CD853F",
@@ -242,7 +266,7 @@ public extension DrinkType {
 
     // Soft Drinks
     DrinkType(
-      name: "Soda",
+      name: String(localized: "Soda", bundle: Bundle.coreHealth, comment: "Name of a built-in drink type"),
       category: .soft,
       symbolName: "bubbles.and.sparkles",
       colorHex: "#8B4513",
@@ -253,17 +277,9 @@ public extension DrinkType {
     ),
 
     // Alcohol (Parent categories with sub-types)
+    beer,
     DrinkType(
-      name: "Beer",
-      category: .alcohol,
-      symbolName: "mug.fill",
-      colorHex: "#DAA520",
-      hydrationCoefficient: 0.50,
-      containerShapeType: .beerGlass,
-      subTypes: beerSubTypes
-    ),
-    DrinkType(
-      name: "Wine",
+      name: String(localized: "Wine", bundle: Bundle.coreHealth, comment: "Name of a built-in drink type"),
       category: .alcohol,
       symbolName: "wineglass.fill",
       colorHex: "#722F37",

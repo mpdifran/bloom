@@ -8,6 +8,7 @@
 import SwiftUI
 import SFSafeSymbols
 import BloomFoundation
+import CoreHealth
 
 struct WatchMetricCell: View {
   let contribution: WatchMetricContribution
@@ -35,12 +36,20 @@ struct WatchMetricCell: View {
   private var contributionText: String {
     let delta = contribution.weightedDelta
     if abs(delta) <= 0.1 {
-      return "0 yrs"
+      return String(localized: "0 yrs", comment: "Bio age contribution of zero years")
     } else if delta >= 0 {
-      return String(format: "+%.1f yrs", delta)
+      return String(format: String(localized: "+%.1f yrs", comment: "Bio age contribution, adds years"), locale: .current, delta)
     } else {
-      return String(format: "%.1f yrs", delta)
+      return String(format: String(localized: "%.1f yrs", comment: "Bio age contribution, removes years"), locale: .current, delta)
     }
+  }
+
+  /// The metric arrives from the phone as `BiologicalAgeMetric.rawValue` - a canonical English
+  /// identifier, which is right for the wire but wrong to show. Resolve it here so the watch
+  /// displays it in the user's language, falling back to the raw value if the phone ever sends a
+  /// metric this build doesn't know.
+  private var metricName: String {
+    BiologicalAgeMetric(rawValue: contribution.metric)?.displayName ?? contribution.metric
   }
 
   var body: some View {
@@ -52,7 +61,7 @@ struct WatchMetricCell: View {
 
       // Metric info
       VStack(alignment: .leading, spacing: 1) {
-        Text(contribution.metric)
+        Text(metricName)
           .font(.caption)
           .fontWeight(.medium)
           .lineLimit(3)

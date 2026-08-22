@@ -152,7 +152,9 @@ private struct NutrientLabel: View {
   let value: Double
   let target: Double?
   let displayAmount: String
-  let label: String
+  /// LocalizedStringKey, not String: a String literal is passed straight to Text without a
+  /// catalog lookup, so every macro label rendered in English regardless of language.
+  let label: LocalizedStringKey
 
   var body: some View {
     VStack(alignment: .leading) {

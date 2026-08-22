@@ -12,13 +12,15 @@ struct FiberStatCard: View {
   let data: FiberChartData?
 
   private var valueText: String {
-    guard let data else { return "No Data" }
+    guard let data else { return String(localized: "No Data", comment: "Stat card value shown when there is no data") }
     return "\(Int(data.averageGrams))g"
   }
 
   private var subtitle: String? {
     guard let data else { return nil }
-    return data.isSufficient ? "Sufficient" : "Insufficient"
+    return data.isSufficient
+      ? String(localized: "Sufficient", comment: "Fiber card subtitle when intake meets the goal")
+      : String(localized: "Insufficient", comment: "Fiber card subtitle when intake is below the goal")
   }
 
   var body: some View {

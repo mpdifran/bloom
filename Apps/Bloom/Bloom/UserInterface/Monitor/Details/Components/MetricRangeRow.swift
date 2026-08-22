@@ -54,13 +54,15 @@ struct MetricRangeRow: View {
   }
 
   // Custom labels for time-based metrics
-  private var lowLabel: String {
+  /// LocalizedStringKey, not String: a String literal is passed straight to Text without a
+  /// catalog lookup, so every zone label rendered in English regardless of language.
+  private var lowLabel: LocalizedStringKey {
     metricType == .bedtime || metricType == .wakeTime ? "Early" : "Low"
   }
 
-  private var normalLabel: String { "Typical" }
+  private var normalLabel: LocalizedStringKey { "Typical" }
 
-  private var highLabel: String {
+  private var highLabel: LocalizedStringKey {
     metricType == .bedtime || metricType == .wakeTime ? "Late" : "High"
   }
 

@@ -172,26 +172,31 @@ struct LogMealTimelineProvider: AppIntentTimelineProvider {
     }
 
     // Generate calories text
-    let caloriesText: String? = totalCalories > 0 ? "\(Int(totalCalories)) cal" : nil
+    let caloriesText: String? = totalCalories > 0
+      ? String(localized: "\(Int(totalCalories)) cal", comment: "Calorie count in the Log Meal widget")
+      : nil
 
     // Generate servings description
     let servingsDescription = servings == 1.0
-      ? "1 serving"
-      : "\(servings.format(using: .twoDecimalPlaces)) servings"
+      ? String(localized: "1 serving", comment: "Serving count in the Log Meal widget")
+      : String(
+          localized: "\(servings.format(using: .twoDecimalPlaces)) servings",
+          comment: "Serving count in the Log Meal widget, %@ is the number of servings"
+        )
 
     // Generate meal name
     let mealName: String = {
       switch meal {
       case .automatic:
-        return "Automatic"
+        return String(localized: "Automatic", comment: "Meal name shown in the Log Meal widget")
       case .breakfast:
-        return "Breakfast"
+        return String(localized: "Breakfast", comment: "Meal name shown in the Log Meal widget")
       case .lunch:
-        return "Lunch"
+        return String(localized: "Lunch", comment: "Meal name shown in the Log Meal widget")
       case .dinner:
-        return "Dinner"
+        return String(localized: "Dinner", comment: "Meal name shown in the Log Meal widget")
       case .snack:
-        return "Snack"
+        return String(localized: "Snack", comment: "Meal name shown in the Log Meal widget")
       }
     }()
 

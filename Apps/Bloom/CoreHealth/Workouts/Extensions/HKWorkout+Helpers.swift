@@ -115,27 +115,38 @@ public extension HKWorkout {
     let locationType = inferredLocationType(hasRoute: hasRoute)
 
     switch (workoutActivityType, locationType) {
-    case (.cycling, .indoor): return "Indoor Cycle"
-    case (.cycling, .outdoor): return "Outdoor Cycle"
-    case (.walking, .indoor): return "Indoor Walk"
-    case (.walking, .outdoor): return "Outdoor Walk"
-    case (.running, .indoor): return "Indoor Run"
-    case (.running, .outdoor): return "Outdoor Run"
-    case (.rowing, .indoor): return "Indoor Row"
-    case (.rowing, .outdoor): return "Outdoor Row"
-    case (.soccer, .indoor): return "Indoor Soccer"
-    case (.soccer, .outdoor): return "Outdoor Soccer"
-    case (.hockey, .indoor): return "Indoor Hockey"
-    case (.hockey, .outdoor): return "Outdoor Hockey"
-    case (.skatingSports, .indoor): return "Indoor Skating"
-    case (.skatingSports, .outdoor): return "Outdoor Skating"
-    case (.swimming, .indoor): return "Pool Swim"
-    case (.swimming, .outdoor): return "Open Water Swim"
+    case (.cycling, .indoor): return String(localized: "Indoor Cycle", bundle: Bundle.coreHealth, comment: "Display name for a workout, including its indoor/outdoor variant.")
+    case (.cycling, .outdoor): return String(localized: "Outdoor Cycle", bundle: Bundle.coreHealth, comment: "Display name for a workout, including its indoor/outdoor variant.")
+    case (.walking, .indoor): return String(localized: "Indoor Walk", bundle: Bundle.coreHealth, comment: "Display name for a workout, including its indoor/outdoor variant.")
+    case (.walking, .outdoor): return String(localized: "Outdoor Walk", bundle: Bundle.coreHealth, comment: "Display name for a workout, including its indoor/outdoor variant.")
+    case (.running, .indoor): return String(localized: "Indoor Run", bundle: Bundle.coreHealth, comment: "Display name for a workout, including its indoor/outdoor variant.")
+    case (.running, .outdoor): return String(localized: "Outdoor Run", bundle: Bundle.coreHealth, comment: "Display name for a workout, including its indoor/outdoor variant.")
+    case (.rowing, .indoor): return String(localized: "Indoor Row", bundle: Bundle.coreHealth, comment: "Display name for a workout, including its indoor/outdoor variant.")
+    case (.rowing, .outdoor): return String(localized: "Outdoor Row", bundle: Bundle.coreHealth, comment: "Display name for a workout, including its indoor/outdoor variant.")
+    case (.soccer, .indoor): return String(localized: "Indoor Soccer", bundle: Bundle.coreHealth, comment: "Display name for a workout, including its indoor/outdoor variant.")
+    case (.soccer, .outdoor): return String(localized: "Outdoor Soccer", bundle: Bundle.coreHealth, comment: "Display name for a workout, including its indoor/outdoor variant.")
+    case (.hockey, .indoor): return String(localized: "Indoor Hockey", bundle: Bundle.coreHealth, comment: "Display name for a workout, including its indoor/outdoor variant.")
+    case (.hockey, .outdoor): return String(localized: "Outdoor Hockey", bundle: Bundle.coreHealth, comment: "Display name for a workout, including its indoor/outdoor variant.")
+    case (.skatingSports, .indoor): return String(localized: "Indoor Skating", bundle: Bundle.coreHealth, comment: "Display name for a workout, including its indoor/outdoor variant.")
+    case (.skatingSports, .outdoor): return String(localized: "Outdoor Skating", bundle: Bundle.coreHealth, comment: "Display name for a workout, including its indoor/outdoor variant.")
+    case (.swimming, .indoor): return String(localized: "Pool Swim", bundle: Bundle.coreHealth, comment: "Display name for a workout, including its indoor/outdoor variant.")
+    case (.swimming, .outdoor): return String(localized: "Open Water Swim", bundle: Bundle.coreHealth, comment: "Display name for a workout, including its indoor/outdoor variant.")
     default:
+      let activityName = workoutActivityType.name
       switch locationType {
-      case .indoor: return "Indoor \(workoutActivityType.name)"
-      case .outdoor: return "Outdoor \(workoutActivityType.name)"
-      default: return workoutActivityType.name
+      case .indoor:
+        return String(
+          localized: "Indoor \(activityName)",
+          bundle: Bundle.coreHealth,
+          comment: "Generic indoor workout name. The placeholder is the workout activity name."
+        )
+      case .outdoor:
+        return String(
+          localized: "Outdoor \(activityName)",
+          bundle: Bundle.coreHealth,
+          comment: "Generic outdoor workout name. The placeholder is the workout activity name."
+        )
+      default: return activityName
       }
     }
   }

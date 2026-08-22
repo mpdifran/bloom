@@ -16,8 +16,12 @@ private extension Double {
 struct ChatBar: View {
 
   let onSubmit: (String, [UIImage]) -> Void
+  /// Focuses the field as soon as the bar appears, raising the keyboard. Used by the App Store
+  /// screenshot previews, which need the keyboard up without anyone tapping.
+  let startFocused: Bool
 
-  init(_ onSubmit: @escaping (String, [UIImage]) -> Void) {
+  init(startFocused: Bool = false, _ onSubmit: @escaping (String, [UIImage]) -> Void) {
+    self.startFocused = startFocused
     self.onSubmit = onSubmit
   }
 
@@ -45,6 +49,11 @@ struct ChatBar: View {
             .stroke(.fill)
             .ignoresSafeArea(edges: .bottom)
         }
+    }
+    .onAppear {
+      guard startFocused else { return }
+
+      isFocused = true
     }
     .sensoryFeedback(.selection, trigger: isFocused)
     .animation(.easeInOut, value: text.isEmpty)

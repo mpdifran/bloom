@@ -79,7 +79,6 @@
 		FF97C3F52E9C407300FE7A82 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF97C3F42E9C407300FE7A82 /* WidgetKit.framework */; };
 		FF97C4062E9C407400FE7A82 /* BloomWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FF97C3F32E9C407300FE7A82 /* BloomWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		FF97CD7B2E9D9EDA00FE7A82 /* SFSafeSymbols in Frameworks */ = {isa = PBXBuildFile; productRef = FF97CD7A2E9D9EDA00FE7A82 /* SFSafeSymbols */; };
-		FF97CDA72EA148C400FE7A82 /* BloomModel in Frameworks */ = {isa = PBXBuildFile; productRef = FF8741782CE14F8E002581FA /* BloomModel */; };
 		FF97D6982EA16EE300FE7A82 /* CoreNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF97D6922EA16EE300FE7A82 /* CoreNetwork.framework */; };
 		FF97D6992EA16EE300FE7A82 /* CoreNetwork.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF97D6922EA16EE300FE7A82 /* CoreNetwork.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FF97D6B22EA1765C00FE7A82 /* Umbrella.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; };
@@ -811,7 +810,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FF97CDA72EA148C400FE7A82 /* BloomModel in Frameworks */,
 				FF97832C2C9B546700A8ED7E /* Algorithms in Frameworks */,
 				FF97832B2C9B546700A8ED7E /* AppFoundations in Frameworks */,
 				FF5D0D162CFA47C500374F66 /* BloomModel in Frameworks */,
@@ -1354,7 +1352,6 @@
 				FF4A21C22C88FA9D00278019 /* BugsnagPerformanceSwift */,
 				FF4A21C42C88FA9D00278019 /* BugsnagPerformanceSwiftUI */,
 				FFE41D232C8BE1A000E3E559 /* ConfettiSwiftUI */,
-				FF8741782CE14F8E002581FA /* BloomModel */,
 				FF5D0D152CFA47C500374F66 /* BloomModel */,
 				FF1FFD672D15C27D0008B47D /* Valet */,
 				FF83DB1B2D2ECF010018FAAC /* RevenueCat */,
@@ -3530,6 +3527,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
@@ -3565,6 +3563,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
@@ -3600,6 +3599,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
@@ -3635,6 +3635,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
@@ -5174,10 +5175,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FF83DB1A2D2ECF010018FAAC /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
 			productName = RevenueCat;
-		};
-		FF8741782CE14F8E002581FA /* BloomModel */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = BloomModel;
 		};
 		FF89AA632EA2C6E900C76B6C /* BloomModel */ = {
 			isa = XCSwiftPackageProductDependency;

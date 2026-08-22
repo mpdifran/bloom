@@ -274,17 +274,18 @@ private extension LogFoodView {
 
   var emptyStateTitle: String {
     switch selectedFilter {
-    case .frequent: return "No frequent foods"
-    case .recent: return "No recent foods"
-    case .meals: return "No saved meals"
+    case .frequent: return String(localized: "No frequent foods", comment: "Empty state title")
+    case .recent: return String(localized: "No recent foods", comment: "Empty state title")
+    case .meals: return String(localized: "No saved meals", comment: "Empty state title")
     }
   }
 
   var emptyStateMessage: String {
     switch selectedFilter {
-    case .frequent: return "Log foods on your iPhone to see them here."
-    case .recent: return "Log foods on your iPhone to see them here."
-    case .meals: return "Create meals on your iPhone to see them here."
+    case .frequent, .recent:
+      return String(localized: "Log foods on your iPhone to see them here.", comment: "Empty state message")
+    case .meals:
+      return String(localized: "Create meals on your iPhone to see them here.", comment: "Empty state message")
     }
   }
 }

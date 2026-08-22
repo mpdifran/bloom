@@ -137,6 +137,30 @@ public enum BiologicalAgeMetric: String, Sendable, CaseIterable, Codable {
   case smoking = "Smoking"
   case alcohol = "Alcohol"
 
+  /// The user-facing name. `rawValue` stays canonical English — it is a backend payload key.
+  public var displayName: String {
+    switch self {
+    case .vo2Max: String(localized: "VO₂ Max", bundle: Bundle.coreHealth, comment: "Display name for biological age metric")
+    case .restingHeartRate: String(localized: "Resting Heart Rate", bundle: Bundle.coreHealth, comment: "Display name for biological age metric")
+    case .heartRateRecovery: String(localized: "Heart Rate Recovery", bundle: Bundle.coreHealth, comment: "Display name for biological age metric")
+    case .hrvTrend: String(localized: "HRV Trend", bundle: Bundle.coreHealth, comment: "Display name for biological age metric")
+    case .heartRateReserve: String(localized: "Heart Rate Reserve", bundle: Bundle.coreHealth, comment: "Display name for biological age metric")
+    case .zoneMinutes: String(localized: "Zone Minutes", bundle: Bundle.coreHealth, comment: "Display name for biological age metric")
+    case .activityLevel: String(localized: "Activity Level", bundle: Bundle.coreHealth, comment: "Display name for biological age metric")
+    case .walkingSpeed: String(localized: "Walking Speed", bundle: Bundle.coreHealth, comment: "Display name for biological age metric")
+    case .stairClimbSpeed: String(localized: "Stair Climb Speed", bundle: Bundle.coreHealth, comment: "Display name for biological age metric")
+    case .sleepScore: String(localized: "Sleep Score", bundle: Bundle.coreHealth, comment: "Display name for biological age metric")
+    case .sleepDurationVariability: String(localized: "Sleep Variability", bundle: Bundle.coreHealth, comment: "Display name for biological age metric")
+    case .bedtimeConsistency: String(localized: "Bedtime Consistency", bundle: Bundle.coreHealth, comment: "Display name for biological age metric")
+    case .sleepHeartRate: String(localized: "Sleep Heart Rate", bundle: Bundle.coreHealth, comment: "Display name for biological age metric")
+    case .sleepRespiratoryRate: String(localized: "Respiratory Rate", bundle: Bundle.coreHealth, comment: "Display name for biological age metric")
+    case .bodyFatPercentage: String(localized: "Body Fat %", bundle: Bundle.coreHealth, comment: "Display name for biological age metric")
+    case .bloodPressure: String(localized: "Blood Pressure", bundle: Bundle.coreHealth, comment: "Display name for biological age metric")
+    case .smoking: String(localized: "Smoking", bundle: Bundle.coreHealth, comment: "Display name for biological age metric")
+    case .alcohol: String(localized: "Alcohol", bundle: Bundle.coreHealth, comment: "Display name for biological age metric")
+    }
+  }
+
   public var weight: Double {
     switch self {
     case .vo2Max: 0.18
@@ -184,4 +208,15 @@ public enum BiologicalAgeCategory: String, Sendable, CaseIterable {
   case sleep = "Sleep"
   case bodyComposition = "Body Composition"
   case lifestyle = "Lifestyle"
+
+  /// The user-facing name. `rawValue` stays canonical English — it is a backend payload key.
+  public var displayName: String {
+    switch self {
+    case .cardiorespiratory: String(localized: "Cardiorespiratory", bundle: Bundle.coreHealth, comment: "Display name for biological age category")
+    case .activity: String(localized: "Activity", bundle: Bundle.coreHealth, comment: "Display name for biological age category")
+    case .sleep: String(localized: "Sleep", bundle: Bundle.coreHealth, comment: "Display name for biological age category")
+    case .bodyComposition: String(localized: "Body Composition", bundle: Bundle.coreHealth, comment: "Display name for biological age category")
+    case .lifestyle: String(localized: "Lifestyle", bundle: Bundle.coreHealth, comment: "Display name for biological age category")
+    }
+  }
 }

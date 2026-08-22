@@ -467,13 +467,12 @@ private extension BowelMovementsDetailView {
   
   var regularityFilterName: String {
     switch selectedRegularityFilter {
-    case 0: "All"
-    case 1: "< 8 Hours"
-    case 2: "8-24 Hours"
-    case 3: "24-48 Hours"
-    case 4: "48-72 Hours"
-    case 5: "> 72 Hours"
-    default: "All"
+    case 1: String(localized: "< 8 Hours", comment: "Label for bowel movements detail view")
+    case 2: String(localized: "8-24 Hours", comment: "Label for bowel movements detail view")
+    case 3: String(localized: "24-48 Hours", comment: "Label for bowel movements detail view")
+    case 4: String(localized: "48-72 Hours", comment: "Label for bowel movements detail view")
+    case 5: String(localized: "> 72 Hours", comment: "Label for bowel movements detail view")
+    default: String(localized: "All", comment: "Regularity filter showing every bowel movement interval")
     }
   }
   

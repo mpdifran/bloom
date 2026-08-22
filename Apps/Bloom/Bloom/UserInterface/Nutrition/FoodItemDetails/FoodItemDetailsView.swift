@@ -75,6 +75,13 @@ struct FoodItemDetailsView: View {
     case mass = "Mass"
 
     var id: String { rawValue }
+
+    var displayName: String {
+      switch self {
+      case .servings: String(localized: "Servings", comment: "Input mode for logging food by number of servings")
+      case .mass: String(localized: "Mass", comment: "Input mode for logging food by weight")
+      }
+    }
   }
 
   @FocusState private var isFocused: Bool
@@ -343,7 +350,7 @@ private extension FoodItemDetailsView {
 
           Picker("Input Mode", selection: $inputMode) {
             ForEach(InputMode.allCases) { mode in
-              Text(mode.rawValue)
+              Text(mode.displayName)
                 .tag(mode)
             }
           }

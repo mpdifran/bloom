@@ -9,8 +9,14 @@ import Foundation
 import SwiftUI
 
 public extension FoodItemLog.Meal {
+  /// The user-facing name. `rawValue` stays canonical English — it is a persistence identifier.
   var name: String {
-    rawValue.capitalized
+    switch self {
+    case .breakfast: String(localized: "Breakfast", bundle: Bundle.dataContainer, comment: "Display name for a meal")
+    case .lunch: String(localized: "Lunch", bundle: Bundle.dataContainer, comment: "Display name for a meal")
+    case .dinner: String(localized: "Dinner", bundle: Bundle.dataContainer, comment: "Display name for a meal")
+    case .snack: String(localized: "Snack", bundle: Bundle.dataContainer, comment: "Display name for a meal")
+    }
   }
 }
 

@@ -114,7 +114,9 @@ struct TargetHeartRateZonesDistributionView: View {
 }
 
 struct HeartRateZoneBar: View {
-  let title: String
+  /// LocalizedStringKey, not String: a String literal is passed straight to Text without a
+  /// catalog lookup, so every zone name rendered in English regardless of language.
+  let title: LocalizedStringKey
   let subtitle: String
   let duration: HKQuantity
   let totalDuration: HKQuantity
@@ -184,7 +186,7 @@ struct HeartRateZoneBar: View {
   }
 
   var formattedDuration: String {
-    return duration.doubleValue(for: .minute()).format() + " min"
+    String(localized: "\(duration.doubleValue(for: .minute()).format()) min", comment: "Duration spent in a heart rate zone. The placeholder is a number of minutes.")
   }
 
   func formattedTarget(target: Double) -> String {

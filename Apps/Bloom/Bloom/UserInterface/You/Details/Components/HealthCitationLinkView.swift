@@ -10,7 +10,9 @@ import BloomUI
 
 struct HealthCitationLinkView: View {
   let url: URL
-  let title: String
+  /// LocalizedStringKey, not String: a String literal is passed straight to Text without a
+  /// catalog lookup, so every citation rendered in English regardless of language.
+  let title: LocalizedStringKey
 
   var body: some View {
     Link(destination: url) {

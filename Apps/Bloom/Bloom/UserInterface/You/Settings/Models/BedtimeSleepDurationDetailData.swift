@@ -40,39 +40,39 @@ struct BedtimeSleepDurationSummary: Sendable {
   }
 
   var averageDurationFormatted: String {
-    let hours = Int(averageDurationMinutes) / 60
-    let mins = Int(averageDurationMinutes) % 60
-    return "\(hours)h \(mins)m"
+    // Locale-aware duration: hand-built "3h 45m" hardcoded English unit abbreviations.
+    return Duration.seconds(Int(averageDurationMinutes) * 60)
+      .formatted(.units(allowed: [.hours, .minutes], width: .narrow))
   }
 
   var previousPeriodAverageDurationFormatted: String? {
     guard let minutes = previousPeriodAverageDurationMinutes else { return nil }
-    let hours = Int(minutes) / 60
-    let mins = Int(minutes) % 60
-    return "\(hours)h \(mins)m"
+    // Locale-aware duration: hand-built "3h 45m" hardcoded English unit abbreviations.
+    return Duration.seconds(Int(minutes) * 60)
+      .formatted(.units(allowed: [.hours, .minutes], width: .narrow))
   }
 
   var consistencyDescription: String {
     if bedtimeStandardDeviationMinutes < 30 {
-      return "Very Consistent"
+      return String(localized: "Very Consistent", comment: "Bedtime consistency rating")
     } else if bedtimeStandardDeviationMinutes < 60 {
-      return "Consistent"
+      return String(localized: "Consistent", comment: "Bedtime consistency rating")
     } else if bedtimeStandardDeviationMinutes < 90 {
-      return "Somewhat Variable"
+      return String(localized: "Somewhat Variable", comment: "Bedtime consistency rating")
     } else {
-      return "Variable"
+      return String(localized: "Variable", comment: "Bedtime consistency rating")
     }
   }
 
   var wakeTimeConsistencyDescription: String {
     if wakeTimeStandardDeviationMinutes < 30 {
-      return "Very Consistent"
+      return String(localized: "Very Consistent", comment: "Wake time consistency rating")
     } else if wakeTimeStandardDeviationMinutes < 60 {
-      return "Consistent"
+      return String(localized: "Consistent", comment: "Wake time consistency rating")
     } else if wakeTimeStandardDeviationMinutes < 90 {
-      return "Somewhat Variable"
+      return String(localized: "Somewhat Variable", comment: "Wake time consistency rating")
     } else {
-      return "Variable"
+      return String(localized: "Variable", comment: "Wake time consistency rating")
     }
   }
 
@@ -84,8 +84,9 @@ struct BedtimeSleepDurationSummary: Sendable {
     }
     let hours = Int(minutesFromMidnight) / 60
     let minutes = Int(minutesFromMidnight) % 60
-    let period = hours >= 12 ? "PM" : "AM"
-    let displayHour = hours == 0 ? 12 : (hours > 12 ? hours - 12 : hours)
-    return String(format: "%d:%02d %@", displayHour, minutes, period)
+    // Formatted through the locale rather than a hardcoded 12-hour AM/PM string, which showed
+    // English "AM"/"PM" in every language and ignored 24-hour locales.
+    guard let date = Calendar.current.date(from: DateComponents(hour: hours, minute: minutes)) else { return "" }
+    return date.formatted(.dateTime.hour().minute())
   }
 }

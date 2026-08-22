@@ -16,14 +16,17 @@ extension SettingsCell {
 }
 
 struct SettingsCell<Content>: View where Content: View {
-  let title: String
-  let subtitle: String?
+  /// LocalizedStringKey, not String: a String literal is passed straight to Text without a
+  /// catalog lookup, so every settings row title rendered in English regardless of language.
+  let title: LocalizedStringKey
+  /// LocalizedStringKey, not String: same reason as `title`.
+  let subtitle: LocalizedStringKey?
   let iconType: TrailingIconType?
   let contentBuilder: () -> Content
 
   init(
-    _ title: String,
-    subtitle: String? = nil,
+    _ title: LocalizedStringKey,
+    subtitle: LocalizedStringKey? = nil,
     iconType: TrailingIconType? = nil,
     @ViewBuilder contentBuilder: @escaping () -> Content
   ) {

@@ -127,8 +127,8 @@ public extension MobilityMonthlySummary {
   }
 
   var subtitle: String {
-    let doubleSupportValue = String(format: "%.0f", doubleSupportTimePercent * 100)
-    let sixMinuteWalkValue = String(format: "%.0f", sixMinuteWalkDistance)
+    let doubleSupportValue = (doubleSupportTimePercent * 100).format(using: .noDecimalPlaces)
+    let sixMinuteWalkValue = sixMinuteWalkDistance.format(using: .noDecimalPlaces)
 
     let doubleSupport = String(
       localized: "Double Support: \(doubleSupportValue)%",

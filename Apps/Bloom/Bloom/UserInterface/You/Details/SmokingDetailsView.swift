@@ -37,7 +37,7 @@ struct SmokingDetailsView: View {
       ToolbarItem(placement: .principal) {
         VitalSummaryDetailTitleView(
           title: "Smoking",
-          subtitle: "Status"
+          subtitle: String(localized: "Status", comment: "Subtitle on the Smoking detail screen")
         )
       }
     }
@@ -259,20 +259,18 @@ private extension SmokingDetailsView {
 
   func quitDurationText(days: Int) -> String {
     if days < 1 {
-      return "Quit today - great decision!"
-    } else if days == 1 {
-      return "Smoke-free for 1 day - keep going!"
+      return String(localized: "Quit today - great decision!", comment: "Encouragement shown on the Smoking detail screen when the quit date is today")
     } else if days < 7 {
-      return "Smoke-free for \(days) days - you're doing great!"
+      return String(localized: "Smoke-free for \(days) days - you're doing great!", comment: "Encouragement on the Smoking detail screen. The placeholder is a number of days.")
     } else if days < 30 {
       let weeks = days / 7
-      return "Smoke-free for \(weeks) week\(weeks == 1 ? "" : "s") - amazing progress!"
+      return String(localized: "Smoke-free for \(weeks) weeks - amazing progress!", comment: "Encouragement on the Smoking detail screen. The placeholder is a number of weeks.")
     } else if days < 365 {
       let months = days / 30
-      return "Smoke-free for \(months) month\(months == 1 ? "" : "s") - incredible!"
+      return String(localized: "Smoke-free for \(months) months - incredible!", comment: "Encouragement on the Smoking detail screen. The placeholder is a number of months.")
     } else {
       let years = days / 365
-      return "Smoke-free for \(years) year\(years == 1 ? "" : "s") - that's amazing!"
+      return String(localized: "Smoke-free for \(years) years - that's amazing!", comment: "Encouragement on the Smoking detail screen. The placeholder is a number of years.")
     }
   }
 

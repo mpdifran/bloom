@@ -378,13 +378,13 @@ private extension SettingsView {
       SettingsSectionContainer {
         if let entitlementInfo = entitlementController.bloomProEntitlement {
           SettingsCell("Plan") {
-            Text(entitlementInfo.activeSubscriptionName)
+            Text(LocalizedStringKey(entitlementInfo.activeSubscriptionName))
           }
 
           Divider()
 
           if let cellInfo = entitlementInfo.statusCellInfo {
-            SettingsCell(cellInfo.title) {
+            SettingsCell(LocalizedStringKey(cellInfo.title)) {
               Text(cellInfo.date, style: .date)
             }
             Divider()
@@ -425,7 +425,7 @@ private extension SettingsView {
 
       SettingsSectionContainer {
         SettingsCell("App Version") {
-          Text(Bundle.main.appVersion ?? "Unknown")
+          Text(Bundle.main.appVersion ?? String(localized: "Unknown", comment: "Placeholder shown when the app version can't be determined"))
             .onTapGesture(count: 10) {
               showDeveloperMode = true
             }
@@ -488,10 +488,16 @@ private extension SettingsView {
           AsyncButton(role: .destructive) {
             try await withCheckedThrowingContinuation { continuation in
               confirmationDialogDetails = ConfirmationDialogDetails(
-                title: "Are You Sure?",
-                message: "This can't be undone. Your personal data and existing food logs will not be deleted, and will remain on your device.",
+                title: String(localized: "Are You Sure?", comment: "Title of the confirmation dialog for deleting your account"),
+                message: String(
+                  localized: "This can't be undone. Your personal data and existing food logs will not be deleted, and will remain on your device.",
+                  comment: "Message of the confirmation dialog for deleting your account"
+                ),
                 buttons: [
-                  ConfirmationDialogDetails.Button(title: "Delete", role: .destructive) {
+                  ConfirmationDialogDetails.Button(
+                    title: String(localized: "Delete", comment: "Button that confirms deleting your account"),
+                    role: .destructive
+                  ) {
                     Task {
                       do {
                         try await UserController.shared.deleteAccount()
@@ -501,7 +507,10 @@ private extension SettingsView {
                       }
                     }
                   },
-                  ConfirmationDialogDetails.Button(title: "Cancel", role: .cancel) {
+                  ConfirmationDialogDetails.Button(
+                    title: String(localized: "Cancel", comment: "Button that dismisses the account deletion confirmation dialog"),
+                    role: .cancel
+                  ) {
                     continuation.resume()
                   }
                 ]

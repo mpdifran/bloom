@@ -11,7 +11,9 @@ import AppUI
 
 struct FoodItemReportImageCell: View {
   let symbol: SFSymbol
-  let title: String
+  /// LocalizedStringKey, not String: a String literal is passed straight to Text without a
+  /// catalog lookup, so every title rendered in English regardless of language.
+  let title: LocalizedStringKey
   @Binding var image: UIImage?
 
   @State private var presentedSheet: AnyView?
@@ -42,7 +44,10 @@ struct FoodItemReportImageCell: View {
     .onTapGesture {
       presentedSheet = CameraView(
         capturedImage: $image,
-        instructions: "Position the item within the frame",
+        instructions: String(
+          localized: "Position the item within the frame",
+          comment: "Camera instructions when photographing a food item for an issue report"
+        ),
         aspectRatio: 0.8
       ).asAny
     }

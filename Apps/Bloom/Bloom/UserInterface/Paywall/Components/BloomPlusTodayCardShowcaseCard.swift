@@ -9,13 +9,13 @@ import SwiftUI
 import BloomUI
 
 struct BloomPlusTodayCardShowcaseCard<Content: View>: View {
-  let title: String
-  let message: String
+  let title: LocalizedStringKey
+  let message: LocalizedStringKey
   let contentBuilder: () -> Content
 
   init(
-    title: String,
-    message: String,
+    title: LocalizedStringKey,
+    message: LocalizedStringKey,
     @ViewBuilder contentBuilder: @escaping () -> Content
   ) {
     self.title = title

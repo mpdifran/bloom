@@ -23,8 +23,11 @@ struct HealthInsightTimelineProvider: TimelineProvider {
       return HealthInsightEntry(
         date: Date(),
         relevance: nil,
-        title: "Actionable Health Insights",
-        body: "Spot trends in your health data with personalized insights that help you understand what's working.",
+        title: String(localized: "Actionable Health Insights", comment: "Health Insight widget copy shown to people without a subscription"),
+        body: String(
+          localized: "Spot trends in your health data with personalized insights that help you understand what's working.",
+          comment: "Health Insight widget copy shown to people without a subscription"
+        ),
         priority: 2,
         isLoading: false,
         hasError: false,
@@ -36,8 +39,11 @@ struct HealthInsightTimelineProvider: TimelineProvider {
       return HealthInsightEntry(
         date: Date(),
         relevance: nil,
-        title: "Nutrition Consistency",
-        body: "Your protein intake has been steady this week, but consider adding more fiber-rich foods.",
+        title: String(localized: "Nutrition Consistency", comment: "Sample insight title shown in the widget gallery"),
+        body: String(
+          localized: "Your protein intake has been steady this week, but consider adding more fiber-rich foods.",
+          comment: "Sample insight body shown in the widget gallery"
+        ),
         priority: 8,
         isLoading: true,
         hasError: false,
@@ -51,8 +57,11 @@ struct HealthInsightTimelineProvider: TimelineProvider {
         return HealthInsightEntry(
           date: Date(),
           relevance: nil,
-          title: "No Insights Available",
-          body: "Check back later for personalized health insights.",
+          title: String(localized: "No Insights Available", comment: "Health Insight widget empty state title"),
+          body: String(
+            localized: "Check back later for personalized health insights.",
+            comment: "Health Insight widget empty state body"
+          ),
           priority: 5,
           isLoading: false,
           hasError: false,
@@ -91,8 +100,11 @@ struct HealthInsightTimelineProvider: TimelineProvider {
       let entry = HealthInsightEntry(
         date: now,
         relevance: nil,
-        title: "Actionable Health Insights",
-        body: "Spot trends in your health data with personalized insights that help you understand what's working.",
+        title: String(localized: "Actionable Health Insights", comment: "Health Insight widget copy shown to people without a subscription"),
+        body: String(
+          localized: "Spot trends in your health data with personalized insights that help you understand what's working.",
+          comment: "Health Insight widget copy shown to people without a subscription"
+        ),
         priority: 2,
         isLoading: false,
         hasError: false,
@@ -106,8 +118,11 @@ struct HealthInsightTimelineProvider: TimelineProvider {
       let entry = HealthInsightEntry(
         date: now,
         relevance: nil,
-        title: "Health Insights",
-        body: "Open the app to load your personalized health insights.",
+        title: String(localized: "Health Insights", comment: "Health Insight widget loading title"),
+        body: String(
+          localized: "Open the app to load your personalized health insights.",
+          comment: "Health Insight widget loading body"
+        ),
         priority: 2,
         isLoading: true,
         hasError: false,
@@ -124,8 +139,11 @@ struct HealthInsightTimelineProvider: TimelineProvider {
         let entry = HealthInsightEntry(
           date: now,
           relevance: nil,
-          title: "No Insights Available",
-          body: "Check back later for personalized health insights.",
+          title: String(localized: "No Insights Available", comment: "Health Insight widget empty state title"),
+          body: String(
+            localized: "Check back later for personalized health insights.",
+            comment: "Health Insight widget empty state body"
+          ),
           priority: 5,
           isLoading: false,
           hasError: false,
@@ -184,8 +202,11 @@ struct HealthInsightTimelineProvider: TimelineProvider {
       return HealthInsightEntry(
         date: Date(),
         relevance: nil,
-        title: "Actionable Health Insights",
-        body: "Spot trends in your health data with personalized insights that help you understand what's working.",
+        title: String(localized: "Actionable Health Insights", comment: "Health Insight widget copy shown to people without a subscription"),
+        body: String(
+          localized: "Spot trends in your health data with personalized insights that help you understand what's working.",
+          comment: "Health Insight widget copy shown to people without a subscription"
+        ),
         priority: 2,
         isLoading: false,
         hasError: false,
@@ -196,8 +217,11 @@ struct HealthInsightTimelineProvider: TimelineProvider {
       return HealthInsightEntry(
         date: Date(),
         relevance: nil,
-        title: "Health Insights",
-        body: "Open the app to load your personalized health insights.",
+        title: String(localized: "Health Insights", comment: "Health Insight widget loading title"),
+        body: String(
+          localized: "Open the app to load your personalized health insights.",
+          comment: "Health Insight widget loading body"
+        ),
         priority: 2,
         isLoading: true,
         hasError: false,
@@ -210,8 +234,11 @@ struct HealthInsightTimelineProvider: TimelineProvider {
         return HealthInsightEntry(
           date: Date(),
           relevance: nil,
-          title: "No Insights Available",
-          body: "Check back later for personalized health insights.",
+          title: String(localized: "No Insights Available", comment: "Health Insight widget empty state title"),
+          body: String(
+            localized: "Check back later for personalized health insights.",
+            comment: "Health Insight widget empty state body"
+          ),
           priority: 5,
           isLoading: false,
           hasError: false,

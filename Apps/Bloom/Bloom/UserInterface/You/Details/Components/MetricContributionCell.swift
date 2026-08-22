@@ -31,9 +31,9 @@ struct MetricContributionCell: View {
   private var contributionText: String {
     let delta = contribution.weightedDelta
     if delta >= 0 {
-      return "+\(delta.format(using: .oneDecimalPlace)) years"
+      return String(localized: "+\(delta.format(using: .oneDecimalPlace)) years", comment: "Biological age contribution. The placeholder is a number of years added.")
     } else {
-      return "\(delta.format(using: .oneDecimalPlace)) years"
+      return String(localized: "\(delta.format(using: .oneDecimalPlace)) years", comment: "Biological age contribution. The placeholder is a signed number of years.")
     }
   }
 

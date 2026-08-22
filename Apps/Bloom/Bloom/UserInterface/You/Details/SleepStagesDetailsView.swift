@@ -315,16 +315,18 @@ private extension SleepStagesDetailsView {
     .cardContainer()
   }
 
+  /// The copy parameters are LocalizedStringKey, not String: a String literal is passed straight
+  /// to Text without a catalog lookup, so these cards rendered in English regardless of language.
   func educationalCard(
-    title: String,
+    title: LocalizedStringKey,
     icon: SFSymbol,
     color: Color,
-    goal: String,
+    goal: LocalizedStringKey,
     goalRange: ClosedRange<Double>?,
     goalMax: Double?,
     actualMinutes: Double?,
     actualPercentage: Double?,
-    description: String
+    description: LocalizedStringKey
   ) -> some View {
     let goalMet: Bool = {
       guard let actual = actualPercentage else { return false }
@@ -401,20 +403,18 @@ private extension SleepStagesDetailsView {
 private extension SleepStagesDetailsView {
 
   func formatMinutes(_ minutes: Double) -> String {
+    // Locale-aware duration: hand-built "3h 45m" hardcoded English unit abbreviations.
     let hours = Int(minutes) / 60
     if hours > 0 {
-      return "\(hours)h"
+      return Duration.seconds(hours * 3600).formatted(.units(allowed: [.hours], width: .narrow))
     }
-    return "\(Int(minutes))m"
+    return Duration.seconds(Int(minutes) * 60).formatted(.units(allowed: [.minutes], width: .narrow))
   }
 
   func formatDuration(_ minutes: Double) -> String {
-    let hours = Int(minutes) / 60
-    let mins = Int(minutes) % 60
-    if hours > 0 {
-      return "\(hours)h \(mins)m"
-    }
-    return "\(mins)m"
+    // Locale-aware duration: hand-built "3h 45m" hardcoded English unit abbreviations.
+    Duration.seconds(Int(minutes) * 60)
+      .formatted(.units(allowed: [.hours, .minutes], width: .narrow))
   }
 }
 
@@ -428,9 +428,9 @@ private struct SleepStageAverages {
   let totalSleepMinutes: Double
 
   var formattedTotalSleep: String {
-    let hours = Int(totalSleepMinutes) / 60
-    let mins = Int(totalSleepMinutes) % 60
-    return "\(hours)h \(mins)m"
+    // Locale-aware duration: hand-built "3h 45m" hardcoded English unit abbreviations.
+    return Duration.seconds(Int(totalSleepMinutes) * 60)
+      .formatted(.units(allowed: [.hours, .minutes], width: .narrow))
   }
 
   var corePercentage: Double {

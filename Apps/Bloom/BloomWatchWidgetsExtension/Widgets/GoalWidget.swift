@@ -85,7 +85,7 @@ struct WatchGoalEntry: TimelineEntry {
     WatchGoalEntry(
       date: .now,
       goalId: "",
-      metricName: "No Goal",
+      metricName: String(localized: "No Goal", comment: "Watch goal widget empty state"),
       metricSystemImage: "target",
       metricColorHex: nil,
       currentValue: 0,

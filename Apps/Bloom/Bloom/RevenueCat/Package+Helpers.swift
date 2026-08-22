@@ -16,9 +16,9 @@ extension Package {
     let subscriptionPeriod = introDiscount.subscriptionPeriod.relativeDisplayString
 
     if introDiscount.price == 0 {
-      return "\(subscriptionPeriod) Free"
+      return String(localized: "\(subscriptionPeriod) Free", comment: "Intro offer badge on a plan. Placeholder is a period such as 'first month'.")
     }
-    return "\(introDiscount.localizedPriceString) for \(subscriptionPeriod)"
+    return String(localized: "\(introDiscount.localizedPriceString) for \(subscriptionPeriod)", comment: "Intro offer badge on a plan. First placeholder is a price, second is a period such as 'first month'.")
   }
 
   var introductoryOfferTrialString: String? {
@@ -27,9 +27,9 @@ extension Package {
     let subscriptionPeriod = introDiscount.subscriptionPeriod.displayString
 
     if introDiscount.price == 0 {
-      return "\(subscriptionPeriod) Free Trial"
+      return String(localized: "\(subscriptionPeriod) Free Trial", comment: "Free trial label. Placeholder is a duration such as '7 days'.")
     }
-    return "\(introDiscount.localizedPriceString) for \(subscriptionPeriod)"
+    return String(localized: "\(introDiscount.localizedPriceString) for \(subscriptionPeriod)", comment: "Intro offer badge on a plan. First placeholder is a price, second is a period such as 'first month'.")
   }
 
   /// ex "Try Free For 7 Days"."
@@ -39,9 +39,9 @@ extension Package {
     let subscriptionPeriod = introDiscount.subscriptionPeriod.displayString
 
     if introDiscount.price == 0 {
-      return "Try Free For \(subscriptionPeriod.capitalized)"
+      return String(localized: "Try Free For \(subscriptionPeriod.capitalized)", comment: "Purchase button title. Placeholder is a duration such as '7 Days'.")
     }
-    return "\(introDiscount.localizedPriceString) for \(subscriptionPeriod.capitalized)"
+    return String(localized: "\(introDiscount.localizedPriceString) for \(subscriptionPeriod.capitalized)", comment: "Intro offer badge on a plan. First placeholder is a price, second is a period such as 'first month'.")
   }
 
   /// ex "then $49.99/year ($4.17/month)
@@ -52,27 +52,35 @@ extension Package {
     else { return nil }
 
     if !isMonthly, let monthlyPriceString {
-      return "then \(pricingString) (\(monthlyPriceString))"
+      return String(localized: "then \(pricingString) (\(monthlyPriceString))", comment: "Price shown under the purchase button, ex 'then $49.99 / year ($4.17 / month)'.")
     }
-    return "then \(pricingString)"
+    return String(localized: "then \(pricingString)", comment: "Price shown under the purchase button, ex 'then $9.99 / month'.")
   }
 
   var sensibleName: String {
     guard let period = storeProduct.subscriptionPeriod else {
-      return "Unknown"
+      return String(localized: "Unknown", comment: "Fallback name for a subscription plan with an unknown billing period.")
     }
 
     switch period.unit {
     case .month:
-      return period.value == 1 ? "Monthly" : "\(period.value) Months"
+      return period.value == 1
+        ? String(localized: "Monthly", comment: "Name of a subscription plan billed every month.")
+        : String(localized: "\(period.value) Months", comment: "Name of a subscription plan billed every few months.")
     case .year:
-      return period.value == 1 ? "Yearly" : "\(period.value) Years"
+      return period.value == 1
+        ? String(localized: "Yearly", comment: "Name of a subscription plan billed every year.")
+        : String(localized: "\(period.value) Years", comment: "Name of a subscription plan billed every few years.")
     case .week:
-      return period.value == 1 ? "Weekly" : "\(period.value) Weeks"
+      return period.value == 1
+        ? String(localized: "Weekly", comment: "Name of a subscription plan billed every week.")
+        : String(localized: "\(period.value) Weeks", comment: "Name of a subscription plan billed every few weeks.")
     case .day:
-      return period.value == 1 ? "Daily" : "\(period.value) Days"
+      return period.value == 1
+        ? String(localized: "Daily", comment: "Name of a subscription plan billed every day.")
+        : String(localized: "\(period.value) Days", comment: "Name of a subscription plan billed every few days.")
     @unknown default:
-      return "\(period.value) Units"
+      return String(localized: "\(period.value) Units", comment: "Fallback name for a subscription plan with an unrecognized billing period.")
     }
   }
 
@@ -87,19 +95,27 @@ extension Package {
     let periodString: String
     switch period.unit {
     case .day:
-      periodString = period.value == 1 ? "day" : "\(period.value) days"
+      periodString = period.value == 1
+        ? String(localized: "day", comment: "Billing period in a price, ex '$1.99 / day'.")
+        : String(localized: "\(period.value) days", comment: "Billing period in a price, ex '$1.99 / 3 days'.")
     case .week:
-      periodString = period.value == 1 ? "week" : "\(period.value) weeks"
+      periodString = period.value == 1
+        ? String(localized: "week", comment: "Billing period in a price, ex '$1.99 / week'.")
+        : String(localized: "\(period.value) weeks", comment: "Billing period in a price, ex '$1.99 / 2 weeks'.")
     case .month:
-      periodString = period.value == 1 ? "month" : "\(period.value) months"
+      periodString = period.value == 1
+        ? String(localized: "month", comment: "Billing period in a price, ex '$9.99 / month'.")
+        : String(localized: "\(period.value) months", comment: "Billing period in a price, ex '$9.99 / 3 months'.")
     case .year:
-      periodString = period.value == 1 ? "year" : "\(period.value) years"
+      periodString = period.value == 1
+        ? String(localized: "year", comment: "Billing period in a price, ex '$49.99 / year'.")
+        : String(localized: "\(period.value) years", comment: "Billing period in a price, ex '$49.99 / 2 years'.")
     @unknown default:
       return nil
     }
 
     // Combine price and period
-    return "\(localizedPriceString) / \(periodString)"
+    return String(localized: "\(localizedPriceString) / \(periodString)", comment: "A price and its billing period, ex '$9.99 / month'. First placeholder is a price, second is a period.")
   }
 
   var isMonthly: Bool {
@@ -136,7 +152,7 @@ extension Package {
       number: .currency
     )
 
-    return "\(formattedPrice) / month"
+    return String(localized: "\(formattedPrice) / month", comment: "The equivalent monthly price of a longer plan, ex '$4.17 / month'.")
   }
 
   var trialDurationInDays: Int? {

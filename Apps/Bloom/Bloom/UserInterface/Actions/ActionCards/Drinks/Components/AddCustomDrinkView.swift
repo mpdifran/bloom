@@ -167,7 +167,7 @@ struct AddCustomDrinkView: View {
 
             Spacer()
 
-            Text("\(String(format: "%.1f", abv))%")
+            Text("\(abv.formatted(.number.precision(.fractionLength(1))))%")
               .font(.subheadline)
               .fontWeight(.semibold)
           }

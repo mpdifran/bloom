@@ -12,7 +12,9 @@ private extension CGFloat {
   static let barHeight: CGFloat = 20
 }
 struct PillRangeChart: View {
-  let title: String
+  /// LocalizedStringKey, not String: a String literal is passed straight to Text without a
+  /// catalog lookup, so every chart row title rendered in English regardless of language.
+  let title: LocalizedStringKey
   let quantityString: String
   let unitString: String
   let value: Double

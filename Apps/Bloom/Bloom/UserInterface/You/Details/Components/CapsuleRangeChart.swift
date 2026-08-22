@@ -14,7 +14,9 @@ private extension CGFloat {
 }
 
 struct CapsuleRangeChart: View {
-  let title: String
+  /// LocalizedStringKey, not String: a String literal is passed straight to Text without a
+  /// catalog lookup, so every nutrient name rendered in English regardless of language.
+  let title: LocalizedStringKey
   let unitString: String
   let value: Double
   let minValue: Double

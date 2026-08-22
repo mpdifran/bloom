@@ -98,13 +98,13 @@ private extension HabitDetailsView {
   var currentPeriodLabel: String {
     switch viewModel.habit.timePeriod {
     case .daily:
-      "Today"
+      String(localized: "Today", comment: "Label for the period a goal is being measured over")
     case .weekly:
-      "This Week"
+      String(localized: "This Week", comment: "Label for the period a goal is being measured over")
     case .monthly:
-      "This Month"
+      String(localized: "This Month", comment: "Label for the period a goal is being measured over")
     case .yearly:
-      "This Year"
+      String(localized: "This Year", comment: "Label for the period a goal is being measured over")
     @unknown default:
       ""
     }
@@ -315,7 +315,7 @@ private extension HabitDetailsView {
       return nil
     }
 
-    return "This goal tracks time spent performing \(workouts) workouts."
+    return String(localized: "This goal tracks time spent performing \(workouts) workouts.", comment: "Notes under a workout duration goal, %@ is a formatted list of workout names")
   }
 }
 

@@ -56,7 +56,7 @@ private extension WorkoutEffortPickerCard {
 
       Spacer()
 
-      Text(WorkoutEffortCategory.category(for: selectedEffort).rawValue)
+      Text(WorkoutEffortCategory.category(for: selectedEffort).displayName)
         .font(.title3)
         .bold()
         .fontDesign(.rounded)

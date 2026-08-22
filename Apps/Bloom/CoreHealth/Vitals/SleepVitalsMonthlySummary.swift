@@ -102,10 +102,10 @@ public extension SleepVitalsMonthlySummary {
     }
 
     if let averageREMSleepPercent = details.averageREMSleepPercent {
-      entries.append("REM: \(String(format: "%.0f", averageREMSleepPercent * 100))%")
+      entries.append("REM: \((averageREMSleepPercent * 100).format(using: .noDecimalPlaces))%")
     }
     if let averageDeepSleepPercent = details.averageDeepSleepPercent {
-      entries.append("Deep: \(String(format: "%.0f", averageDeepSleepPercent * 100))%")
+      entries.append("Deep: \((averageDeepSleepPercent * 100).format(using: .noDecimalPlaces))%")
     }
 
     let nonNilEntries = entries.compactMap({ $0 })

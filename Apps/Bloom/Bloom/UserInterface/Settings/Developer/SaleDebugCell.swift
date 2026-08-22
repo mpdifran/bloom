@@ -124,9 +124,8 @@ struct SaleDebugCell: View {
   // MARK: - Helpers
 
   private func formatDate(_ date: Date) -> String {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "MMM d, yyyy"
-    return formatter.string(from: date)
+    // Locale-aware: a fixed "MMM d, yyyy" pattern forced month-first order and English months.
+    date.formatted(.dateTime.month().day().year())
   }
 
   private func audienceDisplayName(_ audience: TargetAudience) -> String {

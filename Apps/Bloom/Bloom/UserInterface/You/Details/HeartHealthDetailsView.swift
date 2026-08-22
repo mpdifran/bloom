@@ -218,9 +218,9 @@ private extension HeartHealthDetailsView {
     let goal = HealthGoalProvider.shared.goalRestingHeartRateForUser()
 
     if avgRHR < goal.1 {
-      return "A low resting heart rate can be a good indicator of an efficient metabolism, can reduce your risk of heart disease, and help you live longer. For your age and sex, it is recommended your resting heart rate is below \(goal.1.format()) bpm."
+      return String(localized: "A low resting heart rate can be a good indicator of an efficient metabolism, can reduce your risk of heart disease, and help you live longer. For your age and sex, it is recommended your resting heart rate is below \(goal.1.format()) bpm.", comment: "Explanation shown when the user's resting heart rate is below their goal. The placeholder is a heart rate in beats per minute.")
     } else {
-      return "A high resting heart rate can increase your risk of diabetes, stroke, and heart disease. For your age and sex, it is recommended your resting heart rate is below \(goal.1.format()) bpm."
+      return String(localized: "A high resting heart rate can increase your risk of diabetes, stroke, and heart disease. For your age and sex, it is recommended your resting heart rate is below \(goal.1.format()) bpm.", comment: "Explanation shown when the user's resting heart rate is above their goal. The placeholder is a heart rate in beats per minute.")
     }
   }
 
@@ -340,7 +340,7 @@ private extension HeartHealthDetailsView {
   }
 
   var heartRateReserveDescription: String {
-    "Heart Rate Reserve (HRR) is the difference between your maximum heart rate and resting heart rate. A larger reserve indicates better cardiovascular fitness, as your heart can handle a wider range of intensities during exercise."
+    String(localized: "Heart Rate Reserve (HRR) is the difference between your maximum heart rate and resting heart rate. A larger reserve indicates better cardiovascular fitness, as your heart can handle a wider range of intensities during exercise.", comment: "Explanation of Heart Rate Reserve on the Heart Health detail screen")
   }
 
   // MARK: - Heart Rate Recovery Chart

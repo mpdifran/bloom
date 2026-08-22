@@ -62,8 +62,11 @@ private extension HealthInsightWidgetView {
   @ViewBuilder
   var errorView: some View {
     makeWidgetContent(
-      title: "Error",
-      body: "Unable to load insights. Please open the app.",
+      title: String(localized: "Error", comment: "Health Insight widget error title"),
+      body: String(
+        localized: "Unable to load insights. Please open the app.",
+        comment: "Health Insight widget error body"
+      ),
       background: AnyShapeStyle(Color.mutedRed.gradient),
       url: URL(string: "https://api.trybloom.app/today")
     )

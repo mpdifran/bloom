@@ -201,19 +201,40 @@ private extension OnboardingHealthKitTreatmentView {
   var explanationText: String {
     switch focus {
     case .boostEnergyLevels:
-      "Here's how I'll use your data to spot patterns that affect your daily energy and help you feel more energized."
+      return String(
+        localized: "Here's how I'll use your data to spot patterns that affect your daily energy and help you feel more energized.",
+        comment: "Intro on the onboarding Health permission screen, tailored to the focus the user picked."
+      )
     case .buildHealthyHabits:
-      "Here's how I’ll use your data to help you build healthy habits and stay consistent over time."
+      return String(
+        localized: "Here's how I’ll use your data to help you build healthy habits and stay consistent over time.",
+        comment: "Intro on the onboarding Health permission screen, tailored to the focus the user picked."
+      )
     case .improveBodyComposition:
-      "Here's how I’ll use your data to help you understand the signals that influence body composition."
+      return String(
+        localized: "Here's how I’ll use your data to help you understand the signals that influence body composition.",
+        comment: "Intro on the onboarding Health permission screen, tailored to the focus the user picked."
+      )
     case .improveSleep:
-      "Here's how I’ll use your data to help you understand what’s affecting your sleep."
+      return String(
+        localized: "Here's how I’ll use your data to help you understand what’s affecting your sleep.",
+        comment: "Intro on the onboarding Health permission screen, tailored to the focus the user picked."
+      )
     case .reduceStress:
-      "Here's how I’ll use your data to help you understand what’s impacting your stress levels."
+      return String(
+        localized: "Here's how I’ll use your data to help you understand what’s impacting your stress levels.",
+        comment: "Intro on the onboarding Health permission screen, tailored to the focus the user picked."
+      )
     case .understandHealthData:
-      "Here's how I’ll help you make sense of your health data and show you what it all means."
+      return String(
+        localized: "Here's how I’ll help you make sense of your health data and show you what it all means.",
+        comment: "Intro on the onboarding Health permission screen, tailored to the focus the user picked."
+      )
     default:
-      "Here's how I'll use your data to give you personalized insights about your sleep, activity, stress, and overall wellness."
+      return String(
+        localized: "Here's how I'll use your data to give you personalized insights about your sleep, activity, stress, and overall wellness.",
+        comment: "Intro on the onboarding Health permission screen, tailored to the focus the user picked."
+      )
     }
   }
 }

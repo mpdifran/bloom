@@ -422,7 +422,7 @@ private extension WeatherTodayCell {
         ? weather.hourlyForecast.filter({ isDateInSelectedDay($0.date) }).first
         : (closestHour ?? weather.hourlyForecast.filter({ isDateInSelectedDay($0.date) }).last)
 
-      Text(hasSnow ? "Snow" : "Rain")
+      (hasSnow ? Text("Snow") : Text("Rain"))
         .font(.subheadline)
         .bold()
         .fontDesign(.rounded)

@@ -135,18 +135,16 @@ struct ReminderCell: View {
       return "Overdue"
     }
     
-    let formatter = DateFormatter()
     let calendar = Calendar.current
-    
+
+    // Locale-aware: fixed "h:mm a"/"MMM d" patterns forced 12-hour AM/PM and month-first order
+    // on locales that use neither.
     if calendar.isDateInToday(lastMissed) {
-      formatter.dateFormat = "h:mm a"
-      return "Overdue \(formatter.string(from: lastMissed))"
+      return "Overdue \(DateFormatter.justTimeShort.string(from: lastMissed))"
     } else if calendar.isDateInYesterday(lastMissed) {
-      formatter.dateFormat = "h:mm a"
-      return "Overdue yesterday at \(formatter.string(from: lastMissed))"
+      return "Overdue yesterday at \(DateFormatter.justTimeShort.string(from: lastMissed))"
     } else {
-      formatter.dateFormat = "MMM d 'at' h:mm a"
-      return "Overdue \(formatter.string(from: lastMissed))"
+      return "Overdue \(lastMissed.formatted(.dateTime.month().day().hour().minute()))"
     }
   }
   
@@ -165,18 +163,16 @@ struct ReminderCell: View {
       return "No upcoming notifications"
     }
     
-    let formatter = DateFormatter()
     let calendar = Calendar.current
-    
+
+    // Locale-aware: fixed "h:mm a"/"MMM d" patterns forced 12-hour AM/PM and month-first order
+    // on locales that use neither.
     if calendar.isDateInToday(nextDate) {
-      formatter.dateFormat = "h:mm a"
-      return "Today at \(formatter.string(from: nextDate))"
+      return "Today at \(DateFormatter.justTimeShort.string(from: nextDate))"
     } else if calendar.isDateInTomorrow(nextDate) {
-      formatter.dateFormat = "h:mm a"
-      return "Tomorrow at \(formatter.string(from: nextDate))"
+      return "Tomorrow at \(DateFormatter.justTimeShort.string(from: nextDate))"
     } else {
-      formatter.dateFormat = "MMM d 'at' h:mm a"
-      return formatter.string(from: nextDate)
+      return nextDate.formatted(.dateTime.month().day().hour().minute())
     }
   }
 }

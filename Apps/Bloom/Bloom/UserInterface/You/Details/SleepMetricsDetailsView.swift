@@ -426,7 +426,7 @@ private extension SleepMetricsDetailsView {
 
   var formattedAverageRespRate: String? {
     guard let avg = averageRespRate else { return nil }
-    return "\(Int(avg.rounded())) breaths/min"
+    return String(localized: "\(Int(avg.rounded())) breaths/min", comment: "Average respiratory rate. The placeholder is a number of breaths per minute.")
   }
 
   var respiratoryRateChartSection: some View {

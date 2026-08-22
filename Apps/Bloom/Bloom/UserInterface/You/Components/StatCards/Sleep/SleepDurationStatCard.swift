@@ -13,9 +13,9 @@ struct SleepDurationStatCard: View {
   private var formattedDuration: String? {
     guard let data else { return nil }
     let totalMinutes = Int(data.average / 60)
-    let hours = totalMinutes / 60
-    let minutes = totalMinutes % 60
-    return "\(hours)h \(minutes)m"
+    // Locale-aware duration: hand-built "3h 45m" hardcoded English unit abbreviations.
+    return Duration.seconds(Int(totalMinutes) * 60)
+      .formatted(.units(allowed: [.hours, .minutes], width: .narrow))
   }
 
   var body: some View {
@@ -23,8 +23,8 @@ struct SleepDurationStatCard: View {
       StatCard(
         symbol: .clockFill,
         title: "Duration",
-        value: formattedDuration ?? "No Data",
-        valueStyle: .largeTinted("7 day avg")
+        value: formattedDuration ?? String(localized: "No Data", comment: "Stat card value shown when there is no data"),
+        valueStyle: .largeTinted(String(localized: "7 day avg", comment: "Stat card subtitle: the value is a seven day average"))
       ) {
         barChart
       }
@@ -33,7 +33,7 @@ struct SleepDurationStatCard: View {
       StatCard(
         symbol: .clockFill,
         title: "Duration",
-        value: "No Data",
+        value: String(localized: "No Data", comment: "Stat card value shown when there is no data"),
         valueStyle: .largeTinted(nil)
       )
       .tint(.gray)

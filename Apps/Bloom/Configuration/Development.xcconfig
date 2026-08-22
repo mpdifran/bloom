@@ -19,3 +19,8 @@ OTHER_SWIFT_FLAGS = $(inherited) -DDEVELOPMENT
 // into each target's Localizable.xcstrings at build time.
 SWIFT_EMIT_LOC_STRINGS = YES
 LOCALIZATION_PREFERS_STRING_CATALOGS = YES
+
+// No generated symbols. Nothing in the app calls them, and they collide on keys that differ only
+// by case or punctuation - "High"/"high", "%.1f yrs"/"+%.1f yrs" - all of which are legitimately
+// distinct user-facing strings.
+STRING_CATALOG_GENERATE_SYMBOLS = NO

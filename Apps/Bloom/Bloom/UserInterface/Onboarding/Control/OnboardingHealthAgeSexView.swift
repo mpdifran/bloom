@@ -39,7 +39,7 @@ struct OnboardingHealthAgeSexView: View {
         } else {
           hasHealthDataContent(
             age: healthManager.age(),
-            sex: healthManager.sexKind == .female ? "female" : "male"
+            isFemale: healthManager.sexKind == .female
           )
 
           if isHealthDataConfirmed == false {
@@ -143,13 +143,16 @@ private extension OnboardingHealthAgeSexView {
   }
 
   @ViewBuilder
-  func hasHealthDataContent(age: Int, sex: String) -> some View {
+  func hasHealthDataContent(age: Int, isFemale: Bool) -> some View {
     BudImage(.budWorkout)
 
     Text("Looks Great!")
       .appear(with: 1, currentIndex: index, secondaryIfNotCurrentIndex: false)
 
-    Text("According to your data, you're a \(age) year old \(sex). Does that look right?")
+    // One sentence per sex so translators can inflect the whole phrase.
+    Text(isFemale
+         ? "According to your data, you're a \(age) year old female. Does that look right?"
+         : "According to your data, you're a \(age) year old male. Does that look right?")
       .contentTransition(.numericText())
       .appear(with: 2, currentIndex: index, secondaryIfNotCurrentIndex: false)
 

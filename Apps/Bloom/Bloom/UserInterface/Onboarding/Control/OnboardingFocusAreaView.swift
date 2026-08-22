@@ -127,7 +127,9 @@ var healthGoalSuggestionsView: some View {
     ScrollView(.horizontal) {
       HStack {
         ForEach(suggestions, id: \.self) { suggestion in
-          Text(suggestion)
+          // `suggestion` stays canonical English (it's persisted as the user's focus),
+          // so look the display copy up in the catalog at render time.
+          Text(LocalizedStringKey(suggestion))
             .font(.body)
             .bold()
             .fontDesign(.rounded)
@@ -238,7 +240,7 @@ var healthGoalSuggestionsView: some View {
 }
 
 struct OnboardingHealthGoalCell: View {
-  let title: String
+  let title: LocalizedStringKey
   let symbol: SFSymbol
   let isSelected: Bool
 

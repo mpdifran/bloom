@@ -102,7 +102,11 @@ public enum WeightLossSpeed: String, CaseIterable, Identifiable, Sendable {
   case fast
 
   public var name: String {
-    rawValue.capitalized
+    switch self {
+    case .slow: String(localized: "Slow", bundle: Bundle.coreHealth, comment: "Display name for weight loss speed")
+    case .moderate: String(localized: "Moderate", bundle: Bundle.coreHealth, comment: "Display name for weight loss speed")
+    case .fast: String(localized: "Fast", bundle: Bundle.coreHealth, comment: "Display name for weight loss speed")
+    }
   }
 
   public var mifflinStJeorAdjustment: Double {
@@ -125,7 +129,13 @@ public enum WeightLossSpeed: String, CaseIterable, Identifiable, Sendable {
       quantity = HKQuantity(unit: .pound(), doubleValue: 2)
     }
 
-    return "About \(quantity.displayString(for: .pound(), formatter: .oneDecimalPlace)) a week."
+    let amount = quantity.displayString(for: .pound(), formatter: .oneDecimalPlace)
+
+    return String(
+      localized: "About \(amount) a week.",
+      bundle: Bundle.coreHealth,
+      comment: "Weight loss speed description. The placeholder is a weight amount, e.g. \"0.5 lb\"."
+    )
   }
 }
 

@@ -27,13 +27,13 @@ extension WorkoutVariant {
     activityType: .cycling,
     locationType: .outdoor,
     symbol: .figureOutdoorCycle,
-    name: "Outdoor Cycle"
+    name: String(localized: "Outdoor Cycle", comment: "Workout name")
   )
   static let indoorCycling = WorkoutVariant(
     activityType: .cycling,
     locationType: .indoor,
     symbol: .figureIndoorCycle,
-    name: "Indoor Cycle"
+    name: String(localized: "Indoor Cycle", comment: "Workout name")
   )
 
   // MARK: Walking
@@ -41,13 +41,13 @@ extension WorkoutVariant {
     activityType: .walking,
     locationType: .outdoor,
     symbol: .figureWalk,
-    name: "Outdoor Walk"
+    name: String(localized: "Outdoor Walk", comment: "Workout name")
   )
   static let indoorWalking = WorkoutVariant(
     activityType: .walking,
     locationType: .indoor,
     symbol: .figureWalkTreadmill,
-    name: "Indoor Walk"
+    name: String(localized: "Indoor Walk", comment: "Workout name")
   )
 
   // MARK: Running
@@ -55,13 +55,13 @@ extension WorkoutVariant {
     activityType: .running,
     locationType: .outdoor,
     symbol: .figureRun,
-    name: "Outdoor Run"
+    name: String(localized: "Outdoor Run", comment: "Workout name")
   )
   static let indoorRunning = WorkoutVariant(
     activityType: .running,
     locationType: .indoor,
     symbol: .figureRunTreadmill,
-    name: "Indoor Run"
+    name: String(localized: "Indoor Run", comment: "Workout name")
   )
 
   // MARK: Rowing
@@ -69,13 +69,13 @@ extension WorkoutVariant {
     activityType: .rowing,
     locationType: .outdoor,
     symbol: .figureOutdoorRowing,
-    name: "Outdoor Row"
+    name: String(localized: "Outdoor Row", comment: "Workout name")
   )
   static let indoorRowing = WorkoutVariant(
     activityType: .rowing,
     locationType: .indoor,
     symbol: .figureIndoorRowing,
-    name: "Indoor Row"
+    name: String(localized: "Indoor Row", comment: "Workout name")
   )
 
   // MARK: Soccer
@@ -83,13 +83,13 @@ extension WorkoutVariant {
     activityType: .soccer,
     locationType: .outdoor,
     symbol: .figureOutdoorSoccer,
-    name: "Outdoor Soccer"
+    name: String(localized: "Outdoor Soccer", comment: "Workout name")
   )
   static let indoorSoccer = WorkoutVariant(
     activityType: .soccer,
     locationType: .indoor,
     symbol: .figureIndoorSoccer,
-    name: "Indoor Soccer"
+    name: String(localized: "Indoor Soccer", comment: "Workout name")
   )
 
   // MARK: Hockey
@@ -97,13 +97,13 @@ extension WorkoutVariant {
     activityType: .hockey,
     locationType: .outdoor,
     symbol: .figureIceHockey,
-    name: "Outdoor Hockey"
+    name: String(localized: "Outdoor Hockey", comment: "Workout name")
   )
   static let indoorHockey = WorkoutVariant(
     activityType: .hockey,
     locationType: .indoor,
     symbol: .figureIceHockey,
-    name: "Indoor Hockey"
+    name: String(localized: "Indoor Hockey", comment: "Workout name")
   )
 
   // MARK: Skating
@@ -111,13 +111,13 @@ extension WorkoutVariant {
     activityType: .skatingSports,
     locationType: .outdoor,
     symbol: .figureIceSkating,
-    name: "Outdoor Skating"
+    name: String(localized: "Outdoor Skating", comment: "Workout name")
   )
   static let indoorSkating = WorkoutVariant(
     activityType: .skatingSports,
     locationType: .indoor,
     symbol: .figureIceSkating,
-    name: "Indoor Skating"
+    name: String(localized: "Indoor Skating", comment: "Workout name")
   )
 
   // MARK: Swimming
@@ -125,13 +125,13 @@ extension WorkoutVariant {
     activityType: .swimming,
     locationType: .outdoor,
     symbol: .figureOpenWaterSwim,
-    name: "Open Water Swim"
+    name: String(localized: "Open Water Swim", comment: "Workout name")
   )
   static let poolSwimming = WorkoutVariant(
     activityType: .swimming,
     locationType: .indoor,
     symbol: .figurePoolSwim,
-    name: "Pool Swim"
+    name: String(localized: "Pool Swim", comment: "Workout name")
   )
 }
 

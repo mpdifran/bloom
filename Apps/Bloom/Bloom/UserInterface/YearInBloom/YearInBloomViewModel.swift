@@ -86,7 +86,7 @@ extension YearInBloomViewModel {
     if hours >= 100 {
       return "\(Int(hours)) hours"
     } else {
-      return String(format: "%.1f hours", hours)
+      return "\(hours.formatted(.number.precision(.fractionLength(1)))) hours"
     }
   }
 
@@ -106,7 +106,7 @@ extension YearInBloomViewModel {
 
   var topWorkoutTypePercentage: String {
     guard let percentage = stats?.topWorkoutTypes.first?.percentage else { return "0%" }
-    return String(format: "%.0f%%", percentage)
+    return "\(percentage.formatted(.number.precision(.fractionLength(0))))%"
   }
 
   var longestStreakDays: String {

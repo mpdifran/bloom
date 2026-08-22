@@ -108,6 +108,7 @@ struct FoodLoggingActionCardView: View {
             Button {
               presentedSheet = FoodUploadScannerView { foodItem in
                 viewModel.results = [FoodItemSection(
+                  id: "uploadedFood",
                   title: "Uploaded Food",
                   category: .branded,
                   foodItems: [foodItem]

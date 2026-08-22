@@ -8,7 +8,10 @@
 import SwiftUI
 
 struct VitalSummaryDetailTitleView: View {
-    let title: String
+    /// LocalizedStringKey, not String: a String literal is passed straight to Text without a
+    /// catalog lookup, so every detail screen title rendered in English regardless of language.
+    let title: LocalizedStringKey
+    /// Stays String: callers pass already-localized values such as `StatTimePeriod.displayName`.
     let subtitle: String
     var body: some View {
         VStack {

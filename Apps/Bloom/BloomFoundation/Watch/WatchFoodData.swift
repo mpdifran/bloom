@@ -15,8 +15,16 @@ public enum WatchFoodFilter: String, Codable, Sendable, CaseIterable {
   case recent
   case meals
 
+  /// The raw value is the wire identifier and stays English; this is what the watch shows.
   public var displayName: String {
-    rawValue.capitalized
+    switch self {
+    case .frequent:
+      String(localized: "Frequent", bundle: Bundle.bloomFoundation, comment: "Watch food list filter")
+    case .recent:
+      String(localized: "Recent", bundle: Bundle.bloomFoundation, comment: "Watch food list filter")
+    case .meals:
+      String(localized: "Meals", bundle: Bundle.bloomFoundation, comment: "Watch food list filter")
+    }
   }
 }
 
@@ -29,8 +37,18 @@ public enum WatchMeal: String, Codable, Sendable, CaseIterable {
   case dinner
   case snack
 
+  /// The raw value is the wire identifier and stays English; this is what the watch shows.
   public var displayName: String {
-    rawValue.capitalized
+    switch self {
+    case .breakfast:
+      String(localized: "Breakfast", bundle: Bundle.bloomFoundation, comment: "Meal name")
+    case .lunch:
+      String(localized: "Lunch", bundle: Bundle.bloomFoundation, comment: "Meal name")
+    case .dinner:
+      String(localized: "Dinner", bundle: Bundle.bloomFoundation, comment: "Meal name")
+    case .snack:
+      String(localized: "Snack", bundle: Bundle.bloomFoundation, comment: "Meal name")
+    }
   }
 
   /// Returns the suggested meal based on the current time

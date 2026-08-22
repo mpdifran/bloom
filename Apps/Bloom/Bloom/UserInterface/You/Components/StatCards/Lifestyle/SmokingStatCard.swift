@@ -59,7 +59,7 @@ private extension SmokingStatCard {
   var subtitle: String? {
     switch status {
     case .unknown:
-      "Tap to set"
+      String(localized: "Tap to set", comment: "Smoking card subtitle when no status has been recorded")
     case .never:
       nil
     case .former:
@@ -67,38 +67,29 @@ private extension SmokingStatCard {
     case .current:
       nil
     @unknown default:
-      "Tap to set"
+      String(localized: "Tap to set", comment: "Smoking card subtitle when no status has been recorded")
     }
   }
 
   var quitDateSubtitle: String? {
-    guard let quitDate else { return "Quit" }
+    guard let quitDate else { return String(localized: "Quit", comment: "Smoking card subtitle for a former smoker with no quit date") }
 
     let now = Date()
     let components = Calendar.current.dateComponents([.year, .month, .day], from: quitDate, to: now)
 
     if let years = components.year, years >= 1 {
-      if years == 1 {
-        return "Quit 1 year ago"
-      }
-      return "Quit \(years) years ago"
+      return String(localized: "Quit \(years) years ago", comment: "Smoking card subtitle. The placeholder is a number of years since quitting.")
     }
 
     if let months = components.month, months >= 1 {
-      if months == 1 {
-        return "Quit 1 month ago"
-      }
-      return "Quit \(months) months ago"
+      return String(localized: "Quit \(months) months ago", comment: "Smoking card subtitle. The placeholder is a number of months since quitting.")
     }
 
     if let days = components.day, days >= 1 {
-      if days == 1 {
-        return "Quit 1 day ago"
-      }
-      return "Quit \(days) days ago"
+      return String(localized: "Quit \(days) days ago", comment: "Smoking card subtitle. The placeholder is a number of days since quitting.")
     }
 
-    return "Quit today"
+    return String(localized: "Quit today", comment: "Smoking card subtitle when the quit date is today")
   }
 }
 

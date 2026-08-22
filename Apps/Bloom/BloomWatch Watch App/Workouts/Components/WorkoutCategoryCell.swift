@@ -10,6 +10,7 @@ import SFSafeSymbols
 import HealthKit
 
 struct WorkoutCategoryCell: View {
+  /// Already-localized text - callers pass `WorkoutCategory.displayName` or a `String(localized:)` literal.
   let title: String
   let workoutVariants: [WorkoutVariant]
 

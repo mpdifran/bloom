@@ -42,6 +42,13 @@ struct FoodItemLogDetailsView: View {
     case mass = "Mass"
     
     var id: String { rawValue }
+
+    var displayName: String {
+      switch self {
+      case .servings: String(localized: "Servings", comment: "Input mode for logging food by number of servings")
+      case .mass: String(localized: "Mass", comment: "Input mode for logging food by weight")
+      }
+    }
   }
 
   init(
@@ -253,7 +260,7 @@ private extension FoodItemLogDetailsView {
 
         Picker("Input Mode", selection: $inputMode) {
           ForEach(InputMode.allCases) { mode in
-            Text(mode.rawValue)
+            Text(mode.displayName)
               .tag(mode)
           }
         }
@@ -276,7 +283,7 @@ private extension FoodItemLogDetailsView {
             isSwipingItem: $isSwipingItem,
             actions: [
               SwipeAction(
-                title: "Delete",
+                title: String(localized: "Delete", comment: "Swipe action to delete a food item from a log"),
                 symbol: .trash,
                 tint: .mutedRed,
                 action: {

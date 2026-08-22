@@ -10,8 +10,8 @@ import SFSafeSymbols
 
 struct PrivacyDetailCard: View {
   let symbol: SFSymbol
-  let title: String
-  let detail: String
+  let title: LocalizedStringKey
+  let detail: LocalizedStringKey
 
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {

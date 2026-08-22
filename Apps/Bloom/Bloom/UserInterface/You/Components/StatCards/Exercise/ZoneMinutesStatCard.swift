@@ -12,17 +12,17 @@ struct ZoneMinutesStatCard: View {
   let data: ZoneMinutesData?
 
   private var valueText: String {
-    guard let data else { return "No Data" }
+    guard let data else { return String(localized: "No Data", comment: "Stat card value shown when there is no data") }
     return "\(Int(data.weeklyTotal)) min"
   }
 
   private var subtitle: String? {
     guard let data else { return nil }
     if data.meetsGoal {
-      return "Goal Met"
+      return String(localized: "Goal Met", comment: "Zone minutes card subtitle when the weekly goal is met")
     } else {
       let remaining = Int(data.goal - data.weeklyTotal)
-      return "\(remaining) min to go"
+      return String(localized: "\(remaining) min to go", comment: "Zone minutes card subtitle. The placeholder is a number of minutes remaining.")
     }
   }
 

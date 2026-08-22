@@ -157,13 +157,13 @@ private extension OnboardingHealthKitLearnMoreView {
 }
 
 struct HealthDataUsageCell<Content: View>: View {
-  let title: String
-  let message: String
+  let title: LocalizedStringKey
+  let message: LocalizedStringKey
   let icon: () -> Content
 
   init(
-    title: String,
-    message: String,
+    title: LocalizedStringKey,
+    message: LocalizedStringKey,
     @ViewBuilder icon: @escaping () -> Content
   ) {
     self.title = title

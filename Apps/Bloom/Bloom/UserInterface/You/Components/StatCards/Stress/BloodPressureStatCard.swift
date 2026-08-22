@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import BloomFoundation
 import CoreHealth
 
 struct BloodPressureStatCard: View {
@@ -42,7 +43,7 @@ struct BloodPressureStatCard: View {
     StatCard(
       symbol: .heartFill,
       title: "Blood Pressure",
-      value: formattedValue ?? "No Data",
+      value: formattedValue ?? String(localized: "No Data", comment: "Blood pressure card value when there are no readings"),
       valueStyle: .largeTinted(subtitle),
       trend: statCardTrend
     )
@@ -54,15 +55,13 @@ struct BloodPressureStatCard: View {
     let now = Date()
 
     if calendar.isDateInToday(date) {
-      return "Today"
+      return String(localized: "Today", comment: "Blood pressure card date label for a reading taken today")
     } else if calendar.isDateInYesterday(date) {
-      return "Yesterday"
+      return String(localized: "Yesterday", comment: "Blood pressure card date label for a reading taken yesterday")
     } else if let daysAgo = calendar.dateComponents([.day], from: date, to: now).day, daysAgo < 7 {
-      return "\(daysAgo)d ago"
+      return String(localized: "\(daysAgo)d ago", comment: "Blood pressure card date label. The placeholder is a number of days.")
     } else {
-      let formatter = DateFormatter()
-      formatter.dateFormat = "MMM d"
-      return formatter.string(from: date)
+      return DateFormatter.monthAndDay.string(from: date)
     }
   }
 }

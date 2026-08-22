@@ -100,9 +100,9 @@ private extension MorningReportSettingsView {
   var selectAllButtonTitle: String {
     if reportViewModel.selectedCalendarIdentifiers.isEmpty || 
        reportViewModel.selectedCalendarIdentifiers.count == calendars.count {
-      return "Deselect All"
+      return String(localized: "Deselect All", comment: "Button that deselects every calendar in the morning report settings")
     } else {
-      return "Select All"
+      return String(localized: "Select All", comment: "Button that selects every calendar in the morning report settings")
     }
   }
   

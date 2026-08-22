@@ -12,8 +12,8 @@ struct ZoneDistributionStatCard: View {
   let data: ZoneDistributionData?
 
   private var valueText: String {
-    guard let data else { return "No Data" }
-    return "\(data.workoutCount) workout\(data.workoutCount == 1 ? "" : "s")"
+    guard let data else { return String(localized: "No Data", comment: "Stat card value shown when there is no data") }
+    return String(localized: "\(data.workoutCount) workouts", comment: "Zone distribution card value. The placeholder is a number of workouts.")
   }
 
   var body: some View {
@@ -21,7 +21,7 @@ struct ZoneDistributionStatCard: View {
       symbol: .heartFill,
       title: "Zones",
       value: valueText,
-      valueStyle: .largeTinted("Last 7 Days")
+      valueStyle: .largeTinted(String(localized: "Last 7 Days", comment: "Stat card subtitle: the value covers the last seven days"))
     ) {
       zoneBar
     }

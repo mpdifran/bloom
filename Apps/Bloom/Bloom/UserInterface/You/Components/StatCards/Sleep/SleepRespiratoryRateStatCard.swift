@@ -20,7 +20,7 @@ struct SleepRespiratoryRateStatCard: View {
     StatCard(
       symbol: .lungsFill,
       title: "Respiratory Rate",
-      value: trend?.displayText ?? "No Data",
+      value: trend?.displayText ?? String(localized: "No Data", comment: "Stat card value shown when there is no data"),
       layerContent: true,
       includePadding: false
     ) {

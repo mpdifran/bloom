@@ -10,14 +10,16 @@ import SFSafeSymbols
 
 struct TodayCardCell<Content: View>: View {
   let symbol: SFSymbol
-  let title: String
+  /// LocalizedStringKey, not String: a String literal is passed straight to Text without a
+  /// catalog lookup, so every card title rendered in English regardless of language.
+  let title: LocalizedStringKey
   let content: String
   let color: Color
   let contentBuilder: (() -> Content)?
 
   init(
     symbol: SFSymbol,
-    title: String,
+    title: LocalizedStringKey,
     content: String,
     color: Color,
     contentBuilder: @escaping () -> Content
@@ -52,7 +54,7 @@ extension TodayCardCell where Content == EmptyView {
 
   init(
     symbol: SFSymbol,
-    title: String,
+    title: LocalizedStringKey,
     content: String,
     color: Color
   ) {

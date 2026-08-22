@@ -15,7 +15,11 @@ extension OnboardingLoginView.ViewModel {
 
         var errorDescription: String? {
             switch self {
-            case .invalidCredentials: return "The provided credentials are invalid"
+            case .invalidCredentials:
+                return String(
+                    localized: "The provided credentials are invalid",
+                    comment: "Error shown when Sign in with Apple returns credentials Bloom can't use."
+                )
             }
         }
     }

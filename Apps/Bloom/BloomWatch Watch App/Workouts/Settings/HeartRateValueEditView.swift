@@ -9,7 +9,7 @@ import SwiftUI
 import CoreHealth
 
 struct HeartRateValueEditView: View {
-  let title: String
+  let title: LocalizedStringKey
   @Binding var value: Double
   let range: ClosedRange<Double>
 

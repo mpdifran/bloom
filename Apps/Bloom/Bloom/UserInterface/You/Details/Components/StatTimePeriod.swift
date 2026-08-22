@@ -77,34 +77,34 @@ enum StatTimePeriod: String, CaseIterable, Identifiable, Sendable {
 
   var comparisonPeriodLabel: String {
     switch self {
-    case .oneDay: "vs yesterday"
-    case .sevenDays: "vs last week"
-    case .oneMonth: "vs last month"
-    case .threeMonths: "vs previous 3 months"
-    case .sixMonths: "vs previous 6 months"
-    case .oneYear: "vs previous year"
+    case .oneDay: String(localized: "vs yesterday", comment: "Comparison label for stat time period")
+    case .sevenDays: String(localized: "vs last week", comment: "Comparison label for stat time period")
+    case .oneMonth: String(localized: "vs last month", comment: "Comparison label for stat time period")
+    case .threeMonths: String(localized: "vs previous 3 months", comment: "Comparison label for stat time period")
+    case .sixMonths: String(localized: "vs previous 6 months", comment: "Comparison label for stat time period")
+    case .oneYear: String(localized: "vs previous year", comment: "Comparison label for stat time period")
     }
   }
 
   var currentPeriodLabel: String {
     switch self {
-    case .oneDay: "Today"
-    case .sevenDays: "This Week"
-    case .oneMonth: "This Month"
-    case .threeMonths: "Last 3 Mo"
-    case .sixMonths: "Last 6 Mo"
-    case .oneYear: "This Year"
+    case .oneDay: String(localized: "Today", comment: "Current period label for stat time period")
+    case .sevenDays: String(localized: "This Week", comment: "Current period label for stat time period")
+    case .oneMonth: String(localized: "This Month", comment: "Current period label for stat time period")
+    case .threeMonths: String(localized: "Last 3 Mo", comment: "Current period label for stat time period, abbreviated for a compact chart label")
+    case .sixMonths: String(localized: "Last 6 Mo", comment: "Current period label for stat time period, abbreviated for a compact chart label")
+    case .oneYear: String(localized: "This Year", comment: "Current period label for stat time period")
     }
   }
 
   var previousPeriodLabel: String {
     switch self {
-    case .oneDay: "Yesterday"
-    case .sevenDays: "Last Week"
-    case .oneMonth: "Last Month"
-    case .threeMonths: "Prev 3 Mo"
-    case .sixMonths: "Prev 6 Mo"
-    case .oneYear: "Last Year"
+    case .oneDay: String(localized: "Yesterday", comment: "Previous period label for stat time period")
+    case .sevenDays: String(localized: "Last Week", comment: "Previous period label for stat time period")
+    case .oneMonth: String(localized: "Last Month", comment: "Previous period label for stat time period")
+    case .threeMonths: String(localized: "Prev 3 Mo", comment: "Previous period label for stat time period, abbreviated for a compact chart label")
+    case .sixMonths: String(localized: "Prev 6 Mo", comment: "Previous period label for stat time period, abbreviated for a compact chart label")
+    case .oneYear: String(localized: "Last Year", comment: "Previous period label for stat time period")
     }
   }
 

@@ -1597,9 +1597,9 @@ enum RespiratoryRateTrend: Sendable {
 
   var displayText: String {
     switch self {
-    case .consistent: "Consistent"
-    case .increasing: "Increasing"
-    case .decreasing: "Decreasing"
+    case .consistent: String(localized: "Consistent", comment: "Respiratory rate trend")
+    case .increasing: String(localized: "Increasing", comment: "Respiratory rate trend")
+    case .decreasing: String(localized: "Decreasing", comment: "Respiratory rate trend")
     }
   }
 }
@@ -1671,9 +1671,9 @@ enum VO2MaxTrendDirection: Sendable {
 
   var displayText: String {
     switch self {
-    case .improving: "Improving"
-    case .constant: "Constant"
-    case .declining: "Declining"
+    case .improving: String(localized: "Improving", comment: "VO2 Max trend direction")
+    case .constant: String(localized: "Constant", comment: "VO2 Max trend direction")
+    case .declining: String(localized: "Declining", comment: "VO2 Max trend direction")
     }
   }
 }
@@ -1726,9 +1726,9 @@ struct HRVDetailData: Sendable {
   var trendText: String? {
     trend.map {
       switch $0 {
-      case .higher: "Increasing"
-      case .lower: "Decreasing"
-      case .consistent: "Consistent"
+      case .higher: String(localized: "Increasing", comment: "Heart rate variability trend")
+      case .lower: String(localized: "Decreasing", comment: "Heart rate variability trend")
+      case .consistent: String(localized: "Consistent", comment: "Heart rate variability trend")
       }
     }
   }
@@ -1757,9 +1757,9 @@ struct HRVChartData: Sendable {
 
   var trendText: String {
     switch trend {
-    case .higher: "Increasing"
-    case .lower: "Decreasing"
-    case .consistent: "Consistent"
+    case .higher: String(localized: "Increasing", comment: "Heart rate variability trend")
+    case .lower: String(localized: "Decreasing", comment: "Heart rate variability trend")
+    case .consistent: String(localized: "Consistent", comment: "Heart rate variability trend")
     }
   }
 }

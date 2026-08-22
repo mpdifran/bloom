@@ -9,7 +9,7 @@ import SFSafeSymbols
 import SwiftUI
 
 struct BloomPlusLaurelView: View {
-  let title: String
+  let title: LocalizedStringKey
 
   var body: some View {
     HStack {

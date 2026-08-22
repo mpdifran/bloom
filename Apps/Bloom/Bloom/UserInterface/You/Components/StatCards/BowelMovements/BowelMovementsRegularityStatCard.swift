@@ -19,14 +19,14 @@ struct BowelMovementsRegularityStatCard: View {
         symbol: .clockFill,
         title: "Regularity",
         value: regularity.rawValue,
-        valueStyle: .largeTinted("Last 7 Days")
+        valueStyle: .largeTinted(String(localized: "Last 7 Days", comment: "Stat card subtitle: the value covers the last seven days"))
       )
       .tint(regularity.color)
     } else {
       StatCard(
         symbol: .clockFill,
         title: "Regularity",
-        value: "No Data",
+        value: String(localized: "No Data", comment: "Stat card value shown when there is no data"),
         valueStyle: .largeTinted(nil)
       )
     }

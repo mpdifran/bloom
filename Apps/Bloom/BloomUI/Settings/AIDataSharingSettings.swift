@@ -28,13 +28,20 @@ public extension AIDataSharingSettings {
 
   var enabledCategoriesText: String {
     let count = enabledCategories.count
-    if count == 0 {
-      return "No data selected"
-    } else if count == 1 {
-      return "1 category selected"
-    } else {
-      return "\(count) categories selected"
+
+    guard count > 0 else {
+      return String(
+        localized: "No data selected",
+        bundle: Bundle.bloomUI,
+        comment: "Shown when no health data categories are shared with AI features"
+      )
     }
+
+    return String(
+      localized: "\(count) categories selected",
+      bundle: Bundle.bloomUI,
+      comment: "Number of health data categories shared with AI features. The placeholder is a count; needs a plural rule."
+    )
   }
 }
 

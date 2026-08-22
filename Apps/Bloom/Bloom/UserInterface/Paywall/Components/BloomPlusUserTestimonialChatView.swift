@@ -9,7 +9,7 @@ import SwiftUI
 
 struct BloomPlusUserTestimonialChatView: View {
   let profilePhoto: ImageResource
-  let testimonial: String
+  let testimonial: LocalizedStringKey
   let name: String
   let position: ChatBubblePosition
 

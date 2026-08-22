@@ -19,7 +19,11 @@ public extension DateFormatter {
     $0.timeStyle = .medium
   }
 
+  /// Wire format. Only used to serialize dates into the AI/backend payloads, never shown to the
+  /// user, so the pattern stays fixed and the locale is pinned to POSIX - otherwise a French or
+  /// German device would send localized month names into JSON the server expects in English.
   static let dateTimeMediumWithTimeZone = DateFormatter().with {
+    $0.locale = Locale(identifier: "en_US_POSIX")
     $0.dateFormat = "MMM d, yyyy h:mm a zzz"
   }
 
@@ -28,7 +32,10 @@ public extension DateFormatter {
     $0.timeStyle = .short
   }
 
+  /// Wire format. Feeds the biological-age payload sent to the backend, not the UI, so the pattern
+  /// stays fixed and the locale is pinned to POSIX.
   static let mediumDateShortTimeLowercase = DateFormatter().with {
+    $0.locale = Locale(identifier: "en_US_POSIX")
     $0.dateFormat = "MMM d, yyyy h:mma"
   }
 
@@ -203,10 +210,19 @@ public extension DateFormatter {
     {
       return justRelativeDateMedium.string(from: date)
     }
-    return "in " + (timeIntervalDaysFull.string(from: .now, to: date) ?? "")
+    let interval = timeIntervalDaysFull.string(from: .now, to: date) ?? ""
+
+    return String(
+      localized: "in \(interval)",
+      bundle: Bundle.bloomFoundation,
+      comment: "How far in the future something is. The placeholder is a duration, e.g. \"3 days\"."
+    )
   }
 
+  /// Log format. Deliberately fixed and pinned to POSIX so timestamps stay comparable across
+  /// devices regardless of the user's region or calendar.
   static let millisecondBasedLogInterval = DateFormatter().with {
+    $0.locale = Locale(identifier: "en_US_POSIX")
     $0.dateFormat = "HH:mm:ss.SSS"
   }
 }

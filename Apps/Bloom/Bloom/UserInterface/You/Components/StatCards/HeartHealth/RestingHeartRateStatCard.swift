@@ -17,7 +17,7 @@ struct RestingHeartRateStatCard: View {
       symbol: .heartFill,
       title: "Resting HR",
       value: formattedValue,
-      valueStyle: .largeTinted("7 day avg")
+      valueStyle: .largeTinted(String(localized: "7 day avg", comment: "Stat card subtitle: the value is a seven day average"))
     ) {
       heartRateChart
     }
@@ -28,7 +28,7 @@ struct RestingHeartRateStatCard: View {
 private extension RestingHeartRateStatCard {
 
   var formattedValue: String {
-    guard let restingHeartRate else { return "No Data" }
+    guard let restingHeartRate else { return String(localized: "No Data", comment: "Stat card value shown when there is no data") }
     return "\(Int(restingHeartRate)) bpm"
   }
 

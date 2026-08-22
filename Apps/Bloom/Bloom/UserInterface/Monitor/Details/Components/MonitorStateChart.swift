@@ -16,8 +16,20 @@ struct MonitorStateChart: View {
 
   let monitorType: MonitorType
   let days: Int
+  /// Renders these instead of querying. Used by the App Store screenshot previews, which have no
+  /// health database to read from.
+  let injectedRanges: [DayZScoreRange]?
 
-  @State private var dayRanges: [DayZScoreRange] = []
+  @State private var loadedRanges: [DayZScoreRange] = []
+
+  /// What the chart draws: injected fixtures when provided, otherwise what was loaded.
+  private var dayRanges: [DayZScoreRange] { injectedRanges ?? loadedRanges }
+
+  init(monitorType: MonitorType, days: Int, injectedRanges: [DayZScoreRange]? = nil) {
+    self.monitorType = monitorType
+    self.days = days
+    self.injectedRanges = injectedRanges
+  }
 
   // Z-score boundaries (same as MonitorSummaryBar)
   private let lowThreshold: Double = -1.0
@@ -38,6 +50,8 @@ struct MonitorStateChart: View {
     }
     .animation(.easeInOut(duration: 0.3), value: dayRanges.map(\.id))
     .task(id: days) {
+      guard injectedRanges == nil else { return }
+
       await loadData()
     }
   }
@@ -51,9 +65,9 @@ struct MonitorStateChart: View {
       do {
         let actor = DailyMetricSampleModelActor.standard()
         let metricTypes = monitorType.metrics.map { $0.rawValue }
-        dayRanges = try await actor.fetchDailyZScoreRanges(metricTypes: metricTypes, days: days)
+        loadedRanges = try await actor.fetchDailyZScoreRanges(metricTypes: metricTypes, days: days)
       } catch {
-        dayRanges = []
+        loadedRanges = []
       }
     }
   }
@@ -70,7 +84,7 @@ struct MonitorStateChart: View {
     await TrainingLoadCalculator.shared.refreshTrainingLoad()
     guard let summary = await TrainingLoadCalculator.shared.trainingLoadSummary else {
       // No training load - just use metric ranges
-      dayRanges = metricRanges
+      loadedRanges = metricRanges
       return
     }
 
@@ -116,7 +130,7 @@ struct MonitorStateChart: View {
     }
 
     // 5. Convert to DayZScoreRange array
-    dayRanges = mergedRanges.map { date, range in
+    loadedRanges = mergedRanges.map { date, range in
       DayZScoreRange(date: date, minZScore: range.min, maxZScore: range.max)
     }.sorted { $0.date < $1.date }
   }
@@ -173,11 +187,11 @@ struct MonitorStateChart: View {
 
   private func labelForValue(_ value: Double) -> String {
     if value == -2 {
-      return "Low"
+      return String(localized: "Low", comment: "Z-score zone axis label on the monitor state chart")
     } else if value == 0 {
-      return "Typical"
+      return String(localized: "Typical", comment: "Z-score zone axis label on the monitor state chart")
     } else if value == 2 {
-      return "High"
+      return String(localized: "High", comment: "Z-score zone axis label on the monitor state chart")
     }
     return ""
   }

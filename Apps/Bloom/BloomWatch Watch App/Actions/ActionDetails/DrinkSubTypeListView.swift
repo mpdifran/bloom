@@ -70,7 +70,7 @@ private struct SubTypeCell: View {
   PreviewEnvironment {
     NavigationStack {
       DrinkSubTypeListView(
-        parentDrink: DrinkType.defaultDrinks.first { $0.name == "Beer" }!,
+        parentDrink: DrinkType.beer,
         navigationPath: .constant(NavigationPath()),
         performDismiss: nil
       )

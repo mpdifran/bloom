@@ -258,19 +258,34 @@ private extension BudSummaryWidgetView {
   }
 
   var greetingText: String {
-    let userName = entry.userName.isEmpty ? "" : ", \(entry.userName)"
+    let name = entry.userName
+
+    guard !name.isEmpty else {
+      switch entry.timeMode {
+      case .morning:
+        return String(localized: "Good Morning!", comment: "Widget greeting, no name known")
+      case .afternoon:
+        return String(localized: "Good Afternoon!", comment: "Widget greeting, no name known")
+      case .evening:
+        return String(localized: "Good Evening!", comment: "Widget greeting, no name known")
+      case .night:
+        return String(localized: "Good Night!", comment: "Widget greeting, no name known")
+      @unknown default:
+        return String(localized: "Howdy!", comment: "Widget greeting, no name known")
+      }
+    }
 
     switch entry.timeMode {
     case .morning:
-      return "Good Morning\(userName)!"
+      return String(localized: "Good Morning, \(name)!", comment: "Widget greeting, %@ is the person's first name")
     case .afternoon:
-      return "Good Afternoon\(userName)!"
+      return String(localized: "Good Afternoon, \(name)!", comment: "Widget greeting, %@ is the person's first name")
     case .evening:
-      return "Good Evening\(userName)!"
+      return String(localized: "Good Evening, \(name)!", comment: "Widget greeting, %@ is the person's first name")
     case .night:
-      return "Good Night\(userName)!"
+      return String(localized: "Good Night, \(name)!", comment: "Widget greeting, %@ is the person's first name")
     @unknown default:
-      return "Howdy\(userName)!"
+      return String(localized: "Howdy, \(name)!", comment: "Widget greeting, %@ is the person's first name")
     }
   }
 

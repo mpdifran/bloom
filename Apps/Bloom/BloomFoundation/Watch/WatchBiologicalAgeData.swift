@@ -44,9 +44,12 @@ public enum WatchBioAgeConfidence: String, Codable, Sendable {
 
   public var displayName: String {
     switch self {
-    case .high: "High Confidence"
-    case .moderate: "Moderate Confidence"
-    case .low: "Low Confidence"
+    case .high:
+      String(localized: "High Confidence", bundle: Bundle.bloomFoundation, comment: "Biological age confidence level")
+    case .moderate:
+      String(localized: "Moderate Confidence", bundle: Bundle.bloomFoundation, comment: "Biological age confidence level")
+    case .low:
+      String(localized: "Low Confidence", bundle: Bundle.bloomFoundation, comment: "Biological age confidence level")
     }
   }
 }

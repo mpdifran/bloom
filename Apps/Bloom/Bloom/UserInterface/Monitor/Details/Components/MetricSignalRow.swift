@@ -45,7 +45,7 @@ struct MetricSignalRow: View {
       Image(systemSymbol: signal.direction == .higher ? .arrowUp : .arrowDown)
         .font(.caption2)
 
-      Text(String(format: "%.1f", signal.magnitude))
+      Text(signal.magnitude.formatted(.number.precision(.fractionLength(1))))
         .font(.caption)
         .fontWeight(.medium)
     }

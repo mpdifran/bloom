@@ -70,19 +70,18 @@ public struct MonthlyWorkoutStats: Sendable, Codable, Hashable, Identifiable {
   }
 
   public var monthName: String {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "MMMM"
-    let components = DateComponents(month: month)
-    guard let date = Calendar.current.date(from: components) else { return "" }
-    return formatter.string(from: date)
+    // Calendar's symbols are already translated for every locale; a "MMMM" DateFormatter would
+    // hand French and German users the English month name.
+    let symbols = Calendar.current.standaloneMonthSymbols
+    guard symbols.indices.contains(month - 1) else { return "" }
+    return symbols[month - 1]
   }
 
   public var shortMonthName: String {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "MMM"
-    let components = DateComponents(month: month)
-    guard let date = Calendar.current.date(from: components) else { return "" }
-    return formatter.string(from: date)
+    // Localized abbreviated month name, rather than a hardcoded "MMM" pattern.
+    let symbols = Calendar.current.shortStandaloneMonthSymbols
+    guard symbols.indices.contains(month - 1) else { return "" }
+    return symbols[month - 1]
   }
 }
 

@@ -207,7 +207,7 @@ private extension HeartRateZoneSettingsView {
 
 private extension HeartRateZoneSettingsView {
 
-  func heartRateCell(title: String, value: Double, showDisclosure: Bool = false) -> some View {
+  func heartRateCell(title: LocalizedStringKey, value: Double, showDisclosure: Bool = false) -> some View {
     HStack {
       Text(title)
         .font(.caption)

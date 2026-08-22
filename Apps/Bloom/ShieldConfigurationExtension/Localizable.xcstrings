@@ -1,7 +1,330 @@
 {
-  "sourceLanguage" : "en",
-  "strings" : {
-
+  "sourceLanguage": "en",
+  "strings": {
+    "10 More Minutes": {
+      "comment": "Bedtime shield secondary button",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "10 Minuten mehr"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "10 minutos más"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "10 minutes de plus"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "10 minutes de plus"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "10 minuten extra"
+          }
+        }
+      }
+    },
+    "Bloom - Bedtime": {
+      "comment": "Bedtime shield title",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloom - Schlafenszeit"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloom - Hora de dormir"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloom - Coucher"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloom - Coucher"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloom - Bedtijd"
+          }
+        }
+      }
+    },
+    "Close App": {
+      "comment": "Bedtime shield primary button",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App schließen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cerrar la app"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fermer l'app"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fermer l'app"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App sluiten"
+          }
+        }
+      }
+    },
+    "You should avoid using %@ apps like %@ around bedtime to have a better quality sleep.": {
+      "comment": "Bedtime shield message, first %@ is the category name, second %@ is the app's name",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vermeide %1$@-Apps wie %2$@ kurz vor dem Schlafengehen, um besser zu schlafen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Evita las apps de %1$@ como %2$@ cerca de la hora de dormir para descansar mejor."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Évitez les applis %1$@ comme %2$@ à l'approche du coucher pour mieux dormir."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Évite les applis %1$@ comme %2$@ à l'approche du coucher pour mieux dormir."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gebruik %1$@-apps zoals %2$@ liever niet vlak voor het slapengaan, dan slaap je beter."
+          }
+        }
+      }
+    },
+    "You should avoid using %@ around bedtime to have a better quality sleep.": {
+      "comment": "Bedtime shield message, %@ is the app's name",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vermeide %@ kurz vor dem Schlafengehen, um besser zu schlafen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Evita usar %@ cerca de la hora de dormir para descansar mejor."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Évitez d'utiliser %@ à l'approche du coucher pour mieux dormir."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Évite d'utiliser %@ à l'approche du coucher pour mieux dormir."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gebruik %@ liever niet vlak voor het slapengaan, dan slaap je beter."
+          }
+        }
+      }
+    },
+    "You should avoid visiting %@ around bedtime to have a better quality sleep.": {
+      "comment": "Bedtime shield message, %@ is the website's domain",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Besuche %@ nicht kurz vor dem Schlafengehen, um besser zu schlafen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Evita visitar %@ cerca de la hora de dormir para descansar mejor."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Évitez de consulter %@ à l'approche du coucher pour mieux dormir."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Évite de consulter %@ à l'approche du coucher pour mieux dormir."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bezoek %@ liever niet vlak voor het slapengaan, dan slaap je beter."
+          }
+        }
+      }
+    },
+    "You should avoid visiting %@ websites like %@ around bedtime to have a better quality sleep.": {
+      "comment": "Bedtime shield message, first %@ is the category name, second %@ is the website's domain",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Besuche %1$@-Websites wie %2$@ nicht kurz vor dem Schlafengehen, um besser zu schlafen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Evita los sitios de %1$@ como %2$@ cerca de la hora de dormir para descansar mejor."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Évitez les sites %1$@ comme %2$@ à l'approche du coucher pour mieux dormir."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Évite les sites %1$@ comme %2$@ à l'approche du coucher pour mieux dormir."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bezoek %1$@-websites zoals %2$@ liever niet vlak voor het slapengaan, dan slaap je beter."
+          }
+        }
+      }
+    },
+    "this app": {
+      "comment": "Bedtime shield fallback for an app with no name",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "diese App"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "esta app"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "cette app"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "cette app"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "deze app"
+          }
+        }
+      }
+    },
+    "this website": {
+      "comment": "Bedtime shield fallback for a website with no domain",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "diese Website"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "este sitio"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ce site"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ce site"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "deze website"
+          }
+        }
+      }
+    }
   },
-  "version" : "1.0"
+  "version": "1.0"
 }

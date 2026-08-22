@@ -15,7 +15,7 @@ struct SleepBedtimeStatCard: View {
     StatCard(
       symbol: .bedDoubleFill,
       title: "Bedtime",
-      value: data?.trend.rawValue ?? "No Data",
+      value: data?.trend.displayName ?? String(localized: "No Data", comment: "Shown when a stat card has no data"),
       layerContent: true,
       includePadding: false
     ) {
@@ -42,11 +42,9 @@ private extension SleepBedtimeStatCard {
     let currentHour = Int(minutes / 60)
     let nextHour = (currentHour + 1) % 24
 
-    // Convert to 12-hour format
-    let hour12 = nextHour == 0 ? 12 : (nextHour > 12 ? nextHour - 12 : nextHour)
-    let ampm = nextHour < 12 ? "AM" : "PM"
-
-    return "\(hour12)\(ampm)"
+    // Formatted through the locale rather than a hardcoded 12-hour AM/PM string.
+    guard let date = Calendar.current.date(from: DateComponents(hour: nextHour)) else { return nil }
+    return date.formatted(.dateTime.hour())
   }
 
   @ViewBuilder

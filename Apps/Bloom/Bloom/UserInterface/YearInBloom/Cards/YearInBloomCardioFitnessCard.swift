@@ -162,7 +162,7 @@ private extension YearInBloomCardioFitnessCard {
 
   var formattedLatestVO2Max: String {
     guard let vo2Max = stats.latestVO2Max else { return "—" }
-    return String(format: "%.1f vO₂ Max", vo2Max)
+    return "\(vo2Max.formatted(.number.precision(.fractionLength(1)))) vO₂ Max"
   }
 }
 

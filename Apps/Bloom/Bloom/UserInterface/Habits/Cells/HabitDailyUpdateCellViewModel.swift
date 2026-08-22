@@ -67,15 +67,15 @@ extension HabitDailyUpdateCellViewModel {
           unit: unit,
           doubleValue: difference
         ).displayString(for: unit, formatter: formatter)
-        return "\(formatted) below your goal today."
+        return String(localized: "\(formatted) below your goal today.", comment: "Goal progress, %@ is a formatted amount such as \"200 kcal\"")
       } else if difference == 0 {
-        return "You met your goal today!"
+        return String(localized: "You met your goal today!", comment: "Goal progress when the goal is exactly met")
       } else {
         let formatted = HKQuantity(
           unit: unit,
           doubleValue: -difference
         ).displayString(for: unit, formatter: formatter)
-        return "\(formatted) above your goal today."
+        return String(localized: "\(formatted) above your goal today.", comment: "Goal progress, %@ is a formatted amount such as \"200 kcal\"")
       }
     }
 
@@ -85,7 +85,7 @@ extension HabitDailyUpdateCellViewModel {
     case .range:
       let dailyQuantity = HKQuantity(unit: habit.unit, doubleValue: dailyValue)
       if habit.quantityMeetsGoal(dailyQuantity) {
-        return "You met your goal today!"
+        return String(localized: "You met your goal today!", comment: "Goal progress when the goal is exactly met")
       } else {
         return defaultLogic()
       }
@@ -167,8 +167,8 @@ private extension HabitDailyUpdateCellViewModel {
 
     if UIApplication.shared.applicationState != .active {
       await NotificationManager.shared.sendNotification(
-        title: "You Did It!",
-        subtitle: "You've hit your \(habit.targetMetric.name) goal, great job!"
+        title: String(localized: "You Did It!", comment: "Notification title when a goal is hit"),
+        subtitle: String(localized: "You've hit your \(habit.targetMetric.name) goal, great job!", comment: "Notification body when a goal is hit, %@ is the goal's name")
       )
     }
   }

@@ -76,9 +76,9 @@ struct TimeConfigurationCell: View {
     let spansNextDay = timeMode == .night && startHour > getEndHour()
     
     if spansNextDay {
-      return "\(startString) - \(endString) +1 day"
+      return String(localized: "\(startString) - \(endString) +1 day", comment: "Time range that runs past midnight, %1$@ is the start time and %2$@ the end time")
     } else {
-      return "\(startString) - \(endString)"
+      return String(localized: "\(startString) - \(endString)", comment: "Time range, %1$@ is the start time and %2$@ the end time")
     }
   }
   

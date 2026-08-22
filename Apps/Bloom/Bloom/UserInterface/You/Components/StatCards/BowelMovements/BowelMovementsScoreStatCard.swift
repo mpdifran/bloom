@@ -18,14 +18,14 @@ struct BowelMovementsScoreStatCard: View {
         symbol: .chartBarFill,
         title: "Overall Score",
         value: rating.name,
-        valueStyle: .largeTinted("Last 7 Days")
+        valueStyle: .largeTinted(String(localized: "Last 7 Days", comment: "Stat card subtitle: the value covers the last seven days"))
       )
       .tint(rating.color)
     } else {
       StatCard(
         symbol: .chartBarFill,
         title: "Overall Score",
-        value: "No Data",
+        value: String(localized: "No Data", comment: "Stat card value shown when there is no data"),
         valueStyle: .largeTinted(nil)
       )
     }

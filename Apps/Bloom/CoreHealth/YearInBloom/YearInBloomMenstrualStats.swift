@@ -76,8 +76,7 @@ public struct CycleExtreme: Sendable, Codable, Hashable {
   }
 
   public var monthName: String {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "MMM"
-    return formatter.string(from: startDate)
+    // Locale-aware abbreviated month; "MMM" would show English names to French/German users.
+    startDate.formatted(.dateTime.month(.abbreviated))
   }
 }

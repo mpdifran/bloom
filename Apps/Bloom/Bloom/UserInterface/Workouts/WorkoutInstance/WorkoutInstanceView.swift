@@ -594,7 +594,8 @@ private extension WorkoutInstanceView {
     let minutes = totalMilliseconds / 60000
     let seconds = (totalMilliseconds % 60000) / 1000
     let milliseconds = (totalMilliseconds % 1000) / 100
-    return String(format: "%02d:%02d.%01d", minutes, seconds, milliseconds)
+    let decimalSeparator = Locale.current.decimalSeparator ?? "."
+    return String(format: "%02d:%02d%@%01d", minutes, seconds, decimalSeparator, milliseconds)
   }
 
   var subTimeString: String {

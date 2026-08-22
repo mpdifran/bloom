@@ -101,7 +101,11 @@ private extension OnboardingFinishView {
 
   var usersName: String {
     let trimmedName = healthManager.name.trimmingCharacters(in: .whitespacesAndNewlines)
-    return trimmedName.isEmpty ? "friend" : trimmedName
+    let fallback = String(
+      localized: "friend",
+      comment: "Stand-in for the user's name in \"You made it, %@!\" when no name was given."
+    )
+    return trimmedName.isEmpty ? fallback : trimmedName
   }
 
   func advanceForSubscribed() async {

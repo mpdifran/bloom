@@ -19,11 +19,38 @@ private extension Int {
 }
 
 struct FoodItemSection: Equatable, Identifiable {
-  var id: String { title }
-
-  let title: String
+  let id: String
+  /// LocalizedStringKey, not String: a String literal is handed straight to Text without a catalog
+  /// lookup, so every section heading rendered in English regardless of language. `id` is separate
+  /// because it has to stay stable across languages.
+  let title: LocalizedStringKey
   let category: FoodItem.Category
   let foodItems: [BloomModel.FoodItem]
+
+  init(
+    id: String,
+    title: LocalizedStringKey,
+    category: FoodItem.Category,
+    foodItems: [BloomModel.FoodItem]
+  ) {
+    self.id = id
+    self.title = title
+    self.category = category
+    self.foodItems = foodItems
+  }
+
+  /// Heading supplied by the backend. It has no catalog entry, so the lookup falls through and the
+  /// text renders exactly as the server sent it.
+  init(
+    backendTitle: String,
+    category: FoodItem.Category,
+    foodItems: [BloomModel.FoodItem]
+  ) {
+    self.id = backendTitle
+    self.title = LocalizedStringKey(backendTitle)
+    self.category = category
+    self.foodItems = foodItems
+  }
 }
 
 extension FoodLoggingActionCardView {
@@ -56,6 +83,7 @@ extension FoodLoggingActionCardView.ViewModel {
       if frequentFoodItems.isNotEmpty {
         frequentFoodItemSections = [
           FoodItemSection(
+            id: "frequentlyLogged",
             title: "Frequently Logged",
             category: .branded,
             foodItems: frequentFoodItems.makingUnique().map({ $0.asNetworkFoodItem() })
@@ -70,6 +98,7 @@ extension FoodLoggingActionCardView.ViewModel {
       if recentFoodItems.isNotEmpty {
         recentFoodItemSections = [
           FoodItemSection(
+            id: "recentlyLogged",
             title: "Recently Logged",
             category: .branded,
             foodItems: recentFoodItems.makingUnique().map({ $0.asNetworkFoodItem() })
@@ -84,6 +113,7 @@ extension FoodLoggingActionCardView.ViewModel {
       if otherMealsFoodItems.isNotEmpty {
         otherMealsFoodItemSections = [
           FoodItemSection(
+            id: "fromOtherMeals",
             title: "From Other Meals",
             category: .branded,
             foodItems: otherMealsFoodItems.makingUnique().map({ $0.asNetworkFoodItem() })
@@ -151,6 +181,7 @@ extension FoodLoggingActionCardView.ViewModel {
         // Store backend results directly - deduplication handled at View level
         self.results = sections.map {
           FoodItemSection(
+            id: "allResults",
             title: "All Results",
             category: .branded,
             foodItems: $0.foods
@@ -196,7 +227,7 @@ extension FoodLoggingActionCardView.ViewModel {
       TelemetryDeck.signal("Food Item Barcode Scan", parameters: ["barcodeScanResult": "Match"])
       self.results = sections.map({
         FoodItemSection(
-          title: $0.title,
+          backendTitle: $0.title,
           category: .branded,
           foodItems: $0.foods
         )
@@ -214,6 +245,7 @@ extension FoodLoggingActionCardView.ViewModel {
 
   func didUploadNewFood(foodItem: FoodItem) {
     let section = FoodItemSection(
+      id: "uploadedFood",
       title: "Uploaded Food",
       category: .branded,
       foodItems: [foodItem]

@@ -153,8 +153,9 @@ struct FoodServingView: View {
     if abs(fraction) < 0.01 {
       fractionString = ""
     } else {
-      // Fallback to decimal for any other fraction
-      return String(format: "%.2f", servings)
+      // Fallback to decimal for any other fraction. Formatted, not String(format:), so the
+      // separator follows the locale - European users expect "1,25" rather than "1.25".
+      return servings.formatted(.number.precision(.fractionLength(0...2)))
     }
 
     if whole == 0 {

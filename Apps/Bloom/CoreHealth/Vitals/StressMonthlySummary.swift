@@ -337,7 +337,12 @@ public extension StressMonthlySummary.Details {
     let hrv: String?
     if heartRateVariability.isNotEmpty {
       let average = heartRateVariability.map({ $0.quantity.doubleValue(for: .millisecond()) }).average(keyPath: \.self)
-      hrv = "HRV: \(average.format()) ms"
+      let value = average.format()
+      hrv = String(
+        localized: "HRV: \(value) ms",
+        bundle: Bundle.coreHealth,
+        comment: "Stress subtitle line. HRV is heart rate variability; the placeholder is the value in milliseconds."
+      )
     } else {
       hrv = nil
     }
@@ -346,7 +351,13 @@ public extension StressMonthlySummary.Details {
     if bloodPressureSystolic.isNotEmpty, bloodPressureDiastolic.isNotEmpty {
       let systolicAverage = bloodPressureSystolic.map({ $0.quantity.doubleValue(for: .millimeterOfMercury()) }).average(keyPath: \.self)
       let diastolicAverage = bloodPressureDiastolic.map({ $0.quantity.doubleValue(for: .millimeterOfMercury()) }).average(keyPath: \.self)
-      bloodPressure = "BP: \(systolicAverage.format())/\(diastolicAverage.format()) mmHg"
+      let systolic = systolicAverage.format()
+      let diastolic = diastolicAverage.format()
+      bloodPressure = String(
+        localized: "BP: \(systolic)/\(diastolic) mmHg",
+        bundle: Bundle.coreHealth,
+        comment: "Stress subtitle line. BP is blood pressure; the placeholders are systolic and diastolic values."
+      )
     } else {
       bloodPressure = nil
     }

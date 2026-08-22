@@ -36,6 +36,10 @@ struct WatchConfidenceCell: View {
     }
   }
 
+  private var unknownConfidenceName: String {
+    String(localized: "Unknown", comment: "Fallback when bio age confidence is unavailable")
+  }
+
   var body: some View {
     HStack(spacing: 8) {
       Image(systemSymbol: icon)
@@ -43,7 +47,7 @@ struct WatchConfidenceCell: View {
         .foregroundStyle(tintColor)
 
       VStack(alignment: .leading, spacing: 2) {
-        Text(confidence?.displayName ?? "Unknown")
+        Text(confidence?.displayName ?? unknownConfidenceName)
           .font(.footnote)
           .fontWeight(.semibold)
           .foregroundStyle(tintColor)

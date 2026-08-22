@@ -105,11 +105,11 @@ private extension MonitorInsightCard {
 
   var mainText: String {
     if isLoading {
-      return  "Thinking..."
+      return String(localized: "Thinking...", comment: "Placeholder shown while Bud's monitor insight is loading")
     } else if let insight {
       return insight
     } else {
-      return "Oops, there was an error."
+      return String(localized: "Oops, there was an error.", comment: "Shown when Bud's monitor insight fails to load")
     }
   }
 

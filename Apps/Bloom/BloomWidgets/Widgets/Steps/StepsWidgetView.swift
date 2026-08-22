@@ -171,11 +171,11 @@ private extension StepsWidgetView {
       return NumberFormatter.noDecimalPlaces.string(from: steps as NSNumber) ?? "\(steps)"
     } else if steps < 1_000_000 {
       let thousands = Double(steps) / 1_000.0
-      let formatted = NumberFormatter.oneDecimalPlace.string(from: thousands as NSNumber) ?? String(format: "%.1f", thousands)
+      let formatted = thousands.format(using: .oneDecimalPlace)
       return "\(formatted)K"
     } else {
       let millions = Double(steps) / 1_000_000.0
-      let formatted = NumberFormatter.oneDecimalPlace.string(from: millions as NSNumber) ?? String(format: "%.1f", millions)
+      let formatted = millions.format(using: .oneDecimalPlace)
       return "\(formatted)M"
     }
   }

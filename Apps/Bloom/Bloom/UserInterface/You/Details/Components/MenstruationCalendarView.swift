@@ -16,7 +16,9 @@ struct MenstruationCalendarView: View {
 
   @State private var referenceDate = Date.now
 
-  private let daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+  /// The calendar's own symbols rather than hardcoded English abbreviations, which rendered as
+  /// "Sun"/"Mon" in every language. Still Sunday-first, matching the grid layout below.
+  private let daysOfWeek = Calendar.current.shortWeekdaySymbols
 
   var body: some View {
     let daysInMonth = generateDays()

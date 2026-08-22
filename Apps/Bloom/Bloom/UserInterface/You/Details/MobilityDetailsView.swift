@@ -581,16 +581,16 @@ private extension MobilityDetailsView {
   // MARK: - Helpers
 
   func formattedSpeed(_ speed: Double) -> String {
-    "\(String(format: "%.2f", speed)) m/s"
+    "\(speed.formatted(.number.precision(.fractionLength(2)))) m/s"
   }
 
   func ageRangeLabel(lowerAge: Int, upperAge: Int, isFirst: Bool, isLast: Bool) -> String {
     if isFirst {
-      return "< Age \(upperAge)"
+      return String(localized: "< Age \(upperAge)", comment: "Age range label for the youngest bracket. The placeholder is an age in years.")
     } else if isLast {
-      return "> Age \(lowerAge)"
+      return String(localized: "> Age \(lowerAge)", comment: "Age range label for the oldest bracket. The placeholder is an age in years.")
     } else {
-      return "Ages \(lowerAge)-\(upperAge)"
+      return String(localized: "Ages \(lowerAge)-\(upperAge)", comment: "Age range label. The placeholders are the youngest and oldest age in the bracket.")
     }
   }
 

@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct FoodItemIssueTextFieldCell: View {
-  let title: String
+  /// LocalizedStringKey, not String: a String literal is passed straight to Text without a
+  /// catalog lookup, so every title rendered in English regardless of language.
+  let title: LocalizedStringKey
   @Binding var text: String
 
   var body: some View {

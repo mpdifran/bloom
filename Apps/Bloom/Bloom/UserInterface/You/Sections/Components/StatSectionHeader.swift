@@ -10,8 +10,10 @@ import SFSafeSymbols
 
 struct StatSectionHeader: View {
   let symbol: SFSymbol
-  let title: String
-  let subtitle: String
+  /// LocalizedStringKey, not String: a String literal goes straight to Text with no catalog
+  /// lookup, so every section header rendered in English regardless of language.
+  let title: LocalizedStringKey
+  let subtitle: LocalizedStringKey
   let isExpanded: Bool
 
   var body: some View {

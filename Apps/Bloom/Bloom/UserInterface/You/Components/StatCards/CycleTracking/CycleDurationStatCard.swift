@@ -17,15 +17,15 @@ struct CycleDurationStatCard: View {
       StatCard(
         symbol: .circleGridCross,
         title: "Cycle Duration",
-        value: "\(duration) days",
-        valueStyle: .largeTinted("Average")
+        value: String(localized: "\(duration) days", comment: "Cycle duration card value. The placeholder is a number of days."),
+        valueStyle: .largeTinted(String(localized: "Average", comment: "Stat card subtitle: the value is an average"))
       )
       .tint(.pink)
     } else {
       StatCard(
         symbol: .circleGridCross,
         title: "Cycle Duration",
-        value: "No Data",
+        value: String(localized: "No Data", comment: "Stat card value shown when there is no data"),
         valueStyle: .largeTinted(nil)
       )
       .tint(.gray)

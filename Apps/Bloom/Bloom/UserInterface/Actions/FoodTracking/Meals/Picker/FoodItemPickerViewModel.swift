@@ -41,6 +41,7 @@ extension FoodItemPicker.ViewModel {
       if frequentFoodItems.isNotEmpty {
         frequentFoodItemSections = [
           FoodItemSection(
+            id: "frequentlyLogged",
             title: "Frequently Logged",
             category: .branded,
             foodItems: frequentFoodItems.makingUnique().map({ $0.asNetworkFoodItem() })
@@ -55,6 +56,7 @@ extension FoodItemPicker.ViewModel {
       if recentFoodItems.isNotEmpty {
         recentFoodItemSections = [
           FoodItemSection(
+            id: "recentlyLogged",
             title: "Recently Logged",
             category: .branded,
             foodItems: recentFoodItems.makingUnique().map({ $0.asNetworkFoodItem() })
@@ -115,6 +117,7 @@ extension FoodItemPicker.ViewModel {
         // Store backend results directly - deduplication handled at View level
         self.results = sections.map {
           FoodItemSection(
+            id: "allResults",
             title: "All Results",
             category: .branded,
             foodItems: $0.foods

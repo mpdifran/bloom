@@ -24,7 +24,17 @@ public struct GoalGrid: View {
   let minCellWidth: CGFloat
   let spacing: CGFloat
 
-  private let weekdays = ["S", "M", "T", "W", "Th", "F", "S"]
+  /// Localized one-letter weekday labels, rotated so the first row matches the calendar's
+  /// first weekday — the same ordering the week buckets in `GoalGridModel` use.
+  private var weekdays: [String] {
+    let calendar = Calendar.current
+    let symbols = calendar.veryShortWeekdaySymbols
+    let firstIndex = calendar.firstWeekday - 1
+
+    guard symbols.indices.contains(firstIndex) else { return symbols }
+
+    return Array(symbols[firstIndex...] + symbols[..<firstIndex])
+  }
 
   @State private var completionSensoryToggle = false
 

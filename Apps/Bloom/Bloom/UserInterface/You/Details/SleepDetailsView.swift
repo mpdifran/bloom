@@ -35,7 +35,7 @@ struct SleepDetailsView: View {
       ToolbarItem(placement: .principal) {
         VitalSummaryDetailTitleView(
           title: "Sleep Quality",
-          subtitle: "Last 30 Days"
+          subtitle: String(localized: "Last 30 Days", comment: "Time range subtitle on a detail screen")
         )
       }
     }

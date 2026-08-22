@@ -56,16 +56,16 @@ struct DrinkAmountSelectionView: View {
     } else if userLiquidUnit == .fluidOunceUS() {
       // fl oz - show 1 decimal place for small amounts, integer for larger
       if amount < 10 {
-        return String(format: "%.1f", amount)
+        return amount.formatted(.number.precision(.fractionLength(1)))
       } else {
         return "\(Int(amount))"
       }
     } else if userLiquidUnit == .liter() {
       // Liters - show 1-2 decimal places
-      return String(format: "%.1f", amount)
+      return amount.formatted(.number.precision(.fractionLength(1)))
     } else {
       // Default - show 1 decimal place
-      return String(format: "%.1f", amount)
+      return amount.formatted(.number.precision(.fractionLength(1)))
     }
   }
 

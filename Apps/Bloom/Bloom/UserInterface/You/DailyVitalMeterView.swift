@@ -71,13 +71,13 @@ private extension DailyVitalMeterView {
         if meterValue < 0 {
             ""
         } else if cappedMeterValue <= 0.25 {
-            "Concern"
+            String(localized: "Concern", comment: "Strain meter state")
         } else if cappedMeterValue > 0.25 && cappedMeterValue <= 0.5 {
-            "Caution"
+            String(localized: "Caution", comment: "Strain meter state")
         } else if cappedMeterValue > 0.5 && cappedMeterValue <= 0.75 {
-            "Good"
+            String(localized: "Good", comment: "Strain meter state")
         } else {
-            "Amazing"
+            String(localized: "Amazing", comment: "Strain meter state")
         }
     }
 }

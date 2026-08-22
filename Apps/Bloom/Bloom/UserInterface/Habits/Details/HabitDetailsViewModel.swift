@@ -297,9 +297,7 @@ extension HabitDetailsView.ViewModel {
       
       for day in weekDays {
         if calendar.component(.day, from: day) == 1 {
-          let formatter = DateFormatter()
-          formatter.dateFormat = "MMM"
-          monthLabel = formatter.string(from: day)
+          monthLabel = DateFormatter.justShortMonth.string(from: day)
           break
         }
       }
@@ -379,9 +377,7 @@ extension HabitDetailsView.ViewModel {
       let isComplete = habitHistory.habit(for: monthSample.referenceDate)?.quantityMeetsGoal(monthQuantity) ?? false
       
       // Generate month label
-      let formatter = DateFormatter()
-      formatter.dateFormat = "MMM"
-      let monthLabel = formatter.string(from: monthSample.referenceDate)
+      let monthLabel = DateFormatter.justShortMonth.string(from: monthSample.referenceDate)
       
       return GoalGridMonthModel.Month(
         id: monthSample.id,

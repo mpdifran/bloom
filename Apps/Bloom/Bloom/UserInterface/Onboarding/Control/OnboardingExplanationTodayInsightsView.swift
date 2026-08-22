@@ -70,9 +70,12 @@ private extension OnboardingExplanationTodayInsightsView {
 
   var helloText: String {
     if healthManager.name.isNotEmpty {
-      return "Hi there \(healthManager.name), I'm Bud!"
+      return String(
+        localized: "Hi there \(healthManager.name), I'm Bud!",
+        comment: "Onboarding greeting. Placeholder is the user's first name."
+      )
     }
-    return "Hi there, I'm Bud!"
+    return String(localized: "Hi there, I'm Bud!", comment: "Onboarding greeting when we don't know the user's name.")
   }
 
   var todayInsightSection: some View {

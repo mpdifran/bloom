@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct ContrastingPillLabel: View {
-  let text: String
+  let text: LocalizedStringKey
 
-  init(_ text: String) {
+  init(_ text: LocalizedStringKey) {
     self.text = text
   }
 
@@ -32,7 +32,7 @@ struct ContrastingPillLabel: View {
 
   PreviewEnvironment {
     BloomScrollView {
-      ContrastingPillLabel("Step \(stepCount) of 5")
+      ContrastingPillLabel("Step \(stepCount) of \(5)")
         .contentTransition(.numericText())
 
       Button {

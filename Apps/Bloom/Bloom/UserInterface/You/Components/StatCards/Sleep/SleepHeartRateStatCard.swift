@@ -25,7 +25,7 @@ struct SleepHeartRateStatCard: View {
     StatCard(
       symbol: .heartFill,
       title: "Sleep HR",
-      value: formattedHeartRate ?? "No Data",
+      value: formattedHeartRate ?? String(localized: "No Data", comment: "Stat card value shown when there is no data"),
       valueStyle: .largeTinted(nil)
     ) {
       heartRateChart

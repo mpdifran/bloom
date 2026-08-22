@@ -45,7 +45,10 @@ struct BudSummaryTimelineProvider: TimelineProvider {
         date: Date(),
         relevance: nil,
         budState: "proudCoach",
-        summary: "You're doing great! Keep up the excellent work on your health journey.",
+        summary: String(
+          localized: "You're doing great! Keep up the excellent work on your health journey.",
+          comment: "Sample summary shown in the widget gallery"
+        ),
         timeMode: currentTimeMode,
         userName: userName,
         isLoading: true,

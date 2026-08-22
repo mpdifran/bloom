@@ -64,6 +64,17 @@ public enum TrainingLoadStatus: String, CaseIterable, Sendable, Hashable {
     }
   }
   
+  /// The user-facing name. `rawValue` stays canonical English — it is a persistence identifier.
+  public var displayName: String {
+    switch self {
+    case .wellBelow: String(localized: "Well Below", bundle: Bundle.coreHealth, comment: "Display name for training load status")
+    case .below: String(localized: "Below", bundle: Bundle.coreHealth, comment: "Display name for training load status")
+    case .steady: String(localized: "Steady", bundle: Bundle.coreHealth, comment: "Display name for training load status")
+    case .above: String(localized: "Above", bundle: Bundle.coreHealth, comment: "Display name for training load status")
+    case .wellAbove: String(localized: "Well Above", bundle: Bundle.coreHealth, comment: "Display name for training load status")
+    }
+  }
+
   public var color: Color {
     switch self {
     case .wellAbove, .wellBelow:

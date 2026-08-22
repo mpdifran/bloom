@@ -25,10 +25,10 @@ enum StepsWidgetTimePeriod: String, AppEnum {
 
   var displayLabel: String {
     switch self {
-    case .daily: "Today"
-    case .weekly: "This Week"
-    case .monthly: "This Month"
-    case .yearly: "This Year"
+    case .daily: String(localized: "Today", comment: "Time period label shown in the Steps widget")
+    case .weekly: String(localized: "This Week", comment: "Time period label shown in the Steps widget")
+    case .monthly: String(localized: "This Month", comment: "Time period label shown in the Steps widget")
+    case .yearly: String(localized: "This Year", comment: "Time period label shown in the Steps widget")
     }
   }
 }

@@ -17,23 +17,17 @@ public extension Calendar {
     case friday
     case saturday
 
+    /// The weekday's name in the user's language.
+    ///
+    /// Taken from `Calendar.weekdaySymbols` rather than hardcoded English: the system already has
+    /// these translated for every locale, and the raw value matches Calendar's 1-based numbering.
     public var name: String {
-      switch self {
-      case .sunday:
-        "Sunday"
-      case .monday:
-        "Monday"
-      case .tuesday:
-        "Tuesday"
-      case .wednesday:
-        "Wednesday"
-      case .thursday:
-        "Thursday"
-      case .friday:
-        "Friday"
-      case .saturday:
-        "Saturday"
-      }
+      let symbols = Calendar.current.weekdaySymbols
+      let index = rawValue - 1
+
+      guard symbols.indices.contains(index) else { return "" }
+
+      return symbols[index]
     }
   }
 
@@ -48,27 +42,38 @@ public extension Calendar {
     public var name: String {
       switch self {
       case .morning:
-        "Morning"
+        String(localized: "Morning", bundle: Bundle.bloomFoundation, comment: "Part of the day")
       case .afternoon:
-        "Afternoon"
+        String(localized: "Afternoon", bundle: Bundle.bloomFoundation, comment: "Part of the day")
       case .evening:
-        "Evening"
+        String(localized: "Evening", bundle: Bundle.bloomFoundation, comment: "Part of the day")
       case .overnight:
-        "Overnight"
+        String(localized: "Overnight", bundle: Bundle.bloomFoundation, comment: "Part of the day")
       }
     }
 
+    /// The hours this part of the day covers, formatted for the user's locale.
+    ///
+    /// Built from real times rather than written out: "6am - 12pm" is a US 12-hour format, and
+    /// German, French and Dutch users expect "06:00 - 12:00".
     public var summary: String {
-      switch self {
-      case .morning:
-        "6am - 12pm"
-      case .afternoon:
-        "12pm - 6pm"
-      case .evening:
-        "6pm - 12am"
-      case .overnight:
-        "12am - 6am"
+      let (start, end) = switch self {
+      case .morning: (6, 12)
+      case .afternoon: (12, 18)
+      case .evening: (18, 24)
+      case .overnight: (0, 6)
       }
+
+      return "\(Self.formatted(hour: start)) - \(Self.formatted(hour: end))"
+    }
+
+    private static func formatted(hour: Int) -> String {
+      var components = DateComponents()
+      components.hour = hour == 24 ? 0 : hour
+
+      guard let date = Calendar.current.date(from: components) else { return "" }
+
+      return date.formatted(.dateTime.hour())
     }
   }
 }

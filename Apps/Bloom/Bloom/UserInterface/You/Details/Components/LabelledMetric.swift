@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct LabelledMetric: View {
-    let label: String
+    /// LocalizedStringKey, not String: a String literal is passed straight to Text without a
+    /// catalog lookup, so the label rendered in English regardless of language.
+    let label: LocalizedStringKey
     let value: String
 
     var body: some View {

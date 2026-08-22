@@ -166,8 +166,8 @@ struct TodayView: View {
           presentedNavPush = HabitDetailsView(habit: matchingHabit).asAny
         } else {
           alertDetails = AlertDetails(
-            title: "Goal Not Found",
-            message: "This goal is no longer active."
+            title: String(localized: "Goal Not Found", comment: "Alert title when a goal notification points at a deleted goal"),
+            message: String(localized: "This goal is no longer active.", comment: "Alert message when a goal notification points at a deleted goal")
           )
         }
         tabController.pendingGoalNavigation = nil
@@ -505,10 +505,10 @@ private extension TodayView {
                 Divider()
                 Button("Delete", systemSymbol: .trash, role: .destructive) {
                   confirmationDialogDetails = ConfirmationDialogDetails(
-                    title: "Delete Reminder",
-                    message: "Are you sure you want to delete \"\(occurrence.reminder.title)\"? This action cannot be undone.",
+                    title: String(localized: "Delete Reminder", comment: "Confirmation dialog title for deleting a reminder"),
+                    message: String(localized: "Are you sure you want to delete \"\(occurrence.reminder.title)\"? This action cannot be undone.", comment: "Confirmation dialog message, %@ is the name the person gave the item"),
                     buttons: [
-                      ConfirmationDialogDetails.Button(title: "Delete", role: .destructive) {
+                      ConfirmationDialogDetails.Button(title: String(localized: "Delete", comment: "Destructive button in a delete confirmation dialog"), role: .destructive) {
                         Task {
                           do {
                             try await remindersManager.deleteReminder(withID: occurrence.reminder.id)
@@ -540,16 +540,16 @@ private extension TodayView {
     }
   }
 
-  var reminderSectionTitle: String {
+  /// LocalizedStringKey, not String: a String built here is handed to Text verbatim, so both the
+  /// copy and its English-only plural rule survived into every other language.
+  var reminderSectionTitle: LocalizedStringKey {
     let totalCount = filteredTodaysOccurrences.count
     let completedCount = filteredTodaysOccurrences.filter { $0.isCompleted }.count
 
-    let reminderText = totalCount == 1 ? "reminder" : "reminders"
-
     if completedCount > 0 {
-      return "\(totalCount) \(reminderText) • \(completedCount) completed"
+      return "\(totalCount) reminders • \(completedCount) completed"
     } else {
-      return "\(totalCount) \(reminderText)"
+      return "\(totalCount) reminders"
     }
   }
 
@@ -711,10 +711,10 @@ extension TodayView {
 
   func handleDeleteHabit(_ habit: Habit) {
     confirmationDialogDetails = ConfirmationDialogDetails(
-      title: "Delete Goal",
-      message: "Are you sure you want to delete \"\(habit.targetMetric.name)\"? This action cannot be undone.",
+      title: String(localized: "Delete Goal", comment: "Confirmation dialog title for deleting a goal"),
+      message: String(localized: "Are you sure you want to delete \"\(habit.targetMetric.name)\"? This action cannot be undone.", comment: "Confirmation dialog message, %@ is the name the person gave the item"),
       buttons: [
-        ConfirmationDialogDetails.Button(title: "Delete", role: .destructive) {
+        ConfirmationDialogDetails.Button(title: String(localized: "Delete", comment: "Destructive button in a delete confirmation dialog"), role: .destructive) {
           do {
             try HabitsViewModel.shared.delete(habit)
           } catch {

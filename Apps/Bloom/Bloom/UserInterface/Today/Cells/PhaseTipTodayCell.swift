@@ -15,7 +15,7 @@ struct PhaseTipTodayCell: View {
   var body: some View {
     TodayCardCell(
       symbol: .circleDottedAndCircle,
-      title: title,
+      title: LocalizedStringKey(title),
       content: tip,
       color: phase?.color ?? .mutedPink
     )
@@ -23,7 +23,7 @@ struct PhaseTipTodayCell: View {
 
   private var title: String {
     if let phaseName = phase?.name {
-      return "\(phaseName) Tip"
+      return String(localized: "\(phaseName) Tip", comment: "Title for phase tip today cell, %@ is the menstrual cycle phase")
     }
     return String(localized: "Cycle Phase Tip", comment: "Title for phase tip today cell")
   }

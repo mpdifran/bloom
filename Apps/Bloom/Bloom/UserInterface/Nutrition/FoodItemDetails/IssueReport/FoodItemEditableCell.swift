@@ -18,7 +18,9 @@ enum FoodItemEditableCellResetMode {
 }
 
 struct FoodItemEditableCell<Content>: View where Content: View {
-  let title: String
+  /// LocalizedStringKey, not String: a String literal is passed straight to Text without a
+  /// catalog lookup, so every title rendered in English regardless of language.
+  let title: LocalizedStringKey
   let mode: FoodItemEditableCellMode
   let isVertical: Bool
   let canClearValue: Bool
@@ -26,7 +28,7 @@ struct FoodItemEditableCell<Content>: View where Content: View {
   let content: Content
 
   init(
-    title: String,
+    title: LocalizedStringKey,
     mode: FoodItemEditableCellMode,
     isVertical: Bool = false,
     canClearValue: Bool = true,

@@ -72,7 +72,12 @@ private extension TodaySettingsView {
       SectionTitleView("Today Insights")
         .padding(.horizontal)
 
-      TodayInsightsPrivacyAIFeatureOptInCell(extraContext: "Bud will use the Personal Data Categories enabled below.")
+      TodayInsightsPrivacyAIFeatureOptInCell(
+        extraContext: String(
+          localized: "Bud will use the Personal Data Categories enabled below.",
+          comment: "Extra context under the Today Insights opt-in toggle"
+        )
+      )
         .cardContainer()
 
       AIDataShareCell()
@@ -104,11 +109,11 @@ private extension TodaySettingsView {
     let selectedCount = CalendarPreferenceManager.shared.selectedCalendarIdentifiers.count
     
     if selectedCount == 0 {
-      return "None Selected"
+      return String(localized: "None Selected", comment: "Calendar count when no calendars are selected")
     } else if selectedCount == calendars.count && calendars.count > 0 {
-      return "All Calendars"
+      return String(localized: "All Calendars", comment: "Calendar count when every calendar is selected")
     } else {
-      return "\(selectedCount) Selected"
+      return String(localized: "\(selectedCount) Selected", comment: "Calendar count, %lld is how many calendars are selected")
     }
   }
 

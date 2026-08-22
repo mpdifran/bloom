@@ -110,7 +110,7 @@ private extension YearInBloomWalkingRunningDistanceCard {
     if distance >= 100 {
       return "\(Int(distance)) \(distanceUnit.sensibleUnitString)"
     } else {
-      return String(format: "%.1f \(distanceUnit.sensibleUnitString)", distance)
+      return "\(distance.formatted(.number.precision(.fractionLength(1)))) \(distanceUnit.sensibleUnitString)"
     }
   }
 }

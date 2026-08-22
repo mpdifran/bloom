@@ -140,7 +140,7 @@ private extension MultiWorkoutSummaryView {
           .frame(width: 18, height: 18)
           .background(category.color, in: Circle())
 
-        Text(category.rawValue)
+        Text(category.displayName)
           .font(.caption)
           .bold()
           .fontDesign(.rounded)

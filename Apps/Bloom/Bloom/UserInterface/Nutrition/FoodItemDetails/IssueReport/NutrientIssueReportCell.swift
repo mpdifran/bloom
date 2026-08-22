@@ -9,7 +9,9 @@ import SwiftUI
 import HealthKit
 
 struct NutrientIssueReportCell: View {
-  let name: String
+  /// LocalizedStringKey, not String: every call site passes a literal nutrient label, and a
+  /// String would be handed to Text without a catalog lookup, rendering it in English.
+  let name: LocalizedStringKey
   let originalQuantity: HKQuantity?
   @Binding var amount: Double
   @Binding var unit: HKUnit

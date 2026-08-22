@@ -12,7 +12,7 @@ struct BloomPlusDataProcessingView: View {
     TodayCardCell(
       symbol: .sparkles,
       title: "Personal Data Processing",
-      content: "Bloom Plus processes de-identified summaries of your personal data securely with OpenAI to generate personalized insights.",
+      content: String(localized: "Bloom Plus processes de-identified summaries of your personal data securely with OpenAI to generate personalized insights.", comment: "Body of the paywall card explaining how personal data is processed."),
       color: .mutedLightBlue
     ) {
       Button {

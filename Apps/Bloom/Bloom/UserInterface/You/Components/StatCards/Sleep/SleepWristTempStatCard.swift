@@ -16,7 +16,7 @@ struct SleepWristTempStatCard: View {
       symbol: .thermometerMedium,
       title: "Wrist Temp",
       value: formattedDeviation,
-      valueStyle: .largeTinted("Last Night vs Baseline")
+      valueStyle: .largeTinted(String(localized: "Last Night vs Baseline", comment: "Stat card subtitle comparing last night to the baseline"))
     )
     .tint(data == nil ? AnyShapeStyle(.gray) : AnyShapeStyle(.mutedPurple))
   }
@@ -37,7 +37,7 @@ private extension SleepWristTempStatCard {
   }
 
   var formattedDeviation: String {
-    guard let deviation else { return "No Data" }
+    guard let deviation else { return String(localized: "No Data", comment: "Stat card value shown when there is no data") }
 
     let sign = deviation >= 0 ? "+" : "-"
     let formatted = abs(deviation).format(using: .oneDecimalPlace)

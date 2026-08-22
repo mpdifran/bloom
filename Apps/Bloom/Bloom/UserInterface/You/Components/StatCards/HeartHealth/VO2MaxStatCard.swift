@@ -25,8 +25,8 @@ struct VO2MaxStatCard: View {
 private extension VO2MaxStatCard {
 
   var formattedValue: String {
-    guard let value = trendData?.latestValue else { return "No Data" }
-    return String(format: "%.1f", value)
+    guard let value = trendData?.latestValue else { return String(localized: "No Data", comment: "Stat card value shown when there is no data") }
+    return value.formatted(.number.precision(.fractionLength(1)))
   }
 
   var trendText: String? {

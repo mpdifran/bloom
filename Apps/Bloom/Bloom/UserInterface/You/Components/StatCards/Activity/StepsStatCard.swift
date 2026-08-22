@@ -122,7 +122,8 @@ private extension StepsStatCard {
 
   func formattedPercentChange(_ change: Double) -> String {
     let sign = change >= 0 ? "+" : ""
-    return "\(sign)\(Int(change))% vs last week"
+    let percent = "\(sign)\(Int(change))%"
+    return String(localized: "\(percent) vs last week", comment: "Steps card comparison. The placeholder is a signed percentage change, e.g. \"+12%\".")
   }
 }
 

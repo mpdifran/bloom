@@ -200,12 +200,13 @@ private extension WorkoutsStoryPage {
 
   var formattedAvgDuration: String {
     let avgMinutes = stats.yearTotals.totalDurationMinutes / Double(stats.yearTotals.totalWorkouts)
-    let hours = Int(avgMinutes / 60)
-    let minutes = Int(avgMinutes.truncatingRemainder(dividingBy: 60))
-    if hours > 0 {
-      return "\(hours)h \(minutes)m"
+    // Locale-aware duration: hand-built "3h 45m" hardcoded English unit abbreviations.
+    if avgMinutes >= 60 {
+      return Duration.seconds(Int(avgMinutes) * 60)
+        .formatted(.units(allowed: [.hours, .minutes], width: .narrow))
     }
-    return "\(Int(avgMinutes)) min"
+    return Duration.seconds(Int(avgMinutes) * 60)
+      .formatted(.units(allowed: [.minutes], width: .abbreviated))
   }
 }
 

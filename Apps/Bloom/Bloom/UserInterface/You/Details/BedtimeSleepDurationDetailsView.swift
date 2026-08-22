@@ -170,7 +170,7 @@ private extension BedtimeSleepDurationDetailsView {
 
 private extension BedtimeSleepDurationDetailsView {
 
-  func averageStatCard(title: String, value: String, color: Color) -> some View {
+  func averageStatCard(title: LocalizedStringKey, value: String, color: Color) -> some View {
     HStack(spacing: 4) {
       Capsule()
         .fill(color)
@@ -357,9 +357,9 @@ private extension BedtimeSleepDurationDetailsView {
       minutesFromMidnight -= 1440
     }
     let hours = Int(minutesFromMidnight) / 60
-    let period = hours >= 12 ? "PM" : "AM"
-    let displayHour = hours == 0 ? 12 : (hours > 12 ? hours - 12 : hours)
-    return "\(displayHour)\(period)"
+    // Formatted through the locale rather than a hardcoded 12-hour AM/PM string.
+    guard let date = Calendar.current.date(from: DateComponents(hour: hours)) else { return "" }
+    return date.formatted(.dateTime.hour())
   }
 
   func formatTimeFromNoon(_ minutesFromNoon: Double) -> String {
@@ -369,15 +369,15 @@ private extension BedtimeSleepDurationDetailsView {
     }
     let hours = Int(minutesFromMidnight) / 60
     let minutes = Int(minutesFromMidnight) % 60
-    let period = hours >= 12 ? "PM" : "AM"
-    let displayHour = hours == 0 ? 12 : (hours > 12 ? hours - 12 : hours)
-    return String(format: "%d:%02d %@", displayHour, minutes, period)
+    // Formatted through the locale rather than a hardcoded 12-hour AM/PM string.
+    guard let date = Calendar.current.date(from: DateComponents(hour: hours, minute: minutes)) else { return "" }
+    return date.formatted(.dateTime.hour().minute())
   }
 
   func formatDuration(_ minutes: Double) -> String {
-    let hours = Int(minutes) / 60
-    let mins = Int(minutes) % 60
-    return "\(hours)h \(mins)m"
+    // Locale-aware duration: hand-built "3h 45m" hardcoded English unit abbreviations.
+    Duration.seconds(Int(minutes) * 60)
+      .formatted(.units(allowed: [.hours, .minutes], width: .narrow))
   }
 
   func formatDate(_ date: Date) -> String {
@@ -394,11 +394,11 @@ private extension BedtimeSleepDurationDetailsView {
 
   func trendDescription(for change: Double) -> String {
     if abs(change) < 5 {
-      return "Your sleep duration is about the same as before."
+      return String(localized: "Your sleep duration is about the same as before.", comment: "Sleep duration trend description")
     } else if change > 0 {
-      return "You're sleeping more than the previous period."
+      return String(localized: "You're sleeping more than the previous period.", comment: "Sleep duration trend description")
     } else {
-      return "You're sleeping less than the previous period."
+      return String(localized: "You're sleeping less than the previous period.", comment: "Sleep duration trend description")
     }
   }
 

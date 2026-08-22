@@ -40,7 +40,14 @@ public struct NutritionMonthlySummary: Hashable, Sendable {
 public extension NutritionMonthlySummary {
 
   var subtitle: String? {
-    let macros = details.macroStatus().map { "Macros \($0.rawValue)" }
+    let macros = details.macroStatus().map { status in
+      let statusName = status.displayName
+      return String(
+        localized: "Macros \(statusName)",
+        bundle: Bundle.coreHealth,
+        comment: "Nutrition subtitle line. The placeholder is a macro status, e.g. \"Balanced\"."
+      )
+    }
     //        let vitamins = details.vitaminStatus
     //        let minerals = details.mineralStatus
 
@@ -194,6 +201,18 @@ public extension NutritionMonthlySummary {
     case fatSurplus = "Fat Surplus"
     case fatDeficiency = "Fat Deficiency"
     case balanced = "Balanced"
+
+    public var displayName: String {
+      switch self {
+      case .proteinSurplus: String(localized: "Protein Surplus", bundle: Bundle.coreHealth, comment: "Display name for macro status")
+      case .proteinDeficiency: String(localized: "Protein Deficiency", bundle: Bundle.coreHealth, comment: "Display name for macro status")
+      case .carbSurplus: String(localized: "Carb Surplus", bundle: Bundle.coreHealth, comment: "Display name for macro status")
+      case .carbDeficiency: String(localized: "Carb Deficiency", bundle: Bundle.coreHealth, comment: "Display name for macro status")
+      case .fatSurplus: String(localized: "Fat Surplus", bundle: Bundle.coreHealth, comment: "Display name for macro status")
+      case .fatDeficiency: String(localized: "Fat Deficiency", bundle: Bundle.coreHealth, comment: "Display name for macro status")
+      case .balanced: String(localized: "Balanced", bundle: Bundle.coreHealth, comment: "Display name for macro status")
+      }
+    }
   }
 
   struct Macros: Sendable {
@@ -279,13 +298,13 @@ public extension NutritionMonthlySummary.Details {
     guard let netEnergy else { return nil }
 
     if netEnergy < -.netEnergySignificantThreshold {
-      return "Energy Deficit"
+      return String(localized: "Energy Deficit", bundle: Bundle.coreHealth, comment: "Net energy status for the month")
     } else if netEnergy < 0 {
-      return "Slight Energy Deficiency"
+      return String(localized: "Slight Energy Deficiency", bundle: Bundle.coreHealth, comment: "Net energy status for the month")
     } else if netEnergy > .netEnergySignificantThreshold {
-      return "Energy Surplus"
+      return String(localized: "Energy Surplus", bundle: Bundle.coreHealth, comment: "Net energy status for the month")
     }
-    return "Slight Energy Surplus"
+    return String(localized: "Slight Energy Surplus", bundle: Bundle.coreHealth, comment: "Net energy status for the month")
   }
 
   var netEnergyDescription: String? {

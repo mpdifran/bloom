@@ -14,9 +14,11 @@ struct MonitorSummaryBar: View {
   let data: MonitorSummaryBarData
   var hasData: Bool = true
   var showsLabels: Bool = true
-  var lowLabel: String = "Low"
-  var normalLabel: String = "Typical"
-  var highLabel: String = "High"
+  /// LocalizedStringKey, not String: a String literal is passed straight to Text without a
+  /// catalog lookup, so every zone label rendered in English regardless of language.
+  var lowLabel: LocalizedStringKey = "Low"
+  var normalLabel: LocalizedStringKey = "Typical"
+  var highLabel: LocalizedStringKey = "High"
 
   // Layout constants
   var barHeight: CGFloat = 20

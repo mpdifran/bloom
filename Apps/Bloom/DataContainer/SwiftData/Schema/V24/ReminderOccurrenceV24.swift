@@ -44,13 +44,13 @@ extension SchemaV24 {
     public var displayName: String {
       switch self {
       case .daily:
-        return "Daily"
+        return String(localized: "Daily", bundle: Bundle.dataContainer, comment: "Display name for a reminder cadence type")
       case .weekly:
-        return "Weekly"
+        return String(localized: "Weekly", bundle: Bundle.dataContainer, comment: "Display name for a reminder cadence type")
       case .monthly:
-        return "Monthly"
+        return String(localized: "Monthly", bundle: Bundle.dataContainer, comment: "Display name for a reminder cadence type")
       case .yearly:
-        return "Yearly"
+        return String(localized: "Yearly", bundle: Bundle.dataContainer, comment: "Display name for a reminder cadence type")
       }
     }
   }

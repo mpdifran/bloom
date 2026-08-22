@@ -23,6 +23,30 @@ enum WorkoutCategory: String, CaseIterable, Identifiable {
 
   var id: String { rawValue }
 
+  /// Localized title shown in the workout picker. `rawValue` stays untranslated - it is used for identity.
+  var displayName: String {
+    switch self {
+    case .cardioEndurance:
+      return String(localized: "Cardio & Endurance", comment: "Workout category name")
+    case .strengthConditioning:
+      return String(localized: "Strength & Conditioning", comment: "Workout category name")
+    case .teamCompetitive:
+      return String(localized: "Team & Competitive Sports", comment: "Workout category name")
+    case .skillPrecision:
+      return String(localized: "Skill & Precision Sports", comment: "Workout category name")
+    case .combat:
+      return String(localized: "Combat Sports", comment: "Workout category name")
+    case .outdoorAdventure:
+      return String(localized: "Outdoor & Adventure", comment: "Workout category name")
+    case .waterSnowIce:
+      return String(localized: "Water, Snow & Ice", comment: "Workout category name")
+    case .mindMobilityRecovery:
+      return String(localized: "Mind, Mobility & Recovery", comment: "Workout category name")
+    case .playDanceOther:
+      return String(localized: "Play, Dance & Other", comment: "Workout category name")
+    }
+  }
+
   var workoutVariants: [WorkoutVariant] {
     switch self {
     case .cardioEndurance:

@@ -28,8 +28,11 @@ struct TodayInsightTimelineProvider: AppIntentTimelineProvider {
       return TodayInsightEntry(
         date: Date(),
         relevance: nil,
-        title: "Today's Advice",
-        content: "Get simple, personalized advice each morning and sleep recommendations each evening to help you thrive with Bloom Plus.",
+        title: String(localized: "Today's Advice", comment: "Today Insight widget title"),
+        content: String(
+          localized: "Get simple, personalized advice each morning and sleep recommendations each evening to help you thrive with Bloom Plus.",
+          comment: "Today Insight widget copy shown to people without a subscription"
+        ),
         symbol: .sparkles,
         color: .mutedOrange,
         contentType: .advice,
@@ -43,8 +46,11 @@ struct TodayInsightTimelineProvider: AppIntentTimelineProvider {
       return TodayInsightEntry(
         date: Date(),
         relevance: nil,
-        title: "Today's Advice",
-        content: "Focus on getting at least 20 minutes of moderate cardio today to support your VO2 max goals.",
+        title: String(localized: "Today's Advice", comment: "Today Insight widget title"),
+        content: String(
+          localized: "Focus on getting at least 20 minutes of moderate cardio today to support your VO2 max goals.",
+          comment: "Sample advice shown in the widget gallery"
+        ),
         symbol: .sunHorizonFill,
         color: .mutedOrange,
         contentType: .advice,
@@ -61,7 +67,7 @@ struct TodayInsightTimelineProvider: AppIntentTimelineProvider {
         return TodayInsightEntry(
           date: Date(),
           relevance: nil,
-          title: "Tonight's Sleep",
+          title: String(localized: "Tonight's Sleep", comment: "Today Insight widget title"),
           content: content.tonightsSleepRecommendations,
           symbol: .moonZzzFill,
           color: .mutedIndigo,
@@ -74,7 +80,7 @@ struct TodayInsightTimelineProvider: AppIntentTimelineProvider {
         return TodayInsightEntry(
           date: Date(),
           relevance: nil,
-          title: "Today's Advice",
+          title: String(localized: "Today's Advice", comment: "Today Insight widget title"),
           content: content.todaysAdvice,
           symbol: .sunHorizonFill,
           color: .mutedOrange,
@@ -104,8 +110,11 @@ struct TodayInsightTimelineProvider: AppIntentTimelineProvider {
       let entry = TodayInsightEntry(
         date: now,
         relevance: nil,
-        title: "Today's Advice",
-        content: "Get simple, personalized advice each morning and sleep recommendations each evening to help you thrive with Bloom Plus.",
+        title: String(localized: "Today's Advice", comment: "Today Insight widget title"),
+        content: String(
+          localized: "Get simple, personalized advice each morning and sleep recommendations each evening to help you thrive with Bloom Plus.",
+          comment: "Today Insight widget copy shown to people without a subscription"
+        ),
         symbol: .sparkles,
         color: .mutedOrange,
         contentType: .advice,
@@ -119,8 +128,11 @@ struct TodayInsightTimelineProvider: AppIntentTimelineProvider {
       let entry = TodayInsightEntry(
         date: now,
         relevance: nil,
-        title: "Today's Advice",
-        content: "Open the app to load your advice for today.",
+        title: String(localized: "Today's Advice", comment: "Today Insight widget title"),
+        content: String(
+          localized: "Open the app to load your advice for today.",
+          comment: "Today Insight widget loading copy"
+        ),
         symbol: .sparkles,
         color: .mutedOrange,
         contentType: .advice,
@@ -187,8 +199,11 @@ struct TodayInsightTimelineProvider: AppIntentTimelineProvider {
       return TodayInsightEntry(
         date: Date(),
         relevance: nil,
-        title: "Today's Advice",
-        content: "Get simple, personalized advice each morning and sleep recommendations each evening to help you thrive with Bloom Plus.",
+        title: String(localized: "Today's Advice", comment: "Today Insight widget title"),
+        content: String(
+          localized: "Get simple, personalized advice each morning and sleep recommendations each evening to help you thrive with Bloom Plus.",
+          comment: "Today Insight widget copy shown to people without a subscription"
+        ),
         symbol: .sparkles,
         color: .mutedOrange,
         contentType: .advice,
@@ -202,8 +217,11 @@ struct TodayInsightTimelineProvider: AppIntentTimelineProvider {
       return TodayInsightEntry(
         date: Date(),
         relevance: nil,
-        title: "Today's Advice",
-        content: "Open the app to load your advice for today.",
+        title: String(localized: "Today's Advice", comment: "Today Insight widget title"),
+        content: String(
+          localized: "Open the app to load your advice for today.",
+          comment: "Today Insight widget loading copy"
+        ),
         symbol: .sparkles,
         color: .mutedOrange,
         contentType: .advice,
@@ -233,7 +251,7 @@ struct TodayInsightTimelineProvider: AppIntentTimelineProvider {
         return TodayInsightEntry(
           date: Date(),
           relevance: calculateRelevance(for: .sleep, settings: settings),
-          title: "Tonight's Sleep",
+          title: String(localized: "Tonight's Sleep", comment: "Today Insight widget title"),
           content: content.tonightsSleepRecommendations,
           symbol: .moonZzzFill,
           color: .mutedIndigo,
@@ -247,7 +265,7 @@ struct TodayInsightTimelineProvider: AppIntentTimelineProvider {
         return TodayInsightEntry(
           date: Date(),
           relevance: calculateRelevance(for: .advice, settings: settings),
-          title: "Today's Advice",
+          title: String(localized: "Today's Advice", comment: "Today Insight widget title"),
           content: content.todaysAdvice,
           symbol: .sunHorizonFill,
           color: .mutedOrange,
@@ -271,7 +289,7 @@ struct TodayInsightTimelineProvider: AppIntentTimelineProvider {
       return TodayInsightEntry(
         date: date,
         relevance: calculateRelevance(for: .sleep, at: date, settings: settings),
-        title: "Tonight's Sleep",
+        title: String(localized: "Tonight's Sleep", comment: "Today Insight widget title"),
         content: content.tonightsSleepRecommendations,
         symbol: .moonZzzFill,
         color: .mutedIndigo,
@@ -285,7 +303,7 @@ struct TodayInsightTimelineProvider: AppIntentTimelineProvider {
       return TodayInsightEntry(
         date: date,
         relevance: calculateRelevance(for: .advice, at: date, settings: settings),
-        title: "Today's Advice",
+        title: String(localized: "Today's Advice", comment: "Today Insight widget title"),
         content: content.todaysAdvice,
         symbol: .sunHorizonFill,
         color: .mutedOrange,

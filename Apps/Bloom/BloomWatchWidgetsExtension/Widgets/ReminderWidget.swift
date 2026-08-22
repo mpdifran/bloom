@@ -120,16 +120,15 @@ struct ReminderEntry: TimelineEntry {
 
   var timeText: String {
     guard let reminder else { return "" }
-    let formatter = DateFormatter()
-    formatter.dateFormat = "h:mm a"
-    return formatter.string(from: reminder.scheduledTime)
+    // Shared short time style - follows the locale and the user's 12/24-hour setting.
+    return DateFormatter.justTimeShort.string(from: reminder.scheduledTime)
   }
 
   var statusText: String {
     guard let reminder else { return "" }
     switch reminder.status {
     case .dueNow:
-      return "Due now"
+      return String(localized: "Due now", comment: "Watch reminder widget status")
     case .overdue:
       return timeText
     case .upcoming, .completed:

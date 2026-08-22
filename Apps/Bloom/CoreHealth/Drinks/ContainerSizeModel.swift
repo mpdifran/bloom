@@ -42,20 +42,20 @@ public struct ContainerSizeModel: Identifiable, Hashable, Codable, Sendable {
 
     if liquidUnit == .literUnit(with: .milli) {
       if convertedValue >= 1000 {
-        return String(format: "%.1f L", convertedValue / 1000)
+        return "\((convertedValue / 1000).format(using: .oneDecimalPlace)) L"
       } else {
-        return String(format: "%.0f mL", convertedValue)
+        return "\(convertedValue.format(using: .noDecimalPlaces)) mL"
       }
     } else if liquidUnit == .fluidOunceUS() {
       if convertedValue < 10 {
-        return String(format: "%.1f fl oz", convertedValue)
+        return "\(convertedValue.format(using: .oneDecimalPlace)) fl oz"
       } else {
-        return String(format: "%.0f fl oz", convertedValue)
+        return "\(convertedValue.format(using: .noDecimalPlaces)) fl oz"
       }
     } else if liquidUnit == .liter() {
-      return String(format: "%.2f L", convertedValue)
+      return "\(convertedValue.format(using: .twoDecimalPlaces)) L"
     } else {
-      return String(format: "%.1f %@", convertedValue, liquidUnit.sensibleUnitString)
+      return "\(convertedValue.format(using: .oneDecimalPlace)) \(liquidUnit.sensibleUnitString)"
     }
   }
 }
@@ -65,15 +65,15 @@ public struct ContainerSizeModel: Identifiable, Hashable, Codable, Sendable {
 public extension ContainerSizeModel {
 
   static let defaults: [ContainerSizeModel] = [
-    ContainerSizeModel(name: "Shot", volumeML: 30, shapeType: .shotGlass, isSystemDefault: true),
-    ContainerSizeModel(name: "Small Glass", volumeML: 150, shapeType: .glass, isSystemDefault: true),
-    ContainerSizeModel(name: "Glass", volumeML: 250, shapeType: .glass, isSystemDefault: true),
-    ContainerSizeModel(name: "Large Glass", volumeML: 350, shapeType: .glass, isSystemDefault: true),
-    ContainerSizeModel(name: "Can", volumeML: 355, shapeType: .can, isSystemDefault: true),
-    ContainerSizeModel(name: "Bottle", volumeML: 500, shapeType: .waterBottle, isSystemDefault: true),
-    ContainerSizeModel(name: "Pint", volumeML: 473, shapeType: .beerGlass, isSystemDefault: true),
-    ContainerSizeModel(name: "Large Bottle", volumeML: 750, shapeType: .waterBottle, isSystemDefault: true),
-    ContainerSizeModel(name: "Liter", volumeML: 1000, shapeType: .waterBottle, isSystemDefault: true)
+    ContainerSizeModel(name: String(localized: "Shot", bundle: Bundle.coreHealth, comment: "Name of a built-in drink container size"), volumeML: 30, shapeType: .shotGlass, isSystemDefault: true),
+    ContainerSizeModel(name: String(localized: "Small Glass", bundle: Bundle.coreHealth, comment: "Name of a built-in drink container size"), volumeML: 150, shapeType: .glass, isSystemDefault: true),
+    ContainerSizeModel(name: String(localized: "Glass", bundle: Bundle.coreHealth, comment: "Name of a built-in drink container size"), volumeML: 250, shapeType: .glass, isSystemDefault: true),
+    ContainerSizeModel(name: String(localized: "Large Glass", bundle: Bundle.coreHealth, comment: "Name of a built-in drink container size"), volumeML: 350, shapeType: .glass, isSystemDefault: true),
+    ContainerSizeModel(name: String(localized: "Can", bundle: Bundle.coreHealth, comment: "Name of a built-in drink container size"), volumeML: 355, shapeType: .can, isSystemDefault: true),
+    ContainerSizeModel(name: String(localized: "Bottle", bundle: Bundle.coreHealth, comment: "Name of a built-in drink container size"), volumeML: 500, shapeType: .waterBottle, isSystemDefault: true),
+    ContainerSizeModel(name: String(localized: "Pint", bundle: Bundle.coreHealth, comment: "Name of a built-in drink container size"), volumeML: 473, shapeType: .beerGlass, isSystemDefault: true),
+    ContainerSizeModel(name: String(localized: "Large Bottle", bundle: Bundle.coreHealth, comment: "Name of a built-in drink container size"), volumeML: 750, shapeType: .waterBottle, isSystemDefault: true),
+    ContainerSizeModel(name: String(localized: "Liter", bundle: Bundle.coreHealth, comment: "Name of a built-in drink container size"), volumeML: 1000, shapeType: .waterBottle, isSystemDefault: true)
   ]
 }
 

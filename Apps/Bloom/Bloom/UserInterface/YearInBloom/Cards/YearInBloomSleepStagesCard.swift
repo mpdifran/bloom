@@ -187,9 +187,10 @@ private extension YearInBloomSleepStagesCard {
       minutesFromMidnight -= 1440
     }
     let hours = Int(minutesFromMidnight) / 60
-    let period = hours >= 12 ? "PM" : "AM"
-    let displayHour = hours == 0 ? 12 : (hours > 12 ? hours - 12 : hours)
-    return "\(displayHour)\(period)"
+    // Locale-aware hour: the hand-built "11PM" string showed English AM/PM in every language
+    // and ignored 24-hour locales.
+    guard let date = Calendar.current.date(from: DateComponents(hour: hours)) else { return "" }
+    return date.formatted(.dateTime.hour())
   }
 
   var legendView: some View {
@@ -231,15 +232,14 @@ private extension YearInBloomSleepStagesCard {
   }
 
   func monthName(for date: Date) -> String {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "MMM"
-    return formatter.string(from: date)
+    // Locale-aware month name; a fixed "MMM" pattern rendered English months in every language.
+    date.formatted(.dateTime.month(.abbreviated))
   }
 
   func formatScheduleDuration(_ minutes: Double) -> String {
-    let hours = Int(minutes) / 60
-    let mins = Int(minutes) % 60
-    return "\(hours)h \(mins)m"
+    // Locale-aware duration: hand-built "3h 45m" hardcoded English unit abbreviations.
+    Duration.seconds(Int(minutes) * 60)
+      .formatted(.units(allowed: [.hours, .minutes], width: .narrow))
   }
 
   var scoreStatView: some View {
@@ -304,9 +304,9 @@ private extension YearInBloomSleepStagesCard {
 
   var formattedAverageSleepDuration: String {
     let totalMinutes = stats.yearTotals.averageSleepDurationMinutes
-    let hours = Int(totalMinutes) / 60
-    let minutes = Int(totalMinutes) % 60
-    return "\(hours)h \(minutes)m"
+    // Locale-aware duration: hand-built "3h 45m" hardcoded English unit abbreviations.
+    return Duration.seconds(Int(totalMinutes) * 60)
+      .formatted(.units(allowed: [.hours, .minutes], width: .narrow))
   }
 
   var monthlyChartData: [MonthlySleepStageChartData] {

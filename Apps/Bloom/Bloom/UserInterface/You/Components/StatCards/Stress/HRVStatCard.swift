@@ -33,7 +33,7 @@ struct HRVStatCard: View {
     StatCard(
       symbol: .waveformPathEcg,
       title: "HRV",
-      value: formattedHRV ?? "No Data",
+      value: formattedHRV ?? String(localized: "No Data", comment: "Stat card value shown when there is no data"),
       valueStyle: .largeTinted(data?.trendText),
       trend: statCardTrend
     ) {
@@ -107,13 +107,9 @@ private extension HRVStatCard {
   }
 
   func hourLabel(for hour: Int) -> String {
-    switch hour {
-    case 0: "12a"
-    case 6: "6a"
-    case 12: "12p"
-    case 18: "6p"
-    default: "\(hour)"
-    }
+    // Locale-aware: hardcoded "12a"/"6p" labels forced English 12-hour markers on 24-hour locales.
+    guard let date = Calendar.current.date(from: DateComponents(hour: hour)) else { return "\(hour)" }
+    return date.formatted(.dateTime.hour())
   }
 }
 

@@ -37,7 +37,9 @@ struct NetEnergyMathView: View {
 
 private struct EnergyLabelView: View {
     let energy: Double
-    let name: String
+    /// LocalizedStringKey, not String: a String literal is passed straight to Text without a
+    /// catalog lookup, so each energy label rendered in English regardless of language.
+    let name: LocalizedStringKey
 
     var body: some View {
         VStack {

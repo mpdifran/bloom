@@ -119,7 +119,10 @@ private extension OnboardingUserDetailsView {
     let currentYear = Calendar.current.component(.year, from: .now)
     let age = currentYear - birthYear
     if age < 18 {
-      return "You must be at least 18 years old to use Bloom."
+      return String(
+        localized: "You must be at least 18 years old to use Bloom.",
+        comment: "Shown during onboarding when the entered birth year makes the user under 18."
+      )
     }
     return nil
   }

@@ -56,22 +56,24 @@ struct WatchReminderCell: View {
     .disabled(isProcessing)
   }
 
+  // Shared short time style - follows the locale and the user's 12/24-hour setting.
+  private var scheduledTimeText: String {
+    DateFormatter.justTimeShort.string(from: reminder.scheduledTime)
+  }
+
   private var statusText: String {
     switch reminder.status {
     case .completed:
-      let formatter = DateFormatter()
-      formatter.dateFormat = "h:mm a"
-      return formatter.string(from: reminder.scheduledTime)
+      return scheduledTimeText
     case .dueNow:
-      return "Due now"
+      return String(localized: "Due now", comment: "Reminder status when it is due right now")
     case .overdue:
-      let formatter = DateFormatter()
-      formatter.dateFormat = "h:mm a"
-      return "Overdue \(formatter.string(from: reminder.scheduledTime))"
+      return String(
+        localized: "Overdue \(scheduledTimeText)",
+        comment: "Reminder status with the time it was due"
+      )
     case .upcoming:
-      let formatter = DateFormatter()
-      formatter.dateFormat = "h:mm a"
-      return formatter.string(from: reminder.scheduledTime)
+      return scheduledTimeText
     @unknown default:
       return ""
     }

@@ -16,7 +16,7 @@ struct ActiveEnergyStatCard: View {
         symbol: .flameFill,
         title: "Active Energy",
         value: formattedValue,
-        valueStyle: .largeTinted("7 day avg")
+        valueStyle: .largeTinted(String(localized: "7 day avg", comment: "Stat card subtitle: the value is a seven day average"))
       ) {
         barChart
       }
@@ -25,7 +25,7 @@ struct ActiveEnergyStatCard: View {
       StatCard(
         symbol: .flameFill,
         title: "Active Energy",
-        value: "No Data",
+        value: String(localized: "No Data", comment: "Stat card value shown when there is no data"),
         valueStyle: .largeTinted(nil)
       )
       .tint(.gray)
@@ -36,7 +36,7 @@ struct ActiveEnergyStatCard: View {
 private extension ActiveEnergyStatCard {
 
   var formattedValue: String {
-    guard let data else { return "No Data" }
+    guard let data else { return String(localized: "No Data", comment: "Stat card value shown when there is no data") }
     return "\(Int(data.average)) cal"
   }
 

@@ -160,16 +160,16 @@ struct EditContainerView: View {
   private var displayVolume: String {
     if useMetric {
       if volumeML >= 1000 {
-        return String(format: "%.1f L", volumeML / 1000)
+        return "\((volumeML / 1000).formatted(.number.precision(.fractionLength(1)))) L"
       } else {
         return "\(Int(volumeML)) mL"
       }
     } else {
       let flOz = volumeML / 29.5735
       if flOz < 10 {
-        return String(format: "%.1f fl oz", flOz)
+        return "\(flOz.formatted(.number.precision(.fractionLength(1)))) fl oz"
       } else {
-        return String(format: "%.0f fl oz", flOz)
+        return "\(flOz.formatted(.number.precision(.fractionLength(0)))) fl oz"
       }
     }
   }

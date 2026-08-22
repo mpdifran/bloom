@@ -133,12 +133,9 @@ private struct WorkoutDetailCard: View {
   }
 
   private var formattedDuration: String {
-    let hours = Int(durationMinutes / 60)
-    let minutes = Int(durationMinutes.truncatingRemainder(dividingBy: 60))
-    if hours > 0 {
-      return "\(hours)h \(minutes)m"
-    }
-    return "\(minutes)m"
+    // Locale-aware duration: hand-built "3h 45m" hardcoded English unit abbreviations.
+    return Duration.seconds(Int(durationMinutes) * 60)
+      .formatted(.units(allowed: [.hours, .minutes], width: .narrow))
   }
 
   private var formattedWorkoutCount: String {
@@ -160,7 +157,7 @@ private struct WorkoutDetailCard: View {
     if km >= 100 {
       return "\(Int(km)) km"
     }
-    return String(format: "%.1f km", km)
+    return "\(km.formatted(.number.precision(.fractionLength(1)))) km"
   }
 
   private var zoneMinutesValue: Double? {

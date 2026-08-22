@@ -198,18 +198,18 @@ private extension MonitorCard {
 
   var subtitleText: String {
     if result.state == .unavailable {
-      return "Insufficient data"
+      return String(localized: "Insufficient data", comment: "Monitor card subtitle when there is not enough data to evaluate")
     }
 
     if result.state == .encourage {
-      return "Ready when you are"
+      return String(localized: "Ready when you are", comment: "Monitor card subtitle when the monitor is idle and waiting")
     }
 
     // Get signals with significant deviations (|zScore| > 1.0)
     let significantSignals = result.signals.filter { abs($0.zScore) > 1.0 }
 
     if significantSignals.isEmpty {
-      return "All metrics typical"
+      return String(localized: "All metrics typical", comment: "Monitor card subtitle when no metric deviates from baseline")
     }
 
     // Format as "HRV low, RHR high"
@@ -217,13 +217,16 @@ private extension MonitorCard {
       let directionText: String
       switch signal.direction {
       case .higher:
-        directionText = "high"
+        directionText = String(localized: "high", comment: "Direction of a monitor signal deviation, shown after a metric name")
       case .lower:
-        directionText = "low"
+        directionText = String(localized: "low", comment: "Direction of a monitor signal deviation, shown after a metric name")
       case .variable:
-        directionText = "variable"
+        directionText = String(localized: "variable", comment: "Direction of a monitor signal deviation, shown after a metric name")
       }
-      return "\(signal.metricType.shortName) \(directionText)"
+      return String(
+        localized: "\(signal.metricType.shortName) \(directionText)",
+        comment: "Monitor card subtitle item pairing a metric short name with its deviation direction, e.g. 'HRV low'"
+      )
     }
 
     return summaries.joined(separator: ", ")

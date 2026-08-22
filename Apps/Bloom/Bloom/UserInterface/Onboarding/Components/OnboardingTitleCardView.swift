@@ -10,13 +10,13 @@ import SwiftUI
 
 struct OnboardingTitleCardView: View {
   let symbol: SFSymbol
-  let title: String
-  let message: String
+  let title: LocalizedStringKey
+  let message: LocalizedStringKey
 
   init(
     symbol: SFSymbol = .handRaisedCircleFill,
-    title: String,
-    message: String
+    title: LocalizedStringKey,
+    message: LocalizedStringKey
   ) {
     self.symbol = symbol
     self.title = title

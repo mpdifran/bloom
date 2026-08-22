@@ -8,13 +8,17 @@
 import SwiftUI
 
 struct VitalDetailChartTitleView: View {
-    let title: String
+    /// LocalizedStringKey, not String: a String literal is passed straight to Text without a
+    /// catalog lookup, so every chart title rendered in English regardless of language.
+    let title: LocalizedStringKey
+    /// Stays String: callers pass already-localized values such as
+    /// `StatTimePeriod.comparisonPeriodLabel`.
     let valueLabel: String
     let value: String
 
     init(
-        title: String,
-        valueLabel: String = "AVG",
+        title: LocalizedStringKey,
+        valueLabel: String = String(localized: "AVG", comment: "Chart header label for an average value"),
         value: String
     ) {
         self.title = title

@@ -454,9 +454,8 @@ private extension HeartHealthStoryPage {
   }
 
   func monthName(for date: Date) -> String {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "MMMM"
-    return formatter.string(from: date)
+    // Locale-aware month name; a fixed "MMMM" pattern rendered English months in every language.
+    date.formatted(.dateTime.month(.wide))
   }
 }
 

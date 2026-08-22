@@ -24,7 +24,9 @@ enum StatCardTrend {
 
 struct StatCard<Content>: View where Content: View {
   let symbol: SFSymbol
-  let title: String
+  /// LocalizedStringKey, not String: a String literal goes straight to Text with no catalog
+  /// lookup, so every stat card title rendered in English regardless of language.
+  let title: LocalizedStringKey
   let value: String?
   let valueStyle: StatCardValueStyle
   let trend: StatCardTrend?
@@ -35,7 +37,7 @@ struct StatCard<Content>: View where Content: View {
 
   init(
     symbol: SFSymbol,
-    title: String,
+    title: LocalizedStringKey,
     value: String? = nil,
     valueStyle: StatCardValueStyle = .leadingStandard,
     trend: StatCardTrend? = nil,
@@ -201,7 +203,7 @@ extension StatCard where Content == EmptyView {
 
   init(
     symbol: SFSymbol,
-    title: String,
+    title: LocalizedStringKey,
     value: String? = nil,
     valueStyle: StatCardValueStyle = .leadingStandard,
     trend: StatCardTrend? = nil,

@@ -87,13 +87,13 @@ private extension TrainingLoadChartView {
       } label: {
         VStack(alignment: .trailing) {
           HStack(spacing: 4) {
-            Text(summary.status.rawValue)
+            Text(summary.status.displayName)
             Image(systemSymbol: .infoCircle)
               .font(.body)
           }
           .foregroundStyle(.blue)
 
-          Text(String(format: "%+.0f%%", summary.percentageDifference))
+          Text(summary.percentageDifference.formatted(.number.precision(.fractionLength(0)).sign(strategy: .always())) + "%")
             .foregroundStyle(.text.secondary)
         }
       }
