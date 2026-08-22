@@ -63,4 +63,6 @@ let allMigrations: [Migration] = [
   UserConsentRecord.AddMonitorConsent(),
   UserConsentRecord.AddLifestyleConsent(),
   User.AddSIWATransferFields(),
+  WebDomainReputation.Create(),
+  WebDomainReputation.AddVerdictIndexes(),
 ]

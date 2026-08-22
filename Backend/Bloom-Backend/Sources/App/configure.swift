@@ -44,6 +44,7 @@ public func configure(_ app: Application) async throws {
 
   // Commands
   app.asyncCommands.use(SIWAMigrationCommand(), as: "siwa-migrate")
+  app.asyncCommands.use(SeedWebDomainBlocklistCommand(), as: "seed-web-blocklist")
 
   // APNs
   try app.configureAPNs()

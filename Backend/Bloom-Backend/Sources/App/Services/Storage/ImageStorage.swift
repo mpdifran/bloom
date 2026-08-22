@@ -18,6 +18,9 @@ enum StoragePath: String {
   case chatImages = "chat-images"
   case magicScanner = "magic-scanner"
   case saleImages = "sale-images"
+  /// Site icons for web search citations. Public, like sale images - they are fetched by the app
+  /// while rendering a chat message, and there is nothing user-specific about them.
+  case favicons = "favicons"
 }
 
 protocol ImageStorage: Sendable {
