@@ -18,11 +18,11 @@ import Redis
 
 final class ChatService: Sendable {
 
-  private let application: Application
+  let application: Application
   private let openAIService: OpenAIService
   private let chatHistory: ChatHistory
   private let toolCallTracker: ToolCallTracker
-  private let logger: Logger
+  let logger: Logger
 
   init(
     application: Application,
@@ -43,6 +43,7 @@ final class ChatService: Sendable {
   private let jsonBuffer = StreamJSONBuffer()
   private let typingStateTracker = TypingStateTracker()
   private let requestIDTracker = RequestIDTracker()
+  private let citationTracker = CitationTracker()
 }
 
 // MARK: - Public Methods
@@ -183,7 +184,8 @@ private extension ChatService {
       clientLastMessageID: message.lastMessageID,
       conversationID: message.conversationID,
       locale: message.locale,
-      interfaceLocale: message.interfaceLocale
+      interfaceLocale: message.interfaceLocale,
+      protocolVersion: message.protocolVersion
     )
   }
 
@@ -221,7 +223,8 @@ private extension ChatService {
       clientLastMessageID: response.lastMessageID,
       conversationID: response.conversationID,
       locale: response.locale,
-      interfaceLocale: response.interfaceLocale
+      interfaceLocale: response.interfaceLocale,
+      protocolVersion: response.protocolVersion
     )
   }
 }
@@ -240,7 +243,8 @@ private extension ChatService {
     clientLastMessageID: String?,
     conversationID: String?,
     locale: String?,
-    interfaceLocale: String?
+    interfaceLocale: String?,
+    protocolVersion: Int?
   ) async throws {
 
     if isRetry {
@@ -267,9 +271,22 @@ private extension ChatService {
       shouldIncludeTools = true
     }
 
-    let tools: [OpenAIKit.Response.Tool] = shouldIncludeTools ? [
-      Response.Tool.function(.queryUserHealthData)
-    ] : []
+    // Web search is gated on the protocol version rather than the app version: a client that
+    // declares version 1 can render the citations OpenAI requires web results to carry, and one
+    // that declares nothing cannot. The feature flag is the second half of the gate.
+    let canRenderSources = (protocolVersion ?? 0) >= 1
+    let webSearchEnabled = application.webSearchEnabled && canRenderSources
+
+    var tools = [OpenAIKit.Response.Tool]()
+    if shouldIncludeTools {
+      tools.append(.function(.queryUserHealthData))
+
+      if webSearchEnabled {
+        // `.low` context keeps the retrieved page content - billed as ordinary input tokens - from
+        // dwarfing the tool fee itself.
+        tools.append(.webSearch(.init(searchContextSize: .low)))
+      }
+    }
 
     let selectedModel = modelOverride ?? modelID
 
@@ -288,6 +305,7 @@ private extension ChatService {
     logger.debug("Streaming with model \(selectedModel.id)")
     let stream = try await openAIService.openAI.responses.createAndStreamResponse(
       input: fortifiedInputs,
+      maxToolCalls: webSearchEnabled ? application.maxWebSearchesPerResponse : nil,
       model: selectedModel,
       instructions: instructions,
       previousResponseID: previousResponseID,
@@ -318,7 +336,8 @@ private extension ChatService {
         clientLastMessageID: clientLastMessageID,
         conversationID: conversationID,
         locale: locale,
-        interfaceLocale: interfaceLocale
+        interfaceLocale: interfaceLocale,
+        protocolVersion: protocolVersion
       )
     }
 
@@ -328,16 +347,30 @@ private extension ChatService {
         case .created(let event):
           await jsonBuffer.resetIndex(for: userID)
           await typingStateTracker.reset(for: userID)
+          await citationTracker.reset(for: userID)
           await requestIDTracker.setCurrentResponseID(event.response.id, for: userID)
         case .inProgress:
           try await sendIsAssistantTyping(isTyping: true, userID: userID, conversationID: conversationID)
         case .completed(let event):
           await application.aiUsageLimiter.record(
-            model: modelID,
+            model: selectedModel,
             inputTokens: event.response.usage?.inputTokens ?? 0,
             outputTokens: event.response.usage?.outputTokens ?? 0,
             for: userID
           )
+
+          // Web search is billed per call as a flat fee that `Response.Usage` never reports, so
+          // without charging it explicitly the entire cost of the feature escapes the budget.
+          let searchCount = event.response.output.count {
+            if case .webSearchToolCall = $0 { return true } else { return false }
+          }
+          if searchCount > 0 {
+            await application.aiUsageLimiter.record(
+              microdollars: application.webSearchCostMicrodollars * searchCount,
+              for: userID
+            )
+            logger.debug("Charged \(searchCount) web search(es) for \(userID.value)")
+          }
           if toolCalls.isNotEmpty {
             try await send(toolCalls: toolCalls, userID: userID, db: db, conversationID: conversationID, lastMessageID: event.response.id)
           }
@@ -349,6 +382,14 @@ private extension ChatService {
           try await sendIsAssistantTyping(isTyping: false, userID: userID, conversationID: conversationID)
           if toolCalls.isEmpty {
             try await sendResponseCompleted(userID: userID, db: db, lastMessageID: event.response.id, conversationID: conversationID)
+          }
+        case .webSearchCallInProgress, .webSearchCallSearching:
+          // A search runs for several seconds and produces no text while it does. Without this the
+          // client shows nothing at all, which reads as the app having frozen.
+          try await sendIsAssistantTyping(isTyping: true, userID: userID, conversationID: conversationID)
+        case .outputTextAnnotationAdded(let event):
+          if case .urlCitation(let citation) = event.annotation {
+            await citationTracker.record(citation, itemID: event.itemId, for: userID)
           }
         case .failed:
           try await sendIsAssistantTyping(isTyping: false, userID: userID, conversationID: conversationID)
@@ -474,6 +515,18 @@ private extension ChatService {
     let currentRequestID = await requestIDTracker.getCurrentRequestID(for: userID)
     let currentResponseID = await requestIDTracker.getCurrentResponseID(for: userID)
 
+    // Citations are reported against the model's full output, which no longer lines up once the
+    // text has been split for sending - so resolve them onto partitions here, and attach each
+    // group to the message it actually supports.
+    let citations = await citationTracker.citations(forItem: event.itemId, userID: userID)
+    let sourcesByPartition = await sources(
+      forCitations: citations,
+      in: event.text,
+      partitions: partitions,
+      db: db
+    )
+    await citationTracker.clear(itemID: event.itemId, for: userID)
+
     for partition in partitions {
       switch partition {
       case .text(let index, let content):
@@ -483,7 +536,8 @@ private extension ChatService {
           message: content,
           requestID: currentRequestID,
           responseID: currentResponseID,
-          conversationID: conversationID
+          conversationID: conversationID,
+          sources: sourcesByPartition[index]
         )
         try await ensureContentSent(
           response,

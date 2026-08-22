@@ -215,6 +215,32 @@ extension Application {
     Environment.get("AI_COST_DAILY_LIMIT_MICRODOLLARS").flatMap(Int.init) ?? 250_000
   }
 
+  /// Whether the assistant may search the web. Configure via `WEB_SEARCH_ENABLED`.
+  ///
+  /// Off by default so rollout and kill are configuration rather than a deploy. Note this is only
+  /// half the gate: a client also has to declare `protocolVersion` 1 or higher, meaning it can
+  /// render the citations that web results are required to carry.
+  var webSearchEnabled: Bool {
+    Environment.get("WEB_SEARCH_ENABLED").flatMap { Bool($0) } ?? false
+  }
+
+  /// How many searches a single response may run. Configure via `MAX_WEB_SEARCHES_PER_RESPONSE`.
+  ///
+  /// Each search carries a flat tool fee that token accounting never sees, so without a ceiling one
+  /// response can spend without bound. `ToolCallTracker` does not cover this - it counts only the
+  /// tool calls that round-trip to the client.
+  var maxWebSearchesPerResponse: Int {
+    Environment.get("MAX_WEB_SEARCHES_PER_RESPONSE").flatMap(Int.init) ?? 2
+  }
+
+  /// What OpenAI charges per web search, in µ$. Configure via `WEB_SEARCH_COST_MICRODOLLARS`.
+  ///
+  /// $2.50 per 1,000 calls. Charged explicitly because `Response.Usage` reports tokens only, so
+  /// without this the whole cost of the feature escapes the per-user budget.
+  var webSearchCostMicrodollars: Int {
+    Environment.get("WEB_SEARCH_COST_MICRODOLLARS").flatMap(Int.init) ?? 2_500
+  }
+
   /// Max AI spend for a single user per rolling month, in µ$. Configure via `AI_COST_MONTHLY_LIMIT_MICRODOLLARS`.
   /// Default is $2.00/month — roughly 5x a typical active user, so it only catches runaway usage.
   var aiCostMonthlyLimit: Int {
