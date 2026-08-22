@@ -7,6 +7,7 @@
 
 import UIKit
 import SwiftUI
+import BloomModel
 import ChatLayout
 import DataContainer
 
@@ -55,7 +56,14 @@ class ChatMessageCollectionViewCell: UICollectionViewCell {
     updateHostingController(with: AnyView(view))
   }
   
-  func configure(with content: String, isCurrentUser: Bool, isLastInResponse: Bool, responseID: String? = nil, requestID: String? = nil) {
+  func configure(
+    with content: String,
+    isCurrentUser: Bool,
+    isLastInResponse: Bool,
+    responseID: String? = nil,
+    requestID: String? = nil,
+    sources: [SocketMessage.SourceRef] = []
+  ) {
     let view = ChatBubbleCell(
       message: content,
       isDirect: false,
@@ -63,7 +71,8 @@ class ChatMessageCollectionViewCell: UICollectionViewCell {
       showTail: true,
       showReportButton: isLastInResponse,
       responseID: responseID,
-      requestID: requestID
+      requestID: requestID,
+      sources: sources
     )
 
     updateHostingController(with: AnyView(view))

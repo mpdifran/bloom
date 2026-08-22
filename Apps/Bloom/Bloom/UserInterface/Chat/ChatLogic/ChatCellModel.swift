@@ -22,6 +22,9 @@ struct ChatMessageMetadata: Hashable, Sendable {
   let requestID: String?
   let responseID: String?
   let showReportButton: Bool
+  /// Web pages this message drew on. Nil for anything answered without a search, which is most
+  /// messages - so the footer is absent rather than empty.
+  let sources: [SocketMessage.SourceRef]?
 }
 
 // Processed rich content data to avoid async loading in UI

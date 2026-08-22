@@ -274,7 +274,7 @@ private extension ChatService {
     // Web search is gated on the protocol version rather than the app version: a client that
     // declares version 1 can render the citations OpenAI requires web results to carry, and one
     // that declares nothing cannot. The feature flag is the second half of the gate.
-    let canRenderSources = (protocolVersion ?? 0) >= 1
+    let canRenderSources = (protocolVersion ?? 0) >= SocketMessage.currentProtocolVersion
     let webSearchEnabled = application.webSearchEnabled && canRenderSources
 
     var tools = [OpenAIKit.Response.Tool]()

@@ -139,7 +139,10 @@ actor ChatHistoryModifier {
         dbID: message.dbID,
         requestID: message.requestID,
         responseID: message.responseID,
-        showReportButton: showReportButton
+        showReportButton: showReportButton,
+        sources: message.sources.flatMap {
+          try? JSONDecoder.bloomModel.decode([SocketMessage.SourceRef].self, from: $0)
+        }
       )
       
       switch message.content {

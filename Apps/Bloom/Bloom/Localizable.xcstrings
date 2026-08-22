@@ -53218,6 +53218,76 @@
     },
     "Zones" : {
 
+    },
+    "Sources" : {
+      "comment" : "Button and sheet title listing the web pages an assistant answer used",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quellen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fuentes"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sources"
+          }
+        },
+        "fr-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sources"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bronnen"
+          }
+        }
+      }
+    },
+    "Shows the web pages this answer used" : {
+      "comment" : "Accessibility hint for the sources button under an assistant message",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeigt die Webseiten, die für diese Antwort verwendet wurden"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muestra las páginas web utilizadas en esta respuesta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Affiche les pages web utilisées pour cette réponse"
+          }
+        },
+        "fr-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Affiche les pages web utilisées pour cette réponse"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toont de webpagina’s die voor dit antwoord zijn gebruikt"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

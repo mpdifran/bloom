@@ -10,7 +10,7 @@ public extension SocketMessage {
   ///
   /// OpenAI requires that web results shown to a user carry a visible, clickable citation, so
   /// anything the assistant says off the back of a search has to arrive with these.
-  struct SourceRef: Codable, Equatable, Sendable, Identifiable {
+  struct SourceRef: Codable, Hashable, Sendable, Identifiable {
     /// Stable within a message, so the client can diff without reaching for the URL.
     public let id: String
     public let url: String

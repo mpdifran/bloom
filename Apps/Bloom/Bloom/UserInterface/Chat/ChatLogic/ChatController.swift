@@ -251,7 +251,8 @@ extension ChatController {
       lastMessageID: lastMessageID,
       conversationID: resolvedConversationID,
       locale: ChatLanguage.proseTag,
-      interfaceLocale: ChatLanguage.interfaceTag
+      interfaceLocale: ChatLanguage.interfaceTag,
+      protocolVersion: SocketMessage.currentProtocolVersion
     )
 
     let socket = await createOrGetWebSocketHandle()
@@ -314,7 +315,8 @@ extension ChatController {
       lastMessageID: lastMessageID,
       conversationID: resolvedConversationID,
       locale: ChatLanguage.proseTag,
-      interfaceLocale: ChatLanguage.interfaceTag
+      interfaceLocale: ChatLanguage.interfaceTag,
+      protocolVersion: SocketMessage.currentProtocolVersion
     )
 
     let socket = await createOrGetWebSocketHandle()
@@ -386,6 +388,7 @@ private extension ChatController {
           message: messageResponse.message,
           responseID: messageResponse.responseID,
           requestID: messageResponse.requestID,
+          sources: messageResponse.sources.flatMap { try? encoder.encode($0) },
           conversation: conversationModel
         )
         try await saveMessage(message)

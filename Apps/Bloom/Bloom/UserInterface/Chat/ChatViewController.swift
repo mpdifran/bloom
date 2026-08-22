@@ -439,7 +439,14 @@ extension ChatViewController {
       let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChatMessageCell", for: indexPath) as! ChatMessageCollectionViewCell
       let isCurrentUser = metadata?.isCurrentUser ?? false
       let showReportButton = metadata?.showReportButton ?? false
-      cell.configure(with: content, isCurrentUser: isCurrentUser, isLastInResponse: showReportButton, responseID: metadata?.responseID, requestID: metadata?.requestID)
+      cell.configure(
+        with: content,
+        isCurrentUser: isCurrentUser,
+        isLastInResponse: showReportButton,
+        responseID: metadata?.responseID,
+        requestID: metadata?.requestID,
+        sources: metadata?.sources ?? []
+      )
       return cell
 
     case .image(_, let imageData, let metadata):

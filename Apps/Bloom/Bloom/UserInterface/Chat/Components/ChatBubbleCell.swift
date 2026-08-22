@@ -7,6 +7,7 @@
 
 import SwiftUI
 import BloomUI
+import BloomModel
 
 public struct ChatBubbleCell: View {
   let message: String
@@ -16,6 +17,7 @@ public struct ChatBubbleCell: View {
   let showReportButton: Bool
   let responseID: String?
   let requestID: String?
+  let sources: [SocketMessage.SourceRef]
 
   public init(
     message: String,
@@ -24,7 +26,8 @@ public struct ChatBubbleCell: View {
     showTail: Bool,
     showReportButton: Bool = false,
     responseID: String? = nil,
-    requestID: String? = nil
+    requestID: String? = nil,
+    sources: [SocketMessage.SourceRef] = []
   ) {
     self.message = message
     self.isDirect = isDirect
@@ -33,9 +36,18 @@ public struct ChatBubbleCell: View {
     self.showReportButton = showReportButton
     self.responseID = responseID
     self.requestID = requestID
+    self.sources = sources
   }
 
   @State private var showReportSheet = false
+  @State private var showSourcesSheet = false
+  @State private var safariURL: URL?
+
+  /// Whether there is anything to put under the message. Without this an empty row still takes
+  /// padding, leaving a gap under every ordinary reply.
+  private var showsControlRow: Bool {
+    sources.isNotEmpty || (showReportButton && responseID != nil && requestID != nil)
+  }
 
   @Bindable private var themeController = ThemeController.shared
 
@@ -68,17 +80,47 @@ public struct ChatBubbleCell: View {
             }
           }
 
-        if showReportButton,
-           responseID != nil,
-           requestID != nil {
-          Button("Report a Problem") {
-            showReportSheet = true
+        if sources.isNotEmpty {
+          // Against the message rather than in the footer: OpenAI requires citations shown with
+          // the content they support to be visible and clickable, and a footer alone reads as
+          // belonging to the whole conversation.
+          FlowLayout(spacing: 6) {
+            ForEach(sources) { source in
+              ChatSourceChip(source: source) {
+                safariURL = URL(string: source.url)
+              }
+            }
           }
-          .bold()
-          .font(.caption)
+          .padding(.horizontal, 15)
+          .padding(.bottom, 2)
+        }
+
+        if showsControlRow {
+          HStack(spacing: 16) {
+            if showReportButton, responseID != nil, requestID != nil {
+              Button("Report a Problem") {
+                showReportSheet = true
+              }
+              .bold()
+              .font(.caption)
+            }
+
+            if sources.isNotEmpty {
+              ChatSourcesFooter(sources: sources) {
+                showSourcesSheet = true
+              }
+            }
+          }
           .padding(.horizontal, 15)
         }
       }
+    }
+    .sheet(isPresented: $showSourcesSheet) {
+      ChatSourcesSheet(sources: sources)
+    }
+    .fullScreenCover(item: $safariURL) { url in
+      ChatSafariView(url: url)
+        .ignoresSafeArea()
     }
     .fullScreenCover(isPresented: $showReportSheet) {
       if let responseID = responseID,
