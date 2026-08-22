@@ -1471,6 +1471,48 @@ raw value, use `rawValue` at the wire/analytics site instead.
 Before localizing a display property, grep its call sites for `TelemetryDeck.signal`, network request
 bodies, chat/AI payloads and SwiftData writes.
 
+### fr-CA does not fall back to fr
+
+There are two different localization fallbacks and only one of them chains by language:
+
+- **Picking which `.lproj` to use** does match a parent language. A device set to fr-CA with no
+  `fr-CA.lproj` in the bundle resolves to `fr.lproj`.
+- **Looking a key up inside the chosen table** does not chain. A missing key goes straight to
+  `CFBundleDevelopmentRegion`, which is `en`.
+
+So a partial fr-CA localization is strictly *worse* than none: declaring fr-CA opts the app out of
+the fr match it would otherwise get for free, then serves English for every key fr-CA doesn't itself
+define. There is no `CFBundleLocalizationFallback`-style setting; the chain is `fr-CA → en`, period.
+
+fr-CA is not a cosmetic variant — fr addresses the user as **vous**, fr-CA as **tu** — so it can't
+simply be deleted either. Both languages are kept, and `Scripts/sync-fr-ca.py` copies fr into fr-CA
+for every string with no second-person address, leaving anything that says "vous" to be translated by
+hand. Run it whenever French strings are added:
+
+```bash
+cd Apps/Bloom && python3 Scripts/sync-fr-ca.py
+```
+
+### CI gates
+
+Three checks run on every push and PR to `main` and `develop` (`.github/workflows/localization.yml`).
+They're plain JSON checks over the catalogs — no Xcode, no simulator:
+
+| Script | Catches |
+|---|---|
+| `validate-localization.py` | Placeholder mismatches between a string and its translations (a `String(format:)` crash). Also runs as a build phase. |
+| `check-localization-coverage.py` | A shipped string with no translation in de, es, fr, fr-CA or nl. |
+| `sync-fr-ca.py --check` | French moved on and fr-CA wasn't re-synced. |
+
+Coverage is measured against `Scripts/localization-baseline.json`, which records the gaps that
+already existed so the gate blocks *regressions* without demanding the backlog be cleared first. A
+string missing from the baseline fails CI. When you translate a baseline entry, re-run
+`check-localization-coverage.py --write-baseline` so the backlog only shrinks. Use `--strict` to see
+what full coverage would require.
+
+Coverage is deliberately not a build phase — failing a local build the moment someone types a new
+`Text("...")` would be miserable.
+
 ### Strings that must not be "cleaned up" in translation
 
 The WeatherKit attribution link (`WeatherTodayCell`) contains U+F8FF, the Apple logo glyph. Apple

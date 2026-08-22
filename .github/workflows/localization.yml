@@ -1,0 +1,32 @@
+name: Localization
+
+# main is fast-forwarded from develop by a scheduled job, so anything that lands on develop reaches
+# main unreviewed. The gate therefore has to run on develop, not just on main.
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch: {}
+
+jobs:
+  localization:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Apps/Bloom
+
+    steps:
+      - uses: actions/checkout@v5
+
+      # Pure JSON checks over the String Catalogs - no Xcode, no simulator, so this stays fast.
+      - name: Placeholder consistency
+        run: python3 Scripts/validate-localization.py
+
+      - name: Translation coverage
+        run: python3 Scripts/check-localization-coverage.py
+
+      # fr-CA does not fall back to fr at runtime, so a key missing there ships English. This fails
+      # when French has moved on and fr-CA has not been re-synced.
+      - name: fr-CA in sync with fr
+        run: python3 Scripts/sync-fr-ca.py --check
