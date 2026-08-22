@@ -1,0 +1,72 @@
+{
+  "configurations" : [
+    {
+      "id" : "00000000-0000-0000-0000-0000000000EN",
+      "name" : "English",
+      "options" : {
+        "language" : "en",
+        "region" : "US"
+      }
+    },
+    {
+      "id" : "00000000-0000-0000-0000-0000000000FR",
+      "name" : "French",
+      "options" : {
+        "language" : "fr",
+        "region" : "FR"
+      }
+    },
+    {
+      "id" : "00000000-0000-0000-0000-00000000FRCA",
+      "name" : "French (Canada)",
+      "options" : {
+        "language" : "fr-CA",
+        "region" : "CA"
+      }
+    },
+    {
+      "id" : "00000000-0000-0000-0000-0000000000DE",
+      "name" : "German",
+      "options" : {
+        "language" : "de",
+        "region" : "DE"
+      }
+    },
+    {
+      "id" : "00000000-0000-0000-0000-0000000000NL",
+      "name" : "Dutch",
+      "options" : {
+        "language" : "nl",
+        "region" : "NL"
+      }
+    },
+    {
+      "id" : "00000000-0000-0000-0000-0000000000ES",
+      "name" : "Spanish",
+      "options" : {
+        "language" : "es",
+        "region" : "ES"
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:Bloom.xcodeproj",
+      "identifier" : "FFACBAD82BAC7788006AAD0B",
+      "name" : "Bloom"
+    }
+  },
+  "testTargets" : [
+    {
+      "selectedTests" : [
+        "ScreenshotCaptureTests\/testCaptureScreenshots()"
+      ],
+      "target" : {
+        "containerPath" : "container:Bloom.xcodeproj",
+        "identifier" : "FFF61B372BEEB7B000926042",
+        "name" : "BloomTests"
+      }
+    }
+  ],
+  "version" : 1
+}

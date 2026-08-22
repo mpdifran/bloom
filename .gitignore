@@ -1,6 +1,8 @@
 .DS_Store
 xcuserdata
-screenshots/
+# Anchored: an unanchored "screenshots/" also matched Apps/Bloom/BloomTests/Screenshots,
+# silently keeping the capture test out of the repository (core.ignorecase is on).
+/screenshots/
 crashreports/
 fastlane/report.xml
 .claude/skills
