@@ -28,6 +28,16 @@ public extension SocketMessage {
     /// the language the user actually sees on screen.
     public let interfaceLocale: String?
 
+    /// What this client understands of the chat protocol.
+    ///
+    /// Optional for the same reason `locale` is: clients shipped before it existed send nothing,
+    /// and the server has to keep treating `nil` as "legacy" indefinitely. Capabilities are gated
+    /// on this rather than on the app version, which changes far more often than the protocol.
+    ///
+    /// Version 1 means the client can render ``SocketMessage/SourceRef``, so it may be sent web
+    /// search results.
+    public let protocolVersion: Int?
+
     public var isV2: Bool {
       conversationID != nil
     }
@@ -41,7 +51,8 @@ public extension SocketMessage {
       lastMessageID: String? = nil,
       conversationID: String? = nil,
       locale: String? = nil,
-      interfaceLocale: String? = nil
+      interfaceLocale: String? = nil,
+      protocolVersion: Int? = nil
     ) {
       self.text = text
       self.imageFileIDs = imageFileIDs
@@ -52,6 +63,7 @@ public extension SocketMessage {
       self.conversationID = conversationID
       self.locale = locale
       self.interfaceLocale = interfaceLocale
+      self.protocolVersion = protocolVersion
     }
   }
 
@@ -80,19 +92,24 @@ public extension SocketMessage {
     public let requestID: String?
     public let responseID: String?
     public let conversationID: String?
+    /// Web pages this message drew on. Only ever sent to clients that asked for protocol
+    /// version 1 or higher, so in practice a client receiving this can render it.
+    public let sources: [SourceRef]?
 
     public init(
       id: String,
       message: String,
       requestID: String? = nil,
       responseID: String? = nil,
-      conversationID: String? = nil
+      conversationID: String? = nil,
+      sources: [SourceRef]? = nil
     ) {
       self.id = id
       self.message = message
       self.requestID = requestID
       self.responseID = responseID
       self.conversationID = conversationID
+      self.sources = sources
     }
   }
 

@@ -60,6 +60,12 @@ public extension SocketMessage {
     /// BCP-47 tag for the language the app's interface is displayed in. See `MessageRequest`.
     public let interfaceLocale: String?
 
+    /// See `MessageRequest.protocolVersion`.
+    ///
+    /// Carried here for the same reason as `locale`: a tool call result re-enters the streaming
+    /// path, and without it the follow-up turn would forget what the client can render.
+    public let protocolVersion: Int?
+
     public init(
       runID: String,
       toolCallResults: [ToolCallResult],
@@ -67,7 +73,8 @@ public extension SocketMessage {
       conversationID: String? = nil,
       lastMessageID: String? = nil,
       locale: String? = nil,
-      interfaceLocale: String? = nil
+      interfaceLocale: String? = nil,
+      protocolVersion: Int? = nil
     ) {
       self.runID = runID
       self.toolCallResults = toolCallResults
@@ -76,6 +83,7 @@ public extension SocketMessage {
       self.lastMessageID = lastMessageID
       self.locale = locale
       self.interfaceLocale = interfaceLocale
+      self.protocolVersion = protocolVersion
     }
   }
 }
