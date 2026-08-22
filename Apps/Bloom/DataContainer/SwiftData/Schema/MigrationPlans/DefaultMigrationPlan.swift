@@ -8,7 +8,7 @@
 import SwiftData
 
 // CURRENT SCHEMA
-let currentSchema: VersionedSchema.Type = SchemaV31.self
+let currentSchema: VersionedSchema.Type = SchemaV32.self
 
 public enum DefaultMigrationPlan: SchemaMigrationPlan {
   public static var schemas: [any VersionedSchema.Type] {
@@ -44,7 +44,8 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
       SchemaV28.self,
       SchemaV29.self,
       SchemaV30.self,
-      SchemaV31.self
+      SchemaV31.self,
+      SchemaV32.self
     ]
   }
 
@@ -80,7 +81,8 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
       migrateV27ToV28,
       migrateV28ToV29,
       migrateV29ToV30,
-      migrateV30ToV31
+      migrateV30ToV31,
+      migrateV31ToV32
     ]
   }
 
@@ -440,6 +442,15 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
     .lightweight(
       fromVersion: SchemaV30.self,
       toVersion: SchemaV31.self
+    )
+  }
+
+  /// Adds `ChatMessage.sources`. Lightweight: the property is optional with a default, which is
+  /// what CloudKit requires anyway.
+  private static var migrateV31ToV32: MigrationStage {
+    .lightweight(
+      fromVersion: SchemaV31.self,
+      toVersion: SchemaV32.self
     )
   }
 }

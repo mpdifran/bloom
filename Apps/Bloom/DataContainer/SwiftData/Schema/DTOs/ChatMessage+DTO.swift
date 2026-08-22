@@ -26,6 +26,9 @@ public struct ChatMessageDTO: Sendable, Equatable, Identifiable {
   public let dbID: String?
   public let requestID: String?
   public let responseID: String?
+  /// Encoded `[SocketMessage.SourceRef]`, decoded for display by the UI layer. Nil for anything
+  /// the assistant answered without searching, which is most messages.
+  public let sources: Data?
 }
 
 public extension ChatMessage {
@@ -48,7 +51,8 @@ public extension ChatMessage {
       hasPerformedAction: hasPerformedAction,
       dbID: dbID,
       requestID: requestID,
-      responseID: responseID
+      responseID: responseID,
+      sources: sources
     )
   }
 }
