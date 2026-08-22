@@ -7,3 +7,10 @@ fastlane/report.xml
 .env
 .env.*
 *.p8
+
+# Staging directory for ScreenshotCaptureTests (see Apps/Bloom/Scripts/capture-screenshots.sh)
+.screenshots/
+
+# Isolated DerivedData for the screenshot sweep, kept out of Xcode's own so a concurrent build
+# doesn't fail with "database is locked"
+.screenshot-build/
