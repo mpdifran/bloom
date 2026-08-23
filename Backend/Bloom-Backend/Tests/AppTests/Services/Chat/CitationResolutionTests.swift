@@ -187,8 +187,67 @@ struct WebSearchPromptGatingTests {
   @Test("The web search clause exists separately, to be appended with the tool")
   func searchClauseIsItsOwnConstant() {
     #expect(String.Prompt.webSearch.contains("search the web"))
-    // It also has to keep telling the model not to paste URLs, since citations are attached
-    // structurally rather than written into the reply.
-    #expect(String.Prompt.webSearch.contains("citations are attached"))
+    // It also has to forbid the model attributing sources itself. Left to its own devices it
+    // writes "(example.com)" into the prose, which then appears alongside the chip built from the
+    // same citation - the source shown twice, once as text and once as UI.
+    #expect(String.Prompt.webSearch.contains("Never attribute sources"))
+    #expect(String.Prompt.webSearch.contains("shown twice"))
+  }
+}
+
+/// Covers resolving a citation to a paragraph within its block.
+///
+/// This is what puts a chip beside the claim it supports rather than in a heap at the end of the
+/// message, so an off-by-one here attributes a source to the wrong sentence.
+@Suite("CitationParagraphResolution")
+struct CitationParagraphResolutionTests {
+
+  private func block(_ content: String, start: Int = 0) -> ChatService.PartitionRange {
+    ChatService.PartitionRange(
+      partitionIndex: 1,
+      range: start..<(start + content.utf16.count),
+      content: content
+    )
+  }
+
+  @Test("Each paragraph claims the offsets inside it")
+  func offsetsMapToTheirParagraph() {
+    let content = "First para.\n\nSecond para here.\n\nThird one."
+    let range = block(content)
+
+    #expect(ChatService.paragraphIndex(forUTF16Offset: 2, in: range) == 0)
+
+    let second = content.range(of: "Second")!.lowerBound.utf16Offset(in: content)
+    #expect(ChatService.paragraphIndex(forUTF16Offset: second, in: range) == 1)
+
+    let third = content.range(of: "Third")!.lowerBound.utf16Offset(in: content)
+    #expect(ChatService.paragraphIndex(forUTF16Offset: third, in: range) == 2)
+  }
+
+  @Test("Offsets are relative to the block, not the whole message")
+  func offsetsAreBlockRelative() {
+    // A block that starts partway through the model's output - anything after a ```json fence -
+    // still resolves correctly, because the offset is reduced by the block's own start.
+    let content = "Alpha.\n\nBeta."
+    let range = block(content, start: 500)
+
+    #expect(ChatService.paragraphIndex(forUTF16Offset: 502, in: range) == 0)
+
+    let beta = 500 + content.range(of: "Beta")!.lowerBound.utf16Offset(in: content)
+    #expect(ChatService.paragraphIndex(forUTF16Offset: beta, in: range) == 1)
+  }
+
+  @Test("An offset past the end lands on the final paragraph rather than trapping")
+  func pastEndClampsToLast() {
+    let range = block("One.\n\nTwo.\n\nThree.")
+    #expect(ChatService.paragraphIndex(forUTF16Offset: 9_999, in: range) == 2)
+  }
+
+  @Test("A single-paragraph message puts everything on paragraph zero")
+  func singleParagraph() {
+    let content = "Just the one paragraph, no blank lines."
+    let range = block(content)
+    #expect(ChatService.paragraphIndex(forUTF16Offset: 0, in: range) == 0)
+    #expect(ChatService.paragraphIndex(forUTF16Offset: content.utf16.count - 1, in: range) == 0)
   }
 }

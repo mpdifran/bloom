@@ -43,6 +43,25 @@ public struct ChatBubbleCell: View {
   @State private var showSourcesSheet = false
   @State private var safariURL: URL?
 
+  /// The message split on blank lines, which is how the model separates prose and list items.
+  private var paragraphs: [String] {
+    let trimmed = message.trimmingCharacters(in: .whitespacesAndNewlines)
+    let parts = trimmed.components(separatedBy: "\n\n")
+      .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+      .filter { $0.isNotEmpty }
+    return parts.isEmpty ? [trimmed] : parts
+  }
+
+  /// Citations for one paragraph.
+  ///
+  /// A source with no paragraph index falls to the last one - the server could not resolve where it
+  /// belonged, and showing it late beats not showing it, since a web-derived claim has to carry its
+  /// citation.
+  private func sources(forParagraph index: Int) -> [SocketMessage.SourceRef] {
+    let lastIndex = max(paragraphs.count - 1, 0)
+    return sources.filter { min($0.blockIndex ?? lastIndex, lastIndex) == index }
+  }
+
   /// Whether there is anything to put under the message. Without this an empty row still takes
   /// padding, leaving a gap under every ordinary reply.
   private var showsControlRow: Bool {
@@ -69,30 +88,35 @@ public struct ChatBubbleCell: View {
             .fixedSize(horizontal: false, vertical: true)
         }
       } else {
-        Text(message.trimmingCharacters(in: .whitespacesAndNewlines).formattedMarkdown)
-          .fixedSize(horizontal: false, vertical: true)
-          .padding(.vertical, 10)
-          .padding(.horizontal, 15)
-          .horizontalAlignment(.leading)
-          .contextMenu {
-            Button("Copy", systemSymbol: .documentOnDocument) {
-              UIPasteboard.general.string = message.trimmingCharacters(in: .whitespacesAndNewlines)
-            }
-          }
+        // Rendered paragraph by paragraph so a citation can sit beside the claim it supports.
+        // Grouped at the end of the message they read as a bibliography, which is not what a
+        // citation is for.
+        VStack(alignment: .leading, spacing: 8) {
+          ForEach(Array(paragraphs.enumerated()), id: \.offset) { index, paragraph in
+            VStack(alignment: .leading, spacing: 6) {
+              Text(paragraph.formattedMarkdown)
+                .fixedSize(horizontal: false, vertical: true)
+                .horizontalAlignment(.leading)
 
-        if sources.isNotEmpty {
-          // Against the message rather than in the footer: OpenAI requires citations shown with
-          // the content they support to be visible and clickable, and a footer alone reads as
-          // belonging to the whole conversation.
-          FlowLayout(spacing: 6) {
-            ForEach(sources) { source in
-              ChatSourceChip(source: source) {
-                safariURL = URL(string: source.url)
+              let chips = sources(forParagraph: index)
+              if chips.isNotEmpty {
+                FlowLayout(spacing: 6) {
+                  ForEach(chips) { source in
+                    ChatSourceChip(source: source) {
+                      safariURL = URL(string: source.url)
+                    }
+                  }
+                }
               }
             }
           }
-          .padding(.horizontal, 15)
-          .padding(.bottom, 2)
+        }
+        .padding(.vertical, 10)
+        .padding(.horizontal, 15)
+        .contextMenu {
+          Button("Copy", systemSymbol: .documentOnDocument) {
+            UIPasteboard.general.string = message.trimmingCharacters(in: .whitespacesAndNewlines)
+          }
         }
 
         if showsControlRow {

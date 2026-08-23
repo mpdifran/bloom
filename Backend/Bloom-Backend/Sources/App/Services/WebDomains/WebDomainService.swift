@@ -134,12 +134,14 @@ extension WebDomainService {
   ///
   /// - Parameter blockIndexForCitation: which text block each citation belongs to, resolved by the
   ///   caller against the partitioned message.
+  /// - Returns: the surviving sources paired with the index of the citation each came from, so the
+  ///   caller can still tell which message a source belongs to after drops and deduplication.
   func sourceRefs(
     from citations: [OpenAIKit.Response.Annotation.URLCitation],
     blockIndexForCitation: [Int: Int],
     db: any Database
-  ) async -> [SocketMessage.SourceRef] {
-    var refs = [SocketMessage.SourceRef]()
+  ) async -> [(citationOffset: Int, ref: SocketMessage.SourceRef)] {
+    var refs = [(citationOffset: Int, ref: SocketMessage.SourceRef)]()
     var seenHosts = Set<String>()
 
     for (offset, citation) in citations.enumerated() {
@@ -159,7 +161,7 @@ extension WebDomainService {
       let record = try? await WebDomainReputation.find(host, on: db)
 
       refs.append(
-        SocketMessage.SourceRef(
+        (offset, SocketMessage.SourceRef(
           id: "\(offset)-\(host)",
           url: citation.url.absoluteString,
           host: host,
@@ -167,7 +169,7 @@ extension WebDomainService {
           title: citation.title.truncated(to: 120),
           faviconURL: record?.faviconURL,
           blockIndex: blockIndexForCitation[offset]
-        )
+        ))
       )
 
       // The same payload goes out over APNs when the socket is down, and that has a size ceiling.
