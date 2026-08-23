@@ -129,22 +129,32 @@ extension ChatService {
 
   /// Which paragraph of a block a citation falls in.
   ///
-  /// Paragraphs are separated by a blank line, which is how the model formats prose and lists. This
-  /// is the granularity the chips are drawn at: fine enough that a citation sits beside the claim
-  /// it supports, coarse enough to need no text layout work on the client.
+  /// Counted per non-blank *line*, not per blank-line-separated paragraph.
+  ///
+  /// The model writes lists with a single newline between items, so splitting on blank lines put a
+  /// whole eight-item list in one paragraph and stacked every citation at the end of it. A line is
+  /// the unit a claim actually occupies. Blank lines are skipped so the index matches what the
+  /// client renders, which drops them too.
   static func paragraphIndex(forUTF16Offset offset: Int, in block: PartitionRange) -> Int {
     let relative = offset - block.range.lowerBound
-    guard relative > 0 else { return 0 }
-
+    let lines = block.content.components(separatedBy: "\n")
+    var lineIndex = 0
     var consumed = 0
-    for (index, paragraph) in block.content.components(separatedBy: "\n\n").enumerated() {
-      // +2 for the blank line that separated it, which is not part of the paragraph itself.
-      consumed += paragraph.utf16.count + 2
-      if relative < consumed { return index }
+
+    for line in lines {
+      // +1 for the newline itself, which belongs to no line.
+      consumed += line.utf16.count + 1
+      let isBlank = line.trimmingCharacters(in: .whitespaces).isEmpty
+
+      if relative < consumed {
+        // A citation on a blank line belongs to the text before it, not the text after.
+        return isBlank ? max(lineIndex - 1, 0) : lineIndex
+      }
+      if !isBlank { lineIndex += 1 }
     }
 
-    // Past the end: the model sometimes annotates a range that runs to the close of the block.
-    return max(block.content.components(separatedBy: "\n\n").count - 1, 0)
+    // Past the end: the model sometimes annotates a range running to the close of the block.
+    return max(lineIndex - 1, 0)
   }
 
   /// The partition a UTF-16 offset falls inside, if any.
@@ -154,5 +164,47 @@ extension ChatService {
   /// answering in five languages is not hypothetical.
   static func partitionIndex(containing utf16Offset: Int, in ranges: [PartitionRange]) -> Int? {
     ranges.first { $0.range.contains(utf16Offset) }?.partitionIndex
+  }
+}
+
+// MARK: - Stripping the model's own attributions
+
+extension ChatService {
+
+  /// Removes source attributions the model wrote into its prose.
+  ///
+  /// Asking it not to is not enough. Told plainly never to attribute sources in the reply, it still
+  /// emits `([tripadvisor.com](https://…))` after each claim - the web search tool trains hard for
+  /// inline citation and the instruction loses. The result is the same source twice: once as text
+  /// the model wrote, once as the chip built from the annotation behind it.
+  ///
+  /// Only ever applied to messages that carry citations, so an ordinary reply is never rewritten.
+  ///
+  /// Deliberately narrow. It matches a parenthesised bare host, optionally wrapped in a markdown
+  /// link, and nothing else - "(solid for dinner)" contains spaces and no TLD, so it survives.
+  static func strippingInlineAttributions(from text: String) -> String {
+    var result = text
+
+    for pattern in [
+      // ([host](url)) or ([host](url), [host](url))
+      #"\s*\(\s*\[[^\]]+\]\([^)]*\)(?:\s*,\s*\[[^\]]+\]\([^)]*\))*\s*\)"#,
+      // (host.com) or (host.com, other.com)
+      #"\s*\(\s*(?:https?://)?[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9-]+)*\.[a-z]{2,}(?:\s*,\s*(?:https?://)?[a-z0-9][a-z0-9.-]*\.[a-z]{2,})*\s*\)"#,
+      // a bare markdown link whose text is a host, left dangling without parentheses
+      #"\s*\[[a-z0-9][a-z0-9.-]*\.[a-z]{2,}\]\([^)]*\)"#,
+    ] {
+      result = result.replacingOccurrences(
+        of: pattern,
+        with: "",
+        options: [.regularExpression, .caseInsensitive]
+      )
+    }
+
+    // Tidy what removal leaves behind: a space before punctuation, or a trailing space on a line.
+    result = result.replacingOccurrences(of: #" +([.,;:!?])"#, with: "$1", options: .regularExpression)
+    result = result.replacingOccurrences(of: #"[ \t]+$"#, with: "", options: [.regularExpression])
+    result = result.replacingOccurrences(of: #"[ \t]+\n"#, with: "\n", options: .regularExpression)
+
+    return result
   }
 }

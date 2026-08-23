@@ -243,11 +243,103 @@ struct CitationParagraphResolutionTests {
     #expect(ChatService.paragraphIndex(forUTF16Offset: 9_999, in: range) == 2)
   }
 
+  @Test("List items separated by a single newline each get their own index")
+  func listItemsAreSeparateUnits() {
+    // The regression this changed for. Splitting on blank lines made an eight-item list one unit,
+    // so every citation in it stacked at the end instead of sitting beside its own item.
+    let content = """
+      - The Crazy Canuck — comfort food.
+      - Bauer Kitchen — seasonal dishes.
+      - Copper Branch — plant-forward bowls.
+      """
+    let range = block(content)
+
+    for (expected, needle) in [(0, "Crazy"), (1, "Bauer"), (2, "Copper")] {
+      let offset = content.range(of: needle)!.lowerBound.utf16Offset(in: content)
+      #expect(ChatService.paragraphIndex(forUTF16Offset: offset, in: range) == expected)
+    }
+  }
+
+  @Test("Blank lines are skipped, so indices match what the client renders")
+  func blankLinesDoNotConsumeAnIndex() {
+    // The client drops blank lines when it splits. If the server counted them the two would
+    // disagree and every chip after the first blank line would attach one claim too late.
+    let content = "Intro line.\n\n- First item.\n- Second item."
+    let range = block(content)
+
+    let first = content.range(of: "First")!.lowerBound.utf16Offset(in: content)
+    let second = content.range(of: "Second")!.lowerBound.utf16Offset(in: content)
+
+    #expect(ChatService.paragraphIndex(forUTF16Offset: 2, in: range) == 0)
+    #expect(ChatService.paragraphIndex(forUTF16Offset: first, in: range) == 1)
+    #expect(ChatService.paragraphIndex(forUTF16Offset: second, in: range) == 2)
+  }
+
   @Test("A single-paragraph message puts everything on paragraph zero")
   func singleParagraph() {
     let content = "Just the one paragraph, no blank lines."
     let range = block(content)
     #expect(ChatService.paragraphIndex(forUTF16Offset: 0, in: range) == 0)
     #expect(ChatService.paragraphIndex(forUTF16Offset: content.utf16.count - 1, in: range) == 0)
+  }
+}
+
+/// Covers removing attributions the model writes into its own prose.
+///
+/// Cases taken from a real reply: the model was told plainly not to attribute sources and did it
+/// anyway, so the text has to be cleaned rather than merely discouraged.
+@Suite("InlineAttributionStripping")
+struct InlineAttributionStrippingTests {
+
+  @Test("A parenthesised markdown link is removed with its parentheses")
+  func removesParenthesisedMarkdownLink() {
+    let input = "- The Crazy Canuck — classic comfort food and big portions. ([tripadvisor.com](https://www.tripadvisor.com/x))"
+    let output = ChatService.strippingInlineAttributions(from: input)
+
+    #expect(output == "- The Crazy Canuck — classic comfort food and big portions.")
+  }
+
+  @Test("A parenthesised bare host is removed")
+  func removesBareHost() {
+    let input = "Bauer Kitchen — seasonal, locally sourced dishes. (restaurantji.com)"
+    #expect(ChatService.strippingInlineAttributions(from: input) == "Bauer Kitchen — seasonal, locally sourced dishes.")
+  }
+
+  @Test("Several attributions in one parenthesis go together")
+  func removesGroupedAttributions() {
+    let input = "Great spot. ([tripadvisor.com](https://a.com), [yelp.com](https://b.com))"
+    #expect(ChatService.strippingInlineAttributions(from: input) == "Great spot.")
+  }
+
+  @Test("Ordinary parentheses survive")
+  func leavesProseAlone() {
+    // The whole risk of doing this with a regex: over-matching real writing.
+    let inputs = [
+      "Bauer Kitchen — upscale-casual (solid for dinner).",
+      "Wildcraft Grill — creative menu and cocktails (good for a treat night).",
+      "You hit 80% of your protein goal (nice work).",
+      "Zone 2 training (also called base training) builds endurance.",
+    ]
+    for input in inputs {
+      #expect(ChatService.strippingInlineAttributions(from: input) == input)
+    }
+  }
+
+  @Test("A whole list is cleaned line by line, and the lines survive")
+  func cleansAListWithoutCollapsingIt() {
+    let input = """
+      - The Crazy Canuck — comfort food. ([tripadvisor.com](https://a.com))
+      - Bauer Kitchen — seasonal dishes (solid for dinner). (restaurantji.com)
+      - Copper Branch — plant-forward bowls.
+      """
+    let output = ChatService.strippingInlineAttributions(from: input)
+
+    #expect(output == """
+      - The Crazy Canuck — comfort food.
+      - Bauer Kitchen — seasonal dishes (solid for dinner).
+      - Copper Branch — plant-forward bowls.
+      """)
+    // Line count has to hold: the citation indices are counted per line on both sides.
+    #expect(output.components(separatedBy: "\n").count == 3)
   }
 }

@@ -534,7 +534,14 @@ private extension ChatService {
 
     for partition in partitions {
       switch partition {
-      case .text(let index, let content):
+      case .text(let index, var content):
+        // The model attributes sources inline however firmly it is told not to, and those
+        // attributions duplicate the chips built from the same citations. Only rewritten when the
+        // message actually has citations, so an ordinary reply is untouched.
+        if sourcesByPartition[index]?.isNotEmpty == true {
+          content = Self.strippingInlineAttributions(from: content)
+        }
+
         logger.trace("Assistant Message: \(content)")
         let response = SocketMessage.MessageResponse(
           id: event.itemId + "-\(index)",

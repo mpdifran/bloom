@@ -43,11 +43,15 @@ public struct ChatBubbleCell: View {
   @State private var showSourcesSheet = false
   @State private var safariURL: URL?
 
-  /// The message split on blank lines, which is how the model separates prose and list items.
+  /// The message split into the units a citation can attach to.
+  ///
+  /// One entry per non-blank line, matching how the server counts them - the two have to agree or
+  /// a chip lands against the wrong claim. Lines rather than blank-line paragraphs because the
+  /// model writes lists with a single newline between items, and each item is its own claim.
   private var paragraphs: [String] {
     let trimmed = message.trimmingCharacters(in: .whitespacesAndNewlines)
-    let parts = trimmed.components(separatedBy: "\n\n")
-      .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+    let parts = trimmed.components(separatedBy: "\n")
+      .map { $0.trimmingCharacters(in: .whitespaces) }
       .filter { $0.isNotEmpty }
     return parts.isEmpty ? [trimmed] : parts
   }
@@ -91,9 +95,9 @@ public struct ChatBubbleCell: View {
         // Rendered paragraph by paragraph so a citation can sit beside the claim it supports.
         // Grouped at the end of the message they read as a bibliography, which is not what a
         // citation is for.
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 6) {
           ForEach(Array(paragraphs.enumerated()), id: \.offset) { index, paragraph in
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: 4) {
               Text(paragraph.formattedMarkdown)
                 .fixedSize(horizontal: false, vertical: true)
                 .horizontalAlignment(.leading)
