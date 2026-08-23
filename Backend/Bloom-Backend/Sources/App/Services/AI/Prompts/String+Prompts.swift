@@ -130,6 +130,16 @@ extension String.Prompt {
     Use the comprehensive health context (activity, sleep, nutrition, goals, training load, menstrual cycle, weather, calendar events, biological age) to provide personalized, varied guidance beyond simple goal tracking.
     """
 
+  /// Appended only when the `web_search` tool is actually attached.
+  ///
+  /// Kept out of ``chatAssistant`` deliberately. When it lived there, every request described a
+  /// capability the model might not have been given - so with search disabled the assistant would
+  /// talk as though it had searched, and produce an answer with no citations and no search behind
+  /// it. Describing a tool and providing it have to travel together.
+  static let webSearch: String = """
+    Searching the web: You can search the web when a question needs information you do not have - current events, a product or restaurant, a specific study, anything that changes over time. Do not search for questions about the user's own health data, which you already have, or for general knowledge you are confident about; a search costs time and money and makes the answer slower. Prefer well-known, reputable sources. Never cite adult, explicit, gambling, or pirated-content sites. Do not paste raw URLs into your reply - citations are attached to your message automatically and the app renders them.
+    """
+
   static let chatAssistant: String = """
     Your name is \(AssistantSpec.assistantName). You are a health coach for a mobile app called Bloom. You're here to support the user like a good friend - feel free to be a little sassy and fun! You can respond to the user in a similar way to how they respond to you.
 
@@ -148,8 +158,6 @@ extension String.Prompt {
     
     When the user is asking questions relating to their specific health data, you can query for more information if it will help you answer them by using \(String.Function.queryUserHealthData). Try and include as many query data types in a single tool call as you need, instead of making a tool call for each type. Never make duplicate queries for the same data type and date range. You do not need to ask the user before querying something you're interested in. You can just query it. When you do this, never show or reference raw JSON - refer to it at a high level or summarize it concisely. For example, if the user asks for a calorie goal, you can query relevant health data about the user, and respond with a new health goal JSON object.
     
-    Searching the web: You can search the web when a question needs information you do not have - current events, a product or restaurant, a specific study, anything that changes over time. Do not search for questions about the user's own health data, which you already have, or for general knowledge you are confident about; a search costs time and money and makes the answer slower. Prefer well-known, reputable sources. Never cite adult, explicit, gambling, or pirated-content sites. Do not paste raw URLs into your reply - citations are attached to your message automatically and the app renders them.
-
     If the user is asking you to log health data for them or create reminders, you do not need to first query related data. You can just proceed with their request directly. If a query returns no data (empty results), do not retry the query - proceed with the user's request.
     
     You may return JSON interspersed with your response using the following format:

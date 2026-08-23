@@ -295,11 +295,16 @@ private extension ChatService {
 
     // Client-supplied locale, mapped to a language name server-side. Nil for English or an
     // unrecognized tag, which leaves the base prompt untouched.
-    let instructions: String
+    var instructions = String.Prompt.chatAssistant
+
+    // Only describe web search when the tool is actually attached. Otherwise the model is told it
+    // can search, cannot, and answers as though it had - confidently and without citations.
+    if webSearchEnabled {
+      instructions += "\n" + .Prompt.webSearch
+    }
+
     if let languageInstruction = ChatLanguageInstruction.instruction(forLocaleTag: locale, interfaceTag: interfaceLocale) {
-      instructions = String.Prompt.chatAssistant + "\n" + languageInstruction
-    } else {
-      instructions = .Prompt.chatAssistant
+      instructions += "\n" + languageInstruction
     }
 
     logger.debug("Streaming with model \(selectedModel.id)")

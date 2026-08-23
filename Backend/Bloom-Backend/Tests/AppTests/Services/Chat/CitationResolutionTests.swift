@@ -170,3 +170,25 @@ struct WebDomainBlocklistSeedingTests {
     #expect(SeedWebDomainBlocklistCommand.parseHosts(from: list, limit: 10).count == 10)
   }
 }
+
+/// Covers the prompt describing web search only when the tool is actually attached.
+@Suite("WebSearchPromptGating")
+struct WebSearchPromptGatingTests {
+
+  @Test("The base prompt says nothing about searching the web")
+  func basePromptDoesNotMentionSearch() {
+    // It used to. With the tool gated but the prompt unconditional, the assistant was told it
+    // could search on every request - including the ones where it had no such tool - so it
+    // answered as though it had searched, confidently and with no citations.
+    #expect(!String.Prompt.chatAssistant.contains("Searching the web"))
+    #expect(!String.Prompt.chatAssistant.contains("search the web"))
+  }
+
+  @Test("The web search clause exists separately, to be appended with the tool")
+  func searchClauseIsItsOwnConstant() {
+    #expect(String.Prompt.webSearch.contains("search the web"))
+    // It also has to keep telling the model not to paste URLs, since citations are attached
+    // structurally rather than written into the reply.
+    #expect(String.Prompt.webSearch.contains("citations are attached"))
+  }
+}
