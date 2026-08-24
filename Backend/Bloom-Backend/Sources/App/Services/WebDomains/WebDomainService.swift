@@ -132,13 +132,10 @@ extension WebDomainService {
   /// Turns the model's citations into the sources a client can render, dropping anything that
   /// should not be shown.
   ///
-  /// - Parameter blockIndexForCitation: which text block each citation belongs to, resolved by the
-  ///   caller against the partitioned message.
   /// - Returns: the surviving sources paired with the index of the citation each came from, so the
   ///   caller can still tell which message a source belongs to after drops and deduplication.
   func sourceRefs(
     from citations: [OpenAIKit.Response.Annotation.URLCitation],
-    blockIndexForCitation: [Int: Int],
     db: any Database
   ) async -> [(citationOffset: Int, ref: SocketMessage.SourceRef)] {
     var refs = [(citationOffset: Int, ref: SocketMessage.SourceRef)]()
@@ -167,8 +164,7 @@ extension WebDomainService {
           host: host,
           siteName: record?.siteName ?? Self.displayName(forHost: host),
           title: citation.title.truncated(to: 120),
-          faviconURL: record?.faviconURL,
-          blockIndex: blockIndexForCitation[offset]
+          faviconURL: record?.faviconURL
         ))
       )
 

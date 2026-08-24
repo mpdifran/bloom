@@ -43,29 +43,6 @@ public struct ChatBubbleCell: View {
   @State private var showSourcesSheet = false
   @State private var safariURL: URL?
 
-  /// The message split into the units a citation can attach to.
-  ///
-  /// One entry per non-blank line, matching how the server counts them - the two have to agree or
-  /// a chip lands against the wrong claim. Lines rather than blank-line paragraphs because the
-  /// model writes lists with a single newline between items, and each item is its own claim.
-  private var paragraphs: [String] {
-    let trimmed = message.trimmingCharacters(in: .whitespacesAndNewlines)
-    let parts = trimmed.components(separatedBy: "\n")
-      .map { $0.trimmingCharacters(in: .whitespaces) }
-      .filter { $0.isNotEmpty }
-    return parts.isEmpty ? [trimmed] : parts
-  }
-
-  /// Citations for one paragraph.
-  ///
-  /// A source with no paragraph index falls to the last one - the server could not resolve where it
-  /// belonged, and showing it late beats not showing it, since a web-derived claim has to carry its
-  /// citation.
-  private func sources(forParagraph index: Int) -> [SocketMessage.SourceRef] {
-    let lastIndex = max(paragraphs.count - 1, 0)
-    return sources.filter { min($0.blockIndex ?? lastIndex, lastIndex) == index }
-  }
-
   /// Whether there is anything to put under the message. Without this an empty row still takes
   /// padding, leaving a gap under every ordinary reply.
   private var showsControlRow: Bool {
@@ -88,40 +65,23 @@ public struct ChatBubbleCell: View {
             UIPasteboard.general.string = message.trimmingCharacters(in: .whitespacesAndNewlines)
           }
         ) {
-          Text(message.trimmingCharacters(in: .whitespacesAndNewlines).formattedMarkdown)
+          Text(message.trimmingCharacters(in: .whitespacesAndNewlines).attributedMarkdown)
             .fixedSize(horizontal: false, vertical: true)
         }
       } else {
-        // Rendered paragraph by paragraph so a citation can sit beside the claim it supports.
-        // Grouped at the end of the message they read as a bibliography, which is not what a
-        // citation is for.
-        VStack(alignment: .leading, spacing: 6) {
-          ForEach(Array(paragraphs.enumerated()), id: \.offset) { index, paragraph in
-            VStack(alignment: .leading, spacing: 4) {
-              Text(paragraph.formattedMarkdown)
-                .fixedSize(horizontal: false, vertical: true)
-                .horizontalAlignment(.leading)
-
-              let chips = sources(forParagraph: index)
-              if chips.isNotEmpty {
-                FlowLayout(spacing: 6) {
-                  ForEach(chips) { source in
-                    ChatSourceChip(source: source) {
-                      safariURL = URL(string: source.url)
-                    }
-                  }
-                }
-              }
+        // The model writes its own inline citations as markdown links, and they are the same
+        // links whether the message is still streaming or finished - so nothing rearranges itself
+        // when the reply completes.
+        Text(message.trimmingCharacters(in: .whitespacesAndNewlines).attributedMarkdown)
+          .fixedSize(horizontal: false, vertical: true)
+          .padding(.vertical, 10)
+          .padding(.horizontal, 15)
+          .horizontalAlignment(.leading)
+          .contextMenu {
+            Button("Copy", systemSymbol: .documentOnDocument) {
+              UIPasteboard.general.string = message.trimmingCharacters(in: .whitespacesAndNewlines)
             }
           }
-        }
-        .padding(.vertical, 10)
-        .padding(.horizontal, 15)
-        .contextMenu {
-          Button("Copy", systemSymbol: .documentOnDocument) {
-            UIPasteboard.general.string = message.trimmingCharacters(in: .whitespacesAndNewlines)
-          }
-        }
 
         if showsControlRow {
           HStack(spacing: 16) {
@@ -143,6 +103,12 @@ public struct ChatBubbleCell: View {
         }
       }
     }
+    .environment(\.openURL, OpenURLAction { url in
+      // Links in a reply stay inside the app: bouncing to Safari drops the user out of the
+      // conversation they were reading.
+      safariURL = url
+      return .handled
+    })
     .sheet(isPresented: $showSourcesSheet) {
       ChatSourcesSheet(sources: sources)
     }

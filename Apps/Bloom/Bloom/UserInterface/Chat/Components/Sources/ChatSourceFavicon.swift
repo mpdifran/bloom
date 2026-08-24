@@ -1,48 +1,11 @@
 //
-//  ChatSourceChip.swift
+//  ChatSourceFavicon.swift
 //  Bloom
 //
 
 import SwiftUI
 import BloomModel
 import BloomUI
-
-/// A single citation, shown against the part of Bud's answer it supports.
-///
-/// Deliberately quiet: a citation is provenance, not a call to action, and a row of loud pills
-/// would fight the message for attention. Sized off `.caption` so it sits inside the text block
-/// rather than beside it.
-struct ChatSourceChip: View {
-  let source: SocketMessage.SourceRef
-  let action: () -> Void
-
-  var body: some View {
-    Button(action: action) {
-      chip
-    }
-    .buttonStyle(.plain)
-    .accessibilityLabel(Text(source.siteName))
-    .accessibilityHint(Text("Opens this source"))
-  }
-
-  private var chip: some View {
-    HStack(spacing: 5) {
-      ChatSourceFavicon(source: source, size: 14)
-
-      Text(source.siteName)
-        .font(.caption)
-        .fontDesign(.rounded)
-        .foregroundStyle(.secondary)
-        .lineLimit(1)
-    }
-    .padding(.horizontal, 8)
-    .padding(.vertical, 4)
-    .background {
-      Capsule().fill(.background.tertiary)
-    }
-    .contentShape(Capsule())
-  }
-}
 
 /// The site's icon, or a lettered stand-in.
 ///
@@ -87,16 +50,6 @@ struct ChatSourceFavicon: View {
   }
 }
 
-#Preview("Chip") {
-  PreviewEnvironment {
-    VStack(alignment: .leading, spacing: 12) {
-      ChatSourceChip(source: .preview(siteName: "Tripadvisor", host: "tripadvisor.ca")) { }
-      ChatSourceChip(source: .preview(siteName: "OpenTable", host: "opentable.com")) { }
-    }
-    .padding()
-  }
-}
-
 extension SocketMessage.SourceRef {
   /// Fixture for previews only.
   static func preview(
@@ -111,8 +64,7 @@ extension SocketMessage.SourceRef {
       siteName: siteName,
       title: title,
       publishedDate: nil,
-      faviconURL: nil,
-      blockIndex: nil
+      faviconURL: nil
     )
   }
 }

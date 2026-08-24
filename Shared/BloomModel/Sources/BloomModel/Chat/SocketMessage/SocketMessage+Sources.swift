@@ -25,11 +25,6 @@ public extension SocketMessage {
     /// Served from Bloom's own storage, so rendering a citation doesn't tell a third party what
     /// the user asked about. Nil when the site has no usable icon.
     public let faviconURL: String?
-    /// Which block of the message this supports, indexed over the text blocks the message was
-    /// split into. Resolved on the server: the model reports offsets into its full output, which
-    /// no longer line up once the text is partitioned for sending.
-    public let blockIndex: Int?
-
     public init(
       id: String,
       url: String,
@@ -37,8 +32,7 @@ public extension SocketMessage {
       siteName: String,
       title: String? = nil,
       publishedDate: Date? = nil,
-      faviconURL: String? = nil,
-      blockIndex: Int? = nil
+      faviconURL: String? = nil
     ) {
       self.id = id
       self.url = url
@@ -47,7 +41,6 @@ public extension SocketMessage {
       self.title = title
       self.publishedDate = publishedDate
       self.faviconURL = faviconURL
-      self.blockIndex = blockIndex
     }
   }
 }
