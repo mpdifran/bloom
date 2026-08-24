@@ -381,6 +381,14 @@ private extension ChatController {
       }
 
       do {
+        // Checked before the model is built: assigning the conversation relationship is enough to
+        // pull a new object into the context, so a duplicate has to be caught earlier than the
+        // insert.
+        guard !messageExists(id: messageResponse.id) else {
+          print("Ignoring duplicate message \(messageResponse.id)")
+          return
+        }
+
         let conversationModel = try getConversationModel(id: conversationID)
         let message = ChatMessage(
           id: messageResponse.id,
@@ -709,6 +717,11 @@ private extension ChatController {
     responseID: String? = nil,
     requestID: String? = nil
   ) async throws {
+    guard !messageExists(id: id) else {
+      print("Ignoring duplicate rich message \(id)")
+      return
+    }
+
     let conversationModel = try getConversationModel(id: conversationID)
     let richContentMessage = ChatMessage(
       id: id,
@@ -726,6 +739,20 @@ private extension ChatController {
   // MARK: - Helper Methods
 
   /// Fetch a conversation model object (not DTO) for assigning to messages
+  /// Whether a message with this id is already stored.
+  ///
+  /// The same message can arrive more than once: the socket and an APNs push both feed `parse`,
+  /// iOS can deliver a push twice, and a reconnect can replay cached streaming content after the
+  /// finished message already landed. Nothing else stops it - `ChatMessage.id` carries no unique
+  /// constraint, and it cannot, because CloudKit-backed SwiftData does not support them.
+  private func messageExists(id: String) -> Bool {
+    var descriptor = FetchDescriptor<ChatMessage>(
+      predicate: #Predicate<ChatMessage> { $0.id == id }
+    )
+    descriptor.fetchLimit = 1
+    return ((try? modelContext.fetch(descriptor))?.isEmpty == false)
+  }
+
   private func getConversationModel(id conversationID: String) throws -> ChatConversation {
     let predicate = #Predicate<ChatConversation> { conversation in
       conversation.id == conversationID
