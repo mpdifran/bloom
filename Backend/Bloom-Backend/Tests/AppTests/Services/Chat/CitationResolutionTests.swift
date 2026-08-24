@@ -197,3 +197,23 @@ struct WebSearchPromptGatingTests {
     #expect(String.Prompt.webSearch.contains("markdown link"))
   }
 }
+
+/// Covers the web search clause not undermining the health data tool.
+@Suite("WebSearchPromptDoesNotShadowHealthTool")
+struct WebSearchPromptHealthToolTests {
+
+  @Test("The clause points at the health tool rather than claiming the data is already held")
+  func doesNotClaimToAlreadyHaveHealthData() {
+    // The first wording said not to search for the user's health data "which you already have".
+    // It is not already held - it arrives by calling the tool - so the model could skip the call
+    // and then report it could not read the data at all.
+    #expect(!String.Prompt.webSearch.contains("which you already have"))
+    #expect(String.Prompt.webSearch.contains(String.Function.queryUserHealthData))
+  }
+
+  @Test("The base prompt still describes the health tool independently of search")
+  func healthToolSurvivesWithoutSearch() {
+    // Whatever the search clause says, querying health data has to work when search is off.
+    #expect(String.Prompt.chatAssistant.contains(String.Function.queryUserHealthData))
+  }
+}

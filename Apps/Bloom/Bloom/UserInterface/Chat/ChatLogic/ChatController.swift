@@ -598,7 +598,8 @@ private extension ChatController {
           conversationID: conversationID,
           lastMessageID: lastMessageID,
           locale: ChatLanguage.proseTag,
-          interfaceLocale: ChatLanguage.interfaceTag
+          interfaceLocale: ChatLanguage.interfaceTag,
+          protocolVersion: SocketMessage.currentProtocolVersion
         )
 
         if let socket = webSocketHandle {
@@ -615,7 +616,8 @@ private extension ChatController {
           conversationID: conversationID,
           lastMessageID: lastMessageID,
           locale: ChatLanguage.proseTag,
-          interfaceLocale: ChatLanguage.interfaceTag
+          interfaceLocale: ChatLanguage.interfaceTag,
+          protocolVersion: SocketMessage.currentProtocolVersion
         )
         if let socket = webSocketHandle {
           try? await socket.send(payload: responseMessage)
