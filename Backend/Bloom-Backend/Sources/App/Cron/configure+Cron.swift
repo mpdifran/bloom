@@ -51,6 +51,68 @@ extension Application {
       }
     }
 
-    self.logger.info("Configured cron jobs: duplicate-detection (every 4 hours), magic-scanner-cleanup (daily at 2 AM UTC)")
+    // Web domain classification - every 10 minutes, only while search is on.
+    //
+    // Domains are cited long before they are judged: a citation shows as soon as it clears the
+    // deterministic checks and the seeded blocklist, and this decides whether it shows next time.
+    // Deliberately behind the response rather than inside it - holding a reply while a model
+    // judges a domain trades a real cost for a small one.
+    if webSearchEnabled {
+      try cron.schedule("*/10 * * * *") { [weak self] in
+        guard let self else { return }
+
+        Task {
+          do {
+            let classifier = WebDomainClassifier(
+              openAIService: self.openAIService,
+              logger: self.logger
+            )
+            let judged = try await classifier.classifyNextBatch(db: self.db)
+            if judged > 0 {
+              self.logger.info("Domain classification judged \(judged) domains")
+            }
+          } catch {
+            self.logger.error("Domain classification failed: \(error)")
+          }
+        }
+      }
+
+      // Request-time blocklist refresh - every 15 minutes.
+      //
+      // Only the hundred domains OpenAI will accept. The full list stays in Postgres; putting it
+      // in Redis would consume a third of a 25 MB instance running `noeviction`, where filling up
+      // means writes start failing and chat streaming state goes with them.
+      try cron.schedule("*/15 * * * *") { [weak self] in
+        guard let self else { return }
+
+        Task {
+          let blocklist = WebDomainBlocklist(logger: self.logger)
+          let domains = await blocklist.rebuild(db: self.db, redis: self.redis)
+          self.logger.debug("Refreshed the request-time blocklist with \(domains.count) domains")
+        }
+      }
+    }
+
+    // Blocklist seed refresh - weekly, Sunday 3 AM. The public list gains entries constantly, and
+    // a seed that only ran once at launch decays.
+    if webSearchEnabled {
+      try cron.schedule("0 3 * * 0") { [weak self] in
+        guard let self else { return }
+
+        Task {
+          self.logger.info("Refreshing the seeded domain blocklist")
+          // Re-imports on conflict-do-nothing, so anything already judged - especially by hand -
+          // keeps its verdict.
+          do {
+            try await SeedWebDomainBlocklistCommand.importDefaultList(app: self, logger: self.logger)
+          } catch {
+            self.logger.error("Blocklist seed refresh failed: \(error)")
+          }
+        }
+      }
+    }
+
+    let webSearchJobs = webSearchEnabled ? ", web-domain-classification (every 10 min), blocklist-refresh (every 15 min), blocklist-seed (weekly)" : ""
+    self.logger.info("Configured cron jobs: duplicate-detection (every 4 hours), magic-scanner-cleanup (daily at 2 AM UTC)\(webSearchJobs)")
   }
 }

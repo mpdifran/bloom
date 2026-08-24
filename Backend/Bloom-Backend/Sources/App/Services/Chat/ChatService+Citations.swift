@@ -120,3 +120,34 @@ extension ChatService {
     ranges.first { $0.range.contains(utf16Offset) }?.partitionIndex
   }
 }
+
+// MARK: - Domains the search read
+
+extension ChatService {
+
+  /// Records every domain a search consulted, not only the ones it cited.
+  ///
+  /// A search reads far more than it quotes, and an unread domain is exactly as worth judging as a
+  /// cited one - it may be cited tomorrow. Feeding both into the reputation table means the corpus
+  /// grows several times faster, which is the difference between the classifier being useful in
+  /// weeks rather than months.
+  ///
+  /// Only populated when the request asked for it via `include`. Detached, because none of this
+  /// should sit between the model finishing and the user seeing the answer.
+  func observeSearchedDomains(in response: OpenAIKit.Response, db: any Database) {
+    let hosts: [String] = response.output.flatMap { item -> [String] in
+      guard case .webSearchToolCall(let call) = item else { return [] }
+      return (call.action?.sources ?? []).compactMap { source in
+        guard let raw = source.url, let url = URL(string: raw) else { return nil }
+        return WebDomainService.normalizedHost(from: url)
+      }
+    }
+
+    guard hosts.isNotEmpty else { return }
+
+    let service = WebDomainService(logger: logger)
+    Task.detached {
+      await service.observe(hosts: hosts, db: db)
+    }
+  }
+}

@@ -107,7 +107,7 @@ extension WebDomainReputation {
     case needsReview
   }
 
-  enum Category: String, Codable, FluentEnum {
+  enum Category: String, Codable, CaseIterable, FluentEnum {
     static let schema = "web_domain_category"
 
     case safe

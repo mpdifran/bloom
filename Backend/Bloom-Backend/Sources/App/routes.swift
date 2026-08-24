@@ -11,6 +11,7 @@ func routes(_ app: Application) throws {
   try app.register(collection: AdminOpenAIController())
   try app.register(collection: AdminChatController())
   try app.register(collection: AdminStorageController())
+  try app.register(collection: AdminWebDomainController())
   try app.register(collection: HealthReportController())
   try app.register(collection: WorkoutController())
   try app.register(collection: SalesController())

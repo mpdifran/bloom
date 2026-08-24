@@ -217,3 +217,71 @@ struct WebSearchPromptHealthToolTests {
     #expect(String.Prompt.chatAssistant.contains(String.Function.queryUserHealthData))
   }
 }
+
+/// Covers turning a classifier answer into a verdict.
+///
+/// The mapping is deliberately asymmetric, and the asymmetry is the point: blocking a legitimate
+/// site is a worse failure than showing an unjudged one, because the seeded list and the
+/// deterministic filter already catch the obvious cases without a model's help.
+@Suite("WebDomainVerdictMapping")
+struct WebDomainVerdictMappingTests {
+
+  private func decide(
+    _ category: WebDomainReputation.Category,
+    _ confidence: Double,
+    domain: String = "example.com"
+  ) -> (verdict: WebDomainReputation.Verdict, manualOverride: Bool) {
+    WebDomainClassifier.decide(
+      WebDomainClassification(
+        domain: domain,
+        category: category,
+        confidence: confidence,
+        reason: "test",
+        siteName: nil
+      ),
+      domain: domain
+    )
+  }
+
+  @Test("Unambiguous categories block themselves, but only when the model is confident")
+  func confidentBadCategoriesBlock() {
+    #expect(decide(.adult, 0.95).verdict == .blocked)
+    #expect(decide(.gambling, 0.85).verdict == .blocked)
+    #expect(decide(.illegal, 0.9).verdict == .blocked)
+    #expect(decide(.malwareOrSpam, 0.8).verdict == .blocked)
+
+    // Below the bar it goes to a human rather than being acted on.
+    #expect(decide(.adult, 0.6).verdict == .needsReview)
+    #expect(decide(.gambling, 0.79).verdict == .needsReview)
+  }
+
+  @Test("Editorial quality never auto-blocks, however confident the model is")
+  func lowQualityHealthAlwaysNeedsReview() {
+    // A nano model asked to judge health credibility will flag legitimate supplement retailers and
+    // mainstream wellness sections. That call belongs to a person.
+    #expect(decide(.lowQualityHealth, 0.99).verdict == .needsReview)
+    #expect(decide(.lowQualityHealth, 0.5).verdict == .needsReview)
+  }
+
+  @Test("Ordinary sites are allowed, and uncertainty is not")
+  func safeRequiresConfidence() {
+    #expect(decide(.safe, 0.9).verdict == .allowed)
+    #expect(decide(.safe, 0.4).verdict == .needsReview)
+    #expect(decide(.unknown, 0.9).verdict == .needsReview)
+  }
+
+  @Test("A never-blocked domain survives any verdict the classifier reaches")
+  func neverBlockedCannotBeDemoted() {
+    // The circuit breaker: one bad classification must not be able to take out a whole category of
+    // ordinary question.
+    #expect(decide(.adult, 0.99, domain: "wikipedia.org").verdict == .allowed)
+    #expect(decide(.malwareOrSpam, 0.99, domain: "reddit.com").verdict == .allowed)
+    #expect(decide(.lowQualityHealth, 0.99, domain: "nih.gov").verdict == .allowed)
+  }
+
+  @Test("A never-blocked verdict is marked manual so the classifier stops revisiting it")
+  func neverBlockedIsMarkedManual() {
+    #expect(decide(.adult, 0.99, domain: "wikipedia.org").manualOverride)
+    #expect(!decide(.safe, 0.99).manualOverride)
+  }
+}

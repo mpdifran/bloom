@@ -44,10 +44,30 @@ struct SeedWebDomainBlocklistCommand: AsyncCommand {
   }
 
   func run(using context: CommandContext, signature: Signature) async throws {
-    let app = context.application
-    let source = signature.source ?? Self.defaultSource
+    let inserted = try await Self.importList(
+      from: signature.source ?? Self.defaultSource,
+      limit: signature.limit,
+      app: context.application,
+      logger: context.application.logger
+    )
+    context.console.success("Seeded \(inserted) blocked domains")
+  }
 
-    context.console.info("Fetching blocklist from \(source)")
+  /// Imports a hosts-format list. Shared by the command and the weekly refresh cron, so the two
+  /// cannot drift.
+  @discardableResult
+  static func importDefaultList(app: Application, logger: Logger) async throws -> Int {
+    try await importList(from: defaultSource, limit: nil, app: app, logger: logger)
+  }
+
+  @discardableResult
+  static func importList(
+    from source: String,
+    limit: Int?,
+    app: Application,
+    logger: Logger
+  ) async throws -> Int {
+    logger.info("Fetching blocklist from \(source)")
 
     var request = HTTPClientRequest(url: source)
     request.method = .GET
@@ -63,8 +83,8 @@ struct SeedWebDomainBlocklistCommand: AsyncCommand {
       throw Abort(.internalServerError, reason: "Blocklist was not readable as text")
     }
 
-    let hosts = Self.parseHosts(from: text, limit: signature.limit)
-    context.console.info("Parsed \(hosts.count) domains")
+    let hosts = parseHosts(from: text, limit: limit)
+    logger.info("Parsed \(hosts.count) domains")
 
     guard let sql = app.db as? any SQLDatabase else {
       throw Abort(.internalServerError, reason: "Seeding requires a SQL database")
@@ -86,12 +106,10 @@ struct SeedWebDomainBlocklistCommand: AsyncCommand {
         """).run()
 
       inserted += batch.count
-      if inserted.isMultiple(of: 10_000) {
-        context.console.info("  \(inserted)/\(hosts.count)")
-      }
     }
 
-    context.console.success("Seeded \(inserted) blocked domains")
+    logger.info("Seeded \(inserted) blocked domains")
+    return inserted
   }
 
   /// Reads the `0.0.0.0 example.com` hosts format, ignoring comments and loopback entries.

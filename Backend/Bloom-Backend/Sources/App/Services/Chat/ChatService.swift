@@ -282,9 +282,22 @@ private extension ChatService {
       tools.append(.function(.queryUserHealthData))
 
       if webSearchEnabled {
+        // The request-time gate: stops the model reading the junk it hits most often, which saves
+        // tokens and improves answers. Capped at 100 by the API, and that is fine - the emit-time
+        // filter is unbounded and is what actually protects anyone.
+        let blocked = await WebDomainBlocklist(logger: logger)
+          .topBlocked(db: db, redis: application.redis)
+
         // `.low` context keeps the retrieved page content - billed as ordinary input tokens - from
         // dwarfing the tool fee itself.
-        tools.append(.webSearch(.init(searchContextSize: .low)))
+        tools.append(
+          .webSearch(
+            OpenAIKit.Response.Tool.WebSearch(
+              filters: blocked.isEmpty ? nil : OpenAIKit.Response.Tool.WebSearch.Filters(blockedDomains: blocked),
+              searchContextSize: .low
+            )
+          )
+        )
       }
     }
 
@@ -309,6 +322,9 @@ private extension ChatService {
 
     logger.debug("Streaming with model \(selectedModel.id)")
     let stream = try await openAIService.openAI.responses.createAndStreamResponse(
+      // Every URL the search consulted, not only the handful it cited. Roughly five times the
+      // domains per search, which is what makes the reputation corpus grow fast enough to matter.
+      include: webSearchEnabled ? ["web_search_call.action.sources"] : nil,
       input: fortifiedInputs,
       maxToolCalls: webSearchEnabled ? application.maxWebSearchesPerResponse : nil,
       model: selectedModel,
@@ -375,6 +391,8 @@ private extension ChatService {
               for: userID
             )
             logger.debug("Charged \(searchCount) web search(es) for \(userID.value)")
+
+            observeSearchedDomains(in: event.response, db: db)
           }
           if toolCalls.isNotEmpty {
             try await send(toolCalls: toolCalls, userID: userID, db: db, conversationID: conversationID, lastMessageID: event.response.id)
