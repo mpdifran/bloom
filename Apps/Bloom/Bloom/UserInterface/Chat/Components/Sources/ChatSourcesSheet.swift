@@ -4,7 +4,6 @@
 //
 
 import SwiftUI
-import SafariServices
 import BloomModel
 import BloomUI
 import AppUI
@@ -18,14 +17,15 @@ struct ChatSourcesSheet: View {
   let sources: [SocketMessage.SourceRef]
 
   @Environment(\.dismiss) private var dismiss
-  @State private var safariURL: URL?
+  @Bindable private var themeController = ThemeController.shared
 
   var body: some View {
     NavigationStack {
       BloomScrollView(spacing: 12, padding: [.vertical]) {
         ForEach(sources) { source in
           Button {
-            safariURL = URL(string: source.url)
+            guard let url = URL(string: source.url) else { return }
+            SafariPresenter.open(url, tint: themeController.theme.color)
           } label: {
             ChatSourceRow(source: source)
           }
@@ -44,10 +44,6 @@ struct ChatSourcesSheet: View {
     }
     .presentationDetents([.medium, .large])
     .presentationDragIndicator(.visible)
-    .fullScreenCover(item: $safariURL) { url in
-      ChatSafariView(url: url)
-        .ignoresSafeArea()
-    }
   }
 }
 
@@ -100,23 +96,6 @@ private struct ChatSourceRow: View {
     }
     .chatCardContainer(includePadding: false)
   }
-}
-
-/// Links open in-app rather than bouncing out, so the conversation is still there afterwards.
-struct ChatSafariView: UIViewControllerRepresentable {
-  let url: URL
-
-  func makeUIViewController(context: Context) -> SFSafariViewController {
-    let controller = SFSafariViewController(url: url)
-    controller.preferredControlTintColor = UIColor(ThemeController.shared.theme.color)
-    return controller
-  }
-
-  func updateUIViewController(_ controller: SFSafariViewController, context: Context) { }
-}
-
-extension URL: @retroactive Identifiable {
-  public var id: String { absoluteString }
 }
 
 #Preview("Sources sheet") {

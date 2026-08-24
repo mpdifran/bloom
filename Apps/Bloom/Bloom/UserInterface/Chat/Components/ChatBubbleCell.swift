@@ -41,7 +41,6 @@ public struct ChatBubbleCell: View {
 
   @State private var showReportSheet = false
   @State private var showSourcesSheet = false
-  @State private var safariURL: URL?
 
   /// Whether there is anything to put under the message. Without this an empty row still takes
   /// padding, leaving a gap under every ordinary reply.
@@ -106,15 +105,11 @@ public struct ChatBubbleCell: View {
     .environment(\.openURL, OpenURLAction { url in
       // Links in a reply stay inside the app: bouncing to Safari drops the user out of the
       // conversation they were reading.
-      safariURL = url
+      SafariPresenter.open(url, tint: themeController.theme.color)
       return .handled
     })
     .sheet(isPresented: $showSourcesSheet) {
       ChatSourcesSheet(sources: sources)
-    }
-    .fullScreenCover(item: $safariURL) { url in
-      ChatSafariView(url: url)
-        .ignoresSafeArea()
     }
     .fullScreenCover(isPresented: $showReportSheet) {
       if let responseID = responseID,
