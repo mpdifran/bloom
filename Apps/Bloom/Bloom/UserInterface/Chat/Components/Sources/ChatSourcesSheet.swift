@@ -13,11 +13,13 @@ import AppUI
 /// Built from cards rather than a divider-separated list: Bloom's chat surfaces are rounded cards
 /// (`ChatContextCell`, `ChatWorkoutPlanCell`) and a dense hairline list would read as a settings
 /// screen dropped into the conversation.
+///
+/// Rows open in the default browser, the same as tapping a citation in a reply.
 struct ChatSourcesSheet: View {
   let sources: [SocketMessage.SourceRef]
 
   @Environment(\.dismiss) private var dismiss
-  @Bindable private var themeController = ThemeController.shared
+  @Environment(\.openURL) private var openURL
 
   var body: some View {
     NavigationStack {
@@ -25,7 +27,7 @@ struct ChatSourcesSheet: View {
         ForEach(sources) { source in
           Button {
             guard let url = URL(string: source.url) else { return }
-            SafariPresenter.open(url, tint: themeController.theme.color)
+            openURL(url)
           } label: {
             ChatSourceRow(source: source)
           }

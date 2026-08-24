@@ -102,12 +102,6 @@ public struct ChatBubbleCell: View {
         }
       }
     }
-    .environment(\.openURL, OpenURLAction { url in
-      // Links in a reply stay inside the app: bouncing to Safari drops the user out of the
-      // conversation they were reading.
-      SafariPresenter.open(url, tint: themeController.theme.color)
-      return .handled
-    })
     .sheet(isPresented: $showSourcesSheet) {
       ChatSourcesSheet(sources: sources)
     }
