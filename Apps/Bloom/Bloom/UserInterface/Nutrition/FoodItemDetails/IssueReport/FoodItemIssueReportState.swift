@@ -9,7 +9,12 @@ import Foundation
 import HealthKit
 import BloomModel
 
-struct FoodItemIssueReportState {
+/// The editable copy of a food item, pre-filled so the user corrects rather than retypes.
+///
+/// `Equatable` on purpose: comparing against the pristine copy is how the view knows whether the
+/// user actually changed anything. Without that check every submission looks like an edit, because
+/// the pre-fill turns a record's `nil` fields into empty strings and those come back as a diff.
+struct FoodItemIssueReportState: Equatable {
   var name: String = ""
   var brandName: String = ""
   var flavour: String = ""

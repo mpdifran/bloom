@@ -21,8 +21,13 @@ struct FoodItemIssueReportView: View {
     self.foodItem = foodItem
     self.onSubmit = onSubmit
 
-    self._foodItemState = State(initialValue: FoodItemIssueReportState(foodItem: foodItem))
+    let initialState = FoodItemIssueReportState(foodItem: foodItem)
+    self.originalState = initialState
+    self._foodItemState = State(initialValue: initialState)
   }
+
+  /// What the item looked like before the user touched it, to tell a correction from a no-op.
+  private let originalState: FoodItemIssueReportState
 
   @State private var foodItemState: FoodItemIssueReportState
   @State private var packagingImage: UIImage?
@@ -95,8 +100,21 @@ private extension FoodItemIssueReportView {
         .horizontallyCentered()
       }
       .buttonStyle(.primary)
+      .disabled(!hasSomethingToReport)
       .sensoryFeedback(.success, trigger: didSubmitReport)
     }
+  }
+
+  /// Whether there is anything here worth an admin's time.
+  ///
+  /// A photo of the label or a written note is a report on its own - the user is handing over
+  /// evidence rather than typing numbers. What is not a report is an untouched form: it produces a
+  /// record identical to the one being complained about, which nobody can act on.
+  var hasSomethingToReport: Bool {
+    foodItemState != originalState
+      || packagingImage != nil
+      || nutritionLabelImage != nil
+      || foodItemState.notes.isNotEmpty
   }
 
   func submitReport() async throws {
@@ -104,9 +122,9 @@ private extension FoodItemIssueReportView {
     let nutritionLabelImageData = nutritionLabelImage?.resized(toWidth: 1000)?.pngData()
 
     let issue = FoodItemIssue(
-      name: foodItemState.name,
-      brandName: foodItemState.brandName,
-      flavour: foodItemState.flavour,
+      name: foodItemState.name.mapEmptyToNil(),
+      brandName: foodItemState.brandName.mapEmptyToNil(),
+      flavour: foodItemState.flavour.mapEmptyToNil(),
       calories: foodItemState.calories.mapNegativeToNil(),
       protein: foodItemState.protein.mapNegativeToNil(),
       carbohydrates: foodItemState.carbohydrates.mapNegativeToNil(),
@@ -130,13 +148,13 @@ private extension FoodItemIssueReportView {
       vitaminC: foodItemState.vitaminC.mapNegativeToNil(),
       vitaminD: foodItemState.vitaminD.mapNegativeToNil(),
       vitaminE: foodItemState.vitaminE.mapNegativeToNil(),
-      servingName: foodItemState.servingName,
+      servingName: foodItemState.servingName.mapEmptyToNil(),
       servingValue: foodItemState.servingValue.mapNegativeToNil(),
-      servingUnit: foodItemState.servingUnit,
-      ingredients: foodItemState.ingredients,
+      servingUnit: foodItemState.servingUnit.mapEmptyToNil(),
+      ingredients: foodItemState.ingredients.mapEmptyToNil(),
       nutritionLabelImage: nutritionLabelImageData.map { ImageFile(data: $0, fileExtension: "png") },
       packagingImage: packagingImageData.map { ImageFile(data: $0, fileExtension: "png") },
-      notes: foodItemState.notes,
+      notes: foodItemState.notes.mapEmptyToNil(),
       foodItemID: foodItem.id
     )
 
@@ -483,6 +501,15 @@ private extension Double {
 
   func mapNegativeToNil() -> Double? {
     self < 0 ? nil : self
+  }
+}
+
+private extension String {
+  /// An untouched text field holds "", but the record it came from held nil. Sending "" makes every
+  /// blank field look like the user cleared it.
+  func mapEmptyToNil() -> String? {
+    let trimmed = trimmingCharacters(in: .whitespacesAndNewlines)
+    return trimmed.isEmpty ? nil : trimmed
   }
 }
 
