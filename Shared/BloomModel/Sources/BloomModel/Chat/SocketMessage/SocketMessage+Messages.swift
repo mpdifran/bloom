@@ -38,6 +38,12 @@ public extension SocketMessage {
     /// search results.
     public let protocolVersion: Int?
 
+    /// Roughly where the user is, at most to the city, for localizing web search results.
+    ///
+    /// Sent only when the user has enabled the location category in AI data sharing; the client is
+    /// what enforces that, as it is for the location already carried in `userInfo`.
+    public let userLocation: UserLocation?
+
     public var isV2: Bool {
       conversationID != nil
     }
@@ -52,7 +58,8 @@ public extension SocketMessage {
       conversationID: String? = nil,
       locale: String? = nil,
       interfaceLocale: String? = nil,
-      protocolVersion: Int? = nil
+      protocolVersion: Int? = nil,
+      userLocation: UserLocation? = nil
     ) {
       self.text = text
       self.imageFileIDs = imageFileIDs
@@ -64,6 +71,7 @@ public extension SocketMessage {
       self.locale = locale
       self.interfaceLocale = interfaceLocale
       self.protocolVersion = protocolVersion
+      self.userLocation = userLocation
     }
   }
 

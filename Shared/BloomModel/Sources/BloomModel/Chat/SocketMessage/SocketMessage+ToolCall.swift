@@ -66,6 +66,11 @@ public extension SocketMessage {
     /// path, and without it the follow-up turn would forget what the client can render.
     public let protocolVersion: Int?
 
+    /// See `MessageRequest.userLocation`. Carried for the same reason as `locale` and
+    /// `protocolVersion`: the follow-up turn runs a fresh search and would otherwise lose the
+    /// user's city the moment a health query preceded it.
+    public let userLocation: UserLocation?
+
     public init(
       runID: String,
       toolCallResults: [ToolCallResult],
@@ -74,7 +79,8 @@ public extension SocketMessage {
       lastMessageID: String? = nil,
       locale: String? = nil,
       interfaceLocale: String? = nil,
-      protocolVersion: Int? = nil
+      protocolVersion: Int? = nil,
+      userLocation: UserLocation? = nil
     ) {
       self.runID = runID
       self.toolCallResults = toolCallResults
@@ -84,6 +90,7 @@ public extension SocketMessage {
       self.locale = locale
       self.interfaceLocale = interfaceLocale
       self.protocolVersion = protocolVersion
+      self.userLocation = userLocation
     }
   }
 }

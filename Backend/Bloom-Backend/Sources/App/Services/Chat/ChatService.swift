@@ -185,7 +185,8 @@ private extension ChatService {
       conversationID: message.conversationID,
       locale: message.locale,
       interfaceLocale: message.interfaceLocale,
-      protocolVersion: message.protocolVersion
+      protocolVersion: message.protocolVersion,
+      userLocation: message.userLocation
     )
   }
 
@@ -224,7 +225,8 @@ private extension ChatService {
       conversationID: response.conversationID,
       locale: response.locale,
       interfaceLocale: response.interfaceLocale,
-      protocolVersion: response.protocolVersion
+      protocolVersion: response.protocolVersion,
+      userLocation: response.userLocation
     )
   }
 }
@@ -244,7 +246,8 @@ private extension ChatService {
     conversationID: String?,
     locale: String?,
     interfaceLocale: String?,
-    protocolVersion: Int?
+    protocolVersion: Int?,
+    userLocation: SocketMessage.UserLocation?
   ) async throws {
 
     if isRetry {
@@ -288,13 +291,28 @@ private extension ChatService {
         let blocked = await WebDomainBlocklist(logger: logger)
           .topBlocked(db: db, redis: application.redis)
 
+        // Where the user is, if they have shared it. The prompt has carried their city for a while,
+        // but that only lets the model mention the place - this is what actually biases which
+        // results come back, so "somewhere for lunch nearby" returns their city and not California.
+        // City is as precise as the client will send, and the API is told the fix is approximate.
+        let searchLocation = userLocation.flatMap { location -> OpenAIKit.Response.Tool.WebSearch.UserLocation? in
+          guard !location.isEmpty else { return nil }
+          return OpenAIKit.Response.Tool.WebSearch.UserLocation(
+            city: location.city,
+            country: location.country,
+            region: location.region,
+            timezone: location.timezone
+          )
+        }
+
         // `.low` context keeps the retrieved page content - billed as ordinary input tokens - from
         // dwarfing the tool fee itself.
         tools.append(
           .webSearch(
             OpenAIKit.Response.Tool.WebSearch(
               filters: blocked.isEmpty ? nil : OpenAIKit.Response.Tool.WebSearch.Filters(blockedDomains: blocked),
-              searchContextSize: .low
+              searchContextSize: .low,
+              userLocation: searchLocation
             )
           )
         )
@@ -358,7 +376,8 @@ private extension ChatService {
         conversationID: conversationID,
         locale: locale,
         interfaceLocale: interfaceLocale,
-        protocolVersion: protocolVersion
+        protocolVersion: protocolVersion,
+        userLocation: userLocation
       )
     }
 

@@ -8,6 +8,7 @@
 import SwiftUI
 import CoreLocation
 import BloomFoundation
+import BloomModel
 import AppUI
 
 extension CLAuthorizationStatus {
@@ -38,6 +39,17 @@ final class LocationManagerViewModel: ObservableObject {
 
   private var locationManagerDelegate: LocationManagerDelegate? = nil
   private var tasks = [Task<Void, Never>]()
+
+  /// Last reverse-geocode, with the fix it came from.
+  ///
+  /// Chat asks for the user's whereabouts twice per message - once as prose for the prompt, once
+  /// as fields for the search - and CLGeocoder is both a network round trip and rate-limited by
+  /// Apple. Reuse the placemark until the user has actually moved.
+  private var cachedPlacemark: (location: CLLocation, placemark: CLPlacemark)?
+
+  /// Far enough that the city could plausibly have changed, close enough to not re-geocode for
+  /// someone walking around one.
+  private static let placemarkCacheRadius: CLLocationDistance = 5_000
 }
 
 extension LocationManagerViewModel {
@@ -91,46 +103,74 @@ extension LocationManagerViewModel {
   }
   
   func locationString() async -> String? {
+    guard let placemark = await currentPlacemark() else { return nil }
+
+    var components = [String]()
+
+    if let city = placemark.locality {
+      components.append(city)
+    }
+
+    if let state = placemark.administrativeArea {
+      components.append(state)
+    }
+
+    if let country = placemark.country {
+      components.append(country)
+    }
+
+    return components.isEmpty ? nil : components.joined(separator: ", ")
+  }
+
+  /// The current placemark, geocoding only when the cached one is stale or too far away.
+  func currentPlacemark() async -> CLPlacemark? {
     if currentLocation == nil {
       requestLocation()
       // Give location services a moment to update
       await Delay(500)
     }
-    
-    guard let location = currentLocation else {
-      return nil
+
+    guard let location = currentLocation else { return nil }
+
+    if let cached = cachedPlacemark, cached.location.distance(from: location) < Self.placemarkCacheRadius {
+      return cached.placemark
     }
-    
+
     do {
       let geocoder = CLGeocoder()
-      let placemarks = try await geocoder.reverseGeocodeLocation(location)
-      
-      guard let placemark = placemarks.first else {
+      guard let placemark = try await geocoder.reverseGeocodeLocation(location).first else {
         return nil
       }
-      
-      var components = [String]()
-      
-      // Add city
-      if let city = placemark.locality {
-        components.append(city)
-      }
-      
-      // Add state/province
-      if let state = placemark.administrativeArea {
-        components.append(state)
-      }
-      
-      // Add country
-      if let country = placemark.country {
-        components.append(country)
-      }
-      
-      return components.isEmpty ? nil : components.joined(separator: ", ")
+      cachedPlacemark = (location, placemark)
+      return placemark
     } catch {
       print("Error geocoding location: \(error)")
       return nil
     }
+  }
+
+  /// Where the user is, broken into the fields a web search wants, and no more precise than a city.
+  ///
+  /// The coordinates never leave the device: they are reverse-geocoded here and only the placemark
+  /// travels. Timezone comes from the device rather than the placemark, so a search can still be
+  /// pointed at the right part of the world when geocoding fails or is refused.
+  func approximateLocation() async -> SocketMessage.UserLocation {
+    // From the device, not the placemark, so a search can still be pointed at the right part of the
+    // world when there is no fix or geocoding fails.
+    let timezone = TimeZone.current.identifier
+
+    guard let placemark = await currentPlacemark() else {
+      return SocketMessage.UserLocation(timezone: timezone)
+    }
+
+    return SocketMessage.UserLocation(
+      // `locality` is the city. Deliberately not `subLocality`, `thoroughfare` or `postalCode` -
+      // those exist on the placemark and would narrow this to a neighbourhood or a street.
+      city: placemark.locality,
+      region: placemark.administrativeArea,
+      country: placemark.isoCountryCode,
+      timezone: timezone
+    )
   }
 }
 

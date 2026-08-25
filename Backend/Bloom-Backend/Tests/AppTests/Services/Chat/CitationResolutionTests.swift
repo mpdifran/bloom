@@ -285,3 +285,69 @@ struct WebDomainVerdictMappingTests {
     #expect(!decide(.safe, 0.99).manualOverride)
   }
 }
+
+/// Covers what the search is told about where the user is.
+///
+/// The privacy claim this feature rests on is that city is the floor: the coordinates stay on the
+/// device, and nothing narrower than a locality is ever sent. That is worth a test, because the
+/// fields are optional and a regression would be silent.
+@Suite("WebSearchUserLocation")
+struct WebSearchUserLocationTests {
+
+  @Test("A location with nothing in it is treated as absent")
+  func emptyLocationIsEmpty() {
+    #expect(SocketMessage.UserLocation().isEmpty)
+    // Timezone alone is still worth sending - it points the search at the right part of the world
+    // when there is no fix at all.
+    #expect(!SocketMessage.UserLocation(timezone: "America/Toronto").isEmpty)
+    #expect(!SocketMessage.UserLocation(city: "Kitchener").isEmpty)
+  }
+
+  @Test("The wire format carries a city and no way to express anything narrower")
+  func encodesOnlyCoarseFields() throws {
+    let location = SocketMessage.UserLocation(
+      city: "Kitchener",
+      region: "Ontario",
+      country: "CA",
+      timezone: "America/Toronto"
+    )
+
+    let data = try JSONEncoder().encode(location)
+    let json = try #require(
+      try JSONSerialization.jsonObject(with: data) as? [String: Any]
+    )
+
+    #expect(Set(json.keys) == ["city", "region", "country", "timezone"])
+    #expect(json["city"] as? String == "Kitchener")
+
+    // There is no field for a street, a postal code or a coordinate, so no amount of client change
+    // can send one without also changing this type.
+    for narrower in ["latitude", "longitude", "street", "thoroughfare", "postalCode", "subLocality"] {
+      #expect(json[narrower] == nil)
+    }
+  }
+
+  @Test("A round trip survives, including the fields a device could not resolve")
+  func roundTripsWithMissingFields() throws {
+    let location = SocketMessage.UserLocation(city: nil, region: nil, country: "CA", timezone: "Europe/Amsterdam")
+    let decoded = try JSONDecoder().decode(
+      SocketMessage.UserLocation.self,
+      from: try JSONEncoder().encode(location)
+    )
+    #expect(decoded == location)
+  }
+
+  @Test("A request from a client that predates this decodes with no location")
+  func legacyRequestHasNoLocation() throws {
+    // The field has to keep meaning "don't localize the search" forever, the same as protocolVersion.
+    let json = """
+      {"text":"hi","imageFileIDs":[],"userInfo":"{}"}
+      """
+    let request = try JSONDecoder().decode(
+      SocketMessage.MessageRequest.self,
+      from: try #require(json.data(using: .utf8))
+    )
+    #expect(request.userLocation == nil)
+    #expect(request.protocolVersion == nil)
+  }
+}

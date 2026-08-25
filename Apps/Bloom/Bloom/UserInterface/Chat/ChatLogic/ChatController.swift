@@ -252,7 +252,8 @@ extension ChatController {
       conversationID: resolvedConversationID,
       locale: ChatLanguage.proseTag,
       interfaceLocale: ChatLanguage.interfaceTag,
-      protocolVersion: SocketMessage.currentProtocolVersion
+      protocolVersion: SocketMessage.currentProtocolVersion,
+      userLocation: await userLocationForSearch(enabledCategories: enabledCategories)
     )
 
     let socket = await createOrGetWebSocketHandle()
@@ -316,7 +317,8 @@ extension ChatController {
       conversationID: resolvedConversationID,
       locale: ChatLanguage.proseTag,
       interfaceLocale: ChatLanguage.interfaceTag,
-      protocolVersion: SocketMessage.currentProtocolVersion
+      protocolVersion: SocketMessage.currentProtocolVersion,
+      userLocation: await userLocationForSearch(enabledCategories: enabledCategories)
     )
 
     let socket = await createOrGetWebSocketHandle()
@@ -607,7 +609,8 @@ private extension ChatController {
           lastMessageID: lastMessageID,
           locale: ChatLanguage.proseTag,
           interfaceLocale: ChatLanguage.interfaceTag,
-          protocolVersion: SocketMessage.currentProtocolVersion
+          protocolVersion: SocketMessage.currentProtocolVersion,
+          userLocation: await userLocationForSearch(enabledCategories: getEnabledCategories())
         )
 
         if let socket = webSocketHandle {
@@ -625,7 +628,8 @@ private extension ChatController {
           lastMessageID: lastMessageID,
           locale: ChatLanguage.proseTag,
           interfaceLocale: ChatLanguage.interfaceTag,
-          protocolVersion: SocketMessage.currentProtocolVersion
+          protocolVersion: SocketMessage.currentProtocolVersion,
+          userLocation: await userLocationForSearch(enabledCategories: getEnabledCategories())
         )
         if let socket = webSocketHandle {
           try? await socket.send(payload: responseMessage)
@@ -1034,5 +1038,16 @@ private extension ChatController {
 
   func getEnabledCategories() async -> Set<AIHealthCategory> {
     await AIDataSharingSettings.shared.enabledCategories
+  }
+
+  /// The user's rough whereabouts for localizing web search, or nil when they haven't shared it.
+  ///
+  /// Gated on the same AI data sharing category as the location already in `userInfo`. Enforced
+  /// here on the client, which is where the coordinates are and where every other category is
+  /// enforced; the server has the consent bit but never the placemark.
+  func userLocationForSearch(enabledCategories: Set<AIHealthCategory>) async -> SocketMessage.UserLocation? {
+    guard enabledCategories.contains(.location) else { return nil }
+    let location = await LocationManagerViewModel.shared.approximateLocation()
+    return location.isEmpty ? nil : location
   }
 }
