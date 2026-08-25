@@ -26,7 +26,6 @@ struct WebDomainClassifier: Sendable {
 
   /// Blocking on a nano model's judgement is only defensible where the category is unambiguous.
   private static let autoBlockThreshold = 0.8
-  private static let allowThreshold = 0.7
 
   private static let autoBlockable: Set<WebDomainReputation.Category> = [
     .adult, .gambling, .illegal, .malwareOrSpam,
@@ -79,10 +78,14 @@ extension WebDomainClassifier {
 
   /// Maps a classification onto a verdict.
   ///
-  /// Deliberately asymmetric. Adult, gambling, illegal and malware are lexically obvious and safe
-  /// to act on automatically. Editorial quality is not: a small model asked whether a site pushes
-  /// unevidenced health claims will flag legitimate supplement retailers and mainstream wellness
-  /// sections, so that answer only ever routes to a human.
+  /// Only two outcomes, because nobody reviews a third. Blocking is reserved for the categories a
+  /// model can judge from a domain name - adult, gambling, illegal, malware - and only when it is
+  /// confident. Everything else is allowed, including the cases the classifier is unsure about.
+  ///
+  /// That is deliberate rather than lax. Showing an unjudged citation costs a user nothing; a
+  /// wrongly blocked one silently removes a real answer, and neither of us would ever find out.
+  /// The seeded blocklist and the deterministic filter already catch what is lexically obvious, so
+  /// this tier only has to catch what they miss, not everything.
   func apply(_ result: WebDomainClassification, to record: WebDomainReputation) {
     record.category = result.category
     record.confidence = result.confidence
@@ -111,16 +114,14 @@ extension WebDomainClassifier {
       return (.allowed, true)
     }
 
-    switch result.category {
-    case _ where autoBlockable.contains(result.category) && result.confidence >= autoBlockThreshold:
-      return (.blocked, false)
-    case .lowQualityHealth:
-      return (.needsReview, false)
-    case .safe where result.confidence >= allowThreshold:
+    // Editorial quality never blocks. A nano model asked whether a site pushes unevidenced health
+    // claims flags legitimate supplement retailers and mainstream wellness sections, and there is
+    // no longer a human to catch that. The category is still recorded, so acting on it later is a
+    // decision rather than an excavation.
+    guard autoBlockable.contains(result.category), result.confidence >= autoBlockThreshold else {
       return (.allowed, false)
-    default:
-      return (.needsReview, false)
     }
+    return (.blocked, false)
   }
 
   private func classify(domains: [String]) async throws -> [WebDomainClassification] {

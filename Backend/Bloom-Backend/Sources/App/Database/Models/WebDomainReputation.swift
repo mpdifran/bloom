@@ -102,8 +102,10 @@ extension WebDomainReputation {
     case pending
     case allowed
     case blocked
-    /// The classifier was unsure, or judged something it should not decide alone. Held back from
-    /// users until a human looks.
+    /// No longer produced. There is nobody working a review queue, so an unresolved verdict just
+    /// withheld citations indefinitely; uncertainty resolves to `allowed` instead. Retained because
+    /// Postgres cannot drop an enum value without recreating the type, and because a human can
+    /// still set it by hand to park a domain.
     case needsReview
   }
 
@@ -115,8 +117,9 @@ extension WebDomainReputation {
     case gambling
     case illegal
     case malwareOrSpam
-    /// Never auto-blocks. Editorial quality is not something a small model should rule on alone -
-    /// it will flag legitimate supplement retailers and mainstream wellness sections.
+    /// Never blocks. Editorial quality is not something a small model should rule on - it flags
+    /// legitimate supplement retailers and mainstream wellness sections. Recorded rather than acted
+    /// on, so the data is there if this is ever revisited.
     case lowQualityHealth
     case unknown
   }

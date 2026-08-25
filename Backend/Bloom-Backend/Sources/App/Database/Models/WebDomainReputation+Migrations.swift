@@ -78,4 +78,28 @@ extension WebDomainReputation {
       try await sql.raw("DROP INDEX IF EXISTS web_domain_reputations_verdict_last_seen_idx").run()
     }
   }
+
+  /// Releases everything parked for human review.
+  ///
+  /// `needsReview` withheld citations until somebody ruled, and nobody was ever going to. In
+  /// practice it caught small businesses the classifier simply did not recognize - a poke place, a
+  /// menu CDN, a dining blog - and silently stripped them from answers. Those are now allowed, in
+  /// line with the classifier no longer producing the verdict.
+  ///
+  /// A hand-set `needsReview` is left alone: `manual_override` means a person parked that domain
+  /// deliberately, and this migration is not the place to overrule them.
+  struct ReleaseNeedsReview: AsyncMigration {
+    func prepare(on database: any Database) async throws {
+      try await WebDomainReputation.query(on: database)
+        .filter(\.$verdict == .needsReview)
+        .filter(\.$manualOverride == false)
+        .set(\.$verdict, to: .allowed)
+        .update()
+    }
+
+    func revert(on database: any Database) async throws {
+      // Irreversible by design: which rows were released is not recorded, and re-parking every
+      // allowed domain would withhold far more than this ever held.
+    }
+  }
 }

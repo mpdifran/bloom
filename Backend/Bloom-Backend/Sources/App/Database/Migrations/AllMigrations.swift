@@ -65,4 +65,5 @@ let allMigrations: [Migration] = [
   User.AddSIWATransferFields(),
   WebDomainReputation.Create(),
   WebDomainReputation.AddVerdictIndexes(),
+  WebDomainReputation.ReleaseNeedsReview(),
 ]

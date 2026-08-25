@@ -115,7 +115,7 @@ extension WebDomainService {
         // Never seen. Shown, and recorded for classification - see `observe`.
         return false
       }
-      return record.verdict == .blocked || record.verdict == .needsReview
+      return record.verdict == .blocked
     } catch {
       // Fail open. A database blip should not silently strip every citation from an answer, and
       // the deterministic checks above have already run.

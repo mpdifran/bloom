@@ -9,11 +9,13 @@ import Fluent
 import Foundation
 import Vapor
 
-/// Review queue for domains the classifier would not decide alone.
+/// Manual control over which domains may be cited.
 ///
-/// Without somewhere to clear it, `needsReview` is a write-only state: those domains have their
-/// citations withheld and nothing ever lets them out. Editorial quality in particular is routed
-/// here by design rather than auto-blocked, so this is where that judgement actually gets made.
+/// Not a review queue - the classifier no longer defers to a human, because nobody was working the
+/// queue and unresolved domains just lost their citations. This is the escape hatch instead: a way
+/// to block something the classifier waved through, or release something it got wrong, without
+/// shipping a deploy. A verdict set here is marked `manualOverride` and the classifier leaves it
+/// alone from then on.
 struct AdminWebDomainController { }
 
 extension AdminWebDomainController: RouteCollection {
@@ -33,11 +35,12 @@ extension AdminWebDomainController: RouteCollection {
 
 private extension AdminWebDomainController {
 
-  /// Domains awaiting a decision, most-encountered first.
+  /// Domains at a given verdict, most-encountered first. Defaults to what is currently blocked,
+  /// since that is the list worth eyeballing for a mistake.
   @Sendable
   func list(_ request: Request) async throws -> AdminWebDomainListResponse {
     let verdict = request.query[String.self, at: "verdict"]
-      .flatMap { WebDomainReputation.Verdict(rawValue: $0) } ?? .needsReview
+      .flatMap { WebDomainReputation.Verdict(rawValue: $0) } ?? .blocked
     let limit = min(request.query[Int.self, at: "limit"] ?? 50, 200)
 
     let records = try await WebDomainReputation.query(on: request.db)

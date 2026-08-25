@@ -226,11 +226,11 @@ struct WebSearchPromptHealthToolTests {
 @Suite("WebDomainVerdictMapping")
 struct WebDomainVerdictMappingTests {
 
-  private func decide(
+  private func verdict(
     _ category: WebDomainReputation.Category,
     _ confidence: Double,
     domain: String = "example.com"
-  ) -> (verdict: WebDomainReputation.Verdict, manualOverride: Bool) {
+  ) -> WebDomainReputation.Verdict {
     WebDomainClassifier.decide(
       WebDomainClassification(
         domain: domain,
@@ -240,57 +240,58 @@ struct WebDomainVerdictMappingTests {
         siteName: nil
       ),
       domain: domain
-    )
+    ).verdict
   }
 
-  @Test("Unambiguous categories block themselves, but only when the model is confident")
+  @Test("Unambiguous categories block, but only when the model is confident")
   func confidentBadCategoriesBlock() {
-    #expect(decide(.adult, 0.95).verdict == .blocked)
-    #expect(decide(.gambling, 0.85).verdict == .blocked)
-    #expect(decide(.illegal, 0.9).verdict == .blocked)
-    #expect(decide(.malwareOrSpam, 0.8).verdict == .blocked)
-
-    // Below the bar it goes to a human rather than being acted on.
-    #expect(decide(.adult, 0.6).verdict == .needsReview)
-    #expect(decide(.gambling, 0.79).verdict == .needsReview)
+    #expect(verdict(.adult, 0.95) == .blocked)
+    #expect(verdict(.gambling, 0.85) == .blocked)
+    #expect(verdict(.illegal, 0.9) == .blocked)
+    #expect(verdict(.malwareOrSpam, 0.8) == .blocked)
   }
 
-  @Test("Editorial quality never auto-blocks, however confident the model is")
-  func lowQualityHealthAlwaysNeedsReview() {
-    // A nano model asked to judge health credibility will flag legitimate supplement retailers and
-    // mainstream wellness sections. That call belongs to a person.
-    #expect(decide(.lowQualityHealth, 0.99).verdict == .needsReview)
-    #expect(decide(.lowQualityHealth, 0.5).verdict == .needsReview)
+  @Test("An unconfident bad guess is allowed rather than parked")
+  func unconfidentBadCategoriesAllow() {
+    // There is no human backstop, so the alternative to allowing is blocking on a guess. The
+    // seeded list and the deterministic filter have already had their say by this point.
+    #expect(verdict(.adult, 0.6) == .allowed)
+    #expect(verdict(.gambling, 0.79) == .allowed)
   }
 
-  @Test("Ordinary sites are allowed, and uncertainty is not")
-  func safeRequiresConfidence() {
-    #expect(decide(.safe, 0.9).verdict == .allowed)
-    #expect(decide(.safe, 0.4).verdict == .needsReview)
-    #expect(decide(.unknown, 0.9).verdict == .needsReview)
+  @Test("Editorial quality never blocks, however confident the model is")
+  func lowQualityHealthNeverBlocks() {
+    // A nano model asked to judge health credibility flags legitimate supplement retailers and
+    // mainstream wellness sections.
+    #expect(verdict(.lowQualityHealth, 0.99) == .allowed)
+    #expect(verdict(.lowQualityHealth, 0.5) == .allowed)
+  }
+
+  @Test("Ordinary and unrecognized sites are both allowed")
+  func safeAndUnknownAllowed() {
+    #expect(verdict(.safe, 0.9) == .allowed)
+    // The case that drove this: small businesses the model simply does not recognize. Low
+    // confidence must not cost a real site its citation.
+    #expect(verdict(.safe, 0.4) == .allowed)
+    #expect(verdict(.unknown, 0.9) == .allowed)
+  }
+
+  @Test("Nothing the classifier decides can produce a review verdict")
+  func neverParksForReview() {
+    for category in WebDomainReputation.Category.allCases {
+      for confidence in [0.0, 0.4, 0.75, 0.9, 1.0] {
+        #expect(verdict(category, confidence) != .needsReview)
+      }
+    }
   }
 
   @Test("A never-blocked domain survives any verdict the classifier reaches")
   func neverBlockedCannotBeDemoted() {
-    // The circuit breaker: one bad classification must not be able to take out a whole category of
-    // ordinary question.
-    #expect(decide(.adult, 0.99, domain: "wikipedia.org").verdict == .allowed)
-    #expect(decide(.malwareOrSpam, 0.99, domain: "reddit.com").verdict == .allowed)
-    #expect(decide(.lowQualityHealth, 0.99, domain: "nih.gov").verdict == .allowed)
-  }
-
-  @Test("A never-blocked verdict is marked manual so the classifier stops revisiting it")
-  func neverBlockedIsMarkedManual() {
-    #expect(decide(.adult, 0.99, domain: "wikipedia.org").manualOverride)
-    #expect(!decide(.safe, 0.99).manualOverride)
+    #expect(verdict(.adult, 0.99, domain: "wikipedia.org") == .allowed)
+    #expect(verdict(.malwareOrSpam, 0.99, domain: "reddit.com") == .allowed)
   }
 }
 
-/// Covers what the search is told about where the user is.
-///
-/// The privacy claim this feature rests on is that city is the floor: the coordinates stay on the
-/// device, and nothing narrower than a locality is ever sent. That is worth a test, because the
-/// fields are optional and a regression would be silent.
 @Suite("WebSearchUserLocation")
 struct WebSearchUserLocationTests {
 
