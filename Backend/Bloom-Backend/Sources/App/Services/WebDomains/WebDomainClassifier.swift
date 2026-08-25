@@ -137,6 +137,10 @@ extension WebDomainClassifier {
       ],
       model: model,
       instructions: .Prompt.webDomainClassifier,
+      // Reasoning bills at the output rate and dominates the cost of a batch. Judging whether a
+      // domain is a restaurant or a porn site is recall, not deduction - the model has nothing to
+      // work out that it does not already know from the name.
+      reasoning: Response.Reasoning(effort: .minimal, summary: nil),
       text: OpenAIKit.Text(format: Format(type: .jsonSchema(.webDomainClassification))),
       truncation: .auto
     )
