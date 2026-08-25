@@ -1415,6 +1415,31 @@ final actor MagicScanJobManager {
 - **Push Notifications**: Silent notifications alert user when processing completes
 - **Automatic Cleanup**: Images and jobs expire after 48 hours
 - **Simplified UX**: Less user interaction required, more automated
+## Admin API: replace, not patch
+
+`PUT /v1/admin/food/replace` (`AdminFoodController.replaceFood`) **overwrites every field**, nil
+included. Only `name`, `category` and `country` are guarded by `if let`; everything else is assigned
+straight from the request, so any field the caller omits is written as NULL.
+
+There is no partial update. Sending only the fields you changed erases the rest, and the call still
+returns 200 - the damage is silent, and on `essential-1` there is no rollback to undo it with.
+
+```swift
+// Wrong: wipes calories, sugar, serving, brand and everything else not listed
+{"foodItemRecord": {"id": {...}, "state": "verified", "sodium": 0}}
+
+// Right: read the record, change what you mean to, send it all back
+```
+
+Gardener is safe only because its detail view always holds a complete record. Any new caller must do
+the same: fetch first, mutate, send the whole thing.
+
+`PATCH /v1/admin/food/update` is a deprecated alias with identical semantics, kept so Gardener builds
+predating the rename keep working. Remove it once they have all been rebuilt.
+
+Making this a genuine patch means distinguishing "absent" from "explicitly null" in the request,
+which the current wire format cannot express.
+
 ## Localization
 
 The app localizes through **String Catalogs** (`Localizable.xcstrings`), one per target that owns

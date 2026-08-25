@@ -17,6 +17,7 @@ private extension NetworkStack {
     case get = "GET"
     case post = "POST"
     case patch = "PATCH"
+    case put = "PUT"
     case delete = "DELETE"
   }
 
@@ -136,12 +137,17 @@ extension NetworkStack {
     return try JSONDecoder.bloomModel.decode(AdminCreateFoodItemResponse.self, from: data)
   }
 
-  func updateFoodRecord(
+  /// Replaces a food item wholesale.
+  ///
+  /// The request must carry a **complete** record. Every field is overwritten, so anything left out
+  /// is written as NULL - sending only the fields you changed erases the others, and the call still
+  /// returns 200.
+  func replaceFoodRecord(
     request: AdminUpdateFoodItemRequest
   ) async throws -> AdminUpdateFoodItemResponse {
     let urlRequest = try await createAuthenticatedRequest(
-      path: "v1/admin/food/update",
-      method: .patch,
+      path: "v1/admin/food/replace",
+      method: .put,
       body: request
     )
 

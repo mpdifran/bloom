@@ -23,7 +23,11 @@ extension AdminFoodController: RouteCollection {
           $0.post("usda-ingest-fetch", use: ingestUSDAFetch)
           $0.get("unverified", use: getUnverifiedFoods)
           $0.post("create", use: createFood)
-          $0.patch("update", use: updateFood)
+          $0.put("replace", use: replaceFood)
+          // Deprecated. Retained only so Gardener builds installed before the rename keep working;
+          // remove once everyone has rebuilt. Same full-replace semantics as `replace` - the old
+          // name and method were the whole problem.
+          $0.patch("update", use: replaceFood)
           $0.delete(":id", use: deleteFood)
           $0.get("search", use: searchFood)
           $0.get("accuracy-report", use: getAccuracyReport)
@@ -309,7 +313,19 @@ private extension AdminFoodController {
   }
 
   @Sendable
-  func updateFood(_ request: Request) async throws -> AdminUpdateFoodItemResponse {
+  /// Replaces a food item wholesale. **Every field is overwritten, including with nil.**
+  ///
+  /// This is a replace and not a patch: apart from `name`, `category` and `country`, each field is
+  /// assigned straight from the request, so anything the caller leaves out is written as NULL. A
+  /// caller that sends only the fields it means to change will silently erase the rest, and the
+  /// save succeeds with a 200 either way.
+  ///
+  /// So: read the record first, change what you mean to change, and send the whole thing back.
+  /// Gardener does this because its detail view always holds a full record; anything new must too.
+  ///
+  /// Making this a true partial update means distinguishing "absent" from "explicitly null" in the
+  /// request, which the current wire format cannot express.
+  func replaceFood(_ request: Request) async throws -> AdminUpdateFoodItemResponse {
     let requestBody = try request.content.decode(AdminUpdateFoodItemRequest.self)
     let updateRecord = requestBody.foodItemRecord
     let updateNutritionLabelImage = requestBody.nutritionLabelImage

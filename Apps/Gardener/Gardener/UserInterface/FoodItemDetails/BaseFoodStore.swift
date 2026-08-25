@@ -45,7 +45,7 @@ class BaseFoodStore: ObservableObject {
       nutritionLabelImage: nutritionLabelImageFile,
       packagingImage: packagingImageFile
     )
-    let response = try await service.updateFoodRecord(request: request)
+    let response = try await service.replaceFoodRecord(request: request)
 
     guard let updatedFoodItem = response.foodItemRecord else {
       throw NSError(description: "Nil Food Item Response")
