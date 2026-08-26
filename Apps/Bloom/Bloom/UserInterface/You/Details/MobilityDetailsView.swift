@@ -96,7 +96,7 @@ private extension MobilityDetailsView {
         VStack {
           VitalDetailChartTitleView(
             title: "Steps",
-            valueLabel: "TOTAL",
+            valueLabel: String(localized: "TOTAL", comment: "Chart total label"),
             value: stepsChartData.totalStepsCurrent.formatted()
           )
 

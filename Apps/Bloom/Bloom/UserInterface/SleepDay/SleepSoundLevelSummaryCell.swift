@@ -15,7 +15,7 @@ struct SleepSoundLevelSummaryCell: View {
   var body: some View {
     VStack {
       SleepSectionTitleView(
-        title: "Sound Levels",
+        title: String(localized: "Sound Levels", comment: "Sleep detail section heading"),
         symbol: .speakerZzzFill
       )
       .padding(.top)

@@ -17,7 +17,7 @@ struct WorkoutActivityTypeFilterView: View {
     ScrollViewReader { scrollReader in
       ScrollView(.horizontal) {
         HStack {
-          ActivityTypeCell(title: "All", symbol: .figure, isSelected: selectedActivityType == nil)
+          ActivityTypeCell(title: String(localized: "All", comment: "Workout activity type filter option"), symbol: .figure, isSelected: selectedActivityType == nil)
             .id("All")
             .onTapGesture {
               selectedActivityType = nil

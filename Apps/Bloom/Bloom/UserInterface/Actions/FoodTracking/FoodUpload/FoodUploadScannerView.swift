@@ -121,12 +121,12 @@ private extension FoodUploadScannerView {
           .horizontallyCentered()
 
         UploadFoodActionView(
-          title: "Scan Again",
+          title: String(localized: "Scan Again", comment: "Food scanning action"),
           symbol: .barcodeViewfinder
         )
       } else {
         UploadFoodActionView(
-          title: "Scan Barcode",
+          title: String(localized: "Scan Barcode", comment: "Food scanning action"),
           symbol: .barcodeViewfinder
         )
         .frame(minHeight: 100)
@@ -152,12 +152,12 @@ private extension FoodUploadScannerView {
           .clipShape(RoundedRectangle(cornerRadius: 16))
 
         UploadFoodActionView(
-          title: "Scan Again",
+          title: String(localized: "Scan Again", comment: "Food scanning action"),
           symbol: .vialViewfinder
         )
       } else {
         UploadFoodActionView(
-          title: "Scan Packaging",
+          title: String(localized: "Scan Packaging", comment: "Food scanning action"),
           symbol: .vialViewfinder
         )
         .frame(minHeight: 100)
@@ -189,12 +189,12 @@ private extension FoodUploadScannerView {
           .clipShape(RoundedRectangle(cornerRadius: 16))
 
         UploadFoodActionView(
-          title: "Scan Again",
+          title: String(localized: "Scan Again", comment: "Food scanning action"),
           symbol: .textViewfinder
         )
       } else {
         UploadFoodActionView(
-          title: "Scan Nutrition Label",
+          title: String(localized: "Scan Nutrition Label", comment: "Food scanning action"),
           symbol: .textViewfinder
         )
         .frame(minHeight: 100)

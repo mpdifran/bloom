@@ -140,7 +140,7 @@ private extension ExistingUserAIDataConsentView {
     } label: {
       DisclosureOverallToggleView(
         icon: .heartFill,
-        title: "Personal Data Categories",
+        title: String(localized: "Personal Data Categories", comment: "AI data sharing consent section heading"),
         subtitle: "Personal Data Categories (such as sleep, physical activity, or nutrition) allow you to control what data is shared with the Bloom Plus features enabled above.",
         isExpanded: isHealthDataSectionExpanded,
         isEnabled: isHealthDataSectionEnabledBinding
@@ -183,7 +183,7 @@ private extension ExistingUserAIDataConsentView {
     } label: {
       DisclosureOverallToggleView(
         icon: .squareFillOnCircleFill,
-        title: "Other Data Categories",
+        title: String(localized: "Other Data Categories", comment: "AI data sharing consent section heading"),
         subtitle: "Other Data Categories (such as location, calendar, and weather) allow you to control what data is shared with the Bloom Plus features enabled above.",
         isExpanded: isOtherDataSectionExpanded,
         isEnabled: isOtherDataSectionEnabledBinding

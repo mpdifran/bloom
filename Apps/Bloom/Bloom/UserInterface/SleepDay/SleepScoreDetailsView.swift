@@ -16,7 +16,7 @@ struct SleepScoreDetailsView: View {
     VStack {
       HStack {
         LabelledText(
-          label: "Length",
+          label: String(localized: "Length", comment: "Sleep score metric label"),
           symbol: .clockFill,
           value: "\(DateFormatter.timeIntervalHourMinuteAbbreviated.string(for: sleepAnalysis.overallDurationComponents) ?? "")",
           progress: sleepAnalysis.sleepLengthScore / 100
@@ -24,7 +24,7 @@ struct SleepScoreDetailsView: View {
         .tint(.mutedGreen)
 
         LabelledText(
-          label: "Awake",
+          label: String(localized: "Awake", comment: "Sleep score metric label"),
           symbol: .boltHorizontalFill,
           value: awakeDescription,
           progress: sleepAnalysis.awakeSleepScore.map { $0 / 100 }
@@ -32,7 +32,7 @@ struct SleepScoreDetailsView: View {
         .tint(sleepAnalysis.awakeSleepHours == nil ? .gray : .awakeSleep)
 
         LabelledText(
-          label: "HR",
+          label: String(localized: "HR", comment: "Sleep score metric label"),
           symbol: .heartFill,
           value: heartRateDescription,
           progress: sleepAnalysis.heartRateScore.map { $0 / 100 }
@@ -42,7 +42,7 @@ struct SleepScoreDetailsView: View {
 
       HStack {
         LabelledText(
-          label: "REM",
+          label: String(localized: "REM", comment: "Sleep score metric label"),
           symbol: .eyes,
           value: remDescription,
           progress: sleepAnalysis.remSleepScore.map { $0 / 100 }
@@ -50,7 +50,7 @@ struct SleepScoreDetailsView: View {
         .tint(sleepAnalysis.remSleepHours == nil ? Color.gray : Color.remSleep)
 
         LabelledText(
-          label: "Core",
+          label: String(localized: "Core", comment: "Sleep score metric label"),
           symbol: .circleDottedCircle,
           value: coreDescription,
           progress: sleepAnalysis.coreSleepScore.map { $0 / 100 }
@@ -58,7 +58,7 @@ struct SleepScoreDetailsView: View {
         .tint(sleepAnalysis.coreSleepHours == nil ? .gray : .coreSleep)
 
         LabelledText(
-          label: "Deep",
+          label: String(localized: "Deep", comment: "Sleep score metric label"),
           symbol: .arrowDownToLine,
           value: deepDescription,
           progress: sleepAnalysis.deepSleepScore.map { $0 / 100 }

@@ -77,7 +77,7 @@ private extension OnboardingExplanationNutritionView {
 
       if index >= 1 {
         MealHeaderView(
-          mealName: "Breakfast",
+          mealName: String(localized: "Breakfast", comment: "Meal name in the nutrition onboarding example"),
           totalCalories: 400,
           totalProtein: 25,
           totalCarbs: 90,

@@ -37,7 +37,7 @@ struct WristTemperatureSummaryCell: View {
   var body: some View {
     VStack {
       SleepSectionTitleView(
-        title: "Wrist Temperature",
+        title: String(localized: "Wrist Temperature", comment: "Sleep detail section heading"),
         symbol: .thermometerMedium
       )
 

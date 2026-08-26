@@ -204,16 +204,16 @@
     "%@ - %@ +1 day": {
       "comment": "Time range that runs past midnight, %1$@ is the start time and %2$@ the end time",
       "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$@ - %2$@ +1 day"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "%1$@ - %2$@ +1 Tag"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ - %2$@ +1 day"
           }
         },
         "es": {
@@ -1051,15 +1051,15 @@
     },
     "%@%@ bpm": {
       "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$@%2$@ bpm"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
+            "value": "%1$@%2$@ bpm"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "new",
             "value": "%1$@%2$@ bpm"
           }
         },
@@ -1091,15 +1091,15 @@
     },
     "%@%@%%": {
       "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$@%2$@%%"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
+            "value": "%1$@%2$@%%"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "new",
             "value": "%1$@%2$@%%"
           }
         },
@@ -1780,16 +1780,16 @@
     },
     "%lld reminders • %lld completed": {
       "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$lld reminders • %2$lld completed"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "%1$lld Erinnerungen • %2$lld erledigt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld reminders • %2$lld completed"
           }
         },
         "es": {
@@ -6212,16 +6212,16 @@
     "Ages %lld-%lld": {
       "comment": "Age range label. The placeholders are the youngest and oldest age in the bracket.",
       "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "new",
-            "value": "Ages %1$lld-%2$lld"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "%1$lld-%2$lld Jahre"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ages %1$lld-%2$lld"
           }
         },
         "es": {
@@ -6533,7 +6533,7 @@
       }
     },
     "All": {
-      "comment": "Display name for stress details view\nRegularity filter showing every bowel movement interval",
+      "comment": "Display name for stress details view\nDrink category filter option\nRegularity filter showing every bowel movement interval\nWorkout activity type filter option",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -8500,7 +8500,7 @@
       }
     },
     "Awake": {
-      "comment": "Display name for apple sleep stage",
+      "comment": "Display name for apple sleep stage\nSleep score metric label",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -8673,6 +8673,7 @@
       }
     },
     "Barcode Scan": {
+      "comment": "Food logging method",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -10721,6 +10722,41 @@
         }
       }
     },
+    "Bowel Movement": {
+      "comment": "Action to log a bowel movement",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stuhlgang"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deposición"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selles"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selles"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stoelgang"
+          }
+        }
+      }
+    },
     "bowel movements": {
       "comment": "Display name for query data type",
       "localizations": {
@@ -10930,6 +10966,7 @@
       }
     },
     "Breakfast": {
+      "comment": "Meal name in the nutrition onboarding example",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -14883,7 +14920,7 @@
       }
     },
     "Core": {
-      "comment": "Display name for apple sleep stage",
+      "comment": "Display name for apple sleep stage\nSleep score metric label",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -16754,7 +16791,7 @@
       }
     },
     "Deep": {
-      "comment": "Display name for apple sleep stage",
+      "comment": "Display name for apple sleep stage\nSleep score metric label",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -18070,6 +18107,7 @@
       }
     },
     "Drinks": {
+      "comment": "Action to log a drink",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -21404,6 +21442,41 @@
           "stringUnit": {
             "state": "translated",
             "value": "Volg je voortgang in de loop van de tijd met vriendelijke inzichten."
+          }
+        }
+      }
+    },
+    "Food": {
+      "comment": "Action to log a meal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Essen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comida"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repas"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repas"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eten"
           }
         }
       }
@@ -25319,6 +25392,7 @@
       }
     },
     "HR": {
+      "comment": "Sleep score metric label",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -27516,6 +27590,41 @@
         }
       }
     },
+    "Length": {
+      "comment": "Sleep score metric label",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dauer"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duración"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durée"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durée"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duur"
+          }
+        }
+      }
+    },
     "Less guessing. More progressing.": {
       "comment": "Paywall showcase card title.",
       "extractionState": "manual",
@@ -29624,6 +29733,41 @@
         }
       }
     },
+    "Magic Scan": {
+      "comment": "Food logging method",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Magic Scan"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escaneo mágico"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scan magique"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scan magique"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Magic scan"
+          }
+        }
+      }
+    },
     "Magnesium": {
       "comment": "Title of a sample notification shown during onboarding (a supplement reminder).",
       "extractionState": "manual",
@@ -31649,6 +31793,356 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gedempt"
+          }
+        }
+      }
+    },
+    "Muted Blue": {
+      "comment": "Developer colour palette swatch name",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gedämpftes Blau"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Azul apagado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bleu atténué"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bleu atténué"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gedempt blauw"
+          }
+        }
+      }
+    },
+    "Muted Green": {
+      "comment": "Developer colour palette swatch name",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gedämpftes Grün"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verde apagado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vert atténué"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vert atténué"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gedempt groen"
+          }
+        }
+      }
+    },
+    "Muted Indigo": {
+      "comment": "Developer colour palette swatch name",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gedämpftes Indigo"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Índigo apagado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indigo atténué"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indigo atténué"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gedempt indigo"
+          }
+        }
+      }
+    },
+    "Muted Light Blue": {
+      "comment": "Developer colour palette swatch name",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gedämpftes Hellblau"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Azul claro apagado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bleu clair atténué"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bleu clair atténué"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gedempt lichtblauw"
+          }
+        }
+      }
+    },
+    "Muted Orange": {
+      "comment": "Developer colour palette swatch name",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gedämpftes Orange"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Naranja apagado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Orange atténué"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Orange atténué"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gedempt oranje"
+          }
+        }
+      }
+    },
+    "Muted Pink": {
+      "comment": "Developer colour palette swatch name",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gedämpftes Rosa"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rosa apagado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rose atténué"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rose atténué"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gedempt roze"
+          }
+        }
+      }
+    },
+    "Muted Purple": {
+      "comment": "Developer colour palette swatch name",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gedämpftes Violett"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Morado apagado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Violet atténué"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Violet atténué"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gedempt paars"
+          }
+        }
+      }
+    },
+    "Muted Red": {
+      "comment": "Developer colour palette swatch name",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gedämpftes Rot"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rojo apagado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rouge atténué"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rouge atténué"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gedempt rood"
+          }
+        }
+      }
+    },
+    "Muted Teal": {
+      "comment": "Developer colour palette swatch name",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gedämpftes Blaugrün"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verde azulado apagado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sarcelle atténué"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sarcelle atténué"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gedempt turquoise"
+          }
+        }
+      }
+    },
+    "Muted Yellow": {
+      "comment": "Developer colour palette swatch name",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gedämpftes Gelb"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amarillo apagado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jaune atténué"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jaune atténué"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gedempt geel"
           }
         }
       }
@@ -35109,6 +35603,41 @@
         }
       }
     },
+    "Other Data Categories": {
+      "comment": "AI data sharing consent section heading",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weitere Datenkategorien"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otras categorías de datos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autres catégories de données"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autres catégories de données"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Overige datacategorieën"
+          }
+        }
+      }
+    },
     "Other Monitors": {
       "localizations": {
         "de": {
@@ -35555,7 +36084,7 @@
       }
     },
     "Period": {
-      "comment": "Title for legend label",
+      "comment": "Action to log a menstrual cycle event\nTitle for legend label",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -35732,6 +36261,7 @@
       }
     },
     "Personal Data Categories": {
+      "comment": "AI data sharing consent section heading",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -37189,6 +37719,41 @@
         }
       }
     },
+    "Quick Add": {
+      "comment": "Food logging method",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schnell hinzufügen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Añadir rápido"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajout rapide"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajout rapide"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snel toevoegen"
+          }
+        }
+      }
+    },
     "Quiet": {
       "comment": "Display name for sleep environment sound",
       "localizations": {
@@ -38506,7 +39071,7 @@
       }
     },
     "REM": {
-      "comment": "Display name for apple sleep stage\nShort display name for monitor metric type",
+      "comment": "Display name for apple sleep stage\nShort display name for monitor metric type\nSleep score metric label",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -39398,6 +39963,7 @@
       }
     },
     "Rest": {
+      "comment": "Workout set type",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -40456,6 +41022,146 @@
           "stringUnit": {
             "state": "translated",
             "value": "Scan een barcode om voeding vast te leggen"
+          }
+        }
+      }
+    },
+    "Scan Again": {
+      "comment": "Food scanning action",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erneut scannen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volver a escanear"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scanner à nouveau"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scanner à nouveau"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opnieuw scannen"
+          }
+        }
+      }
+    },
+    "Scan Barcode": {
+      "comment": "Food scanning action",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Barcode scannen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escanear código de barras"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scanner le code-barres"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scanner le code-barres"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Barcode scannen"
+          }
+        }
+      }
+    },
+    "Scan Nutrition Label": {
+      "comment": "Food scanning action",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nährwerttabelle scannen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escanear la tabla nutricional"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scanner le tableau nutritionnel"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scanner le tableau nutritionnel"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voedingswaardetabel scannen"
+          }
+        }
+      }
+    },
+    "Scan Packaging": {
+      "comment": "Food scanning action",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verpackung scannen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escanear el envase"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scanner l'emballage"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scanner l'emballage"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verpakking scannen"
           }
         }
       }
@@ -44748,6 +45454,41 @@
           "stringUnit": {
             "state": "translated",
             "value": "Geluidsdebug"
+          }
+        }
+      }
+    },
+    "Sound Levels": {
+      "comment": "Sleep detail section heading",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geräuschpegel"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveles de sonido"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveaux sonores"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveaux sonores"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geluidsniveaus"
           }
         }
       }
@@ -49872,6 +50613,41 @@
         }
       }
     },
+    "TOTAL": {
+      "comment": "Chart total label",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GESAMT"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TOTAL"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TOTAL"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TOTAL"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TOTAAL"
+          }
+        }
+      }
+    },
     "Total Cycles": {
       "localizations": {
         "de": {
@@ -53302,6 +54078,7 @@
       }
     },
     "Voice Logger": {
+      "comment": "Food logging method",
       "localizations": {
         "de": {
           "stringUnit": {

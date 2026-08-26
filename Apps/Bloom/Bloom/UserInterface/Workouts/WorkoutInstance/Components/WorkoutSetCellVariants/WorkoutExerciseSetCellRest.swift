@@ -21,7 +21,7 @@ struct WorkoutExerciseSetCellRest: View {
 
       WorkoutExerciseSetCellTitleView(
         symbol: .figureStand,
-        title: "Rest",
+        title: String(localized: "Rest", comment: "Workout set type"),
         measurementDescription: timeDescription,
         mode: mode,
         isPeeking: isPeeking

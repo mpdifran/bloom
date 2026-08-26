@@ -53,28 +53,28 @@ struct ActionsList: View {
 
   private var items: [ActionItem] {
     var result: [ActionItem] = [
-      ActionItem(image: .logFoodIcon, title: "Food", tint: .mutedGreen) {
+      ActionItem(image: .logFoodIcon, title: String(localized: "Food", comment: "Action to log a meal"), tint: .mutedGreen) {
         FoodLoggingActionCardView { onDismiss() }.asAny
       },
-      ActionItem(image: .logWaterIcon, title: "Drinks", tint: .mutedBlue) {
+      ActionItem(image: .logWaterIcon, title: String(localized: "Drinks", comment: "Action to log a drink"), tint: .mutedBlue) {
         DrinkSelectionView(performDismiss: { onDismiss() }).asAny
       }
     ]
 
     if HealthManager.shared.sex() == .female {
-      result.append(ActionItem(image: .logPeriodIcon, title: "Period", tint: .mutedPink) {
+      result.append(ActionItem(image: .logPeriodIcon, title: String(localized: "Period", comment: "Action to log a menstrual cycle event"), tint: .mutedPink) {
         CycleTrackingActionCardView { onDismiss() }.asAny
       })
     }
 
     result.append(contentsOf: [
-      ActionItem(image: .logWeightIcon, title: "Weight", tint: .mutedIndigo) {
+      ActionItem(image: .logWeightIcon, title: String(localized: "Weight", comment: "Action to log body weight"), tint: .mutedIndigo) {
         BodyWeightActionCardView { onDismiss() }.asAny
       },
-      ActionItem(image: .logBowelIcon, title: "Bowel Movement", tint: .brown) {
+      ActionItem(image: .logBowelIcon, title: String(localized: "Bowel Movement", comment: "Action to log a bowel movement"), tint: .brown) {
         BowelMovementActionCardView { onDismiss() }.asAny
       },
-      ActionItem(image: .logBloodPressureIcon, title: "Blood Pressure", tint: .mutedRed) {
+      ActionItem(image: .logBloodPressureIcon, title: String(localized: "Blood Pressure", comment: "Action to log a blood pressure reading"), tint: .mutedRed) {
         BloodPressureActionCardView { onDismiss() }.asAny
       }
     ])

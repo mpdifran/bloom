@@ -15,16 +15,16 @@ struct ColorPaletteView: View {
         NavigationStack {
             List {
                 Section("Muted") {
-                    ColorCell(name: "Muted Blue", color: .mutedBlue)
-                    ColorCell(name: "Muted Green", color: .mutedGreen)
-                    ColorCell(name: "Muted Indigo", color: .mutedIndigo)
-                    ColorCell(name: "Muted Light Blue", color: .mutedLightBlue)
-                    ColorCell(name: "Muted Orange", color: .mutedOrange)
-                    ColorCell(name: "Muted Pink", color: .mutedPink)
-                    ColorCell(name: "Muted Purple", color: .mutedPurple)
-                    ColorCell(name: "Muted Red", color: .mutedRed)
-                    ColorCell(name: "Muted Teal", color: .mutedTeal)
-                    ColorCell(name: "Muted Yellow", color: .mutedYellow)
+                    ColorCell(name: String(localized: "Muted Blue", comment: "Developer colour palette swatch name"), color: .mutedBlue)
+                    ColorCell(name: String(localized: "Muted Green", comment: "Developer colour palette swatch name"), color: .mutedGreen)
+                    ColorCell(name: String(localized: "Muted Indigo", comment: "Developer colour palette swatch name"), color: .mutedIndigo)
+                    ColorCell(name: String(localized: "Muted Light Blue", comment: "Developer colour palette swatch name"), color: .mutedLightBlue)
+                    ColorCell(name: String(localized: "Muted Orange", comment: "Developer colour palette swatch name"), color: .mutedOrange)
+                    ColorCell(name: String(localized: "Muted Pink", comment: "Developer colour palette swatch name"), color: .mutedPink)
+                    ColorCell(name: String(localized: "Muted Purple", comment: "Developer colour palette swatch name"), color: .mutedPurple)
+                    ColorCell(name: String(localized: "Muted Red", comment: "Developer colour palette swatch name"), color: .mutedRed)
+                    ColorCell(name: String(localized: "Muted Teal", comment: "Developer colour palette swatch name"), color: .mutedTeal)
+                    ColorCell(name: String(localized: "Muted Yellow", comment: "Developer colour palette swatch name"), color: .mutedYellow)
                 }
             }
             .navigationTitle("Color Palette")

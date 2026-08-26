@@ -19,7 +19,7 @@ struct DrinkCategoryFilterView: View {
         HStack(spacing: 8) {
           // "All" chip
           CategoryChip(
-            title: "All",
+            title: String(localized: "All", comment: "Drink category filter option"),
             symbol: nil,
             isSelected: selectedCategory == nil
           )

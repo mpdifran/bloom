@@ -107,31 +107,31 @@ private extension FoodSearchCard {
   }
 
   var barcodeScanButton: some View {
-    FoodSearchActionButton(symbol: .barcodeViewfinder, title: "Barcode Scan") {
+    FoodSearchActionButton(symbol: .barcodeViewfinder, title: String(localized: "Barcode Scan", comment: "Food logging method")) {
       showBarcodeScanner()
     }
   }
 
   var magicScanButton: some View {
-    FoodSearchActionButton(symbol: .cameraViewfinder, title: "Magic Scan") {
+    FoodSearchActionButton(symbol: .cameraViewfinder, title: String(localized: "Magic Scan", comment: "Food logging method")) {
       showMagicScan()
     }
   }
 
   var textFoodButton: some View {
-    FoodSearchActionButton(symbol: .microphoneFill, title: "Voice Logger") {
+    FoodSearchActionButton(symbol: .microphoneFill, title: String(localized: "Voice Logger", comment: "Food logging method")) {
       showVoiceLogger()
     }
   }
 
   var barcodeScannerPickerButton: some View {
-    FoodSearchActionButton(symbol: .barcodeViewfinder, title: "Barcode Scan") {
+    FoodSearchActionButton(symbol: .barcodeViewfinder, title: String(localized: "Barcode Scan", comment: "Food logging method")) {
       showBarcodeScannerPicker()
     }
   }
 
   var quickAddButton: some View {
-    FoodSearchActionButton(symbol: .plus, title: "Quick Add") {
+    FoodSearchActionButton(symbol: .plus, title: String(localized: "Quick Add", comment: "Food logging method")) {
 
     }
   }

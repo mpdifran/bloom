@@ -15,7 +15,7 @@ struct SleepHeartRateSummaryCell: View {
   var body: some View {
     VStack {
       SleepSectionTitleView(
-        title: "Heart Rate",
+        title: String(localized: "Heart Rate", comment: "Sleep detail section heading"),
         symbol: .heartFill
       )
 

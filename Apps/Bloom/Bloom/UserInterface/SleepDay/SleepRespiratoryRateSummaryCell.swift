@@ -15,7 +15,7 @@ struct SleepRespiratoryRateSummaryCell: View {
   var body: some View {
     VStack {
       SleepSectionTitleView(
-        title: "Respiratory Rate",
+        title: String(localized: "Respiratory Rate", comment: "Sleep detail section heading"),
         symbol: .lungsFill
       )
       .padding(.top)
