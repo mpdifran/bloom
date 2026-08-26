@@ -22,7 +22,7 @@ Following these patterns ensures consistency across the codebase and prevents ar
 ## Project Overview
 
 Bloom is a comprehensive health and wellness ecosystem consisting of:
-- **iOS App**: Main health tracking app with nutrition, sleep, workouts, habits, and AI chat (iOS 18.0+ minimum)
+- **iOS App**: Main health tracking app with nutrition, sleep, workouts, habits, and AI chat (iOS 26.0+ minimum)
 - **watchOS App**: Companion app for workout tracking and health metrics
 - **macOS App (Gardener)**: Admin tool for food item management and data verification
 - **Backend**: Vapor-based API with PostgreSQL, Redis, WebSocket support, and OpenAI integration
