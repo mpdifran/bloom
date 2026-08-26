@@ -1,1227 +1,1228 @@
 {
-  "sourceLanguage" : "en",
-  "strings" : {
-    "" : {
-
+  "sourceLanguage": "en",
+  "strings": {
+    "": {
+      "shouldTranslate": false
     },
-    "%@" : {
-
+    "%@": {
+      "shouldTranslate": false
     },
-    "%@ %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ %2$@"
+    "%@ %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ %2$@"
+          }
+        }
+      },
+      "shouldTranslate": false
+    },
+    "%@ yrs": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ J."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ años"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ans"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ans"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ jr"
           }
         }
       }
     },
-    "%@ yrs" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ J."
+    "Action": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktion"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ años"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acción"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ ans"
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Action"
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ ans"
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Action"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ jr"
-          }
-        }
-      }
-    },
-    "Action" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aktion"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Acción"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Action"
-          }
-        },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Action"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Actie"
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actie"
           }
         }
       }
     },
-    "Actions" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aktionen"
+    "Actions": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktionen"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Acciones"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acciones"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Actions"
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actions"
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Actions"
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actions"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Acties"
-          }
-        }
-      }
-    },
-    "Actions Widget" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aktionen-Widget"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Widget de acciones"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Widget Actions"
-          }
-        },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Widget Actions"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Actiewidget"
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acties"
           }
         }
       }
     },
-    "Bio Age" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bio-Alter"
+    "Actions Widget": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktionen-Widget"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Edad bio"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widget de acciones"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Âge bio"
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widget Actions"
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Âge bio"
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widget Actions"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bio-leeftijd"
-          }
-        }
-      }
-    },
-    "Biological Age" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Biologisches Alter"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Edad biológica"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Âge biologique"
-          }
-        },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Âge biologique"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Biologische leeftijd"
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actiewidget"
           }
         }
       }
     },
-    "Blood Pressure" : {
-      "comment" : "Name of a quick action on the watch",
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Blutdruck"
+    "Bio Age": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bio-Alter"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tensión"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edad bio"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tension"
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Âge bio"
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tension"
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Âge bio"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bloeddruk"
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bio-leeftijd"
           }
         }
       }
     },
-    "Bowel Movement" : {
-      "comment" : "Name of a quick action on the watch",
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stuhlgang"
+    "Biological Age": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Biologisches Alter"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Deposición"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edad biológica"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Selles"
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Âge biologique"
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Selles"
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Âge biologique"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stoelgang"
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Biologische leeftijd"
           }
         }
       }
     },
-    "Choose which action to open." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wähle die Aktion, die geöffnet werden soll."
+    "Blood Pressure": {
+      "comment": "Name of a quick action on the watch",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blutdruck"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Elige qué acción quieres abrir."
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tensión"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Choisissez l'action à ouvrir."
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tension"
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Choisis l'action à ouvrir."
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tension"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kies welke actie je wilt openen."
-          }
-        }
-      }
-    },
-    "Choose which goal to display." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wähle das Ziel, das angezeigt werden soll."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Elige qué objetivo quieres ver."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Choisissez l'objectif à afficher."
-          }
-        },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Choisis l'objectif à afficher."
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kies welk doel je wilt zien."
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloeddruk"
           }
         }
       }
     },
-    "Complete Reminder" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Erinnerung abhaken"
+    "Bowel Movement": {
+      "comment": "Name of a quick action on the watch",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stuhlgang"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Completar recordatorio"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deposición"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Terminer le rappel"
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selles"
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Terminer le rappel"
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selles"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Herinnering afvinken"
-          }
-        }
-      }
-    },
-    "Drink" : {
-      "comment" : "Name of a quick action on the watch",
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Trinken"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bebida"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Boisson"
-          }
-        },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Boisson"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Drinken"
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stoelgang"
           }
         }
       }
     },
-    "Due now" : {
-      "comment" : "Watch reminder widget status - the reminder is due right now",
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Jetzt fällig"
+    "Choose which action to open.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle die Aktion, die geöffnet werden soll."
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ahora"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige qué acción quieres abrir."
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "À faire"
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez l'action à ouvrir."
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "À faire"
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisis l'action à ouvrir."
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nu te doen"
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kies welke actie je wilt openen."
           }
         }
       }
     },
-    "Food" : {
-      "comment" : "Name of a quick action on the watch",
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Essen"
+    "Choose which goal to display.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle das Ziel, das angezeigt werden soll."
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Comida"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige qué objetivo quieres ver."
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aliments"
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez l'objectif à afficher."
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aliments"
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisis l'objectif à afficher."
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Voeding"
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kies welk doel je wilt zien."
           }
         }
       }
     },
-    "Goal" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ziel"
+    "Complete Reminder": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerung abhaken"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Objetivo"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Completar recordatorio"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Objectif"
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terminer le rappel"
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Objectif"
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terminer le rappel"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Doel"
-          }
-        }
-      }
-    },
-    "Goal Widget" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ziel-Widget"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Widget de objetivos"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Widget Objectif"
-          }
-        },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Widget Objectif"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Doelwidget"
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herinnering afvinken"
           }
         }
       }
     },
-    "Heart Rate" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Herzfrequenz"
+    "Drink": {
+      "comment": "Name of a quick action on the watch",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trinken"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Frecuencia cardíaca"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bebida"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fréquence cardiaque"
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Boisson"
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fréquence cardiaque"
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Boisson"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hartslag"
-          }
-        }
-      }
-    },
-    "Marks a reminder as completed." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hakt eine Erinnerung als erledigt ab."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Marca un recordatorio como completado."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Marque un rappel comme terminé."
-          }
-        },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Marque un rappel comme terminé."
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Markeert een herinnering als voltooid."
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drinken"
           }
         }
       }
     },
-    "No Goal" : {
-      "comment" : "Watch goal widget empty state",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kein Ziel"
+    "Due now": {
+      "comment": "Watch reminder widget status - the reminder is due right now",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jetzt fällig"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sin objetivo"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ahora"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aucun objectif"
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À faire"
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aucun objectif"
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À faire"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Geen doel"
-          }
-        }
-      }
-    },
-    "No Reminders" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Keine Erinnerungen"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sin recordatorios"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aucun rappel"
-          }
-        },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aucun rappel"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Geen herinneringen"
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nu te doen"
           }
         }
       }
     },
-    "Occurrence ID" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vorkommens-ID"
+    "Food": {
+      "comment": "Name of a quick action on the watch",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Essen"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ID de repetición"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comida"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Identifiant d'occurrence"
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aliments"
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Identifiant d'occurrence"
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aliments"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Voorkomens-id"
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voeding"
           }
         }
       }
     },
-    "Quickly open actions or a specific action." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Öffne schnell die Aktionen oder eine bestimmte Aktion."
+    "Goal": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ziel"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abre rápidamente tus acciones o una acción concreta."
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Objetivo"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ouvrez rapidement les actions ou une action précise."
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Objectif"
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ouvre rapidement les actions ou une action précise."
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Objectif"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open snel je acties of een specifieke actie."
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doel"
           }
         }
       }
     },
-    "Quickly open your workouts." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Öffne schnell deine Workouts."
+    "Goal Widget": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ziel-Widget"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abre rápidamente tus entrenamientos."
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widget de objetivos"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ouvrez rapidement vos séances."
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widget Objectif"
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ouvre rapidement tes séances."
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widget Objectif"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open snel je trainingen."
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doelwidget"
           }
         }
       }
     },
-    "Reminder" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Erinnerung"
+    "Heart Rate": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herzfrequenz"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Recordatorio"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frecuencia cardíaca"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rappel"
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fréquence cardiaque"
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rappel"
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fréquence cardiaque"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Herinnering"
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hartslag"
           }
         }
       }
     },
-    "Reminder ID" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Erinnerungs-ID"
+    "Marks a reminder as completed.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hakt eine Erinnerung als erledigt ab."
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ID de recordatorio"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marca un recordatorio como completado."
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Identifiant de rappel"
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marque un rappel comme terminé."
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Identifiant de rappel"
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marque un rappel comme terminé."
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Herinnerings-id"
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Markeert een herinnering als voltooid."
           }
         }
       }
     },
-    "See your biological age at a glance." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sieh dein biologisches Alter auf einen Blick."
+    "No Goal": {
+      "comment": "Watch goal widget empty state",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kein Ziel"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Consulta tu edad biológica de un vistazo."
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin objetivo"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Consultez votre âge biologique d'un coup d'œil."
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun objectif"
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Consulte ton âge biologique d'un coup d'œil."
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun objectif"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zie je biologische leeftijd in één oogopslag."
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geen doel"
           }
         }
       }
     },
-    "See your next upcoming reminder." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sieh deine nächste anstehende Erinnerung."
+    "No Reminders": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Erinnerungen"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Consulta tu próximo recordatorio."
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin recordatorios"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Consultez votre prochain rappel."
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun rappel"
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Consulte ton prochain rappel."
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun rappel"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zie je eerstvolgende herinnering."
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geen herinneringen"
           }
         }
       }
     },
-    "Slot" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Platz"
+    "Occurrence ID": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vorkommens-ID"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Espacio"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ID de repetición"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Emplacement"
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Identifiant d'occurrence"
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Emplacement"
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Identifiant d'occurrence"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Plek"
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voorkomens-id"
           }
         }
       }
     },
-    "Steps" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Schritte"
+    "Quickly open actions or a specific action.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Öffne schnell die Aktionen oder eine bestimmte Aktion."
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pasos"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abre rápidamente tus acciones o una acción concreta."
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pas"
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrez rapidement les actions ou une action précise."
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pas"
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvre rapidement les actions ou une action précise."
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stappen"
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open snel je acties of een specifieke actie."
           }
         }
       }
     },
-    "Track your goal progress at a glance." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verfolge deinen Zielfortschritt auf einen Blick."
+    "Quickly open your workouts.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Öffne schnell deine Workouts."
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sigue tu progreso de un vistazo."
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abre rápidamente tus entrenamientos."
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Suivez votre progression d'un coup d'œil."
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrez rapidement vos séances."
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Suis ta progression d'un coup d'œil."
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvre rapidement tes séances."
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Volg je voortgang in één oogopslag."
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open snel je trainingen."
           }
         }
       }
     },
-    "View today's steps and distance." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sieh dir Schritte und Strecke von heute an."
+    "Reminder": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerung"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Consulta tus pasos y distancia de hoy."
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recordatorio"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Consultez vos pas et votre distance du jour."
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rappel"
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Consulte tes pas et ton distance du jour."
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rappel"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bekijk je stappen en afstand van vandaag."
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herinnering"
           }
         }
       }
     },
-    "View your latest heart rate with today's range." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sieh deine aktuelle Herzfrequenz samt heutiger Spanne."
+    "Reminder ID": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerungs-ID"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Consulta tu última frecuencia cardíaca y el rango de hoy."
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ID de recordatorio"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Consultez votre dernière fréquence cardiaque et l'amplitude du jour."
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Identifiant de rappel"
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Consulte ton dernière fréquence cardiaque et l'amplitude du jour."
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Identifiant de rappel"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bekijk je laatste hartslag met het bereik van vandaag."
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herinnerings-id"
           }
         }
       }
     },
-    "Voice" : {
-      "comment" : "Name of a quick action on the watch",
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sprache"
+    "See your biological age at a glance.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sieh dein biologisches Alter auf einen Blick."
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Voz"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consulta tu edad biológica de un vistazo."
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Voix"
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consultez votre âge biologique d'un coup d'œil."
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Voix"
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consulte ton âge biologique d'un coup d'œil."
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Spraak"
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zie je biologische leeftijd in één oogopslag."
           }
         }
       }
     },
-    "Weight" : {
-      "comment" : "Name of a quick action on the watch",
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gewicht"
+    "See your next upcoming reminder.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sieh deine nächste anstehende Erinnerung."
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Peso"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consulta tu próximo recordatorio."
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Poids"
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consultez votre prochain rappel."
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Poids"
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consulte ton prochain rappel."
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gewicht"
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zie je eerstvolgende herinnering."
           }
         }
       }
     },
-    "Workouts" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Workouts"
+    "Slot": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Platz"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Entrenamientos"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Espacio"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Séances"
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Emplacement"
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Séances"
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Emplacement"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Trainingen"
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plek"
+          }
+        }
+      }
+    },
+    "Steps": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schritte"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pasos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stappen"
+          }
+        }
+      }
+    },
+    "Track your goal progress at a glance.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verfolge deinen Zielfortschritt auf einen Blick."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sigue tu progreso de un vistazo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suivez votre progression d'un coup d'œil."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suis ta progression d'un coup d'œil."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volg je voortgang in één oogopslag."
+          }
+        }
+      }
+    },
+    "View today's steps and distance.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sieh dir Schritte und Strecke von heute an."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consulta tus pasos y distancia de hoy."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consultez vos pas et votre distance du jour."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consulte tes pas et ton distance du jour."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bekijk je stappen en afstand van vandaag."
+          }
+        }
+      }
+    },
+    "View your latest heart rate with today's range.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sieh deine aktuelle Herzfrequenz samt heutiger Spanne."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consulta tu última frecuencia cardíaca y el rango de hoy."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consultez votre dernière fréquence cardiaque et l'amplitude du jour."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consulte ton dernière fréquence cardiaque et l'amplitude du jour."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bekijk je laatste hartslag met het bereik van vandaag."
+          }
+        }
+      }
+    },
+    "Voice": {
+      "comment": "Name of a quick action on the watch",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sprache"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voz"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voix"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voix"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spraak"
+          }
+        }
+      }
+    },
+    "Weight": {
+      "comment": "Name of a quick action on the watch",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gewicht"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peso"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Poids"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Poids"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gewicht"
+          }
+        }
+      }
+    },
+    "Workouts": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workouts"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrenamientos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Séances"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Séances"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trainingen"
           }
         }
       }
     }
   },
-  "version" : "1.0"
+  "version": "1.0"
 }

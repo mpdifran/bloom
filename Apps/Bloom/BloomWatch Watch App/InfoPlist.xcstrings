@@ -1,156 +1,216 @@
 {
-  "sourceLanguage" : "en",
-  "strings" : {
-    "CFBundleDisplayName" : {
-      "comment" : "Bundle display name",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Bloom Health"
+  "sourceLanguage": "en",
+  "strings": {
+    "CFBundleDisplayName": {
+      "comment": "Bundle display name",
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bloom Health"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloom"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloom"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloom"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloom"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloom"
           }
         }
       }
     },
-    "CFBundleName" : {
-      "comment" : "Bundle name",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "BloomWatch Watch App"
+    "CFBundleName": {
+      "comment": "Bundle name",
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "BloomWatch Watch App"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloom"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloom"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloom"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloom"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloom"
           }
         }
       }
     },
-    "NSHealthShareUsageDescription" : {
-      "comment" : "Shown when the watch app asks to read Health data.",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Um Auffälligkeiten in deiner Gesundheit zu erkennen."
+    "NSHealthShareUsageDescription": {
+      "comment": "Shown when the watch app asks to read Health data.",
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Um Auffälligkeiten in deiner Gesundheit zu erkennen."
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Help identify areas of concern with your health."
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Help identify areas of concern with your health."
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Para ayudar a identificar aspectos de tu salud que merecen atención."
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Para ayudar a identificar aspectos de tu salud que merecen atención."
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Pour repérer les points de votre santé qui méritent votre attention."
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Pour repérer les points de votre santé qui méritent votre attention."
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Pour repérer les points de ta santé qui méritent ton attention."
+        "fr-CA": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Pour repérer les points de ta santé qui méritent ton attention."
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Om aandachtspunten in je gezondheid te herkennen."
+        "nl": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Om aandachtspunten in je gezondheid te herkennen."
           }
         }
       }
     },
-    "NSHealthUpdateUsageDescription" : {
-      "comment" : "Shown when the watch app asks to write Health data.",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Um Auffälligkeiten in deiner Gesundheit zu erkennen."
+    "NSHealthUpdateUsageDescription": {
+      "comment": "Shown when the watch app asks to write Health data.",
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Um Auffälligkeiten in deiner Gesundheit zu erkennen."
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Help identify areas of concern with your health."
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Help identify areas of concern with your health."
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Para ayudar a identificar aspectos de tu salud que merecen atención."
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Para ayudar a identificar aspectos de tu salud que merecen atención."
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Pour repérer les points de votre santé qui méritent votre attention."
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Pour repérer les points de votre santé qui méritent votre attention."
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Pour repérer les points de ta santé qui méritent ton attention."
+        "fr-CA": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Pour repérer les points de ta santé qui méritent ton attention."
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Om aandachtspunten in je gezondheid te herkennen."
+        "nl": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Om aandachtspunten in je gezondheid te herkennen."
           }
         }
       }
     },
-    "NSLocationWhenInUseUsageDescription" : {
-      "comment" : "Shown when the watch app asks for location, used to record outdoor workout routes.",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Bloom nutzt deinen Standort, um Routen bei Outdoor-Workouts aufzuzeichnen."
+    "NSLocationWhenInUseUsageDescription": {
+      "comment": "Shown when the watch app asks for location, used to record outdoor workout routes.",
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Bloom nutzt deinen Standort, um Routen bei Outdoor-Workouts aufzuzeichnen."
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Bloom uses your location to record routes during outdoor workouts."
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bloom uses your location to record routes during outdoor workouts."
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Bloom usa tu ubicación para registrar rutas en entrenamientos al aire libre."
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Bloom usa tu ubicación para registrar rutas en entrenamientos al aire libre."
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Bloom utilise votre position pour enregistrer vos parcours lors des entraînements en extérieur."
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Bloom utilise votre position pour enregistrer vos parcours lors des entraînements en extérieur."
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Bloom utilise ta position pour enregistrer tes parcours lors des entraînements en plein air."
+        "fr-CA": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Bloom utilise ta position pour enregistrer tes parcours lors des entraînements en plein air."
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Bloom gebruikt je locatie om routes vast te leggen tijdens buitentrainingen."
+        "nl": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Bloom gebruikt je locatie om routes vast te leggen tijdens buitentrainingen."
           }
         }
       }
     }
   },
-  "version" : "1.0"
+  "version": "1.0"
 }

@@ -1,7 +1,9 @@
 {
   "sourceLanguage": "en",
   "strings": {
-    "": {},
+    "": {
+      "shouldTranslate": false
+    },
     " cal": {
       "localizations": {
         "de": {
@@ -106,7 +108,9 @@
         }
       }
     },
-    "%lld": {},
+    "%lld": {
+      "shouldTranslate": false
+    },
     "%lld Min": {
       "comment": "Minutes spent in heart rate zones; %lld is the minute count",
       "extractionState": "manual",

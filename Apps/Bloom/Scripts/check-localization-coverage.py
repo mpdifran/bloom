@@ -9,17 +9,22 @@ fr-CA is the sharpest edge here. Declaring it in a catalog opts the app out of t
 otherwise get for free, and every key missing from fr-CA falls back to English rather than to French
 - so a partial fr-CA localization is strictly worse than none. Run sync-fr-ca.py to fill it.
 
-Known gaps live in localization-baseline.json so this can block regressions today while the existing
-backlog is worked down. A string missing from the baseline fails the run; a baseline entry that has
-since been translated is reported so the baseline can shrink. Nothing is ever added automatically -
-run --write-baseline deliberately.
+Every shipped string must be translated into every language. There is no allowance and no backlog
+file - a single missing translation fails the run.
+
+It did not start this way. A localization-baseline.json once recorded 905 accepted gaps so the check
+could block new drift while the backlog was worked down, and the effect was a gate that reported OK
+while permission prompts, nutrient names and half the developer menu were still English. The backlog
+is cleared, so the allowance is gone with it.
+
+Strings that are pure format glue - "%@", "-", " • " - carry shouldTranslate=false in the catalog and
+are skipped here. That flag is the only way to exempt a string, and it lives next to the string
+rather than in a list far away from it.
 
 This is not wired into the Xcode build: failing a local build the moment someone types a new
 Text("...") would be miserable. It runs in CI, where the branch is meant to be shippable.
 
-  ./check-localization-coverage.py                  check against the baseline
-  ./check-localization-coverage.py --strict         ignore the baseline, demand full coverage
-  ./check-localization-coverage.py --write-baseline record today's gaps as accepted
+  ./check-localization-coverage.py                  demand full coverage
 
 Run with no arguments from Apps/Bloom.
 """
@@ -33,7 +38,6 @@ from collections import defaultdict
 # a catalog missing a language entirely fails here instead of looking complete.
 LANGUAGES = ["de", "es", "fr", "fr-CA", "nl"]
 
-BASELINE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "localization-baseline.json")
 
 # Gaps per language are listed up to this many, then summarized.
 MAX_LISTED = 10
@@ -71,74 +75,34 @@ def find_gaps(paths):
     return {p: {lang: sorted(keys) for lang, keys in langs.items()} for p, langs in gaps.items()}, shipped
 
 
-def load_baseline():
-    if not os.path.exists(BASELINE_PATH):
-        return {}
-    with open(BASELINE_PATH, encoding="utf-8") as handle:
-        return json.load(handle)
-
 
 def main():
     arguments = sys.argv[1:]
-    strict = "--strict" in arguments
-    writing = "--write-baseline" in arguments
 
-    paths = sorted(glob.glob("*/Localizable.xcstrings"))
+    # Every catalog, not just Localizable: the permission prompts live in InfoPlist.xcstrings and
+    # went unchecked for as long as this only looked at one filename.
+    paths = sorted(glob.glob("*/*.xcstrings"))
     if not paths:
         print("warning: no String Catalogs found")
         return 0
 
     gaps, shipped = find_gaps(paths)
 
-    if writing:
-        with open(BASELINE_PATH, "w", encoding="utf-8") as handle:
-            json.dump(gaps, handle, indent=2, ensure_ascii=False, sort_keys=True)
-            handle.write("\n")
+    if gaps:
+        for path in sorted(gaps):
+            for language in sorted(gaps[path]):
+                keys = gaps[path][language]
+                print(f"{path} [{language}]: {len(keys)} untranslated")
+                for key in sorted(keys)[:10]:
+                    print(f"    {key!r}")
+                if len(keys) > 10:
+                    print(f"    ... and {len(keys) - 10} more")
         total = sum(len(keys) for langs in gaps.values() for keys in langs.values())
-        print(f"Wrote baseline: {total} accepted gap(s) across {shipped} shipped strings")
-        print(f"  {BASELINE_PATH}")
-        return 0
-
-    baseline = {} if strict else load_baseline()
-
-    new_gaps = 0
-    accepted = 0
-
-    for path in sorted(gaps):
-        for language in LANGUAGES:
-            keys = gaps[path].get(language, [])
-            if not keys:
-                continue
-            known = set(baseline.get(path, {}).get(language, []))
-            fresh = [key for key in keys if key not in known]
-            accepted += len(keys) - len(fresh)
-            if not fresh:
-                continue
-            new_gaps += len(fresh)
-            print(f"{path}: error: [{language}] {len(fresh)} untranslated string(s)")
-            for key in fresh[:MAX_LISTED]:
-                print(f"    {key!r}")
-            if len(fresh) > MAX_LISTED:
-                print(f"    ... and {len(fresh) - MAX_LISTED} more")
-
-    # A baseline entry that now has a translation should be dropped, so the backlog only shrinks.
-    fixed = 0
-    for path, languages in baseline.items():
-        for language, keys in languages.items():
-            still_missing = set(gaps.get(path, {}).get(language, []))
-            fixed += len([key for key in keys if key not in still_missing])
-
-    if new_gaps:
-        print(f"\n{new_gaps} newly untranslated string(s) across {shipped} shipped strings")
-        print("Translate them in Xcode, or run Scripts/sync-fr-ca.py if the gap is fr-CA.")
-        print("If a string genuinely needs no translation, tick \"Don't Translate\" on it in Xcode.")
+        print(f"\nFAIL: {total} untranslated string(s) across {shipped} shipped strings.")
+        print("Translate them, or mark pure format glue with shouldTranslate=false in the catalog.")
         return 1
 
     print(f"Localization coverage OK: {shipped} shipped strings, all {len(LANGUAGES)} languages")
-    if accepted:
-        print(f"  {accepted} known gap(s) still accepted by localization-baseline.json")
-    if fixed:
-        print(f"  {fixed} baseline gap(s) now translated - re-run with --write-baseline to shrink it")
     return 0
 
 
