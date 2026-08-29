@@ -24,7 +24,7 @@ struct WorkoutExerciseSetCellTabata: View {
         symbol: exerciseSet.set.systemSymbol,
         title: exerciseSet.set.title,
         measurementDescription: timeDescription,
-        measurementSubtitle: "TABATA",
+        measurementSubtitle: String(localized: "TABATA", comment: "Workout format: Tabata intervals"),
         mode: mode,
         isPeeking: isPeeking
       )

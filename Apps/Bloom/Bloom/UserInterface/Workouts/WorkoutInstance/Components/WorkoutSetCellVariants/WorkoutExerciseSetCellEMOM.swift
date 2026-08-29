@@ -25,7 +25,7 @@ struct WorkoutExerciseSetCellEMOM: View {
         symbol: exerciseSet.set.systemSymbol,
         title: exerciseSet.set.title,
         measurementDescription: timeDescription,
-        measurementSubtitle: "EMOM",
+        measurementSubtitle: String(localized: "EMOM", comment: "Workout format: every minute on the minute"),
         mode: mode,
         isPeeking: isPeeking
       )

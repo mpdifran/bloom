@@ -22,7 +22,7 @@ public struct ChatEmojiCell: View {
         Spacer(minLength: 60)
       }
 
-      Text(emojiMessage)
+      Text(verbatim: emojiMessage)
         .font(.system(size: 50))
 
       if !isCurrentUser {

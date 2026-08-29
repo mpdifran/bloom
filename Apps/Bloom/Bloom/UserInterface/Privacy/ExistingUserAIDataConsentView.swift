@@ -149,7 +149,7 @@ private extension ExistingUserAIDataConsentView {
     }
     .disclosureGroupStyle(
       PrivacySectionDisclosureGroupStyle(
-        expandButtonTitle: "Choose Categories Individually",
+        expandButtonTitle: String(localized: "Choose Categories Individually", comment: "Button that expands per-category data sharing options"),
         isExpanded: $isHealthDataSectionExpanded
       )
     )
@@ -192,7 +192,7 @@ private extension ExistingUserAIDataConsentView {
     }
     .disclosureGroupStyle(
       PrivacySectionDisclosureGroupStyle(
-        expandButtonTitle: "Choose Categories Individually",
+        expandButtonTitle: String(localized: "Choose Categories Individually", comment: "Button that expands per-category data sharing options"),
         isExpanded: $isOtherDataSectionExpanded
       )
     )

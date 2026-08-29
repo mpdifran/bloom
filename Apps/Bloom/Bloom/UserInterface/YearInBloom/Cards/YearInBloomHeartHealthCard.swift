@@ -21,7 +21,7 @@ struct YearInBloomHeartHealthCard: View {
 
   var body: some View {
     YearInBloomCard(
-      title: "Heart Health",
+      title: String(localized: "Heart Health", comment: "Year in Bloom card title"),
       focusStat: formattedAverageRestingHR,
       focusStatLabel: "Avg Resting HR",
       includePadding: false,

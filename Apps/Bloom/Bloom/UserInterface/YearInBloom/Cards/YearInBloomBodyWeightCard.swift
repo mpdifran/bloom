@@ -19,7 +19,7 @@ struct YearInBloomBodyWeightCard: View {
 
   var body: some View {
     YearInBloomCard(
-      title: "Body Weight",
+      title: String(localized: "Body Weight", comment: "Year in Bloom card title"),
       focusStat: formattedWeightChange,
       focusStatLabel: weightChangeLabel,
       includePadding: false,

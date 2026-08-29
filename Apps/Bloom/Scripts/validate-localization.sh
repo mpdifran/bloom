@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 
-# Checks that every translation's format placeholders match its source string. A mismatch is a
-# runtime crash in String(format:), and neither the compiler nor xcstringstool compares placeholders
-# across languages - so this runs as a build phase and fails the build instead.
+# Two checks the compiler cannot do, run as a build phase so they fail the build:
+#
+#   1. Every translation's format placeholders match its source string. A mismatch is a runtime
+#      crash in String(format:), and nothing else compares placeholders across languages.
+#   2. No string literal reaches a Text through a plain String property. Those never get extracted,
+#      so they render in English in every language while the coverage gate still reports 100%.
 
 set -euo pipefail
 
@@ -14,3 +17,4 @@ if ! command -v python3 > /dev/null; then
 fi
 
 python3 Scripts/validate-localization.py
+python3 Scripts/check-unlocalized-literals.py

@@ -14,7 +14,7 @@ struct YearInBloomCardioFitnessCard: View {
 
   var body: some View {
     YearInBloomCard(
-      title: "Cardio Fitness",
+      title: String(localized: "Cardio Fitness", comment: "Year in Bloom card title"),
       focusStat: stats.currentCardioFitnessLevel?.name ?? "Unknown",
       focusStatLabel: formattedLatestVO2Max,
       includeDivider: false,

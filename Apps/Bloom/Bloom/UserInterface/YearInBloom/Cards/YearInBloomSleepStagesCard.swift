@@ -20,7 +20,7 @@ struct YearInBloomSleepStagesCard: View {
 
   var body: some View {
     YearInBloomCard(
-      title: "Sleep Stages",
+      title: String(localized: "Sleep Stages", comment: "Year in Bloom card title"),
       focusStat: formattedAverageSleepDuration,
       focusStatLabel: "Avg Duration",
       includePadding: false,

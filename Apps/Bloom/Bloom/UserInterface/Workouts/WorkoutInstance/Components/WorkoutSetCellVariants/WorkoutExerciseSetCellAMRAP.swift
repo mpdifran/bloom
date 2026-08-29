@@ -25,7 +25,7 @@ struct WorkoutExerciseSetCellAMRAP: View {
         symbol: exerciseSet.set.systemSymbol,
         title: exerciseSet.set.title,
         measurementDescription: timeDescription,
-        measurementSubtitle: "AMRAP",
+        measurementSubtitle: String(localized: "AMRAP", comment: "Workout format: as many rounds as possible"),
         mode: mode,
         isPeeking: isPeeking
       )

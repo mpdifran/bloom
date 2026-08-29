@@ -17,7 +17,7 @@ struct YearInBloomWalkingRunningDistanceCard: View {
 
   var body: some View {
     YearInBloomCard(
-      title: "Distance Moved",
+      title: String(localized: "Distance Moved", comment: "Year in Bloom card title"),
       focusStat: formattedTotalDistance,
       focusStatLabel: distanceUnit.sensibleUnitString,
       foregroundFill: .black,

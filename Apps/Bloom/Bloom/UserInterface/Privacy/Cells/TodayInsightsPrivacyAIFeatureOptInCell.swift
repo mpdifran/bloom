@@ -19,7 +19,7 @@ struct TodayInsightsPrivacyAIFeatureOptInCell: View {
 
   var body: some View {
     PrivacyAIFeatureOptInCell(
-      title: "Today Insights",
+      title: String(localized: "Today Insights", comment: "AI feature name in the data sharing settings"),
       subtitle: subtitle,
       isEnabled: $aiFeatureSettings.todayInsightsEnabled) {
         TodayInsightsIcon(isEnabled: aiFeatureSettings.todayInsightsEnabled)

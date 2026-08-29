@@ -19,7 +19,7 @@ struct ChatPrivacyAIFeatureOptInCell: View {
 
   var body: some View {
     PrivacyAIFeatureOptInCell(
-      title: "Chat with Bud",
+      title: String(localized: "Chat with Bud", comment: "AI feature name in the data sharing settings"),
       subtitle: subtitle,
       isEnabled: $aiFeatureSettings.chatEnabled) {
         ChatWithBudIcon(isEnabled: aiFeatureSettings.chatEnabled)

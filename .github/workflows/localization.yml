@@ -19,9 +19,12 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      # Pure JSON checks over the String Catalogs - no Xcode, no simulator, so this stays fast.
+      # Catalog JSON and Swift sources only - no Xcode, no simulator, so this stays fast.
       - name: Placeholder consistency
         run: python3 Scripts/validate-localization.py
+
+      - name: Literals that never reach a String Catalog
+        run: python3 Scripts/check-unlocalized-literals.py
 
       - name: Translation coverage
         run: python3 Scripts/check-localization-coverage.py

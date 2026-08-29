@@ -21,7 +21,7 @@ struct YearInBloomWorkoutTypesCard: View {
 
   var body: some View {
     YearInBloomCard(
-      title: "Workouts",
+      title: String(localized: "Workouts", comment: "Year in Bloom card title"),
       focusStat: formattedTotalMinutes,
       focusStatLabel: "Total Minutes",
       includePadding: false,

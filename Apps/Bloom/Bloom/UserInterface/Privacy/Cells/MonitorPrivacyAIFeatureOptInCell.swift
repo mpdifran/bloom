@@ -19,7 +19,7 @@ struct MonitorPrivacyAIFeatureOptInCell: View {
 
   var body: some View {
     PrivacyAIFeatureOptInCell(
-      title: "Monitor Insights",
+      title: String(localized: "Monitor Insights", comment: "AI feature name in the data sharing settings"),
       subtitle: subtitle,
       isEnabled: $aiFeatureSettings.monitorEnabled) {
         MonitorIcon(isEnabled: aiFeatureSettings.monitorEnabled)

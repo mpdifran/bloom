@@ -15,7 +15,7 @@ struct YearInBloomMenstrualCycleCard: View {
 
   var body: some View {
     YearInBloomCard(
-      title: "Cycle Insights",
+      title: String(localized: "Cycle Insights", comment: "Year in Bloom card title"),
       focusStat: "\(Int(stats.averageCycleDuration)) days",
       focusStatLabel: "Avg Cycle",
       includeDivider: false,

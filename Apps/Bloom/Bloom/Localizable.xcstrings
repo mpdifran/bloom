@@ -7256,7 +7256,7 @@
       }
     },
     "AMRAP": {
-      "comment": "Display name for format",
+      "comment": "Display name for format\nWorkout format: as many rounds as possible",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -12773,6 +12773,7 @@
       }
     },
     "Cardio Fitness": {
+      "comment": "Year in Bloom card title",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -13430,6 +13431,41 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kies %@-type"
+          }
+        }
+      }
+    },
+    "Choose Categories Individually": {
+      "comment": "Button that expands per-category data sharing options",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kategorien einzeln auswählen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elegir categorías por separado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisir les catégories une par une"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisir les catégories une par une"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Categorieën afzonderlijk kiezen"
           }
         }
       }
@@ -15749,6 +15785,7 @@
       }
     },
     "Cycle Insights": {
+      "comment": "Year in Bloom card title",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -17897,6 +17934,41 @@
         }
       }
     },
+    "Distance Moved": {
+      "comment": "Year in Bloom card title",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zurückgelegte Strecke"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Distancia recorrida"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Distance parcourue"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Distance parcourue"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afgelegde afstand"
+          }
+        }
+      }
+    },
     "Do I need an Apple Watch to use this app?": {
       "comment": "Paywall FAQ question.",
       "extractionState": "manual",
@@ -18799,7 +18871,7 @@
       }
     },
     "EMOM": {
-      "comment": "Display name for format",
+      "comment": "Display name for format\nWorkout format: every minute on the minute",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -24084,6 +24156,7 @@
       }
     },
     "Heart Rate Zones": {
+      "comment": "Year in Bloom card title",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -31481,6 +31554,41 @@
           "stringUnit": {
             "state": "translated",
             "value": "Historische monitoranalyse"
+          }
+        }
+      }
+    },
+    "Monitor Insights": {
+      "comment": "AI feature name in the data sharing settings",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Monitor-Erkenntnisse"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Información del monitor"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Analyses du moniteur"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Analyses du moniteur"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Monitorinzichten"
           }
         }
       }
@@ -47425,6 +47533,41 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tabata"
+          }
+        }
+      }
+    },
+    "TABATA": {
+      "comment": "Workout format: Tabata intervals",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TABATA"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TABATA"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TABATA"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TABATA"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TABATA"
           }
         }
       }
