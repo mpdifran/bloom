@@ -128,7 +128,7 @@ private extension WorkoutsListView {
         Button {
           triggerHealthPermissionSheet = true
         } label: {
-          Text("Allow Access")
+          Text("Continue")
             .fontWeight(.bold)
             .foregroundColor(.white)
         }

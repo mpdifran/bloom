@@ -102,7 +102,7 @@ private extension CalendarSelectionView {
       AsyncButton {
         await calendarManager.promptForPermission(alertDetails: $alertDetails)
       } label: {
-        Text("Allow Access")
+        Text("Continue")
       }
       .buttonStyle(.tertiary)
     }

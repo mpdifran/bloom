@@ -130,7 +130,7 @@ private extension CalendarTodayCell {
       AsyncButton {
         await calendarManager.promptForPermission(alertDetails: $alertDetails)
       } label: {
-        Text("Allow Access")
+        Text("Continue")
       }
       .buttonStyle(.tertiary)
     }

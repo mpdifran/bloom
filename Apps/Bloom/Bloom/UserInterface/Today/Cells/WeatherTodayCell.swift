@@ -100,7 +100,7 @@ private extension WeatherTodayCell {
       AsyncButton {
         locationViewModel.promptForPermission(alertDetails: $alertDetails)
       } label: {
-        Text("Allow Access")
+        Text("Continue")
       }
       .buttonStyle(.tertiary)
     }

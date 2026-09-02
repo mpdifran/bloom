@@ -95,7 +95,7 @@ private extension OnboardingCalendarWeatherView {
           Label("Access Granted", systemSymbol: .checkmark)
             .horizontallyCentered()
         } else {
-          Text("Allow Access")
+          Text("Continue")
             .horizontallyCentered()
         }
       }
@@ -121,7 +121,7 @@ private extension OnboardingCalendarWeatherView {
           Label("Access Granted", systemSymbol: .checkmark)
             .horizontallyCentered()
         } else {
-          Text("Allow Access")
+          Text("Continue")
             .horizontallyCentered()
         }
       }
