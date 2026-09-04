@@ -24,11 +24,14 @@ import SignInWithApple
 /// - `exchange`: Uses the new team's SIWA key (the regular `SIWA_*`/`APPLE_TEAM_ID` env vars,
 ///   which must already point at the new team) to exchange each `transfer_sub` for the user's
 ///   new team-scoped identifier.
+/// - `collisions`: Re-runs the exchange for users the exchange skipped and prints both sides of
+///   each collision - the legacy account and the duplicate created by a post-transfer sign-in -
+///   so a merge can be decided by hand. Changes nothing.
 /// - `status`: Prints migration progress counts without contacting Apple.
 struct SIWAMigrationCommand: AsyncCommand {
 
   struct Signature: CommandSignature {
-    @Argument(name: "phase", help: "One of: generate, exchange, status")
+    @Argument(name: "phase", help: "One of: generate, exchange, collisions, status")
     var phase: String
   }
 
@@ -44,10 +47,12 @@ struct SIWAMigrationCommand: AsyncCommand {
       try await generateTransferSubs(app: app, console: context.console)
     case "exchange":
       try await exchangeTransferSubs(app: app, console: context.console)
+    case "collisions":
+      try await reportCollisions(app: app, console: context.console)
     case "status":
       try await printStatus(app: app, console: context.console)
     default:
-      context.console.error("Unknown phase '\(signature.phase)'. Use one of: generate, exchange, status")
+      context.console.error("Unknown phase '\(signature.phase)'. Use one of: generate, exchange, collisions, status")
     }
   }
 }
@@ -174,6 +179,77 @@ private extension SIWAMigrationCommand {
     }
 
     console.print("Exchange complete. Succeeded: \(succeeded), failed: \(failed), collisions: \(collisions)")
+  }
+
+  func reportCollisions(app: Application, console: any Console) async throws {
+    guard !app.appleTeamID.isEmpty, app.appleTeamID != app.legacyAppleTeamID else {
+      console.error("APPLE_TEAM_ID must be set to the new team ID")
+      return
+    }
+
+    let clientSecret = try makeClientSecret(
+      teamID: app.appleTeamID,
+      clientID: app.bloomAppBundleID,
+      privateKey: try app.createBloomSiwAPrivateKey()
+    )
+    let accessToken = try await fetchMigrationAccessToken(app: app, clientSecret: clientSecret)
+
+    // Anything that has a transfer_sub but no new_apple_id was either a collision or an outright
+    // failure. Asking Apple again tells us which, and nothing here writes to the database.
+    let users = try await User.query(on: app.db)
+      .filter(\.$transferSub != nil)
+      .filter(\.$newAppleID == nil)
+      .all()
+
+    console.print("Re-checking \(users.count) unexchanged user(s)")
+
+    for user in users {
+      guard let userID = user.id?.value, let transferSub = user.transferSub else { continue }
+
+      do {
+        let response = try await postUserMigrationInfo(
+          app: app,
+          accessToken: accessToken,
+          body: [
+            "transfer_sub": transferSub,
+            "client_id": app.bloomAppBundleID,
+            "client_secret": clientSecret
+          ]
+        )
+        let result = try response.content.decode(ExchangeResponse.self)
+
+        guard let shadow = try await User.find(UserIdentifier(result.sub), on: app.db),
+              shadow.id?.value != userID else {
+          console.print("\(userID) -> \(result.sub): no duplicate account. Re-run the exchange phase.")
+          continue
+        }
+
+        console.print("")
+        console.print("Collision")
+        try await printAccount(label: "  legacy ", user: user, app: app, console: console)
+        try await printAccount(label: "  shadow ", user: shadow, app: app, console: console)
+      } catch {
+        console.error("\(userID): could not exchange transfer_sub: \(error)")
+      }
+
+      try await Task.sleep(nanoseconds: 100_000_000)
+    }
+  }
+
+  /// Prints the fields that decide which side of a collision to keep.
+  func printAccount(label: String, user: User, app: Application, console: any Console) async throws {
+    guard let id = user.id else { return }
+
+    let tokens = try await UserToken.query(on: app.db).filter(\.$user.$id == id).count()
+    let consents = try await UserConsentRecord.query(on: app.db).filter(\.$user.$id == id).count()
+    let foodReports = try await FoodItemIssueReport.query(on: app.db).filter(\.$user.$id == id).count()
+    let chatReports = try await ChatMessageIssueReport.query(on: app.db).filter(\.$user.$id == id).count()
+    let created = user.createdAt.map { String(describing: $0) } ?? "unknown"
+
+    console.print("\(label)\(id.value)")
+    console.print("    email: \(user.email ?? user.migratedEmail ?? "none")  created: \(created)  app version: \(user.appVersion ?? "unknown")")
+    console.print("    tokens: \(tokens)  consents: \(consents)  food reports: \(foodReports)  chat reports: \(chatReports)")
+    console.print("    chat thread: \(user.healthCoachThreadID ?? "none")")
   }
 
   func printStatus(app: Application, console: any Console) async throws {
