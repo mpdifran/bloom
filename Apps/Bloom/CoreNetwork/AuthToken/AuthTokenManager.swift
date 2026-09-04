@@ -70,6 +70,17 @@ public final class AuthTokenManager: ObservableObject {
     storeToStorage()
   }
 
+  /// Replaces the stored Sign in with Apple identifier, leaving the auth token alone.
+  ///
+  /// Used after the developer team migration: the device may hold the identifier the old team
+  /// issued, which Apple no longer resolves, while the session itself is perfectly valid.
+  public func updateUserIdentifier(_ userIdentifier: UserIdentifier) {
+    guard authenticatedUserIdentifier != userIdentifier else { return }
+
+    self.authenticatedUserIdentifier = userIdentifier
+    storeToStorage()
+  }
+
   /// Clears the authentication credentials.
   public func clearAuthentication() {
     self.authToken = nil

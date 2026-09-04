@@ -8,6 +8,7 @@
 import Foundation
 import Vapor
 import Fluent
+import SQLKit
 
 extension User {
   struct Create: AsyncMigration {
@@ -197,6 +198,35 @@ extension User {
         .deleteField("health_data_consent_granted_at")
         .deleteField("external_processing_consent_granted_at")
         .update()
+    }
+  }
+
+  /// Indexes the migrated Sign in with Apple identifier.
+  ///
+  /// `UserDatabaseService.fetchUser(for:)` falls back to this column for every sign-in that arrives
+  /// with a new team-scoped identifier, so it is on the hot path for authentication and would
+  /// otherwise be a sequential scan of the whole table.
+  struct AddNewAppleIDIndex: AsyncMigration {
+    func prepare(on database: any Database) async throws {
+      guard let sqlDatabase = database as? SQLDatabase else {
+        return
+      }
+
+      try await sqlDatabase
+        .create(index: "idx_users_new_apple_id")
+        .on(User.schema)
+        .column("new_apple_id")
+        .run()
+    }
+
+    func revert(on database: any Database) async throws {
+      guard let sqlDatabase = database as? SQLDatabase else {
+        return
+      }
+
+      try await sqlDatabase
+        .drop(index: "idx_users_new_apple_id")
+        .run()
     }
   }
 }

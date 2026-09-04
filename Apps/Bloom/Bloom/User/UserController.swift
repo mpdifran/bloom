@@ -82,13 +82,24 @@ extension UserController {
         // We're good
         break
       case .revoked, .notFound:
+        // A device that still holds the identifier issued by the old developer team gets notFound
+        // for an account that is perfectly valid. Take the migrated identifier and re-check on the
+        // next launch before concluding the user revoked anything.
+        guard await refreshMigratedUserIdentifier() == false else { return }
+
         try await logout()
       case .transferred:
         // Refresh user identifier when transferring ownership of app
-        break
+        await refreshMigratedUserIdentifier()
       @unknown default:
           break
       }
+    } catch let error as ASAuthorizationError where error.code == .unknown {
+      // Apple does not resolve identifiers issued by the old team once the migration window closes:
+      // the lookup fails outright rather than reporting transferred. Swap in the migrated identifier
+      // so the next launch can verify properly. The session itself is unaffected either way, so the
+      // user stays signed in.
+      await refreshMigratedUserIdentifier()
     } catch {
       TelemetryDeck.errorOccurred(
         id: "UserController.verifyAuthentication",
@@ -97,6 +108,32 @@ extension UserController {
       )
     }
     #endif
+  }
+
+  /// Asks the server which Sign in with Apple identifier the current developer team knows this user
+  /// by, and stores it when it differs from the one on the device.
+  ///
+  /// Returns whether the stored identifier changed.
+  @discardableResult
+  func refreshMigratedUserIdentifier() async -> Bool {
+    do {
+      let requestBody = AuthIdentifyRequest(
+        appUserID: UserID.value,
+        appVersion: Bundle.main.appVersion ?? "Unknown"
+      )
+      let response = try await NetworkRequester.shared.identify(request: requestBody)
+
+      guard let rawIdentifier = response.appleUserIdentifier else { return false }
+
+      let identifier = UserIdentifier(rawIdentifier)
+      guard AuthTokenManager.shared.authenticatedUserIdentifier != identifier else { return false }
+
+      AuthTokenManager.shared.updateUserIdentifier(identifier)
+      return true
+    } catch {
+      print(error) // Swallow the error
+      return false
+    }
   }
 
   func identify() async {
@@ -118,6 +155,10 @@ extension UserController {
       self.familyName = response.familyName
       self.lastIdentifyDate = .now
       self.registerDetailsWithRevenueCat()
+
+      if let rawIdentifier = response.appleUserIdentifier {
+        AuthTokenManager.shared.updateUserIdentifier(UserIdentifier(rawIdentifier))
+      }
     } catch {
       print(error) // Swallow the error
     }

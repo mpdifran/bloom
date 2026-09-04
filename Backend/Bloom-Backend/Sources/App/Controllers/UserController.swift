@@ -90,7 +90,8 @@ private extension UserController {
     let identity = AuthIdentifyResponse(
       email: user.email,
       givenName: user.givenName,
-      familyName: user.familyName
+      familyName: user.familyName,
+      appleUserIdentifier: user.newAppleID
     )
 
     return AuthenticationResponse(
@@ -113,7 +114,8 @@ private extension UserController {
     return AuthIdentifyResponse(
       email: user.email,
       givenName: user.givenName,
-      familyName: user.familyName
+      familyName: user.familyName,
+      appleUserIdentifier: user.newAppleID
     )
   }
 
