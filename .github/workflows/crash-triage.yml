@@ -1,0 +1,40 @@
+name: Daily crash triage
+
+# Symbolicates new crash reports, then has Claude classify the crash groups that saw activity and
+# posts the summary to Telegram. See .github/scripts/crash-triage.sh.
+
+on:
+  schedule:
+    - cron: "0 12 * * *" # Noon UTC daily
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: crash-triage
+  cancel-in-progress: false
+
+jobs:
+  triage:
+    # GitHub-hosted rather than self-hosted: this repository is public, and a self-hosted runner
+    # on a public repository runs whatever a fork's workflow asks it to. macOS for atos/dwarfdump.
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: develop
+
+      - name: Symbolicate crashes
+        env:
+          CRASH_ADMIN_SECRET: ${{ secrets.CRASH_ADMIN_SECRET }}
+        run: Apps/Bloom/Scripts/symbolicate-crashes.sh --limit 50 || echo "::warning::Symbolication failed; triaging what's there"
+
+      - name: Triage crash groups
+        env:
+          CRASH_ADMIN_SECRET: ${{ secrets.CRASH_ADMIN_SECRET }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: .github/scripts/crash-triage.sh

@@ -7,9 +7,14 @@
 
 import WidgetKit
 import SwiftUI
+import BloomFoundation
 
 @main
 struct BloomWatchWidgetsExtensionBundle: WidgetBundle {
+  init() {
+    CrashReporter.shared.install()
+  }
+
   var body: some Widget {
     WorkoutWidget()
     ActionsWidget()

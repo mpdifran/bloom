@@ -17,6 +17,7 @@ import TelemetryDeck
 import Swipy
 import CoreHealth
 import CoreNetwork
+import BloomFoundation
 
 struct SettingsView: View {
 
@@ -31,6 +32,7 @@ struct SettingsView: View {
   @AppStorage("TodayView.showWeightWidget") private var showWeightWidget: Bool = true
   @AppStorage("TodayView.showNutritionTodayWidget") private var showNutritionTodayWidget: Bool = true
   @AppStorage(.FeatureFlag.developerMode) private var showDeveloperMode: Bool = false
+  @AppStorage(.crashReportingEnabledKey, store: .group) private var crashReportingEnabled = true
 
   @ObservedObject private var aiFeatureSettings = AIFeatureSettings.shared
 
@@ -189,6 +191,24 @@ private extension SettingsView {
         .onTapGesture {
           presentedSheet = AIDataSharingView(showDismiss: true).asAny
         }
+
+      SettingsSectionContainer {
+        SettingsCell("Share Crash Reports") {
+          Toggle("", isOn: $crashReportingEnabled)
+        }
+      }
+
+      Text("If Bloom crashes, a report of what the app was doing is sent so it can be fixed. Reports never include your health data or who you are.")
+        .font(.caption)
+        .foregroundStyle(.secondary)
+        .padding(.horizontal)
+    }
+    .onChange(of: crashReportingEnabled) { _, isEnabled in
+      if isEnabled {
+        CrashReporter.shared.install()
+      } else {
+        CrashReporter.shared.discardPending()
+      }
     }
     .onChange(of: aiFeatureSettings.monitorEnabled) {
       Task {

@@ -19,6 +19,8 @@ func routes(_ app: Application) throws {
 
   try app.register(collection: AdminMailerLiteController())
   try app.register(collection: RevenueCatWebhookController())
+  try app.register(collection: CrashController())
+  try app.register(collection: AdminCrashController())
 
   // IMPORTANT: Fallback controller must be registered LAST
   // to avoid catching API endpoints

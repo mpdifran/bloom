@@ -11,6 +11,10 @@ import BloomFoundation
 
 @main
 struct BloomWidgetsBundle: WidgetBundle {
+  init() {
+    CrashReporter.shared.install()
+  }
+
   var body: some Widget {
     ActionControl()
     BudSummaryWidget()

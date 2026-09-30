@@ -39,10 +39,5 @@
 		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
-	<key>bugsnag</key>
-	<dict>
-		<key>apiKey</key>
-		<string>e24d7aa4dce2bddffd5e2db22c7ec9bd</string>
-	</dict>
 </dict>
 </plist>

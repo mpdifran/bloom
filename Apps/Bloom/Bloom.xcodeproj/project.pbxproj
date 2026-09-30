@@ -23,11 +23,6 @@
 		FF34FED82F2E674B0039180A /* BloomWatchWidgetsExtensionExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FF34FEC62F2E67490039180A /* BloomWatchWidgetsExtensionExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		FF34FEE92F2E71970039180A /* BloomFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96842C0C1F38004DAD2D /* BloomFoundation.framework */; };
 		FF3A8F402C1A8359002DA563 /* ScreenControl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E966D2C0C1A99004DAD2D /* ScreenControl.framework */; };
-		FF4A21BC2C88FA5600278019 /* Bugsnag in Frameworks */ = {isa = PBXBuildFile; productRef = FF4A21BB2C88FA5600278019 /* Bugsnag */; };
-		FF4A21BE2C88FA5600278019 /* BugsnagNetworkRequestPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = FF4A21BD2C88FA5600278019 /* BugsnagNetworkRequestPlugin */; };
-		FF4A21C12C88FA9D00278019 /* BugsnagPerformance in Frameworks */ = {isa = PBXBuildFile; productRef = FF4A21C02C88FA9D00278019 /* BugsnagPerformance */; };
-		FF4A21C32C88FA9D00278019 /* BugsnagPerformanceSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FF4A21C22C88FA9D00278019 /* BugsnagPerformanceSwift */; };
-		FF4A21C52C88FA9D00278019 /* BugsnagPerformanceSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = FF4A21C42C88FA9D00278019 /* BugsnagPerformanceSwiftUI */; };
 		FF5D0D162CFA47C500374F66 /* BloomModel in Frameworks */ = {isa = PBXBuildFile; productRef = FF5D0D152CFA47C500374F66 /* BloomModel */; };
 		FF5D62DA2DEDEC2D00C05976 /* ChatLayout in Frameworks */ = {isa = PBXBuildFile; productRef = FF5D62D92DEDEC2D00C05976 /* ChatLayout */; };
 		FF5D70CC2DEE306D00C05976 /* DifferenceKit in Frameworks */ = {isa = PBXBuildFile; productRef = FF5D70CB2DEE306D00C05976 /* DifferenceKit */; };
@@ -815,20 +810,15 @@
 				FF5D0D162CFA47C500374F66 /* BloomModel in Frameworks */,
 				FF97832A2C9B546700A8ED7E /* AppUI in Frameworks */,
 				FF75776C2DCA381D00E31C86 /* TelemetryDeck in Frameworks */,
-				FF4A21C52C88FA9D00278019 /* BugsnagPerformanceSwiftUI in Frameworks */,
 				FFECC1D42DC2C327002F6AAA /* CoreHealth.framework in Frameworks */,
-				FF4A21BE2C88FA5600278019 /* BugsnagNetworkRequestPlugin in Frameworks */,
 				FFADE9942D468789004FBF2B /* Swipy in Frameworks */,
 				FF1FFD682D15C27D0008B47D /* Valet in Frameworks */,
 				4B13A26E2D74E7FD00459D05 /* SFSafeSymbols in Frameworks */,
 				FF83DB1E2D2ECFC80018FAAC /* StoreKit.framework in Frameworks */,
 				FF83DB1C2D2ECF010018FAAC /* RevenueCat in Frameworks */,
 				FF1E968A2C0C1F38004DAD2D /* BloomFoundation.framework in Frameworks */,
-				FF4A21C12C88FA9D00278019 /* BugsnagPerformance in Frameworks */,
 				FF5D70CC2DEE306D00C05976 /* DifferenceKit in Frameworks */,
 				FFCE85342C99DBD6002C46B1 /* DataContainer.framework in Frameworks */,
-				FF4A21BC2C88FA5600278019 /* Bugsnag in Frameworks */,
-				FF4A21C32C88FA9D00278019 /* BugsnagPerformanceSwift in Frameworks */,
 				FF97D6982EA16EE300FE7A82 /* CoreNetwork.framework in Frameworks */,
 				FF89BDB72EA5564300C76B6C /* BloomUI.framework in Frameworks */,
 				FF9782DD2C9A22C900A8ED7E /* Umbrella.framework in Frameworks */,
@@ -1346,11 +1336,6 @@
 				FFD8C4D22BD1AC5E001E8D42 /* AppUI */,
 				FFF61AEA2BED52A900926042 /* AppFoundations */,
 				FF8B8B202BFD1EF500BA2128 /* Algorithms */,
-				FF4A21BB2C88FA5600278019 /* Bugsnag */,
-				FF4A21BD2C88FA5600278019 /* BugsnagNetworkRequestPlugin */,
-				FF4A21C02C88FA9D00278019 /* BugsnagPerformance */,
-				FF4A21C22C88FA9D00278019 /* BugsnagPerformanceSwift */,
-				FF4A21C42C88FA9D00278019 /* BugsnagPerformanceSwiftUI */,
 				FFE41D232C8BE1A000E3E559 /* ConfettiSwiftUI */,
 				FF5D0D152CFA47C500374F66 /* BloomModel */,
 				FF1FFD672D15C27D0008B47D /* Valet */,
@@ -1525,8 +1510,6 @@
 				FFD8C4D12BD1AC5E001E8D42 /* XCRemoteSwiftPackageReference "AppUI" */,
 				FFF61AE92BED52A900926042 /* XCRemoteSwiftPackageReference "AppFoundations" */,
 				FF8B8B1F2BFD1EF500BA2128 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
-				FF4A21BA2C88FA5600278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa" */,
-				FF4A21BF2C88FA9D00278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa-performance" */,
 				FFE41D222C8BE1A000E3E559 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
 				FF9782F32C9B1ECD00A8ED7E /* XCRemoteSwiftPackageReference "SwiftSDK" */,
 				FF5D0D142CFA47C500374F66 /* XCLocalSwiftPackageReference "../../Shared/BloomModel" */,
@@ -4996,22 +4979,6 @@
 				minimumVersion = 5.0.0;
 			};
 		};
-		FF4A21BA2C88FA5600278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/bugsnag/bugsnag-cocoa";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 6.30.1;
-			};
-		};
-		FF4A21BF2C88FA9D00278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa-performance" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/bugsnag/bugsnag-cocoa-performance";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.8.1;
-			};
-		};
 		FF5D62D82DEDEC2D00C05976 /* XCRemoteSwiftPackageReference "ChatLayout" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ekazaev/ChatLayout.git";
@@ -5096,31 +5063,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FF1FFD662D15C27D0008B47D /* XCRemoteSwiftPackageReference "Valet" */;
 			productName = Valet;
-		};
-		FF4A21BB2C88FA5600278019 /* Bugsnag */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FF4A21BA2C88FA5600278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa" */;
-			productName = Bugsnag;
-		};
-		FF4A21BD2C88FA5600278019 /* BugsnagNetworkRequestPlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FF4A21BA2C88FA5600278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa" */;
-			productName = BugsnagNetworkRequestPlugin;
-		};
-		FF4A21C02C88FA9D00278019 /* BugsnagPerformance */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FF4A21BF2C88FA9D00278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa-performance" */;
-			productName = BugsnagPerformance;
-		};
-		FF4A21C22C88FA9D00278019 /* BugsnagPerformanceSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FF4A21BF2C88FA9D00278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa-performance" */;
-			productName = BugsnagPerformanceSwift;
-		};
-		FF4A21C42C88FA9D00278019 /* BugsnagPerformanceSwiftUI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FF4A21BF2C88FA9D00278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa-performance" */;
-			productName = BugsnagPerformanceSwiftUI;
 		};
 		FF5D0D152CFA47C500374F66 /* BloomModel */ = {
 			isa = XCSwiftPackageProductDependency;

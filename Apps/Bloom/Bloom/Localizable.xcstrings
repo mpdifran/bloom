@@ -7530,6 +7530,40 @@
         }
       }
     },
+    "App": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App"
+          }
+        }
+      }
+    },
     "App Store": {
       "localizations": {
         "de": {
@@ -15195,6 +15229,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Land"
+          }
+        }
+      }
+    },
+    "Crash Reporting": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Absturzberichte"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Informes de fallos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rapports de plantage"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rapports de plantage"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crashrapportage"
           }
         }
       }
@@ -26155,6 +26223,40 @@
         }
       }
     },
+    "If Bloom crashes, a report of what the app was doing is sent so it can be fixed. Reports never include your health data or who you are.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wenn Bloom abstürzt, wird ein Bericht darüber gesendet, was die App gerade gemacht hat, damit der Fehler behoben werden kann. Berichte enthalten nie deine Gesundheitsdaten oder wer du bist."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Si Bloom se cierra inesperadamente, se envía un informe de lo que estaba haciendo la app para poder corregirlo. Los informes nunca incluyen tus datos de salud ni quién eres."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Si Bloom plante, un rapport sur ce que faisait l'app est envoyé pour que le problème puisse être corrigé. Les rapports n'incluent jamais vos données de santé ni votre identité."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Si Bloom plante, un rapport sur ce que faisait l'app est envoyé pour que le problème puisse être corrigé. Les rapports n'incluent jamais tes données de santé ni ton identité."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Als Bloom crasht, wordt er een rapport verstuurd van wat de app aan het doen was, zodat het opgelost kan worden. Rapporten bevatten nooit je gezondheidsgegevens of wie je bent."
+          }
+        }
+      }
+    },
     "If you need to cancel your trial, you can cancel it right from the app's settings (we made it easy to find!). You can also manage your subscriptions on your Apple Account.": {
       "comment": "Paywall FAQ answer.",
       "extractionState": "manual",
@@ -26650,6 +26752,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Inzichten"
+          }
+        }
+      }
+    },
+    "Install": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Installation"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Instalación"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Installation"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Installation"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Installatie"
           }
         }
       }
@@ -36123,6 +36259,40 @@
         }
       }
     },
+    "Pending": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ausstehend"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pendientes"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En attente"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En attente"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In wachtrij"
+          }
+        }
+      }
+    },
     "per %@ serving": {
       "comment": "Nutrition label header, e.g. 'per 1.5 serving'",
       "extractionState": "manual",
@@ -37894,6 +38064,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vragen? Mail ons!"
+          }
+        }
+      }
+    },
+    "Queue Test Report": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Testbericht einreihen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Poner en cola un informe de prueba"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mettre un rapport de test en file d'attente"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mettre un rapport de test en file d'attente"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Testrapport in wachtrij zetten"
           }
         }
       }
@@ -42931,6 +43135,40 @@
         }
       }
     },
+    "Send Pending Now": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ausstehende jetzt senden"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enviar pendientes ahora"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoyer les rapports en attente"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoyer les rapports en attente"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wachtrij nu versturen"
+          }
+        }
+      }
+    },
     "Send Report By": {
       "localizations": {
         "de": {
@@ -43686,6 +43924,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Deel Bloom met een vriend en houd elkaar gemotiveerd op weg naar een betere gezondheid!"
+          }
+        }
+      }
+    },
+    "Share Crash Reports": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Absturzberichte teilen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compartir informes de fallos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partager les rapports de plantage"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partager les rapports de plantage"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crashrapporten delen"
           }
         }
       }

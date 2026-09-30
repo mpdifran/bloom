@@ -8,11 +8,17 @@
 import DeviceActivity
 import ManagedSettings
 import ScreenControl
+import BloomFoundation
 import UserNotifications
 
 class DeviceActivityMonitorExtension: DeviceActivityMonitor {
     let store = ManagedSettingsStore()
     let screenController = ScreenUseController.shared
+
+    override init() {
+        CrashReporter.shared.install()
+        super.init()
+    }
 
     // MARK: Schedules
 

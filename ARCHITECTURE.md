@@ -762,6 +762,27 @@ Default parameters ride along with every signal, so any query can break down by 
 Fire each event from exactly one place. If a value is worth attaching, add it as a parameter to the
 existing signal rather than sending a second signal from the caller.
 
+## Crash Reporting
+
+Bloom reports its own crashes to the Bloom backend; there is no third-party crash SDK. Ported from AirChat's reporter, which reports into Northstar the same way.
+
+**Client** (`BloomFoundation/CrashReporting/`):
+- `CrashReporter.shared.install()` is the first line of every process's entry point - `BloomApp`, the watch app, both widget bundles and the Screen Time extensions. New extensions must call it too, and need `BLOOM_APP_GROUP_ID` in their Info.plist so they share the app group queue. (`ShieldConfigurationExtension` doesn't link BloomFoundation and isn't covered.)
+- Three capture paths: a signal handler (async-signal-safe, writes addresses to a per-process file, parsed next launch), an uncaught `NSException` handler, and MetricKit (iOS app only - not on watchOS). The signal and exception paths share a dedupe key with MetricKit so one crash is filed once.
+- Reports queue on disk in the app group (`PendingCrashStore`) with backoff. Only the iOS and watch apps upload (`drainPending()` on foreground); extensions just queue.
+- The payload is deliberately **not** in BloomModel - a report written by one build may be sent by the next. `CrashReportPayload` and the backend's `SubmitCrashRequest` are the contract; dates are ISO8601.
+- Privacy: the install ID is a local UUID, never the user's ID, and `NSException` reasons are truncated with `userInfo` dropped. The "Share Crash Reports" toggle (Settings -> AI & Privacy) is `.crashReportingEnabledKey` in the app group; turning it off discards the queue.
+
+**Backend** (`CrashController`, `AdminCrashController`):
+- `POST v1/apps/:app/crashes` (`app` is `bloom` or `bloom-watch`), gated by `X-Crash-Ingest-Key` (`CRASH_INGEST_KEY`, comma-separated to allow rotation). A bad key is a 404. The key ships in the binary - the rate limits are the real protection.
+- Grouping keys on the first frame in one of the app's own images, and re-runs after symbolication. Group counts are computed, not stored.
+- Admin endpoints under `v1/admin/apps/:app/` use `CRASH_ADMIN_SECRET` as a bearer token.
+
+**Symbols and triage**:
+- `ci_scripts/ci_post_xcodebuild.sh` zips every dSYM in a Bloom archive, uploads it to the S3 bucket under `dsyms/` via a presigned URL, and registers each binary's UUID. Needs `CRASH_ADMIN_SECRET` on the Xcode Cloud workflow.
+- `Apps/Bloom/Scripts/symbolicate-crashes.sh` matches frames to dSYMs by UUID and resolves them with `atos -l`. Use `--local <DerivedData dir>` for a debug build.
+- `.github/workflows/crash-triage.yml` symbolicates daily, has Claude classify groups that saw activity, writes the result onto each group, and posts to Telegram.
+
 ## Performance Patterns
 
 ### Lazy Loading

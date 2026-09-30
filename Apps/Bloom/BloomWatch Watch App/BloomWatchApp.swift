@@ -24,6 +24,9 @@ struct BloomWatch_Watch_AppApp: App {
   @Environment(\.scenePhase) private var scenePhase
 
   init() {
+    // First, so a crash anywhere below is caught.
+    CrashReporter.shared.install()
+
     TelemetryDeck.initialize(
       config: TelemetryManagerConfiguration(
         appID: .telemetryDeckWatchAppID,
@@ -62,6 +65,9 @@ struct BloomWatch_Watch_AppApp: App {
         }
         .onChange(of: scenePhase) { _, newPhase in
           guard newPhase == .active else { return }
+          Task {
+            await CrashReporter.shared.drainPending()
+          }
           Task { @MainActor in
             await WatchSyncRequester.shared.requestSyncIfNeeded()
             await PendingBowelMovementManager.shared.syncPendingEntries()

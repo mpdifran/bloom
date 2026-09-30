@@ -14,6 +14,7 @@ import CoreHealth
 import CoreNetwork
 import BloomModel
 import BloomUI
+import BloomFoundation
 
 struct DeveloperSettingsView: View {
 
@@ -36,6 +37,7 @@ struct DeveloperSettingsView: View {
   @State private var presentedFullScreenView: AnyView?
   @State private var presentedSheet: AnyView?
   @State private var alertDetails: AlertDetails?
+  @State private var pendingCrashReportCount = 0
   @State private var error: Error?
 
   @ObservedObject private var apiHost = APIHost.shared
@@ -52,6 +54,7 @@ struct DeveloperSettingsView: View {
       ScrollView {
         VStack(spacing: 20) {
           networkSection
+          crashReportingSection
           userSection
           healthPermissionsSection
           featureFlagSection
@@ -149,6 +152,79 @@ extension DeveloperSettingsView {
         .font(.caption)
         .foregroundStyle(.secondary)
         .padding(.horizontal)
+    }
+  }
+
+  var crashReportingSection: some View {
+    VStack(alignment: .leading) {
+      SectionTitleView("Crash Reporting")
+        .padding(.horizontal)
+
+      SettingsSectionContainer {
+        SettingsCell("App") {
+          Text(verbatim: CrashReporter.shared.configuration.app)
+            .foregroundStyle(.secondary)
+        }
+
+        Divider()
+
+        SettingsCell("Install") {
+          Text(verbatim: String(CrashReporter.shared.configuration.installID.prefix(8)))
+            .foregroundStyle(.secondary)
+        }
+
+        Divider()
+
+        SettingsCell("Pending") {
+          Text(verbatim: "\(pendingCrashReportCount)")
+            .foregroundStyle(.secondary)
+        }
+
+        Divider()
+
+        Button {
+          let queued = CrashReporter.shared.report(.developerTest())
+          pendingCrashReportCount = CrashReporter.shared.pendingReportCount
+          alertDetails = AlertDetails(
+            title: queued ? "Test Report Queued" : "Not Queued",
+            message: queued ? "It will be sent on the next drain." : "Crash reporting is switched off."
+          )
+        } label: {
+          LabeledContent("Queue Test Report") {
+            Image(systemSymbol: .ladybug)
+          }
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
+          .selectable()
+        }
+        .frame(height: 60)
+
+        Divider()
+
+        AsyncButton {
+          await CrashReporter.shared.drainPending()
+          await MainActor.run {
+            pendingCrashReportCount = CrashReporter.shared.pendingReportCount
+            alertDetails = AlertDetails(
+              title: "Drained",
+              message: "\(pendingCrashReportCount) still waiting."
+            )
+          }
+        } label: {
+          LabeledContent("Send Pending Now") {
+            Image(systemSymbol: .paperplane)
+          }
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
+          .selectable()
+        }
+        .frame(height: 60)
+      }
+      .onAppear {
+        pendingCrashReportCount = CrashReporter.shared.pendingReportCount
+      }
     }
   }
 

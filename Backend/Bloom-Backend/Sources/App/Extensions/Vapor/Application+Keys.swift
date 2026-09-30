@@ -270,6 +270,25 @@ extension Application {
   }
 }
 
+// MARK: - Crash Reporting
+
+extension Application {
+
+  /// Keys the apps present when posting a crash. Comma-separated so a key can be rotated without
+  /// breaking builds that still ship the old one.
+  var crashIngestKeys: [String] {
+    (Environment.get("CRASH_INGEST_KEY") ?? "")
+      .split(separator: ",")
+      .map { $0.trimmingCharacters(in: .whitespaces) }
+      .filter { !$0.isEmpty }
+  }
+
+  /// Bearer secret for the crash admin endpoints: dSYM registration, symbolication and triage.
+  var crashAdminSecret: String? {
+    Environment.get("CRASH_ADMIN_SECRET").flatMap { $0.isEmpty ? nil : $0 }
+  }
+}
+
 // MARK: - RevenueCat
 
 extension Application {

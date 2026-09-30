@@ -8,11 +8,17 @@
 import ManagedSettings
 import DeviceActivity
 import ScreenControl
+import BloomFoundation
 import UserNotifications
 
 class ShieldActionExtension: ShieldActionDelegate {
     let store = ManagedSettingsStore()
     let screenController = ScreenUseController.shared
+
+    override init() {
+        CrashReporter.shared.install()
+        super.init()
+    }
 
     override func handle(action: ShieldAction, for application: ApplicationToken, completionHandler: @escaping (ShieldActionResponse) -> Void) {
         switch action {

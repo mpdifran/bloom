@@ -7,9 +7,14 @@
 
 import DeviceActivity
 import SwiftUI
+import BloomFoundation
 
 @main
 struct DefaultReportExtension: DeviceActivityReportExtension {
+
+    init() {
+        CrashReporter.shared.install()
+    }
 
     var body: some DeviceActivityReportScene {
         BedtimeActivityReport { configuration in

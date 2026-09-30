@@ -67,4 +67,5 @@ let allMigrations: [Migration] = [
   WebDomainReputation.AddVerdictIndexes(),
   WebDomainReputation.ReleaseNeedsReview(),
   User.AddNewAppleIDIndex(),
+  CrashReport.Create(),
 ]

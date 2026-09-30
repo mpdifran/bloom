@@ -6,8 +6,6 @@
 //
 
 import SwiftUI
-import Bugsnag
-import BugsnagPerformance
 import TelemetryDeck
 import DataContainer
 import RevenueCat
@@ -24,8 +22,8 @@ struct BloomApp: App {
   private let tokenManager = PushNotificationTokenManager.shared
 
   init() {
-    Bugsnag.start()
-    BugsnagPerformance.start()
+    // First, so a crash anywhere below is caught.
+    CrashReporter.shared.install()
 
     // Setup TelemetryDeck
     let telemetryConfiguration = TelemetryManagerConfiguration(
@@ -73,6 +71,10 @@ struct BloomApp: App {
         }
         .onForegroundTask {
           await UserController.shared.identify()
+        }
+        .onForegroundTask {
+          // Includes what the extensions queued since the app last ran.
+          await CrashReporter.shared.drainPending()
         }
         .onForegroundTask {
           await tokenManager.refreshTokenIfNeeded()
