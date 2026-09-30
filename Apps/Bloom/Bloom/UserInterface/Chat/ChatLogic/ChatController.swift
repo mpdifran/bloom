@@ -42,8 +42,8 @@ extension ChatController {
 final actor ChatController: ObservableObject {
   static let shared = ChatController()
 
-  /// Max images that can be attached to a single message. Matches the backend upload limit.
-  static let maxImageCount = 10
+  /// Max images and documents that can be attached to a single message. Matches the backend upload limits.
+  static let maxAttachmentCount = 10
 
   @AsyncStreamable var assistantTypingStatus: [String: String?] = [:]
   @AsyncStreamable var assistantIsTyping: [String: Bool] = [:]
@@ -158,7 +158,14 @@ extension ChatController {
     _ = await createOrGetWebSocketHandle()
   }
 
-  func send(message: String, images: [UIImage], chatContexts: [ChatContext], conversationID: String?, lastMessageID: String?) async throws {
+  func send(
+    message: String,
+    images: [UIImage],
+    documents: [ChatDocument] = [],
+    chatContexts: [ChatContext],
+    conversationID: String?,
+    lastMessageID: String?
+  ) async throws {
     // Send any pending telemetry before starting a new message
     sendToolCallCountTelemetry()
     sendToolRequestCountTelemetry()
@@ -180,7 +187,7 @@ extension ChatController {
     let conversationModel = try getConversationModel(id: resolvedConversationID)
 
     let imageDatas = images
-      .prefix(Self.maxImageCount)
+      .prefix(Self.maxAttachmentCount)
       .compactMap { $0.resized(toWidth: 800)?.jpegData(compressionQuality: 0.75) }
     let trimmedMessage = message.trimmingCharacters(in: .whitespacesAndNewlines)
 
@@ -193,6 +200,18 @@ extension ChatController {
         conversation: conversationModel
       )
       try await saveMessage(imageMessage)
+    }
+
+    // Chat history keeps a record of each document rather than the file itself.
+    for document in documents {
+      let attachmentData = try encoder.encode(document.attachment)
+      let documentMessage = ChatMessage(
+        isCurrentUser: true,
+        richContent: attachmentData,
+        requestID: requestID,
+        conversation: conversationModel
+      )
+      try await saveMessage(documentMessage)
     }
 
     for chatContext in chatContexts {
@@ -222,14 +241,18 @@ extension ChatController {
     let chatContext = HealthVitalData.ChatContext(userInfo: demographics, dateTime: dateTime)
     let stringData = try encoder.encodeToString(chatContext) ?? ""
 
-    let fileIDs: [String]
-    if imageDatas.isNotEmpty {
-      fileIDs = try await NetworkRequester.shared.uploadChatImages(images: imageDatas).fileIDs
-    } else {
-      fileIDs = []
-    }
+    async let imageUpload: [String] = imageDatas.isNotEmpty
+      ? NetworkRequester.shared.uploadChatImages(images: imageDatas).fileIDs
+      : []
+    async let documentUpload: [String] = documents.isNotEmpty
+      ? NetworkRequester.shared.uploadChatDocuments(
+        documents: documents.map { ChatUploadDocumentRequest.Document(filename: $0.filename, data: $0.data) }
+      ).fileIDs
+      : []
+    let fileIDs = try await imageUpload
+    let documentFileIDs = try await documentUpload
 
-    guard trimmedMessage.isNotEmpty || fileIDs.isNotEmpty else { return }
+    guard trimmedMessage.isNotEmpty || fileIDs.isNotEmpty || documentFileIDs.isNotEmpty else { return }
 
     let extraSystemContext: String?
     if chatContexts.isNotEmpty {
@@ -245,6 +268,7 @@ extension ChatController {
     let socketMessage = SocketMessage.MessageRequest(
       text: trimmedMessage,
       imageFileIDs: fileIDs,
+      documentFileIDs: documentFileIDs.isNotEmpty ? documentFileIDs : nil,
       userInfo: stringData,
       extraSystemContext: extraSystemContext,
       requestID: requestID,
@@ -266,7 +290,8 @@ extension ChatController {
     TelemetryDeck.signal(
       "Send Chat Message",
       parameters: [
-        "includesChatImages": fileIDs.isNotEmpty ? "Yes" : "No"
+        "includesChatImages": fileIDs.isNotEmpty ? "Yes" : "No",
+        "includesChatDocuments": documentFileIDs.isNotEmpty ? "Yes" : "No"
       ]
     )
 

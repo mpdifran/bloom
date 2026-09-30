@@ -761,6 +761,41 @@
         }
       }
     },
+    "%@ is too large to attach.": {
+      "comment": "Shown when files attached to a chat message exceed the size limit. The argument is a list of filenames.",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ist zu groß zum Anhängen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ es demasiado grande para adjuntarlo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ est trop volumineux pour être joint."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ est trop volumineux pour être joint."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ is te groot om bij te voegen."
+          }
+        }
+      }
+    },
     "%@ min": {
       "comment": "Duration spent in a heart rate zone. The placeholder is a number of minutes.",
       "localizations": {
@@ -6880,6 +6915,7 @@
       }
     },
     "Allow Access": {
+      "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -11307,6 +11343,41 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bud kan nu niet helpen"
+          }
+        }
+      }
+    },
+    "Bud can't read %@. Try a PDF, document, spreadsheet, or text file.": {
+      "comment": "Shown when files attached to a chat message are of a type the assistant can't read. The argument is a list of filenames.",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bud kann %@ nicht lesen. Versuch es mit einer PDF, einem Dokument, einer Tabelle oder einer Textdatei."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bud no puede leer %@. Prueba con un PDF, un documento, una hoja de cálculo o un archivo de texto."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bud ne peut pas lire %@. Essayez avec un PDF, un document, une feuille de calcul ou un fichier texte."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bud ne peut pas lire %@. Essaie avec un PDF, un document, une feuille de calcul ou un fichier texte."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bud kan %@ niet lezen. Probeer een pdf, document, spreadsheet of tekstbestand."
           }
         }
       }

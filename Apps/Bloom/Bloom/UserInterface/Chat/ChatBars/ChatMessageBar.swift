@@ -83,7 +83,7 @@ private extension ChatMessageBar {
       ImagePicker(
         images: $images,
         presentedSheet: $presentedSheet,
-        maxImageCount: ChatController.maxImageCount
+        maxImageCount: ChatController.maxAttachmentCount
       ) {
         Image(systemSymbol: .plusCircleFill)
           .foregroundStyle(.white, .tint)

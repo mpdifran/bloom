@@ -87,6 +87,28 @@ extension ChatService {
     }
   }
 
+  /// Uploads documents for use as file inputs. Returns file IDs in the same order as `documents`.
+  func uploadDocuments(_ documents: [ChatUploadDocumentRequest.Document]) async throws -> [String] {
+    try await withThrowingTaskGroup(of: (Int, String).self) { [openAIService] group in
+      for (index, document) in documents.enumerated() {
+        group.addTask {
+          let file = try await openAIService.openAI.files.upload(
+            file: document.data,
+            fileName: document.filename,
+            purpose: .userData
+          )
+          return (index, file.id)
+        }
+      }
+
+      var fileIDs = [String](repeating: "", count: documents.count)
+      for try await (index, fileID) in group {
+        fileIDs[index] = fileID
+      }
+      return fileIDs
+    }
+  }
+
   func flushCachedStreamingContent(userID: UserIdentifier) async throws {
     let messages = try await chatHistory.flushCachedStreamingContent(userID: userID)
     
@@ -150,6 +172,9 @@ private extension ChatService {
     var userContent = [OpenAIKit.Response.InputItem.Content]()
     for fileID in message.imageFileIDs {
       userContent.append(.image(.init(detail: .auto, fileId: fileID)))
+    }
+    for fileID in message.documentFileIDs ?? [] {
+      userContent.append(.file(.init(fileId: fileID, fileData: nil, filename: nil)))
     }
     if message.text.isNotEmpty {
       userContent.append(.text(.init(text: message.text)))

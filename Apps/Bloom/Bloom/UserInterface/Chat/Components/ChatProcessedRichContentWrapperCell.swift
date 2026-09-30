@@ -110,6 +110,8 @@ struct ChatProcessedRichContentWrapperCell: View {
           )
         case .chatContext(let chatContext):
           ChatContextCell(chatContext: chatContext)
+        case .document(let document):
+          ChatDocumentCell(document: document)
         case .unknown:
           ChatUnknownContentCell()
         }

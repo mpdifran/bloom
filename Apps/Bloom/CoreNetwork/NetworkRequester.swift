@@ -299,6 +299,15 @@ public extension NetworkRequester {
     )
   }
 
+  func uploadChatDocuments(documents: [ChatUploadDocumentRequest.Document]) async throws -> ChatUploadFileResponse {
+    let body = ChatUploadDocumentRequest(documents: documents)
+    let request = try await URLRequest.Chat.uploadDocument(body: body)
+    return try await URLSession.shared.authenticatedBloomRequestWithResponse(
+      request: request,
+      responseType: ChatUploadFileResponse.self
+    )
+  }
+
   func deleteChatThread() async throws {
     let request = await URLRequest.Chat.deleteChatThread()
     try await URLSession.shared.authenticatedBloomRequest(request: request)

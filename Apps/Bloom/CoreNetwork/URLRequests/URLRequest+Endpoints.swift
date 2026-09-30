@@ -122,6 +122,9 @@ public extension URLRequest {
     static func uploadImage(body: ChatUploadFileRequest) async throws -> URLRequest {
       try await URLRequest.post("v1/chat/upload-image", body: body)
     }
+    static func uploadDocument(body: ChatUploadDocumentRequest) async throws -> URLRequest {
+      try await URLRequest.post("v1/chat/upload-document", body: body)
+    }
     static func deleteChatThread() async -> URLRequest {
       await URLRequest.get("v1/chat/delete-thread")
     }

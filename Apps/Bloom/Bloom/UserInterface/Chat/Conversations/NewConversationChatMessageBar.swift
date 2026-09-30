@@ -18,6 +18,7 @@ struct NewConversationChatMessageBar: View {
 
   @State private var text = ""
   @State private var images = [UIImage]()
+  @State private var documents = [ChatDocument]()
   @State private var presentedSheet: AnyView?
   @State private var didSendToggle = false
   @State private var error: Error?
@@ -29,6 +30,7 @@ struct NewConversationChatMessageBar: View {
       content
     }
     .animation(.bouncy, value: images)
+    .animation(.bouncy, value: documents)
     .animation(.bouncy, value: tabController.chatContexts)
     .sensoryFeedback(.impact, trigger: didSendToggle)
     .alert(error: $error)
@@ -37,7 +39,7 @@ struct NewConversationChatMessageBar: View {
 
   private var content: some View {
     VStack {
-      if images.isNotEmpty || tabController.chatContexts.isNotEmpty {
+      if images.isNotEmpty || documents.isNotEmpty || tabController.chatContexts.isNotEmpty {
         imageAndContextSection
       }
 
@@ -61,6 +63,13 @@ struct NewConversationChatMessageBar: View {
           .transition(.scale)
         }
 
+        ForEach(documents) { document in
+          EditableChatDocumentCell(document: document) {
+            documents.removeAll { $0.id == document.id }
+          }
+          .transition(.scale)
+        }
+
         ForEachEnumerated(tabController.chatContexts) { index, chatContext in
           EditableChatContextCell(chatContext: chatContext) {
             tabController.chatContexts.remove(at: index)
@@ -77,8 +86,10 @@ struct NewConversationChatMessageBar: View {
     HStack(alignment: .bottom, spacing: 12) {
       ImagePicker(
         images: $images,
+        documents: $documents,
+        error: $error,
         presentedSheet: $presentedSheet,
-        maxImageCount: ChatController.maxImageCount
+        maxImageCount: ChatController.maxAttachmentCount
       ) {
         Image(systemSymbol: .plus)
           .foregroundStyle(.white, .tint)
@@ -153,16 +164,18 @@ struct NewConversationChatMessageBar: View {
   }
 
   private func submit() async {
-    guard text.isNotEmpty || images.isNotEmpty else { return }
+    guard text.isNotEmpty || images.isNotEmpty || documents.isNotEmpty else { return }
 
     didSendToggle.toggle()
 
     let textToSend = text
     let imagesToSend = images
+    let documentsToSend = documents
     let chatContextsToSend = tabController.chatContexts
 
     text = ""
     images = []
+    documents = []
     tabController.chatContexts = []
     isFocused = false
 
@@ -179,6 +192,7 @@ struct NewConversationChatMessageBar: View {
       try await ChatController.shared.send(
         message: textToSend,
         images: imagesToSend,
+        documents: documentsToSend,
         chatContexts: chatContextsToSend,
         conversationID: conversation.id,
         lastMessageID: nil

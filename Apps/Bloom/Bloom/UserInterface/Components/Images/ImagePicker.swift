@@ -12,17 +12,27 @@ struct ImagePicker<Label>: View where Label: View {
   @Binding var images: [UIImage]
   @Binding var presentedSheet: AnyView?
 
-  /// The maximum number of images that can be held at once. Zero means no limit.
+  /// When set, the Files option picks any file rather than only images. Documents share
+  /// `maxImageCount` with images.
+  let documents: Binding<[ChatDocument]>?
+  /// Set when picked files can't be attached. Only used alongside `documents`.
+  let error: Binding<Error?>?
+
+  /// The maximum number of images (and documents) that can be held at once. Zero means no limit.
   let maxImageCount: Int
   let labelBuilder: () -> Label
 
   init(
     images: Binding<[UIImage]>,
+    documents: Binding<[ChatDocument]>? = nil,
+    error: Binding<Error?>? = nil,
     presentedSheet: Binding<AnyView?>,
     maxImageCount: Int = 0,
     @ViewBuilder labelBuilder: @escaping () -> Label
   ) {
     self._images = images
+    self.documents = documents
+    self.error = error
     self._presentedSheet = presentedSheet
     self.maxImageCount = maxImageCount
     self.labelBuilder = labelBuilder
@@ -54,15 +64,21 @@ struct ImagePicker<Label>: View where Label: View {
       .disabled(isAtCapacity)
 
       Button("Files", systemSymbol: .folder) {
-        presentedSheet = FilesImagePicker(images: pickerBinding, selectionLimit: remainingCount).asAny
+        presentedSheet = FilesImagePicker(
+          images: pickerBinding,
+          documents: documents,
+          error: error,
+          selectionLimit: remainingCount
+        ).asAny
       }
       .disabled(isAtCapacity)
 
       Divider()
 
-      if !images.isEmpty {
+      if attachmentCount > 0 {
         Button(deleteTitle, systemSymbol: .trash, role: .destructive) {
           self.images = []
+          documents?.wrappedValue = []
         }
       }
     } label: {
@@ -76,17 +92,21 @@ private extension ImagePicker {
 
   /// Single-image pickers replace what's there rather than filling up, so they're never at capacity.
   var isAtCapacity: Bool {
-    maxImageCount > 1 && images.count >= maxImageCount
+    maxImageCount > 1 && attachmentCount >= maxImageCount
   }
 
   /// How many more images may be picked, or zero (no limit) when unbounded.
   var remainingCount: Int {
     guard maxImageCount > 0 else { return 0 }
-    return max(1, maxImageCount - images.count)
+    return max(1, maxImageCount - attachmentCount)
+  }
+
+  var attachmentCount: Int {
+    images.count + (documents?.wrappedValue.count ?? 0)
   }
 
   var deleteTitle: String {
-    images.count > 1 ? "Delete All" : "Delete"
+    attachmentCount > 1 ? "Delete All" : "Delete"
   }
 
   /// When only a single image is allowed, picking a new one replaces the existing one.

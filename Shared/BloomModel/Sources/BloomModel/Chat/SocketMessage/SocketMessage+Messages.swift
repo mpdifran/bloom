@@ -9,6 +9,11 @@ public extension SocketMessage {
   struct MessageRequest: Codable, Equatable, Sendable {
     public let text: String
     public let imageFileIDs: [String]
+
+    /// Files from ``ChatUploadDocumentRequest`` uploads, passed to the model as file inputs.
+    ///
+    /// Optional for backwards compatibility: clients shipped before documents existed send nothing.
+    public let documentFileIDs: [String]?
     public let userInfo: String
     public let extraSystemContext: String?
     public let requestID: String?
@@ -51,6 +56,7 @@ public extension SocketMessage {
     public init(
       text: String,
       imageFileIDs: [String],
+      documentFileIDs: [String]? = nil,
       userInfo: String,
       extraSystemContext: String? = nil,
       requestID: String? = nil,
@@ -63,6 +69,7 @@ public extension SocketMessage {
     ) {
       self.text = text
       self.imageFileIDs = imageFileIDs
+      self.documentFileIDs = documentFileIDs
       self.userInfo = userInfo
       self.extraSystemContext = extraSystemContext
       self.requestID = requestID

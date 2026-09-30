@@ -25,6 +25,9 @@ extension ChatController: RouteCollection {
           $0.webSocket("web-socket", maxFrameSize: .frameSize, onUpgrade: createWebSocket)
           $0.post("submit-tool-call-response", use: submitToolCallResponses)
           $0.post("upload-image", use: uploadImage)
+          // Documents are base64-encoded in a JSON body, so allow for the ~4/3 overhead on top of
+          // the combined size limit.
+          $0.on(.POST, "upload-document", body: .collect(maxSize: "64mb"), use: uploadDocument)
           $0.get("delete-thread", use: deleteThread)
           $0.post("report-issue", use: reportIssue)
         }
@@ -101,6 +104,41 @@ extension ChatController {
     }
 
     let fileIDs = try await request.chatService.uploadImages(imageData: body.images)
+    return ChatUploadFileResponse(fileIDs: fileIDs)
+  }
+
+  /// Max documents accepted in a single chat upload request.
+  static let maxDocumentUploadCount = 10
+
+  @Sendable
+  func uploadDocument(_ request: Request) async throws -> ChatUploadFileResponse {
+    let user = try request.auth.require(User.self)
+    guard let userID = user.id else {
+      throw Abort(.internalServerError, reason: "User ID unexpectedly nil after authentication.")
+    }
+
+    // Same as images: each document is uploaded to OpenAI, so gate on the user's AI budget.
+    try await request.aiUsageLimiter.checkBudget(for: userID)
+
+    let body = try request.content.decode(ChatUploadDocumentRequest.self)
+
+    guard !body.documents.isEmpty else {
+      throw Abort(.badRequest, reason: "No documents provided.")
+    }
+    guard body.documents.count <= Self.maxDocumentUploadCount else {
+      throw Abort(.badRequest, reason: "Too many files. Please upload at most \(Self.maxDocumentUploadCount) at a time.")
+    }
+    if let unsupported = body.documents.first(where: { !ChatUploadDocumentRequest.isSupported(filename: $0.filename) }) {
+      throw Abort(.unsupportedMediaType, reason: "\(unsupported.filename) isn't a supported file type.")
+    }
+    guard body.documents.allSatisfy({ $0.data.count <= ChatUploadDocumentRequest.maxDocumentBytes }) else {
+      throw Abort(.payloadTooLarge, reason: "One or more files exceed the size limit.")
+    }
+    guard body.documents.reduce(0, { $0 + $1.data.count }) <= ChatUploadDocumentRequest.maxTotalBytes else {
+      throw Abort(.payloadTooLarge, reason: "These files are too large to send together.")
+    }
+
+    let fileIDs = try await request.chatService.uploadDocuments(body.documents)
     return ChatUploadFileResponse(fileIDs: fileIDs)
   }
 

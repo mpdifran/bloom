@@ -45,6 +45,7 @@ class ChatMessageBarView: UIView {
   private let maxTextViewHeight: CGFloat = 120
 
   private var selectedImages = [UIImage]()
+  private var selectedDocuments = [ChatDocument]()
 
   // MARK: - Initialization
 
@@ -328,12 +329,16 @@ class ChatMessageBarView: UIView {
   }
 
   private var isAtImageCapacity: Bool {
-    selectedImages.count >= ChatController.maxImageCount
+    remainingImageCount == 0
   }
 
-  /// How many more images may be attached to this message.
+  /// How many more images or documents may be attached to this message.
   private var remainingImageCount: Int {
-    max(0, ChatController.maxImageCount - selectedImages.count)
+    max(0, ChatController.maxAttachmentCount - selectedImages.count - selectedDocuments.count)
+  }
+
+  private var hasAttachmentsOrContexts: Bool {
+    !selectedImages.isEmpty || !selectedDocuments.isEmpty || !tabController.chatContexts.isEmpty
   }
 
   private func addImages(_ images: [UIImage]) {
@@ -343,8 +348,15 @@ class ChatMessageBarView: UIView {
     updateImageContextVisibility()
   }
 
+  private func addDocuments(_ documents: [ChatDocument]) {
+    guard remainingImageCount > 0 else { return }
+
+    selectedDocuments.append(contentsOf: documents.prefix(remainingImageCount))
+    updateImageContextVisibility()
+  }
+
   private func updateImageContextVisibility() {
-    let hasContent = !selectedImages.isEmpty || !tabController.chatContexts.isEmpty
+    let hasContent = hasAttachmentsOrContexts
 
     setupPlusButtonMenu()
 
@@ -367,6 +379,12 @@ class ChatMessageBarView: UIView {
     for (index, image) in selectedImages.enumerated() {
       let imageView = createEditableImageView(image: image, index: index)
       imageContextStackView.addArrangedSubview(imageView)
+    }
+
+    // Add documents
+    for (index, document) in selectedDocuments.enumerated() {
+      let documentView = createEditableDocumentView(document: document, index: index)
+      imageContextStackView.addArrangedSubview(documentView)
     }
 
     // Add chat contexts
@@ -471,6 +489,80 @@ class ChatMessageBarView: UIView {
     return containerView
   }
 
+  private func createEditableDocumentView(document: ChatDocument, index: Int) -> UIView {
+    let containerView = UIView()
+    containerView.translatesAutoresizingMaskIntoConstraints = false
+    containerView.backgroundColor = .systemBackground
+    containerView.layer.cornerRadius = 8
+    containerView.layer.shadowColor = UIColor.black.cgColor
+    containerView.layer.shadowOpacity = 0.1
+    containerView.layer.shadowOffset = CGSize(width: 0, height: 2)
+    containerView.layer.shadowRadius = 4
+
+    let iconView = UIImageView(image: UIImage(systemSymbol: document.attachment.systemSymbol))
+    iconView.translatesAutoresizingMaskIntoConstraints = false
+    iconView.contentMode = .scaleAspectFit
+    iconView.tintColor = .tintColor
+
+    let nameLabel = UILabel()
+    nameLabel.text = document.filename
+    nameLabel.font = .systemFont(ofSize: 12, weight: .semibold)
+    nameLabel.textColor = .label
+    nameLabel.lineBreakMode = .byTruncatingMiddle
+
+    let sizeLabel = UILabel()
+    sizeLabel.text = document.attachment.formattedByteCount
+    sizeLabel.font = .systemFont(ofSize: 11)
+    sizeLabel.textColor = .secondaryLabel
+
+    let labelStackView = UIStackView(arrangedSubviews: [nameLabel, sizeLabel])
+    labelStackView.translatesAutoresizingMaskIntoConstraints = false
+    labelStackView.axis = .vertical
+    labelStackView.spacing = 2
+
+    let removeButton = UIButton(type: .system)
+    removeButton.translatesAutoresizingMaskIntoConstraints = false
+    removeButton.setImage(UIImage(systemSymbol: .xmarkCircleFill), for: .normal)
+    removeButton.tintColor = .systemRed
+    removeButton.backgroundColor = .systemBackground
+    removeButton.layer.cornerRadius = 10
+    removeButton.tag = index
+    removeButton.addTarget(self, action: #selector(removeDocumentTapped(_:)), for: .touchUpInside)
+
+    containerView.addSubview(iconView)
+    containerView.addSubview(labelStackView)
+    containerView.addSubview(removeButton)
+
+    NSLayoutConstraint.activate([
+      containerView.widthAnchor.constraint(equalToConstant: 140),
+      containerView.heightAnchor.constraint(equalToConstant: 52),
+
+      iconView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 8),
+      iconView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+      iconView.widthAnchor.constraint(equalToConstant: 22),
+      iconView.heightAnchor.constraint(equalToConstant: 22),
+
+      labelStackView.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 6),
+      labelStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -8),
+      labelStackView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+
+      removeButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: -4),
+      removeButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: 4),
+      removeButton.widthAnchor.constraint(equalToConstant: 20),
+      removeButton.heightAnchor.constraint(equalToConstant: 20)
+    ])
+
+    return containerView
+  }
+
+  @objc private func removeDocumentTapped(_ sender: UIButton) {
+    let index = sender.tag
+    guard index < selectedDocuments.count else { return }
+
+    selectedDocuments.remove(at: index)
+    updateImageContextVisibility()
+  }
+
   @objc private func removeImageTapped(_ sender: UIButton) {
     let index = sender.tag
     guard index < selectedImages.count else { return }
@@ -540,20 +632,9 @@ class ChatMessageBarView: UIView {
     textView.resignFirstResponder()
     parentViewController.resignFirstResponder()
 
-    let documentPicker = UIDocumentPickerViewController(
-      forOpeningContentTypes: [
-        .image,
-        .png,
-        .jpeg,
-        .heif,
-        .heic,
-        .webP,
-        .gif,
-        .bmp,
-        .tiff
-      ],
-      asCopy: true
-    )
+    // Any file can be picked; images are attached as images, and anything the chat can't read is
+    // turned away with an explanation once picked.
+    let documentPicker = UIDocumentPickerViewController(forOpeningContentTypes: [.item], asCopy: true)
     documentPicker.delegate = self
     documentPicker.allowsMultipleSelection = true
     parentViewController.present(documentPicker, animated: true)
@@ -562,17 +643,21 @@ class ChatMessageBarView: UIView {
   // MARK: - Message Submission
 
   private func submit() async {
-    guard !textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || !selectedImages.isEmpty else { return }
+    guard !textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            || !selectedImages.isEmpty
+            || !selectedDocuments.isEmpty else { return }
 
     provideFeedback()
 
     let textToSend = textView.text.trimmingCharacters(in: .whitespacesAndNewlines)
     let imagesToSend = selectedImages
+    let documentsToSend = selectedDocuments
     let chatContextsToSend = tabController.chatContexts
 
     // Clear inputs
     textView.text = ""
     selectedImages = []
+    selectedDocuments = []
     tabController.chatContexts = []
 
     // Dismiss keyboard
@@ -590,6 +675,7 @@ class ChatMessageBarView: UIView {
       try await ChatController.shared.send(
         message: textToSend,
         images: imagesToSend,
+        documents: documentsToSend,
         chatContexts: chatContextsToSend,
         conversationID: conversationID,
         lastMessageID: conversation?.lastMessageID
@@ -645,7 +731,7 @@ class ChatMessageBarView: UIView {
   override var intrinsicContentSize: CGSize {
     // Calculate height based on text view content + padding
     let textViewHeight = textViewHeightConstraint?.constant ?? minTextViewHeight
-    let imageContextHeight: CGFloat = (!selectedImages.isEmpty || !tabController.chatContexts.isEmpty) ? 60 : 0
+    let imageContextHeight: CGFloat = hasAttachmentsOrContexts ? 60 : 0
 
     let basePadding: CGFloat = 24 // 12pt card padding top + 12pt card padding bottom
 
@@ -746,11 +832,24 @@ extension ChatMessageBarView: UIImagePickerControllerDelegate, UINavigationContr
 
 extension ChatMessageBarView: UIDocumentPickerDelegate {
   func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-    // Load the images from the selected files
-    addImages(urls.compactMap { url in
-      guard let data = try? Data(contentsOf: url) else { return nil }
-      return UIImage(data: data)
-    })
+    let result = ChatAttachmentLoader.load(
+      urls: urls,
+      remainingCount: remainingImageCount,
+      existingDocumentBytes: selectedDocuments.reduce(0) { $0 + $1.data.count }
+    )
+    addImages(result.images)
+    addDocuments(result.documents)
+
+    // Wait for the picker to finish dismissing so the alert has somewhere to present from.
+    if let error = result.error {
+      if let transitionCoordinator = controller.transitionCoordinator {
+        transitionCoordinator.animate(alongsideTransition: nil) { [weak self] _ in
+          self?.showError(error)
+        }
+      } else {
+        showError(error)
+      }
+    }
   }
 
   func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {

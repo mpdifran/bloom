@@ -33,6 +33,7 @@ extension AdminRegenerateAccuracyReportRequest: @retroactive Content { }
 extension ChatMessageRequest: @retroactive Content { }
 extension ChatMessageResponse: @retroactive Content { }
 extension ChatUploadFileRequest: @retroactive Content { }
+extension ChatUploadDocumentRequest: @retroactive Content { }
 extension ChatUploadFileResponse: @retroactive Content { }
 extension AdminChatIssueReportsResponse: @retroactive Content { }
 extension AdminChatIssueReportMessagesResponse: @retroactive Content { }
