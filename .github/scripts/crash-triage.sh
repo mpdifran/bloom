@@ -87,9 +87,10 @@ SCHEMA='{
 
 # Groups worth a look: seen in the window, and either brand new or not yet dealt with. A group
 # someone has already marked fixed/unfixable/manual, or pinned on third-party code, only comes back
-# if it's new - no re-spamming about a known crash.
+# if it's new - no re-spamming about a known crash. Groups with no reports left are skipped.
 RECENT_FILTER='
   [ .groups[]
+    | select(.occurrenceCount > 0)
     | select((.lastSeenAt // "") > $cutoff)
     | select(
         ((.createdAt // "") > $cutoff)
