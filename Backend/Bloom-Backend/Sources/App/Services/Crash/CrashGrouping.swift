@@ -15,6 +15,7 @@ enum CrashGrouping {
   /// signature is worth something. That is why `CrashGroup` has no stored count.
   static func group(_ report: CrashReport, on db: any Database) async throws {
     let signature = self.signature(for: report)
+    let previousGroupID = report.crashGroupID
 
     let group: CrashGroup
     if let existing = try await CrashGroup.query(on: db)
@@ -43,8 +44,20 @@ enum CrashGrouping {
       group = newGroup
     }
 
-    report.crashGroupID = try group.requireID()
+    let groupID = try group.requireID()
+    report.crashGroupID = groupID
     try await report.save(on: db)
+
+    // Symbolication moves a report out of the coarse group it arrived in. A group left with no
+    // reports describes nothing and would otherwise show up in triage as a phantom crash.
+    if let previousGroupID, previousGroupID != groupID {
+      let remaining = try await CrashReport.query(on: db)
+        .filter(\.$crashGroupID == previousGroupID)
+        .count()
+      if remaining == 0 {
+        try await CrashGroup.find(previousGroupID, on: db)?.delete(on: db)
+      }
+    }
   }
 
   /// The signature a report groups under.
@@ -92,9 +105,15 @@ enum CrashSignature {
 
   /// Returns the first non-empty stack frame with addresses, hex offsets and the leading frame
   /// index removed, collapsing it to `binary symbol`.
-  private static func normalizedTopFrame(from stackTrace: String) -> String {
+  ///
+  /// atos's `(in Binary)` and `(File.swift:42)` suffixes are dropped too: the line number moves
+  /// whenever code above the crash changes, and one crash would split into a group per build.
+  static func normalizedTopFrame(from stackTrace: String) -> String {
     for rawLine in stackTrace.split(whereSeparator: \.isNewline) {
-      let line = rawLine.trimmingCharacters(in: .whitespaces)
+      let line = String(rawLine)
+        .replacingOccurrences(of: #"\(in [^)]*\)"#, with: "", options: .regularExpression)
+        .replacingOccurrences(of: #"\([^()]*:\d+\)"#, with: "", options: .regularExpression)
+        .trimmingCharacters(in: .whitespaces)
       guard !line.isEmpty else { continue }
 
       var tokens = line.split(separator: " ").map(String.init)

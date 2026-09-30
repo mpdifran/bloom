@@ -110,4 +110,20 @@ struct CrashGroupingTests {
   func invalidDSYMFilename(_ filename: String) {
     #expect(!DSYMStorage.isValid(filename: filename))
   }
+
+  @Test("A frame keeps its group when only its line number moves")
+  func lineNumbersAreIgnored() {
+    let first = CrashSignature.compute(
+      exceptionType: "SIGTRAP",
+      stackTrace: "1   Bloom   ChatController.send(message:) (in Bloom) (ChatController.swift:120)"
+    )
+    let second = CrashSignature.compute(
+      exceptionType: "SIGTRAP",
+      stackTrace: "1   Bloom   ChatController.send(message:) (in Bloom) (ChatController.swift:131)"
+    )
+
+    #expect(first == second)
+    #expect(first.contains("ChatController.send(message:)"))
+    #expect(!first.contains("(in Bloom)"))
+  }
 }
