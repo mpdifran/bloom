@@ -14,20 +14,17 @@ import AppFoundations
 
 struct OpenAIService: Sendable {
   let openAI: OpenAIKit.Client
-  let gemini: OpenAIKit.Client
   let imageStorage: ImageStorage
   let logger: Logger
   let aiUsageLimiter: AIUsageLimiter
 
   init(
     openAI: OpenAIKit.Client,
-    gemini: OpenAIKit.Client,
     imageStorage: ImageStorage,
     logger: Logger,
     aiUsageLimiter: AIUsageLimiter
   ) {
     self.openAI = openAI
-    self.gemini = gemini
     self.imageStorage = imageStorage
     self.logger = logger
     self.aiUsageLimiter = aiUsageLimiter

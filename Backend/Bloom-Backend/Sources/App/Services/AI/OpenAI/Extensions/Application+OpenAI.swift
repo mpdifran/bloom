@@ -37,37 +37,6 @@ extension Application {
 
     return client
   }
-
-  private struct GeminiKey: StorageKey {
-    typealias Value = OpenAIKit.Client
-  }
-
-  public var gemini: OpenAIKit.Client {
-    if let client = storage[GeminiKey.self] {
-      return client
-    }
-
-    guard let apiKey = Environment.get("GEMINI_API_KEY") else {
-      fatalError("GEMINI_API_KEY env var required")
-    }
-
-    let configuration = Configuration(
-      apiKey: apiKey,
-      api: API(
-        scheme: .https,
-        host: "generativelanguage.googleapis.com",
-        pathPrefix: "/v1beta/openai"
-      )
-    )
-
-    let client = OpenAIKit.Client(
-      httpClient: self.http.client.shared,
-      configuration: configuration
-    )
-    storage[GeminiKey.self] = client
-
-    return client
-  }
 }
 
 extension Application {
@@ -83,7 +52,6 @@ extension Application {
 
     let service = OpenAIService(
       openAI: openAI,
-      gemini: gemini,
       imageStorage: imageStorage,
       logger: logger,
       aiUsageLimiter: aiUsageLimiter

@@ -14,10 +14,6 @@ extension Request {
     application.openAI
   }
 
-  var gemini: OpenAIKit.Client {
-    application.gemini
-  }
-
   var openAIService: OpenAIService {
     application.openAIService
   }
