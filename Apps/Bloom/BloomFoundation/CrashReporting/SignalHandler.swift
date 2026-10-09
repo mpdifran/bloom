@@ -43,6 +43,11 @@ extension SignalHandler {
 
   /// Arms the handlers. Call once, early, and never off the main thread.
   static func install(reportPath: String) {
+    #if os(watchOS)
+    // watchOS 27 traps on `sigaction` for any fatal signal ("sigaction on fatal signals is not
+    // supported"), killing the app at launch. The watch relies on the exception handler and the
+    // OS's own crash reports instead.
+    #else
     guard !isDebuggerAttached() else {
       // LLDB takes the signal first, so the handler either never runs or runs after the
       // debugger has already changed the situation. Better to do nothing visible than to
@@ -60,16 +65,12 @@ extension SignalHandler {
       action.__sigaction_u.__sa_handler = handleSignal
       sigemptyset(&action.sa_mask)
       // SA_ONSTACK is what makes a stack-overflow crash reportable: without it the handler
-      // runs on the stack that just overflowed and faults immediately. watchOS has no
-      // `sigaltstack`, so a stack overflow on the watch goes unreported by this path.
-      #if os(watchOS)
-      action.sa_flags = 0
-      #else
+      // runs on the stack that just overflowed and faults immediately.
       action.sa_flags = SA_ONSTACK
-      #endif
 
       sigaction(signalNumber, &action, nil)
     }
+    #endif
   }
 }
 
