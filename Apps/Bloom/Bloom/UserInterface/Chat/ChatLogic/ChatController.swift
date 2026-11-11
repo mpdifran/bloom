@@ -364,7 +364,7 @@ private extension ChatController {
       return existingHandle
     }
 
-    let modelOverride = enableOpenAIModelOverride ? "o3" : nil
+    let modelOverride = enableOpenAIModelOverride ? "gpt-5.6-sol" : nil
     let handle = await NetworkRequester.shared.openChatWebsocket(modelOverride: modelOverride)
 
     webSocketDataTask = Task.detached { [weak self] in

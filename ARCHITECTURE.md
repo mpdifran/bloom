@@ -893,13 +893,14 @@ cheapest tier that clears the quality bar for that endpoint, and justify anythin
 
 | Endpoint | Model | Rationale |
 |---|---|---|
-| Chat (`ChatService`), goal-setter assistant | `gpt-5-mini` | Long threads; `gpt-5.6-luna` scores 41.3% on long-context recall vs 89.6% for terra, so the cheapest tier is unsafe here |
+| Chat (`ChatService`), goal-setter assistant | `gpt-5.6-luna` | Moved off `gpt-5-mini` (shut down 2026-12-11). OpenAI suggests terra, but it's 6-8x mini's cost; luna is cheaper than mini. Watch long threads: luna scores 41.3% on long-context recall vs 89.6% for terra, so step up to terra if chat quality degrades |
 | Today insights, monitor insight (`HealthReportService`) | `gpt-5.6-luna` | Single-shot summarization, not recall-heavy |
 | Food estimation, nutrition label / packaging parse, magic scan (text + vision), workout plans | `gpt-5.6-luna` | High volume, short context |
-| Conversation titles | `gpt-5-nano` | No reasoning required; 4x cheaper than luna |
+| Conversation titles, web domain classifier | `gpt-5.6-luna` | No reasoning required; OpenAI's replacement for `gpt-5-nano` (shut down 2026-12-11) |
 
-`gpt-5.6-terra` ($2/$12 per 1M) and `gpt-5.6-sol` are ~8x the input cost of `gpt-5-mini`. Don't
-reach for them without an eval showing the cheaper tier actually fails.
+`gpt-5.6-terra` ($2/$12 per 1M) is 10x luna's cost, and `gpt-5.6-sol` ($5/$30) is 2.5x terra's. Don't
+reach for either without an eval showing luna actually fails.
+The GPT-5 family (`gpt-5`, `-mini`, `-nano`) and `o3` are shut down as of 2026-12-11 — don't use them.
 
 Keep `reasoning: .init(effort: .low, ...)` on Responses API calls — reasoning tokens bill as output.
 

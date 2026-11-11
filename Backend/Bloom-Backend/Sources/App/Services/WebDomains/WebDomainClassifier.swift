@@ -125,7 +125,7 @@ extension WebDomainClassifier {
   }
 
   private func classify(domains: [String]) async throws -> [WebDomainClassification] {
-    let model = ModelID.GPT5.gpt5Nano
+    let model = ModelID.GPT5_6.luna
 
     let response = try await openAIService.openAI.responses.createResponse(
       input: [

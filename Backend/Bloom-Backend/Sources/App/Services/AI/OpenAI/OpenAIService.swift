@@ -57,7 +57,7 @@ extension OpenAIService {
 
   func generateConversationTitle(userMessage: String, userID: UserIdentifier? = nil, languageName: String? = nil) async -> String? {
     do {
-      let model = ModelID.GPT5.gpt5Nano
+      let model = ModelID.GPT5_6.luna
 
       // Titles show up in the conversation list, so they follow the app's language too.
       let languageInstruction: [Chat.Message.Content] = languageName
