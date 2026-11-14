@@ -59,7 +59,7 @@ struct CrashSignatureTestSuite {
   @Test("Different crash sites get different keys")
   func differentSitesDiffer() {
     var other = Self.exceptionFrames
-    other[3] = .init(index: 3, imageName: "Bloom", imageUUID: "APP", address: nil, offset: 0x4444, symbol: nil)
+    other[3] = CrashReportPayload.Frame(index: 3, imageName: "Bloom", imageUUID: "APP", address: nil, offset: 0x4444, symbol: nil)
 
     let original = CrashSignature.dedupeKey(buildNumber: "100", signal: "SIGABRT", frames: Self.exceptionFrames)
     let changed = CrashSignature.dedupeKey(buildNumber: "100", signal: "SIGABRT", frames: other)
