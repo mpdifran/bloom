@@ -53,10 +53,12 @@ struct ImagePicker<Label>: View where Label: View {
 
   var body: some View {
     Menu {
-      Button("Camera", systemSymbol: .camera) {
-        presentedSheet = CameraPicker(images: pickerBinding).asAny
+      if CameraPicker.isAvailable {
+        Button("Camera", systemSymbol: .camera) {
+          presentedSheet = CameraPicker(images: pickerBinding).asAny
+        }
+        .disabled(isAtCapacity)
       }
-      .disabled(isAtCapacity)
 
       Button("Photo Library", systemSymbol: .photo) {
         presentedSheet = PhotoLibraryPicker(images: pickerBinding, selectionLimit: remainingCount).asAny

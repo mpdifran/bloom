@@ -12,6 +12,13 @@ struct CameraPicker: UIViewControllerRepresentable {
 
   @Environment(\.dismiss) private var dismiss
 
+  /// Whether this device can take a photo right now. Setting `.camera` as the source type when it
+  /// isn't available throws, and an uncaught exception takes the app down - so callers should hide
+  /// the option rather than present this.
+  static var isAvailable: Bool {
+    UIImagePickerController.isSourceTypeAvailable(.camera)
+  }
+
   init(images: Binding<[UIImage]>) {
     self._images = images
   }
@@ -24,7 +31,9 @@ struct CameraPicker: UIViewControllerRepresentable {
 
   func makeUIViewController(context: Context) -> UIImagePickerController {
     let picker = UIImagePickerController()
-    picker.sourceType = .camera
+    // Availability can change between the menu being built and this running. The library is a
+    // better outcome than a crash.
+    picker.sourceType = Self.isAvailable ? .camera : .photoLibrary
     picker.delegate = context.coordinator
     return picker
   }
